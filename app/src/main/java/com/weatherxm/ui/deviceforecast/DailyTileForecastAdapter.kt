@@ -54,8 +54,10 @@ class DailyTileForecastAdapter(
 
             binding.timestamp.text = itemView.context.getString(item.date.dayOfWeek.getShortName())
             binding.icon.setWeatherAnimation(item.icon)
-            binding.temperaturePrimary.text = getFormattedTemperature(item.maxTemp)
-            binding.temperatureSecondary.text = getFormattedTemperature(item.minTemp)
+            binding.temperaturePrimary.text =
+                getFormattedTemperature(itemView.context, item.maxTemp)
+            binding.temperatureSecondary.text =
+                getFormattedTemperature(itemView.context, item.minTemp)
         }
 
         private fun checkSelectionStatus(item: UIForecastDay, position: Int) {

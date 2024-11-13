@@ -83,7 +83,6 @@ object TestConfig : AbstractProjectConfig() {
             every { context.getString(KEY_TEMPERATURE) } returns "temperature_unit"
             every { resources.getString(R.string.temperature_celsius) } returns "°C"
             every { context.getString(R.string.temperature_celsius) } returns "°C"
-            every { resources.getString(R.string.degrees_mark) } returns "°"
             every { sharedPref.getString("temperature_unit", "°C") } returns "°C"
             every { resources.getString(R.string.solar_radiation_unit) } returns "W/m2"
             every { resources.getString(KEY_PRESSURE) } returns "key_pressure_preference"

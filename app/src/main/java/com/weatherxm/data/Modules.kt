@@ -2,6 +2,7 @@ package com.weatherxm.data
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.DecimalFormatSymbols
@@ -276,7 +277,6 @@ import java.util.concurrent.TimeUnit
 const val RETROFIT_API = "RETROFIT_API"
 const val RETROFIT_AUTH = "RETROFIT_AUTH"
 const val APP_DATABASE_NAME = "WEATHERXM"
-
 const val DECIMAL_FORMAT_TOKENS = "0.00"
 const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"

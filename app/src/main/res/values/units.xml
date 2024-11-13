@@ -53,7 +53,6 @@
     <string name="wind_speed_beaufort">&#160;bf</string>
     <string name="wind_direction_cardinal">Cardinal</string>
     <string name="wind_direction_degrees">Degrees</string>
-    <string name="degrees_mark">°</string>
     <string name="pressure_hpa">&#160;hPa</string>
     <string name="pressure_inHg">&#160;inHg</string>
     <string name="solar_radiation_unit" translatable="false">&#160;W/m2</string>

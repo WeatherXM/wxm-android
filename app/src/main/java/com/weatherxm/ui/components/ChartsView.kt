@@ -85,10 +85,14 @@ class ChartsView : LinearLayout {
                              * only the decimals
                              */
                             val temperature = Weather.getFormattedTemperature(
-                                e.y, decimals = 1, ignoreConversion = true
+                                context = context,
+                                value = e.y,
+                                decimals = 1,
+                                ignoreConversion = true
                             )
                             val feelsLike = Weather.getFormattedTemperature(
-                                feelsLikeData.entries[e.x.toInt()].y,
+                                context = context,
+                                value = feelsLikeData.entries[e.x.toInt()].y,
                                 decimals = 1,
                                 ignoreConversion = true
                             )
@@ -143,8 +147,11 @@ class ChartsView : LinearLayout {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
                         if (e != null && !e.y.isNaN()) {
                             val time = data.timestamps[e.x.toInt()]
-                            val pressure =
-                                Weather.getFormattedPressure(e.y, ignoreConversion = true)
+                            val pressure = Weather.getFormattedPressure(
+                                context = context,
+                                value = e.y,
+                                ignoreConversion = true
+                            )
                             binding.chartPressure.onHighlightedData(time, pressure)
 
                             autoHighlightCharts(e.x)
@@ -237,10 +244,11 @@ class ChartsView : LinearLayout {
     ) {
         if (e != null && !e.y.isNaN()) {
             val time = uvData.timestamps[e.x.toInt()]
-            val uv = Weather.getFormattedUV(e.y.toInt())
+            val uv = Weather.getFormattedUV(context, e.y.toInt())
 
             if (radiationData.isDataValid()) {
-                val radiation = getFormattedSolarRadiation(radiationData.entries[e.x.toInt()].y)
+                val radiation =
+                    getFormattedSolarRadiation(context, radiationData.entries[e.x.toInt()].y)
                 binding.chartSolar.onHighlightedData(time, uv, radiation)
             } else {
                 binding.chartSolar.onHighlightedData(time, uv)
@@ -260,12 +268,14 @@ class ChartsView : LinearLayout {
         if (e != null && !e.y.isNaN()) {
             val time = secondaryData.timestamps[e.x.toInt()]
             val accumulated = Weather.getFormattedPrecipitation(
-                secondaryData.entries[e.x.toInt()].y,
+                context = context,
+                value = secondaryData.entries[e.x.toInt()].y,
                 isRainRate = false,
                 ignoreConversion = true
             )
             val rate = Weather.getFormattedPrecipitation(
-                primaryData.entries[e.x.toInt()].y,
+                context = context,
+                value = primaryData.entries[e.x.toInt()].y,
                 isRainRate = true,
                 ignoreConversion = true
             )
@@ -285,7 +295,8 @@ class ChartsView : LinearLayout {
         if (e != null && !e.y.isNaN()) {
             val time = secondaryData.timestamps[e.x.toInt()]
             val precipitation = Weather.getFormattedPrecipitation(
-                primaryData.entries[e.x.toInt()].y,
+                context = context,
+                value = primaryData.entries[e.x.toInt()].y,
                 isRainRate = false,
                 ignoreConversion = true
             )
@@ -309,15 +320,17 @@ class ChartsView : LinearLayout {
         if (e != null && !e.y.isNaN()) {
             val time = windSpeedData.timestamps[e.x.toInt()]
             val windSpeed = Weather.getFormattedWind(
-                e.y,
-                windDirectionData.entries[e.x.toInt()].y.toInt(),
+                context = context,
+                windSpeed = e.y,
+                windDirection = windDirectionData.entries[e.x.toInt()].y.toInt(),
                 ignoreConversion = true
             )
 
             if (windGustData.isDataValid()) {
                 val windGust = Weather.getFormattedWind(
-                    windGustData.entries[e.x.toInt()].y,
-                    windDirectionData.entries[e.x.toInt()].y.toInt(),
+                    context = context,
+                    windSpeed = windGustData.entries[e.x.toInt()].y,
+                    windDirection = windDirectionData.entries[e.x.toInt()].y.toInt(),
                     ignoreConversion = true
                 )
                 binding.chartWind.onHighlightedData(time, windSpeed, windGust)

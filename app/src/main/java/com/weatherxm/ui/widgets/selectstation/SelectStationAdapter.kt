@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
@@ -19,6 +18,7 @@ import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.stationHealthViewsOnList
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Resources
+import com.weatherxm.util.UnitSelector
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
 import com.weatherxm.util.Weather.getWindDirectionDrawable
@@ -122,12 +122,12 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             binding.icon.setAnimation(Weather.getWeatherAnimation(device.currentWeather?.icon))
             binding.temperature.setData(
                 Weather.getFormattedTemperature(
-                    device.currentWeather?.temperature, 1, includeUnit = false
+                    context = itemView.context,
+                    value = device.currentWeather?.temperature,
+                    decimals = 1,
+                    includeUnit = false
                 ),
-                Weather.getPreferredUnit(
-                    itemView.context.getString(CacheService.KEY_TEMPERATURE),
-                    itemView.context.getString(R.string.temperature_celsius)
-                )
+                UnitSelector.getTemperatureUnit(itemView.context).unit
             )
             binding.humidity.setData(
                 Weather.getFormattedHumidity(
@@ -135,24 +135,27 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                 ), "%"
             )
             val windValue = Weather.getFormattedWind(
-                device.currentWeather?.windSpeed,
-                device.currentWeather?.windDirection,
+                context = itemView.context,
+                windSpeed = device.currentWeather?.windSpeed,
+                windDirection = device.currentWeather?.windDirection,
                 includeUnits = false
             )
-            val windUnit = Weather.getPreferredUnit(
-                resources.getString(CacheService.KEY_WIND),
-                resources.getString(R.string.wind_speed_ms)
-            )
+            val windUnit = UnitSelector.getWindUnit(itemView.context).unit
+            val windDirection =
+                getFormattedWindDirection(itemView.context, device.currentWeather?.windDirection)
             binding.wind.setData(
                 windValue,
-                "$windUnit ${getFormattedWindDirection(device.currentWeather?.windDirection)}",
+                "$windUnit $windDirection",
                 getWindDirectionDrawable(itemView.context, device.currentWeather?.windDirection)
             )
 
             binding.rain.setData(
                 Weather.getFormattedPrecipitation(
-                    device.currentWeather?.precipitation, includeUnit = false
-                ), Weather.getPrecipitationPreferredUnit()
+                    context = itemView.context,
+                    value = device.currentWeather?.precipitation,
+                    includeUnit = false
+                ),
+                UnitSelector.getPrecipitationUnit(itemView.context, true).unit
             )
         }
     }

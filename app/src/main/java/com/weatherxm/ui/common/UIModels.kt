@@ -605,6 +605,12 @@ data class DeviceTotalRewardsBoost(
     val boostPeriodEnd: ZonedDateTime?
 ) : Parcelable
 
+@Keep
+data class WeatherUnit(
+    val type: WeatherUnitType,
+    val unit: String
+)
+
 enum class RewardTimelineType {
     DATA,
     END_OF_LIST
@@ -656,3 +662,20 @@ enum class ErrorType : Parcelable {
     WARNING,
     ERROR
 }
+
+enum class WeatherUnitType {
+    CELSIUS,
+    FAHRENHEIT,
+    MILLIMETERS,
+    INCHES,
+    HPA,
+    INHG,
+    MS,
+    BEAUFORT,
+    KMH,
+    MPH,
+    KNOTS,
+    CARDINAL,
+    DEGREES
+}
+

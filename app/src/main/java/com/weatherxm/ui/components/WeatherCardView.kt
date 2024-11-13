@@ -7,18 +7,15 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.data.models.HourlyWeather
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setNoDataMessage
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
+import com.weatherxm.util.UnitSelector
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedHumidity
-import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getUVClassification
 import com.weatherxm.util.Weather.getWindDirectionDrawable
 
@@ -51,65 +48,81 @@ class WeatherCardView : LinearLayout {
 
     private fun updateCurrentWeatherUI() {
         with(binding) {
+            val temperatureUnitSymbol = UnitSelector.getTemperatureUnit(context).unit
+
             icon.setWeatherAnimation(weatherData?.icon)
-            val temperatureUnitText = Weather.getPreferredUnit(
-                context.getString(KEY_TEMPERATURE), context.getString(R.string.temperature_celsius)
-            )
             temperature.text = Weather.getFormattedTemperature(
-                weatherData?.temperature, 1, includeUnit = false
+                context, weatherData?.temperature, 1, includeUnit = false
             )
-            temperatureUnit.text = temperatureUnitText
+            temperatureUnit.text = temperatureUnitSymbol
             feelsLike.text = Weather.getFormattedTemperature(
-                weatherData?.feelsLike, 1, includeUnit = false
+                context, weatherData?.feelsLike, 1, includeUnit = false
             )
-            feelsLikeUnit.text = temperatureUnitText
+            feelsLikeUnit.text = temperatureUnitSymbol
             dewPoint.setData(
-                Weather.getFormattedTemperature(weatherData?.dewPoint, 1, includeUnit = false),
-                temperatureUnitText
+                Weather.getFormattedTemperature(
+                    context,
+                    weatherData?.dewPoint,
+                    1,
+                    includeUnit = false
+                ),
+                temperatureUnitSymbol
             )
 
             humidity.setData(getFormattedHumidity(weatherData?.humidity, includeUnit = false), "%")
 
             val windValue = Weather.getFormattedWind(
-                weatherData?.windSpeed, weatherData?.windDirection, includeUnits = false
+                context = context,
+                windSpeed = weatherData?.windSpeed,
+                windDirection = weatherData?.windDirection,
+                includeUnits = false
             )
-            val windUnit = Weather.getPreferredUnit(
-                context.getString(KEY_WIND), context.getString(R.string.wind_speed_ms)
-            )
-            val windDirectionUnit = Weather.getFormattedWindDirection(weatherData?.windDirection)
+            val windUnit = UnitSelector.getWindUnit(context).unit
+            val windDirectionUnit =
+                Weather.getFormattedWindDirection(context, weatherData?.windDirection)
             val windGustValue = Weather.getFormattedWind(
-                weatherData?.windGust, weatherData?.windDirection, includeUnits = false
+                context = context,
+                windSpeed = weatherData?.windGust,
+                windDirection = weatherData?.windDirection,
+                includeUnits = false
             )
             val windDirDrawable = getWindDirectionDrawable(context, weatherData?.windDirection)
             wind.setData(windValue, "$windUnit $windDirectionUnit", windDirDrawable)
             windGust.setData(windGustValue, "$windUnit $windDirectionUnit", windDirDrawable)
 
             rainRate.setData(
-                Weather.getFormattedPrecipitation(weatherData?.precipitation, includeUnit = false),
-                getPrecipitationPreferredUnit(true)
+                Weather.getFormattedPrecipitation(
+                    context = context,
+                    value = weatherData?.precipitation,
+                    includeUnit = false
+                ),
+                UnitSelector.getPrecipitationUnit(context, true).unit
             )
             precipitationAccumulated.setData(
                 Weather.getFormattedPrecipitation(
-                    weatherData?.precipAccumulated,
+                    context = context,
+                    value = weatherData?.precipAccumulated,
                     isRainRate = false,
                     includeUnit = false
                 ),
-                getPrecipitationPreferredUnit(false)
+                UnitSelector.getPrecipitationUnit(context, false).unit
             )
 
-            val pressureUnit = Weather.getPreferredUnit(
-                context.getString(KEY_PRESSURE), context.getString(R.string.pressure_hpa)
-            )
+            val pressureUnit = UnitSelector.getPressureUnit(context).unit
             pressure.setData(
-                Weather.getFormattedPressure(weatherData?.pressure, includeUnit = false),
+                Weather.getFormattedPressure(
+                    context = context,
+                    value = weatherData?.pressure,
+                    includeUnit = false
+                ),
                 pressureUnit
             )
             uv.setData(
-                Weather.getFormattedUV(weatherData?.uvIndex, includeUnit = false),
-                getUVClassification(weatherData?.uvIndex)
+                Weather.getFormattedUV(context, weatherData?.uvIndex, includeUnit = false),
+                getUVClassification(context, weatherData?.uvIndex)
             )
             solarRadiation.setData(
-                Weather.getFormattedSolarRadiation(weatherData?.solarIrradiance, false),
+                Weather.getFormattedSolarRadiation(context, weatherData?.solarIrradiance, false),
                 context.getString(R.string.solar_radiation_unit)
             )
         }

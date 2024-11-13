@@ -10,9 +10,6 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.graphics.drawable.toBitmap
 import com.weatherxm.R
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
@@ -22,6 +19,7 @@ import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
+import com.weatherxm.util.UnitSelector
 import com.weatherxm.util.Weather
 import com.weatherxm.util.isToday
 
@@ -213,31 +211,30 @@ fun RemoteViews.setWeatherData(
     }
 
     val temperature = Weather.getFormattedTemperature(
-        device.currentWeather?.temperature, 1, includeUnit = false
+        context = context,
+        value = device.currentWeather?.temperature,
+        decimals = 1,
+        includeUnit = false
     )
-    val temperatureUnit = Weather.getPreferredUnit(
-        context.getString(KEY_TEMPERATURE), context.getString(R.string.temperature_celsius)
-    )
+    val temperatureUnit = UnitSelector.getTemperatureUnit(context).unit
     setTextViewText(R.id.temperature, temperature)
     setTextViewText(R.id.temperatureUnit, temperatureUnit)
 
     val feelsLike = Weather.getFormattedTemperature(
-        device.currentWeather?.feelsLike, 1, includeUnit = false
-    )
-    val feelsLikeUnit = Weather.getPreferredUnit(
-        context.getString(KEY_TEMPERATURE), context.getString(R.string.temperature_celsius)
+        context = context,
+        value = device.currentWeather?.feelsLike,
+        decimals = 1,
+        includeUnit = false
     )
     setTextViewText(R.id.feelsLike, feelsLike)
-    setTextViewText(R.id.feelsLikeUnit, feelsLikeUnit)
+    setTextViewText(R.id.feelsLikeUnit, temperatureUnit)
 
     /**
      * Data shown on all widgets except the tile
      */
-    val windUnit = Weather.getPreferredUnit(
-        context.getString(KEY_WIND), context.getString(R.string.wind_speed_ms)
-    )
+    val windUnit = UnitSelector.getWindUnit(context).unit
     val windDirection = device.currentWeather?.windDirection
-    val windDirectionUnit = Weather.getFormattedWindDirection(windDirection)
+    val windDirectionUnit = Weather.getFormattedWindDirection(context, windDirection)
     val windDirectionDrawable = Weather.getWindDirectionDrawable(context, windDirection)
     if (widgetType != WidgetType.CURRENT_WEATHER_TILE) {
         val humidity = Weather.getFormattedHumidity(device.currentWeather?.humidity, false)
@@ -245,7 +242,10 @@ fun RemoteViews.setWeatherData(
         setTextViewText(R.id.humidityUnit, "%")
 
         val windValue = Weather.getFormattedWind(
-            device.currentWeather?.windSpeed, windDirection, includeUnits = false
+            context = context,
+            windSpeed = device.currentWeather?.windSpeed,
+            windDirection = windDirection,
+            includeUnits = false
         )
         setTextViewText(R.id.windValue, windValue)
         setTextViewText(R.id.windUnit, "$windUnit $windDirectionUnit")
@@ -254,10 +254,12 @@ fun RemoteViews.setWeatherData(
         setRelationIcon(device.relation)
 
         val rainRateValue = Weather.getFormattedPrecipitation(
-            device.currentWeather?.precipitation, includeUnit = false
+            context = context,
+            value = device.currentWeather?.precipitation,
+            includeUnit = false
         )
         setTextViewText(R.id.rainRateValue, rainRateValue)
-        setTextViewText(R.id.rainRateUnit, Weather.getPrecipitationPreferredUnit())
+        setTextViewText(R.id.rainRateUnit, UnitSelector.getPrecipitationUnit(context, true).unit)
     }
 
     /**
@@ -265,40 +267,57 @@ fun RemoteViews.setWeatherData(
      */
     if (widgetType == WidgetType.CURRENT_WEATHER_DETAILED) {
         val windGustValue = Weather.getFormattedWind(
-            device.currentWeather?.windGust, windDirection, includeUnits = false
+            context = context,
+            windSpeed = device.currentWeather?.windGust,
+            windDirection = windDirection,
+            includeUnits = false
         )
         setTextViewText(R.id.windGustValue, windGustValue)
         setTextViewText(R.id.windGustUnit, "$windUnit $windDirectionUnit")
         setImageViewBitmap(R.id.windGustIconDirection, windDirectionDrawable?.toBitmap())
 
         val dailyPrecipValue = Weather.getFormattedPrecipitation(
-            device.currentWeather?.precipAccumulated, isRainRate = false, includeUnit = false
+            context = context,
+            value = device.currentWeather?.precipAccumulated,
+            isRainRate = false,
+            includeUnit = false
         )
         setTextViewText(R.id.dailyPrecipValue, dailyPrecipValue)
-        setTextViewText(R.id.dailyPrecipUnit, Weather.getPrecipitationPreferredUnit(false))
+        setTextViewText(
+            R.id.dailyPrecipUnit,
+            UnitSelector.getPrecipitationUnit(context, false).unit
+        )
 
         val pressureValue = Weather.getFormattedPressure(
-            device.currentWeather?.pressure, includeUnit = false
+            context = context,
+            value = device.currentWeather?.pressure,
+            includeUnit = false
         )
-        val pressureUnit = Weather.getPreferredUnit(
-            context.getString(KEY_PRESSURE), context.getString(R.string.pressure_hpa)
-        )
+        val pressureUnit = UnitSelector.getPressureUnit(context).unit
         setTextViewText(R.id.pressureValue, pressureValue)
         setTextViewText(R.id.pressureUnit, pressureUnit)
 
         val dewPointValue = Weather.getFormattedTemperature(
-            device.currentWeather?.dewPoint, decimals = 1, includeUnit = false
+            context = context,
+            value = device.currentWeather?.dewPoint,
+            decimals = 1,
+            includeUnit = false
         )
         setTextViewText(R.id.dewValue, dewPointValue)
         setTextViewText(R.id.dewUnit, temperatureUnit)
 
         val radiationValue = Weather.getFormattedSolarRadiation(
-            device.currentWeather?.solarIrradiance, includeUnit = false
+            context,
+            device.currentWeather?.solarIrradiance,
+            false
         )
         setTextViewText(R.id.radiationValue, radiationValue)
         setTextViewText(R.id.radiationUnit, context.getString(R.string.solar_radiation_unit))
 
-        setTextViewText(R.id.uvValue, Weather.getFormattedUV(device.currentWeather?.uvIndex))
+        setTextViewText(
+            R.id.uvValue,
+            Weather.getFormattedUV(context, device.currentWeather?.uvIndex)
+        )
     }
 }
 
