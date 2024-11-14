@@ -322,7 +322,8 @@ object Weather : KoinComponent {
         }
 
         // Return the value based on the weather unit the user wants
-        return if (UnitSelector.getTemperatureUnit(context).type == WeatherUnitType.MILLIMETERS) {
+        val precipUnitType = UnitSelector.getPrecipitationUnit(context, false).type
+        return if (precipUnitType == WeatherUnitType.MILLIMETERS) {
             // This is the default value - millimeters - so we show 1 decimal
             roundToDecimals(value)
         } else {

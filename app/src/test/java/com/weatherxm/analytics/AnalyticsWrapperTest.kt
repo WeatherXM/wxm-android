@@ -1,12 +1,19 @@
 package com.weatherxm.analytics
 
 import android.content.SharedPreferences
+import com.weatherxm.R
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.ui.common.WeatherUnit
+import com.weatherxm.ui.common.WeatherUnitType
+import com.weatherxm.util.UnitSelector
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -46,6 +53,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
             )
         }
 
+        mockkObject(UnitSelector)
         service1.mockResponses()
         service2.mockResponses()
     }
@@ -62,6 +70,29 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 analyticsWrapper.setDisplayMode(testDisplayMode)
                 analyticsWrapper.setDevicesSortFilterOptions(
                     listOf("DATE_ADDED", "ALL", "NO_GROUPING")
+                )
+
+                every { UnitSelector.getTemperatureUnit(context) } returns WeatherUnit(
+                    WeatherUnitType.CELSIUS,
+                    context.getString(R.string.temperature_celsius)
+                )
+                every {
+                    UnitSelector.getPrecipitationUnit(context, false)
+                } returns WeatherUnit(
+                    WeatherUnitType.MILLIMETERS,
+                    context.getString(R.string.precipitation_mm)
+                )
+                every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+                    WeatherUnitType.MS,
+                    context.getString(R.string.wind_speed_ms)
+                )
+                every { UnitSelector.getWindDirectionUnit(context) } returns WeatherUnit(
+                    WeatherUnitType.CARDINAL,
+                    context.getString(R.string.wind_direction_cardinal)
+                )
+                every { UnitSelector.getPressureUnit(context) } returns WeatherUnit(
+                    WeatherUnitType.HPA,
+                    context.getString(R.string.pressure_hpa)
                 )
                 with(analyticsWrapper.setUserProperties()) {
                     size shouldBe 11
@@ -155,5 +186,6 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
 
     afterSpec {
         stopKoin()
+        unmockkObject(UnitSelector)
     }
 })

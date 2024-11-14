@@ -54,7 +54,7 @@ object UnitSelector : KoinComponent {
         val hPaUnit = context.getString(R.string.pressure_hpa)
         val selectedUnit = cacheService.getPreferredUnit(
             unitKeyResId = KEY_PRESSURE,
-            defaultUnitResId = R.string.key_pressure_preference
+            defaultUnitResId = R.string.pressure_hpa
         )
         return if (selectedUnit == hPaUnit) {
             WeatherUnit(WeatherUnitType.HPA, hPaUnit)

@@ -10,11 +10,13 @@ import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isEqual
 import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.LocalDateTimeRange
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -70,6 +72,7 @@ class ChartsUseCaseTest : BehaviorSpec({
     beforeSpec {
         startKoin {
             modules(module {
+                single<CacheService> { mockk() }
                 single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
                     DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
                 }

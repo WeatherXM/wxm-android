@@ -1,8 +1,9 @@
 package com.weatherxm.util
 
 import com.weatherxm.R
-import com.weatherxm.TestConfig.resources
-import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.TestConfig.context
+import com.weatherxm.ui.common.WeatherUnit
+import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
 import com.weatherxm.util.Weather.getFormattedPrecipitationProbability
@@ -13,6 +14,8 @@ import com.weatherxm.util.Weather.getFormattedUV
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -26,14 +29,38 @@ class WeatherTest : KoinTest, BehaviorSpec({
         startKoin {
             modules(
                 module {
-                    single { resources }
-                    single { sharedPref }
                     single<NumberFormat> {
                         NumberFormat.getInstance(Locale.US)
                     }
                 }
             )
         }
+        mockkObject(UnitSelector)
+
+        every { UnitSelector.getTemperatureUnit(context) } returns WeatherUnit(
+            WeatherUnitType.CELSIUS,
+            context.getString(R.string.temperature_celsius)
+        )
+        every { UnitSelector.getPrecipitationUnit(context, false) } returns WeatherUnit(
+            WeatherUnitType.MILLIMETERS,
+            context.getString(R.string.precipitation_mm)
+        )
+        every { UnitSelector.getPrecipitationUnit(context, true) } returns WeatherUnit(
+            WeatherUnitType.MILLIMETERS,
+            context.getString(R.string.precipitation_mm_hour)
+        )
+        every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+            WeatherUnitType.MS,
+            context.getString(R.string.wind_speed_ms)
+        )
+        every { UnitSelector.getWindDirectionUnit(context) } returns WeatherUnit(
+            WeatherUnitType.CARDINAL,
+            context.getString(R.string.wind_direction_cardinal)
+        )
+        every { UnitSelector.getPressureUnit(context) } returns WeatherUnit(
+            WeatherUnitType.HPA,
+            context.getString(R.string.pressure_hpa)
+        )
     }
 
     given("A Weather icon") {
@@ -82,27 +109,27 @@ class WeatherTest : KoinTest, BehaviorSpec({
             }
             When("value is not null") {
                 and("value is less than 2") {
-                    testUV(resources, 0, R.string.uv_low)
-                    testUV(resources, 1, R.string.uv_low)
+                    testUV(0, R.string.uv_low)
+                    testUV(1, R.string.uv_low)
                 }
                 and("value is between 2 and 5") {
-                    testUV(resources, 3, R.string.uv_moderate)
-                    testUV(resources, 5, R.string.uv_moderate)
+                    testUV(3, R.string.uv_moderate)
+                    testUV(5, R.string.uv_moderate)
                 }
                 and("value is between 5 and 7") {
-                    testUV(resources, 6, R.string.uv_high)
-                    testUV(resources, 7, R.string.uv_high)
+                    testUV(6, R.string.uv_high)
+                    testUV(7, R.string.uv_high)
                 }
                 and("value is between 7 and 10") {
-                    testUV(resources, 8, R.string.uv_very_high)
-                    testUV(resources, 9, R.string.uv_very_high)
+                    testUV(8, R.string.uv_very_high)
+                    testUV(9, R.string.uv_very_high)
                 }
                 and("value is greater than 10") {
-                    testUV(resources, 11, R.string.uv_extreme)
+                    testUV(11, R.string.uv_extreme)
                 }
                 and("unit (classification) should NOT be included") {
                     then("it should return the value without the unit") {
-                        getFormattedUV(5, false) shouldBe "5"
+                        getFormattedUV(context, 5, false) shouldBe "5"
                     }
                 }
             }
@@ -129,7 +156,10 @@ class WeatherTest : KoinTest, BehaviorSpec({
                     testTemperature("°C", 25, 25.5F)
                 }
                 and("is in Fahrenheit") {
-                    every { sharedPref.getString("temperature_unit", "°C") } returns "°F"
+                    every { UnitSelector.getTemperatureUnit(context) } returns WeatherUnit(
+                        WeatherUnitType.FAHRENHEIT,
+                        context.getString(R.string.temperature_fahrenheit)
+                    )
                     testTemperature("°F", 77, 77.9F)
                 }
             }
@@ -154,11 +184,14 @@ class WeatherTest : KoinTest, BehaviorSpec({
             }
             When("value is not null") {
                 and("is in hPa") {
-                    testPressure("hPa", "1,000.4")
+                    testPressure(WeatherUnit(WeatherUnitType.HPA, "hPa"), "1,000.4")
                 }
                 and("unit is in inHg") {
-                    every { sharedPref.getString("key_pressure_preference", "hPa") } returns "inHg"
-                    testPressure("inHg", "29.54")
+                    every { UnitSelector.getPressureUnit(context) } returns WeatherUnit(
+                        WeatherUnitType.INHG,
+                        context.getString(R.string.pressure_inHg)
+                    )
+                    testPressure(WeatherUnit(WeatherUnitType.INHG, "inHg"), "29.54")
                 }
             }
         }
@@ -171,11 +204,18 @@ class WeatherTest : KoinTest, BehaviorSpec({
             }
             When("value is not null") {
                 and("is in millimeters") {
-                    testPrecipitation("mm/h", "mm", 10.6F)
+                    testPrecipitation(WeatherUnitType.MILLIMETERS, "mm/h", "mm", 10.6F)
                 }
                 and("unit is in inches") {
-                    every { sharedPref.getString("precipitation_unit", "mm") } returns "in"
-                    testPrecipitation("in/h", "in", 0.42F)
+                    every { UnitSelector.getPrecipitationUnit(context, false) } returns WeatherUnit(
+                        WeatherUnitType.INCHES,
+                        context.getString(R.string.precipitation_in)
+                    )
+                    every { UnitSelector.getPrecipitationUnit(context, true) } returns WeatherUnit(
+                        WeatherUnitType.INCHES,
+                        context.getString(R.string.precipitation_in_hour)
+                    )
+                    testPrecipitation(WeatherUnitType.INCHES, "in/h", "in", 0.42F)
                 }
             }
         }
@@ -188,23 +228,35 @@ class WeatherTest : KoinTest, BehaviorSpec({
             }
             When("value is not null") {
                 and("is in m/s") {
-                    testWind(sharedPref, "m/s", 10.6F, false)
+                    testWind("m/s", 10.6F, false)
                 }
                 and("is in beaufort") {
-                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "bf"
-                    testWind(sharedPref, "bf", 5F, true)
+                    every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+                        WeatherUnitType.BEAUFORT,
+                        context.getString(R.string.wind_speed_beaufort)
+                    )
+                    testWind("bf", 5F, true)
                 }
                 and("is in km/h") {
-                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "km/h"
-                    testWind(sharedPref, "km/h", 38F, false)
+                    every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+                        WeatherUnitType.KMH,
+                        context.getString(R.string.wind_speed_kmh)
+                    )
+                    testWind("km/h", 38F, false)
                 }
                 and("is in mph") {
-                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "mph"
-                    testWind(sharedPref, "mph", 23.6F, false)
+                    every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+                        WeatherUnitType.MPH,
+                        context.getString(R.string.wind_speed_mph)
+                    )
+                    testWind("mph", 23.6F, false)
                 }
                 and("is in knots") {
-                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "knots"
-                    testWind(sharedPref, "knots", 20.5F, false)
+                    every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+                        WeatherUnitType.KNOTS,
+                        context.getString(R.string.wind_speed_knots)
+                    )
+                    testWind("knots", 20.5F, false)
                 }
             }
         }
@@ -212,5 +264,6 @@ class WeatherTest : KoinTest, BehaviorSpec({
 
     afterSpec {
         stopKoin()
+        unmockkObject(UnitSelector)
     }
 })
