@@ -278,8 +278,8 @@ class ChartsView : LinearLayout {
             )
             binding.chartPrecipitation.onHighlightedData(
                 time,
-                "$rateValue$rateUnit",
-                "$accumulatedValue$accumulatedUnit"
+                "$rateValue${rateUnit.unit}",
+                "$accumulatedValue${accumulatedUnit.unit}"
             )
 
             autoHighlightCharts(e.x)
@@ -333,11 +333,14 @@ class ChartsView : LinearLayout {
                 val windGust = formatNumber(windGustData.entries[e.x.toInt()].y, decimals)
                 binding.chartWind.onHighlightedData(
                     time,
-                    "$windSpeed $windDirection",
-                    "$windGust $windDirection"
+                    "$windSpeed${windUnit.unit} $windDirection",
+                    "$windGust${windUnit.unit} $windDirection"
                 )
             } else {
-                binding.chartWind.onHighlightedData(time, "$windSpeed $windDirection")
+                binding.chartWind.onHighlightedData(
+                    time,
+                    "$windSpeed${windUnit.unit} $windDirection"
+                )
             }
 
             autoHighlightCharts(e.x)

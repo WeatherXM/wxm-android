@@ -120,7 +120,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 windDirection = item.currentWeather?.windDirection,
                 includeUnits = false
             )
-            val windUnit = UnitSelector.getWindUnit(itemView.context)
+            val windUnit = UnitSelector.getWindUnit(itemView.context).unit
             val windDirection =
                 getFormattedWindDirection(itemView.context, item.currentWeather?.windDirection)
             binding.wind.setData(
