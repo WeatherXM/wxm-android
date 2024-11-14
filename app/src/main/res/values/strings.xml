@@ -146,7 +146,7 @@
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
-    <string name="observations">Observations</string>
+    <string name="overview">Overview</string>
     <string name="forecast">Forecast</string>
     <string name="no_data_message_public_device">No weather data received from this station yet, likely due to connectivity or operational issues.</string>
 

@@ -130,7 +130,7 @@ class DeviceDetailsActivity : BaseActivity() {
         @Suppress("UseCheckOrError")
         TabLayoutMediator(binding.navigatorGroup, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                OBSERVATIONS -> getString(R.string.observations)
+                OBSERVATIONS -> getString(R.string.overview)
                 FORECAST_TAB_POSITION -> resources.getString(R.string.forecast)
                 REWARDS_TAB_POSITION -> resources.getString(R.string.rewards)
                 else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
