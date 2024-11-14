@@ -2,6 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.successUnitResponse
 import com.weatherxm.TestUtils.isError
@@ -21,7 +22,6 @@ import io.mockk.verify
 
 class WalletDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
-    val cacheService = mockk<CacheService>()
     val networkSource = NetworkWalletDataSource(apiService)
     val cacheSource = CacheWalletDataSource(cacheService)
 

@@ -1,6 +1,7 @@
 package com.weatherxm.data.datasource
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testNetworkCall
@@ -8,7 +9,6 @@ import com.weatherxm.data.datasource.DeviceOTADataSourceImpl.Companion.LAST_OTA_
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl.Companion.LAST_OTA_VERSION
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
@@ -19,7 +19,6 @@ import okhttp3.ResponseBody
 
 class DeviceOTADataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
-    val cacheService = mockk<CacheService>()
     val datasource = DeviceOTADataSourceImpl(apiService, cacheService)
 
     val deviceId = "deviceId"

@@ -7,16 +7,18 @@ import com.weatherxm.R
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.TestUtils.defaultMockUnitSelector
 import com.weatherxm.TestUtils.isEqual
 import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.models.HourlyWeather
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.LocalDateTimeRange
+import com.weatherxm.util.UnitSelector
 import io.kotest.core.spec.style.BehaviorSpec
+import io.mockk.clearMocks
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -68,11 +70,9 @@ class ChartsUseCaseTest : BehaviorSpec({
         solarRadiation = LineChartData(timestamps, solarRadiationEntries)
     )
 
-
     beforeSpec {
         startKoin {
             modules(module {
-                single<CacheService> { mockk() }
                 single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
                     DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
                 }
@@ -80,6 +80,8 @@ class ChartsUseCaseTest : BehaviorSpec({
                 single { sharedPref }
             })
         }
+        mockkObject(UnitSelector)
+        defaultMockUnitSelector()
 
         LocalDateTimeRange(
             localDate.atStartOfDay(),
@@ -184,5 +186,6 @@ class ChartsUseCaseTest : BehaviorSpec({
 
     afterSpec {
         stopKoin()
+        clearMocks(UnitSelector)
     }
 })

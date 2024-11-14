@@ -1,6 +1,7 @@
 package com.weatherxm.util
 
 import com.weatherxm.R
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.context
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
@@ -13,15 +14,12 @@ import com.weatherxm.ui.common.WeatherUnitType
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockk
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 class UnitSelectorTest : KoinTest, BehaviorSpec({
-    val cacheService = mockk<CacheService>()
-
     beforeSpec {
         startKoin {
             modules(
@@ -159,7 +157,7 @@ class UnitSelectorTest : KoinTest, BehaviorSpec({
         }
     }
 
-    context("Get Wind Direction") {
+    context("Get Wind") {
         When("it's m/s") {
             every {
                 cacheService.getPreferredUnit(

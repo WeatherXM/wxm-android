@@ -80,8 +80,12 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                 } ?: precipProbabilityEntries.add(emptyEntry)
 
                 // Get the wind speed and direction formatted
-                val windSpeedValue = convertWindSpeed(context, hourlyWeather.windSpeed)?.toFloat()
-                val windGustValue = convertWindSpeed(context, hourlyWeather.windGust)?.toFloat()
+                val windSpeedValue = hourlyWeather.windSpeed?.let {
+                    convertWindSpeed(context, it)
+                }?.toFloat()
+                val windGustValue = hourlyWeather.windGust?.let {
+                    convertWindSpeed(context, it)
+                }?.toFloat()
                 val windDirection: Drawable? =
                     Weather.getWindDirectionDrawable(context, hourlyWeather.windDirection)
                 hourlyWeather.windDirection?.let {

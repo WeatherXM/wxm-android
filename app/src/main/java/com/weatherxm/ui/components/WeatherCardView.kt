@@ -9,6 +9,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.databinding.ViewWeatherCardBinding
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setNoDataMessage
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.visible
@@ -117,10 +118,10 @@ class WeatherCardView : LinearLayout {
                 ),
                 pressureUnit
             )
-            uv.setData(
-                Weather.getFormattedUV(context, weatherData?.uvIndex, includeUnit = false),
-                getUVClassification(context, weatherData?.uvIndex)
-            )
+            val uvLabel = weatherData?.uvIndex?.let {
+                getUVClassification(context, it)
+            } ?: String.empty()
+            uv.setData(Weather.getFormattedUV(context, weatherData?.uvIndex, false), uvLabel)
             solarRadiation.setData(
                 Weather.getFormattedSolarRadiation(context, weatherData?.solarIrradiance, false),
                 context.getString(R.string.solar_radiation_unit)

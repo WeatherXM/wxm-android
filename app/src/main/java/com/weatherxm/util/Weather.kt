@@ -13,7 +13,6 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import org.koin.core.component.KoinComponent
-import timber.log.Timber
 
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
@@ -164,17 +163,13 @@ object Weather : KoinComponent {
     }
 
     @Suppress("MagicNumber")
-    fun getUVClassification(context: Context, value: Int?): String {
-        return if (value == null) {
-            String.empty()
-        } else {
-            when {
-                value <= 2 -> context.getString(R.string.uv_low)
-                value <= 5 -> context.getString(R.string.uv_moderate)
-                value <= 7 -> context.getString(R.string.uv_high)
-                value <= 10 -> context.getString(R.string.uv_very_high)
-                else -> context.getString(R.string.uv_extreme)
-            }
+    fun getUVClassification(context: Context, value: Int): String {
+        return when {
+            value <= 2 -> context.getString(R.string.uv_low)
+            value <= 5 -> context.getString(R.string.uv_moderate)
+            value <= 7 -> context.getString(R.string.uv_high)
+            value <= 10 -> context.getString(R.string.uv_very_high)
+            else -> context.getString(R.string.uv_extreme)
         }
     }
 
@@ -223,7 +218,7 @@ object Weather : KoinComponent {
 
     private fun getFormattedWindSpeed(
         context: Context,
-        value: Float?,
+        value: Float,
         includeUnit: Boolean = true,
         ignoreConversion: Boolean = false
     ): String {
@@ -232,9 +227,6 @@ object Weather : KoinComponent {
             weatherUnit.unit
         } else {
             String.empty()
-        }
-        if (value == null) {
-            return "$EMPTY_VALUE$unit"
         }
 
         val decimals = if (weatherUnit.type == WeatherUnitType.BEAUFORT) {
@@ -314,13 +306,7 @@ object Weather : KoinComponent {
         }
     }
 
-    fun convertPrecipitation(context: Context, value: Number?): Number? {
-        if (value == null) {
-            Timber.d("Precipitation value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
+    fun convertPrecipitation(context: Context, value: Number): Number {
         // Return the value based on the weather unit the user wants
         val precipUnitType = UnitSelector.getPrecipitationUnit(context, false).type
         return if (precipUnitType == WeatherUnitType.MILLIMETERS) {
@@ -332,13 +318,7 @@ object Weather : KoinComponent {
         }
     }
 
-    fun convertWindSpeed(context: Context, value: Number?): Number? {
-        if (value == null) {
-            Timber.d("Wind speed value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
+    fun convertWindSpeed(context: Context, value: Number): Number {
         // Return the value based on the weather unit the user wants
         return when (UnitSelector.getWindUnit(context).type) {
             WeatherUnitType.MS -> {
@@ -363,13 +343,7 @@ object Weather : KoinComponent {
         }
     }
 
-    fun convertPressure(context: Context, value: Number?): Number? {
-        if (value == null) {
-            Timber.d("Pressure value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
+    fun convertPressure(context: Context, value: Number): Number {
         // Return the value based on the weather unit the user wants
         return if (UnitSelector.getPressureUnit(context).type == WeatherUnitType.HPA) {
             // This is the default value - hpa - so we show 1 decimal

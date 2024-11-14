@@ -1,5 +1,6 @@
 package com.weatherxm.data.datasource
 
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.successUnitResponse
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.testNetworkCall
@@ -14,7 +15,6 @@ import io.mockk.verify
 
 class FollowDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
-    val cacheService = mockk<CacheService>()
     val networkSource = NetworkFollowDataSource(apiService)
     val cacheSource = CacheFollowDataSource(cacheService)
 

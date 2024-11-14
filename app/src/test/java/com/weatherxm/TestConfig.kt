@@ -9,6 +9,7 @@ import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.ErrorResponse
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
@@ -42,6 +43,7 @@ object TestConfig : AbstractProjectConfig() {
     val successUnitResponse =
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
     val geocoder = mockk<Geocoder>()
+    val cacheService = mockk<CacheService>()
 
     const val REACH_OUT_MSG = "Reach Out"
     const val DEVICE_NOT_FOUND_MSG = "Device Not Found"

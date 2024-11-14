@@ -2,6 +2,8 @@ package com.weatherxm.util
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.context
+import com.weatherxm.TestUtils.defaultMockUnitSelector
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.WeatherUnit
 import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.util.Weather.getFormattedHumidity
@@ -11,11 +13,12 @@ import com.weatherxm.util.Weather.getFormattedPressure
 import com.weatherxm.util.Weather.getFormattedSolarRadiation
 import com.weatherxm.util.Weather.getFormattedTemperature
 import com.weatherxm.util.Weather.getFormattedUV
+import com.weatherxm.util.Weather.getFormattedWindDirection
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockkObject
-import io.mockk.unmockkObject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -36,31 +39,7 @@ class WeatherTest : KoinTest, BehaviorSpec({
             )
         }
         mockkObject(UnitSelector)
-
-        every { UnitSelector.getTemperatureUnit(context) } returns WeatherUnit(
-            WeatherUnitType.CELSIUS,
-            context.getString(R.string.temperature_celsius)
-        )
-        every { UnitSelector.getPrecipitationUnit(context, false) } returns WeatherUnit(
-            WeatherUnitType.MILLIMETERS,
-            context.getString(R.string.precipitation_mm)
-        )
-        every { UnitSelector.getPrecipitationUnit(context, true) } returns WeatherUnit(
-            WeatherUnitType.MILLIMETERS,
-            context.getString(R.string.precipitation_mm_hour)
-        )
-        every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
-            WeatherUnitType.MS,
-            context.getString(R.string.wind_speed_ms)
-        )
-        every { UnitSelector.getWindDirectionUnit(context) } returns WeatherUnit(
-            WeatherUnitType.CARDINAL,
-            context.getString(R.string.wind_direction_cardinal)
-        )
-        every { UnitSelector.getPressureUnit(context) } returns WeatherUnit(
-            WeatherUnitType.HPA,
-            context.getString(R.string.pressure_hpa)
-        )
+        defaultMockUnitSelector()
     }
 
     given("A Weather icon") {
@@ -221,7 +200,7 @@ class WeatherTest : KoinTest, BehaviorSpec({
         }
     }
 
-    context("Format Wind Speed") {
+    context("Format Wind") {
         given("A Wind Speed value") {
             When("value is null") {
                 testNullWindValue()
@@ -260,10 +239,17 @@ class WeatherTest : KoinTest, BehaviorSpec({
                 }
             }
         }
+        given("a wind direction value") {
+            When("it is null") {
+                then("return an $EMPTY_VALUE") {
+                    getFormattedWindDirection(context, null) shouldBe EMPTY_VALUE
+                }
+            }
+        }
     }
 
     afterSpec {
         stopKoin()
-        unmockkObject(UnitSelector)
+        clearMocks(UnitSelector)
     }
 })
