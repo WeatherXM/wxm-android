@@ -183,7 +183,7 @@ class WeatherTest : KoinTest, BehaviorSpec({
             }
             When("value is not null") {
                 and("is in millimeters") {
-                    testPrecipitation(WeatherUnitType.MILLIMETERS, "mm/h", "mm", 10.6F)
+                    testPrecipitation("mm/h", "mm", 10.6F)
                 }
                 and("unit is in inches") {
                     every { UnitSelector.getPrecipitationUnit(context, false) } returns WeatherUnit(
@@ -194,7 +194,7 @@ class WeatherTest : KoinTest, BehaviorSpec({
                         WeatherUnitType.INCHES,
                         context.getString(R.string.precipitation_in_hour)
                     )
-                    testPrecipitation(WeatherUnitType.INCHES, "in/h", "in", 0.42F)
+                    testPrecipitation("in/h", "in", 0.42F)
                 }
             }
         }

@@ -9,8 +9,14 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.weatherxm.databinding.ViewChartsBinding
 import com.weatherxm.ui.common.LineChartData
+import com.weatherxm.util.NumberUtils.formatNumber
+import com.weatherxm.util.UnitSelector
 import com.weatherxm.util.Weather
+import com.weatherxm.util.Weather.getDecimalsPrecipitation
+import com.weatherxm.util.Weather.getDecimalsPressure
 import com.weatherxm.util.Weather.getFormattedSolarRadiation
+import com.weatherxm.util.Weather.getFormattedWindDirection
+import com.weatherxm.util.Weather.getWindDecimals
 import com.weatherxm.util.initHumidity24hChart
 import com.weatherxm.util.initPrecipitation24hChart
 import com.weatherxm.util.initPressure24hChart
@@ -84,18 +90,10 @@ class ChartsView : LinearLayout {
                              * is already converted to the user's preference so we need to handle
                              * only the decimals
                              */
-                            val temperature = Weather.getFormattedTemperature(
-                                context = context,
-                                value = e.y,
-                                decimals = 1,
-                                ignoreConversion = true
-                            )
-                            val feelsLike = Weather.getFormattedTemperature(
-                                context = context,
-                                value = feelsLikeData.entries[e.x.toInt()].y,
-                                decimals = 1,
-                                ignoreConversion = true
-                            )
+                            val unit = UnitSelector.getTemperatureUnit(context).unit
+                            val temperature = "${formatNumber(e.y, 1)}$unit"
+                            val feelsLike =
+                                "${formatNumber(feelsLikeData.entries[e.x.toInt()].y, 1)}$unit"
                             binding.chartTemperature.onHighlightedData(time, temperature, feelsLike)
 
                             autoHighlightCharts(e.x)
@@ -147,12 +145,12 @@ class ChartsView : LinearLayout {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
                         if (e != null && !e.y.isNaN()) {
                             val time = data.timestamps[e.x.toInt()]
-                            val pressure = Weather.getFormattedPressure(
-                                context = context,
-                                value = e.y,
-                                ignoreConversion = true
+                            val pressureUnit = UnitSelector.getPressureUnit(context)
+                            val pressure = formatNumber(e.y, getDecimalsPressure(pressureUnit.type))
+                            binding.chartPressure.onHighlightedData(
+                                time,
+                                "$pressure${pressureUnit.unit}"
                             )
-                            binding.chartPressure.onHighlightedData(time, pressure)
 
                             autoHighlightCharts(e.x)
                         } else {
@@ -267,19 +265,22 @@ class ChartsView : LinearLayout {
     ) {
         if (e != null && !e.y.isNaN()) {
             val time = secondaryData.timestamps[e.x.toInt()]
-            val accumulated = Weather.getFormattedPrecipitation(
-                context = context,
-                value = secondaryData.entries[e.x.toInt()].y,
-                isRainRate = false,
-                ignoreConversion = true
+            val accumulatedUnit = UnitSelector.getPrecipitationUnit(context, false)
+            val rateUnit = UnitSelector.getPrecipitationUnit(context, true)
+
+            val accumulatedValue = formatNumber(
+                secondaryData.entries[e.x.toInt()].y,
+                getDecimalsPrecipitation(accumulatedUnit.type)
             )
-            val rate = Weather.getFormattedPrecipitation(
-                context = context,
-                value = primaryData.entries[e.x.toInt()].y,
-                isRainRate = true,
-                ignoreConversion = true
+            val rateValue = formatNumber(
+                primaryData.entries[e.x.toInt()].y,
+                getDecimalsPrecipitation(rateUnit.type)
             )
-            binding.chartPrecipitation.onHighlightedData(time, rate, accumulated)
+            binding.chartPrecipitation.onHighlightedData(
+                time,
+                "$rateValue$rateUnit",
+                "$accumulatedValue$accumulatedUnit"
+            )
 
             autoHighlightCharts(e.x)
         } else {
@@ -294,16 +295,19 @@ class ChartsView : LinearLayout {
     ) {
         if (e != null && !e.y.isNaN()) {
             val time = secondaryData.timestamps[e.x.toInt()]
-            val precipitation = Weather.getFormattedPrecipitation(
-                context = context,
-                value = primaryData.entries[e.x.toInt()].y,
-                isRainRate = false,
-                ignoreConversion = true
+            val precipUnit = UnitSelector.getPrecipitationUnit(context, false)
+            val precipitationValue = formatNumber(
+                primaryData.entries[e.x.toInt()].y,
+                getDecimalsPrecipitation(precipUnit.type)
             )
             val percentage = Weather.getFormattedPrecipitationProbability(
                 secondaryData.entries[e.x.toInt()].y.toInt()
             )
-            binding.chartPrecipitation.onHighlightedData(time, precipitation, percentage)
+            binding.chartPrecipitation.onHighlightedData(
+                time,
+                "${precipitationValue}${precipUnit.unit}",
+                percentage
+            )
 
             autoHighlightCharts(e.x)
         } else {
@@ -319,23 +323,21 @@ class ChartsView : LinearLayout {
     ) {
         if (e != null && !e.y.isNaN()) {
             val time = windSpeedData.timestamps[e.x.toInt()]
-            val windSpeed = Weather.getFormattedWind(
-                context = context,
-                windSpeed = e.y,
-                windDirection = windDirectionData.entries[e.x.toInt()].y.toInt(),
-                ignoreConversion = true
-            )
+            val windUnit = UnitSelector.getWindUnit(context)
+            val decimals = getWindDecimals(windUnit.type)
+            val windSpeed = formatNumber(e.y, decimals)
+            val windDirection =
+                getFormattedWindDirection(context, windDirectionData.entries[e.x.toInt()].y.toInt())
 
             if (windGustData.isDataValid()) {
-                val windGust = Weather.getFormattedWind(
-                    context = context,
-                    windSpeed = windGustData.entries[e.x.toInt()].y,
-                    windDirection = windDirectionData.entries[e.x.toInt()].y.toInt(),
-                    ignoreConversion = true
+                val windGust = formatNumber(windGustData.entries[e.x.toInt()].y, decimals)
+                binding.chartWind.onHighlightedData(
+                    time,
+                    "$windSpeed $windDirection",
+                    "$windGust $windDirection"
                 )
-                binding.chartWind.onHighlightedData(time, windSpeed, windGust)
             } else {
-                binding.chartWind.onHighlightedData(time, windSpeed)
+                binding.chartWind.onHighlightedData(time, "$windSpeed $windDirection")
             }
 
             autoHighlightCharts(e.x)

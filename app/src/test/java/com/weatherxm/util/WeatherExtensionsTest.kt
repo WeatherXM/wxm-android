@@ -136,15 +136,6 @@ suspend fun BehaviorSpecWhenContainerScope.testTemperature(
             getFormattedTemperature(context, 25f, includeUnit = false) shouldBe "$expectedInt"
         }
     }
-    and("we should ignore converting the value") {
-        then("it should return the value as-is with the correct unit") {
-            getFormattedTemperature(
-                context,
-                25f,
-                ignoreConversion = true
-            ) shouldBe "25$expectedUnit"
-        }
-    }
 }
 
 suspend fun BehaviorSpecWhenContainerScope.testSolarRadiation(expectedValue: Float) {
@@ -170,22 +161,9 @@ suspend fun BehaviorSpecWhenContainerScope.testPressure(
             getFormattedPressure(context, 1000.35f, false) shouldBe expectedValue
         }
     }
-    and("we should ignore converting the value") {
-        val expectedValueNoConversion = if (weatherUnit.type == WeatherUnitType.HPA) {
-            29.5F
-        } else {
-            29.54F
-        }
-        getFormattedPressure(
-            context,
-            29.54f,
-            ignoreConversion = true
-        ) shouldBe "$expectedValueNoConversion${weatherUnit.unit}"
-    }
 }
 
 suspend fun BehaviorSpecWhenContainerScope.testPrecipitation(
-    weatherUnitType: WeatherUnitType,
     expectedRateUnit: String,
     expectedAccUnit: String,
     expectedValue: Float
@@ -211,18 +189,6 @@ suspend fun BehaviorSpecWhenContainerScope.testPrecipitation(
             ) shouldBe "$expectedValue$expectedAccUnit"
         }
     }
-    and("we should ignore converting the value") {
-        val expectedValueNoConversion = if (weatherUnitType == WeatherUnitType.MILLIMETERS) {
-            10.6F
-        } else {
-            10.55F
-        }
-        getFormattedPrecipitation(
-            context,
-            10.55f,
-            ignoreConversion = true
-        ) shouldBe "$expectedValueNoConversion$expectedRateUnit"
-    }
 }
 
 suspend fun BehaviorSpecWhenContainerScope.testWind(
@@ -240,15 +206,6 @@ suspend fun BehaviorSpecWhenContainerScope.testWind(
         then("it should return the value with the $expectedUnit unit") {
             getFormattedWind(context, 10.55F, 10) shouldBe "$value$expectedUnit N"
         }
-        and("we should ignore converting the value") {
-            val expectedValueNoConversion = if (isBeaufortUsed) 11 else 10.6
-            getFormattedWind(
-                context,
-                10.55F,
-                10,
-                ignoreConversion = true
-            ) shouldBe "$expectedValueNoConversion$expectedUnit N"
-        }
     }
     and("use Degrees direction") {
         every { UnitSelector.getWindDirectionUnit(context) } returns WeatherUnit(
@@ -262,15 +219,6 @@ suspend fun BehaviorSpecWhenContainerScope.testWind(
     and("units are NOT included") {
         then("it should return the value without the unit") {
             getFormattedWind(context, 10.55F, 10, false) shouldBe "$value"
-        }
-        and("we should ignore converting the value") {
-            val expectedValueNoConversion = if (isBeaufortUsed) 11 else 10.6
-            getFormattedWind(
-                context,
-                10.55F,
-                10,
-                ignoreConversion = true
-            ) shouldBe "$expectedValueNoConversion$expectedUnit 10°"
         }
     }
 }

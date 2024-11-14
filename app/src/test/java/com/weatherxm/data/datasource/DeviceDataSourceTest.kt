@@ -6,6 +6,7 @@ import com.weatherxm.TestConfig.successUnitResponse
 import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testNetworkCall
 import com.weatherxm.TestUtils.testThrowNotImplemented
+import com.weatherxm.data.datasource.NetworkDeviceDataSource.Companion.CLAIM_MAX_RETRIES
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Location
@@ -18,6 +19,8 @@ import com.weatherxm.data.network.FriendlyNameBody
 import com.weatherxm.data.network.LocationBody
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -197,19 +200,19 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     context("Claim a device") {
         When("Using the Network Source") {
-//            and("it's a DeviceClaiming failure") {
-//                coEvery {
-//                    apiService.claimDevice(ClaimDeviceBody(invalidSerialNumber, location, secret))
-//                } returns deviceClaimingErrorResponse
-//                then("retry until [CLAIM_MAX_RETRIES = $CLAIM_MAX_RETRIES] is hit") {
-//                    networkSource.claimDevice(invalidSerialNumber, location, secret)
-//                    coVerify(exactly = CLAIM_MAX_RETRIES + 1) {
-//                        apiService.claimDevice(
-//                            ClaimDeviceBody(invalidSerialNumber, location, secret)
-//                        )
-//                    }
-//                }
-//            }
+            and("it's a DeviceClaiming failure") {
+                coEvery {
+                    apiService.claimDevice(ClaimDeviceBody(invalidSerialNumber, location, secret))
+                } returns deviceClaimingErrorResponse
+                then("retry until [CLAIM_MAX_RETRIES = $CLAIM_MAX_RETRIES] is hit") {
+                    networkSource.claimDevice(invalidSerialNumber, location, secret)
+                    coVerify(exactly = CLAIM_MAX_RETRIES + 1) {
+                        apiService.claimDevice(
+                            ClaimDeviceBody(invalidSerialNumber, location, secret)
+                        )
+                    }
+                }
+            }
             and("it's either a success or a failure other than DeviceClaiming") {
                 testNetworkCall(
                     "device",
