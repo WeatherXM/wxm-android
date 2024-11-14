@@ -571,7 +571,6 @@
     <string name="please_select_station_desc">You need to select a station you own or follow.</string>
 
     <!-- Share/Follow Station -->
-    <string name="share_station">Share Station</string>
     <string name="add_favorites">Add to favorites?</string>
     <string name="add_favorites_desc"><![CDATA[<b>%s</b> seems offline at the moment. You can still add it to your favorites, but keep in mind that its data may not be correct.]]></string>
     <string name="remove_favorites">Remove from favorites?</string>
