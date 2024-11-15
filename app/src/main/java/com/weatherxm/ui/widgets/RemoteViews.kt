@@ -5,6 +5,7 @@ import android.app.TaskStackBuilder
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
@@ -266,59 +267,78 @@ fun RemoteViews.setWeatherData(
      * Data shown only on detailed widget
      */
     if (widgetType == WidgetType.CURRENT_WEATHER_DETAILED) {
-        val windGustValue = Weather.getFormattedWind(
+        setWeatherDataOnDetailed(
             context = context,
-            windSpeed = device.currentWeather?.windGust,
-            windDirection = windDirection,
-            includeUnits = false
-        )
-        setTextViewText(R.id.windGustValue, windGustValue)
-        setTextViewText(R.id.windGustUnit, "$windUnit $windDirectionUnit")
-        setImageViewBitmap(R.id.windGustIconDirection, windDirectionDrawable?.toBitmap())
-
-        val dailyPrecipValue = Weather.getFormattedPrecipitation(
-            context = context,
-            value = device.currentWeather?.precipAccumulated,
-            isRainRate = false,
-            includeUnit = false
-        )
-        setTextViewText(R.id.dailyPrecipValue, dailyPrecipValue)
-        setTextViewText(
-            R.id.dailyPrecipUnit,
-            UnitSelector.getPrecipitationUnit(context, false).unit
-        )
-
-        val pressureValue = Weather.getFormattedPressure(
-            context = context,
-            value = device.currentWeather?.pressure,
-            includeUnit = false
-        )
-        val pressureUnit = UnitSelector.getPressureUnit(context).unit
-        setTextViewText(R.id.pressureValue, pressureValue)
-        setTextViewText(R.id.pressureUnit, pressureUnit)
-
-        val dewPointValue = Weather.getFormattedTemperature(
-            context = context,
-            value = device.currentWeather?.dewPoint,
-            decimals = 1,
-            includeUnit = false
-        )
-        setTextViewText(R.id.dewValue, dewPointValue)
-        setTextViewText(R.id.dewUnit, temperatureUnit)
-
-        val radiationValue = Weather.getFormattedSolarRadiation(
-            context,
-            device.currentWeather?.solarIrradiance,
-            false
-        )
-        setTextViewText(R.id.radiationValue, radiationValue)
-        setTextViewText(R.id.radiationUnit, context.getString(R.string.solar_radiation_unit))
-
-        setTextViewText(
-            R.id.uvValue,
-            Weather.getFormattedUV(context, device.currentWeather?.uvIndex)
+            device = device,
+            temperatureUnit = temperatureUnit,
+            windUnit = windUnit,
+            windDirectionUnit = windDirectionUnit,
+            windDirectionDrawable = windDirectionDrawable
         )
     }
+}
+
+@Suppress("LongParameterList")
+private fun RemoteViews.setWeatherDataOnDetailed(
+    context: Context,
+    device: UIDevice,
+    temperatureUnit: String,
+    windUnit: String,
+    windDirectionUnit: String,
+    windDirectionDrawable: Drawable?
+) {
+    val windGustValue = Weather.getFormattedWind(
+        context = context,
+        windSpeed = device.currentWeather?.windGust,
+        windDirection = device.currentWeather?.windDirection,
+        includeUnits = false
+    )
+    setTextViewText(R.id.windGustValue, windGustValue)
+    setTextViewText(R.id.windGustUnit, "$windUnit $windDirectionUnit")
+    setImageViewBitmap(R.id.windGustIconDirection, windDirectionDrawable?.toBitmap())
+
+    val dailyPrecipValue = Weather.getFormattedPrecipitation(
+        context = context,
+        value = device.currentWeather?.precipAccumulated,
+        isRainRate = false,
+        includeUnit = false
+    )
+    setTextViewText(R.id.dailyPrecipValue, dailyPrecipValue)
+    setTextViewText(
+        R.id.dailyPrecipUnit,
+        UnitSelector.getPrecipitationUnit(context, false).unit
+    )
+
+    val pressureValue = Weather.getFormattedPressure(
+        context = context,
+        value = device.currentWeather?.pressure,
+        includeUnit = false
+    )
+    val pressureUnit = UnitSelector.getPressureUnit(context).unit
+    setTextViewText(R.id.pressureValue, pressureValue)
+    setTextViewText(R.id.pressureUnit, pressureUnit)
+
+    val dewPointValue = Weather.getFormattedTemperature(
+        context = context,
+        value = device.currentWeather?.dewPoint,
+        decimals = 1,
+        includeUnit = false
+    )
+    setTextViewText(R.id.dewValue, dewPointValue)
+    setTextViewText(R.id.dewUnit, temperatureUnit)
+
+    val radiationValue = Weather.getFormattedSolarRadiation(
+        context,
+        device.currentWeather?.solarIrradiance,
+        false
+    )
+    setTextViewText(R.id.radiationValue, radiationValue)
+    setTextViewText(R.id.radiationUnit, context.getString(R.string.solar_radiation_unit))
+
+    setTextViewText(
+        R.id.uvValue,
+        Weather.getFormattedUV(context, device.currentWeather?.uvIndex)
+    )
 }
 
 private fun RemoteViews.setRelationIcon(relation: DeviceRelation?) {

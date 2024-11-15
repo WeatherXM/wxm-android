@@ -2,7 +2,6 @@ package com.weatherxm.data
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
-import android.content.Context
 import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.DecimalFormatSymbols

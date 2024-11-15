@@ -10,7 +10,6 @@ import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.mockEitherRight
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.widgets.WidgetType
 import io.kotest.core.spec.style.BehaviorSpec
