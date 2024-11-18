@@ -5,7 +5,7 @@
     <item
         android:id="@+id/share_station"
         android:icon="@drawable/ic_share_station"
-        android:title="@string/share_station"
+        android:title="@string/share"
         app:showAsAction="never" />
 
     <item

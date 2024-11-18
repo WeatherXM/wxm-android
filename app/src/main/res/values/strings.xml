@@ -146,7 +146,7 @@
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
-    <string name="observations">Observations</string>
+    <string name="overview">Overview</string>
     <string name="forecast">Forecast</string>
     <string name="no_data_message_public_device">No weather data received from this station yet, likely due to connectivity or operational issues.</string>
 
@@ -571,7 +571,6 @@
     <string name="please_select_station_desc">You need to select a station you own or follow.</string>
 
     <!-- Share/Follow Station -->
-    <string name="share_station">Share Station</string>
     <string name="add_favorites">Add to favorites?</string>
     <string name="add_favorites_desc"><![CDATA[<b>%s</b> seems offline at the moment. You can still add it to your favorites, but keep in mind that its data may not be correct.]]></string>
     <string name="remove_favorites">Remove from favorites?</string>
