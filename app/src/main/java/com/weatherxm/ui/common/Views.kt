@@ -297,7 +297,7 @@ fun Chip.lowBatteryChip() {
 }
 
 fun Chip.offlineChip() {
-    text = context.getString(R.string.station_inactive)
+    text = context.getString(R.string.inactive)
     setChipBackgroundColorResource(R.color.errorTint)
     setIcon(R.drawable.ic_error_hex_filled)
     setChipIconTintResource(R.color.error)
@@ -324,7 +324,7 @@ fun Chip.setStatusChip(device: UIDevice) {
             setChipIconTintResource(R.color.success)
         }
         false -> {
-            setChipBackgroundColorResource(R.color.errorTint)
+            setChipBackgroundColorResource(R.color.blueTint)
             setChipIconTintResource(R.color.error)
         }
         else -> {
