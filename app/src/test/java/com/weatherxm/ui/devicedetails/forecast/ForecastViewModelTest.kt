@@ -4,6 +4,7 @@ import com.weatherxm.R
 import com.weatherxm.TestConfig.CONNECTION_TIMEOUT_MSG
 import com.weatherxm.TestConfig.NO_CONNECTION_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -24,17 +25,11 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ForecastViewModelTest : BehaviorSpec({
     val usecase = mockk<ForecastUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -53,7 +48,6 @@ class ForecastViewModelTest : BehaviorSpec({
     val invalidTimezone = ApiError.UserError.InvalidTimezone("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -80,7 +74,8 @@ class ForecastViewModelTest : BehaviorSpec({
             device,
             resources,
             usecase,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -213,7 +208,6 @@ class ForecastViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

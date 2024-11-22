@@ -19,6 +19,7 @@ import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import com.weatherxm.util.isToday
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -31,7 +32,8 @@ class HistoryViewModel(
     private val historyUseCase: HistoryUseCase,
     private val chartsUseCase: ChartsUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     companion object {
@@ -69,7 +71,7 @@ class HistoryViewModel(
             }
         }
 
-        updateWeatherHistoryJob = viewModelScope.launch(Dispatchers.IO) {
+        updateWeatherHistoryJob = viewModelScope.launch(dispatcher) {
             // Post loading status
             charts.postValue(Resource.loading())
 

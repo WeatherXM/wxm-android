@@ -4,22 +4,21 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import arrow.core.getOrElse
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
-import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
@@ -55,12 +54,10 @@ class LoginActivity : BaseActivity() {
             onUserResult(it)
         }
 
-        model.isLoggedIn().observe(this) { result ->
-            if (result.getOrElse { false }) {
-                Timber.d("Already Logged In. Finish the activity.")
-                toast(R.string.already_logged_in)
-                finish()
-            }
+        if (model.isLoggedIn()) {
+            Timber.d("Already Logged In. Finish the activity.")
+            toast(R.string.already_logged_in)
+            finish()
         }
 
         binding.username.onTextChanged {

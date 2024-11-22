@@ -7,7 +7,7 @@ import com.weatherxm.data.network.AuthToken
 interface AuthRepository {
     suspend fun login(username: String, password: String): Either<Failure, AuthToken>
     suspend fun logout()
-    suspend fun isLoggedIn(): Either<Failure, Boolean>
+    fun isLoggedIn(): Boolean
     suspend fun signup(
         username: String,
         firstName: String?,

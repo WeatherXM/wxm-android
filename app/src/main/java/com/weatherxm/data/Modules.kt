@@ -276,7 +276,6 @@ import java.util.concurrent.TimeUnit
 const val RETROFIT_API = "RETROFIT_API"
 const val RETROFIT_AUTH = "RETROFIT_AUTH"
 const val APP_DATABASE_NAME = "WEATHERXM"
-
 const val DECIMAL_FORMAT_TOKENS = "0.00"
 const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
@@ -522,13 +521,13 @@ private val usecases = module {
         RewardsUseCaseImpl(get(), androidContext())
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get(), get(), get())
+        AuthUseCaseImpl(get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get(), get())
+        PreferencesUseCaseImpl(get(), get())
     }
     single<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(get(), get())
@@ -549,7 +548,7 @@ private val usecases = module {
         StationSettingsUseCaseImpl(get(), get(), get())
     }
     single<WidgetSelectStationUseCase> {
-        WidgetSelectStationUseCaseImpl(get(), get(), get())
+        WidgetSelectStationUseCaseImpl(get(), get())
     }
     single<WidgetCurrentWeatherUseCase> {
         WidgetCurrentWeatherUseCaseImpl(get(), get())
@@ -972,10 +971,10 @@ private val viewmodels = module {
     viewModel { ExplorerViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
     viewModel { PasswordPromptViewModel(get(), get(), get()) }
-    viewModel { PreferenceViewModel(get(), get()) }
+    viewModel { PreferenceViewModel(get(), get(), get()) }
     viewModel { ResetPasswordViewModel(get(), get(), get()) }
     viewModel { RewardsClaimViewModel(get(), get()) }
     viewModel { RewardsListViewModel(get(), get()) }
@@ -994,7 +993,7 @@ private val viewmodels = module {
     viewModel { SignupViewModel(get(), get(), get()) }
     viewModel { UpdatePromptViewModel(get()) }
     viewModel { DeepLinkRouterViewModel(get(), get(), get()) }
-    viewModel { SelectStationViewModel(get()) }
+    viewModel { SelectStationViewModel(get(), get()) }
     viewModel { ClaimLocationViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }

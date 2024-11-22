@@ -12,10 +12,15 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.StartupUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class StartupViewModel(private val startupUseCase: StartupUseCase) : ViewModel() {
+class StartupViewModel(
+    private val startupUseCase: StartupUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
     private val onStartupState = MutableLiveData<StartupState>()
 
@@ -49,7 +54,7 @@ class StartupViewModel(private val startupUseCase: StartupUseCase) : ViewModel()
     }
 
     private fun defaultStartup() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onStartupState.postValue(startupUseCase.getStartupState().first())
         }
     }

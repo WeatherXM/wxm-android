@@ -142,11 +142,11 @@
     <string name="empty_weather_stations">No stations yet?</string>
     <string name="view_explorer_map">View Explorer Map</string>
     <string name="displayed_times">All displayed times are in the Station’s timezone (%s).</string>
-    <string name="station_inactive">Station inactive</string>
+    <string name="inactive">Inactive</string>
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
-    <string name="observations">Observations</string>
+    <string name="overview">Overview</string>
     <string name="forecast">Forecast</string>
     <string name="no_data_message_public_device">No weather data received from this station yet, likely due to connectivity or operational issues.</string>
 
@@ -556,7 +556,7 @@
     <string name="station_inactive_alert_message_public">We\’re unable to show live station data. Please check back later for further updates.</string>
     <string name="update_required">Update Required</string>
     <string name="low_battery">Low Battery</string>
-    <string name="low_battery_desc">Your station is reporting low battery. This may lead to data gaps at night, or in low-sunlight conditions and, eventually, lose rewards. Read more on how to replace your station batteries.</string>
+    <string name="low_battery_desc">Your station is reporting low battery. This will lead to data gaps and eventually loss of rewards. Read more on how to replace your station batteries.</string>
 
     <!-- Widgets -->
     <string name="select_station">Select Station for Widget</string>
@@ -571,7 +571,6 @@
     <string name="please_select_station_desc">You need to select a station you own or follow.</string>
 
     <!-- Share/Follow Station -->
-    <string name="share_station">Share Station</string>
     <string name="add_favorites">Add to favorites?</string>
     <string name="add_favorites_desc"><![CDATA[<b>%s</b> seems offline at the moment. You can still add it to your favorites, but keep in mind that its data may not be correct.]]></string>
     <string name="remove_favorites">Remove from favorites?</string>

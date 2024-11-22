@@ -22,6 +22,8 @@ import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -33,7 +35,8 @@ class DeviceEditLocationViewModel(
     private val usecase: EditLocationUseCase,
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
-    private val resources: Resources
+    private val resources: Resources,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null
 
@@ -59,7 +62,7 @@ class DeviceEditLocationViewModel(
     }
 
     fun getSearchSuggestions(query: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getSearchSuggestions(query).onRight { suggestions ->
                 onSearchResults.postValue(suggestions)
             }.onLeft {
@@ -69,7 +72,7 @@ class DeviceEditLocationViewModel(
     }
 
     fun getLocationFromSearchSuggestion(suggestion: SearchSuggestion) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getSuggestionLocation(suggestion).onRight { location ->
                 onMoveToLocation.postValue(location)
             }.onLeft {
@@ -88,7 +91,7 @@ class DeviceEditLocationViewModel(
             }
         }
 
-        reverseGeocodingJob = viewModelScope.launch {
+        reverseGeocodingJob = viewModelScope.launch(dispatcher) {
             delay(REVERSE_GEOCODING_DELAY)
             usecase.getAddressFromPoint(point).onRight {
                 onReverseGeocodedAddress.postValue(it)
@@ -106,7 +109,7 @@ class DeviceEditLocationViewModel(
     }
 
     fun setLocation(deviceId: String, lat: Double, lon: Double) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onUpdatedDevice.postValue(Resource.loading())
             usecase.setLocation(deviceId, lat, lon).onRight {
                 Timber.d("Location Updated. Got new device.")

@@ -14,6 +14,8 @@ import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -21,8 +23,9 @@ import java.util.concurrent.TimeUnit
 class ClaimHeliumResultViewModel(
     connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
-    analytics: AnalyticsWrapper
-) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
+    analytics: AnalyticsWrapper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics, dispatcher) {
     companion object {
         val CONNECT_DELAY_ON_REBOOT = TimeUnit.SECONDS.toMillis(10L)
     }
@@ -71,7 +74,7 @@ class ClaimHeliumResultViewModel(
     }
 
     fun setFrequency(frequency: Frequency) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             connectionUseCase.setFrequency(frequency).onRight {
                 reboot()
             }.onLeft {
@@ -86,7 +89,7 @@ class ClaimHeliumResultViewModel(
     }
 
     private fun reboot() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onRebooting.postValue(true)
             connectionUseCase.reboot().onRight {
                 connectToPeripheral()
@@ -102,7 +105,7 @@ class ClaimHeliumResultViewModel(
     }
 
     private fun connectToPeripheral() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onBLEConnection.postValue(true)
             delay(CONNECT_DELAY_ON_REBOOT)
             super.connect(false)
@@ -110,7 +113,7 @@ class ClaimHeliumResultViewModel(
     }
 
     private fun fetchDeviceEUI() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             connectionUseCase.fetchDeviceEUI().onRight {
                 /**
                  * BLE returns Dev EUI with `:` in between so we need to unmask it
@@ -129,7 +132,7 @@ class ClaimHeliumResultViewModel(
     }
 
     private fun fetchClaimingKey() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             connectionUseCase.fetchClaimingKey().onRight {
                 onBLEClaimingKey.postValue(it)
             }.onLeft {

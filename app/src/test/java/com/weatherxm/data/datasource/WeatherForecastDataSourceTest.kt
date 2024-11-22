@@ -1,6 +1,7 @@
 package com.weatherxm.data.datasource
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testNetworkCall
@@ -8,7 +9,6 @@ import com.weatherxm.TestUtils.testThrowNotImplemented
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coJustRun
 import io.mockk.mockk
@@ -17,9 +17,8 @@ import java.time.LocalDate
 
 class WeatherForecastDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
-    val cache = mockk<CacheService>()
     val networkSource = NetworkWeatherForecastDataSource(apiService)
-    val cacheSource = CacheWeatherForecastDataSource(cache)
+    val cacheSource = CacheWeatherForecastDataSource(cacheService)
 
     val deviceId = "deviceId"
     val fromDate = LocalDate.now()
@@ -32,8 +31,8 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
     )
 
     beforeSpec {
-        coJustRun { cache.setForecast(deviceId, forecastData) }
-        coJustRun { cache.clearForecast() }
+        coJustRun { cacheService.setForecast(deviceId, forecastData) }
+        coJustRun { cacheService.clearForecast() }
     }
 
     context("Get forecast") {
@@ -53,7 +52,7 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                 testGetFromCache(
                     "forecast",
                     forecastData,
-                    mockFunction = { cache.getForecast(deviceId) },
+                    mockFunction = { cacheService.getForecast(deviceId) },
                     runFunction = { cacheSource.getForecast(deviceId, fromDate, toDate) }
                 )
             }
@@ -66,9 +65,9 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                 testThrowNotImplemented { networkSource.setForecast(deviceId, forecastData) }
             }
             When("Using the Cache Source") {
-                then("save the forecast in cache") {
+                then("save the forecast in cacheService") {
                     cacheSource.setForecast(deviceId, forecastData)
-                    verify(exactly = 1) { cache.setForecast(deviceId, forecastData) }
+                    verify(exactly = 1) { cacheService.setForecast(deviceId, forecastData) }
                 }
             }
         }
@@ -80,9 +79,9 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                 testThrowNotImplemented { networkSource.clear() }
             }
             When("Using the Cache Source") {
-                then("clear the forecast in cache") {
+                then("clear the forecast in cacheService") {
                     cacheSource.clear()
-                    verify(exactly = 1) { cache.clearForecast() }
+                    verify(exactly = 1) { cacheService.clearForecast() }
                 }
             }
         }

@@ -6,7 +6,6 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.models.Device
-import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.WidgetRepository
 import io.kotest.core.spec.style.BehaviorSpec
@@ -15,10 +14,9 @@ import io.mockk.coVerify
 import io.mockk.mockk
 
 class WidgetSelectStationUseCaseTest : BehaviorSpec({
-    val authRepository = mockk<AuthRepository>()
     val deviceRepository = mockk<DeviceRepository>()
     val widgetRepository = mockk<WidgetRepository>()
-    val usecase = WidgetSelectStationUseCaseImpl(authRepository, deviceRepository, widgetRepository)
+    val usecase = WidgetSelectStationUseCaseImpl(deviceRepository, widgetRepository)
 
     val widgetId = 0
     val deviceId = "deviceId"
@@ -28,23 +26,6 @@ class WidgetSelectStationUseCaseTest : BehaviorSpec({
     beforeSpec {
         coJustRun { widgetRepository.setWidgetDevice(widgetId, deviceId) }
         coJustRun { widgetRepository.setWidgetId(widgetId) }
-    }
-
-    context("Get if the user is logged in") {
-        given("A repository providing the answer") {
-            When("it's a success") {
-                coMockEitherRight({ authRepository.isLoggedIn() }, true)
-                then("return that answer") {
-                    usecase.isLoggedIn().isSuccess(true)
-                }
-            }
-            When("it's a failure") {
-                coMockEitherLeft({ authRepository.isLoggedIn() }, failure)
-                then("return that failure") {
-                    usecase.isLoggedIn().isError()
-                }
-            }
-        }
     }
 
     context("Get user devices") {

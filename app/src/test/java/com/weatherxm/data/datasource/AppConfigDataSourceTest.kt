@@ -5,13 +5,13 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.weatherxm.BuildConfig
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl.Companion.REMOTE_CONFIG_CHANGELOG
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl.Companion.REMOTE_CONFIG_MINIMUM_VERSION_CODE
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl.Companion.REMOTE_CONFIG_VERSION_CODE
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -24,7 +24,6 @@ import io.mockk.verify
 class AppConfigDataSourceTest : BehaviorSpec({
     val remoteConfig = mockk<FirebaseRemoteConfig>()
     val firebaseInstallations = mockk<FirebaseInstallations>()
-    val cacheService = mockk<CacheService>()
 
     val dataSource = AppConfigDataSourceImpl(remoteConfig, firebaseInstallations, cacheService)
 

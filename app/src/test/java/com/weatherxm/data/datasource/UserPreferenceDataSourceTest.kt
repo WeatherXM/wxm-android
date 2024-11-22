@@ -1,6 +1,6 @@
 package com.weatherxm.data.datasource
 
-import com.weatherxm.data.services.CacheService
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortOrder
@@ -8,11 +8,9 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.verify
 
 class UserPreferenceDataSourceTest : BehaviorSpec({
-    val cacheService = mockk<CacheService>()
     val datasource = UserPreferenceDataSourceImpl(cacheService)
 
     val enabled = true

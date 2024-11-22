@@ -1,6 +1,7 @@
 package com.weatherxm.ui.rewardslist
 
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -20,17 +21,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RewardsListViewModelTest : BehaviorSpec({
     val usecase = mockk<RewardsUseCase>()
     lateinit var analytics: AnalyticsWrapper
@@ -55,7 +50,6 @@ class RewardsListViewModelTest : BehaviorSpec({
     }
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -71,7 +65,7 @@ class RewardsListViewModelTest : BehaviorSpec({
         analytics = mockk<AnalyticsWrapper>()
         justRun { analytics.trackEventFailure(any()) }
 
-        viewModel = RewardsListViewModel(usecase, analytics)
+        viewModel = RewardsListViewModel(usecase, analytics, dispatcher)
     }
 
     context("Get the first page of the rewards") {
@@ -122,7 +116,6 @@ class RewardsListViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

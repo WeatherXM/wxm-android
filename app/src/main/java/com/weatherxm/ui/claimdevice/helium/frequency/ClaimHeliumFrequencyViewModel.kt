@@ -9,11 +9,14 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ClaimHeliumFrequencyViewModel(
     private val usecase: ClaimDeviceUseCase,
-    private val resources: Resources
+    private val resources: Resources,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val frequenciesInOrder = mutableListOf<Frequency>()
 
@@ -26,7 +29,7 @@ class ClaimHeliumFrequencyViewModel(
     }
 
     fun getCountryAndFrequencies(location: Location) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getCountryAndFrequencies(location).apply {
                 frequenciesInOrder.add(recommendedFrequency)
                 frequenciesInOrder.addAll(otherFrequencies)

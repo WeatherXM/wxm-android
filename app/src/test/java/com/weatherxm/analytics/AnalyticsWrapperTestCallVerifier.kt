@@ -1,7 +1,8 @@
 package com.weatherxm.analytics
 
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.weatherxm.util.Weather
+import com.weatherxm.TestConfig.context
+import com.weatherxm.util.UnitSelector
 import io.kotest.matchers.shouldBe
 import io.mockk.verify
 
@@ -21,14 +22,11 @@ class AnalyticsWrapperTestCallVerifier(
     }
 
     fun verifyUserPropertiesSet() {
-        verify(exactly = 5) { Weather.getPreferredUnit(any(), any()) }
-        verify(exactly = 1) { Weather.getPreferredUnit("temperature_unit", "°C") }
-        verify(exactly = 1) { Weather.getPreferredUnit("wind_speed_unit", "m/s") }
-        verify(exactly = 1) {
-            Weather.getPreferredUnit("key_wind_direction_preference", "Cardinal")
-        }
-        verify(exactly = 1) { Weather.getPreferredUnit("precipitation_unit", "mm") }
-        verify(exactly = 1) { Weather.getPreferredUnit("key_pressure_preference", "hPa") }
+        verify(exactly = 1) { UnitSelector.getTemperatureUnit(context) }
+        verify(exactly = 1) { UnitSelector.getPrecipitationUnit(context, false) }
+        verify(exactly = 1) { UnitSelector.getWindUnit(context) }
+        verify(exactly = 1) { UnitSelector.getWindDirectionUnit(context) }
+        verify(exactly = 1) { UnitSelector.getPressureUnit(context) }
     }
 
     fun verifyAnalyticsEnabled(enabled: Boolean) {

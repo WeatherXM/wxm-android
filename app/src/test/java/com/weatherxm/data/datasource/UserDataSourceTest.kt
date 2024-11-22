@@ -2,6 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.successUnitResponse
 import com.weatherxm.TestUtils.isError
@@ -13,7 +14,6 @@ import com.weatherxm.TestUtils.testThrowNotImplemented
 import com.weatherxm.data.models.User
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
@@ -23,9 +23,8 @@ import io.mockk.verify
 
 class UserDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
-    val cache = mockk<CacheService>()
     val networkSource = NetworkUserDataSource(apiService)
-    val cacheSource = CacheUserDataSource(cache)
+    val cacheSource = CacheUserDataSource(cacheService)
 
     val username = "username"
     val userId = "userId"
@@ -34,9 +33,9 @@ class UserDataSourceTest : BehaviorSpec({
     val userResponse = NetworkResponse.Success<User, ErrorResponse>(user, retrofitResponse(user))
 
     beforeSpec {
-        every { cache.getUserId() } returns userId
-        coJustRun { cache.setUser(user) }
-        coJustRun { cache.setUserUsername(username) }
+        every { cacheService.getUserId() } returns userId
+        coJustRun { cacheService.setUser(user) }
+        coJustRun { cacheService.setUserUsername(username) }
     }
 
     context("Get user's username") {
@@ -48,7 +47,7 @@ class UserDataSourceTest : BehaviorSpec({
                 testGetFromCache(
                     "username",
                     username,
-                    mockFunction = { cache.getUserUsername() },
+                    mockFunction = { cacheService.getUserUsername() },
                     runFunction = { cacheSource.getUserUsername() }
                 )
             }
@@ -61,9 +60,9 @@ class UserDataSourceTest : BehaviorSpec({
                 testThrowNotImplemented { networkSource.setUserUsername(username) }
             }
             When("Using the Cache Source") {
-                then("save the username in cache") {
+                then("save the username in cacheService") {
                     cacheSource.setUserUsername(username)
-                    verify(exactly = 1) { cache.setUserUsername(username) }
+                    verify(exactly = 1) { cacheService.setUserUsername(username) }
                 }
             }
         }
@@ -89,7 +88,7 @@ class UserDataSourceTest : BehaviorSpec({
                  */
                 and("the response is a success") {
                     every {
-                        cache.getUser()
+                        cacheService.getUser()
                     } propertyType Either::class answers { Either.Right(user) }
                     then("return the user") {
                         cacheSource.getUser().isSuccess(user)
@@ -97,7 +96,7 @@ class UserDataSourceTest : BehaviorSpec({
                 }
                 and("the response is a failure") {
                     every {
-                        cache.getUser()
+                        cacheService.getUser()
                     } propertyType Either::class answers { Either.Left(failure) }
                     then("return the failure") {
                         cacheSource.getUser().isError()
@@ -113,9 +112,9 @@ class UserDataSourceTest : BehaviorSpec({
                 testThrowNotImplemented { networkSource.setUser(user) }
             }
             When("Using the Cache Source") {
-                then("save the user in cache") {
+                then("save the user in cacheService") {
                     cacheSource.setUser(user)
-                    verify(exactly = 1) { cache.setUser(user) }
+                    verify(exactly = 1) { cacheService.setUser(user) }
                 }
             }
         }

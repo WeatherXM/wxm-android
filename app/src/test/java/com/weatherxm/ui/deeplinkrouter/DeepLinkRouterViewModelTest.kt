@@ -6,6 +6,7 @@ import android.os.Build
 import com.weatherxm.R
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -31,22 +32,16 @@ import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 @Suppress("DEPRECATION")
-@OptIn(ExperimentalCoroutinesApi::class)
 class DeepLinkRouterViewModelTest : BehaviorSpec({
     val explorerUseCase = mockk<ExplorerUseCase>()
     val devicesUseCase = mockk<DeviceListUseCase>()
-    val viewModel = DeepLinkRouterViewModel(explorerUseCase, devicesUseCase, resources)
+    val viewModel = DeepLinkRouterViewModel(explorerUseCase, devicesUseCase, resources, dispatcher)
 
     val uri = mockk<Uri>()
     val intent = mockk<Intent>()
@@ -102,7 +97,6 @@ class DeepLinkRouterViewModelTest : BehaviorSpec({
     val emptyAnnouncementRemoteMessage = WXMRemoteMessage(RemoteMessageType.ANNOUNCEMENT)
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -292,7 +286,6 @@ class DeepLinkRouterViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

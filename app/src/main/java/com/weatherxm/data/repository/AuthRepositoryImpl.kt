@@ -3,12 +3,12 @@ package com.weatherxm.data.repository
 import arrow.core.Either
 import arrow.core.flatMap
 import com.weatherxm.BuildConfig
-import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService
 import timber.log.Timber
@@ -38,16 +38,17 @@ class AuthRepositoryImpl(
         cacheService.clearAll()
     }
 
-    override suspend fun isLoggedIn(): Either<Failure, Boolean> {
+    override fun isLoggedIn(): Boolean {
         /**
          * Fix: Consider the user as logged in in local mock mode because otherwise this returns
          * Either.Left and some functionalities are limited because of a not logged in user
          */
-        if (BuildConfig.FLAVOR_mode == "local") return Either.Right(true)
+        if (BuildConfig.FLAVOR_mode == "local") return true
 
-        return cacheAuthDataSource.getAuthToken().map {
-            it.isAccessTokenValid() || it.isRefreshTokenValid()
-        }
+        return cacheAuthDataSource.getAuthToken().fold(
+            ifLeft = { false },
+            ifRight = { it.isAccessTokenValid() || it.isRefreshTokenValid() }
+        )
     }
 
     override suspend fun signup(

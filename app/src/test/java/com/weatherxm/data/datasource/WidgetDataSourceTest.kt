@@ -1,18 +1,16 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.testGetFromCache
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.WIDGET_ID
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coJustRun
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.verify
 
 class WidgetDataSourceTest : BehaviorSpec({
-    val cacheService = mockk<CacheService>()
     val datasource = WidgetDataSourceImpl(cacheService)
 
     val widgetId = 1

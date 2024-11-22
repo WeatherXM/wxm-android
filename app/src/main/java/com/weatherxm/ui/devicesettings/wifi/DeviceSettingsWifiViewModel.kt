@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.DeviceInfo
@@ -24,18 +23,22 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@Suppress("LongParameterList")
 class DeviceSettingsWifiViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
     private val userUseCase: UserUseCase,
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
-) : BaseDeviceSettingsViewModel(device, usecase, resources, analytics) {
+    private val analytics: AnalyticsWrapper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : BaseDeviceSettingsViewModel(device, usecase, resources, analytics, dispatcher) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 
     private lateinit var data: UIDeviceInfo
@@ -61,7 +64,7 @@ class DeviceSettingsWifiViewModel(
             )
         }
         onLoading.postValue(true)
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getDeviceInfo(device.id).onLeft {
                 analytics.trackEventFailure(it.code)
                 Timber.d("$it: Fetching remote device info failed for device: $device")
@@ -179,8 +182,7 @@ class DeviceSettingsWifiViewModel(
         var walletAddress = String.empty()
         coroutineScope {
             val getWalletAddressJob = launch {
-                val isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
-                if (isLoggedIn) {
+                if (authUseCase.isLoggedIn()) {
                     userUseCase.getWalletAddress().onRight {
                         walletAddress = it
                     }

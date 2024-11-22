@@ -2,6 +2,7 @@ package com.weatherxm.ui.deviceheliumota
 
 import android.net.Uri
 import com.weatherxm.R
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -25,16 +26,10 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DeviceHeliumOTAViewModelTest : BehaviorSpec({
     val updaterUseCase = mockk<BluetoothUpdaterUseCase>()
     val connectionUseCase = mockk<BluetoothConnectionUseCase>()
@@ -90,7 +85,6 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
     val otaAborted = "OTA Aborted"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
@@ -110,7 +104,8 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
             updaterUseCase,
             connectionUseCase,
             scannerUseCase,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -241,9 +236,5 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
                 }
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

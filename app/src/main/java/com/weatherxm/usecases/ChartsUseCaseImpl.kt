@@ -54,19 +54,25 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                 it.timestamp.toLocalDateTime() == localDateTime
             }?.let { hourlyWeather ->
                 hourlyWeather.temperature?.let {
-                    temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
+                    temperatureEntries.add(
+                        Entry(counter, Weather.convertTemp(context, it, 1) as Float)
+                    )
                 } ?: temperatureEntries.add(emptyEntry)
 
                 hourlyWeather.feelsLike?.let {
-                    feelsLikeEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
+                    feelsLikeEntries.add(
+                        Entry(counter, Weather.convertTemp(context, it, 1) as Float)
+                    )
                 } ?: feelsLikeEntries.add(emptyEntry)
 
                 hourlyWeather.precipitation?.let {
-                    precipEntries.add(Entry(counter, convertPrecipitation(it) as Float))
+                    precipEntries.add(Entry(counter, convertPrecipitation(context, it) as Float))
                 } ?: precipEntries.add(emptyEntry)
 
                 hourlyWeather.precipAccumulated?.let {
-                    precipAccumulatedEntries.add(Entry(counter, convertPrecipitation(it) as Float))
+                    precipAccumulatedEntries.add(
+                        Entry(counter, convertPrecipitation(context, it) as Float)
+                    )
                 } ?: precipAccumulatedEntries.add(emptyEntry)
 
                 hourlyWeather.precipProbability?.let {
@@ -74,8 +80,12 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                 } ?: precipProbabilityEntries.add(emptyEntry)
 
                 // Get the wind speed and direction formatted
-                val windSpeedValue = convertWindSpeed(hourlyWeather.windSpeed)?.toFloat()
-                val windGustValue = convertWindSpeed(hourlyWeather.windGust)?.toFloat()
+                val windSpeedValue = hourlyWeather.windSpeed?.let {
+                    convertWindSpeed(context, it)
+                }?.toFloat()
+                val windGustValue = hourlyWeather.windGust?.let {
+                    convertWindSpeed(context, it)
+                }?.toFloat()
                 val windDirection: Drawable? =
                     Weather.getWindDirectionDrawable(context, hourlyWeather.windDirection)
                 hourlyWeather.windDirection?.let {
@@ -103,7 +113,9 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                 } ?: windGustEntries.add(emptyEntry)
 
                 hourlyWeather.pressure?.let {
-                    pressureEntries.add(Entry(counter, Weather.convertPressure(it) as Float))
+                    pressureEntries.add(
+                        Entry(counter, Weather.convertPressure(context, it) as Float)
+                    )
                 } ?: pressureEntries.add(emptyEntry)
 
                 hourlyWeather.humidity?.let {

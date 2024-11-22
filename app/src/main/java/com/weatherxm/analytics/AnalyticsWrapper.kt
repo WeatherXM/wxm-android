@@ -2,14 +2,13 @@ package com.weatherxm.analytics
 
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.weatherxm.R
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
 import com.weatherxm.ui.common.DevicesSortOrder
+import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.ui.common.empty
-import com.weatherxm.util.Weather
+import com.weatherxm.util.UnitSelector
 
 // Suppress it as it's just a bunch of set/get functions
 @Suppress("TooManyFunctions")
@@ -53,89 +52,73 @@ class AnalyticsWrapper(
         userParams.add(Pair(AnalyticsService.UserProperty.THEME.propertyName, displayMode))
 
         // Selected Temperature Unit
-        Weather.getPreferredUnit(
-            context.getString(CacheService.KEY_TEMPERATURE),
-            context.getString(R.string.temperature_celsius)
-        ).let {
-            if (it == context.getString(R.string.temperature_celsius)) {
-                AnalyticsService.UserProperty.CELSIUS.propertyName
-            } else {
-                AnalyticsService.UserProperty.FAHRENHEIT.propertyName
-            }.apply {
-                userParams.add(
-                    Pair(AnalyticsService.UserProperty.UNIT_TEMPERATURE.propertyName, this)
-                )
+        UnitSelector.getTemperatureUnit(context).apply {
+            val analyticsValue = when (this.type) {
+                WeatherUnitType.CELSIUS -> AnalyticsService.UserProperty.CELSIUS.propertyName
+                WeatherUnitType.FAHRENHEIT -> AnalyticsService.UserProperty.FAHRENHEIT.propertyName
+                else -> AnalyticsService.UserProperty.CELSIUS.propertyName
             }
+
+            userParams.add(
+                Pair(AnalyticsService.UserProperty.UNIT_TEMPERATURE.propertyName, analyticsValue)
+            )
         }
 
         // Selected Wind Unit
-        Weather.getPreferredUnit(
-            context.getString(CacheService.KEY_WIND),
-            context.getString(R.string.wind_speed_ms)
-        ).let {
-            when (it) {
-                context.getString(R.string.wind_speed_ms) -> {
-                    AnalyticsService.UserProperty.MPS.propertyName
-                }
-                context.getString(R.string.wind_speed_mph) -> {
-                    AnalyticsService.UserProperty.MPH.propertyName
-                }
-                context.getString(R.string.wind_speed_kmh) -> {
-                    AnalyticsService.UserProperty.KMPH.propertyName
-                }
-                context.getString(R.string.wind_speed_knots) -> {
-                    AnalyticsService.UserProperty.KN.propertyName
-                }
-                else -> AnalyticsService.UserProperty.BF.propertyName
-            }.apply {
-                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_WIND.propertyName, this))
+        UnitSelector.getWindUnit(context).apply {
+            val analyticsValue = when (this.type) {
+                WeatherUnitType.MS -> AnalyticsService.UserProperty.MPS.propertyName
+                WeatherUnitType.MPH -> AnalyticsService.UserProperty.MPH.propertyName
+                WeatherUnitType.KMH -> AnalyticsService.UserProperty.KMPH.propertyName
+                WeatherUnitType.KNOTS -> AnalyticsService.UserProperty.KN.propertyName
+                WeatherUnitType.BEAUFORT -> AnalyticsService.UserProperty.BF.propertyName
+                else -> AnalyticsService.UserProperty.MPS.propertyName
             }
+
+            userParams.add(
+                Pair(AnalyticsService.UserProperty.UNIT_WIND.propertyName, analyticsValue)
+            )
         }
 
         // Selected Wind Direction Unit
-        Weather.getPreferredUnit(
-            context.getString(CacheService.KEY_WIND_DIR),
-            context.getString(R.string.wind_direction_cardinal)
-        ).let {
-            if (it == context.getString(R.string.wind_direction_cardinal)) {
-                AnalyticsService.UserProperty.CARDINAL.propertyName
-            } else {
-                AnalyticsService.UserProperty.DEGREES.propertyName
-            }.apply {
-                userParams.add(
-                    Pair(AnalyticsService.UserProperty.UNIT_WIND_DIRECTION.propertyName, this)
-                )
+        UnitSelector.getWindDirectionUnit(context).apply {
+            val analyticsValue = when (this.type) {
+                WeatherUnitType.CARDINAL -> AnalyticsService.UserProperty.CARDINAL.propertyName
+                WeatherUnitType.DEGREES -> AnalyticsService.UserProperty.DEGREES.propertyName
+                else -> AnalyticsService.UserProperty.CARDINAL.propertyName
             }
+
+            userParams.add(
+                Pair(AnalyticsService.UserProperty.UNIT_WIND_DIRECTION.propertyName, analyticsValue)
+            )
         }
 
         // Selected Precipitation Unit
-        Weather.getPreferredUnit(
-            context.getString(CacheService.KEY_PRECIP),
-            context.getString(R.string.precipitation_mm)
-        ).let {
-            if (it == context.getString(R.string.precipitation_mm)) {
-                AnalyticsService.UserProperty.MILLIMETERS.propertyName
-            } else {
-                AnalyticsService.UserProperty.INCHES.propertyName
-            }.apply {
-                userParams.add(
-                    Pair(AnalyticsService.UserProperty.UNIT_PRECIPITATION.propertyName, this)
-                )
+        UnitSelector.getPrecipitationUnit(context, false).apply {
+            val analyticsValue = when (this.type) {
+                WeatherUnitType.MILLIMETERS -> {
+                    AnalyticsService.UserProperty.MILLIMETERS.propertyName
+                }
+                WeatherUnitType.INCHES -> AnalyticsService.UserProperty.INCHES.propertyName
+                else -> AnalyticsService.UserProperty.MILLIMETERS.propertyName
             }
+
+            userParams.add(
+                Pair(AnalyticsService.UserProperty.UNIT_PRECIPITATION.propertyName, analyticsValue)
+            )
         }
 
         // Selected Pressure Unit
-        Weather.getPreferredUnit(
-            context.getString(CacheService.KEY_PRESSURE),
-            context.getString(R.string.pressure_hpa)
-        ).let {
-            if (it == context.getString(R.string.pressure_hpa)) {
-                AnalyticsService.UserProperty.HPA.propertyName
-            } else {
-                AnalyticsService.UserProperty.INHG.propertyName
-            }.apply {
-                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_PRESSURE.propertyName, this))
+        UnitSelector.getPressureUnit(context).apply {
+            val analyticsValue = when (this.type) {
+                WeatherUnitType.HPA -> AnalyticsService.UserProperty.HPA.propertyName
+                WeatherUnitType.INHG -> AnalyticsService.UserProperty.INHG.propertyName
+                else -> AnalyticsService.UserProperty.HPA.propertyName
             }
+
+            userParams.add(
+                Pair(AnalyticsService.UserProperty.UNIT_PRESSURE.propertyName, analyticsValue)
+            )
         }
 
         val sortFilterOptions = if (devicesSortFilterOptions.isEmpty()) {

@@ -62,7 +62,11 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
         val shouldUpdate = intent?.action == ACTION_APPWIDGET_UPDATE
             && extras?.getBoolean(ARG_IS_CUSTOM_APPWIDGET_UPDATE) ?: false
 
-        if (!shouldUpdate) {
+
+        if (!shouldUpdate && (widgetIdsFromIntent == null || widgetIdsFromIntent.isEmpty())) {
+            return
+        } else if (!shouldUpdate) {
+            CurrentWeatherWidgetWorkerUpdate.restartAllWorkers(context)
             return
         }
 

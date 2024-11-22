@@ -3,10 +3,10 @@ package com.weatherxm.data.datasource
 import android.content.Context.TELEPHONY_SERVICE
 import android.telephony.TelephonyManager
 import com.squareup.moshi.Moshi
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.context
 import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.Location
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.empty
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -21,7 +21,6 @@ import org.koin.test.KoinTest
 import java.io.ByteArrayInputStream
 
 class LocationDataSourceTest : KoinTest, BehaviorSpec({
-    val cacheService = mockk<CacheService>()
     val moshi: Moshi by inject(Moshi::class.java)
     lateinit var datasource: LocationDataSourceImpl
 

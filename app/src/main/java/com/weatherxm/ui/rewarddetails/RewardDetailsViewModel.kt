@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
@@ -19,19 +18,22 @@ import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.ZonedDateTime
 
+@Suppress("LongParameterList")
 class RewardDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val analytics: AnalyticsWrapper,
     private val resources: Resources,
     private val usecase: RewardsUseCase,
     private val userUseCase: UserUseCase,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val onRewardDetails = MutableLiveData<Resource<RewardDetails>>()
@@ -40,11 +42,10 @@ class RewardDetailsViewModel(
 
     private var rewardSplitsData = RewardSplitsData(listOf(), String.empty())
     private var walletAddressJob: Job? = null
-    private var isLoggedIn: Boolean? = null
 
     private fun fetchWalletAddress() {
-        if (isLoggedIn == true) {
-            walletAddressJob = viewModelScope.launch {
+        if (authUseCase.isLoggedIn()) {
+            walletAddressJob = viewModelScope.launch(dispatcher) {
                 userUseCase.getWalletAddress().onRight {
                     rewardSplitsData.wallet = it
                 }
@@ -53,7 +54,7 @@ class RewardDetailsViewModel(
     }
 
     fun getRewardSplitsData(listener: (RewardSplitsData) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             if (walletAddressJob?.isActive == true) {
                 walletAddressJob?.join()
             }
@@ -68,7 +69,7 @@ class RewardDetailsViewModel(
     }
 
     fun fetchRewardDetails(timestamp: ZonedDateTime) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             onRewardDetails.postValue(Resource.loading())
 
             usecase.getRewardDetails(device.id, timestamp)
@@ -101,11 +102,5 @@ class RewardDetailsViewModel(
                 }
             )
         )
-    }
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
-        }
     }
 }

@@ -11,6 +11,7 @@ import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -20,7 +21,8 @@ import timber.log.Timber
 
 class NetworkSearchViewModel(
     private val explorerUseCase: ExplorerUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     companion object {
         const val NETWORK_SEARCH_REQUEST_THRESHOLD = 1000L
@@ -62,7 +64,7 @@ class NetworkSearchViewModel(
             }
         }
 
-        networkSearchJob = viewModelScope.launch(Dispatchers.IO) {
+        networkSearchJob = viewModelScope.launch(dispatcher) {
             // Wait for threshold time to pass before sending an API request
             if (!runImmediately) {
                 delay(NETWORK_SEARCH_REQUEST_THRESHOLD)
@@ -84,7 +86,7 @@ class NetworkSearchViewModel(
     }
 
     fun getRecentSearches() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             explorerUseCase.getRecentSearches().apply {
                 onRecentSearches.postValue(this)
             }
@@ -92,7 +94,7 @@ class NetworkSearchViewModel(
     }
 
     fun onSearchClicked(searchResult: SearchResult) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             explorerUseCase.setRecentSearch(searchResult)
             query = String.empty()
         }

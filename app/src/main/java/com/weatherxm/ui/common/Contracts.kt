@@ -2,6 +2,7 @@ package com.weatherxm.ui.common
 
 object Contracts {
     const val EMPTY_VALUE = "?"
+    const val DEGREES_MARK = "°"
     const val NOT_AVAILABLE_VALUE = "N/A"
     const val ARG_DEVICE = "device"
     const val ARG_DEVICE_TYPE = "device_type"

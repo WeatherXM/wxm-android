@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import arrow.core.flatMap
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -12,20 +11,24 @@ import com.weatherxm.data.models.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.models.Failure
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.data.models.User
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class LoginViewModel(
     private val authUseCase: AuthUseCase,
+    private val userUseCase: UserUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val onLogin = MutableLiveData<Resource<Unit>>()
@@ -34,22 +37,15 @@ class LoginViewModel(
     private val user = MutableLiveData<Resource<User>>()
     fun user(): LiveData<Resource<User>> = user
 
-    /*
-    * Needed for checking if the user is logged in or not for a race condition where a user
-    * that has added a widget, logs in to a 2nd account and taps the "Login" button in the Widget
+    /**
+     * Needed for checking if the user is logged in or not for a race condition where a user
+     * that has added a widget, logs in to a 2nd account and taps the "Login" button in the Widget
      */
-    private val isLoggedIn = MutableLiveData<Either<Failure, Boolean>>().apply {
-        Timber.d("Checking if user is logged in in the background")
-        viewModelScope.launch(Dispatchers.IO) {
-            postValue(authUseCase.isLoggedIn())
-        }
-    }
-
-    fun isLoggedIn(): LiveData<Either<Failure, Boolean>> = isLoggedIn
+    fun isLoggedIn(): Boolean = authUseCase.isLoggedIn()
 
     fun login(username: String, password: String) {
         onLogin.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             authUseCase.login(username, password)
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
@@ -58,7 +54,7 @@ class LoginViewModel(
                 }
                 .flatMap {
                     onLogin.postValue(Resource.success(Unit))
-                    authUseCase.getUser()
+                    userUseCase.getUser()
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
@@ -92,6 +88,6 @@ class LoginViewModel(
     }
 
     fun shouldShowAnalyticsOptIn(): Boolean {
-        return authUseCase.shouldShowAnalyticsOptIn()
+        return userUseCase.shouldShowAnalyticsOptIn()
     }
 }

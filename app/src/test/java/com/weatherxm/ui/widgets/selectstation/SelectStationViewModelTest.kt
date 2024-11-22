@@ -1,6 +1,7 @@
 package com.weatherxm.ui.widgets.selectstation
 
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -11,26 +12,23 @@ import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SelectStationViewModelTest : BehaviorSpec({
     val usecase = mockk<WidgetSelectStationUseCase>()
+    val authUseCase = mockk<AuthUseCase>()
     lateinit var viewModel: SelectStationViewModel
 
     val deviceId = "deviceId"
@@ -70,7 +68,6 @@ class SelectStationViewModelTest : BehaviorSpec({
     val widgetId = 0
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -84,7 +81,7 @@ class SelectStationViewModelTest : BehaviorSpec({
         }
         justRun { usecase.saveWidgetData(widgetId, deviceId) }
 
-        viewModel = SelectStationViewModel(usecase)
+        viewModel = SelectStationViewModel(usecase, authUseCase, dispatcher)
     }
 
     context("GET / SET the selected station") {
@@ -122,29 +119,20 @@ class SelectStationViewModelTest : BehaviorSpec({
 
     context("Check if the user is logged in and proceed accordingly") {
         given("a usecase returning if the user is logged in or not") {
-            When("it's a failure") {
-                coMockEitherLeft({ usecase.isLoggedIn() }, failure)
+            When("the user is logged in") {
+                every { authUseCase.isLoggedIn() } returns true
+                coMockEitherRight({ usecase.getUserDevices() }, emptyList<UIDevice>())
+
+                runTest { viewModel.checkIfLoggedInAndProceed() }
+                then("fetching of the devices should take place (mocked as empty list)") {
+                    viewModel.onDevices().isSuccess(emptyList())
+                }
+            }
+            When("the user is NOT logged in") {
+                every { authUseCase.isLoggedIn() } returns false
                 runTest { viewModel.checkIfLoggedInAndProceed() }
                 then("LiveData isNotLoggedIn should be called with value Unit") {
                     viewModel.isNotLoggedIn().value shouldBe Unit
-                }
-            }
-            When("it's a success") {
-                and("the user is logged in") {
-                    coMockEitherRight({ usecase.isLoggedIn() }, true)
-                    coMockEitherRight({ usecase.getUserDevices() }, emptyList<UIDevice>())
-
-                    runTest { viewModel.checkIfLoggedInAndProceed() }
-                    then("fetching of the devices should take place (mocked as empty list)") {
-                        viewModel.onDevices().isSuccess(emptyList())
-                    }
-                }
-                and("the user is not logged in") {
-                    coMockEitherRight({ usecase.isLoggedIn() }, false)
-                    runTest { viewModel.checkIfLoggedInAndProceed() }
-                    then("LiveData isNotLoggedIn should be called with value Unit") {
-                        viewModel.isNotLoggedIn().value shouldBe Unit
-                    }
                 }
             }
         }
@@ -160,7 +148,6 @@ class SelectStationViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

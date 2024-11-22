@@ -40,11 +40,11 @@ class NetworkAuthDataSource(private val authService: AuthService) : AuthDataSour
         return authService.resetPassword(ResetPasswordBody(email)).mapResponse()
     }
 
-    override suspend fun getAuthToken(): Either<Failure, AuthToken> {
+    override fun getAuthToken(): Either<Failure, AuthToken> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun setAuthToken(token: AuthToken) {
+    override fun setAuthToken(token: AuthToken) {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 }

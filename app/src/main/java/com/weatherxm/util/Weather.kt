@@ -1,37 +1,29 @@
 package com.weatherxm.util
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import androidx.annotation.RawRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
+import com.weatherxm.ui.common.Contracts.DEGREES_MARK
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
+import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import timber.log.Timber
 
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
-
-    private val resources: Resources by inject()
-    private val sharedPref: SharedPreferences by inject()
-
     private const val DECIMALS_PRECIPITATION_INCHES = 2
     private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
     private const val DECIMALS_PRESSURE_INHG = 2
     private const val DECIMALS_PRESSURE_HPA = 1
+    private const val DECIMALS_WIND_DEFAULT = 1
+    private const val DECIMALS_WIND_BEAUFORT = 0
 
-    /*
+    /**
      * Suppress ComplexMethod because it is just a bunch of "when statements"
      */
     @Suppress("ComplexMethod")
@@ -43,13 +35,45 @@ object Weather : KoinComponent {
             "clear-night" -> R.raw.anim_weather_clear_night
             "partly-cloudy-day" -> R.raw.anim_weather_partly_cloudy_day
             "partly-cloudy-night" -> R.raw.anim_weather_partly_cloudy_night
+            "partly-cloudy-day-drizzle" -> R.raw.anim_weather_partly_cloudy_day_drizzle
+            "partly-cloudy-night-drizzle" -> R.raw.anim_weather_partly_cloudy_night_drizzle
+            "partly-cloudy-day-snow" -> R.raw.anim_weather_partly_cloudy_day_snow
+            "partly-cloudy-night-snow" -> R.raw.anim_weather_partly_cloudy_night_snow
             "overcast-day" -> R.raw.anim_weather_overcast_day
             "overcast-night" -> R.raw.anim_weather_overcast_night
+            "overcast" -> R.raw.anim_weather_overcast
+            "overcast-rain" -> R.raw.anim_weather_overcast_rain
+            "overcast-snow" -> R.raw.anim_weather_overcast_snow
+            "overcast-drizzle" -> R.raw.anim_weather_overcast_drizzle
+            "overcast-light-snow" -> R.raw.anim_weather_overcast_light_snow
+            "overcast-sleet" -> R.raw.anim_weather_overcast_sleet
             "drizzle" -> R.raw.anim_weather_drizzle
             "rain" -> R.raw.anim_weather_rain
             "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
+            "thunderstorms-overcast-rain" -> R.raw.anim_weather_thunderstorms_overcast_rain
+            "thunderstorms-light-rain" -> R.raw.anim_weather_thunderstorms_light_rain
+            "thunderstorms-extreme-rain" -> R.raw.anim_weather_thunderstorms_extreme_rain
             "snow" -> R.raw.anim_weather_snow
             "sleet" -> R.raw.anim_weather_sleet
+            "haze-day" -> R.raw.anim_weather_haze_day
+            "haze-night" -> R.raw.anim_weather_haze_night
+            "extreme-day" -> R.raw.anim_weather_extreme_day
+            "extreme-night" -> R.raw.anim_weather_extreme_night
+            "extreme-rain" -> R.raw.anim_weather_extreme_rain
+            "extreme-snow" -> R.raw.anim_weather_extreme_snow
+            "extreme-day-rain" -> R.raw.anim_weather_extreme_day_rain
+            "extreme-night-rain" -> R.raw.anim_weather_extreme_night_rain
+            "extreme-day-sleet" -> R.raw.anim_weather_extreme_day_sleet
+            "extreme-night-sleet" -> R.raw.anim_weather_extreme_night_sleet
+            "extreme-day-snow" -> R.raw.anim_weather_extreme_day_snow
+            "extreme-night-snow" -> R.raw.anim_weather_extreme_night_snow
+            "extreme-day-drizzle" -> R.raw.anim_weather_extreme_day_drizzle
+            "extreme-night-drizzle" -> R.raw.anim_weather_extreme_night_drizzle
+            "extreme-day-light-snow" -> R.raw.anim_weather_extreme_day_light_snow
+            "extreme-night-light-snow" -> R.raw.anim_weather_extreme_night_light_snow
+            "dust-day" -> R.raw.anim_weather_dust_day
+            "dust-night" -> R.raw.anim_weather_dust_night
+            "dust-wind" -> R.raw.anim_weather_dust_wind
             // The 3 following cases are for backward compatibility
             "wind" -> R.raw.anim_weather_wind
             "fog" -> R.raw.anim_weather_fog
@@ -58,7 +82,7 @@ object Weather : KoinComponent {
         }
     }
 
-    /*
+    /**
      * Suppress ComplexMethod because it is just a bunch of "when statements"
      */
     @Suppress("ComplexMethod")
@@ -69,13 +93,45 @@ object Weather : KoinComponent {
             "clear-night" -> R.drawable.ic_weather_clear_night
             "partly-cloudy-day" -> R.drawable.ic_weather_partly_cloudy_day
             "partly-cloudy-night" -> R.drawable.ic_weather_partly_cloudy_night
+            "partly-cloudy-day-drizzle" -> R.drawable.ic_weather_partly_cloudy_day_drizzle
+            "partly-cloudy-night-drizzle" -> R.drawable.ic_weather_partly_cloudy_night_drizzle
+            "partly-cloudy-day-snow" -> R.drawable.ic_weather_partly_cloudy_day_snow
+            "partly-cloudy-night-snow" -> R.drawable.ic_weather_partly_cloudy_night_snow
             "overcast-day" -> R.drawable.ic_weather_overcast_day
             "overcast-night" -> R.drawable.ic_weather_overcast_night
+            "overcast" -> R.drawable.ic_weather_overcast
+            "overcast-rain" -> R.drawable.ic_weather_overcast_rain
+            "overcast-snow" -> R.drawable.ic_weather_overcast_snow
+            "overcast-drizzle" -> R.drawable.ic_weather_overcast_drizzle
+            "overcast-light-snow" -> R.drawable.ic_weather_overcast_light_snow
+            "overcast-sleet" -> R.drawable.ic_weather_overcast_sleet
             "drizzle" -> R.drawable.ic_weather_drizzle
             "rain" -> R.drawable.ic_weather_rain
             "thunderstorms-rain" -> R.drawable.ic_weather_thunderstorms_rain
+            "thunderstorms-light-rain" -> R.drawable.ic_weather_thunderstorms_rain
+            "thunderstorms-overcast-rain" -> R.drawable.ic_weather_thunderstorms_overcast_rain
+            "thunderstorms-extreme-rain" -> R.drawable.ic_weather_thunderstorms_extreme_rain
             "snow" -> R.drawable.ic_weather_snow
             "sleet" -> R.drawable.ic_weather_sleet
+            "haze-day" -> R.drawable.ic_weather_haze_day
+            "haze-night" -> R.drawable.ic_weather_haze_night
+            "extreme-day" -> R.drawable.ic_weather_extreme_day
+            "extreme-night" -> R.drawable.ic_weather_extreme_night
+            "extreme-rain" -> R.drawable.ic_weather_extreme_rain
+            "extreme-snow" -> R.drawable.ic_weather_extreme_snow
+            "extreme-day-rain" -> R.drawable.ic_weather_extreme_day_rain
+            "extreme-night-rain" -> R.drawable.ic_weather_extreme_night_rain
+            "extreme-day-sleet" -> R.drawable.ic_weather_extreme_day_sleet
+            "extreme-night-sleet" -> R.drawable.ic_weather_extreme_night_sleet
+            "extreme-day-snow" -> R.drawable.ic_weather_extreme_day_snow
+            "extreme-night-snow" -> R.drawable.ic_weather_extreme_night_snow
+            "extreme-day-drizzle" -> R.drawable.ic_weather_extreme_day_drizzle
+            "extreme-night-drizzle" -> R.drawable.ic_weather_extreme_night_drizzle
+            "extreme-day-light-snow" -> R.drawable.ic_weather_extreme_day_light_snow
+            "extreme-night-light-snow" -> R.drawable.ic_weather_extreme_night_light_snow
+            "dust-day" -> R.drawable.ic_weather_dust_day
+            "dust-night" -> R.drawable.ic_weather_dust_night
+            "dust-wind" -> R.drawable.ic_weather_dust_wind
             // The 3 following cases are for backward compatibility
             "wind" -> R.drawable.ic_weather_windy
             "fog" -> R.drawable.ic_weather_fog
@@ -85,19 +141,17 @@ object Weather : KoinComponent {
     }
 
     fun getFormattedTemperature(
+        context: Context,
         value: Float?,
         decimals: Int = 0,
         fullUnit: Boolean = true,
-        includeUnit: Boolean = true,
-        ignoreConversion: Boolean = false
+        includeUnit: Boolean = true
     ): String {
+        val weatherUnit = UnitSelector.getTemperatureUnit(context)
         val unit = if (fullUnit && includeUnit) {
-            getPreferredUnit(
-                resources.getString(KEY_TEMPERATURE),
-                resources.getString(R.string.temperature_celsius)
-            )
+            weatherUnit.unit
         } else if (includeUnit) {
-            resources.getString(R.string.degrees_mark)
+            DEGREES_MARK
         } else {
             String.empty()
         }
@@ -106,23 +160,19 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val formattedValue = if (ignoreConversion) {
-            formatNumber(value, decimals)
-        } else {
-            formatNumber(convertTemp(value, decimals), decimals)
-        }
-
+        val formattedValue = formatNumber(convertTemp(context, value, decimals), decimals)
         return "$formattedValue$unit"
     }
 
     fun getFormattedPrecipitation(
+        context: Context,
         value: Float?,
         isRainRate: Boolean = true,
-        includeUnit: Boolean = true,
-        ignoreConversion: Boolean = false
+        includeUnit: Boolean = true
     ): String {
+        val weatherUnit = UnitSelector.getPrecipitationUnit(context, isRainRate)
         val unit = if (includeUnit) {
-            getPrecipitationPreferredUnit(isRainRate)
+            weatherUnit.unit
         } else {
             String.empty()
         }
@@ -131,77 +181,60 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val formattedValue = if (ignoreConversion) {
-            formatNumber(value, getDecimalsPrecipitation())
-        } else {
-            formatNumber(convertPrecipitation(value), getDecimalsPrecipitation())
-        }
-
+        val formattedValue = formatNumber(
+            convertPrecipitation(context, value),
+            getDecimalsPrecipitation(weatherUnit.type)
+        )
         return "$formattedValue$unit"
     }
 
     fun getFormattedPrecipitationProbability(value: Int?, includeUnit: Boolean = true): String {
-        val unit = if (includeUnit) {
-            "%"
+        val unit = if (includeUnit) "%" else String.empty()
+        return if (value == null) {
+            "$EMPTY_VALUE$unit"
         } else {
-            String.empty()
+            "$value$unit"
         }
-        if (value == null) {
-            return "$EMPTY_VALUE$unit"
-        }
-
-        return "$value$unit"
     }
 
     fun getFormattedHumidity(value: Int?, includeUnit: Boolean = true): String {
-        val unit = if (includeUnit) {
-            "%"
+        val unit = if (includeUnit) "%" else String.empty()
+        return if (value == null) {
+            "$EMPTY_VALUE$unit"
         } else {
-            String.empty()
+            "$value$unit"
         }
-        if (value == null) {
-            return "$EMPTY_VALUE$unit"
-        }
-
-        return "$value$unit"
     }
 
-    fun getFormattedUV(value: Int?, includeUnit: Boolean = true): String {
-        if (value == null) {
-            return EMPTY_VALUE
-        }
-
-        return if (includeUnit) {
-            "$value${getUVClassification(value)}"
+    fun getFormattedUV(context: Context, value: Int?, includeUnit: Boolean = true): String {
+        return if (value == null) {
+            EMPTY_VALUE
+        } else if (includeUnit) {
+            "$value${getUVClassification(context, value)}"
         } else {
             "$value"
         }
     }
 
     @Suppress("MagicNumber")
-    fun getUVClassification(value: Int?): String {
-        if (value == null) {
-            return String.empty()
-        }
+    fun getUVClassification(context: Context, value: Int): String {
         return when {
-            value <= 2 -> resources.getString(R.string.uv_low)
-            value <= 5 -> resources.getString(R.string.uv_moderate)
-            value <= 7 -> resources.getString(R.string.uv_high)
-            value <= 10 -> resources.getString(R.string.uv_very_high)
-            else -> resources.getString(R.string.uv_extreme)
+            value <= 2 -> context.getString(R.string.uv_low)
+            value <= 5 -> context.getString(R.string.uv_moderate)
+            value <= 7 -> context.getString(R.string.uv_high)
+            value <= 10 -> context.getString(R.string.uv_very_high)
+            else -> context.getString(R.string.uv_extreme)
         }
     }
 
     fun getFormattedPressure(
+        context: Context,
         value: Float?,
-        includeUnit: Boolean = true,
-        ignoreConversion: Boolean = false
+        includeUnit: Boolean = true
     ): String {
+        val weatherUnit = UnitSelector.getPressureUnit(context)
         val unit = if (includeUnit) {
-            getPreferredUnit(
-                resources.getString(KEY_PRESSURE),
-                resources.getString(R.string.pressure_hpa)
-            )
+            weatherUnit.unit
         } else {
             String.empty()
         }
@@ -210,99 +243,79 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val formattedValue = if (ignoreConversion) {
-            formatNumber(value, getDecimalsPressure())
-        } else {
-            formatNumber(convertPressure(value), getDecimalsPressure())
-        }
-
+        val formattedValue =
+            formatNumber(convertPressure(context, value), getDecimalsPressure(weatherUnit.type))
         return "$formattedValue$unit"
     }
 
-    fun getFormattedSolarRadiation(value: Float?, includeUnit: Boolean = true): String {
+    fun getFormattedSolarRadiation(
+        context: Context,
+        value: Float?,
+        includeUnit: Boolean = true
+    ): String {
         val unit = if (includeUnit) {
-            resources.getString(R.string.solar_radiation_unit)
+            context.getString(R.string.solar_radiation_unit)
         } else {
             String.empty()
         }
-
-        if (value == null) {
-            return "$EMPTY_VALUE$unit"
+        return if (value == null) {
+            "$EMPTY_VALUE$unit"
+        } else {
+            "${formatNumber(value, 1)}$unit"
         }
-
-        return "${formatNumber(value, 1)}$unit"
     }
 
     private fun getFormattedWindSpeed(
-        value: Float?,
-        includeUnit: Boolean = true,
-        ignoreConversion: Boolean = false
+        context: Context,
+        value: Float,
+        includeUnit: Boolean = true
     ): String {
-        val preferredUnit = getPreferredUnit(
-            resources.getString(KEY_WIND),
-            resources.getString(R.string.wind_speed_ms)
-        )
+        val weatherUnit = UnitSelector.getWindUnit(context)
         val unit = if (includeUnit) {
-            preferredUnit
+            weatherUnit.unit
         } else {
             String.empty()
         }
-        if (value == null) {
-            return "$EMPTY_VALUE$unit"
-        }
 
-        val decimals = if (preferredUnit == resources.getString(R.string.wind_speed_beaufort)) {
-            0
-        } else {
-            1
-        }
-
-        val formattedValue = if (ignoreConversion) {
-            formatNumber(value, decimals)
-        } else {
-            formatNumber(convertWindSpeed(value), decimals)
-        }
-
+        val formattedValue =
+            formatNumber(convertWindSpeed(context, value), getWindDecimals(weatherUnit.type))
         return "$formattedValue$unit"
     }
 
-    fun getFormattedWindDirection(value: Int?): String {
+    fun getFormattedWindDirection(context: Context, value: Int?): String {
         if (value == null) {
             return EMPTY_VALUE
         }
-        val defaultUnit = resources.getString(R.string.wind_direction_cardinal)
-        val savedUnit = sharedPref.getString(resources.getString(KEY_WIND_DIR), defaultUnit)
 
-        return if (savedUnit != defaultUnit) {
-            "$value${resources.getString(R.string.degrees_mark)}"
+        val weatherUnit = UnitSelector.getWindDirectionUnit(context)
+        return if (weatherUnit.type == WeatherUnitType.DEGREES) {
+            "$value$DEGREES_MARK"
         } else {
             UnitConverter.degreesToCardinal(value)
         }
     }
 
     fun getFormattedWind(
+        context: Context,
         windSpeed: Float?,
         windDirection: Int?,
-        includeUnits: Boolean = true,
-        ignoreConversion: Boolean = false
+        includeUnits: Boolean = true
     ): String {
-        val windUnit = if (includeUnits) {
-            getPreferredUnit(
-                resources.getString(KEY_WIND), resources.getString(R.string.wind_speed_ms)
-            )
-        } else {
-            String.empty()
-        }
-
         return if (windSpeed != null && windDirection != null) {
+            val formattedWindSpeed = getFormattedWindSpeed(
+                context = context,
+                value = windSpeed,
+                includeUnit = includeUnits
+            )
             if (includeUnits) {
-                "${getFormattedWindSpeed(windSpeed, ignoreConversion = ignoreConversion)} ${
-                    getFormattedWindDirection(windDirection)
-                }"
+                "$formattedWindSpeed ${getFormattedWindDirection(context, windDirection)}"
             } else {
-                getFormattedWindSpeed(windSpeed, false, ignoreConversion = ignoreConversion)
+                formattedWindSpeed
             }
-        } else "$EMPTY_VALUE$windUnit"
+        } else {
+            val windUnit = UnitSelector.getWindUnit(context).unit
+            "$EMPTY_VALUE$windUnit"
+        }
     }
 
     fun getWindDirectionDrawable(context: Context, index: Int?): Drawable? {
@@ -315,140 +328,72 @@ object Weather : KoinComponent {
         } ?: AppCompatResources.getDrawable(context, R.drawable.ic_weather_wind)
     }
 
-    fun convertTemp(value: Number, decimals: Int = 0): Number {
-        val defaultUnit = resources.getString(R.string.temperature_celsius)
-        val savedUnit = sharedPref.getString(resources.getString(KEY_TEMPERATURE), defaultUnit)
-
+    fun convertTemp(context: Context, value: Number, decimals: Int = 0): Number {
         // Return the value based on the weather unit the user wants
-        return if (savedUnit != defaultUnit) {
-            roundToDecimals(UnitConverter.celsiusToFahrenheit(value.toFloat()), decimals)
-        } else {
+        return if (UnitSelector.getTemperatureUnit(context).type == WeatherUnitType.CELSIUS) {
             roundToDecimals(value, decimals)
+        } else {
+            roundToDecimals(UnitConverter.celsiusToFahrenheit(value.toFloat()), decimals)
         }
     }
 
-    fun convertPrecipitation(value: Number?): Number? {
-        if (value == null) {
-            Timber.d("Precipitation value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
-        val defaultUnit = resources.getString(R.string.precipitation_mm)
-        val savedUnit = sharedPref.getString(resources.getString(KEY_PRECIP), defaultUnit)
-
+    fun convertPrecipitation(context: Context, value: Number): Number {
         // Return the value based on the weather unit the user wants
-        return if (savedUnit != defaultUnit) {
-            // On inches we use 2 decimals
-            roundToDecimals(UnitConverter.millimetersToInches(value.toFloat()), decimals = 2)
-        } else {
+        val precipUnitType = UnitSelector.getPrecipitationUnit(context, false).type
+        return if (precipUnitType == WeatherUnitType.MILLIMETERS) {
             // This is the default value - millimeters - so we show 1 decimal
             roundToDecimals(value)
+        } else {
+            // On inches we use 2 decimals
+            roundToDecimals(UnitConverter.millimetersToInches(value.toFloat()), decimals = 2)
         }
     }
 
-    fun convertWindSpeed(value: Number?): Number? {
-        if (value == null) {
-            Timber.d("Wind speed value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
-        val defaultUnit = resources.getString(R.string.wind_speed_ms)
-        val savedUnit = sharedPref.getString(resources.getString(KEY_WIND), defaultUnit)
-
+    fun convertWindSpeed(context: Context, value: Number): Number {
         // Return the value based on the weather unit the user wants
-        return if (savedUnit != defaultUnit) {
-            when (savedUnit) {
-                resources.getString(R.string.wind_speed_knots) -> {
-                    roundToDecimals(UnitConverter.msToKnots(value.toFloat()))
-                }
-                resources.getString(R.string.wind_speed_beaufort) -> {
-                    UnitConverter.msToBeaufort(value.toFloat())
-                }
-                resources.getString(R.string.wind_speed_kmh) -> {
-                    roundToDecimals(UnitConverter.msToKmh(value.toFloat()))
-                }
-                resources.getString(R.string.wind_speed_mph) -> {
-                    roundToDecimals(UnitConverter.msToMph(value.toFloat()))
-                }
-                else -> {
-                    null
-                }
-            }
-        } else {
-            // This is the default value - m/s - so we show 1 decimal
-            roundToDecimals(value)
+        return when (UnitSelector.getWindUnit(context).type) {
+            WeatherUnitType.MS -> roundToDecimals(value)
+            WeatherUnitType.KMH -> roundToDecimals(UnitConverter.msToKmh(value.toFloat()))
+            WeatherUnitType.MPH -> roundToDecimals(UnitConverter.msToMph(value.toFloat()))
+            WeatherUnitType.KNOTS -> roundToDecimals(UnitConverter.msToKnots(value.toFloat()))
+            WeatherUnitType.BEAUFORT -> UnitConverter.msToBeaufort(value.toFloat())
+            else -> roundToDecimals(value)
         }
     }
 
-    fun convertPressure(value: Number?): Number? {
-        if (value == null) {
-            Timber.d("Pressure value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
-        val defaultUnit = resources.getString(R.string.pressure_hpa)
-        val savedUnit = sharedPref.getString(resources.getString(KEY_PRESSURE), defaultUnit)
-
+    fun convertPressure(context: Context, value: Number): Number {
         // Return the value based on the weather unit the user wants
-        return if (savedUnit != defaultUnit) {
-            // On inHg we use 2 decimals
-            roundToDecimals(UnitConverter.hpaToInHg(value.toFloat()), decimals = 2)
-        } else {
+        return if (UnitSelector.getPressureUnit(context).type == WeatherUnitType.HPA) {
             // This is the default value - hpa - so we show 1 decimal
             roundToDecimals(value)
-        }
-    }
-
-    fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
-        return sharedPref.getString(keyOnSharedPref, defaultUnit) ?: defaultUnit
-    }
-
-    fun getPrecipitationPreferredUnit(isRainRate: Boolean = true): String {
-        val keyOnSharedPref = resources.getString(KEY_PRECIP)
-        val defaultUnitOnPreferences = resources.getString(R.string.precipitation_mm)
-
-        val savedUnit = getPreferredUnit(keyOnSharedPref, defaultUnitOnPreferences)
-
-        return if (defaultUnitOnPreferences == savedUnit) {
-            if (isRainRate) {
-                resources.getString(R.string.precipitation_mm_hour)
-            } else {
-                resources.getString(R.string.precipitation_mm)
-            }
         } else {
-            if (isRainRate) {
-                resources.getString(R.string.precipitation_in_hour)
-            } else {
-                resources.getString(R.string.precipitation_in)
-            }
+            // On inHg we use 2 decimals
+            roundToDecimals(UnitConverter.hpaToInHg(value.toFloat()), decimals = 2)
         }
     }
 
-    fun getDecimalsPrecipitation(): Int {
-        val keyOnSharedPref = resources.getString(KEY_PRECIP)
-        val defaultUnit = resources.getString(R.string.precipitation_mm)
-
-        val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
-
-        return if (unit == defaultUnit) {
+    fun getDecimalsPrecipitation(unitType: WeatherUnitType): Int {
+        return if (unitType == WeatherUnitType.MILLIMETERS) {
             DECIMALS_PRECIPITATION_MILLIMETERS
         } else {
             DECIMALS_PRECIPITATION_INCHES
         }
     }
 
-    fun getDecimalsPressure(): Int {
-        val unit = getPreferredUnit(
-            resources.getString(KEY_PRESSURE), resources.getString(R.string.pressure_hpa)
-        )
-
-        return if (unit == resources.getString(R.string.pressure_hpa)) {
+    fun getDecimalsPressure(unitType: WeatherUnitType): Int {
+        return if (unitType == WeatherUnitType.HPA) {
             DECIMALS_PRESSURE_HPA
         } else {
             DECIMALS_PRESSURE_INHG
         }
     }
+
+    fun getWindDecimals(unitType: WeatherUnitType): Int {
+        return if (unitType == WeatherUnitType.BEAUFORT) {
+            DECIMALS_WIND_BEAUFORT
+        } else {
+            DECIMALS_WIND_DEFAULT
+        }
+    }
+
 }

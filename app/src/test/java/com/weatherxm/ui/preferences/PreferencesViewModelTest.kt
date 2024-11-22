@@ -1,9 +1,9 @@
 package com.weatherxm.ui.preferences
 
-import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.InstantExecutorListener
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.PreferencesUseCase
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -13,34 +13,28 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PreferencesViewModelTest : BehaviorSpec({
     val usecase = mockk<PreferencesUseCase>()
+    val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: PreferenceViewModel
 
     val installationId = "installationId"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         every { analytics.setUserProperties() } returns mutableListOf()
         justRun { analytics.setAnalyticsEnabled(any()) }
         justRun { analytics.onLogout() }
         justRun { usecase.setAnalyticsEnabled(any()) }
-        coJustRun { usecase.logout() }
-        coMockEitherRight({ usecase.isLoggedIn() }, true)
+        coJustRun { authUseCase.logout() }
+        every { authUseCase.isLoggedIn() } returns true
         every { usecase.getInstallationId() } returns installationId
 
-        viewModel = PreferenceViewModel(usecase, analytics)
+        viewModel = PreferenceViewModel(usecase, authUseCase, analytics, dispatcher)
     }
 
     context("Invoke a change in SharedPreferences and update user's properties in analytics") {
@@ -57,7 +51,7 @@ class PreferencesViewModelTest : BehaviorSpec({
             When("it's a success") {
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
-                    viewModel.isLoggedIn().value?.isSuccess(true)
+                    viewModel.isLoggedIn() shouldBe true
                 }
             }
         }
@@ -70,7 +64,7 @@ class PreferencesViewModelTest : BehaviorSpec({
                 verify(exactly = 1) { analytics.onLogout() }
             }
             then("call the logout function in the usecase") {
-                coVerify(exactly = 1) { usecase.logout() }
+                coVerify(exactly = 1) { authUseCase.logout() }
             }
             then("LiveData onLogout gets invoked with `true` param") {
                 viewModel.onLogout().value shouldBe true
@@ -103,9 +97,5 @@ class PreferencesViewModelTest : BehaviorSpec({
                 viewModel.getInstallationId() shouldBe installationId
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

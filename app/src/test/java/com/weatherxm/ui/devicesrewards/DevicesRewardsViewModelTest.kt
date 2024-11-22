@@ -2,6 +2,7 @@ package com.weatherxm.ui.devicesrewards
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -23,17 +24,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DevicesRewardsViewModelTest : BehaviorSpec({
     lateinit var usecase: RewardsUseCase
     lateinit var analytics: AnalyticsWrapper
@@ -52,7 +47,6 @@ class DevicesRewardsViewModelTest : BehaviorSpec({
     )
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -68,7 +62,7 @@ class DevicesRewardsViewModelTest : BehaviorSpec({
         usecase = mockk<RewardsUseCase>()
         justRun { analytics.trackEventFailure(any()) }
 
-        viewModel = DevicesRewardsViewModel(rewards, usecase, analytics)
+        viewModel = DevicesRewardsViewModel(rewards, usecase, analytics, dispatcher)
     }
 
     context("Get Total Rewards by range for owned devices") {
@@ -143,7 +137,6 @@ class DevicesRewardsViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

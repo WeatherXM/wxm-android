@@ -93,26 +93,12 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             appVersionPref?.summary = getString(R.string.app_version) + "-$it"
         }
 
-        model.isLoggedIn().observe(this) { result ->
-            result
-                .mapLeft {
-                    Timber.d("Not logged in. Hide account preferences.")
-                    onLoggedOut(
-                        logoutBtn,
-                        resetPassBtn,
-                        deleteAccountButton,
-                        analyticsPreference
-                    )
-                }
-                .map {
-                    Timber.d("Logged in. Handle button clicks")
-                    onLoggedIn(
-                        logoutBtn,
-                        resetPassBtn,
-                        deleteAccountButton,
-                        analyticsPreference
-                    )
-                }
+        if (model.isLoggedIn()) {
+            Timber.d("Logged in. Handle button clicks")
+            onLoggedIn(logoutBtn, resetPassBtn, deleteAccountButton, analyticsPreference)
+        } else {
+            Timber.d("Not logged in. Hide account preferences.")
+            onLoggedOut(logoutBtn, resetPassBtn, deleteAccountButton, analyticsPreference)
         }
     }
 

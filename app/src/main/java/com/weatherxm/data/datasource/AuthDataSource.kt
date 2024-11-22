@@ -26,6 +26,6 @@ interface AuthDataSource {
     ): Either<Failure, Unit>
 
     suspend fun refresh(authToken: AuthToken): Either<Failure, AuthToken>
-    suspend fun getAuthToken(): Either<Failure, AuthToken>
-    suspend fun setAuthToken(token: AuthToken)
+    fun getAuthToken(): Either<Failure, AuthToken>
+    fun setAuthToken(token: AuthToken)
 }

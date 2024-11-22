@@ -19,6 +19,7 @@ import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -26,7 +27,8 @@ abstract class BaseDeviceSettingsViewModel(
     var device: UIDevice,
     private val usecase: StationSettingsUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    protected val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()
@@ -49,7 +51,7 @@ abstract class BaseDeviceSettingsViewModel(
     private fun setFriendlyName(friendlyName: String) {
         if (friendlyName.isNotEmpty() && friendlyName != device.friendlyName) {
             onLoading.postValue(true)
-            viewModelScope.launch {
+            viewModelScope.launch(dispatcher) {
                 usecase.setFriendlyName(device.id, friendlyName).onRight {
                     analytics.trackEventViewContent(
                         AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
@@ -77,7 +79,7 @@ abstract class BaseDeviceSettingsViewModel(
     private fun clearFriendlyName() {
         if (device.friendlyName?.isNotEmpty() == true) {
             onLoading.postValue(true)
-            viewModelScope.launch {
+            viewModelScope.launch(dispatcher) {
                 usecase.clearFriendlyName(device.id).onRight {
                     analytics.trackEventViewContent(
                         AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
@@ -104,7 +106,7 @@ abstract class BaseDeviceSettingsViewModel(
 
     fun removeDevice() {
         onLoading.postValue(true)
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             device.label?.let { serialNumber ->
                 usecase.removeDevice(serialNumber.unmask(), device.id).onRight {
                     Timber.d("Device ${device.name} removed.")

@@ -7,9 +7,9 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import com.weatherxm.R
-import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.mapResponse
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.RefreshBody
@@ -66,16 +66,14 @@ class AuthTokenAuthenticator(
         }
     }
 
-    private fun getAuthToken(): Either<Failure, AuthToken> = runBlocking {
-        cacheAuthDataSource.getAuthToken()
-            .flatMap { authToken ->
-                if (!authToken.isRefreshTokenValid()) {
-                    Either.Left(Failure.InvalidRefreshTokenError)
-                } else {
-                    Either.Right(authToken)
-                }
+    private fun getAuthToken(): Either<Failure, AuthToken> =
+        cacheAuthDataSource.getAuthToken().flatMap { authToken ->
+            if (!authToken.isRefreshTokenValid()) {
+                Either.Left(Failure.InvalidRefreshTokenError)
+            } else {
+                Either.Right(authToken)
             }
-    }
+        }
 
     private fun refresh(request: Request): Either<Failure, AuthToken> {
         Timber.d("[${request.path()}] Trying refresh & retry.")

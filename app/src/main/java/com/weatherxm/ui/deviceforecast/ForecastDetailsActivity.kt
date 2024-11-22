@@ -4,12 +4,12 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.classSimpleName
@@ -110,19 +110,19 @@ class ForecastDetailsActivity : BaseActivity() {
         // Update Daily Weather
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
         binding.dailyIcon.setWeatherAnimation(forecast.icon)
-        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp)
-        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp)
+        binding.dailyMaxTemp.text = getFormattedTemperature(this, forecast.maxTemp)
+        binding.dailyMinTemp.text = getFormattedTemperature(this, forecast.minTemp)
         binding.precipProbabilityCard.setData(
             getFormattedPrecipitationProbability(forecast.precipProbability)
         )
         binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
-        binding.windCard.setData(getFormattedWind(forecast.windSpeed, forecast.windDirection))
+        binding.windCard.setData(getFormattedWind(this, forecast.windSpeed, forecast.windDirection))
         binding.dailyPrecipCard.setData(
-            getFormattedPrecipitation(forecast.precip, isRainRate = false)
+            getFormattedPrecipitation(context = this, value = forecast.precip, isRainRate = false)
         )
-        binding.uvCard.setData(getFormattedUV(forecast.uv))
+        binding.uvCard.setData(getFormattedUV(this, forecast.uv))
         binding.humidityCard.setData(getFormattedHumidity(forecast.humidity))
-        binding.pressureCard.setData(getFormattedPressure(forecast.pressure))
+        binding.pressureCard.setData(getFormattedPressure(this, forecast.pressure))
 
         // Update Hourly Tiles
         hourlyAdapter = HourlyForecastAdapter(null)

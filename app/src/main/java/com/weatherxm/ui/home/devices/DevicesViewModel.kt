@@ -20,6 +20,7 @@ import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -28,7 +29,8 @@ class DevicesViewModel(
     private val deviceListUseCase: DeviceListUseCase,
     private val followUseCase: FollowUseCase,
     private val analytics: AnalyticsWrapper,
-    private val resources: Resources
+    private val resources: Resources,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val devices = MutableLiveData<Resource<List<UIDevice>>>().apply {
         value = Resource.loading()
@@ -46,7 +48,7 @@ class DevicesViewModel(
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             deviceListUseCase.getUserDevices().onRight { devices ->
                 Timber.d("Got ${devices.size} devices")
                 this@DevicesViewModel.devices.postValue(Resource.success(devices))
@@ -85,7 +87,7 @@ class DevicesViewModel(
 
     fun unFollowStation(deviceId: String) {
         onUnFollowStatus.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             followUseCase.unfollowStation(deviceId).onRight {
                 Timber.d("[Unfollow Device] Success")
                 onUnFollowStatus.postValue(Resource.success(Unit))

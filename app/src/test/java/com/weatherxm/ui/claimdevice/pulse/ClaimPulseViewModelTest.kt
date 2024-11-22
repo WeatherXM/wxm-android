@@ -3,6 +3,7 @@ package com.weatherxm.ui.claimdevice.pulse
 import com.weatherxm.R
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -23,17 +24,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClaimPulseViewModelTest : BehaviorSpec({
     val usecase = mockk<ClaimDeviceUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -53,7 +48,6 @@ class ClaimPulseViewModelTest : BehaviorSpec({
     val device = UIDevice.empty()
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -75,7 +69,7 @@ class ClaimPulseViewModelTest : BehaviorSpec({
             resources.getString(R.string.error_claim_device_claiming_error)
         } returns deviceClaimingError
 
-        viewModel = ClaimPulseViewModel(usecase, resources, analytics)
+        viewModel = ClaimPulseViewModel(usecase, resources, analytics, dispatcher)
     }
 
 
@@ -234,7 +228,6 @@ class ClaimPulseViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

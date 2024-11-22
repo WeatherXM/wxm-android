@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -18,17 +17,20 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@Suppress("LongParameterList")
 class CellInfoViewModel(
     val cell: UICell,
     private val resources: Resources,
     private val explorerUseCase: ExplorerUseCase,
     private val followUseCase: FollowUseCase,
     private val authUseCase: AuthUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val onCellDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()
@@ -43,7 +45,7 @@ class CellInfoViewModel(
 
     fun fetchDevices() {
         onCellDevices.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             if (cell.index.isEmpty()) {
                 Timber.w("Getting cell devices failed: cell index = null")
                 onCellDevices.postValue(
@@ -74,7 +76,7 @@ class CellInfoViewModel(
             AnalyticsService.ParamValue.FOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             followUseCase.followStation(deviceId).onRight {
                 Timber.d("[Follow Device] Success")
                 onFollowStatus.postValue(Resource.success(Unit))
@@ -92,7 +94,7 @@ class CellInfoViewModel(
             AnalyticsService.ParamValue.UNFOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             followUseCase.unfollowStation(deviceId).onRight {
                 Timber.d("[Unfollow Device] Success")
                 onFollowStatus.postValue(Resource.success(Unit))
@@ -116,8 +118,8 @@ class CellInfoViewModel(
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
+        viewModelScope.launch(dispatcher) {
+            isLoggedIn = authUseCase.isLoggedIn()
         }
     }
 }

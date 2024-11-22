@@ -10,12 +10,15 @@ import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PasswordPromptViewModel(
     private val usecase: AuthUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val onValidPassword = SingleLiveEvent<Resource<Unit>>()
@@ -33,7 +36,7 @@ class PasswordPromptViewModel(
         }
 
         // Check with the server if the password is correct
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.isPasswordCorrect(password).onRight {
                 onValidPassword.postValue(Resource.success(Unit))
             }.onLeft {

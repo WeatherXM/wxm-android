@@ -12,13 +12,16 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SignupViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val isSignedUp = MutableLiveData<Resource<String>>()
@@ -26,7 +29,7 @@ class SignupViewModel(
 
     fun signup(username: String, firstName: String?, lastName: String?) {
         isSignedUp.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             authUseCase.signup(username, firstName, lastName)
                 .onLeft {
                     analytics.trackEventFailure(it.code)

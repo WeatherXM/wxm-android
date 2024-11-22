@@ -5,7 +5,6 @@ import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
 import com.weatherxm.ui.common.empty
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -43,9 +42,7 @@ class ApiRequestInterceptor(private val cacheAuthDataSource: CacheAuthDataSource
 private fun Request.signedRequest(cacheAuthDataSource: CacheAuthDataSource): Request {
     return runCatching {
         // Get stored auth token
-        val authToken = runBlocking {
-            cacheAuthDataSource.getAuthToken()
-        }.getOrElse {
+        val authToken = cacheAuthDataSource.getAuthToken().getOrElse {
             throw Error("Auth Token not found.")
         }
 

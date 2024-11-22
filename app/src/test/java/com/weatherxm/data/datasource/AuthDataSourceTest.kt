@@ -1,6 +1,7 @@
 package com.weatherxm.data.datasource
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.successUnitResponse
 import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testGetFromCache
@@ -14,7 +15,6 @@ import com.weatherxm.data.network.LogoutBody
 import com.weatherxm.data.network.RefreshBody
 import com.weatherxm.data.network.RegistrationBody
 import com.weatherxm.data.network.ResetPasswordBody
-import com.weatherxm.data.services.CacheService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coJustRun
@@ -24,7 +24,6 @@ import io.mockk.verify
 
 class AuthDataSourceTest : BehaviorSpec({
     val authService = mockk<AuthService>()
-    val cacheService = mockk<CacheService>()
     val networkSource = NetworkAuthDataSource(authService)
     val cacheSource = CacheAuthDataSource(cacheService)
 

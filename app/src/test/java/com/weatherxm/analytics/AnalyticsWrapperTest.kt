@@ -3,10 +3,14 @@ package com.weatherxm.analytics
 import android.content.SharedPreferences
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.TestUtils.defaultMockUnitSelector
+import com.weatherxm.util.UnitSelector
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearMocks
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.mockkObject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -46,6 +50,8 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
             )
         }
 
+        mockkObject(UnitSelector)
+        defaultMockUnitSelector()
         service1.mockResponses()
         service2.mockResponses()
     }
@@ -63,6 +69,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 analyticsWrapper.setDevicesSortFilterOptions(
                     listOf("DATE_ADDED", "ALL", "NO_GROUPING")
                 )
+
                 with(analyticsWrapper.setUserProperties()) {
                     size shouldBe 11
                     this[0] shouldBe ("theme" to testDisplayMode)
@@ -155,5 +162,6 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
 
     afterSpec {
         stopKoin()
+        clearMocks(UnitSelector)
     }
 })

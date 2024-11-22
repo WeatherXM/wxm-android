@@ -22,6 +22,7 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -30,7 +31,8 @@ import timber.log.Timber
 class ExplorerViewModel(
     private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
-    private val locationHelper: LocationHelper
+    private val locationHelper: LocationHelper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     companion object {
         const val FILL_OPACITY_HEXAGONS: Double = 0.5
@@ -213,7 +215,7 @@ class ExplorerViewModel(
     fun fetch() {
         onStatus.postValue(Resource.loading())
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             explorerUseCase.getCells().onRight { response ->
                 if (hexesIndexes.isEmpty()) {
                     hexesIndexes = response.publicHexes.map {
@@ -296,7 +298,7 @@ class ExplorerViewModel(
                 }
             }
         } else {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcher) {
                 explorerUseCase.getUserCountryLocation()?.let {
                     navigateToLocation(it, true)
                 }

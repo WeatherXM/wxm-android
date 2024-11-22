@@ -16,6 +16,8 @@ import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
@@ -24,12 +26,14 @@ class RebootViewModel(
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
     private val resources: Resources,
-    analytics: AnalyticsWrapper
+    analytics: AnalyticsWrapper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,
     connectionUseCase,
-    analytics
+    analytics,
+    dispatcher
 ) {
 
     private val onStatus = MutableLiveData<Resource<RebootState>>()
@@ -68,7 +72,7 @@ class RebootViewModel(
     }
 
     private fun reboot() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onStatus.postValue(Resource.loading(RebootState(RebootStatus.REBOOTING)))
             connectionUseCase.reboot().onRight {
                 onStatus.postValue(Resource.success(RebootState(RebootStatus.REBOOTING)))

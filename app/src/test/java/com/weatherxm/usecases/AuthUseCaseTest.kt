@@ -5,12 +5,9 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.models.User
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.NotificationsRepository
-import com.weatherxm.data.repository.UserPreferencesRepository
-import com.weatherxm.data.repository.UserRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
@@ -20,40 +17,32 @@ import io.mockk.mockk
 
 class AuthUseCaseTest : BehaviorSpec({
     val authRepository = mockk<AuthRepository>()
-    val userRepository = mockk<UserRepository>()
-    val userPreferencesRepository = mockk<UserPreferencesRepository>()
     val notificationsRepository = mockk<NotificationsRepository>()
-    val usecase = AuthUseCaseImpl(
-        authRepository,
-        userRepository,
-        notificationsRepository,
-        userPreferencesRepository
-    )
+    val usecase = AuthUseCaseImpl(authRepository, notificationsRepository)
 
     val username = "username"
     val password = "password"
     val firstName = "firstName"
     val lastName = "lastName"
-    val user = mockk<User>()
     val authToken = AuthToken("access", "refresh")
 
     beforeSpec {
         coJustRun { notificationsRepository.setFcmToken() }
-        every { userPreferencesRepository.shouldShowAnalyticsOptIn() } returns true
+        coJustRun { authRepository.logout() }
     }
 
     context("Get if a user is logged in or not") {
         given("The repository providing that information") {
-            When("the response is a failure") {
-                coMockEitherLeft({ authRepository.isLoggedIn() }, failure)
-                then("return that failure") {
-                    usecase.isLoggedIn().isError()
+            When("the user is NOT logged in") {
+                every { authRepository.isLoggedIn() } returns false
+                then("return false") {
+                    usecase.isLoggedIn() shouldBe false
                 }
             }
-            When("the response is a success") {
-                coMockEitherRight({ authRepository.isLoggedIn() }, true)
-                then("return that success") {
-                    usecase.isLoggedIn().isSuccess(true)
+            When("the user is logged in") {
+                every { authRepository.isLoggedIn() } returns true
+                then("return true") {
+                    usecase.isLoggedIn() shouldBe true
                 }
             }
         }
@@ -99,23 +88,6 @@ class AuthUseCaseTest : BehaviorSpec({
         }
     }
 
-    context("Get User") {
-        given("The repository which returns the user") {
-            When("the response is a failure") {
-                coMockEitherLeft({ userRepository.getUser() }, failure)
-                then("return that failure") {
-                    usecase.getUser().isError()
-                }
-            }
-            When("the response is a success") {
-                coMockEitherRight({ userRepository.getUser() }, user)
-                then("return the user") {
-                    usecase.getUser().isSuccess(user)
-                }
-            }
-        }
-    }
-
     context("Reset Password") {
         given("The repository which accepts the reset password request") {
             When("the response is a failure") {
@@ -129,14 +101,6 @@ class AuthUseCaseTest : BehaviorSpec({
                 then("return the user") {
                     usecase.resetPassword(username).isSuccess(Unit)
                 }
-            }
-        }
-    }
-
-    context("Get if we should show the analytics opt in or not") {
-        given("The repository which returns the answer") {
-            then("return the answer") {
-                usecase.shouldShowAnalyticsOptIn() shouldBe true
             }
         }
     }
@@ -155,6 +119,16 @@ class AuthUseCaseTest : BehaviorSpec({
                     usecase.isPasswordCorrect(password).isSuccess(true)
                 }
             }
+        }
+    }
+
+    context("Logout a user") {
+        given("A repository providing LOGOUT mechanism") {
+            then("logout the user") {
+                usecase.logout()
+                coVerify(exactly = 1) { authRepository.logout() }
+            }
+
         }
     }
 })

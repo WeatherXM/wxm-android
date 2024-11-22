@@ -12,12 +12,15 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private var currentWalletRewards: UIWalletRewards? = null
 
@@ -29,7 +32,7 @@ class ProfileViewModel(
 
     fun fetchUser(forceRefresh: Boolean = false) {
         onUser.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             useCase.getUser(forceRefresh).onRight {
                 onUser.postValue(Resource.success(it))
                 fetchWalletRewards(it.wallet?.address)
@@ -51,7 +54,7 @@ class ProfileViewModel(
     }
 
     private fun fetchWalletRewards(walletAddress: String?) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onWalletRewards.postValue(Resource.loading())
             useCase.getWalletRewards(walletAddress).onRight {
                 Timber.d("Got Wallet Rewards: $it")

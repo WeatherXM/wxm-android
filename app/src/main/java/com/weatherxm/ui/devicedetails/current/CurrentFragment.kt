@@ -200,7 +200,7 @@ class CurrentFragment : BaseFragment() {
         }
 
         binding.emptyStationHealthInfo.visible(
-            device.qodScore == null && device.metricsTimestamp == null
+            device.isOwned() && device.qodScore == null && device.metricsTimestamp == null
         )
     }
 }
