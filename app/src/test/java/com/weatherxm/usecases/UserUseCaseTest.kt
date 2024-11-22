@@ -44,6 +44,7 @@ class UserUseCaseTest : BehaviorSpec({
 
     beforeSpec {
         justRun { userPreferencesRepository.setWalletWarningDismissTimestamp() }
+        every { userPreferencesRepository.shouldShowAnalyticsOptIn() } returns true
     }
 
     context("Get the Wallet Address") {
@@ -107,6 +108,14 @@ class UserUseCaseTest : BehaviorSpec({
             then("return the user's id") {
                 every { userRepository.getUserId() } returns userId
                 usecase.getUserId() shouldBe userId
+            }
+        }
+    }
+
+    context("Get if we should show the analytics opt in or not") {
+        given("The repository which returns the answer") {
+            then("return the answer") {
+                usecase.shouldShowAnalyticsOptIn() shouldBe true
             }
         }
     }

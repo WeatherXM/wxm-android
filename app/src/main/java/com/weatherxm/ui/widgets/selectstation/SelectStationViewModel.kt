@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class SelectStationViewModel(private val usecase: WidgetSelectStationUseCase) : ViewModel() {
+class SelectStationViewModel(
+    private val usecase: WidgetSelectStationUseCase,
+    private val authUseCase: AuthUseCase,
+) : ViewModel() {
 
     private val onDevices = MutableLiveData<Resource<List<UIDevice>>>()
     private val isNotLoggedIn = MutableLiveData<Unit>()
@@ -30,16 +33,10 @@ class SelectStationViewModel(private val usecase: WidgetSelectStationUseCase) : 
 
     fun checkIfLoggedInAndProceed() {
         Timber.d("Checking if user is logged in in the background")
-        viewModelScope.launch(Dispatchers.IO) {
-            usecase.isLoggedIn().onRight {
-                if (it) {
-                    fetch()
-                } else {
-                    isNotLoggedIn.postValue(Unit)
-                }
-            }.onLeft {
-                isNotLoggedIn.postValue(Unit)
-            }
+        if (authUseCase.isLoggedIn()) {
+            fetch()
+        } else {
+            isNotLoggedIn.postValue(Unit)
         }
     }
 

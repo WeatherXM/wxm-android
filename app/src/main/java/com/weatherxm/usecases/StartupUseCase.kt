@@ -42,20 +42,20 @@ class StartupUseCaseImpl(
                 appConfigRepository.setLastRemindedVersion()
                 trySend(StartupState.ShowUpdate)
             } else {
-                authRepository.isLoggedIn()
-                    .map {
-                        Timber.d("Already logged in.")
-                        RefreshFcmApiWorker.initAndRefreshToken(context, null)
-                        if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
-                            trySend(StartupState.ShowAnalyticsOptIn)
-                        } else {
-                            trySend(StartupState.ShowHome)
-                        }
-                    }
-                    .mapLeft {
-                        Timber.d("Not logged in. Show explorer.")
-                        trySend(StartupState.ShowExplorer)
-                    }
+                val isLoggedIn = authRepository.isLoggedIn().apply {
+                    if (this) RefreshFcmApiWorker.initAndRefreshToken(context, null)
+                }
+                Timber.d("User logged in: $isLoggedIn")
+                if (isLoggedIn && userPreferencesRepository.shouldShowAnalyticsOptIn()) {
+                    Timber.d("Show the Analytics Opt-In screen.")
+                    trySend(StartupState.ShowAnalyticsOptIn)
+                } else if (isLoggedIn) {
+                    Timber.d("Show the Home screen.")
+                    trySend(StartupState.ShowHome)
+                } else {
+                    Timber.d("Show the Explorer.")
+                    trySend(StartupState.ShowExplorer)
+                }
             }
             awaitClose { /* Do nothing */ }
         }

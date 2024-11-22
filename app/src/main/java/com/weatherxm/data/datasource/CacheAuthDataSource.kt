@@ -7,11 +7,11 @@ import com.weatherxm.data.services.CacheService
 
 class CacheAuthDataSource(private val cacheService: CacheService) : AuthDataSource {
 
-    override suspend fun getAuthToken(): Either<Failure, AuthToken> {
+    override fun getAuthToken(): Either<Failure, AuthToken> {
         return cacheService.getAuthToken()
     }
 
-    override suspend fun setAuthToken(token: AuthToken) {
+    override fun setAuthToken(token: AuthToken) {
         cacheService.setAuthToken(token)
     }
 
