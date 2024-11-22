@@ -73,13 +73,13 @@ fun getFlavorProperty(propertyName: String, flavorEnvFile: String): String {
 
 android {
     namespace = "com.weatherxm"
-    compileSdk = 34
+    compileSdk = 35
     buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.weatherxm.app"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 10 + getVersionGitTags().size
         val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")
         versionName = getLastVersionGitTag(skipTagsLogging)
