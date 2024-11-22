@@ -117,7 +117,7 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     setDrawCircleHole(false)
     circleRadius = POINT_SIZE
     lineWidth = LINE_WIDTH
-    mode = LineDataSet.Mode.CUBIC_BEZIER
+    mode = LineDataSet.Mode.LINEAR
     highLightColor = context.getColor(R.color.colorPrimary)
     setDrawHorizontalHighlightIndicator(false)
     enableDashedHighlightLine(10F, 4F, 0F)
@@ -596,7 +596,6 @@ fun LineChart.initTotalEarnedChart(
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
     if (dataSet.values.size > 1) dataSet.setDrawCircles(false)
-    dataSet.mode = LineDataSet.Mode.LINEAR
     dataSet.highLightColor = context.getColor(R.color.darkGrey)
     dataSet.color = context.getColor(R.color.blue)
     dataSet.axisDependency = YAxis.AxisDependency.RIGHT
