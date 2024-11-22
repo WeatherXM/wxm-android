@@ -1,9 +1,9 @@
 package com.weatherxm.data.datasource
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.data.models.InfoBanner
 import com.weatherxm.data.models.Survey
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -13,7 +13,6 @@ import io.mockk.verify
 
 class RemoteBannersDataSourceTest : BehaviorSpec({
     val remoteConfig = mockk<FirebaseRemoteConfig>()
-    val cacheService = mockk<CacheService>()
     val datasource = RemoteBannersDataSourceImpl(remoteConfig, cacheService)
 
     val id = "id"

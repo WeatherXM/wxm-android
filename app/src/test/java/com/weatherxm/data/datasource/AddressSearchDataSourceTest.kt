@@ -10,6 +10,7 @@ import com.mapbox.search.common.IsoCountryCode
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testThrowNotImplemented
@@ -20,7 +21,6 @@ import com.weatherxm.data.datasource.NetworkAddressSearchDataSource.Companion.SE
 import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.coEvery
@@ -32,8 +32,7 @@ import org.koin.test.KoinTest
 
 class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
     val searchEngine = mockk<SearchEngine>()
-    val cache = mockk<CacheService>()
-    val cacheSource = CacheAddressSearchDataSource(cache)
+    val cacheSource = CacheAddressSearchDataSource(cacheService)
     val networkSource = NetworkAddressSearchDataSource(searchEngine)
 
     val query = "query"
@@ -58,8 +57,8 @@ class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
 
 
     beforeSpec {
-        coJustRun { cache.setSearchSuggestions(query, searchSuggestions) }
-        coJustRun { cache.setSuggestionLocation(searchSuggestion, location) }
+        coJustRun { cacheService.setSearchSuggestions(query, searchSuggestions) }
+        coJustRun { cacheService.setSuggestionLocation(searchSuggestion, location) }
     }
 
     context("Get search suggestions by query and country code") {
@@ -67,7 +66,7 @@ class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
             testGetFromCache(
                 "search suggestions",
                 searchSuggestions,
-                mockFunction = { cache.getSearchSuggestions(query) },
+                mockFunction = { cacheService.getSearchSuggestions(query) },
                 runFunction = { cacheSource.getSearchSuggestions(query, countryCode) }
             )
         }
@@ -118,7 +117,7 @@ class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
             testGetFromCache(
                 "location of the search suggestion",
                 location,
-                mockFunction = { cache.getSuggestionLocation(searchSuggestion) },
+                mockFunction = { cacheService.getSuggestionLocation(searchSuggestion) },
                 runFunction = { cacheSource.getSuggestionLocation(searchSuggestion) }
             )
         }
@@ -159,9 +158,9 @@ class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
 
     context("Set search suggestions") {
         When("Using the Cache Source") {
-            then("save the search suggestions in the cache") {
+            then("save the search suggestions in the cacheService") {
                 cacheSource.setSearchSuggestions(query, searchSuggestions)
-                verify(exactly = 1) { cache.setSearchSuggestions(query, searchSuggestions) }
+                verify(exactly = 1) { cacheService.setSearchSuggestions(query, searchSuggestions) }
             }
         }
         When("Using the Network Source") {
@@ -171,9 +170,14 @@ class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
 
     context("Set a location of a search suggestion") {
         When("Using the Cache Source") {
-            then("save the location in the cache") {
+            then("save the location in the cacheService") {
                 cacheSource.setSuggestionLocation(searchSuggestion, location)
-                verify(exactly = 1) { cache.setSuggestionLocation(searchSuggestion, location) }
+                verify(exactly = 1) {
+                    cacheService.setSuggestionLocation(
+                        searchSuggestion,
+                        location
+                    )
+                }
             }
         }
         When("Using the Network Source") {

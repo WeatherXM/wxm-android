@@ -2,6 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.successUnitResponse
 import com.weatherxm.TestUtils.isError
@@ -12,7 +13,6 @@ import com.weatherxm.data.models.Wallet
 import com.weatherxm.data.network.AddressBody
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coJustRun
 import io.mockk.every
@@ -21,7 +21,6 @@ import io.mockk.verify
 
 class WalletDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
-    val cacheService = mockk<CacheService>()
     val networkSource = NetworkWalletDataSource(apiService)
     val cacheSource = CacheWalletDataSource(cacheService)
 

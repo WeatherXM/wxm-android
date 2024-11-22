@@ -6,10 +6,10 @@ import android.content.Intent
 import android.os.Parcelable
 import arrow.core.Either
 import com.weatherxm.R
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.mockEitherRight
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.widgets.WidgetType
 import io.kotest.core.spec.style.BehaviorSpec
@@ -23,7 +23,6 @@ import io.mockk.mockkStatic
 import io.mockk.verify
 
 class WidgetHelperTest : BehaviorSpec({
-    val cacheService = mockk<CacheService>()
     val appWidgetManager = mockk<AppWidgetManager>()
     val appWidgetProviderInfo = mockk<AppWidgetProviderInfo>()
     val widgetHelper = WidgetHelper(cacheService, context)
