@@ -21,6 +21,8 @@ import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -28,7 +30,8 @@ class ClaimWifiViewModel(
     val deviceType: DeviceType,
     private val claimDeviceUseCase: ClaimDeviceUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     private val onNext = MutableLiveData<Int>()
@@ -78,7 +81,7 @@ class ClaimWifiViewModel(
 
     fun claimDevice(location: Location) {
         onClaimResult.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             claimDeviceUseCase.claimDevice(
                 currentSerialNumber,
                 location.lat,

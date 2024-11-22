@@ -32,8 +32,14 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import java.util.Locale
 
+@OptIn(ExperimentalCoroutinesApi::class)
 object TestConfig : AbstractProjectConfig() {
     override val duplicateTestNameMode = DuplicateTestNameMode.Error
     val context = mockk<Context>()
@@ -44,6 +50,7 @@ object TestConfig : AbstractProjectConfig() {
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
     val geocoder = mockk<Geocoder>()
     val cacheService = mockk<CacheService>()
+    val dispatcher = UnconfinedTestDispatcher()
 
     const val REACH_OUT_MSG = "Reach Out"
     const val DEVICE_NOT_FOUND_MSG = "Device Not Found"
@@ -54,6 +61,8 @@ object TestConfig : AbstractProjectConfig() {
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
         @Suppress("LongMethod")
         override suspend fun beforeProject() {
+            Dispatchers.setMain(dispatcher)
+
             mockkConstructor(CountDownTimerHelper::class)
             justRun { anyConstructed<CountDownTimerHelper>().start(any(), any()) }
             justRun { anyConstructed<CountDownTimerHelper>().stop() }
@@ -140,6 +149,7 @@ object TestConfig : AbstractProjectConfig() {
         }
 
         override suspend fun afterProject() {
+            Dispatchers.resetMain()
             println("Unit Tests completed!")
         }
     }

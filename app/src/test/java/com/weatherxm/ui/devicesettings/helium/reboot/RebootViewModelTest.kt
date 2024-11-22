@@ -2,6 +2,7 @@ package com.weatherxm.ui.devicesettings.helium.reboot
 
 import android.bluetooth.BluetoothDevice
 import com.weatherxm.R
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -25,16 +26,10 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RebootViewModelTest : BehaviorSpec({
     val connectionUseCase = mockk<BluetoothConnectionUseCase>()
     val scanUseCase = mockk<BluetoothScannerUseCase>()
@@ -56,7 +51,6 @@ class RebootViewModelTest : BehaviorSpec({
     val scannedDevice = ScannedDevice(macAddress, macAddress)
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
@@ -76,7 +70,8 @@ class RebootViewModelTest : BehaviorSpec({
             connectionUseCase,
             scanUseCase,
             resources,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -205,9 +200,5 @@ class RebootViewModelTest : BehaviorSpec({
                 }
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

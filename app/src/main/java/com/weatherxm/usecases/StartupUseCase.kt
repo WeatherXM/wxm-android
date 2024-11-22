@@ -6,6 +6,7 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.startup.StartupState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -25,7 +26,8 @@ class StartupUseCaseImpl(
     private val context: Context,
     private val authRepository: AuthRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val appConfigRepository: AppConfigRepository
+    private val appConfigRepository: AppConfigRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : StartupUseCase {
 
     companion object {
@@ -63,6 +65,6 @@ class StartupUseCaseImpl(
         // Return a combined flow
         return combine(delayFlow, stateFlow) { _, state ->
             state
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(dispatcher)
     }
 }

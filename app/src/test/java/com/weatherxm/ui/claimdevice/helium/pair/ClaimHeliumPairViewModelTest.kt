@@ -1,6 +1,7 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
 import com.weatherxm.R
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -22,16 +23,10 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClaimHeliumPairViewModelTest : BehaviorSpec({
     val usecase = mockk<BluetoothConnectionUseCase>()
     val scannerUseCase = mockk<BluetoothScannerUseCase>()
@@ -54,7 +49,6 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
     )
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         every { resources.getString(R.string.helium_bluetooth_disabled) } returns bluetoothDisabled
@@ -65,7 +59,8 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
         every { usecase.registerOnBondStatus() } returns bondFlow
         coJustRun { usecase.disconnectFromPeripheral() }
 
-        viewModel = ClaimHeliumPairViewModel(scannerUseCase, usecase, resources, analytics)
+        viewModel =
+            ClaimHeliumPairViewModel(scannerUseCase, usecase, resources, analytics, dispatcher)
     }
 
     context("Scan devices") {
@@ -156,9 +151,5 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
                 coVerify(exactly = 1) { usecase.disconnectFromPeripheral() }
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

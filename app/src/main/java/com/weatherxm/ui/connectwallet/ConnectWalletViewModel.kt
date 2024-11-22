@@ -13,13 +13,15 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ConnectWalletViewModel(
     private val useCase: UserUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     companion object {
@@ -35,7 +37,7 @@ class ConnectWalletViewModel(
 
     fun setWalletAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             useCase.setWalletAddress(address).onRight {
                 isAddressSaved.postValue(
                     Resource.success(resources.getString(R.string.address_saved))
@@ -83,7 +85,7 @@ class ConnectWalletViewModel(
 
     init {
         // Get initial value from repository
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             useCase.getWalletAddress().map { currentAddress.postValue(it) }
         }
     }

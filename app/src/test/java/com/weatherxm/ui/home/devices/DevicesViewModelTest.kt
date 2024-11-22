@@ -3,6 +3,7 @@ package com.weatherxm.ui.home.devices
 import com.weatherxm.R
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -31,17 +32,11 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DevicesViewModelTest : BehaviorSpec({
     val deviceListUseCase = mockk<DeviceListUseCase>()
     val followUseCase = mockk<FollowUseCase>()
@@ -94,7 +89,6 @@ class DevicesViewModelTest : BehaviorSpec({
     val deviceSortFilterOptions = DevicesSortFilterOptions()
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -110,7 +104,8 @@ class DevicesViewModelTest : BehaviorSpec({
         every { resources.getString(R.string.error_max_followed) } returns maxFollowedMsg
         justRun { deviceListUseCase.setDevicesSortFilterOptions(any()) }
 
-        viewModel = DevicesViewModel(deviceListUseCase, followUseCase, analytics, resources)
+        viewModel =
+            DevicesViewModel(deviceListUseCase, followUseCase, analytics, resources, dispatcher)
     }
 
     context("Fetch devices") {
@@ -295,7 +290,6 @@ class DevicesViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

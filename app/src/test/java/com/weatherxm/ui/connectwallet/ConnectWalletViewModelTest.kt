@@ -2,6 +2,7 @@ package com.weatherxm.ui.connectwallet
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -20,17 +21,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ConnectWalletViewModelTest : BehaviorSpec({
     val usecase = mockk<UserUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -44,7 +39,6 @@ class ConnectWalletViewModelTest : BehaviorSpec({
     val invalidWalletAddressFailure = ApiError.UserError.WalletError.InvalidWalletAddress("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -63,7 +57,7 @@ class ConnectWalletViewModelTest : BehaviorSpec({
             resources.getString(R.string.error_connect_wallet_invalid_address)
         } returns invalidAddressMsg
 
-        viewModel = ConnectWalletViewModel(usecase, resources, analytics)
+        viewModel = ConnectWalletViewModel(usecase, resources, analytics, dispatcher)
     }
 
     context("Set a new wallet address") {
@@ -142,7 +136,6 @@ class ConnectWalletViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

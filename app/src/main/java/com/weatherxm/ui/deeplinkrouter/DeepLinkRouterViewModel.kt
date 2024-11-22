@@ -24,6 +24,7 @@ import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,7 +32,8 @@ import timber.log.Timber
 class DeepLinkRouterViewModel(
     private val usecase: ExplorerUseCase,
     private val devicesUseCase: DeviceListUseCase,
-    private val resources: Resources
+    private val resources: Resources,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     companion object {
         const val STATIONS_PATH_SEGMENT = "stations"
@@ -74,7 +76,7 @@ class DeepLinkRouterViewModel(
     }
 
     private fun handleDeviceNotification(remoteMessage: WXMRemoteMessage) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             devicesUseCase.getUserDevices().getOrElse { mutableListOf() }.firstOrNull {
                 it.id == remoteMessage.deviceId
             }?.let {
@@ -98,7 +100,7 @@ class DeepLinkRouterViewModel(
     }
 
     private fun searchForCell(cellIndex: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getCellInfo(cellIndex).onRight {
                 onCell.postValue(it)
             }.onLeft {
@@ -110,7 +112,7 @@ class DeepLinkRouterViewModel(
 
     private fun searchForDevice(normalizedDeviceName: String) {
         val deviceName = normalizedDeviceName.replace("-", " ")
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.networkSearch(deviceName, exact = true, exclude = EXCLUDE_PLACES).onRight {
                 if (it.size == 1) {
                     getDeviceFromSearchResult(it[0])

@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicedetails
 import com.weatherxm.R
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -27,22 +28,17 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.timeout
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.parse
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+@OptIn(FlowPreview::class)
 class DeviceDetailsViewModelTest : BehaviorSpec({
     val deviceDetailsUseCase = mockk<DeviceDetailsUseCase>()
     val authUseCase = mockk<AuthUseCase>()
@@ -89,7 +85,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     val maxFollowedMsg = "Max Followed Failure"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -124,7 +119,8 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
             authUseCase,
             followUseCase,
             resources,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -386,7 +382,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

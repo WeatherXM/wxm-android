@@ -19,21 +19,25 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 class ChangeFrequencyViewModel(
     val device: UIDevice,
     private val usecase: StationSettingsUseCase,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
     private val resources: Resources,
-    analytics: AnalyticsWrapper
+    analytics: AnalyticsWrapper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,
     connectionUseCase,
-    analytics
+    analytics,
+    dispatcher
 ) {
     private val frequenciesInOrder = mutableListOf<Frequency>()
     private var selectedFrequency = Frequency.US915
@@ -51,7 +55,7 @@ class ChangeFrequencyViewModel(
     fun onStatus() = onStatus
 
     fun getCountryAndFrequencies() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getCountryAndFrequencies(device.location?.lat, device.location?.lon).apply {
                 frequenciesInOrder.add(recommendedFrequency)
                 frequenciesInOrder.addAll(otherFrequencies)
@@ -113,7 +117,7 @@ class ChangeFrequencyViewModel(
     }
 
     private fun changeFrequency() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onStatus.postValue(
                 Resource.loading(ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY))
             )

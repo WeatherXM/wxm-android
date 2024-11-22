@@ -18,6 +18,8 @@ import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
@@ -27,7 +29,8 @@ class ForecastDetailsViewModel(
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val chartsUseCase: ChartsUseCase,
-    private val forecastUseCase: ForecastUseCase
+    private val forecastUseCase: ForecastUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val onForecastLoaded = MutableLiveData<Resource<Unit>>()
     fun onForecastLoaded(): LiveData<Resource<Unit>> = onForecastLoaded
@@ -38,7 +41,7 @@ class ForecastDetailsViewModel(
 
     fun fetchForecast() {
         onForecastLoaded.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             forecastUseCase.getForecast(device).onRight {
                 Timber.d("Got forecast")
                 forecast = it

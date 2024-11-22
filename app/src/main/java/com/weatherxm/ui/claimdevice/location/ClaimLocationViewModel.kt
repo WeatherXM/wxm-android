@@ -16,6 +16,8 @@ import com.weatherxm.usecases.EditLocationUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -25,7 +27,8 @@ import timber.log.Timber
 class ClaimLocationViewModel(
     private val editLocationUseCase: EditLocationUseCase,
     private val analytics: AnalyticsWrapper,
-    private val locationHelper: LocationHelper
+    private val locationHelper: LocationHelper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null
     private var installationLocation = Location(0.0, 0.0)
@@ -74,7 +77,7 @@ class ClaimLocationViewModel(
     }
 
     fun getSearchSuggestions(query: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             editLocationUseCase.getSearchSuggestions(query).onRight {
                 onSearchResults.postValue(it)
             }.onLeft {
@@ -84,7 +87,7 @@ class ClaimLocationViewModel(
     }
 
     fun getLocationFromSearchSuggestion(suggestion: SearchSuggestion) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             editLocationUseCase.getSuggestionLocation(suggestion).onRight {
                 onMoveToLocation.postValue(it)
             }.onLeft {
@@ -103,7 +106,7 @@ class ClaimLocationViewModel(
             }
         }
 
-        reverseGeocodingJob = viewModelScope.launch {
+        reverseGeocodingJob = viewModelScope.launch(dispatcher) {
             delay(REVERSE_GEOCODING_DELAY)
             editLocationUseCase.getAddressFromPoint(point).onRight {
                 onReverseGeocodedAddress.postValue(it)

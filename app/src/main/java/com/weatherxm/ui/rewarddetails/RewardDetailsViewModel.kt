@@ -18,19 +18,22 @@ import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.ZonedDateTime
 
+@Suppress("LongParameterList")
 class RewardDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val analytics: AnalyticsWrapper,
     private val resources: Resources,
     private val usecase: RewardsUseCase,
     private val userUseCase: UserUseCase,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val onRewardDetails = MutableLiveData<Resource<RewardDetails>>()
@@ -42,7 +45,7 @@ class RewardDetailsViewModel(
 
     private fun fetchWalletAddress() {
         if (authUseCase.isLoggedIn()) {
-            walletAddressJob = viewModelScope.launch {
+            walletAddressJob = viewModelScope.launch(dispatcher) {
                 userUseCase.getWalletAddress().onRight {
                     rewardSplitsData.wallet = it
                 }
@@ -51,7 +54,7 @@ class RewardDetailsViewModel(
     }
 
     fun getRewardSplitsData(listener: (RewardSplitsData) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             if (walletAddressJob?.isActive == true) {
                 walletAddressJob?.join()
             }
@@ -66,7 +69,7 @@ class RewardDetailsViewModel(
     }
 
     fun fetchRewardDetails(timestamp: ZonedDateTime) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             onRewardDetails.postValue(Resource.loading())
 
             usecase.getRewardDetails(device.id, timestamp)

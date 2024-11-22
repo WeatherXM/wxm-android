@@ -8,13 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.PreferencesUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PreferenceViewModel(
     private val preferencesUseCase: PreferencesUseCase,
     private val authUseCase: AuthUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         analytics.setUserProperties()
@@ -27,7 +29,7 @@ class PreferenceViewModel(
     fun isLoggedIn(): Boolean = authUseCase.isLoggedIn()
 
     fun logout() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             analytics.onLogout()
             authUseCase.logout()
             onLogout.postValue(true)
