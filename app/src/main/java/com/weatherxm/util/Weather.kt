@@ -43,13 +43,45 @@ object Weather : KoinComponent {
             "clear-night" -> R.raw.anim_weather_clear_night
             "partly-cloudy-day" -> R.raw.anim_weather_partly_cloudy_day
             "partly-cloudy-night" -> R.raw.anim_weather_partly_cloudy_night
+            "partly-cloudy-day-drizzle" -> R.raw.anim_weather_partly_cloudy_day_drizzle
+            "partly-cloudy-night-drizzle" -> R.raw.anim_weather_partly_cloudy_night_drizzle
+            "partly-cloudy-day-snow" -> R.raw.anim_weather_partly_cloudy_day_snow
+            "partly-cloudy-night-snow" -> R.raw.anim_weather_partly_cloudy_night_snow
             "overcast-day" -> R.raw.anim_weather_overcast_day
             "overcast-night" -> R.raw.anim_weather_overcast_night
+            "overcast" -> R.raw.anim_weather_overcast
+            "overcast-rain" -> R.raw.anim_weather_overcast_rain
+            "overcast-snow" -> R.raw.anim_weather_overcast_snow
+            "overcast-drizzle" -> R.raw.anim_weather_overcast_drizzle
+            "overcast-light-snow" -> R.raw.anim_weather_overcast_light_snow
+            "overcast-sleet" -> R.raw.anim_weather_overcast_sleet
             "drizzle" -> R.raw.anim_weather_drizzle
             "rain" -> R.raw.anim_weather_rain
             "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
+            "thunderstorms-overcast-rain" -> R.raw.anim_weather_thunderstorms_overcast_rain
+            "thunderstorms-light-rain" -> R.raw.anim_weather_thunderstorms_light_rain
+            "thunderstorms-extreme-rain" -> R.raw.anim_weather_thunderstorms_extreme_rain
             "snow" -> R.raw.anim_weather_snow
             "sleet" -> R.raw.anim_weather_sleet
+            "haze-day" -> R.raw.anim_weather_haze_day
+            "haze-night" -> R.raw.anim_weather_haze_night
+            "extreme-day" -> R.raw.anim_weather_extreme_day
+            "extreme-night" -> R.raw.anim_weather_extreme_night
+            "extreme-rain" -> R.raw.anim_weather_extreme_rain
+            "extreme-snow" -> R.raw.anim_weather_extreme_snow
+            "extreme-day-rain" -> R.raw.anim_weather_extreme_day_rain
+            "extreme-night-rain" -> R.raw.anim_weather_extreme_night_rain
+            "extreme-day-sleet" -> R.raw.anim_weather_extreme_day_sleet
+            "extreme-night-sleet" -> R.raw.anim_weather_extreme_night_sleet
+            "extreme-day-snow" -> R.raw.anim_weather_extreme_day_snow
+            "extreme-night-snow" -> R.raw.anim_weather_extreme_night_snow
+            "extreme-day-drizzle" -> R.raw.anim_weather_extreme_day_drizzle
+            "extreme-night-drizzle" -> R.raw.anim_weather_extreme_night_drizzle
+            "extreme-day-light-snow" -> R.raw.anim_weather_extreme_day_light_snow
+            "extreme-night-light-snow" -> R.raw.anim_weather_extreme_night_light_snow
+            "dust-day" -> R.raw.anim_weather_dust_day
+            "dust-night" -> R.raw.anim_weather_dust_night
+            "dust-wind" -> R.raw.anim_weather_dust_wind
             // The 3 following cases are for backward compatibility
             "wind" -> R.raw.anim_weather_wind
             "fog" -> R.raw.anim_weather_fog
@@ -69,13 +101,45 @@ object Weather : KoinComponent {
             "clear-night" -> R.drawable.ic_weather_clear_night
             "partly-cloudy-day" -> R.drawable.ic_weather_partly_cloudy_day
             "partly-cloudy-night" -> R.drawable.ic_weather_partly_cloudy_night
+            "partly-cloudy-day-drizzle" -> R.drawable.ic_weather_partly_cloudy_day_drizzle
+            "partly-cloudy-night-drizzle" -> R.drawable.ic_weather_partly_cloudy_night_drizzle
+            "partly-cloudy-day-snow" -> R.drawable.ic_weather_partly_cloudy_day_snow
+            "partly-cloudy-night-snow" -> R.drawable.ic_weather_partly_cloudy_night_snow
             "overcast-day" -> R.drawable.ic_weather_overcast_day
             "overcast-night" -> R.drawable.ic_weather_overcast_night
+            "overcast" -> R.drawable.ic_weather_overcast
+            "overcast-rain" -> R.drawable.ic_weather_overcast_rain
+            "overcast-snow" -> R.drawable.ic_weather_overcast_snow
+            "overcast-drizzle" -> R.drawable.ic_weather_overcast_drizzle
+            "overcast-light-snow" -> R.drawable.ic_weather_overcast_light_snow
+            "overcast-sleet" -> R.drawable.ic_weather_overcast_sleet
             "drizzle" -> R.drawable.ic_weather_drizzle
             "rain" -> R.drawable.ic_weather_rain
             "thunderstorms-rain" -> R.drawable.ic_weather_thunderstorms_rain
+            "thunderstorms-light-rain" -> R.drawable.ic_weather_thunderstorms_rain
+            "thunderstorms-overcast-rain" -> R.drawable.ic_weather_thunderstorms_overcast_rain
+            "thunderstorms-extreme-rain" -> R.drawable.ic_weather_thunderstorms_extreme_rain
             "snow" -> R.drawable.ic_weather_snow
             "sleet" -> R.drawable.ic_weather_sleet
+            "haze-day" -> R.drawable.ic_weather_haze_day
+            "haze-night" -> R.drawable.ic_weather_haze_night
+            "extreme-day" -> R.drawable.ic_weather_extreme_day
+            "extreme-night" -> R.drawable.ic_weather_extreme_night
+            "extreme-rain" -> R.drawable.ic_weather_extreme_rain
+            "extreme-snow" -> R.drawable.ic_weather_extreme_snow
+            "extreme-day-rain" -> R.drawable.ic_weather_extreme_day_rain
+            "extreme-night-rain" -> R.drawable.ic_weather_extreme_night_rain
+            "extreme-day-sleet" -> R.drawable.ic_weather_extreme_day_sleet
+            "extreme-night-sleet" -> R.drawable.ic_weather_extreme_night_sleet
+            "extreme-day-snow" -> R.drawable.ic_weather_extreme_day_snow
+            "extreme-night-snow" -> R.drawable.ic_weather_extreme_night_snow
+            "extreme-day-drizzle" -> R.drawable.ic_weather_extreme_day_drizzle
+            "extreme-night-drizzle" -> R.drawable.ic_weather_extreme_night_drizzle
+            "extreme-day-light-snow" -> R.drawable.ic_weather_extreme_day_light_snow
+            "extreme-night-light-snow" -> R.drawable.ic_weather_extreme_night_light_snow
+            "dust-day" -> R.drawable.ic_weather_dust_day
+            "dust-night" -> R.drawable.ic_weather_dust_night
+            "dust-wind" -> R.drawable.ic_weather_dust_wind
             // The 3 following cases are for backward compatibility
             "wind" -> R.drawable.ic_weather_windy
             "fog" -> R.drawable.ic_weather_fog
