@@ -54,7 +54,7 @@ class DeviceAlertsAdapter(
                         }
                 }
                 DeviceAlertType.OFFLINE -> {
-                    binding.alert.title(R.string.station_inactive)
+                    binding.alert.title(R.string.inactive)
                     if (device?.isOwned() == true) {
                         binding.alert.message(R.string.station_inactive_alert_message)
                             .action(itemView.context.getString(R.string.contact_support_title)) {

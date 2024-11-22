@@ -17,6 +17,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.weatherxm.R
 import com.weatherxm.ui.common.LineChartData
+import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
@@ -117,7 +118,7 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     setDrawCircleHole(false)
     circleRadius = POINT_SIZE
     lineWidth = LINE_WIDTH
-    mode = LineDataSet.Mode.CUBIC_BEZIER
+    mode = LineDataSet.Mode.LINEAR
     highLightColor = context.getColor(R.color.colorPrimary)
     setDrawHorizontalHighlightIndicator(false)
     enableDashedHighlightLine(10F, 4F, 0F)
@@ -284,7 +285,7 @@ fun LineChart.initPressure24hChart(chartData: LineChartData): MutableMap<Int, Li
     val yMin = lineDataSetsWithValues.minOf { it.yMin }
     val yMax = lineDataSetsWithValues.maxOf { it.yMax }
     if (yMax - yMin < 2) {
-        if (getDecimalsPressure() == 2) {
+        if (getDecimalsPressure(UnitSelector.getPressureUnit(context).type) == 2) {
             axisLeft.axisMinimum = yMin - 0.1F
             axisLeft.axisMaximum = yMax + 0.1F
             axisLeft.granularity = Y_AXIS_PRESSURE_INHG_GRANULARITY
@@ -346,23 +347,26 @@ fun LineChart.initPrecipitation24hChart(
     // Set the default settings we want to all LineCharts
     setDefaultSettings(context)
 
+    val unitType = UnitSelector.getPrecipitationUnit(context, false).type
     // Y Axis settings
     with(axisLeft) {
         setupPrecipitation(
+            unitType,
             primaryDataSetsWithValues.minOf { it.yMin },
             primaryDataSetsWithValues.maxOf { it.yMax }
         )
-        valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation())
+        valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation(unitType))
     }
 
     axisRight.isEnabled = true
     if (hasDecimalsAxisRight) {
         with(axisRight) {
             setupPrecipitation(
+                unitType,
                 secondaryDataLineDataSetsWithValues.minOf { it.yMin },
                 secondaryDataLineDataSetsWithValues.maxOf { it.yMax }
             )
-            valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation(), false)
+            valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation(unitType), false)
         }
     } else {
         axisRight.axisMinimum = 0F
@@ -380,8 +384,8 @@ fun LineChart.initPrecipitation24hChart(
 }
 
 @Suppress("MagicNumber")
-private fun YAxis.setupPrecipitation(yMin: Float, yMax: Float) {
-    val decimals = getDecimalsPrecipitation()
+private fun YAxis.setupPrecipitation(unitType: WeatherUnitType, yMin: Float, yMax: Float) {
+    val decimals = getDecimalsPrecipitation(unitType)
     val customNumberForMinMax = if (decimals == 2) 0.01F else 0.1F
 
     granularity = if (decimals == 2) {
@@ -596,7 +600,6 @@ fun LineChart.initTotalEarnedChart(
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
     if (dataSet.values.size > 1) dataSet.setDrawCircles(false)
-    dataSet.mode = LineDataSet.Mode.LINEAR
     dataSet.highLightColor = context.getColor(R.color.darkGrey)
     dataSet.color = context.getColor(R.color.blue)
     dataSet.axisDependency = YAxis.AxisDependency.RIGHT

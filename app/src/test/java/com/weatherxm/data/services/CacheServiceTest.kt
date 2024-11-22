@@ -2,6 +2,7 @@ package com.weatherxm.data.services
 
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
+import com.weatherxm.R
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isSuccess
@@ -14,6 +15,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_FILTER
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_GROUP_BY
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_SORT
 import com.weatherxm.data.services.CacheService.Companion.KEY_REFRESH
+import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
@@ -36,6 +38,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     val filterOption = "filterOption"
     val groupByOption = "groupByOption"
     val deviceId = "deviceId"
+    val celsiusUnit = "°C"
     val weatherData = listOf<WeatherData>(mockk())
 
     beforeSpec {
@@ -196,6 +199,39 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
                 then("return CacheMissError") {
                     cacheService.getForecast(deviceId).leftOrNull()
                         .shouldBeTypeOf<DataError.CacheMissError>()
+                }
+            }
+        }
+    }
+
+    context("Get a preferred unit") {
+        given("the key for the preferred unit and the default fallback") {
+            and("there is no such key in the Shared Preferences") {
+                every {
+                    sharedPref.getString(
+                        resources.getString(KEY_TEMPERATURE),
+                        resources.getString(R.string.temperature_celsius)
+                    )
+                } returns null
+                then("return the default fallback") {
+                    cacheService.getPreferredUnit(
+                        KEY_TEMPERATURE,
+                        R.string.temperature_celsius
+                    ) shouldBe celsiusUnit
+                }
+            }
+            and("there is a such key in the Shared Preferences") {
+                every {
+                    sharedPref.getString(
+                        resources.getString(KEY_TEMPERATURE),
+                        resources.getString(R.string.temperature_celsius)
+                    )
+                } returns celsiusUnit
+                then("return the selected unit or the default fallback") {
+                    cacheService.getPreferredUnit(
+                        KEY_TEMPERATURE,
+                        R.string.temperature_celsius
+                    ) shouldBe celsiusUnit
                 }
             }
         }

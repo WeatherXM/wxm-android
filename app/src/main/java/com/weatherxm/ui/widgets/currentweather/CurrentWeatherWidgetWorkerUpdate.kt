@@ -14,9 +14,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
-import arrow.core.flatMap
 import arrow.core.getOrElse
-import arrow.core.right
 import com.weatherxm.data.models.ApiError.GenericError.JWTError.ForbiddenError
 import com.weatherxm.data.models.UserActionError.UserNotLoggedInError
 import com.weatherxm.data.requireNetwork
@@ -101,38 +99,33 @@ class CurrentWeatherWidgetWorkerUpdate(
         intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
         intent.putExtra(ARG_WIDGET_TYPE, widgetType as Parcelable)
 
-        return authUseCase.isLoggedIn()
-            .flatMap { isLoggedIn ->
-                if (isLoggedIn) {
-                    true.right()
-                } else {
-                    Either.Left(UserNotLoggedInError())
-                }
-            }
-            .flatMap {
+        return authUseCase.isLoggedIn().let {
+            if (it) {
                 widgetUseCase.getUserDevice(deviceId).map { device ->
                     Timber.d("Got device for [$widgetId].")
                     intent.putExtra(ARG_DEVICE, device)
                     context.sendBroadcast(intent)
                     Result.success()
                 }
+            } else {
+                Either.Left(UserNotLoggedInError())
             }
-            .getOrElse { failure ->
-                when (failure) {
-                    is UserNotLoggedInError -> Result.success()
-                    is ForbiddenError -> {
-                        intent.putExtra(ARG_WIDGET_SHOULD_SELECT_STATION, true)
-                        context.sendBroadcast(intent)
-                        Result.success()
-                    }
-                    else -> {
-                        Timber.w(
-                            Exception("Fetching user device for widget failed: ${failure.code}"),
-                            failure.toString()
-                        )
-                        Result.retry()
-                    }
+        }.getOrElse { failure ->
+            when (failure) {
+                is UserNotLoggedInError -> Result.success()
+                is ForbiddenError -> {
+                    intent.putExtra(ARG_WIDGET_SHOULD_SELECT_STATION, true)
+                    context.sendBroadcast(intent)
+                    Result.success()
+                }
+                else -> {
+                    Timber.w(
+                        Exception("Fetching user device for widget failed: ${failure.code}"),
+                        failure.toString()
+                    )
+                    Result.retry()
                 }
             }
+        }
     }
 }

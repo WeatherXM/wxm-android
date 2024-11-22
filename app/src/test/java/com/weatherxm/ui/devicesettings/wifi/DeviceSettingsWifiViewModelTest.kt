@@ -210,7 +210,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.error_invalid_device_identifier)
         } returns "invalidIdentifier"
-        coMockEitherRight({ authUseCase.isLoggedIn() }, true)
+        every { authUseCase.isLoggedIn() } returns true
         coMockEitherRight({ userUseCase.getWalletAddress() }, "walletAddress")
 
         every { resources.getString(R.string.station_default_name) } returns "Station Name"

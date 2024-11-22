@@ -321,6 +321,15 @@ class CacheService(
         countriesInfo = info ?: mutableListOf()
     }
 
+    fun getPreferredUnit(
+        @StringRes unitKeyResId: Int,
+        @StringRes defaultUnitResId: Int
+    ): String {
+        val unitKey = resources.getString(unitKeyResId)
+        val defaultUnit = resources.getString(defaultUnitResId)
+        return preferences.getString(unitKey, defaultUnit) ?: defaultUnit
+    }
+
     fun clearAll() {
         this.walletAddress = null
         this.user = null

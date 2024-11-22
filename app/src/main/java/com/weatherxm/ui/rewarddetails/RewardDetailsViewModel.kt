@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
@@ -43,10 +42,9 @@ class RewardDetailsViewModel(
 
     private var rewardSplitsData = RewardSplitsData(listOf(), String.empty())
     private var walletAddressJob: Job? = null
-    private var isLoggedIn: Boolean? = null
 
     private fun fetchWalletAddress() {
-        if (isLoggedIn == true) {
+        if (authUseCase.isLoggedIn()) {
             walletAddressJob = viewModelScope.launch(dispatcher) {
                 userUseCase.getWalletAddress().onRight {
                     rewardSplitsData.wallet = it
@@ -104,11 +102,5 @@ class RewardDetailsViewModel(
                 }
             )
         )
-    }
-
-    init {
-        viewModelScope.launch(dispatcher) {
-            isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
-        }
     }
 }

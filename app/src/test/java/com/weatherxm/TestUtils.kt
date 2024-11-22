@@ -3,6 +3,7 @@ package com.weatherxm
 import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Failure
@@ -11,6 +12,9 @@ import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.WeatherUnit
+import com.weatherxm.ui.common.WeatherUnitType
+import com.weatherxm.util.UnitSelector
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
@@ -24,6 +28,33 @@ import retrofit2.Response
 import java.net.SocketTimeoutException
 
 object TestUtils {
+    fun defaultMockUnitSelector() {
+        every { UnitSelector.getTemperatureUnit(context) } returns WeatherUnit(
+            WeatherUnitType.CELSIUS,
+            context.getString(R.string.temperature_celsius)
+        )
+        every { UnitSelector.getPrecipitationUnit(context, false) } returns WeatherUnit(
+            WeatherUnitType.MILLIMETERS,
+            context.getString(R.string.precipitation_mm)
+        )
+        every { UnitSelector.getPrecipitationUnit(context, true) } returns WeatherUnit(
+            WeatherUnitType.MILLIMETERS,
+            context.getString(R.string.precipitation_mm_hour)
+        )
+        every { UnitSelector.getWindUnit(context) } returns WeatherUnit(
+            WeatherUnitType.MS,
+            context.getString(R.string.wind_speed_ms)
+        )
+        every { UnitSelector.getWindDirectionUnit(context) } returns WeatherUnit(
+            WeatherUnitType.CARDINAL,
+            context.getString(R.string.wind_direction_cardinal)
+        )
+        every { UnitSelector.getPressureUnit(context) } returns WeatherUnit(
+            WeatherUnitType.HPA,
+            context.getString(R.string.pressure_hpa)
+        )
+    }
+
     fun <T : Any> Either<Failure, T?>.isSuccess(successData: T?) {
         this shouldBe Either.Right(successData)
     }

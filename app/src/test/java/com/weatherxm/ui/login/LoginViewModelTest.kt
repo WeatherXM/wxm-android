@@ -18,6 +18,7 @@ import com.weatherxm.data.models.User
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -32,6 +33,7 @@ import org.koin.dsl.module
 
 class LoginViewModelTest : BehaviorSpec({
     val usecase = mockk<AuthUseCase>()
+    val userUseCase = mockk<UserUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: LoginViewModel
 
@@ -60,8 +62,8 @@ class LoginViewModelTest : BehaviorSpec({
         }
         justRun { analytics.trackEventFailure(any()) }
         justRun { analytics.setUserId(user.id) }
-        coMockEitherRight({ usecase.isLoggedIn() }, true)
-        every { usecase.shouldShowAnalyticsOptIn() } returns true
+        every { usecase.isLoggedIn() } returns true
+        every { userUseCase.shouldShowAnalyticsOptIn() } returns true
         every {
             resources.getString(R.string.error_login_invalid_username)
         } returns invalidUsername
@@ -72,7 +74,7 @@ class LoginViewModelTest : BehaviorSpec({
             resources.getString(R.string.error_login_invalid_credentials)
         } returns invalidCredentials
 
-        viewModel = LoginViewModel(usecase, resources, analytics, dispatcher)
+        viewModel = LoginViewModel(usecase, userUseCase, resources, analytics, dispatcher)
     }
 
     context("Get if the user is logged in already or not") {
@@ -80,7 +82,7 @@ class LoginViewModelTest : BehaviorSpec({
             When("it's a success") {
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
-                    viewModel.isLoggedIn().value?.isSuccess(true)
+                    viewModel.isLoggedIn() shouldBe true
                 }
             }
         }
@@ -143,7 +145,7 @@ class LoginViewModelTest : BehaviorSpec({
             }
             When("login is a success and fetching the user is a failure") {
                 coMockEitherRight({ usecase.login(username, password) }, authToken)
-                coMockEitherLeft({ usecase.getUser() }, failure)
+                coMockEitherLeft({ userUseCase.getUser() }, failure)
                 runTest { viewModel.login(username, password) }
                 then("LiveData of login posts a success") {
                     viewModel.onLogin().isSuccess(Unit)
@@ -157,7 +159,7 @@ class LoginViewModelTest : BehaviorSpec({
             }
             When("login is a success and fetching the user is a success also") {
                 coMockEitherRight({ usecase.login(username, password) }, authToken)
-                coMockEitherRight({ usecase.getUser() }, user)
+                coMockEitherRight({ userUseCase.getUser() }, user)
                 runTest { viewModel.login(username, password) }
                 then("LiveData of login posts a success") {
                     viewModel.onLogin().isSuccess(Unit)

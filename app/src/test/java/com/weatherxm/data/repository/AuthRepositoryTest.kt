@@ -1,5 +1,6 @@
 package com.weatherxm.data.repository
 
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -11,8 +12,8 @@ import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.network.AuthToken
-import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -25,7 +26,6 @@ class AuthRepositoryTest : BehaviorSpec({
     lateinit var cacheUserDataSource: CacheUserDataSource
     lateinit var databaseExplorerDataSource: DatabaseExplorerDataSource
     lateinit var appConfigDataSource: AppConfigDataSource
-    lateinit var cacheService: CacheService
     lateinit var authRepository: AuthRepository
 
     val email = "email"
@@ -42,7 +42,6 @@ class AuthRepositoryTest : BehaviorSpec({
         cacheUserDataSource = mockk<CacheUserDataSource>()
         databaseExplorerDataSource = mockk<DatabaseExplorerDataSource>()
         appConfigDataSource = mockk<AppConfigDataSource>()
-        cacheService = mockk<CacheService>()
         authRepository = AuthRepositoryImpl(
             cacheAuthDataSource,
             networkAuthDataSource,
@@ -103,7 +102,7 @@ class AuthRepositoryTest : BehaviorSpec({
                 }
                 then("clear the cache and the database") {
                     coVerify(exactly = 1) { databaseExplorerDataSource.deleteAll() }
-                    coVerify(exactly = 1) { cacheService.clearAll() }
+                    coVerify(exactly = 2) { cacheService.clearAll() }
                 }
             }
         }
@@ -114,7 +113,7 @@ class AuthRepositoryTest : BehaviorSpec({
                     every { mockedAuthToken.isAccessTokenValid() } returns true
                     every { mockedAuthToken.isRefreshTokenValid() } returns false
                     then("return true") {
-                        authRepository.isLoggedIn().isSuccess(true)
+                        authRepository.isLoggedIn() shouldBe true
                     }
                 }
                 and("refresh token is valid") {
@@ -122,21 +121,21 @@ class AuthRepositoryTest : BehaviorSpec({
                     every { mockedAuthToken.isAccessTokenValid() } returns false
                     every { mockedAuthToken.isRefreshTokenValid() } returns true
                     then("return true") {
-                        authRepository.isLoggedIn().isSuccess(true)
+                        authRepository.isLoggedIn() shouldBe true
                     }
                 }
                 and("nor access or refresh token are valid") {
                     coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, mockedAuthToken)
                     every { mockedAuthToken.isRefreshTokenValid() } returns false
                     then("return false") {
-                        authRepository.isLoggedIn().isSuccess(false)
+                        authRepository.isLoggedIn() shouldBe false
                     }
                 }
             }
             When("auth token is not in cache") {
                 coMockEitherLeft({ cacheAuthDataSource.getAuthToken() }, failure)
                 then("return false") {
-                    authRepository.isLoggedIn().isError()
+                    authRepository.isLoggedIn() shouldBe false
                 }
             }
         }

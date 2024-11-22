@@ -19,6 +19,7 @@ interface UserUseCase {
     fun setWalletWarningDismissTimestamp()
     suspend fun getWalletRewards(walletAddress: String?): Either<Failure, UIWalletRewards>
     fun getUserId(): String
+    fun shouldShowAnalyticsOptIn(): Boolean
 }
 
 class UserUseCaseImpl(
@@ -73,5 +74,9 @@ class UserUseCaseImpl(
 
     override fun getUserId(): String {
         return userRepository.getUserId()
+    }
+
+    override fun shouldShowAnalyticsOptIn(): Boolean {
+        return userPreferencesRepository.shouldShowAnalyticsOptIn()
     }
 }

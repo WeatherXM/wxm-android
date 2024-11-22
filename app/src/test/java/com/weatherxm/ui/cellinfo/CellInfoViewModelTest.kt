@@ -97,7 +97,7 @@ class CellInfoViewModelTest : BehaviorSpec({
         }
         justRun { analytics.trackEventFailure(any()) }
         justRun { analytics.trackEventUserAction(any(), any()) }
-        coMockEitherRight({ authUseCase.isLoggedIn() }, true)
+        every { authUseCase.isLoggedIn() } returns true
         every { resources.getString(R.string.error_cell_devices_no_data) } returns cellDevicesNoData
         every { resources.getString(R.string.error_max_followed) } returns maxFollowedMsg
 

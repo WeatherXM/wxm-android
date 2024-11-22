@@ -39,9 +39,11 @@ class RefreshFcmApiWorker(
     private val notificationsRepository: NotificationsRepository by inject()
 
     override suspend fun doWork(): Result {
-        return authUseCase.isLoggedIn().fold({ Result.failure() }, {
+        return if (authUseCase.isLoggedIn()) {
             notificationsRepository.setFcmToken(workerParams.inputData.getString(ARG_FCM_TOKEN))
             Result.success()
-        })
+        } else {
+            Result.failure()
+        }
     }
 }

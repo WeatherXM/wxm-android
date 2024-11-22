@@ -98,14 +98,21 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
                     values = listOf(item.minTemp, item.maxTemp)
                 }
             }
-            binding.minTemperature.text = Weather.getFormattedTemperature(item.minTemp)
-            binding.maxTemperature.text = Weather.getFormattedTemperature(item.maxTemp)
+            binding.minTemperature.text =
+                Weather.getFormattedTemperature(itemView.context, item.minTemp)
+            binding.maxTemperature.text =
+                Weather.getFormattedTemperature(itemView.context, item.maxTemp)
 
             binding.precipProbability.text =
                 Weather.getFormattedPrecipitationProbability(item.precipProbability)
-            binding.precip.text = Weather.getFormattedPrecipitation(item.precip, isRainRate = false)
+            binding.precip.text = Weather.getFormattedPrecipitation(
+                context = itemView.context,
+                value = item.precip,
+                isRainRate = false
+            )
 
-            binding.wind.text = Weather.getFormattedWind(item.windSpeed, item.windDirection)
+            binding.wind.text =
+                Weather.getFormattedWind(itemView.context, item.windSpeed, item.windDirection)
             binding.windIcon.setImageDrawable(
                 getWindDirectionDrawable(itemView.context, item.windDirection)
             )
