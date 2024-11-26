@@ -9,8 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentClaimResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
@@ -18,6 +16,8 @@ import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DeviceType.PULSE_4G
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
@@ -134,16 +134,12 @@ class ClaimResultFragment : BaseFragment() {
             }
             Status.ERROR -> {
                 binding.statusView.animation(R.raw.anim_error, false)
-                    .title(R.string.error_claim_failed_title)
+                    .title(R.string.error_generic_message)
                     .action(getString(R.string.contact_support_title))
+                    .subtitle(resource.message)
                     .listener {
                         navigator.openSupportCenter(context)
                     }
-                resource.message?.let {
-                    binding.statusView.htmlSubtitle(it) {
-                        navigator.openSupportCenter(context)
-                    }
-                }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,

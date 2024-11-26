@@ -1,18 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/alternativeBackground"
     android:paddingBottom="@dimen/padding_normal">
 
-    <com.weatherxm.ui.components.BleActionFlowView
-        android:id="@+id/bleActionFlow"
+    <com.weatherxm.ui.components.EmptyView
+        android:id="@+id/status"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:ble_action_flow_first_step="@string/setting_up_station"
-        app:ble_action_flow_second_step="@string/rebooting_station"
-        app:ble_action_flow_third_step="@string/claiming_station_step" />
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_normal"
+        android:visibility="gone"
+        app:empty_animation="@raw/anim_loading"
+        app:empty_title="@string/claiming_station"
+        app:layout_constraintBottom_toTopOf="@id/informationCard"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <!-- Progress Steps -->
+    <LinearLayout
+        android:id="@+id/steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/firstStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_one_filled"
+            android:drawablePadding="@dimen/padding_extra_small"
+            android:drawableTint="@color/colorOnSurface"
+            android:text="@string/setting_up_station"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/secondStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_two_filled"
+            android:drawablePadding="@dimen/padding_extra_small"
+            android:text="@string/rebooting_station"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:drawableTint="@color/midGrey" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/thirdStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_three_filled"
+            android:drawablePadding="@dimen/padding_extra_small"
+            android:text="@string/claiming_station_step"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:drawableTint="@color/midGrey" />
+    </LinearLayout>
+
+    <com.weatherxm.ui.components.MessageCardView
+        android:id="@+id/informationCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
+        app:message_background_tint="@color/blueTint"
+        app:message_html_message="@string/update_prompt_on_claiming_flow"
+        app:message_icon="@drawable/ic_info"
+        app:message_icon_color="@color/colorPrimaryVariant"
+        app:message_includes_close_button="false"
+        app:message_stroke_color="@color/infoStrokeColor"
+        tools:visibility="visible" />
+
+    <!-- Buttons -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/firmwareUpdateButtonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewStationSecondaryBtn"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_weight="1"
+                android:text="@string/action_go_to" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/updateBtn"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_update"
+                android:drawableTint="@color/colorOnSurface"
+                android:text="@string/action_update_firmware"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/viewStationPrimaryBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="@string/action_go_to" />
+
+        <LinearLayout
+            android:id="@+id/failureButtonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_weight="1"
+                android:text="@string/action_cancel_claiming" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_weight="1"
+                android:text="@string/action_retry_claiming"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

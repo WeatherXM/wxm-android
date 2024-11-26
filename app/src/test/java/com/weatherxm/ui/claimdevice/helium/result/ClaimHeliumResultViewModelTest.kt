@@ -94,10 +94,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
             When("it's BluetoothDisabledException") {
                 viewModel.onConnectionFailure(bluetoothDisabledFailure)
                 then("onBLEError should post the respective error") {
-                    viewModel.onBLEError().value.testBLEError(
-                        bluetoothDisabledFailure.code,
-                        bluetoothDisabled
-                    )
+                    viewModel.onBLEError().value.testBLEError(null, bluetoothDisabled)
                 }
             }
             When("it's ConnectionLostException") {
@@ -109,10 +106,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
             }
             When("it's any other Failure") {
                 viewModel.onConnectionFailure(connectionRejectedFailure)
-                viewModel.onBLEError().value.testBLEError(
-                    connectionRejectedFailure.code,
-                    connectionRejected
-                )
+                viewModel.onBLEError().value.testBLEError(null, connectionRejected)
             }
         }
     }
@@ -138,10 +132,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
                     coMockEitherLeft({ usecase.reboot() }, connectionRejectedFailure)
                     runTest { viewModel.setFrequency(frequency) }
                     then("LiveData onBLEError should post the respective error") {
-                        viewModel.onBLEError().value.testBLEError(
-                            connectionRejectedFailure.code,
-                            rebootFailed
-                        )
+                        viewModel.onBLEError().value.testBLEError(null, rebootFailed)
                     }
                     then("track the event's failure in analytics") {
                         verify(exactly = 1) {
@@ -166,10 +157,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
                 coMockEitherLeft({ usecase.fetchDeviceEUI() }, bluetoothDisabledFailure)
                 runTest { viewModel.onConnected() }
                 then("LiveData onBLEError should post the respective error") {
-                    viewModel.onBLEError().value.testBLEError(
-                        bluetoothDisabledFailure.code,
-                        fetchingInfoFailed
-                    )
+                    viewModel.onBLEError().value.testBLEError(null, fetchingInfoFailed)
                 }
                 then("track the event's failure in analytics") {
                     verify(exactly = 1) {
@@ -186,10 +174,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
                 }
                 When("fetching the claiming key is a failure") {
                     then("LiveData onBLEError should post the respective error") {
-                        viewModel.onBLEError().value.testBLEError(
-                            atCommandFailure.code,
-                            fetchingInfoFailed
-                        )
+                        viewModel.onBLEError().value.testBLEError(null, fetchingInfoFailed)
                     }
                     then("track the event's failure in analytics") {
                         verify(exactly = 1) {

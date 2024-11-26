@@ -11,7 +11,6 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
-import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.InstantExecutorListener
@@ -84,7 +83,6 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
 
     suspend fun BehaviorSpecWhenContainerScope.testClaimingFailure(
         verifyNumberOfFailureEvents: Int,
-        failure: Failure,
         errorMsg: String
     ) {
         runTest { viewModel.claimDevice(location) }
@@ -94,7 +92,6 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
         then("LiveData posts an error with a specific $errorMsg message") {
             val claimResult = viewModel.onClaimResult().value
             claimResult?.status shouldBe Status.ERROR
-            claimResult?.error shouldBe failure
             claimResult?.message shouldBe errorMsg
         }
     }
@@ -176,42 +173,42 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
                         { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                         invalidClaimIdFailure
                     )
-                    testClaimingFailure(1, invalidClaimIdFailure, invalidEUI)
+                    testClaimingFailure(1, invalidEUI)
                 }
                 and("It's an InvalidClaimLocation failure") {
                     coMockEitherLeft(
                         { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                         invalidClaimLocationFailure
                     )
-                    testClaimingFailure(2, invalidClaimLocationFailure, invalidLocation)
+                    testClaimingFailure(2, invalidLocation)
                 }
                 and("It's an DeviceAlreadyClaimed failure") {
                     coMockEitherLeft(
                         { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                         deviceAlreadyClaimedFailure
                     )
-                    testClaimingFailure(3, deviceAlreadyClaimedFailure, alreadyClaimed)
+                    testClaimingFailure(3, alreadyClaimed)
                 }
                 and("It's an DeviceNotFound failure") {
                     coMockEitherLeft(
                         { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                         deviceNotFoundFailure
                     )
-                    testClaimingFailure(4, deviceNotFoundFailure, DEVICE_NOT_FOUND_MSG)
+                    testClaimingFailure(4, DEVICE_NOT_FOUND_MSG)
                 }
                 and("It's an DeviceClaiming failure") {
                     coMockEitherLeft(
                         { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                         deviceClaimingFailure
                     )
-                    testClaimingFailure(5, deviceClaimingFailure, deviceClaimingError)
+                    testClaimingFailure(5, deviceClaimingError)
                 }
                 and("it's any other failure") {
                     coMockEitherLeft(
                         { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                         failure
                     )
-                    testClaimingFailure(6, failure, REACH_OUT_MSG)
+                    testClaimingFailure(6, REACH_OUT_MSG)
                 }
             }
         }
