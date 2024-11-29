@@ -100,7 +100,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
         binding.status.clear()
             .animation(R.raw.anim_loading)
-            .title(R.string.claiming_station_helium_desc)
+            .title(R.string.claiming_station)
             .htmlSubtitle(R.string.claiming_station_helium_desc)
             .show()
     }
