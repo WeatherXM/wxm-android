@@ -93,7 +93,7 @@ class RebootActivity : BaseActivity() {
                 binding.bleActionFlow.onSuccess(
                     title = R.string.station_rebooted,
                     message = getString(R.string.station_rebooted_subtitle),
-                    primaryActionText = getString(R.string.back_to_settings)
+                    successActionText = getString(R.string.back_to_settings)
                 )
             }
             Status.LOADING -> {

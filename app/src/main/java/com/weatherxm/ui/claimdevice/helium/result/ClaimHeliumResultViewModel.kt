@@ -49,7 +49,7 @@ class ClaimHeliumResultViewModel(
     override fun onConnectionFailure(failure: Failure) {
         onBLEError.postValue(when (failure) {
             is BluetoothError.BluetoothDisabledException -> {
-                UIError(resources.getString(R.string.helium_bluetooth_disabled), failure.code) {
+                UIError(resources.getString(R.string.helium_bluetooth_disabled)) {
                     connectToPeripheral()
                 }
             }
@@ -59,10 +59,7 @@ class ClaimHeliumResultViewModel(
                 }
             }
             else -> {
-                UIError(
-                    resources.getString(R.string.helium_connection_rejected),
-                    failure.code
-                ) {
+                UIError(resources.getString(R.string.helium_connection_rejected)) {
                     connectToPeripheral()
                 }
             }
@@ -96,7 +93,7 @@ class ClaimHeliumResultViewModel(
             }.onLeft {
                 analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
-                    UIError(resources.getString(R.string.helium_reboot_failed), it.code) {
+                    UIError(resources.getString(R.string.helium_reboot_failed)) {
                         reboot()
                     }
                 )
@@ -123,7 +120,7 @@ class ClaimHeliumResultViewModel(
             }.onLeft {
                 analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
-                    UIError(resources.getString(R.string.helium_fetching_info_failed), it.code) {
+                    UIError(resources.getString(R.string.helium_fetching_info_failed)) {
                         fetchDeviceEUI()
                     }
                 )
@@ -138,7 +135,7 @@ class ClaimHeliumResultViewModel(
             }.onLeft {
                 analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
-                    UIError(resources.getString(R.string.helium_fetching_info_failed), it.code) {
+                    UIError(resources.getString(R.string.helium_fetching_info_failed)) {
                         fetchClaimingKey()
                     }
                 )

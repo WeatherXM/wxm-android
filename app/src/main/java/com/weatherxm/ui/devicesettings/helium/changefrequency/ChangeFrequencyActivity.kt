@@ -160,7 +160,7 @@ class ChangeFrequencyActivity : BaseActivity() {
                         R.string.frequency_changed_subtitle,
                         model.getSelectedFrequency()
                     ),
-                    primaryActionText = getString(R.string.back_to_settings)
+                    successActionText = getString(R.string.back_to_settings)
                 )
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,

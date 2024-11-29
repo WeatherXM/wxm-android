@@ -22,6 +22,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -101,6 +102,8 @@ class ClaimHeliumActivity : BaseActivity() {
                     frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
+                    binding.appBar.visible(false)
+                    binding.progress.visible(false)
                     resultModel.setSelectedDevice(pairModel.getSelectedDevice())
                     resultModel.setFrequency(model.getFrequency())
                 }

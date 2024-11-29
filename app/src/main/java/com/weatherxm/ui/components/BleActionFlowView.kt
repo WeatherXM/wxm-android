@@ -66,7 +66,6 @@ class BleActionFlowView : ConstraintLayout {
         onScanClicked: () -> Unit,
         onPairClicked: () -> Unit,
         onSuccessPrimaryButtonClicked: () -> Unit,
-        onSuccessSecondaryButtonClicked: (() -> Unit)? = null,
         onCancelButtonClicked: () -> Unit,
         onRetryButtonClicked: () -> Unit
     ) {
@@ -76,38 +75,14 @@ class BleActionFlowView : ConstraintLayout {
         binding.pairDevice.setOnClickListener {
             onPairClicked.invoke()
         }
-        setSuccessOneButtonOnlyListener(onSuccessPrimaryButtonClicked)
-        setSuccessPrimaryButtonListener(onSuccessPrimaryButtonClicked)
-        onSuccessSecondaryButtonClicked?.let {
-            setSuccessSecondaryButtonListener(it)
+        binding.successButton.setOnClickListener {
+            onSuccessPrimaryButtonClicked()
         }
         binding.cancel.setOnClickListener {
             onCancelButtonClicked.invoke()
         }
-        setRetryButtonListener(onRetryButtonClicked)
-    }
-
-    fun setSuccessOneButtonOnlyListener(listener: () -> Unit) {
-        binding.successOneButtonOnly.setOnClickListener {
-            listener.invoke()
-        }
-    }
-
-    fun setSuccessPrimaryButtonListener(listener: () -> Unit) {
-        binding.successPrimaryAction.setOnClickListener {
-            listener.invoke()
-        }
-    }
-
-    fun setSuccessSecondaryButtonListener(listener: () -> Unit) {
-        binding.successSecondaryAction.setOnClickListener {
-            listener.invoke()
-        }
-    }
-
-    fun setRetryButtonListener(listener: (() -> Unit)?) {
         binding.retry.setOnClickListener {
-            listener?.invoke()
+            onRetryButtonClicked()
         }
     }
 
@@ -151,34 +126,15 @@ class BleActionFlowView : ConstraintLayout {
     }
 
     @Suppress("LongParameterList")
-    fun onSuccess(
-        @StringRes title: Int,
-        message: String? = null,
-        htmlMessage: String? = null,
-        argForHtmlMessage: String? = null,
-        primaryActionText: String,
-        secondaryActionText: String? = null
-    ) {
+    fun onSuccess(@StringRes title: Int, message: String, successActionText: String) {
         hideButtons()
         binding.steps.visible(false)
         binding.status.clear()
             .animation(R.raw.anim_success, false)
             .title(title)
-        if (htmlMessage != null) {
-            binding.status.htmlSubtitle(htmlMessage, argForHtmlMessage)
-        } else {
-            binding.status.subtitle(message)
-        }
-        if (secondaryActionText != null) {
-            binding.successOneButtonOnly.visible(false)
-            binding.successPrimaryAction.text = primaryActionText
-            binding.successSecondaryAction.text = secondaryActionText
-            binding.successPrimaryAction.visible(true)
-            binding.successSecondaryAction.visible(true)
-        } else {
-            binding.successOneButtonOnly.text = primaryActionText
-            binding.successOneButtonOnly.visible(true)
-        }
+            .subtitle(message)
+        binding.successButton.text = successActionText
+        binding.successButton.visible(true)
     }
 
     fun onStep(
@@ -244,10 +200,6 @@ class BleActionFlowView : ConstraintLayout {
         binding.installationProgressBar.progress = progress
     }
 
-    fun onShowInformationCard() {
-        binding.informationCard.visible(true)
-    }
-
     fun onShowStationUpdateMetadata(stationName: String, firmwareVersions: String) {
         binding.stationName.text = stationName
         binding.firmwareVersions.text = firmwareVersions
@@ -257,10 +209,8 @@ class BleActionFlowView : ConstraintLayout {
     }
 
     private fun hideButtons() {
-        binding.successOneButtonOnly.invisible()
-        binding.successPrimaryAction.visible(false)
-        binding.successSecondaryAction.visible(false)
         binding.failureButtonsContainer.invisible()
+        binding.successButton.invisible()
         binding.scanAgain.invisible()
         binding.pairDevice.invisible()
     }

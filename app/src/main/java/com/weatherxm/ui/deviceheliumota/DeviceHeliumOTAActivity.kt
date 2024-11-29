@@ -118,7 +118,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
                 binding.bleActionFlow.onSuccess(
                     title = R.string.station_updated,
                     message = getString(R.string.station_updated_subtitle),
-                    primaryActionText = getString(R.string.action_view_station)
+                    successActionText = getString(R.string.action_view_station)
                 )
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.OTA_RESULT.paramValue,

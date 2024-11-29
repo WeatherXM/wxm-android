@@ -1,18 +1,25 @@
 package com.weatherxm.ui.claimdevice.helium.result
 
 import android.app.Activity
+import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentClaimHeliumResultBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.show
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -34,21 +41,28 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setListeners()
+
+        binding.cancel.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.CANCEL.paramValue
+                )
+            )
+            parentModel.cancel()
+        }
 
         model.onRebooting().observe(viewLifecycleOwner) {
             if (it) {
-                binding.bleActionFlow.onStep(
-                    1, R.string.claiming_station, R.string.claiming_station_helium_desc
-                )
+                onStep(1)
             }
         }
 
         model.onBLEConnection().observe(viewLifecycleOwner) {
             if (it) {
-                binding.bleActionFlow.onStep(
-                    2, R.string.claiming_station, R.string.claiming_station_helium_desc
-                )
+                onStep(2)
             }
         }
 
@@ -62,49 +76,65 @@ class ClaimHeliumResultFragment : BaseFragment() {
         }
 
         model.onBLEError().observe(viewLifecycleOwner) { uiError ->
-            binding.bleActionFlow.setRetryButtonListener {
+            hideButtons()
+            binding.retry.setOnClickListener {
                 uiError.retryFunction?.invoke()
             }
-            binding.bleActionFlow.onError(
-                false,
-                title = R.string.error_claim_failed_title,
-                retryActionText = getString(R.string.action_retry),
-                message = uiError.errorMessage,
-                errorCode = uiError.errorCode
-            ) {
-                navigator.openSupportCenter(context = context)
-            }
+            binding.failureButtonsContainer.visible(true)
+            binding.steps.visible(false)
+            binding.status.clear()
+                .animation(R.raw.anim_error)
+                .title(R.string.error_claim_failed_title)
+
+            uiError.errorCode?.let {
+                binding.status
+                    .htmlSubtitle(uiError.errorMessage, it) { navigator.openSupportCenter(context) }
+                    .action(resources.getString(R.string.contact_support_title))
+                    .listener { navigator.openSupportCenter(context) }
+            } ?: binding.status.subtitle(uiError.errorMessage)
         }
 
         parentModel.onClaimResult().observe(viewLifecycleOwner) {
             updateUI(it)
         }
 
-        binding.bleActionFlow.onStep(
-            0, R.string.claiming_station, R.string.claiming_station_helium_desc
-        )
+        binding.status.clear()
+            .animation(R.raw.anim_loading)
+            .title(R.string.claiming_station)
+            .htmlSubtitle(R.string.claiming_station_helium_desc)
+            .show()
     }
 
-    private fun setListeners() {
-        binding.bleActionFlow.setListeners(onScanClicked = {
-            // Not used
-        }, onPairClicked = {
-            // Not used
-        }, onSuccessPrimaryButtonClicked = {
-            // We will define this later when we show it
-        }, onCancelButtonClicked = {
-            analytics.trackEventUserAction(
-                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
-                Pair(
-                    AnalyticsService.CustomParam.ACTION.paramName,
-                    AnalyticsService.ParamValue.CANCEL.paramValue
+    private fun onStep(currentStep: Int) {
+        if (!binding.steps.isVisible) {
+            hideButtons()
+            binding.steps.visible(true)
+        }
+        when (currentStep) {
+            0 -> binding.firstStep.typeface = Typeface.DEFAULT_BOLD
+            1 -> {
+                binding.firstStep.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_checkmark, 0, 0, 0
                 )
-            )
-            parentModel.cancel()
-        }, onRetryButtonClicked = {
-            // We will define this later when we show it
-        })
+                TextViewCompat.setCompoundDrawableTintList(
+                    binding.secondStep,
+                    ColorStateList.valueOf(requireContext().getColor(R.color.colorOnSurface))
+                )
+                binding.firstStep.typeface = Typeface.DEFAULT
+                binding.secondStep.typeface = Typeface.DEFAULT_BOLD
+            }
+            2 -> {
+                binding.secondStep.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_checkmark, 0, 0, 0
+                )
+                TextViewCompat.setCompoundDrawableTintList(
+                    binding.thirdStep,
+                    ColorStateList.valueOf(requireContext().getColor(R.color.colorOnSurface))
+                )
+                binding.secondStep.typeface = Typeface.DEFAULT
+                binding.thirdStep.typeface = Typeface.DEFAULT_BOLD
+            }
+        }
     }
 
     private fun updateUI(resource: Resource<UIDevice>) {
@@ -112,37 +142,34 @@ class ClaimHeliumResultFragment : BaseFragment() {
             Status.SUCCESS -> {
                 val device = resource.data
                 if (device != null && device.isHelium() && device.shouldPromptUpdate()) {
+
                     analytics.trackEventPrompt(
                         AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
                         AnalyticsService.ParamValue.WARN.paramValue,
                         AnalyticsService.ParamValue.VIEW.paramValue
                     )
-                    binding.bleActionFlow.setSuccessPrimaryButtonListener {
+                    binding.updateBtn.setOnClickListener {
                         onUpdate(device)
                     }
-                    binding.bleActionFlow.setSuccessSecondaryButtonListener {
+                    binding.viewStationSecondaryBtn.setOnClickListener {
                         showConfirmBypassOTADialog(device)
                     }
-                    binding.bleActionFlow.onSuccess(
-                        R.string.station_claimed,
-                        message = null,
-                        htmlMessage = getString(R.string.success_claim_device),
-                        argForHtmlMessage = device.name,
-                        primaryActionText = getString(R.string.action_update_firmware),
-                        secondaryActionText = getString(R.string.action_view_station)
-                    )
-                    binding.bleActionFlow.onShowInformationCard()
+                    binding.status.clear()
+                        .animation(R.raw.anim_success, false)
+                        .title(R.string.station_claimed)
+                        .htmlSubtitle(getString(R.string.success_claim_device, device.name))
+                    binding.informationCard.visible(true)
                 } else if (device != null) {
-                    binding.bleActionFlow.setSuccessOneButtonOnlyListener {
+                    hideButtons()
+                    binding.steps.visible(false)
+                    binding.viewStationPrimaryBtn.setOnClickListener {
                         onViewDevice(device)
                     }
-                    binding.bleActionFlow.onSuccess(
-                        R.string.station_claimed,
-                        message = null,
-                        htmlMessage = getString(R.string.success_claim_device),
-                        argForHtmlMessage = device.name,
-                        primaryActionText = getString(R.string.action_view_station)
-                    )
+                    binding.viewStationPrimaryBtn.visible(true)
+                    binding.status.clear()
+                        .animation(R.raw.anim_success, false)
+                        .title(R.string.station_claimed)
+                        .htmlSubtitle(getString(R.string.success_claim_device, device.name))
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
@@ -151,7 +178,9 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 )
             }
             Status.ERROR -> {
-                binding.bleActionFlow.setRetryButtonListener {
+                hideButtons()
+                binding.steps.visible(false)
+                binding.retry.setOnClickListener {
                     analytics.trackEventUserAction(
                         actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                         contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
@@ -160,20 +189,16 @@ class ClaimHeliumResultFragment : BaseFragment() {
                             AnalyticsService.ParamValue.RETRY.paramValue
                         )
                     )
-                    binding.bleActionFlow.onStep(
-                        2, R.string.claiming_station, R.string.claiming_station_helium_desc
-                    )
+                    onStep(2)
                     parentModel.claimDevice(locationModel.getInstallationLocation())
                 }
-                binding.bleActionFlow.onError(
-                    false,
-                    R.string.error_claim_failed_title,
-                    getString(R.string.action_retry_claiming),
-                    resource.message,
-                    resource.error?.code
-                ) {
-                    navigator.openSupportCenter(context = context)
-                }
+                binding.failureButtonsContainer.visible(true)
+                binding.status.clear()
+                    .animation(R.raw.anim_error)
+                    .title(R.string.error_claim_failed_title)
+                    .subtitle(resource.message)
+                    .action(resources.getString(R.string.contact_support_title))
+                    .listener { navigator.openSupportCenter(context) }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
@@ -225,5 +250,11 @@ class ClaimHeliumResultFragment : BaseFragment() {
             }
             .build()
             .show(this)
+    }
+
+    private fun hideButtons() {
+        binding.firmwareUpdateButtonsContainer.invisible()
+        binding.failureButtonsContainer.invisible()
+        binding.viewStationPrimaryBtn.invisible()
     }
 }
