@@ -78,7 +78,7 @@ android {
 
     defaultConfig {
         applicationId = "com.weatherxm.app"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 35
         versionCode = 10 + getVersionGitTags().size
         val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")

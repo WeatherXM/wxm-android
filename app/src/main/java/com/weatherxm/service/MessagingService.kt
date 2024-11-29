@@ -75,13 +75,12 @@ class MessagingService : FirebaseMessagingService() {
             RemoteMessageType.parse(remoteMessage.data.getOrDefault(ARG_TYPE, String.empty()))
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                type.id, type.publicName, NotificationManager.IMPORTANCE_DEFAULT
-            )
-            channel.description = type.desc
-            manager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(
+            type.id, type.publicName, NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = type.desc
+        manager.createNotificationChannel(channel)
+
 
         val notification = NotificationCompat.Builder(context, type.id).apply {
             createPendingIntent(context, remoteMessage, type)?.let {
