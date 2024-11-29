@@ -40,7 +40,7 @@ class HourlyForecastAdapter(
                 }
             }
 
-            binding.timestamp.text = item.timestamp.getFormattedTime(itemView.context, false)
+            binding.timestamp.text = item.timestamp.getFormattedTime(itemView.context)
             binding.icon.setWeatherAnimation(item.icon)
             binding.temperaturePrimary.text =
                 Weather.getFormattedTemperature(itemView.context, item.temperature, 1)
