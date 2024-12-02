@@ -3,7 +3,6 @@ package com.weatherxm.data
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.util.AndroidBuildInfo
 import timber.log.Timber
@@ -25,11 +24,7 @@ class ClientIdentificationHelper(
         return try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             val name = packageInfo.versionName
-            val code = if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.P) {
-                packageInfo.longVersionCode
-            } else {
-                packageInfo.versionCode
-            }
+            val code = packageInfo.longVersionCode
             val installationId = appConfigRepository.getInstallationId() ?: "N/A"
             "wxm-android (${context.applicationInfo.packageName}); $name ($code); $installationId"
         } catch (e: PackageManager.NameNotFoundException) {
