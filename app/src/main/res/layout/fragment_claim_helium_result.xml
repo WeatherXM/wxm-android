@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSurface"
+    android:background="@color/alternativeBackground"
     android:paddingBottom="@dimen/padding_normal">
 
     <com.weatherxm.ui.components.EmptyView
