@@ -21,6 +21,7 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -111,20 +112,26 @@ class ClaimResultFragment : BaseFragment() {
                     )
                 val device = resource.data
                 if (device != null) {
-                    binding.goToStationBtn.setOnClickListener {
-                        analytics.trackEventUserAction(
-                            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
-                            Pair(
-                                AnalyticsService.CustomParam.ACTION.paramName,
-                                AnalyticsService.ParamValue.VIEW_STATION.paramValue
+                    binding.skipAndGoToStationBtn.setOnClickListener {
+                        ActionDialogFragment.createSkipPhotoVerification(requireContext()) {
+                            analytics.trackEventUserAction(
+                                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+                                Pair(
+                                    AnalyticsService.CustomParam.ACTION.paramName,
+                                    AnalyticsService.ParamValue.VIEW_STATION.paramValue
+                                )
                             )
-                        )
-                        navigator.showDeviceDetails(activity, device = device)
-                        activity?.setResult(Activity.RESULT_OK)
-                        activity?.finish()
+                            navigator.showDeviceDetails(activity, device = device)
+                            activity?.setResult(Activity.RESULT_OK)
+                            activity?.finish()
+                        }.show(this)
                     }
-                    binding.goToStationBtn.visible(true)
+                    binding.photoVerificationBtn.setOnClickListener {
+                        // TODO: Go to photo verification intro screen 
+                    }
+                    binding.skipAndGoToStationBtn.visible(true)
+                    binding.photoVerificationBtn.visible(true)
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,

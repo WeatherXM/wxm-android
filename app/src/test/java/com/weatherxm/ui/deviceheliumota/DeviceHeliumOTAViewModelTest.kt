@@ -98,14 +98,15 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
         justRun { updaterUseCase.onUpdateSuccess(device.id, firmware) }
 
         viewModel = DeviceHeliumOTAViewModel(
-            device,
-            true,
-            resources,
-            updaterUseCase,
-            connectionUseCase,
-            scannerUseCase,
-            analytics,
-            dispatcher
+            device = device,
+            deviceIsBleConnected = true,
+            needsPhotoVerification = false,
+            resources = resources,
+            updaterUseCase = updaterUseCase,
+            connectionUseCase = connectionUseCase,
+            scanUseCase = scannerUseCase,
+            analytics = analytics,
+            dispatcher = dispatcher
         )
     }
 

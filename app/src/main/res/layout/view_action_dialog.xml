@@ -12,6 +12,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/darkestBlue"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Pairing Failed!" />

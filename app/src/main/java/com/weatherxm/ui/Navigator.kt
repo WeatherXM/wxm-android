@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
@@ -370,23 +371,18 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun showDeviceHeliumOTA(fragment: Fragment, device: UIDevice?, deviceIsBleConnected: Boolean) {
-        fragment.context?.let {
-            it.startActivity(
-                Intent(it, DeviceHeliumOTAActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_DEVICE, device)
-                    .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
-            )
-        }
-    }
-
-    fun showDeviceHeliumOTA(context: Context, device: UIDevice?, deviceIsBleConnected: Boolean) {
-        context.startActivity(
+    fun showDeviceHeliumOTA(
+        context: Context?,
+        device: UIDevice?,
+        deviceIsBleConnected: Boolean = false,
+        needsPhotoVerification: Boolean = false
+    ) {
+        context?.startActivity(
             Intent(context, DeviceHeliumOTAActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
                 .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
+                .putExtra(ARG_NEEDS_PHOTO_VERIFICATION, needsPhotoVerification)
         )
     }
 

@@ -127,7 +127,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                     AnalyticsService.ParamValue.WARN.paramValue,
                     AnalyticsService.ParamValue.ACTION.paramValue
                 )
-                navigator.showDeviceHeliumOTA(this, model.device, false)
+                navigator.showDeviceHeliumOTA(this, model.device)
                 finish()
             }
         }
