@@ -173,9 +173,10 @@
     <string name="station_updated_subtitle">Your station is updated to the latest Firmware!</string>
     <string name="update_failed">Update Failed</string>
     <string name="update_failed_message"><![CDATA[Updating failed, please try again! If the problem persists, please contact our support team at <b><a>support.weatherxm.com</a></b>.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
-    <string name="update_prompt_on_claiming_flow"><![CDATA[There is a brand new firmware update for your station.<br><b>We highly recommend you update, as this will improve the experience you’ll have with your WeatherXM station!</b>]]></string>
+    <string name="update_prompt_on_claiming_flow"><![CDATA[<b>We strongly recommend you to update for a better station experience!</b><br>You will be able to photo verify your station after the update.]]></string>
     <string name="update_prompt_on_dialog">We highly recommend you update, as this will improve the experience you’ll have with your WeatherXM station!</string>
 
+    Y
     <!-- Update Prompt -->
     <string name="title_update_prompt">New Update</string>
     <string name="desc_update_prompt"><![CDATA[A new update of this app has been released. Please click the button below to go to Play Store and update the app.<br><br>After updating please restart the app.]]></string>
@@ -358,7 +359,6 @@
     <string name="search_location">Search for location</string>
     <string name="confirm_and_proceed">Confirm and Proceed</string>
     <string name="action_view_station">View Station</string>
-    <string name="action_go_to">Go to Station</string>
     <string name="action_skip_for_now">Skip for now</string>
     <string name="action_continue_photo_verification">Continue to Photo Verification</string>
     <string name="action_quit_claiming">Quit Claiming</string>
