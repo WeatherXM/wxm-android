@@ -126,7 +126,7 @@ class BleActionFlowView : ConstraintLayout {
     }
 
     @Suppress("LongParameterList")
-    fun onSuccess(@StringRes title: Int, message: String, successActionText: String) {
+    fun onSuccess(@StringRes title: Int, message: String, successActionText: String?) {
         hideButtons()
         binding.steps.visible(false)
         binding.status.clear()
@@ -134,7 +134,7 @@ class BleActionFlowView : ConstraintLayout {
             .title(title)
             .subtitle(message)
         binding.successButton.text = successActionText
-        binding.successButton.visible(true)
+        binding.successButton.visible(!successActionText.isNullOrEmpty())
     }
 
     fun onStep(

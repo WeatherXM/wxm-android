@@ -235,7 +235,12 @@ class ClaimHeliumResultFragment : BaseFragment() {
             AnalyticsService.ParamValue.WARN.paramValue,
             AnalyticsService.ParamValue.ACTION.paramValue
         )
-        navigator.showDeviceHeliumOTA(this, device, true)
+        navigator.showDeviceHeliumOTA(
+            context,
+            device,
+            deviceIsBleConnected = true,
+            needsPhotoVerification = true
+        )
         activity?.finish()
     }
 
