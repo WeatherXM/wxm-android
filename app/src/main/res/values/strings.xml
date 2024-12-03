@@ -11,6 +11,7 @@
     <string name="action_change">Change</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_back">Back</string>
+    <string name="action_skip">Skip</string>
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
@@ -358,6 +359,8 @@
     <string name="confirm_and_proceed">Confirm and Proceed</string>
     <string name="action_view_station">View Station</string>
     <string name="action_go_to">Go to Station</string>
+    <string name="action_skip_for_now">Skip for now</string>
+    <string name="action_continue_photo_verification">Continue to Photo Verification</string>
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="action_cancel_claiming">Cancel Claiming</string>
     <string name="action_retry_claiming">Retry Claiming</string>
@@ -628,4 +631,8 @@
     <string name="station_health_data_quality_explanation"><![CDATA[The network’s effectiveness relies on meaningful, usable data, measured by the Quality-of-Data (QoD) score, which <b>updates daily</b>. This score motivates weather station owners to follow guidelines for optimal data quality. A station’s daily reward is tied to its QoD, calculated using an open-source algorithm that assesses data quality and provides a confidence level in the data received.]]></string>
     <string name="station_health_location_quality_explanation"><![CDATA[It is crucial for the Network that a station stays in the same location throughout its lifetime.<br>The Proof-of-Location algorithm, which also <b>updates daily</b>, assesses the accuracy and consistency of the station’s location data, generating a confidence score for its position.]]></string>
     <string name="station_has_started_transmitting_data">Your station has started transmitting its initial data. Sit back and relax, your rewards are on the way!</string>
+
+    <!-- Photo Verification -->
+    <string name="skip_photo_verification">Skip Photo Verification</string>
+    <string name="skip_photo_verification_message">Are you sure you want to skip the Photo Verification process?\n\nYou can always do it later from the station’s settings.</string>
 </resources>
