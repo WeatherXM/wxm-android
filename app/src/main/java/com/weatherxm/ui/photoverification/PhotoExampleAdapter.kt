@@ -61,6 +61,7 @@ class PhotoExampleAdapter :
         }
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     internal fun ExampleDescription(context: Context, item: PhotoExample) {
         Column {

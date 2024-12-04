@@ -308,7 +308,6 @@
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
 
-
         <!-- Services -->
         <service
             android:name="com.weatherxm.service.MessagingService"
