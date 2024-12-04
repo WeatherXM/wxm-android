@@ -91,7 +91,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.addDevice.setOnClickListener {
-            navigator.showClaimSelectStationType(this)
+            navigator.showPhotoVerificationIntro(this)
+        //    navigator.showClaimSelectStationType(this)
         }
 
         binding.networkStatsBtn.setOnClickListener {

@@ -14,6 +14,7 @@
     <string name="action_skip">Skip</string>
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
+    <string name="action_exit">Exit</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_pair_station_via_bluetooth">Pair station via Bluetooth</string>
     <string name="action_favorite">Favorite</string>
@@ -227,7 +228,7 @@
     <string name="hint_wxm_address">E.g., 0xDe1f*****B7F5 </string>
     <string name="create_metamask">Create a MetaMask wallet here</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
-    <string name="accept_terms"><![CDATA[I have read and accept the <a href="%1$s">Terms of Service</a>.]]></string>
+    <string name="accept_terms"><![CDATA[I have read and accept the <a href="%1$s">Terms of Service</a>]]></string>
     <string name="address_saved">Success: Address Saved.</string>
     <string name="action_save_wallet_address">Save Wallet Address</string>
     <string name="confirm_wallet_ownership_title">Confirm Wallet Ownership</string>
@@ -635,4 +636,22 @@
     <!-- Photo Verification -->
     <string name="skip_photo_verification">Skip Photo Verification</string>
     <string name="skip_photo_verification_message">Are you sure you want to skip the Photo Verification process?\n\nYou can always do it later from the station’s settings.</string>
+    <string name="all_about">ALL ABOUT</string>
+    <string name="photo_verification">Photo Verification</string>
+    <string name="boost_network_health_photos">Boost network health with a few photos of your setup!</string>
+    <string name="how_to_take_photos">How to take the photos</string>
+    <string name="photos_instruction_rotate">Rotate to landscape and use a wide-angle lens to include as much of the horizon as possible.</string>
+    <string name="photos_instruction_surface">Ensure at least 1 photo clearly shows the surface where the station is installed.</string>
+    <string name="photos_instruction_faces_personal_items">Avoid capturing faces or personal items in any of the photos.</string>
+    <string name="photos_instruction_angles">Take 2–4 photos of the station from the following angles:</string>
+    <string name="photos_instruction_angles_1">from the rain gauge looking towards the anemometer</string>
+    <string name="photos_instruction_angles_2">from the anemometer looking towards the rain gauge</string>
+    <string name="photos_instruction_angles_3">from the side, showing the rain gauge on the left and anemometer on the right</string>
+    <string name="photos_instruction_angles_4">from the other side, showing the anemometer on the left and rain gauge on the right</string>
+    <string name="photo_examples">Photo Examples</string>
+    <string name="exit_photo_verification">Exit Photo Verification</string>
+    <string name="exit_photo_verification_message">Are you sure you want to exit the Photo Verification process?\n\nYou can always do it later from the station’s settings.n</string>
+    <string name="upload_your_photos">Upload your photos</string>
+    <string name="upload_your_photos_message">After taking the photos, tap ‘Upload’ to send them to us for installation evaluation. Your photos are used solely for this purpose.\n\nUploading will run in the background, so feel free to navigate the app while we handle the transfer.</string>
+    <string name="lets_take_first_photo">Let’s take the first photo!</string>
 </resources>
