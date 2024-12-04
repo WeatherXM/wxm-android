@@ -141,6 +141,7 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
         binding.takePhotoBtn.visible(false)
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     internal fun BulletWithText(text: String) {
         Row(Modifier.padding(6.dp, 2.dp, 0.dp, 0.dp)) {
@@ -158,6 +159,7 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
         }
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     internal fun PhotoAmountInstructionsList() {
         Column {
