@@ -155,15 +155,126 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_large"
-            android:layout_marginTop="40dp"
-            android:text="@string/upload_your_photos"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_large"
+                app:cardBackgroundColor="@color/successTint" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/goodExamplesTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/photo_good_example_title"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_checkmark"
+                    app:layout_constraintBottom_toBottomOf="@id/goodExamplesTitle"
+                    app:layout_constraintStart_toEndOf="@id/goodExamplesTitle"
+                    app:layout_constraintTop_toTopOf="@id/goodExamplesTitle"
+                    app:tint="@color/success" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/goodExamplesRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="@dimen/padding_normal"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/goodExamplesTitle"
+                    tools:ignore="RtlSymmetry"
+                    tools:listitem="@layout/list_item_photo_example" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_large"
+                app:cardBackgroundColor="@color/errorTint" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/badExamplesTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/photo_bad_example_title"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_error_circular"
+                    app:layout_constraintBottom_toBottomOf="@id/badExamplesTitle"
+                    app:layout_constraintStart_toEndOf="@id/badExamplesTitle"
+                    app:layout_constraintTop_toTopOf="@id/badExamplesTitle"
+                    app:tint="@color/error" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/badExamplesRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="@dimen/padding_normal"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/badExamplesTitle"
+                    tools:ignore="RtlSymmetry"
+                    tools:listitem="@layout/list_item_photo_example" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentPhotoVerificationInstructionsBinding
+import com.weatherxm.ui.common.PhotoExample
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
@@ -39,6 +40,70 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
         binding.photoAmountInstructionsList.setContent {
             PhotoAmountInstructionsList()
         }
+
+        val goodExamples = listOf(
+            PhotoExample(
+                R.drawable.photo_good_example_1,
+                listOf(
+                    R.string.photo_good_example_1_1,
+                    R.string.photo_good_example_1_2,
+                    R.string.photo_good_example_1_3
+                ),
+                true
+            ),
+            PhotoExample(
+                R.drawable.photo_good_example_2,
+                listOf(
+                    R.string.photo_good_example_2_1,
+                    R.string.photo_good_example_2_2,
+                    R.string.photo_good_example_2_3
+                ),
+                true
+            ),
+            PhotoExample(
+                R.drawable.photo_good_example_3,
+                listOf(
+                    R.string.photo_good_example_3_1,
+                    R.string.photo_good_example_3_2,
+                    R.string.photo_good_example_3_3
+                ),
+                true
+            ),
+            PhotoExample(
+                R.drawable.photo_good_example_4,
+                listOf(R.string.photo_good_example_4_1),
+                true
+            )
+        )
+        val badExamples = listOf(
+            PhotoExample(
+                R.drawable.photo_bad_example_1,
+                listOf(
+                    R.string.photo_bad_example_1_1,
+                    R.string.photo_bad_example_1_2,
+                    R.string.photo_bad_example_1_3
+                ),
+                false
+            ),
+            PhotoExample(
+                R.drawable.photo_bad_example_2,
+                listOf(R.string.photo_bad_example_2_1, R.string.photo_bad_example_2_2),
+                false
+            ),
+            PhotoExample(
+                R.drawable.photo_bad_example_3,
+                listOf(R.string.photo_bad_example_3_1, R.string.photo_bad_example_3_2),
+                false
+            )
+        )
+
+        val goodExampleAdapter = PhotoExampleAdapter()
+        val badExampleAdapter = PhotoExampleAdapter()
+        binding.goodExamplesRecycler.adapter = goodExampleAdapter
+        binding.badExamplesRecycler.adapter = badExampleAdapter
+
+        goodExampleAdapter.submitList(goodExamples)
+        badExampleAdapter.submitList(badExamples)
     }
 
     fun onIntroScreen(onClose: () -> Unit, onTakePhoto: () -> Unit) {
