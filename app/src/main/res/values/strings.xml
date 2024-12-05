@@ -684,4 +684,5 @@
     <string name="delete_this_photo_message">This photo is already uploaded, are you sure you want to delete it?</string>
     <string name="camera_permission_photo_verification">Allow WeatherXM to access your camera to continue with Photo Verification.</string>
     <string name="tap_plus_icon"><![CDATA[<b>Tap the plus icon to take a photo</b><br><br>Your camera will open]]></string>
+    <string name="upload_your_photos_dialog_message">Are you sure that your photos follow our guidelines?\nIf you are having second thoughts you can go back and retake any of them!</string>
 </resources>

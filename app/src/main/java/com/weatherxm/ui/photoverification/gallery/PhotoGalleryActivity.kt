@@ -34,7 +34,7 @@ class PhotoGalleryActivity : BaseActivity() {
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                // TODO: Will be filled with the uploading mechanism
+                // TODO: Save the path of the photo taken 
             }
         }
 
@@ -76,9 +76,24 @@ class PhotoGalleryActivity : BaseActivity() {
         } else {
             binding.toolbar.setNavigationIcon(R.drawable.ic_back)
             binding.toolbar.setNavigationOnClickListener {
-                // TODO: Add a check if less than 2 photos are here
+                // TODO: Add a check if less than 2 photos are here and show the respective dialog
                 finish()
             }
+        }
+
+        binding.uploadBtn.setOnClickListener {
+            ActionDialogFragment
+                .Builder(
+                    title = getString(R.string.upload_your_photos),
+                    message = getString(R.string.upload_your_photos_dialog_message),
+                    negative = getString(R.string.action_back)
+                )
+                .onPositiveClick(getString(R.string.action_upload)) {
+                    // TODO: Will be filled with the uploading mechanism
+                    finish()
+                }
+                .build()
+                .show(this)
         }
 
         binding.instructionsBtn.setOnClickListener {
