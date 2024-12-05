@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -489,11 +490,12 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun showPhotoVerificationIntro(context: Context?) {
+    fun showPhotoVerificationIntro(context: Context?, instructionsOnly: Boolean = false) {
         context?.let {
             it.startActivity(
                 Intent(it, PhotoVerificationIntroActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_INSTRUCTIONS_ONLY, instructionsOnly)
             )
         }
     }

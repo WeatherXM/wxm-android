@@ -131,7 +131,7 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
         }
     }
 
-    fun onInstructionBottomSheet(onBack: () -> Unit) {
+    fun onInstructionScreen(onBack: () -> Unit) {
         binding.closeOrBackButton.setImageResource(R.drawable.ic_back)
         binding.closeOrBackButton.setOnClickListener {
             onBack()
