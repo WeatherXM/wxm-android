@@ -37,6 +37,15 @@
         android:theme="@style/Theme.WeatherXM"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute,LockedOrientationActivity">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.weatherxm.app.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
