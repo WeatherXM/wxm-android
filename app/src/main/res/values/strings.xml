@@ -17,6 +17,9 @@
     <string name="action_exit">Exit</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_pair_station_via_bluetooth">Pair station via Bluetooth</string>
+    <string name="action_upload">Upload</string>
+    <string name="action_instructions">Instructions</string>
+    <string name="action_open_settings">Open Settings</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
     <string name="action_retry_updating">Retry Updating</string>
@@ -673,4 +676,12 @@
     <string name="photo_bad_example_2_2">No surface of installation</string>
     <string name="photo_bad_example_3_1">Tilted angle</string>
     <string name="photo_bad_example_3_2">Subject not in the middle</string>
+    <string name="station_photos">Station Photos</string>
+    <string name="add_1_more_to_upload">Add 1 more photo to upload</string>
+    <string name="add_2_more_to_upload">Add 2 more photos to upload</string>
+    <string name="delete_this_photo">Delete this photo?</string>
+    <string name="add_photo">Add photo</string>
+    <string name="delete_this_photo_message">This photo is already uploaded, are you sure you want to delete it?</string>
+    <string name="camera_permission_photo_verification">Allow WeatherXM to access your camera to continue with Photo Verification.</string>
+    <string name="tap_plus_icon"><![CDATA[<b>Tap the plus icon to take a photo</b><br><br>Your camera will open]]></string>
 </resources>

@@ -190,6 +190,7 @@ import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
+import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
 import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
@@ -1015,6 +1016,9 @@ private val viewmodels = module {
     }
     viewModel { ClaimPulseViewModel(get(), get(), get()) }
     viewModel { DevicesRewardsViewModel(get(), get(), get()) }
+    viewModel { params ->
+        PhotoGalleryViewModel(currentPhotosList = params.get(), fromClaiming = params.get())
+    }
 }
 
 val modules = listOf(
