@@ -8,7 +8,7 @@ import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.photoverification.PhotoVerificationInstructionsFragment
 
-class PhotoVerificationIntro : BaseActivity() {
+class PhotoVerificationIntroActivity : BaseActivity() {
     private lateinit var binding: ActivityPhotoVerificationIntroBinding
 
     @SuppressLint("MissingPermission")

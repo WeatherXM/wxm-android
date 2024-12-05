@@ -77,7 +77,7 @@ import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
-import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntro
+import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewardboosts.RewardBoostActivity
@@ -492,7 +492,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showPhotoVerificationIntro(context: Context?) {
         context?.let {
             it.startActivity(
-                Intent(it, PhotoVerificationIntro::class.java)
+                Intent(it, PhotoVerificationIntroActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
