@@ -4,8 +4,10 @@ import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.ui.common.Contracts
@@ -20,6 +22,7 @@ import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.io.File
 
 class PhotoGalleryActivity : BaseActivity() {
     private lateinit var binding: ActivityPhotoGalleryBinding
@@ -34,11 +37,12 @@ class PhotoGalleryActivity : BaseActivity() {
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                // TODO: Save the path of the photo taken 
+                model.addPhoto(latestPhotoTakenPath)
             }
         }
 
     private var wentToSettingsForPermissions = false
+    private var latestPhotoTakenPath: String = ""
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,14 +52,24 @@ class PhotoGalleryActivity : BaseActivity() {
 
         binding.emptyPhotosText.setHtml(R.string.tap_plus_icon)
 
-        if (model.currentPhotosList.isEmpty()) {
-            binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
-            binding.emptyPhotosText.visible(true)
-            binding.deletePhotoBtn.disable()
-        } else if (model.currentPhotosList.size == 1) {
-            binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
-        } else {
-            binding.uploadBtn.isEnabled = true
+        model.onPhotoNumber().observe(this) {
+            binding.addPhotoBtn.visible(it < 6)
+            when (it) {
+                0 -> {
+                    binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
+                    binding.emptyPhotosText.visible(true)
+                    binding.deletePhotoBtn.disable()
+                }
+                1 -> {
+                    binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
+                    binding.deletePhotoBtn.enable()
+                }
+                else -> {
+                    binding.toolbar.subtitle = null
+                    binding.uploadBtn.isEnabled = true
+                    binding.deletePhotoBtn.enable()
+                }
+            }
         }
 
         if (model.fromClaiming) {
@@ -76,8 +90,17 @@ class PhotoGalleryActivity : BaseActivity() {
         } else {
             binding.toolbar.setNavigationIcon(R.drawable.ic_back)
             binding.toolbar.setNavigationOnClickListener {
-                // TODO: Add a check if less than 2 photos are here and show the respective dialog
-                finish()
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.exit_photo_verification),
+                        message = getString(R.string.exit_photo_verification_start_over),
+                        negative = getString(R.string.action_back)
+                    )
+                    .onPositiveClick(getString(R.string.action_exit)) {
+                        finish()
+                    }
+                    .build()
+                    .show(this)
             }
         }
 
@@ -107,6 +130,10 @@ class PhotoGalleryActivity : BaseActivity() {
 
         binding.addPhotoBtn.setOnClickListener {
             getCameraPermissions()
+        }
+
+        binding.deletePhotoBtn.setOnClickListener {
+            // TODO: Implement this. Also add a check if a photo is already uploaded to show the dialog
         }
 
         getCameraPermissions()
@@ -161,9 +188,21 @@ class PhotoGalleryActivity : BaseActivity() {
         )
     }
 
+    private fun createPhotoFile(): File {
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        // TODO: Create name of image
+        return File.createTempFile("JPEG_TEST_", ".jpg", storageDir).apply {
+            latestPhotoTakenPath = absolutePath
+        }
+    }
+
     private fun openCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // TODO: Create the image file in order to save it
+            val photoFile: File = createPhotoFile()
+            takePictureIntent.putExtra(
+                MediaStore.EXTRA_OUTPUT,
+                FileProvider.getUriForFile(this, "com.weatherxm.app.fileprovider", photoFile)
+            )
             cameraLauncher.launch(takePictureIntent)
         }
     }
