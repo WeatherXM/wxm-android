@@ -45,7 +45,11 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                             .show(this)
                     },
                     onTakePhoto = {
-                        // TODO: Navigate to next screen
+                        navigator.showPhotoGallery(
+                            this@PhotoVerificationIntroActivity,
+                            arrayListOf(),
+                            true
+                        )
                         finish()
                     }
                 )

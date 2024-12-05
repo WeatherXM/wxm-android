@@ -24,7 +24,8 @@ fun FragmentActivity.checkPermissionsAndThen(
     rationaleTitle: String,
     rationaleMessage: String,
     onGranted: () -> Unit,
-    onDenied: () -> Unit
+    onDenied: () -> Unit,
+    showOnPermanentlyDenied: Boolean = true
 ) {
     // Show rationale dialog
     fun onShowRationale() {
@@ -78,7 +79,11 @@ fun FragmentActivity.checkPermissionsAndThen(
         when {
             result.anyGranted() -> onGranted()
             result.anyShouldShowRationale() -> onShowRationale()
-            result.allPermanentlyDenied() -> onPermanentlyDenied()
+            result.allPermanentlyDenied() -> {
+                if (showOnPermanentlyDenied) {
+                    onPermanentlyDenied()
+                }
+            }
         }
     }
 }
