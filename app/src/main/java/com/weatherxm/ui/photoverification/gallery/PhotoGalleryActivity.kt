@@ -1,10 +1,8 @@
 package com.weatherxm.ui.photoverification.gallery
 
-import android.Manifest.permission.ACCESS_MEDIA_LOCATION
 import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,10 +16,8 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
-import com.weatherxm.util.permissionsBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -137,12 +133,9 @@ class PhotoGalleryActivity : BaseActivity() {
     @SuppressLint("InlinedApi")
     private fun getCameraPermissions() {
         /**
-         * The below permission check (no prompt shown to the user - Google...) is necessary
-         * in order to embed GPS information in the EXIF metadata of the image
+         * Location-related permissions are also needed to be granted beforehand in order
+         * to have them in EXIF Metadata.
          */
-        if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.Q) {
-            permissionsBuilder(permissions = arrayOf(ACCESS_MEDIA_LOCATION)).build().send()
-        }
         checkPermissionsAndThen(
             permissions = arrayOf(CAMERA),
             rationaleTitle = getString(R.string.camera_permission_required_title),
