@@ -300,7 +300,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.photoverification.intro.PhotoVerificationIntro"
+            android:name="com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
