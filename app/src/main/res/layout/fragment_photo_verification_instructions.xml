@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/alternativeBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-150dp"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_large">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/closeOrBackButton"
+                style="@style/Widget.WeatherXM.ImageButton"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="@dimen/margin_large"
+                android:background="@drawable/background_imagebutton_circular_translucent"
+                android:contentDescription="@string/action_close"
+                android:elevation="1dp"
+                app:tint="@color/dark_text"
+                tools:src="@drawable/ic_close" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:src="@drawable/station_background" />
+        </FrameLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="-170dp"
+            android:text="@string/all_about"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textColor="@color/darkGrey"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:text="@string/photo_verification"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:text="@string/boost_network_health_photos"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="40dp"
+            android:text="@string/how_to_take_photos"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:drawableStart="@drawable/ic_photo_rotation"
+            android:drawablePadding="@dimen/padding_normal"
+            android:text="@string/photos_instruction_rotate"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:drawableStart="@drawable/ic_photo_surface"
+            android:drawablePadding="@dimen/padding_normal"
+            android:text="@string/photos_instruction_surface"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:drawableStart="@drawable/ic_photo_no_faces"
+            android:drawablePadding="@dimen/padding_normal"
+            android:text="@string/photos_instruction_faces_personal_items"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large">
+
+            <ImageView
+                android:id="@+id/photoAmountIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_photo_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/photoAmountInstruction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:text="@string/photos_instruction_angles"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/photoAmountIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/photoAmountInstructionsList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/photoAmountInstruction"
+                app:layout_constraintTop_toBottomOf="@id/photoAmountInstruction" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="40dp"
+            android:text="@string/photo_examples"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                app:cardBackgroundColor="@color/successTint" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/goodExamplesTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/photo_good_example_title"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_checkmark"
+                    app:layout_constraintBottom_toBottomOf="@id/goodExamplesTitle"
+                    app:layout_constraintStart_toEndOf="@id/goodExamplesTitle"
+                    app:layout_constraintTop_toTopOf="@id/goodExamplesTitle"
+                    app:tint="@color/success" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/goodExamplesRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:paddingStart="40dp"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="@dimen/padding_normal"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/goodExamplesTitle"
+                    tools:ignore="RtlSymmetry"
+                    tools:listitem="@layout/list_item_photo_example" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                app:cardBackgroundColor="@color/errorTint" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/badExamplesTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/photo_bad_example_title"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_error_circular"
+                    app:layout_constraintBottom_toBottomOf="@id/badExamplesTitle"
+                    app:layout_constraintStart_toEndOf="@id/badExamplesTitle"
+                    app:layout_constraintTop_toTopOf="@id/badExamplesTitle"
+                    app:tint="@color/error" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/badExamplesRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:paddingStart="40dp"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="@dimen/padding_normal"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/badExamplesTitle"
+                    tools:ignore="RtlSymmetry"
+                    tools:listitem="@layout/list_item_photo_example" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="40dp"
+            android:text="@string/upload_your_photos"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/upload_your_photos_message"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/termsCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/termsCheckboxDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:drawableEnd="@drawable/ic_open_new"
+                android:drawablePadding="@dimen/padding_extra_small"
+                android:drawableTint="@color/colorPrimary"
+                android:text="@string/accept_terms"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/takePhotoBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:enabled="false"
+            android:text="@string/lets_take_first_photo" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

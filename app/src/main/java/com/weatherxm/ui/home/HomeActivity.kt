@@ -11,10 +11,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.mapbox.geojson.Point
 import com.weatherxm.R
 import com.weatherxm.data.models.Location
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
