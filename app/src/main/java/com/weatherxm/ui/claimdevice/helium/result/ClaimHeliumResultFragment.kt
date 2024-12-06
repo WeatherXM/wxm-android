@@ -43,12 +43,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.photoVerificationBtn.setOnClickListener {
-            navigator.showPhotoVerificationIntro(context)
-            activity?.setResult(Activity.RESULT_OK)
-            activity?.finish()
-        }
-
         binding.cancel.setOnClickListener {
             analytics.trackEventUserAction(
                 actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
@@ -158,12 +152,14 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     binding.updateBtn.setOnClickListener {
                         onUpdate(device)
                     }
+                    initPhotoVerificationBtn(device)
                     binding.skipAndGoToStationBtn.setOnClickListener {
                         showConfirmBypassOTADialog(device)
                     }
                     binding.infoMessage.setHtml(R.string.update_prompt_on_claiming_flow)
                     binding.informationCard.visible(true)
                 } else if (device != null) {
+                    initPhotoVerificationBtn(device)
                     binding.skipAndGoToStationBtn.setOnClickListener {
                         ActionDialogFragment.createSkipPhotoVerification(requireContext()) {
                             onViewDevice(device)
@@ -265,5 +261,13 @@ class ClaimHeliumResultFragment : BaseFragment() {
     private fun hideButtons() {
         binding.failureButtonsContainer.invisible()
         binding.successButtonsContainer.invisible()
+    }
+
+    private fun initPhotoVerificationBtn(device: UIDevice) {
+        binding.photoVerificationBtn.setOnClickListener {
+            navigator.showPhotoVerificationIntro(context, device)
+            activity?.setResult(Activity.RESULT_OK)
+            activity?.finish()
+        }
     }
 }

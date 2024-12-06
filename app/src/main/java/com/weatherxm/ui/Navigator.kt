@@ -8,10 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -93,6 +95,7 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import timber.log.Timber
+import java.io.File
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
@@ -493,21 +496,32 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun showPhotoVerificationIntro(context: Context?, instructionsOnly: Boolean = false) {
+    fun showPhotoVerificationIntro(
+        context: Context?,
+        device: UIDevice,
+        instructionsOnly: Boolean = false
+    ) {
         context?.let {
             it.startActivity(
                 Intent(it, PhotoVerificationIntroActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
                     .putExtra(ARG_INSTRUCTIONS_ONLY, instructionsOnly)
             )
         }
     }
 
-    fun showPhotoGallery(context: Context?, photos: ArrayList<String>, fromClaiming: Boolean) {
+    fun showPhotoGallery(
+        context: Context?,
+        device: UIDevice,
+        photos: ArrayList<String>,
+        fromClaiming: Boolean
+    ) {
         context?.let {
             it.startActivity(
                 Intent(it, PhotoGalleryActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
                     .putStringArrayListExtra(ARG_PHOTOS, photos)
                     .putExtra(ARG_FROM_CLAIMING, fromClaiming)
             )
@@ -605,6 +619,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Timber.d(e, "Could not open support center.")
                 it.toast(R.string.error_cannot_open_support_center)
             }
+        }
+    }
+
+    fun openCamera(launcher: ActivityResultLauncher<Intent>, context: Context, destFile: File) {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.putExtra(
+                MediaStore.EXTRA_OUTPUT,
+                FileProvider.getUriForFile(context, "com.weatherxm.app.fileprovider", destFile)
+            )
+            launcher.launch(takePictureIntent)
         }
     }
 

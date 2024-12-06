@@ -152,23 +152,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         }
     }
 
-    context("Get the normalized station name of the weather station") {
-        given("the station") {
-            When("it's empty") {
-                viewModel.updateDevice(emptyDevice)
-                then("return an empty string") {
-                    viewModel.createNormalizedName() shouldBe String.empty()
-                }
-            }
-            When("it's not empty") {
-                viewModel.updateDevice(device)
-                then("return the normalized station name") {
-                    viewModel.createNormalizedName() shouldBe normalizedStationName
-                }
-            }
-        }
-    }
-
     context("Follow a station") {
         given("a usecase returning the response of the unfollow request") {
             When("it's failure") {

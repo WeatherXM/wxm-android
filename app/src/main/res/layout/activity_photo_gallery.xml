@@ -50,7 +50,7 @@
             android:layout_marginHorizontal="@dimen/margin_large"
             android:orientation="vertical"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/addPhotoBtn"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
@@ -77,23 +77,35 @@
             android:text="@string/tap_plus_icon"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/addPhotoBtn"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-        <ImageButton
-            android:id="@+id/addPhotoBtn"
-            android:layout_width="48dp"
-            android:layout_height="70dp"
+        <LinearLayout
+            android:id="@+id/thumbnailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginBottom="40dp"
-            android:background="@drawable/background_imagebutton_smaller_radius_layer1"
-            android:contentDescription="@string/add_photo"
-            android:src="@drawable/ic_add"
-            app:layout_constraintBottom_toTopOf="@id/instructionsBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_goneMarginBottom="@dimen/margin_large"
-            app:tint="@color/colorPrimary" />
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/instructionsBtn">
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/thumbnails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small" />
+
+            <ImageButton
+                android:id="@+id/addPhotoBtn"
+                android:layout_width="48dp"
+                android:layout_height="70dp"
+                android:background="@drawable/background_imagebutton_smaller_radius_layer1"
+                android:contentDescription="@string/add_photo"
+                android:src="@drawable/ic_add"
+                app:tint="@color/colorPrimary" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/deletePhotoBtn"

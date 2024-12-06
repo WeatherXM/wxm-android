@@ -2,18 +2,38 @@ package com.weatherxm.ui.photoverification.gallery
 
 import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_FROM_CLAIMING
+import com.weatherxm.ui.common.StationPhoto
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.disable
 import com.weatherxm.ui.common.enable
+import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -29,6 +49,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private val model: PhotoGalleryViewModel by viewModel {
         parametersOf(
+            intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
             intent.getStringArrayListExtra(Contracts.ARG_PHOTOS),
             intent.getBooleanExtra(ARG_FROM_CLAIMING, false)
         )
@@ -43,6 +64,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private var wentToSettingsForPermissions = false
     private var latestPhotoTakenPath: String = ""
+    private var selectedPhoto: MutableState<StationPhoto?> = mutableStateOf(null)
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,24 +74,8 @@ class PhotoGalleryActivity : BaseActivity() {
 
         binding.emptyPhotosText.setHtml(R.string.tap_plus_icon)
 
-        model.onPhotoNumber().observe(this) {
-            binding.addPhotoBtn.visible(it < 6)
-            when (it) {
-                0 -> {
-                    binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
-                    binding.emptyPhotosText.visible(true)
-                    binding.deletePhotoBtn.disable()
-                }
-                1 -> {
-                    binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
-                    binding.deletePhotoBtn.enable()
-                }
-                else -> {
-                    binding.toolbar.subtitle = null
-                    binding.uploadBtn.isEnabled = true
-                    binding.deletePhotoBtn.enable()
-                }
-            }
+        model.onPhotosNumber().observe(this) {
+            onPhotosNumber(it)
         }
 
         if (model.fromClaiming) {
@@ -120,7 +126,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         binding.instructionsBtn.setOnClickListener {
-            navigator.showPhotoVerificationIntro(this, true)
+            navigator.showPhotoVerificationIntro(this, model.device, true)
         }
 
         binding.openSettingsBtn.setOnClickListener {
@@ -133,7 +139,11 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         binding.deletePhotoBtn.setOnClickListener {
-            // TODO: Implement this. Also add a check if a photo is already uploaded to show the dialog
+            onDeletePhoto()
+        }
+
+        binding.thumbnails.setContent {
+            Thumbnails()
         }
 
         getCameraPermissions()
@@ -144,6 +154,48 @@ class PhotoGalleryActivity : BaseActivity() {
             onPermissionsGivenFromSettings()
         }
         super.onResume()
+    }
+
+    private fun onPhotosNumber(photosNumber: Int) {
+        binding.addPhotoBtn.visible(photosNumber < 6)
+        binding.uploadBtn.isEnabled = photosNumber >= 2
+        when (photosNumber) {
+            0 -> {
+                binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
+                binding.emptyPhotosText.visible(true)
+                binding.deletePhotoBtn.disable()
+            }
+            1 -> {
+                binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
+                binding.deletePhotoBtn.enable()
+            }
+            else -> {
+                binding.toolbar.subtitle = null
+                binding.deletePhotoBtn.enable()
+            }
+        }
+    }
+
+    private fun onDeletePhoto() {
+        selectedPhoto.value?.let {
+            if (it.remotePath != null) {
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.delete_this_photo),
+                        message = getString(R.string.delete_this_photo_message),
+                        negative = getString(R.string.action_back)
+                    )
+                    .onPositiveClick(getString(R.string.action_delete)) {
+                        model.deletePhoto(it)
+                        selectedPhoto.value = null
+                    }
+                    .build()
+                    .show(this)
+            } else {
+                model.deletePhoto(it)
+                selectedPhoto.value = null
+            }
+        }
     }
 
     private fun onCameraDenied() {
@@ -160,7 +212,7 @@ class PhotoGalleryActivity : BaseActivity() {
         binding.instructionsBtn.isEnabled = true
         binding.addPhotoBtn.enable()
         binding.permissionsContainer.visible(false)
-        if (model.currentPhotosList.isEmpty()) {
+        if (model.photos.isEmpty()) {
             binding.emptyPhotosText.visible(true)
             binding.deletePhotoBtn.disable()
         }
@@ -182,7 +234,7 @@ class PhotoGalleryActivity : BaseActivity() {
             permissions = arrayOf(CAMERA),
             rationaleTitle = getString(R.string.camera_permission_required_title),
             rationaleMessage = getString(R.string.camera_permission_required),
-            onGranted = { openCamera() },
+            onGranted = { navigator.openCamera(cameraLauncher, this, createPhotoFile()) },
             onDenied = { onCameraDenied() },
             showOnPermanentlyDenied = false
         )
@@ -190,20 +242,67 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private fun createPhotoFile(): File {
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        // TODO: Create name of image
-        return File.createTempFile("JPEG_TEST_", ".jpg", storageDir).apply {
+        return File.createTempFile(model.device.normalizedName(), ".jpg", storageDir).apply {
             latestPhotoTakenPath = absolutePath
         }
     }
 
-    private fun openCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            val photoFile: File = createPhotoFile()
-            takePictureIntent.putExtra(
-                MediaStore.EXTRA_OUTPUT,
-                FileProvider.getUriForFile(this, "com.weatherxm.app.fileprovider", photoFile)
-            )
-            cameraLauncher.launch(takePictureIntent)
+    @Composable
+    fun Thumbnails() {
+        val photos = remember { model.onPhotos }
+        if (selectedPhoto.value == null) {
+            selectedPhoto.value = photos.firstOrNull()
+        }
+
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small))
+        ) {
+            items(photos) { photo ->
+                Thumbnail(
+                    item = photo,
+                    isSelected = photo == selectedPhoto.value,
+                    onClick = {
+                        // TODO: Show image
+                        selectedPhoto.value = photo
+                    }
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun Thumbnail(item: StationPhoto, isSelected: Boolean, onClick: () -> Unit) {
+        var width = 48.dp
+        var height = 70.dp
+        var border: BorderStroke? = null
+
+        if (isSelected) {
+            width = 62.dp
+            height = 88.dp
+            border = BorderStroke(2.dp, colorResource(R.color.colorPrimary))
+        }
+
+        Card(
+            Modifier
+                .size(width, height)
+                .clickable(onClick = onClick),
+            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_small)),
+            border = border
+        ) {
+            if (!item.remotePath.isNullOrEmpty()) {
+                AsyncImage(
+                    model = item.remotePath,
+                    contentDescription = item.remotePath,
+                    contentScale = ContentScale.Crop
+                )
+            } else if (!item.localPath.isNullOrEmpty()) {
+                AsyncImage(
+                    model = item.localPath,
+                    contentDescription = item.localPath,
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
     }
 }
