@@ -29,6 +29,7 @@
     <string name="action_view_all">View All</string>
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
+    <string name="action_delete">Delete</string>
     <string name="action_buy_station">Buy a Station</string>
     <string name="action_claim">Claim</string>
     <string name="action_dismiss">Dismiss</string>

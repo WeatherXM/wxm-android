@@ -1,35 +1,43 @@
 package com.weatherxm.ui.photoverification.gallery
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.weatherxm.ui.common.StationPhoto
+import com.weatherxm.ui.common.UIDevice
 
 class PhotoGalleryViewModel(
-    val currentPhotosList: List<String>,
+    val device: UIDevice,
+    val photos: MutableList<StationPhoto>,
     val fromClaiming: Boolean
 ) : ViewModel() {
-    private val newPhotosTaken = mutableListOf<String>()
+    private val onPhotosNumber = MutableLiveData(photos.size)
+    private val _onPhotos = mutableStateListOf<StationPhoto>()
+    val onPhotos: List<StationPhoto> = _onPhotos
 
-    private val onPhotoNumber = MutableLiveData(getPhotoNumber())
-
-    fun onPhotoNumber(): LiveData<Int> = onPhotoNumber
-
-    private fun getPhotoNumber() = newPhotosTaken.size + currentPhotosList.size
+    fun onPhotosNumber(): LiveData<Int> = onPhotosNumber
 
     fun addPhoto(path: String) {
-        if (path.isNotEmpty() && !newPhotosTaken.contains(path)) {
-            newPhotosTaken.add(path)
-            onPhotoNumber.postValue(getPhotoNumber())
+        if (path.isNotEmpty() && photos.firstOrNull { it.localPath == path } == null) {
+            val stationPhoto = StationPhoto(null, path)
+            photos.add(stationPhoto)
+            _onPhotos.add(stationPhoto)
+            onPhotosNumber.postValue(photos.size)
         }
     }
 
-    fun deletePhoto(path: String) {
-        if (currentPhotosList.contains(path)) {
-            // TODO: Call the delete endpoint and post the new number on success
-            onPhotoNumber.postValue(getPhotoNumber())
-        } else if (newPhotosTaken.contains(path)) {
-            newPhotosTaken.remove(path)
-            onPhotoNumber.postValue(getPhotoNumber())
+    fun deletePhoto(photo: StationPhoto) {
+        if (photos.firstOrNull { it.remotePath == photo.remotePath } != null) {
+            // TODO: Call the delete endpoint and post the new state on success
+            photos.remove(photo)
+            _onPhotos.remove(photo)
+            onPhotosNumber.postValue(photos.size)
+        } else if (photos.firstOrNull { it.localPath == photo.localPath } != null) {
+            // TODO: Delete it actually from the storage saved 
+            photos.remove(photo)
+            _onPhotos.remove(photo)
+            onPhotosNumber.postValue(photos.size)
         }
     }
 }

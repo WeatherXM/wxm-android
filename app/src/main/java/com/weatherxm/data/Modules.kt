@@ -1017,7 +1017,11 @@ private val viewmodels = module {
     viewModel { ClaimPulseViewModel(get(), get(), get()) }
     viewModel { DevicesRewardsViewModel(get(), get(), get()) }
     viewModel { params ->
-        PhotoGalleryViewModel(currentPhotosList = params.get(), fromClaiming = params.get())
+        PhotoGalleryViewModel(
+            device = params.get(),
+            photos = params.get(),
+            fromClaiming = params.get()
+        )
     }
 }
 
