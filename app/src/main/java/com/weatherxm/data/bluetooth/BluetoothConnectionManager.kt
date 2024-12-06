@@ -141,6 +141,9 @@ class BluetoothConnectionManager(
         address: String
     ): Either<Failure, Unit> {
         return try {
+            if (this::peripheral.isInitialized) {
+                peripheral.cancel()
+            }
             macAddress = address
             initBondStateChangeReceiver()
             peripheral = Peripheral(advertisement) {
@@ -171,7 +174,6 @@ class BluetoothConnectionManager(
             readCharacteristic = null
             writeCharacteristic = null
             peripheral.disconnect()
-            peripheral.cancel()
         } catch (e: UninitializedPropertyAccessException) {
             Timber.d(e, "Could not disconnect peripheral.")
         } catch (e: NotConnectedException) {
