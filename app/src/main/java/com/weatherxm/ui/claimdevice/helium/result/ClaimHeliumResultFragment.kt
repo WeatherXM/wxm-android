@@ -44,7 +44,9 @@ class ClaimHeliumResultFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.photoVerificationBtn.setOnClickListener {
-            // TODO: Go to photo verification intro screen
+            navigator.showPhotoVerificationIntro(context)
+            activity?.setResult(Activity.RESULT_OK)
+            activity?.finish()
         }
 
         binding.cancel.setOnClickListener {
