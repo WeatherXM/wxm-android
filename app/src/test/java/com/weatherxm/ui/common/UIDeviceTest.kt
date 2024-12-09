@@ -23,6 +23,7 @@ class UIDeviceTest : BehaviorSpec({
         every { device.createDeviceAlerts(any()) } answers { callOriginal() }
         every { device.hasErrors() } answers { callOriginal() }
         every { device.getLastCharsOfLabel() } answers { callOriginal() }
+        every { device.normalizedName() } answers { callOriginal() }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testDeviceRelation(
@@ -260,7 +261,7 @@ class UIDeviceTest : BehaviorSpec({
 
     context("Get the normalized name") {
         When("the name is empty") {
-            every { device.name } returns String.empty()
+
             then("return an empty string") {
                 device.normalizedName() shouldBe String.empty()
             }
