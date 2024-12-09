@@ -1,6 +1,7 @@
 package com.weatherxm.ui.common
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
@@ -602,6 +603,14 @@ data class DeviceTotalRewardsBoost(
     val boostPeriodStart: ZonedDateTime?,
     val boostPeriodEnd: ZonedDateTime?
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class PhotoExample(
+    @DrawableRes val image: Int,
+    val feedbackResId: List<Int>,
+    val isGoodExample: Boolean
+)
 
 @Keep
 data class WeatherUnit(

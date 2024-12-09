@@ -100,7 +100,8 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     private fun setListeners() {
         binding.photoVerificationBtn.setOnClickListener {
-            // TODO: Go to photo verification intro screen
+            navigator.showPhotoVerificationIntro(this)
+            finish()
         }
         binding.skipAndGoToStationBtn.setOnClickListener {
             ActionDialogFragment.createSkipPhotoVerification(this) {
