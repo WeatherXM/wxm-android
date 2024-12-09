@@ -24,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.load
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.ui.common.Contracts
@@ -32,6 +33,7 @@ import com.weatherxm.ui.common.Contracts.ARG_FROM_CLAIMING
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.disable
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.enable
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
@@ -63,7 +65,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
     private var wentToSettingsForPermissions = false
-    private var latestPhotoTakenPath: String = ""
+    private var latestPhotoTakenPath: String = String.empty()
     private var selectedPhoto: MutableState<StationPhoto?> = mutableStateOf(null)
 
     @SuppressLint("MissingPermission")
@@ -250,8 +252,12 @@ class PhotoGalleryActivity : BaseActivity() {
     @Composable
     fun Thumbnails() {
         val photos = remember { model.onPhotos }
+        binding.emptyPhotosText.visible(photos.isEmpty())
+        binding.selectedPhoto.visible(photos.isNotEmpty())
         if (selectedPhoto.value == null) {
-            selectedPhoto.value = photos.firstOrNull()
+            selectedPhoto.value = photos.firstOrNull()?.apply {
+                binding.selectedPhoto.load(remotePath ?: localPath)
+            }
         }
 
         LazyRow(
@@ -263,7 +269,7 @@ class PhotoGalleryActivity : BaseActivity() {
                     item = photo,
                     isSelected = photo == selectedPhoto.value,
                     onClick = {
-                        // TODO: Show image
+                        binding.selectedPhoto.load(photo.remotePath ?: photo.localPath)
                         selectedPhoto.value = photo
                     }
                 )

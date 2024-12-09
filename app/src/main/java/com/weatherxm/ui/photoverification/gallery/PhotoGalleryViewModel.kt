@@ -13,7 +13,9 @@ class PhotoGalleryViewModel(
     val fromClaiming: Boolean
 ) : ViewModel() {
     private val onPhotosNumber = MutableLiveData(photos.size)
-    private val _onPhotos = mutableStateListOf<StationPhoto>()
+    private val _onPhotos = mutableStateListOf<StationPhoto>().apply {
+        addAll(photos)
+    }
     val onPhotos: List<StationPhoto> = _onPhotos
 
     fun onPhotosNumber(): LiveData<Int> = onPhotosNumber

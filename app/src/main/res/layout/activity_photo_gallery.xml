@@ -69,6 +69,19 @@
                 android:text="@string/action_open_settings" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/selectedPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/padding_extra_large"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/emptyPhotosText"
             android:layout_width="match_parent"

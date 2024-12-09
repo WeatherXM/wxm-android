@@ -316,8 +316,12 @@
             android:name="com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
+
+        <!-- configChanges is needed in the PhotoGalleryActivity to have the ability
+            to take photos in landscape without recreating the activity -->
         <activity
             android:name="com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity"
+            android:configChanges="screenSize|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
