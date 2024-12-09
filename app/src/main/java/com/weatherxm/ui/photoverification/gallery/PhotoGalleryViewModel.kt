@@ -36,7 +36,6 @@ class PhotoGalleryViewModel(
             _onPhotos.remove(photo)
             onPhotosNumber.postValue(photos.size)
         } else if (photos.firstOrNull { it.localPath == photo.localPath } != null) {
-            // TODO: Delete it actually from the storage saved 
             photos.remove(photo)
             _onPhotos.remove(photo)
             onPhotosNumber.postValue(photos.size)
