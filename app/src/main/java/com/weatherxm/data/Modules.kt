@@ -946,6 +946,7 @@ private val viewmodels = module {
         DeviceHeliumOTAViewModel(
             device = params.get(),
             deviceIsBleConnected = params.get(),
+            needsPhotoVerification = params.get(),
             get(),
             get(),
             get(),
