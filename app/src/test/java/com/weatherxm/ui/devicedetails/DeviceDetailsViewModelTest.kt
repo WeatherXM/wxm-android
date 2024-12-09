@@ -46,7 +46,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: DeviceDetailsViewModel
 
-    val normalizedStationName = "my-weather-station"
     val emptyDevice = UIDevice.empty()
     val device = UIDevice(
         "deviceId",
@@ -148,23 +147,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
             }
             then("LiveData onUpdatedDevice should post that device") {
                 viewModel.onUpdatedDevice().value shouldBe device
-            }
-        }
-    }
-
-    context("Get the normalized station name of the weather station") {
-        given("the station") {
-            When("it's empty") {
-                viewModel.updateDevice(emptyDevice)
-                then("return an empty string") {
-                    viewModel.createNormalizedName() shouldBe String.empty()
-                }
-            }
-            When("it's not empty") {
-                viewModel.updateDevice(device)
-                then("return the normalized station name") {
-                    viewModel.createNormalizedName() shouldBe normalizedStationName
-                }
             }
         }
     }

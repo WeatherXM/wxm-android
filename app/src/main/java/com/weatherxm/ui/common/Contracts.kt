@@ -32,4 +32,6 @@ object Contracts {
     const val ARG_FCM_TOKEN = "fcm_token"
     const val ARG_DEVICES_REWARDS = "devices_rewards"
     const val ARG_INSTRUCTIONS_ONLY = "instructions_only"
+    const val ARG_PHOTOS = "photos"
+    const val ARG_FROM_CLAIMING = "from_claiming"
 }
