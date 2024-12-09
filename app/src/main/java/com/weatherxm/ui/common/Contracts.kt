@@ -31,4 +31,5 @@ object Contracts {
     const val ARG_FORECAST_SELECTED_DAY = "forecast_selected_day"
     const val ARG_FCM_TOKEN = "fcm_token"
     const val ARG_DEVICES_REWARDS = "devices_rewards"
+    const val ARG_INSTRUCTIONS_ONLY = "instructions_only"
 }

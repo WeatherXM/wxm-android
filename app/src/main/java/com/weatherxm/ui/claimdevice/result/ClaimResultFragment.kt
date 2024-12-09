@@ -128,7 +128,9 @@ class ClaimResultFragment : BaseFragment() {
                         }.show(this)
                     }
                     binding.photoVerificationBtn.setOnClickListener {
-                        // TODO: Go to photo verification intro screen 
+                        navigator.showPhotoVerificationIntro(context)
+                        activity?.setResult(Activity.RESULT_OK)
+                        activity?.finish()
                     }
                     binding.skipAndGoToStationBtn.visible(true)
                     binding.photoVerificationBtn.visible(true)
