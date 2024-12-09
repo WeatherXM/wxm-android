@@ -47,6 +47,11 @@ import org.koin.core.parameter.parametersOf
 import java.io.File
 
 class PhotoGalleryActivity : BaseActivity() {
+    companion object {
+        const val MIN_PHOTOS = 2
+        const val MAX_PHOTOS = 6
+    }
+
     private lateinit var binding: ActivityPhotoGalleryBinding
 
     private val model: PhotoGalleryViewModel by viewModel {
@@ -159,8 +164,8 @@ class PhotoGalleryActivity : BaseActivity() {
     }
 
     private fun onPhotosNumber(photosNumber: Int) {
-        binding.addPhotoBtn.visible(photosNumber < 6)
-        binding.uploadBtn.isEnabled = photosNumber >= 2
+        binding.addPhotoBtn.visible(photosNumber < MAX_PHOTOS)
+        binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS
         when (photosNumber) {
             0 -> {
                 binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
@@ -203,6 +208,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
     }
 
+    @Suppress("MagicNumber")
     private fun onCameraDenied() {
         binding.deletePhotoBtn.disable()
         binding.instructionsBtn.alpha = 0.4F
@@ -252,6 +258,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     fun Thumbnails() {
         val photos = remember { model.onPhotos }
@@ -280,6 +287,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     fun Thumbnail(item: StationPhoto, isSelected: Boolean, onClick: () -> Unit) {
         var width = 48.dp

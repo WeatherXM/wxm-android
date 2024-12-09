@@ -259,6 +259,7 @@ fun ImageButton.enable() {
     isClickable = true
 }
 
+@Suppress("MagicNumber")
 fun ImageButton.disable() {
     alpha = 0.4F
     isEnabled = false

@@ -19,6 +19,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import timber.log.Timber
 
+@Suppress("LongParameterList")
 fun FragmentActivity.checkPermissionsAndThen(
     vararg permissions: String,
     rationaleTitle: String,

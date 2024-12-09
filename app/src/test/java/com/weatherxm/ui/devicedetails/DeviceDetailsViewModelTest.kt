@@ -46,7 +46,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: DeviceDetailsViewModel
 
-    val normalizedStationName = "my-weather-station"
     val emptyDevice = UIDevice.empty()
     val device = UIDevice(
         "deviceId",
