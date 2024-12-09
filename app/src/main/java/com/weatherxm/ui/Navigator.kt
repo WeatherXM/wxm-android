@@ -52,6 +52,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
+import com.weatherxm.ui.common.Contracts.FILE_PROVIDER_AUTHORITY
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
@@ -235,11 +236,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     }
 
     fun openShare(context: Context, text: String) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+        with(Intent()) {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+            context.startActivity(Intent.createChooser(this, context.getString(R.string.share)))
+        }
+    }
+
+    fun openShareImages(context: Context, photoUris: ArrayList<Uri>) {
+        with(Intent()) {
+            action = Intent.ACTION_SEND_MULTIPLE
+            type = "image/*"
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, photoUris)
+            context.startActivity(Intent.createChooser(this, context.getString(R.string.share)))
+        }
     }
 
     fun showDeleteAccountSurvey(
@@ -626,7 +637,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.putExtra(
                 MediaStore.EXTRA_OUTPUT,
-                FileProvider.getUriForFile(context, "com.weatherxm.app.fileprovider", destFile)
+                FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, destFile)
             )
             launcher.launch(takePictureIntent)
         }
