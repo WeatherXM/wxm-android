@@ -1,11 +1,16 @@
 package com.weatherxm.ui.photoverification.gallery
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.weatherxm.ui.common.Contracts.FILE_PROVIDER_AUTHORITY
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
+import java.io.File
 
 class PhotoGalleryViewModel(
     val device: UIDevice,
@@ -40,5 +45,17 @@ class PhotoGalleryViewModel(
             _onPhotos.remove(photo)
             onPhotosNumber.postValue(photos.size)
         }
+    }
+
+    fun getUrisOfLocalPhotos(context: Context): ArrayList<Uri> {
+        val uris = arrayListOf<Uri>()
+        photos.forEach {
+            if (!it.localPath.isNullOrEmpty()) {
+                uris.add(
+                    FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, File(it.localPath))
+                )
+            }
+        }
+        return uris
     }
 }
