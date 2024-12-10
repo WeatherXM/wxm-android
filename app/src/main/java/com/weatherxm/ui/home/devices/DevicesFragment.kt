@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.runtime.collectAsState
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -15,6 +16,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.InfoBanner
 import com.weatherxm.databinding.FragmentDevicesBinding
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.DeviceAdapter
 import com.weatherxm.ui.common.DeviceListener
 import com.weatherxm.ui.common.DeviceRelation
@@ -29,8 +31,10 @@ import com.weatherxm.ui.common.setCardRadius
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.PhotoUploadState
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.NumberUtils.formatTokens
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {
@@ -40,6 +44,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private lateinit var binding: FragmentDevicesBinding
     private lateinit var adapter: DeviceAdapter
     private lateinit var dialogOverlay: AlertDialog
+
+    private val uploadObserverService: GlobalUploadObserverService by inject()
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
@@ -94,6 +100,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         parentModel.onWalletWarnings().observe(viewLifecycleOwner) {
             onWalletMissingWarning(it.showMissingWarning)
         }
+
+        initAndObserveUploadState()
         return binding.root
     }
 
@@ -123,6 +131,39 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialogOverlay = MaterialAlertDialogBuilder(requireContext()).create()
+    }
+
+    private fun initAndObserveUploadState() {
+        binding.uploadStateView.setContent {
+            val uploadState = uploadObserverService.getUploadPhotosState().collectAsState(null)
+            binding.uploadStateCard.visible(uploadState.value != null)
+
+            if (uploadState.value?.error != null) {
+                binding.uploadStateCard.setOnClickListener {
+                    // TODO: Invoke retry mechanism
+                }
+                binding.uploadAnimation.visible(false)
+                binding.uploadRetryIcon.visible(true)
+            } else {
+                uploadState.value?.device?.let { device ->
+                    binding.uploadStateCard.setOnClickListener {
+                        navigator.showStationSettings(context, device)
+                    }
+                }
+                binding.uploadRetryIcon.visible(false)
+                binding.uploadAnimation.visible(true)
+            }
+
+            if (uploadState.value?.isSuccess == true) {
+                binding.uploadAnimation.setAnimation(R.raw.anim_upload_success)
+            } else if (uploadState.value?.progress == 0) {
+                binding.uploadAnimation.setAnimation(R.raw.anim_uploading)
+            }
+
+            uploadState.value?.let {
+                PhotoUploadState(it, true)
+            }
+        }
     }
 
     private fun onUnFollowStatus(status: Resource<Unit>) {

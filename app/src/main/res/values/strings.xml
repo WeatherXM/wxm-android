@@ -687,4 +687,7 @@
     <string name="camera_permission_photo_verification">Allow WeatherXM to access your camera to continue with Photo Verification.</string>
     <string name="tap_plus_icon"><![CDATA[<b>Tap the plus icon to take a photo</b><br><br>Your camera will open]]></string>
     <string name="upload_your_photos_dialog_message">Are you sure that your photos follow our guidelines?\nIf you are having second thoughts you can go back and retake any of them!</string>
+    <string name="uploading">Uploading…</string>
+    <string name="completed">Completed</string>
+    <string name="upload_failed_retry">Upload failed. Tap to retry</string>
 </resources>
