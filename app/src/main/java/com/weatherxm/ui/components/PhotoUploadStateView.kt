@@ -56,13 +56,15 @@ fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
                 )
             }
         }
-        LinearProgressIndicator(
-            progress = { state.progress.toFloat() },
-            modifier = Modifier.fillMaxWidth(),
-            strokeCap = StrokeCap.Round,
-            color = colorResource(R.color.colorPrimary),
-            trackColor = colorResource(R.color.layer2)
-        )
+        if (state.error == null) {
+            LinearProgressIndicator(
+                progress = { state.progress.toFloat() },
+                modifier = Modifier.fillMaxWidth(),
+                strokeCap = StrokeCap.Round,
+                color = colorResource(R.color.colorPrimary),
+                trackColor = colorResource(R.color.layer2)
+            )
+        }
         if (showStationName) {
             Text(
                 text = state.device.name,

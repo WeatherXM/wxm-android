@@ -28,6 +28,7 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setCardRadius
+import com.weatherxm.ui.common.swipeToDismiss
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
@@ -136,25 +137,30 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private fun initAndObserveUploadState() {
         binding.uploadStateView.setContent {
             val uploadState = uploadObserverService.getUploadPhotosState().collectAsState(null)
-            binding.uploadStateCard.visible(uploadState.value != null)
+            binding.uploadStateContainer.visible(uploadState.value != null)
+
+            binding.uploadAnimation.visible(uploadState.value?.error == null)
+            binding.uploadRetryIcon.visible(uploadState.value?.error != null)
 
             if (uploadState.value?.error != null) {
+                binding.uploadStateCard.swipeToDismiss {
+                    binding.uploadStateContainer.visible(false)
+                    // TODO: Clear local data 
+                }
                 binding.uploadStateCard.setOnClickListener {
                     // TODO: Invoke retry mechanism
                 }
-                binding.uploadAnimation.visible(false)
-                binding.uploadRetryIcon.visible(true)
-            } else {
+            } else if (uploadState.value?.isSuccess == true) {
+                // TODO: Navigate to other screens should hide the container. 
+                binding.uploadStateCard.swipeToDismiss {
+                    binding.uploadStateContainer.visible(false)
+                }
                 uploadState.value?.device?.let { device ->
                     binding.uploadStateCard.setOnClickListener {
                         navigator.showStationSettings(context, device)
+                        binding.uploadStateContainer.visible(false)
                     }
                 }
-                binding.uploadRetryIcon.visible(false)
-                binding.uploadAnimation.visible(true)
-            }
-
-            if (uploadState.value?.isSuccess == true) {
                 binding.uploadAnimation.setAnimation(R.raw.anim_upload_success)
             } else if (uploadState.value?.progress == 0) {
                 binding.uploadAnimation.setAnimation(R.raw.anim_uploading)
