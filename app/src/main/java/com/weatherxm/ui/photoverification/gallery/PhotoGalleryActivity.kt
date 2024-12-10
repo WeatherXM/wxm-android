@@ -2,6 +2,7 @@ package com.weatherxm.ui.photoverification.gallery
 
 import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import coil.compose.AsyncImage
 import coil.load
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_FROM_CLAIMING
@@ -40,8 +42,13 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.util.ImageFileHelper.compressImageFile
+import com.weatherxm.util.ImageFileHelper.copyExifMetadata
+import com.weatherxm.util.ImageFileHelper.copyInputStreamToFile
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
@@ -51,6 +58,8 @@ class PhotoGalleryActivity : BaseActivity() {
         const val MIN_PHOTOS = 2
         const val MAX_PHOTOS = 6
     }
+
+    private val uploadObserverService: GlobalUploadObserverService by inject()
 
     private lateinit var binding: ActivityPhotoGalleryBinding
 
@@ -118,22 +127,47 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         binding.uploadBtn.setOnClickListener {
-            // STOPSHIP: Revert this before merging.
-            navigator.openShareImages(this, model.getUrisOfLocalPhotos(this))
+            ActionDialogFragment
+                .Builder(
+                    title = getString(R.string.upload_your_photos),
+                    message = getString(R.string.upload_your_photos_dialog_message),
+                    negative = getString(R.string.action_back)
+                )
+                .onPositiveClick(getString(R.string.action_upload)) {
+                    /** STOPSHIP: Comment out the below, for testing purposes.
+                     * Also need to be done with Coroutines and NOT on main thread!!!
+                     */
+                    val files = mutableListOf<File>()
+                    model.photos.forEachIndexed { index, stationPhoto ->
+                        if (!stationPhoto.localPath.isNullOrEmpty()) {
+                            val file = File(cacheDir, "img$index.jpeg")
+                            val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
+                            file.copyInputStreamToFile(compressImageFile(imageBitmap))
+                            copyExifMetadata(stationPhoto.localPath, file.path)
+                            files.add(file)
+                        }
+                    }
 
-
-//            ActionDialogFragment
-//                .Builder(
-//                    title = getString(R.string.upload_your_photos),
-//                    message = getString(R.string.upload_your_photos_dialog_message),
-//                    negative = getString(R.string.action_back)
-//                )
-//                .onPositiveClick(getString(R.string.action_upload)) {
-//                    // TODO: Will be filled with the uploading mechanism
-//                    finish()
-//                }
-//                .build()
-//                .show(this)
+                    val uploadRequest =
+                        MultipartUploadRequest(this, "http://192.168.1.87:8008/api/upload")
+                            .setMethod("POST")
+                            .addParameter("bucket", "bucket")
+                            .addParameter("X-Amz-Algorithm", "X-Amz-Algorithm")
+                            .addParameter("X-Amz-Credential", "X-Amz-Credential")
+                            .addParameter("X-Amz-Date", "X-Amz-Date")
+                            .addParameter("X-Amz-Security-Token", "X-Amz-Security-Token")
+                            .addParameter("key", "key")
+                            .addParameter("Policy", "Policy")
+                            .addParameter("X-Amz-Signature", "X-Amz-Signature")
+                    files.forEach {
+                        uploadRequest.addFileToUpload(it.path, it.name)
+                    }
+                    uploadObserverService.setDevice(model.device)
+                    uploadRequest.startUpload()
+                    finish()
+                }
+                .build()
+                .show(this)
         }
 
         binding.instructionsBtn.setOnClickListener {

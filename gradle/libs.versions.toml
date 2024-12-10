@@ -56,6 +56,7 @@ okhttp-bom = "4.12.0"
 retrofit = "2.11.0"
 retromock = "1.1.1"
 timber = "5.0.1"
+upload-service = "4.9.3"
 
 # Plugins
 android-gradle-plugin = "8.7.3"
@@ -148,6 +149,8 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 retromock = { module = "co.infinum:retromock", version.ref = "retromock" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+upload-service = { module = "net.gotev:uploadservice", version.ref = "upload-service" }
+upload-service-okhttp = { module = "net.gotev:uploadservice-okhttp", version.ref = "upload-service" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
