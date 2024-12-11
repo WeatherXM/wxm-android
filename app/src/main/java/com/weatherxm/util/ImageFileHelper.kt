@@ -1,7 +1,11 @@
 package com.weatherxm.util
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import com.weatherxm.ui.common.Contracts.FILE_PROVIDER_AUTHORITY
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -56,4 +60,7 @@ object ImageFileHelper {
         )
         newExifInterface.saveAttributes()
     }
+
+    fun File.getUriForFile(context: Context): Uri =
+        FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, this)
 }

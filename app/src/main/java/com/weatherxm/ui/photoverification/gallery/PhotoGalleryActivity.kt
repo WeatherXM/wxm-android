@@ -239,9 +239,6 @@ class PhotoGalleryActivity : BaseActivity() {
                     .build()
                     .show(this)
             } else {
-                selectedPhoto.value?.localPath?.let { path ->
-                    File(path).delete()
-                }
                 model.deletePhoto(it)
                 selectedPhoto.value = null
             }
