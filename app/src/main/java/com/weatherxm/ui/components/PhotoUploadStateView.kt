@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.ui.common.UploadPhotosState
 
+@Suppress("FunctionNaming")
 @Composable
 fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
     Column(

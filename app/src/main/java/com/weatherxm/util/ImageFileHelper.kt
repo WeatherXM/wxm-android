@@ -15,6 +15,7 @@ import java.io.File
 import java.io.InputStream
 
 object ImageFileHelper {
+    @Suppress("MagicNumber", "TooGenericExceptionCaught")
     fun compressImageFile(bitmap: Bitmap): InputStream? {
         var quality = 100
         var inputStream: InputStream? = null
@@ -26,11 +27,9 @@ object ImageFileHelper {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
                 bufferSize = byteArrayOutputStream.size()
                 quality -= 10
-                Timber.d("[IMAGE COMPRESSING] Quality: $quality -> Size in KB: ${bufferSize / 1000}")
+                Timber.d("[IMAGE COMPRESSING] Quality: $quality -> Size (KB): ${bufferSize / 1000}")
             } while (bufferSize > 1024 * 1024)
 
-            byteArrayOutputStream.reset()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
             inputStream = ByteArrayInputStream(byteArrayOutputStream.toByteArray())
             byteArrayOutputStream.close()
         } catch (e: Exception) {
