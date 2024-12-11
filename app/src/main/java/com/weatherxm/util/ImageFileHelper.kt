@@ -3,9 +3,11 @@ package com.weatherxm.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import com.weatherxm.ui.common.Contracts.FILE_PROVIDER_AUTHORITY
+import com.weatherxm.ui.common.UIDevice
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -63,4 +65,22 @@ object ImageFileHelper {
 
     fun File.getUriForFile(context: Context): Uri =
         FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, this)
+
+    fun deleteAllStationPhotos(context: Context?, device: UIDevice?) {
+        val directory = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        if (device == null) {
+            directory?.deleteRecursively()
+        } else {
+            directory?.listFiles()?.forEach {
+                if (it.name.startsWith(device.normalizedName())) {
+                    it.deleteRecursively()
+                }
+            }
+            context?.cacheDir?.listFiles()?.forEach {
+                if (it.name.startsWith("img")) {
+                    it.delete()
+                }
+            }
+        }
+    }
 }

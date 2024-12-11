@@ -34,6 +34,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.PhotoUploadState
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.ImageFileHelper.deleteAllStationPhotos
 import com.weatherxm.util.NumberUtils.formatTokens
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -145,7 +146,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             if (uploadState.value?.error != null) {
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
-                    // TODO: Clear local data 
+                    deleteAllStationPhotos(context, uploadState.value?.device)
                 }
                 binding.uploadStateCard.setOnClickListener {
                     // TODO: Invoke retry mechanism
