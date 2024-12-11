@@ -48,6 +48,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private lateinit var dialogOverlay: AlertDialog
 
     private val uploadObserverService: GlobalUploadObserverService by inject()
+    private var removeUploadStateOnPause = false
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
@@ -135,6 +136,13 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         dialogOverlay = MaterialAlertDialogBuilder(requireContext()).create()
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (removeUploadStateOnPause) {
+            binding.uploadStateContainer.visible(false)
+        }
+    }
+
     private fun initAndObserveUploadState() {
         binding.uploadStateView.setContent {
             val uploadState = uploadObserverService.getUploadPhotosState().collectAsState(null)
@@ -152,7 +160,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     // TODO: Invoke retry mechanism
                 }
             } else if (uploadState.value?.isSuccess == true) {
-                // TODO: Navigate to other screens should hide the container. 
+                removeUploadStateOnPause = true
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
                 }
