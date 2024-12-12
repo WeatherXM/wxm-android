@@ -153,7 +153,9 @@ class PhotoGalleryActivity : BaseActivity() {
             Thumbnails()
         }
 
-        getCameraPermissions()
+        if (model.photos.isEmpty()) {
+            getCameraPermissions()
+        }
     }
 
     override fun onResume() {
@@ -264,10 +266,8 @@ class PhotoGalleryActivity : BaseActivity() {
         val photos = remember { model.onPhotos }
         binding.emptyPhotosText.visible(photos.isEmpty())
         binding.selectedPhoto.visible(photos.isNotEmpty())
-        if (selectedPhoto.value == null) {
-            selectedPhoto.value = photos.firstOrNull()?.apply {
-                binding.selectedPhoto.load(remotePath ?: localPath)
-            }
+        selectedPhoto.value = photos.lastOrNull()?.apply {
+            binding.selectedPhoto.load(remotePath ?: localPath)
         }
 
         LazyRow(
