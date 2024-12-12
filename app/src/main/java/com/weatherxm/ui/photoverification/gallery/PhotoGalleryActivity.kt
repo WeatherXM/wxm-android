@@ -154,7 +154,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         if (model.photos.isEmpty()) {
-            getCameraPermissions()
+            binding.addPhotoBtn.performClick()
         }
     }
 
