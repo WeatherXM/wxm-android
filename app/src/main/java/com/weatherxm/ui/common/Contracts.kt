@@ -1,5 +1,7 @@
 package com.weatherxm.ui.common
 
+import com.weatherxm.BuildConfig
+
 object Contracts {
     const val EMPTY_VALUE = "?"
     const val DEGREES_MARK = "°"
@@ -34,5 +36,5 @@ object Contracts {
     const val ARG_INSTRUCTIONS_ONLY = "instructions_only"
     const val ARG_PHOTOS = "photos"
     const val ARG_FROM_CLAIMING = "from_claiming"
-    const val FILE_PROVIDER_AUTHORITY = "com.weatherxm.app.fileprovider"
+    const val FILE_PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.fileprovider"
 }
