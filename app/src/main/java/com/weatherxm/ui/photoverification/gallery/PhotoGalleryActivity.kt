@@ -64,9 +64,10 @@ class PhotoGalleryActivity : BaseActivity() {
     private lateinit var binding: ActivityPhotoGalleryBinding
 
     private val model: PhotoGalleryViewModel by viewModel {
+        val stationPhotoUrls = intent.getStringArrayListExtra(Contracts.ARG_PHOTOS) ?: arrayListOf()
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
-            intent.getStringArrayListExtra(Contracts.ARG_PHOTOS),
+            stationPhotoUrls.map { StationPhoto(it, null) },
             intent.getBooleanExtra(ARG_FROM_CLAIMING, false)
         )
     }
@@ -112,6 +113,7 @@ class PhotoGalleryActivity : BaseActivity() {
         } else {
             binding.toolbar.setNavigationIcon(R.drawable.ic_back)
             binding.toolbar.setNavigationOnClickListener {
+                // TODO: Handle when to show this. And delete all if <2.
                 ActionDialogFragment
                     .Builder(
                         title = getString(R.string.exit_photo_verification),

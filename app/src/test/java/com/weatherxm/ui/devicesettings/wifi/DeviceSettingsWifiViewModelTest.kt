@@ -32,6 +32,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
 import com.weatherxm.ui.devicesettings.UIDeviceInfoItem
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
@@ -52,6 +53,7 @@ import java.time.format.DateTimeFormatter
 
 class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     val settingsUseCase = mockk<StationSettingsUseCase>()
+    val photosUseCase = mockk<DevicePhotoUseCase>()
     val userUseCase = mockk<UserUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -238,6 +240,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         viewModel = DeviceSettingsWifiViewModel(
             device,
             settingsUseCase,
+            photosUseCase,
             userUseCase,
             authUseCase,
             resources,

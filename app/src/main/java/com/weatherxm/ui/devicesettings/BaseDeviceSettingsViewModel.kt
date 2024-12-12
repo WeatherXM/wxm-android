@@ -11,12 +11,14 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.BatteryState
 import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.unmask
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,6 +28,7 @@ import timber.log.Timber
 abstract class BaseDeviceSettingsViewModel(
     var device: UIDevice,
     private val usecase: StationSettingsUseCase,
+    private val photosUseCase: DevicePhotoUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     protected val dispatcher: CoroutineDispatcher
@@ -34,11 +37,13 @@ abstract class BaseDeviceSettingsViewModel(
     private val onDeviceRemoved = MutableLiveData<Boolean>()
     private val onError = MutableLiveData<UIError>()
     protected val onLoading = MutableLiveData<Boolean>()
+    private val onPhotos = MutableLiveData<List<DevicePhoto>>()
 
     fun onEditNameChange(): LiveData<String> = onEditNameChange
     fun onDeviceRemoved(): LiveData<Boolean> = onDeviceRemoved
     fun onError(): LiveData<UIError> = onError
     fun onLoading(): LiveData<Boolean> = onLoading
+    fun onPhotos(): LiveData<List<DevicePhoto>> = onPhotos
 
     fun setOrClearFriendlyName(friendlyName: String?) {
         if (friendlyName == null) {
@@ -161,6 +166,14 @@ abstract class BaseDeviceSettingsViewModel(
                     resources.getString(R.string.battery_level_ok)
                 )
             )
+        }
+    }
+
+    suspend fun getDevicePhotos() {
+        photosUseCase.getDevicePhotos(device.id).onRight {
+            onPhotos.postValue(it)
+        }.onLeft {
+            Timber.e("Error when trying to get device photos: $it")
         }
     }
 

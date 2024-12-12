@@ -8,6 +8,7 @@ import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -95,6 +96,10 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             finish()
         }
 
+        model.onPhotos().observe(this) {
+            onPhotos(it)
+        }
+
         binding.changeStationNameBtn.setOnClickListener {
             onChangeStationName()
         }
@@ -112,6 +117,22 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }
 
         setupStationLocation()
+    }
+
+    private fun onPhotos(devicePhotos: List<DevicePhoto>) {
+        if (devicePhotos.isEmpty()) {
+            binding.devicePhotosCard.onEmpty()
+        } else {
+            binding.devicePhotosCard.onPhotos(devicePhotos)
+        }
+        binding.devicePhotosCard.setOnClickListener {
+            val photos = arrayListOf<String>()
+            devicePhotos.forEach {
+                photos.add(it.url)
+            }
+            navigator.showPhotoGallery(this, model.device, photos, false)
+        }
+        binding.devicePhotosCard.visible(true)
     }
 
     private fun setupRecyclers() {

@@ -7,6 +7,7 @@ import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.databinding.ActivityDeviceSettingsHeliumBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
@@ -92,6 +93,10 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             finish()
         }
 
+        model.onPhotos().observe(this) {
+            onPhotos(it)
+        }
+
         binding.changeStationNameBtn.setOnClickListener {
             onChangeStationName()
         }
@@ -117,6 +122,22 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         }
 
         setupStationLocation()
+    }
+
+    private fun onPhotos(devicePhotos: List<DevicePhoto>) {
+        if (devicePhotos.isEmpty()) {
+            binding.devicePhotosCard.onEmpty()
+        } else {
+            binding.devicePhotosCard.onPhotos(devicePhotos)
+        }
+        binding.devicePhotosCard.setOnClickListener {
+            val photos = arrayListOf<String>()
+            devicePhotos.forEach {
+                photos.add(it.url)
+            }
+            navigator.showPhotoGallery(this, model.device, photos, false)
+        }
+        binding.devicePhotosCard.visible(true)
     }
 
     private fun setupRecyclers() {
