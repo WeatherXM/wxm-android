@@ -158,7 +158,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     deleteAllStationPhotos(context, uploadState.value?.device)
                 }
                 binding.uploadStateCard.setOnClickListener {
-                    // TODO: Invoke retry mechanism
+                    // TODO: STOPSHIP: Invoke retry mechanism
                 }
             } else if (uploadState.value?.isSuccess == true) {
                 removeUploadStateOnPause = true

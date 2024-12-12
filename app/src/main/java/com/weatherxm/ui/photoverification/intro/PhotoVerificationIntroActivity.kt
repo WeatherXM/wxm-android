@@ -51,6 +51,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                     },
                     onTakePhoto = {
                         navigator.showPhotoGallery(
+                            null,
                             this@PhotoVerificationIntroActivity,
                             device,
                             arrayListOf(),

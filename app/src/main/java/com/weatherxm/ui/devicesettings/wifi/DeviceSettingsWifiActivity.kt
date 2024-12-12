@@ -11,17 +11,20 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
 import com.weatherxm.ui.common.BundleName
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.common.RewardSplitsData
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.parcelableList
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
@@ -51,6 +54,21 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             if (it.resultCode == Activity.RESULT_OK && device != null) {
                 model.device = device
                 setupStationLocation(true)
+            }
+        }
+
+    // Register the launcher for the photo gallery activity and wait for a possible result
+    private val photoGalleryLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            /**
+             * Some changes happened in the photos so we need to fetch them again or delete all of
+             * them if the user left the screen with <2 photos left.
+             */
+            val shouldDeleteAllPhotos =
+                it.data?.getBooleanExtra(Contracts.ARG_DELETE_ALL_PHOTOS, false)
+            val photos = it.data?.parcelableList<StationPhoto>(Contracts.ARG_PHOTOS)
+            if (it.resultCode == Activity.RESULT_OK) {
+                model.onPhotosChanged(shouldDeleteAllPhotos, photos)
             }
         }
 
@@ -130,7 +148,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             devicePhotos.forEach {
                 photos.add(it.url)
             }
-            navigator.showPhotoGallery(this, model.device, photos, false)
+            navigator.showPhotoGallery(photoGalleryLauncher, this, model.device, photos, false)
         }
         binding.devicePhotosCard.visible(true)
     }

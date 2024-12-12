@@ -2,9 +2,11 @@ package com.weatherxm.ui.photoverification.gallery
 
 import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -38,6 +40,7 @@ import com.weatherxm.ui.common.disable
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.enable
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -97,35 +100,16 @@ class PhotoGalleryActivity : BaseActivity() {
 
         if (model.fromClaiming) {
             binding.toolbar.setNavigationIcon(R.drawable.ic_close)
-            binding.toolbar.setNavigationOnClickListener {
-                ActionDialogFragment
-                    .Builder(
-                        title = getString(R.string.exit_photo_verification),
-                        message = getString(R.string.exit_photo_verification_message),
-                        negative = getString(R.string.action_back)
-                    )
-                    .onPositiveClick(getString(R.string.action_exit)) {
-                        finish()
-                    }
-                    .build()
-                    .show(this)
-            }
         } else {
             binding.toolbar.setNavigationIcon(R.drawable.ic_back)
-            binding.toolbar.setNavigationOnClickListener {
-                // TODO: Handle when to show this. And delete all if <2.
-                ActionDialogFragment
-                    .Builder(
-                        title = getString(R.string.exit_photo_verification),
-                        message = getString(R.string.exit_photo_verification_start_over),
-                        negative = getString(R.string.action_back)
-                    )
-                    .onPositiveClick(getString(R.string.action_exit)) {
-                        finish()
-                    }
-                    .build()
-                    .show(this)
-            }
+        }
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        onBackPressedDispatcher.addCallback {
+            onExit()
         }
 
         binding.uploadBtn.setOnClickListener {
@@ -166,6 +150,7 @@ class PhotoGalleryActivity : BaseActivity() {
                     }
                     uploadObserverService.setDevice(model.device)
                     uploadRequest.startUpload()
+                    setResult(false)
                     finish()
                 }
                 .build()
@@ -205,6 +190,46 @@ class PhotoGalleryActivity : BaseActivity() {
         super.onResume()
     }
 
+    private fun onExit() {
+        if (model.fromClaiming) {
+            ActionDialogFragment
+                .Builder(
+                    title = getString(R.string.exit_photo_verification),
+                    message = getString(R.string.exit_photo_verification_message),
+                    negative = getString(R.string.action_back)
+                )
+                .onPositiveClick(getString(R.string.action_exit)) {
+                    finish()
+                }
+                .build()
+                .show(this)
+        } else {
+            if (model.photos.size < 2) {
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.exit_photo_verification),
+                        message = getString(R.string.exit_photo_verification_start_over),
+                        negative = getString(R.string.action_back)
+                    )
+                    .onPositiveClick(getString(R.string.action_exit)) {
+                        setResult(true)
+                        finish()
+                    }
+                    .build()
+                    .show(this)
+            } else {
+                finish()
+            }
+        }
+    }
+
+    private fun setResult(shouldDeleteAll: Boolean) {
+        val intent = Intent()
+            .putExtra(Contracts.ARG_DELETE_ALL_PHOTOS, shouldDeleteAll)
+            .putParcelableList(Contracts.ARG_PHOTOS, model.photos)
+        setResult(RESULT_OK, intent)
+    }
+
     private fun onPhotosNumber(photosNumber: Int) {
         binding.addPhotoBtn.visible(photosNumber < MAX_PHOTOS)
         binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS
@@ -235,6 +260,7 @@ class PhotoGalleryActivity : BaseActivity() {
                         negative = getString(R.string.action_back)
                     )
                     .onPositiveClick(getString(R.string.action_delete)) {
+                        setResult(false)
                         model.deletePhoto(it)
                         selectedPhoto.value = null
                     }

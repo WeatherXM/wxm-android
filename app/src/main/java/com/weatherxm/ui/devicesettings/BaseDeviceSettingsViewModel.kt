@@ -15,6 +15,7 @@ import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.unmask
@@ -24,7 +25,9 @@ import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 
+@Suppress("TooManyFunctions")
 abstract class BaseDeviceSettingsViewModel(
     var device: UIDevice,
     private val usecase: StationSettingsUseCase,
@@ -174,6 +177,29 @@ abstract class BaseDeviceSettingsViewModel(
             onPhotos.postValue(it)
         }.onLeft {
             Timber.e("Error when trying to get device photos: $it")
+        }
+    }
+
+    fun onPhotosChanged(shouldDeleteAllPhotos: Boolean?, photos: ArrayList<StationPhoto>?) {
+        viewModelScope.launch(dispatcher) {
+            onLoading.postValue(true)
+            if (shouldDeleteAllPhotos == true) {
+                deleteAllPhotos(photos)
+            } else {
+                getDevicePhotos()
+            }
+            onLoading.postValue(false)
+        }
+    }
+
+    private fun deleteAllPhotos(photos: ArrayList<StationPhoto>?) {
+        photos?.forEach { photo ->
+            photo.localPath?.let {
+                File(it).delete()
+            }
+            photo.remotePath?.let {
+                // TODO: STOPSHIP: Call the delete endpoint for each one of them
+            }
         }
     }
 

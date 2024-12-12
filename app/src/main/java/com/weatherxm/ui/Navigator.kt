@@ -522,19 +522,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     }
 
     fun showPhotoGallery(
-        context: Context?,
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context,
         device: UIDevice,
         photos: ArrayList<String>,
         fromClaiming: Boolean
     ) {
-        context?.let {
-            it.startActivity(
-                Intent(it, PhotoGalleryActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_DEVICE, device)
-                    .putStringArrayListExtra(ARG_PHOTOS, photos)
-                    .putExtra(ARG_FROM_CLAIMING, fromClaiming)
-            )
+        val intent = Intent(context, PhotoGalleryActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_DEVICE, device)
+            .putStringArrayListExtra(ARG_PHOTOS, photos)
+            .putExtra(ARG_FROM_CLAIMING, fromClaiming)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
         }
     }
 
