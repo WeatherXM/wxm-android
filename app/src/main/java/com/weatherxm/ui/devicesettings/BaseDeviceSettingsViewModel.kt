@@ -173,10 +173,12 @@ abstract class BaseDeviceSettingsViewModel(
     }
 
     suspend fun getDevicePhotos() {
-        photosUseCase.getDevicePhotos(device.id).onRight {
-            onPhotos.postValue(it)
-        }.onLeft {
-            Timber.e("Error when trying to get device photos: $it")
+        if(device.isOwned()) {
+            photosUseCase.getDevicePhotos(device.id).onRight {
+                onPhotos.postValue(it)
+            }.onLeft {
+                Timber.e("Error when trying to get device photos: $it")
+            }
         }
     }
 
