@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.collectAsState
 import androidx.core.view.isVisible
+import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -171,8 +172,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     }
                 }
                 binding.uploadAnimation.setAnimation(R.raw.anim_upload_success)
+                binding.uploadAnimation.repeatCount = 0
             } else if (uploadState.value?.progress == 0) {
                 binding.uploadAnimation.setAnimation(R.raw.anim_uploading)
+                binding.uploadAnimation.repeatCount = INFINITE
             }
 
             uploadState.value?.let {
