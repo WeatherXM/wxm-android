@@ -525,6 +525,7 @@ dependencies {
     // Image Loader
     implementation(libs.coil.core)
     implementation(libs.coil.gif)
+    implementation(libs.coil.compose)
     implementation(libs.coil.network)
 
     // Chucker - HTTP Inspector

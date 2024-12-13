@@ -100,7 +100,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     private fun setListeners() {
         binding.photoVerificationBtn.setOnClickListener {
-            navigator.showPhotoVerificationIntro(this)
+            navigator.showPhotoVerificationIntro(this, model.device)
             finish()
         }
         binding.skipAndGoToStationBtn.setOnClickListener {

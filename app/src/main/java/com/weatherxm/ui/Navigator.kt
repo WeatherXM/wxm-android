@@ -8,10 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -40,14 +42,17 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_FROM_CLAIMING
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
+import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
+import com.weatherxm.ui.common.Contracts.FILE_PROVIDER_AUTHORITY
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
@@ -78,6 +83,7 @@ import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
+import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
@@ -90,6 +96,7 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import timber.log.Timber
+import java.io.File
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
@@ -229,11 +236,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     }
 
     fun openShare(context: Context, text: String) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+        with(Intent()) {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+            context.startActivity(Intent.createChooser(this, context.getString(R.string.share)))
+        }
+    }
+
+    fun openShareImages(context: Context, photoUris: ArrayList<Uri>) {
+        with(Intent()) {
+            action = Intent.ACTION_SEND_MULTIPLE
+            type = "image/*"
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, photoUris)
+            context.startActivity(Intent.createChooser(this, context.getString(R.string.share)))
+        }
     }
 
     fun showDeleteAccountSurvey(
@@ -490,12 +507,34 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun showPhotoVerificationIntro(context: Context?, instructionsOnly: Boolean = false) {
+    fun showPhotoVerificationIntro(
+        context: Context?,
+        device: UIDevice,
+        instructionsOnly: Boolean = false
+    ) {
         context?.let {
             it.startActivity(
                 Intent(it, PhotoVerificationIntroActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
                     .putExtra(ARG_INSTRUCTIONS_ONLY, instructionsOnly)
+            )
+        }
+    }
+
+    fun showPhotoGallery(
+        context: Context?,
+        device: UIDevice,
+        photos: ArrayList<String>,
+        fromClaiming: Boolean
+    ) {
+        context?.let {
+            it.startActivity(
+                Intent(it, PhotoGalleryActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
+                    .putStringArrayListExtra(ARG_PHOTOS, photos)
+                    .putExtra(ARG_FROM_CLAIMING, fromClaiming)
             )
         }
     }
@@ -591,6 +630,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Timber.d(e, "Could not open support center.")
                 it.toast(R.string.error_cannot_open_support_center)
             }
+        }
+    }
+
+    fun openCamera(launcher: ActivityResultLauncher<Intent>, context: Context, destFile: File) {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.putExtra(
+                MediaStore.EXTRA_OUTPUT,
+                FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, destFile)
+            )
+            launcher.launch(takePictureIntent)
         }
     }
 

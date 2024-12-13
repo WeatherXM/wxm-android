@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -238,6 +239,19 @@ fun ImageView.loadImage(imageLoader: ImageLoader, data: Any?) {
             .target(this)
             .build()
     )
+}
+
+fun ImageButton.enable() {
+    alpha = 1.0F
+    isEnabled = true
+    isClickable = true
+}
+
+@Suppress("MagicNumber")
+fun ImageButton.disable() {
+    alpha = 0.4F
+    isEnabled = false
+    isClickable = false
 }
 
 @Suppress("EmptyFunctionBlock")
