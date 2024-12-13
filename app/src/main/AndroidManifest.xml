@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="DiscouragedApi">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         tools:node="replace" />
@@ -33,6 +37,15 @@
         android:theme="@style/Theme.WeatherXM"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute,LockedOrientationActivity">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
@@ -301,6 +314,14 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+
+        <!-- configChanges is needed in the PhotoGalleryActivity to have the ability
+            to take photos in landscape without recreating the activity -->
+        <activity
+            android:name="com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity"
+            android:configChanges="screenSize|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
