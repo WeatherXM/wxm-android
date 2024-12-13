@@ -171,6 +171,14 @@ data class UIDevice(
     fun isHelium() = connectivity == "helium"
     fun isWifi() = connectivity == "wifi"
     fun isCellular() = connectivity == "cellular"
+
+    fun normalizedName(): String {
+        return if (!isEmpty()) {
+            name.replace(" ", "-").lowercase()
+        } else {
+            String.empty()
+        }
+    }
 }
 
 @Keep
@@ -612,6 +620,13 @@ data class PhotoExample(
     @DrawableRes val image: Int,
     val feedbackResId: List<Int>,
     val isGoodExample: Boolean
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class StationPhoto(
+    val remotePath: String?,
+    val localPath: String?
 )
 
 @Keep
