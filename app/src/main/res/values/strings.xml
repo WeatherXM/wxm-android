@@ -23,6 +23,7 @@
     <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
     <string name="action_retry_updating">Retry Updating</string>
+    <string name="action_retry_upload">Retry upload</string>
     <string name="action_deny">Deny</string>
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
@@ -696,5 +697,6 @@
     <string name="once_completed_photos_will_appear_here">Once completed, the photos will appear here!</string>
     <string name="cancel_upload">Cancel upload</string>
     <string name="yes_cancel">Yes, cancel</string>
-    <string name="cancel_upload_message">Are you sure you want to cancel the upload and lose the photos?\nYou will need to retake them. </string>
+    <string name="cancel_upload_message">Are you sure you want to cancel the upload and lose the photos?\nYou will need to retake them.</string>
+    <string name="upload_unexpected_error">We faced an unexpected error while uploading your photos.</string>
 </resources>

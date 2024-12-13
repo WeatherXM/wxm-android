@@ -55,9 +55,9 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
                     binding.inProgressText.visible(false)
                     binding.inProgressUploadState.visible(false)
                     onError()
-                    // TODO: Show error card here after onError is implemented
+                    binding.errorCard.visible(true)
                 } else {
-                    // TODO: Hide error card
+                    binding.errorCard.visible(false)
                 }
                 if (it.isSuccess) {
                     onSuccess()
@@ -67,7 +67,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         }
     }
 
-    fun setOnClickListener(onClick: () -> Unit, onCancelUpload: () -> Unit) {
+    fun setOnClickListener(onClick: () -> Unit, onCancelUpload: () -> Unit, onRetry: () -> Unit) {
         binding.startPhotoVerificationBtn.setOnClickListener {
             onClick()
         }
@@ -79,6 +79,9 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         }
         binding.cancelUploadBtn.setOnClickListener {
             onCancelUpload()
+        }
+        binding.retryBtn.setOnClickListener {
+            onRetry()
         }
     }
 

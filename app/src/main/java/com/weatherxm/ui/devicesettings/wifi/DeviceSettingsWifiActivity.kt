@@ -139,7 +139,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             onError = {
                 // Trigger a refresh on the photos through the API
                 model.onPhotosChanged(false, null)
-                // TODO: Trigger retry mechanism
+                // TODO: STOPSHIP:  Trigger retry mechanism
             },
             onSuccess = {
                 // Trigger a refresh on the photos through the API
@@ -170,10 +170,13 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     .onPositiveClick(getString(R.string.yes_cancel)) {
                         // Trigger a refresh on the photos through the API
                         model.onPhotosChanged(false, null)
-                        // TODO: Cancel the current upload
+                        // TODO: STOPSHIP: Cancel the current upload
                     }
                     .build()
                     .show(this)
+            },
+            onRetry = {
+                // TODO: STOPSHIP:  Trigger retry mechanism
             }
         )
         binding.devicePhotosCard.visible(true)

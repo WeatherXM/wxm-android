@@ -15,38 +15,44 @@
         app:cardElevation="@dimen/elevation_small"
         app:contentPaddingTop="0dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal_to_large"
-                android:text="@string/photo_verification"
-                android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/layer2"
-                app:cardCornerRadius="8dp"
-                app:contentPadding="@dimen/padding_small"
-                app:layout_constraintBottom_toBottomOf="@id/title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title">
-
-                <ImageView
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_new"
-                    app:tint="@color/colorPrimary" />
+                    android:layout_marginTop="@dimen/margin_normal_to_large"
+                    android:text="@string/photo_verification"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/layer2"
+                    app:cardCornerRadius="8dp"
+                    app:contentPadding="@dimen/padding_small"
+                    app:layout_constraintBottom_toBottomOf="@id/title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/title">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_new"
+                        app:tint="@color/colorPrimary" />
+
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/emptyText"
@@ -56,9 +62,7 @@
                 android:text="@string/photo_verification_empty_station_settings"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/colorPrimaryVariant"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/photosText"
@@ -69,8 +73,6 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/colorPrimaryVariant"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title"
                 tools:visibility="visible" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -81,9 +83,7 @@
                 android:text="@string/once_completed_photos_will_appear_here"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/colorPrimaryVariant"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/photosContainer"
@@ -93,7 +93,6 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/photosText"
                 tools:visibility="visible">
 
                 <com.google.android.material.card.MaterialCardView
@@ -150,8 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/inProgressText" />
+                android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancelUploadBtn"
@@ -160,8 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/cancel_upload"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/inProgressUploadState" />
+                android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/startPhotoVerificationBtn"
@@ -169,9 +166,59 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/start_photo_verification"
+                android:visibility="gone" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/errorCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/emptyText" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:cardBackgroundColor="@color/errorTint"
+                app:layout_constraintTop_toBottomOf="@id/startPhotoVerificationBtn"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/errorIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_error_hex_filled"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/error" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/errorText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small_to_normal"
+                        android:text="@string/upload_unexpected_error"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:textColor="@color/colorPrimaryVariant"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/errorIcon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/retryBtn"
+                        style="@style/Widget.WeatherXM.TextButton.Subtle"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:text="@string/action_retry_upload"
+                        app:layout_constraintStart_toEndOf="@id/errorIcon"
+                        app:layout_constraintTop_toBottomOf="@id/errorText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
