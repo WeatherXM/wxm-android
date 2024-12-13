@@ -180,11 +180,11 @@ abstract class BaseDeviceSettingsViewModel(
         }
     }
 
-    fun onPhotosChanged(shouldDeleteAllPhotos: Boolean?, photos: ArrayList<StationPhoto>?) {
+    fun onPhotosChanged(shouldDeleteAllPhotos: Boolean?, photosToDelete: ArrayList<StationPhoto>?) {
         viewModelScope.launch(dispatcher) {
             onLoading.postValue(true)
             if (shouldDeleteAllPhotos == true) {
-                deleteAllPhotos(photos)
+                deleteAllPhotos(photosToDelete)
             } else {
                 getDevicePhotos()
             }

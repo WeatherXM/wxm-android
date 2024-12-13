@@ -28,6 +28,7 @@ import com.weatherxm.ui.common.parcelableList
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
@@ -134,22 +135,47 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             binding.contactSupportBtn.text = getString(R.string.see_something_wrong_contact_support)
         }
 
+        binding.devicePhotosCard.initProgressView(
+            onError = {
+                // Trigger a refresh on the photos through the API
+                model.onPhotosChanged(false, null)
+                // TODO: Trigger retry mechanism
+            },
+            onSuccess = {
+                // Trigger a refresh on the photos through the API
+                model.onPhotosChanged(false, null)
+            }
+        )
+
         setupStationLocation()
     }
 
     private fun onPhotos(devicePhotos: List<DevicePhoto>) {
-        if (devicePhotos.isEmpty()) {
-            binding.devicePhotosCard.onEmpty()
-        } else {
-            binding.devicePhotosCard.onPhotos(devicePhotos)
-        }
-        binding.devicePhotosCard.setOnClickListener {
-            val photos = arrayListOf<String>()
-            devicePhotos.forEach {
-                photos.add(it.url)
+        binding.devicePhotosCard.updateUI(devicePhotos)
+        binding.devicePhotosCard.setOnClickListener(
+            onClick = {
+                val photos = arrayListOf<String>()
+                devicePhotos.forEach {
+                    photos.add(it.url)
+                }
+                navigator.showPhotoGallery(photoGalleryLauncher, this, model.device, photos, false)
+            },
+            onCancelUpload = {
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.cancel_upload),
+                        message = getString(R.string.cancel_upload_message),
+                        negative = getString(R.string.action_back)
+                    )
+                    .onPositiveClick(getString(R.string.yes_cancel)) {
+                        // Trigger a refresh on the photos through the API
+                        model.onPhotosChanged(false, null)
+                        // TODO: Cancel the current upload
+                    }
+                    .build()
+                    .show(this)
             }
-            navigator.showPhotoGallery(photoGalleryLauncher, this, model.device, photos, false)
-        }
+        )
         binding.devicePhotosCard.visible(true)
     }
 

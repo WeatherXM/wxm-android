@@ -275,12 +275,14 @@ class PhotoGalleryActivity : BaseActivity() {
 
     @Suppress("MagicNumber")
     private fun onCameraDenied() {
-        binding.deletePhotoBtn.disable()
-        binding.instructionsBtn.alpha = 0.4F
-        binding.instructionsBtn.isEnabled = false
-        binding.addPhotoBtn.disable()
-        binding.emptyPhotosText.visible(false)
-        binding.permissionsContainer.visible(true)
+        if(model.photos.isEmpty()) {
+            binding.deletePhotoBtn.disable()
+            binding.instructionsBtn.alpha = 0.4F
+            binding.instructionsBtn.isEnabled = false
+            binding.addPhotoBtn.disable()
+            binding.emptyPhotosText.visible(false)
+            binding.permissionsContainer.visible(true)
+        }
     }
 
     private fun onPermissionsGivenFromSettings() {

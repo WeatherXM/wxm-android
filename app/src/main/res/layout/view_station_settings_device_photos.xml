@@ -73,6 +73,18 @@
                 app:layout_constraintTop_toBottomOf="@id/title"
                 tools:visibility="visible" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/inProgressText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/once_completed_photos_will_appear_here"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/colorPrimaryVariant"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+
             <LinearLayout
                 android:id="@+id/photosContainer"
                 android:layout_width="match_parent"
@@ -132,6 +144,24 @@
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/inProgressUploadState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/inProgressText" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelUploadBtn"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/cancel_upload"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/inProgressUploadState" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/startPhotoVerificationBtn"

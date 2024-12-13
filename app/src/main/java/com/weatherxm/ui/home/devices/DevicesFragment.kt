@@ -146,39 +146,38 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     private fun initAndObserveUploadState() {
         binding.uploadStateView.setContent {
-            val uploadState = uploadObserverService.getUploadPhotosState().collectAsState(null)
-            binding.uploadStateContainer.visible(uploadState.value != null)
+            val uploadState =
+                uploadObserverService.getUploadPhotosState().collectAsState(null).value
+            binding.uploadStateContainer.visible(uploadState != null)
 
-            binding.uploadAnimation.visible(uploadState.value?.error == null)
-            binding.uploadRetryIcon.visible(uploadState.value?.error != null)
+            binding.uploadAnimation.visible(uploadState?.error == null)
+            binding.uploadRetryIcon.visible(uploadState?.error != null)
 
-            if (uploadState.value?.error != null) {
+            if (uploadState?.error != null) {
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
-                    deleteAllStationPhotos(context, uploadState.value?.device)
+                    deleteAllStationPhotos(context, uploadState?.device)
                 }
                 binding.uploadStateCard.setOnClickListener {
                     // TODO: STOPSHIP: Invoke retry mechanism
                 }
-            } else if (uploadState.value?.isSuccess == true) {
+            } else if (uploadState?.isSuccess == true) {
                 removeUploadStateOnPause = true
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
                 }
-                uploadState.value?.device?.let { device ->
-                    binding.uploadStateCard.setOnClickListener {
-                        navigator.showStationSettings(context, device)
-                        binding.uploadStateContainer.visible(false)
-                    }
+                binding.uploadStateCard.setOnClickListener {
+                    navigator.showStationSettings(context, uploadState.device)
+                    binding.uploadStateContainer.visible(false)
                 }
                 binding.uploadAnimation.setAnimation(R.raw.anim_upload_success)
                 binding.uploadAnimation.repeatCount = 0
-            } else if (uploadState.value?.progress == 0) {
+            } else if (uploadState?.progress == 0) {
                 binding.uploadAnimation.setAnimation(R.raw.anim_uploading)
                 binding.uploadAnimation.repeatCount = INFINITE
             }
 
-            uploadState.value?.let {
+            uploadState?.let {
                 PhotoUploadState(it, true)
             }
         }

@@ -693,4 +693,8 @@
     <string name="start_photo_verification">Start Photo Verification</string>
     <string name="photo_verification_empty_station_settings">To ensure optimal performance and rewards, take a few quick photos of your station’s installation!</string>
     <string name="thanks_helping_see_photos">Thanks for helping us build a healthier network! Here you can see your photos.</string>
+    <string name="once_completed_photos_will_appear_here">Once completed, the photos will appear here!</string>
+    <string name="cancel_upload">Cancel upload</string>
+    <string name="yes_cancel">Yes, cancel</string>
+    <string name="cancel_upload_message">Are you sure you want to cancel the upload and lose the photos?\nYou will need to retake them. </string>
 </resources>
