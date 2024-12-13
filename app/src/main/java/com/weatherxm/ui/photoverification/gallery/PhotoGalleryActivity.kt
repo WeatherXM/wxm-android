@@ -118,18 +118,22 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         binding.uploadBtn.setOnClickListener {
-            ActionDialogFragment
-                .Builder(
-                    title = getString(R.string.upload_your_photos),
-                    message = getString(R.string.upload_your_photos_dialog_message),
-                    negative = getString(R.string.action_back)
-                )
-                .onPositiveClick(getString(R.string.action_upload)) {
-                    // TODO: Will be filled with the uploading mechanism
-                    finish()
-                }
-                .build()
-                .show(this)
+            // STOPSHIP: Revert this before merging.
+            navigator.openShareImages(this, model.getUrisOfLocalPhotos(this))
+
+
+//            ActionDialogFragment
+//                .Builder(
+//                    title = getString(R.string.upload_your_photos),
+//                    message = getString(R.string.upload_your_photos_dialog_message),
+//                    negative = getString(R.string.action_back)
+//                )
+//                .onPositiveClick(getString(R.string.action_upload)) {
+//                    // TODO: Will be filled with the uploading mechanism
+//                    finish()
+//                }
+//                .build()
+//                .show(this)
         }
 
         binding.instructionsBtn.setOnClickListener {
