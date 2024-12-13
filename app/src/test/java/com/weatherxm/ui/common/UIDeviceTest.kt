@@ -23,6 +23,7 @@ class UIDeviceTest : BehaviorSpec({
         every { device.createDeviceAlerts(any()) } answers { callOriginal() }
         every { device.hasErrors() } answers { callOriginal() }
         every { device.getLastCharsOfLabel() } answers { callOriginal() }
+        every { device.normalizedName() } answers { callOriginal() }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testDeviceRelation(
@@ -252,8 +253,23 @@ class UIDeviceTest : BehaviorSpec({
         }
         When("the label is valid") {
             every { device.label } returns "00:00:00"
-            then("return an the last 6 chars") {
+            then("return the last 6 chars") {
                 device.getLastCharsOfLabel() shouldBe "000000"
+            }
+        }
+    }
+
+    context("Get the normalized name") {
+        When("the name is empty") {
+
+            then("return an empty string") {
+                device.normalizedName() shouldBe String.empty()
+            }
+        }
+        When("the name is not empty") {
+            every { device.name } returns "My Weather Station"
+            then("return the correct normalized name") {
+                device.normalizedName() shouldBe "my-weather-station"
             }
         }
     }

@@ -128,7 +128,7 @@ class ClaimResultFragment : BaseFragment() {
                         }.show(this)
                     }
                     binding.photoVerificationBtn.setOnClickListener {
-                        navigator.showPhotoVerificationIntro(context)
+                        navigator.showPhotoVerificationIntro(context, device)
                         activity?.setResult(Activity.RESULT_OK)
                         activity?.finish()
                     }
