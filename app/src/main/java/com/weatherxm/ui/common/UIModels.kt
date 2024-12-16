@@ -16,6 +16,7 @@ import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
+import net.gotev.uploadservice.data.UploadInfo
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -633,6 +634,14 @@ data class StationPhoto(
 data class WeatherUnit(
     val type: WeatherUnitType,
     val unit: String
+)
+
+@Keep
+data class UploadPhotosState(
+    val device: UIDevice,
+    val progress: Int,
+    val isSuccess: Boolean,
+    val error: UploadInfo? = null
 )
 
 enum class RewardTimelineType {
