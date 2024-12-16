@@ -158,7 +158,17 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 devicePhotos.forEach {
                     photos.add(it.url)
                 }
-                navigator.showPhotoGallery(photoGalleryLauncher, this, model.device, photos, false)
+                if (photos.isEmpty()) {
+                    navigator.showPhotoVerificationIntro(this, model.device)
+                } else {
+                    navigator.showPhotoGallery(
+                        photoGalleryLauncher,
+                        this,
+                        model.device,
+                        photos,
+                        false
+                    )
+                }
             },
             onCancelUpload = {
                 ActionDialogFragment

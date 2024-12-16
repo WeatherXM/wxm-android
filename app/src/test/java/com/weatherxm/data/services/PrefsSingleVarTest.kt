@@ -6,6 +6,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_O
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BANNER_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_LAST_REMINDED_VERSION
+import com.weatherxm.data.services.CacheService.Companion.KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS
 import com.weatherxm.data.services.CacheService.Companion.KEY_WALLET_WARNING_DISMISSED_TIMESTAMP
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -109,6 +110,15 @@ class PrefsSingleVarTest(
             { prefEditor.putString(KEY_DISMISSED_INFO_BANNER_ID, infoBannerId) },
             { cacheService.getLastDismissedInfoBannerId() },
             { cacheService.setLastDismissedInfoBannerId(infoBannerId) }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "if the user has accepted the terms of photo verification",
+            true,
+            { sharedPref.getBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, false) },
+            { prefEditor.putBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, false) },
+            { cacheService.getPhotoVerificationAcceptedTerms() },
+            { cacheService.setPhotoVerificationAcceptedTerms(false) }
         )
     }
 

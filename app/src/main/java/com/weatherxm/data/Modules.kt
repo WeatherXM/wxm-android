@@ -196,6 +196,7 @@ import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
+import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
 import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
@@ -436,7 +437,7 @@ private val datasources = module {
         RemoteBannersDataSourceImpl(get(), get())
     }
     single<DevicePhotoDataSource> {
-        DevicePhotoDataSourceImpl(get())
+        DevicePhotoDataSourceImpl(get(), get())
     }
 }
 
@@ -1047,6 +1048,7 @@ private val viewmodels = module {
             fromClaiming = params.get()
         )
     }
+    viewModel { PhotoVerificationIntroViewModel(get()) }
 }
 
 val modules = listOf(
