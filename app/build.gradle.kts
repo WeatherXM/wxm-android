@@ -531,4 +531,8 @@ dependencies {
     // Chucker - HTTP Inspector
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
+
+    // Upload Service
+    implementation(libs.upload.service)
+    implementation(libs.upload.service.okhttp)
 }
