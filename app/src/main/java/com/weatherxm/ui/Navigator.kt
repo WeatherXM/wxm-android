@@ -13,7 +13,6 @@ import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -52,7 +51,6 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
-import com.weatherxm.ui.common.Contracts.FILE_PROVIDER_AUTHORITY
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
@@ -95,6 +93,7 @@ import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
+import com.weatherxm.util.ImageFileHelper.getUriForFile
 import timber.log.Timber
 import java.io.File
 import java.time.LocalDate
@@ -635,10 +634,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
 
     fun openCamera(launcher: ActivityResultLauncher<Intent>, context: Context, destFile: File) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.putExtra(
-                MediaStore.EXTRA_OUTPUT,
-                FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, destFile)
-            )
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, destFile.getUriForFile(context))
             launcher.launch(takePictureIntent)
         }
     }
