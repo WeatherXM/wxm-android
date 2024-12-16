@@ -9,12 +9,15 @@ import androidx.lifecycle.ViewModel
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.ImageFileHelper.getUriForFile
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 
 class PhotoGalleryViewModel(
     val device: UIDevice,
     val photos: MutableList<StationPhoto>,
-    val fromClaiming: Boolean
+    val fromClaiming: Boolean,
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val onPhotosNumber = MutableLiveData(photos.size)
     private val _onPhotos = mutableStateListOf<StationPhoto>().apply {
@@ -35,7 +38,7 @@ class PhotoGalleryViewModel(
 
     fun deletePhoto(photo: StationPhoto) {
         if (photos.firstOrNull { it.remotePath == photo.remotePath } != null) {
-            // TODO: Call the delete endpoint and post the new state on success
+            // TODO: STOPSHIP: Call the delete endpoint and post the new state on success
             photos.remove(photo)
             _onPhotos.remove(photo)
             onPhotosNumber.postValue(photos.size)
