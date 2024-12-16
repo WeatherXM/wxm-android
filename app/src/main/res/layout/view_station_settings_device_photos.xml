@@ -108,7 +108,7 @@
                         android:layout_width="160dp"
                         android:layout_height="160dp"
                         android:importantForAccessibility="no"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         tools:src="@drawable/photo_good_example_1" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -129,7 +129,7 @@
                             android:layout_width="160dp"
                             android:layout_height="160dp"
                             android:importantForAccessibility="no"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             tools:src="@drawable/photo_bad_example_1" />
 
                         <View
