@@ -11,9 +11,11 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.photoverification.PhotoVerificationInstructionsFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PhotoVerificationIntroActivity : BaseActivity() {
     private lateinit var binding: ActivityPhotoVerificationIntroBinding
+    private val viewModel: PhotoVerificationIntroViewModel by viewModel()
 
     private var instructionsOnly = false
     private var device = UIDevice.empty()
@@ -26,6 +28,11 @@ class PhotoVerificationIntroActivity : BaseActivity() {
 
         instructionsOnly = intent.getBooleanExtra(ARG_INSTRUCTIONS_ONLY, false)
         device = intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty()
+
+        if (viewModel.getAcceptedTerms()) {
+            navigator.showPhotoGallery(null, this, device, arrayListOf(), true)
+            finish()
+        }
     }
 
     override fun onResume() {
@@ -50,6 +57,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                             .show(this)
                     },
                     onTakePhoto = {
+                        viewModel.setAcceptedTerms()
                         navigator.showPhotoGallery(
                             null,
                             this@PhotoVerificationIntroActivity,
