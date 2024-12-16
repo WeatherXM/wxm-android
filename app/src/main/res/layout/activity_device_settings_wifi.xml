@@ -40,6 +40,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/padding_normal">
 
@@ -86,13 +87,22 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.weatherxm.ui.devicesettings.DevicePhotosView
+                android:id="@+id/devicePhotosCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/basicActionsCard"
+                tools:visibility="visible" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/locationCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_normal"
                 app:cardElevation="@dimen/elevation_small"
-                app:layout_constraintTop_toBottomOf="@id/basicActionsCard">
+                app:layout_constraintTop_toBottomOf="@id/devicePhotosCard">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/locationLayout"

@@ -625,10 +625,11 @@ data class PhotoExample(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class StationPhoto(
     val remotePath: String?,
     val localPath: String?
-)
+) : Parcelable
 
 @Keep
 data class WeatherUnit(

@@ -3,6 +3,7 @@
 package com.weatherxm.ui.common
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -123,6 +124,24 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? =
         BundleCompat.getParcelable(this, key, T::class.java)
     } else {
         @Suppress("DEPRECATION") getParcelable(key) as? T
+    }
+
+inline fun <reified T : Parcelable> Intent.putParcelableList(key: String, data: List<T?>): Intent {
+    val arraylist = arrayListOf<T?>()
+    data.forEach {
+        arraylist.add(it)
+    }
+    putParcelableArrayListExtra(key, arraylist)
+    return this
+}
+
+// https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
+@SuppressLint("NewApi")
+inline fun <reified T : Parcelable> Intent.parcelableList(key: String): ArrayList<T>? =
+    if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
+        getParcelableArrayListExtra(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION") getParcelableArrayListExtra<T>(key)
     }
 
 /**

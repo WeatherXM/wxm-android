@@ -7,6 +7,7 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.models.BoostRewardResponse
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.data.models.DeviceRewardsSummary
 import com.weatherxm.data.models.DevicesRewards
 import com.weatherxm.data.models.NetworkSearchResults
@@ -282,4 +283,12 @@ interface ApiService {
         @Path("installationId") installationId: String,
         @Path("fcmToken") fcmToken: String
     ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/device_photos_list.json")
+    @POST("/api/v1/me/devices/{deviceId}/photos")
+    suspend fun getDevicePhotos(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<List<DevicePhoto>, ErrorResponse>
 }
