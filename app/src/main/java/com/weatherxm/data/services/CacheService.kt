@@ -46,6 +46,7 @@ class CacheService(
         const val KEY_INSTALLATION_ID = "installation_id"
         const val KEY_DISMISSED_SURVEY_ID = "dismissed_survey_id"
         const val KEY_DISMISSED_INFO_BANNER_ID = "dismissed_info_banner_id"
+        const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -311,6 +312,14 @@ class CacheService(
 
     fun setLastDismissedInfoBannerId(infoBannerId: String) {
         preferences.edit().putString(KEY_DISMISSED_INFO_BANNER_ID, infoBannerId).apply()
+    }
+
+    fun getPhotoVerificationAcceptedTerms(): Boolean {
+        return preferences.getBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, false)
+    }
+
+    fun setPhotoVerificationAcceptedTerms() {
+        preferences.edit().putBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, true).apply()
     }
 
     fun getCountriesInfo(): List<CountryInfo> {

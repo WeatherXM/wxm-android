@@ -7,6 +7,8 @@ import com.weatherxm.data.models.Failure
 
 interface DevicePhotoRepository {
     suspend fun getDevicePhotos(deviceId: String): Either<Failure, List<DevicePhoto>>
+    fun getAcceptedTerms(): Boolean
+    fun setAcceptedTerms()
 }
 
 class DevicePhotoRepositoryImpl(
@@ -14,5 +16,13 @@ class DevicePhotoRepositoryImpl(
 ) : DevicePhotoRepository {
     override suspend fun getDevicePhotos(deviceId: String): Either<Failure, List<DevicePhoto>> {
         return datasource.getDevicePhotos(deviceId)
+    }
+
+    override fun getAcceptedTerms(): Boolean {
+        return datasource.getAcceptedTerms()
+    }
+
+    override fun setAcceptedTerms() {
+        datasource.setAcceptedTerms()
     }
 }
