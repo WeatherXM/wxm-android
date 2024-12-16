@@ -65,6 +65,7 @@ class ExplorerUseCaseImpl(
                 publicDevice.toUIDevice().apply {
                     this.cellCenter = cell.center
                     this.relation = getRelation(this.id)
+                    createDeviceAlerts(false)
                 }
             }.sortedWith(
                 compareByDescending<UIDevice> { it.lastWeatherStationActivity }.thenBy { it.name }
