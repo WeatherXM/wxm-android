@@ -37,4 +37,5 @@ object Contracts {
     const val ARG_PHOTOS = "photos"
     const val ARG_FROM_CLAIMING = "from_claiming"
     const val FILE_PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.fileprovider"
+    const val ARG_DELETE_ALL_PHOTOS = "delete_all_photos"
 }

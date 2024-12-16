@@ -77,6 +77,8 @@ import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
+import com.weatherxm.data.datasource.DevicePhotoDataSource
+import com.weatherxm.data.datasource.DevicePhotoDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
@@ -119,6 +121,8 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceOTARepositoryImpl
+import com.weatherxm.data.repository.DevicePhotoRepository
+import com.weatherxm.data.repository.DevicePhotoRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
@@ -222,6 +226,8 @@ import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.DeviceListUseCaseImpl
+import com.weatherxm.usecases.DevicePhotoUseCase
+import com.weatherxm.usecases.DevicePhotoUseCaseImpl
 import com.weatherxm.usecases.EditLocationUseCase
 import com.weatherxm.usecases.EditLocationUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
@@ -429,6 +435,9 @@ private val datasources = module {
     single<RemoteBannersDataSource> {
         RemoteBannersDataSourceImpl(get(), get())
     }
+    single<DevicePhotoDataSource> {
+        DevicePhotoDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
@@ -494,6 +503,9 @@ private val repositories = module {
     }
     single<RemoteBannersRepository> {
         RemoteBannersRepositoryImpl(get())
+    }
+    single<DevicePhotoRepository> {
+        DevicePhotoRepositoryImpl(get())
     }
 }
 
@@ -569,6 +581,9 @@ private val usecases = module {
     }
     single<RemoteBannersUseCase> {
         RemoteBannersUseCaseImpl(get())
+    }
+    single<DevicePhotoUseCase> {
+        DevicePhotoUseCaseImpl(get())
     }
 }
 
@@ -927,12 +942,14 @@ private val viewmodels = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
     viewModel { params ->
         DeviceSettingsHeliumViewModel(
             device = params.get(),
+            get(),
             get(),
             get(),
             get(),
