@@ -224,9 +224,9 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 analyticsScreen = AnalyticsService.Screen.DATA_QUALITY_INFO
             )
         }
-        if (qodScore >= 95) {
+        if (qodScore >= 80) {
             binding.dataQualityCard.checkmark()
-        } else if (qodScore in 10..94) {
+        } else if (qodScore >= 20) {
             binding.dataQualityCard.warning()
         } else {
             binding.dataQualityCard.error()
