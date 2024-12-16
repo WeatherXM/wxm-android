@@ -45,3 +45,6 @@
  # Retain Fragment Class Names for Analytics purposes
  -keepnames class * extends androidx.fragment.app.Fragment
  -keepnames class * extends com.google.android.material.bottomsheet.BottomSheetDialogFragment
+
+ # Retain Upload Service classes
+ -keep class net.gotev.uploadservice.** { *; }

@@ -154,6 +154,7 @@ import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepositoryImpl
 import com.weatherxm.data.services.CacheService
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.analytics.AnalyticsOptInViewModel
 import com.weatherxm.ui.cellinfo.CellInfoViewModel
@@ -777,6 +778,12 @@ val clientIdentificationHelper = module {
     }
 }
 
+val uploadObserverService = module {
+    single {
+        GlobalUploadObserverService()
+    }
+}
+
 val analytics = module {
     single<FirebaseAnalytics> {
         Firebase.analytics
@@ -1045,5 +1052,6 @@ val modules = listOf(
     clientIdentificationHelper,
     utilities,
     widgetHelper,
+    uploadObserverService,
     viewmodels
 )

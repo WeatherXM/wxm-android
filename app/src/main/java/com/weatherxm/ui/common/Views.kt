@@ -39,6 +39,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.BundleCompat
@@ -53,6 +54,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.behavior.SwipeDismissBehavior
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
@@ -479,6 +481,23 @@ fun MaterialCardView.setCardRadius(
 fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {
     strokeColor = context.getColor(colorResId)
     strokeWidth = width
+}
+
+fun MaterialCardView.swipeToDismiss(onDismiss: () -> Unit) {
+    val swipeDismissBehavior = SwipeDismissBehavior<View>()
+    swipeDismissBehavior.setSwipeDirection(SwipeDismissBehavior.SWIPE_DIRECTION_ANY)
+
+    (layoutParams as (CoordinatorLayout.LayoutParams)).behavior = swipeDismissBehavior
+
+    swipeDismissBehavior.listener = object : SwipeDismissBehavior.OnDismissListener {
+        override fun onDismiss(view: View?) {
+            onDismiss()
+        }
+
+        override fun onDragStateChanged(state: Int) {
+            // Do nothing
+        }
+    }
 }
 
 /**
