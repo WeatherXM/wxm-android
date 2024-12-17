@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.location.Geocoder
-import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -15,11 +14,10 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
-import coil.ImageLoader
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
+import coil3.ImageLoader
+import coil3.disk.DiskCache
+import coil3.gif.AnimatedImageDecoder
+import coil3.memory.MemoryCache
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -256,6 +254,7 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
+import okio.Path.Companion.toOkioPath
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -809,24 +808,19 @@ private val utilities = module {
     single<ImageLoader>(createdAtStart = true) {
         ImageLoader.Builder(androidContext())
             .memoryCache {
-                MemoryCache.Builder(androidContext())
-                    .maxSizePercent(COIL_MEMORY_CACHE_SIZE_PERCENTAGE)
+                MemoryCache.Builder()
+                    .maxSizePercent(androidContext(), COIL_MEMORY_CACHE_SIZE_PERCENTAGE)
                     .build()
             }
             .diskCache {
                 DiskCache.Builder()
-                    .directory(androidContext().cacheDir.resolve("image_cache"))
+                    .directory(androidContext().cacheDir.resolve("image_cache").toOkioPath())
                     .maxSizePercent(COIL_DISK_CACHE_SIZE_PERCENTAGE)
                     .build()
             }
             .components {
-                if (SDK_INT >= 28) {
-                    add(ImageDecoderDecoder.Factory())
-                } else {
-                    add(GifDecoder.Factory())
-                }
+                add(AnimatedImageDecoder.Factory())
             }
-            .respectCacheHeaders(false)
             .build()
     }
     single<Geocoder> {
