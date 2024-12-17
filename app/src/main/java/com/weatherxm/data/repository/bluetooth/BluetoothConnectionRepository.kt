@@ -2,17 +2,12 @@ package com.weatherxm.data.repository.bluetooth
 
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
-import com.juul.kable.Advertisement
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionRepository {
-    suspend fun setPeripheral(
-        advertisement: Advertisement,
-        address: String
-    ): Either<Failure, Unit>
-
+    suspend fun setPeripheral(address: String): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Unit>
     suspend fun disconnectFromPeripheral()
     fun registerOnBondStatus(): Flow<Int>

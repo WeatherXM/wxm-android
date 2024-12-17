@@ -2,7 +2,7 @@ package com.weatherxm.data.bluetooth
 
 import com.juul.kable.Advertisement
 import com.juul.kable.Filter
-import com.juul.kable.InternalException
+import com.juul.kable.InternalError
 import com.juul.kable.Scanner
 import com.juul.kable.UnmetRequirementException
 import com.juul.kable.logs.Logging
@@ -34,7 +34,7 @@ class BluetoothScanner {
         } catch (e: UnmetRequirementException) {
             Timber.e(e, "[Scanning Error] UnmetRequirementException: ${e.message}")
             flowOf()
-        } catch (e: InternalException) {
+        } catch (e: InternalError) {
             Timber.e(e, "[Scanning Error] InternalException: ${e.message}")
             flowOf()
         }
