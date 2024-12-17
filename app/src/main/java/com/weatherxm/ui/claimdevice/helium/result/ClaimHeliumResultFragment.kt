@@ -79,6 +79,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
             hideButtons()
             binding.retry.setOnClickListener {
                 uiError.retryFunction?.invoke()
+                onLoadingState()
             }
             binding.failureButtonsContainer.visible(true)
             binding.steps.visible(false)
@@ -98,11 +99,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
             updateUI(it)
         }
 
-        binding.status.clear()
-            .animation(R.raw.anim_loading)
-            .title(R.string.claiming_station)
-            .htmlSubtitle(R.string.claiming_station_helium_desc)
-            .show()
+        onLoadingState()
     }
 
     private fun onStep(currentStep: Int) {
@@ -189,7 +186,8 @@ class ClaimHeliumResultFragment : BaseFragment() {
                             AnalyticsService.ParamValue.RETRY.paramValue
                         )
                     )
-                    onStep(2)
+                    onLoadingState()
+                    onStep(3)
                     parentModel.claimDevice(locationModel.getInstallationLocation())
                 }
                 binding.failureButtonsContainer.visible(true)
@@ -209,6 +207,14 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 // Do nothing
             }
         }
+    }
+    
+    private fun onLoadingState() {
+        binding.status.clear()
+            .animation(R.raw.anim_loading)
+            .title(R.string.claiming_station)
+            .htmlSubtitle(R.string.claiming_station_helium_desc)
+            .show()
     }
 
     private fun onViewDevice(device: UIDevice) {
