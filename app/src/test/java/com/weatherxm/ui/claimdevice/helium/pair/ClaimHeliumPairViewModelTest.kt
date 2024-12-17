@@ -37,7 +37,7 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
 
     val bluetoothDisabledFailure = BluetoothError.BluetoothDisabledException()
     val connectionLostFailure = BluetoothError.ConnectionLostException()
-    val connectionRejectedFailure = BluetoothError.ConnectionRejectedError()
+    val gattRequestRejectedFailure = BluetoothError.GattRequestRejectedException()
     val bluetoothDisabled = "Bluetooth Disabled"
     val pairingFailed = "Pairing Failed"
 
@@ -99,7 +99,7 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
                 }
             }
             When("it's any other Failure") {
-                viewModel.onConnectionFailure(connectionRejectedFailure)
+                viewModel.onConnectionFailure(gattRequestRejectedFailure)
                 then("onBLEError should post the respective error") {
                     viewModel.onBLEError().value?.errorMessage shouldBe pairingFailed
                     viewModel.onBLEError().value?.retryFunction shouldNotBe null

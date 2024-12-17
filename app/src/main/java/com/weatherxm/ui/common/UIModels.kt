@@ -191,13 +191,11 @@ data class DeviceAlert(
 }
 
 @Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
 data class ScannedDevice(
     val address: String,
     val name: String?,
     val type: DeviceType = DeviceType.HELIUM
-) : Parcelable {
+) {
     companion object {
         fun empty() = ScannedDevice(String.empty(), String.empty())
     }

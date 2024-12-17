@@ -85,10 +85,10 @@ class BluetoothConnectionDataSourceTest : BehaviorSpec({
             and("it's a failure other than ConnectionLostException") {
                 coEvery {
                     connectionManager.connectToPeripheral()
-                } returns Either.Left(BluetoothError.ConnectionRejectedError())
+                } returns Either.Left(BluetoothError.GattRequestRejectedException())
                 then("return that failure") {
                     datasource.connectToPeripheral().leftOrNull()
-                        .shouldBeTypeOf<BluetoothError.ConnectionRejectedError>()
+                        .shouldBeTypeOf<BluetoothError.GattRequestRejectedException>()
                 }
             }
             and("it's a success") {
