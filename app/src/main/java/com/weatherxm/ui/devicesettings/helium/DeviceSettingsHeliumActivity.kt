@@ -3,7 +3,7 @@ package com.weatherxm.ui.devicesettings.helium
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -167,7 +167,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             null
         }
         getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
-            binding.locationMinimap.loadImage(imageLoader, it)
+            binding.locationMinimap.loadImage(imageLoader, it.toString())
         } ?: binding.locationMinimap.visible(false)
     }
 
