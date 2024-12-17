@@ -30,6 +30,12 @@ class ClaimHeliumResultFragment : BaseFragment() {
     private val model: ClaimHeliumResultViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimHeliumResultBinding
 
+    companion object {
+        const val STEP_SET_UP_STATION = 0
+        const val STEP_REBOOT_STATION = 1
+        const val STEP_CLAIM_STATION = 2
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,13 +62,13 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
         model.onRebooting().observe(viewLifecycleOwner) {
             if (it) {
-                onStep(1)
+                onStep(STEP_REBOOT_STATION)
             }
         }
 
         model.onBLEConnection().observe(viewLifecycleOwner) {
             if (it) {
-                onStep(2)
+                onStep(STEP_CLAIM_STATION)
             }
         }
 
@@ -108,8 +114,8 @@ class ClaimHeliumResultFragment : BaseFragment() {
             binding.steps.visible(true)
         }
         when (currentStep) {
-            0 -> binding.firstStep.typeface = Typeface.DEFAULT_BOLD
-            1 -> {
+            STEP_SET_UP_STATION -> binding.firstStep.typeface = Typeface.DEFAULT_BOLD
+            STEP_REBOOT_STATION -> {
                 binding.firstStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
@@ -120,7 +126,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 binding.firstStep.typeface = Typeface.DEFAULT
                 binding.secondStep.typeface = Typeface.DEFAULT_BOLD
             }
-            2 -> {
+            STEP_CLAIM_STATION -> {
                 binding.secondStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
@@ -187,7 +193,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                         )
                     )
                     onLoadingState()
-                    onStep(3)
+                    onStep(STEP_CLAIM_STATION)
                     parentModel.claimDevice(locationModel.getInstallationLocation())
                 }
                 binding.failureButtonsContainer.visible(true)
@@ -208,7 +214,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
             }
         }
     }
-    
+
     private fun onLoadingState() {
         binding.status.clear()
             .animation(R.raw.anim_loading)
