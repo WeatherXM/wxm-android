@@ -38,7 +38,6 @@ class BluetoothConnectionDataSourceImpl(
 
     override suspend fun connectToPeripheral(numOfRetries: Int): Either<Failure, Unit> {
         return connectionManager.connectToPeripheral().handleErrorWith {
-            // STOPSHIP: Handle this. Is ConnectionLost still a case while claiming? Test it. 
             if (it is BluetoothError.ConnectionLostException && numOfRetries < CLAIM_MAX_RETRIES) {
                 Timber.d("Connection lost with BLE. Retrying after 3 seconds...")
                 delay(CLAIM_RETRY_DELAY_MS)
