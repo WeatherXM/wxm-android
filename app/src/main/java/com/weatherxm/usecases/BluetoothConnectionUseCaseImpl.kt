@@ -2,7 +2,6 @@ package com.weatherxm.usecases
 
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
-import com.juul.kable.Advertisement
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
@@ -16,11 +15,8 @@ class BluetoothConnectionUseCaseImpl(
         return bluetoothConnectionRepository.getPairedDevices()
     }
 
-    override suspend fun setPeripheral(
-        advertisement: Advertisement,
-        address: String
-    ): Either<Failure, Unit> {
-        return bluetoothConnectionRepository.setPeripheral(advertisement, address)
+    override suspend fun setPeripheral(address: String): Either<Failure, Unit> {
+        return bluetoothConnectionRepository.setPeripheral(address)
     }
 
     override suspend fun connectToPeripheral(): Either<Failure, Unit> {

@@ -11,7 +11,6 @@ import android.content.IntentFilter
 import android.content.IntentFilter.SYSTEM_HIGH_PRIORITY
 import android.os.Build
 import arrow.core.Either
-import com.juul.kable.Advertisement
 import com.juul.kable.Characteristic
 import com.juul.kable.Descriptor
 import com.juul.kable.GattRequestRejectedException
@@ -42,23 +41,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-
-/**
- * STOPSHIP: LAUNCH JOBS FROM PERIPHERAL.connect scope
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
 
 @Suppress("TooManyFunctions")
 class BluetoothConnectionManager(
@@ -136,19 +118,14 @@ class BluetoothConnectionManager(
         }
     }
 
-    fun setPeripheral(
-        advertisement: Advertisement,
-        address: String
-    ): Either<Failure, Unit> {
+    fun setPeripheral(address: String): Either<Failure, Unit> {
         return try {
             if (this::peripheral.isInitialized) {
                 peripheral.cancel()
             }
             macAddress = address
             initBondStateChangeReceiver()
-            peripheral = Peripheral(advertisement) {
-
-            }
+            peripheral = Peripheral(address)
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
             Timber.w(e, "Creation of peripheral failed: $address")

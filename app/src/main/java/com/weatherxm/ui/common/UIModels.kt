@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
-import com.juul.kable.Advertisement
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.analytics.AnalyticsService
@@ -193,13 +192,12 @@ data class DeviceAlert(
 
 @Keep
 data class ScannedDevice(
-    val advertisement: Advertisement?,
     val address: String,
     val name: String?,
     val type: DeviceType = DeviceType.HELIUM
 ) {
     companion object {
-        fun empty() = ScannedDevice(null, String.empty(), String.empty())
+        fun empty() = ScannedDevice(String.empty(), String.empty())
     }
 }
 
