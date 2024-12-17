@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimWifiPrepareClaimingBinding
