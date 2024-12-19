@@ -111,7 +111,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             binding.contactSupportBtn.text = getString(R.string.see_something_wrong_contact_support)
         }
 
-        setupStationLocation()
+        setupStationLocation(false)
     }
 
     private fun setupRecyclers() {
@@ -133,7 +133,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         binding.recyclerStationInfo.adapter = stationAdapter
     }
 
-    private fun setupStationLocation(forceUpdateMinimap: Boolean = false) {
+    private fun setupStationLocation(forceUpdateMinimap: Boolean) {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }
