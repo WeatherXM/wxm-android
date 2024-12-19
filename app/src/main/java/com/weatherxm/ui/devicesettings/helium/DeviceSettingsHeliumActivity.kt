@@ -116,7 +116,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             binding.contactSupportBtn.text = getString(R.string.see_something_wrong_contact_support)
         }
 
-        setupStationLocation()
+        setupStationLocation(false)
     }
 
     private fun setupRecyclers() {
@@ -134,7 +134,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         binding.recyclerInfo.adapter = adapter
     }
 
-    private fun setupStationLocation(forceUpdateMinimap: Boolean = false) {
+    private fun setupStationLocation(forceUpdateMinimap: Boolean) {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }

@@ -21,7 +21,6 @@
     <string name="action_deny">Deny</string>
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
-    <string name="action_view_all">View All</string>
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_buy_station">Buy a Station</string>
@@ -550,8 +549,6 @@
     <!-- Alerts -->
     <string name="alerts">Alerts</string>
     <string name="issues">%d issues</string>
-    <string name="issues_detected">%d issues detected</string>
-    <string name="alerts_detected">%d alerts detected</string>
     <string name="station_inactive_alert_message">The station is not sending weather data. Check your network connection and the outdoor unit’s batteries. If the problem persists, contact our support team.</string>
     <string name="station_inactive_alert_message_public">We\’re unable to show live station data. Please check back later for further updates.</string>
     <string name="update_required">Update Required</string>

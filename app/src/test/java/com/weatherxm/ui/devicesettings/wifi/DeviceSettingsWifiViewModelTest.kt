@@ -2,7 +2,6 @@ package com.weatherxm.ui.devicesettings.wifi
 
 import android.text.format.DateFormat
 import com.weatherxm.R
-import com.weatherxm.TestConfig
 import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.dispatcher
@@ -206,7 +205,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
                 success = any()
             )
         }
-        every { DateFormat.is24HourFormat(TestConfig.context) } returns true
+        every { DateFormat.is24HourFormat(context) } returns true
         every {
             resources.getString(R.string.error_invalid_device_identifier)
         } returns "invalidIdentifier"

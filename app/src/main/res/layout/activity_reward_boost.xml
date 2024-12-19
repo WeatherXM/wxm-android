@@ -61,7 +61,6 @@
                         app:layout_constraintBottom_toBottomOf="@id/dataContainer"
                         app:layout_constraintTop_toTopOf="@id/dataContainer"
                         tools:ignore="contentDescription"
-                        tools:src="@drawable/weatherxm_gradient_background"
                         tools:visibility="visible" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout

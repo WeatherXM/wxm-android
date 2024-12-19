@@ -14,7 +14,6 @@ import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -148,18 +147,6 @@ fun String.capitalized(): String {
             it.toString()
         }
     }
-}
-
-fun String.boldText(boldText: String): SpannableStringBuilder {
-    val formattedText = SpannableStringBuilder(this)
-    val boldToStart = this.indexOf(boldText, ignoreCase = true)
-    formattedText.setSpan(
-        StyleSpan(Typeface.BOLD),
-        boldToStart,
-        boldToStart.plus(boldText.length),
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-    )
-    return formattedText
 }
 
 @Suppress("FunctionOnlyReturningConstant")

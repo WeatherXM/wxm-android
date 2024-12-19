@@ -26,7 +26,7 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
     val currentZone = ZonedDateTime.now().zone
     val today = LocalDate.now()
     val data = mutableListOf<HourlyWeather>()
-    val hourlyWeather = mockk<HourlyWeather>() {
+    val hourlyWeather = mockk<HourlyWeather> {
         every { timestamp } returns ZonedDateTime.now()
     }
 

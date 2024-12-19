@@ -16,7 +16,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 
 class RefreshFcmApiWorker(
-    private val context: Context,
+    context: Context,
     private val workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
