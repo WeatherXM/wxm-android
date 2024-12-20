@@ -57,7 +57,7 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                 100,
                 listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 60, 0.6),
-                    NetworkStatsStationDetails("test", Connectivity.helium, "test", 40, 0.4)
+                    NetworkStatsStationDetails("test", Connectivity.cellular, "test", 40, 0.4)
                 )
             ),
             NetworkStatsStation(

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!--
         Defaults
@@ -54,10 +54,6 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.CollapsedToolbar.Title" parent="TextAppearance.WeatherXM.Default.PrimaryColor">
-        <item name="android:textSize">18sp</item>
-    </style>
-
     <!--
         Devices List
     -->
@@ -97,7 +93,7 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.Navigation.Tabs" parent="TextAppearance.WeatherXM.Default.BodyMedium">
-        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+        <item name="android:textFontWeight">500</item>
     </style>
 
     <!--
