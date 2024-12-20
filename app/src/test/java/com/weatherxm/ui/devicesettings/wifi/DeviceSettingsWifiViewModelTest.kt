@@ -25,6 +25,7 @@ import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
@@ -63,7 +64,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         "deviceId",
         "My Weather Station",
         String.empty(),
-        null,
+        DeviceRelation.OWNED,
         "la:bel",
         "friendlyName",
         BundleName.d1,
