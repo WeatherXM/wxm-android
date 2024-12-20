@@ -411,6 +411,18 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         }
     }
 
+    context("Get Device Photos") {
+        given("a usecase returning the result of the photos") {
+            When("it's a success") {
+                coMockEitherRight({ photosUseCase.getDevicePhotos(device.id) }, listOf<String>())
+                runTest { viewModel.getDevicePhotos() }
+                then("LiveData onPhotos should post the List<String> created") {
+                    viewModel.onPhotos().value shouldBe listOf<String>()
+                }
+            }
+        }
+    }
+
     context("Get Device Info") {
         given("a usecase returning the result of getting device info") {
             When("it's a failure") {
