@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.load
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.Contracts
@@ -120,6 +121,10 @@ class PhotoGalleryActivity : BaseActivity() {
                     negative = getString(R.string.action_back)
                 )
                 .onPositiveClick(getString(R.string.action_upload)) {
+                    analytics.trackEventUserAction(
+                        AnalyticsService.ParamValue.START_UPLOADING_PHOTOS.paramValue
+                    )
+
                     /** STOPSHIP: Comment out the below, for testing purposes.
                      * Also need to be done with Coroutines and NOT on main thread!!!
                      */
@@ -167,6 +172,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         binding.addPhotoBtn.setOnClickListener {
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue)
             getCameraPermissions()
         }
 
@@ -199,6 +205,9 @@ class PhotoGalleryActivity : BaseActivity() {
                     negative = getString(R.string.action_back)
                 )
                 .onPositiveClick(getString(R.string.action_exit)) {
+                    analytics.trackEventUserAction(
+                        AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
+                    )
                     finish()
                 }
                 .build()
@@ -212,6 +221,9 @@ class PhotoGalleryActivity : BaseActivity() {
                         negative = getString(R.string.action_back)
                     )
                     .onPositiveClick(getString(R.string.action_exit)) {
+                        analytics.trackEventUserAction(
+                            AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
+                        )
                         setResult(true)
                         finish()
                     }

@@ -171,6 +171,9 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 }
             },
             onCancelUpload = {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.CANCEL_UPLOADING_PHOTOS.paramValue
+                )
                 ActionDialogFragment
                     .Builder(
                         title = getString(R.string.cancel_upload),
@@ -186,6 +189,9 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     .show(this)
             },
             onRetry = {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.RETRY_UPLOADING_PHOTOS.paramValue
+                )
                 // TODO: STOPSHIP:  Trigger retry mechanism
             }
         )
