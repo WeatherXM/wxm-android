@@ -159,6 +159,13 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         binding.devicePhotosCard.updateUI(devicePhotos)
         binding.devicePhotosCard.setOnClickListener(
             onClick = {
+                analytics.trackEventSelectContent(
+                    contentType = AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.SETTINGS.paramValue
+                    )
+                )
                 val photos = arrayListOf<String>()
                 devicePhotos.forEach {
                     photos.add(it.url)

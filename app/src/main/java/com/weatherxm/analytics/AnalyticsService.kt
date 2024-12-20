@@ -264,7 +264,7 @@ interface AnalyticsService {
         START_UPLOADING_PHOTOS("Start Uploading Photos"),
         UPLOADING_PHOTOS_SUCCESS("Uploading Photos Success"),
         GO_TO_PHOTO_VERIFICATION("Go To Photo Verification"),
-        CLAIMING_KEY("claiming"),
+        CLAIMING_ID("claiming"),
         ANNOUNCEMENT_BUTTON("Announcement Button")
     }
 
