@@ -29,11 +29,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.load
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.Contracts.ARG_FROM_CLAIMING
+import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.disable
@@ -71,7 +72,7 @@ class PhotoGalleryActivity : BaseActivity() {
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
             stationPhotoUrls.map { StationPhoto(it, null) },
-            intent.getBooleanExtra(ARG_FROM_CLAIMING, false)
+            intent.getBooleanExtra(ARG_NEW_PHOTO_VERIFICATION, false)
         )
     }
 
@@ -120,6 +121,10 @@ class PhotoGalleryActivity : BaseActivity() {
                     negative = getString(R.string.action_back)
                 )
                 .onPositiveClick(getString(R.string.action_upload)) {
+                    analytics.trackEventUserAction(
+                        AnalyticsService.ParamValue.START_UPLOADING_PHOTOS.paramValue
+                    )
+
                     /** STOPSHIP: Comment out the below, for testing purposes.
                      * Also need to be done with Coroutines and NOT on main thread!!!
                      */
@@ -167,6 +172,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         binding.addPhotoBtn.setOnClickListener {
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue)
             getCameraPermissions()
         }
 
@@ -199,6 +205,9 @@ class PhotoGalleryActivity : BaseActivity() {
                     negative = getString(R.string.action_back)
                 )
                 .onPositiveClick(getString(R.string.action_exit)) {
+                    analytics.trackEventUserAction(
+                        AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
+                    )
                     finish()
                 }
                 .build()
@@ -212,6 +221,9 @@ class PhotoGalleryActivity : BaseActivity() {
                         negative = getString(R.string.action_back)
                     )
                     .onPositiveClick(getString(R.string.action_exit)) {
+                        analytics.trackEventUserAction(
+                            AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
+                        )
                         setResult(true)
                         finish()
                     }
@@ -275,7 +287,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
     @Suppress("MagicNumber")
     private fun onCameraDenied() {
-        if(model.photos.isEmpty()) {
+        if (model.photos.isEmpty()) {
             binding.deletePhotoBtn.disable()
             binding.instructionsBtn.alpha = 0.4F
             binding.instructionsBtn.isEnabled = false

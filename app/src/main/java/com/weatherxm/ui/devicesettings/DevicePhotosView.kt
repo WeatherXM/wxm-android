@@ -1,5 +1,6 @@
 package com.weatherxm.ui.devicesettings
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -100,6 +101,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         binding.startPhotoVerificationBtn.visible(true)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun onPhotos(devicePhotos: List<DevicePhoto>) {
         binding.emptyText.visible(false)
         binding.startPhotoVerificationBtn.visible(false)
@@ -111,7 +113,10 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
             binding.firstPhoto.load(devicePhotos[0].url)
             binding.secondPhoto.load(devicePhotos[1].url)
             binding.photosContainer.visible(true)
-            binding.translucentViewOnSecondPhoto.visible(devicePhotos.size > 2)
+            if(devicePhotos.size > 2) {
+                binding.morePhotos.text = "+${devicePhotos.size - 2}"
+                binding.translucentViewOnSecondPhoto.visible(true)
+            }
         }
     }
 }
