@@ -33,7 +33,7 @@ import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.Contracts.ARG_FROM_CLAIMING
+import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.disable
@@ -71,7 +71,7 @@ class PhotoGalleryActivity : BaseActivity() {
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
             stationPhotoUrls.map { StationPhoto(it, null) },
-            intent.getBooleanExtra(ARG_FROM_CLAIMING, false)
+            intent.getBooleanExtra(ARG_NEW_PHOTO_VERIFICATION, false)
         )
     }
 
@@ -275,7 +275,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
     @Suppress("MagicNumber")
     private fun onCameraDenied() {
-        if(model.photos.isEmpty()) {
+        if (model.photos.isEmpty()) {
             binding.deletePhotoBtn.disable()
             binding.instructionsBtn.alpha = 0.4F
             binding.instructionsBtn.isEnabled = false
