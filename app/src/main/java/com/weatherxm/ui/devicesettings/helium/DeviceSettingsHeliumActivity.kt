@@ -159,6 +159,13 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         binding.devicePhotosCard.updateUI(devicePhotos)
         binding.devicePhotosCard.setOnClickListener(
             onClick = {
+                analytics.trackEventSelectContent(
+                    contentType = AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.SETTINGS.paramValue
+                    )
+                )
                 val photos = arrayListOf<String>()
                 devicePhotos.forEach {
                     photos.add(it.url)
@@ -183,6 +190,9 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                         negative = getString(R.string.action_back)
                     )
                     .onPositiveClick(getString(R.string.yes_cancel)) {
+                        analytics.trackEventUserAction(
+                            AnalyticsService.ParamValue.CANCEL_UPLOADING_PHOTOS.paramValue
+                        )
                         // Trigger a refresh on the photos through the API
                         model.onPhotosChanged(false, null)
                         // TODO: STOPSHIP:  Cancel the current upload
@@ -191,6 +201,9 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                     .show(this)
             },
             onRetry = {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.RETRY_UPLOADING_PHOTOS.paramValue
+                )
                 // TODO: STOPSHIP:  Trigger retry mechanism
             }
         )

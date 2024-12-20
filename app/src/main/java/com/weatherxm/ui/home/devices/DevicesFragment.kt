@@ -115,6 +115,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 .title(infoBanner.title)
                 .message(infoBanner.message)
                 .action(infoBanner.actionLabel, infoBanner.showActionButton) {
+                    analytics.trackEventSelectContent(
+                        contentType = AnalyticsService.ParamValue.ANNOUNCEMENT_BUTTON.paramValue,
+                        Pair(FirebaseAnalytics.Param.ITEM_ID, infoBanner.url)
+                    )
                     navigator.openWebsite(context, infoBanner.url)
                 }
                 .close(infoBanner.showCloseButton) {

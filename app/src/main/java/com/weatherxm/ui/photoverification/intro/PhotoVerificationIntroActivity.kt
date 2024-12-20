@@ -3,6 +3,7 @@ package com.weatherxm.ui.photoverification.intro
 import android.annotation.SuppressLint
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoVerificationIntroBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
@@ -52,7 +53,12 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                                 message = getString(R.string.exit_photo_verification_message),
                                 negative = getString(R.string.action_back)
                             )
-                            .onPositiveClick(getString(R.string.action_exit)) { finish() }
+                            .onPositiveClick(getString(R.string.action_exit)) {
+                                analytics.trackEventUserAction(
+                                    AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
+                                )
+                                finish()
+                            }
                             .build()
                             .show(this)
                     },

@@ -795,7 +795,7 @@ val clientIdentificationHelper = module {
 
 val uploadObserverService = module {
     single {
-        GlobalUploadObserverService()
+        GlobalUploadObserverService(get())
     }
 }
 

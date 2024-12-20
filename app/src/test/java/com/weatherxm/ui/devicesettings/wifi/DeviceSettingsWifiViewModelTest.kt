@@ -24,6 +24,7 @@ import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
@@ -62,7 +63,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         "deviceId",
         "My Weather Station",
         String.empty(),
-        null,
+        DeviceRelation.OWNED,
         "la:bel",
         "friendlyName",
         BundleName.d1,
@@ -405,6 +406,18 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
             When("user is not stakeholder") {
                 then("return false") {
                     viewModel.isStakeholder(nonStakeholderSplits) shouldBe false
+                }
+            }
+        }
+    }
+
+    context("Get Device Photos") {
+        given("a usecase returning the result of the photos") {
+            When("it's a success") {
+                coMockEitherRight({ photosUseCase.getDevicePhotos(device.id) }, listOf<String>())
+                runTest { viewModel.getDevicePhotos() }
+                then("LiveData onPhotos should post the List<String> created") {
+                    viewModel.onPhotos().value shouldBe listOf<String>()
                 }
             }
         }
