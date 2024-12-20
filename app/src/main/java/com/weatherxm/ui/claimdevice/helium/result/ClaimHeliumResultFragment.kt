@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimHeliumResultBinding
@@ -265,6 +266,13 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
     private fun initPhotoVerificationBtn(device: UIDevice) {
         binding.photoVerificationBtn.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.SOURCE,
+                    AnalyticsService.ParamValue.CLAIMING_ID.paramValue
+                )
+            )
             navigator.showPhotoVerificationIntro(context, device)
             activity?.setResult(Activity.RESULT_OK)
             activity?.finish()

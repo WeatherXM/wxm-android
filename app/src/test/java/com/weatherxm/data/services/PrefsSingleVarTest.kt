@@ -116,9 +116,9 @@ class PrefsSingleVarTest(
             "if the user has accepted the terms of photo verification",
             true,
             { sharedPref.getBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, false) },
-            { prefEditor.putBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, false) },
+            { prefEditor.putBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, true) },
             { cacheService.getPhotoVerificationAcceptedTerms() },
-            { cacheService.setPhotoVerificationAcceptedTerms(false) }
+            { cacheService.setPhotoVerificationAcceptedTerms() }
         )
     }
 

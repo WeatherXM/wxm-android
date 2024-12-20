@@ -1,9 +1,11 @@
 package com.weatherxm.service
 
 import android.content.Context
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UploadPhotosState
-import com.weatherxm.ui.common.empty
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +17,9 @@ import net.gotev.uploadservice.network.ServerResponse
 import net.gotev.uploadservice.observer.request.RequestObserverDelegate
 import timber.log.Timber
 
-class GlobalUploadObserverService : RequestObserverDelegate {
+class GlobalUploadObserverService(
+    private val analytics: AnalyticsWrapper
+) : RequestObserverDelegate {
 
     private var device = UIDevice.empty()
     private val onUploadPhotosState = MutableSharedFlow<UploadPhotosState>(
@@ -41,6 +45,11 @@ class GlobalUploadObserverService : RequestObserverDelegate {
         serverResponse: ServerResponse
     ) {
         Timber.d("[UPLOAD SERVICE] Success: $serverResponse")
+        analytics.trackEventViewContent(
+            contentName = AnalyticsService.ParamValue.UPLOADING_PHOTOS_SUCCESS.paramValue,
+            null,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, device.name)
+        )
         onUploadPhotosState.tryEmit(
             UploadPhotosState(
                 device,

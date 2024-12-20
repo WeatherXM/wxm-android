@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimResultBinding
@@ -128,6 +129,13 @@ class ClaimResultFragment : BaseFragment() {
                         }.show(this)
                     }
                     binding.photoVerificationBtn.setOnClickListener {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.CLAIMING_ID.paramValue
+                            )
+                        )
                         navigator.showPhotoVerificationIntro(context, device)
                         activity?.setResult(Activity.RESULT_OK)
                         activity?.finish()

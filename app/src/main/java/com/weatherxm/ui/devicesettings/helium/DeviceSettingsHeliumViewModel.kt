@@ -33,7 +33,7 @@ import timber.log.Timber
 class DeviceSettingsHeliumViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
-    private val photosUseCase: DevicePhotoUseCase,
+    photosUseCase: DevicePhotoUseCase,
     private val userUseCase: UserUseCase,
     private val authUseCase: AuthUseCase,
     private val resources: Resources,

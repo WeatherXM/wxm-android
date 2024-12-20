@@ -100,6 +100,13 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     private fun setListeners() {
         binding.photoVerificationBtn.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.SOURCE,
+                    AnalyticsService.ParamValue.CLAIMING_ID.paramValue
+                )
+            )
             navigator.showPhotoVerificationIntro(this, model.device)
             finish()
         }
