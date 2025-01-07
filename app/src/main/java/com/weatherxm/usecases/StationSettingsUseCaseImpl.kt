@@ -13,7 +13,7 @@ import com.weatherxm.ui.common.UIDevice
 class StationSettingsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val deviceOTARepository: DeviceOTARepository,
-    private val addressRepository: AddressRepository,
+    private val addressRepository: AddressRepository
 ) : StationSettingsUseCase {
 
     override suspend fun setFriendlyName(
