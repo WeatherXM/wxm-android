@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.compose.runtime.collectAsState
 import coil3.load
-import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.databinding.ViewStationSettingsDevicePhotosBinding
 import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.visible
@@ -86,7 +85,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         }
     }
 
-    fun updateUI(devicePhotos: List<DevicePhoto>) {
+    fun updateUI(devicePhotos: List<String>) {
         if (devicePhotos.isEmpty()) {
             onEmpty()
         } else {
@@ -102,7 +101,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun onPhotos(devicePhotos: List<DevicePhoto>) {
+    private fun onPhotos(devicePhotos: List<String>) {
         binding.emptyText.visible(false)
         binding.startPhotoVerificationBtn.visible(false)
         binding.inProgressText.visible(false)
@@ -110,8 +109,8 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         binding.photosText.visible(true)
 
         if (devicePhotos.size >= 2) {
-            binding.firstPhoto.load(devicePhotos[0].url)
-            binding.secondPhoto.load(devicePhotos[1].url)
+            binding.firstPhoto.load(devicePhotos[0])
+            binding.secondPhoto.load(devicePhotos[1])
             binding.photosContainer.visible(true)
             if(devicePhotos.size > 2) {
                 binding.morePhotos.text = "+${devicePhotos.size - 2}"

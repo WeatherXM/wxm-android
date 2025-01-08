@@ -831,13 +831,6 @@ data class DeviceRewardsSummaryDetails(
     }
 }
 
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class DevicePhoto(
-    val url: String
-) : Parcelable
-
 @Suppress("EnumNaming")
 enum class Connectivity {
     wifi,

@@ -6,17 +6,22 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.util.ImageFileHelper.getUriForFile
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 class PhotoGalleryViewModel(
     val device: UIDevice,
     val photos: MutableList<StationPhoto>,
     val fromClaiming: Boolean,
+    private val usecase: DevicePhotoUseCase,
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val onPhotosNumber = MutableLiveData(photos.size)
@@ -37,13 +42,17 @@ class PhotoGalleryViewModel(
     }
 
     fun deletePhoto(photo: StationPhoto) {
-        photo.remotePath?.let {  photoRemotePath ->
-            // TODO: STOPSHIP: Call the delete endpoint and post the new state on success
+        photo.remotePath?.let { photoRemotePath ->
             if (photos.firstOrNull { it.remotePath == photoRemotePath } != null) {
+                viewModelScope.launch {
+                    usecase.deleteDevicePhoto(device.id, photoRemotePath).onLeft {
+                        Timber.e("Failed to delete photo $photo")
+                    }
+                }
                 onDeletedPhoto(photo)
             }
         }
-        photo.localPath?.let {  photoLocalPath ->
+        photo.localPath?.let { photoLocalPath ->
             if (photos.firstOrNull { it.localPath == photoLocalPath } != null) {
                 File(photoLocalPath).delete()
                 onDeletedPhoto(photo)

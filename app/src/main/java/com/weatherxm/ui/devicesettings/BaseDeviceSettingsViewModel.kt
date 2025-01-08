@@ -11,7 +11,6 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.BatteryState
 import com.weatherxm.data.models.DeviceInfo
-import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
@@ -40,13 +39,13 @@ abstract class BaseDeviceSettingsViewModel(
     private val onDeviceRemoved = MutableLiveData<Boolean>()
     private val onError = MutableLiveData<UIError>()
     protected val onLoading = MutableLiveData<Boolean>()
-    private val onPhotos = MutableLiveData<List<DevicePhoto>>()
+    private val onPhotos = MutableLiveData<List<String>>()
 
     fun onEditNameChange(): LiveData<String> = onEditNameChange
     fun onDeviceRemoved(): LiveData<Boolean> = onDeviceRemoved
     fun onError(): LiveData<UIError> = onError
     fun onLoading(): LiveData<Boolean> = onLoading
-    fun onPhotos(): LiveData<List<DevicePhoto>> = onPhotos
+    fun onPhotos(): LiveData<List<String>> = onPhotos
 
     fun setOrClearFriendlyName(friendlyName: String?) {
         if (friendlyName == null) {
@@ -173,7 +172,7 @@ abstract class BaseDeviceSettingsViewModel(
     }
 
     suspend fun getDevicePhotos() {
-        if(device.isOwned()) {
+        if (device.isOwned()) {
             photosUseCase.getDevicePhotos(device.id).onRight {
                 onPhotos.postValue(it)
             }.onLeft {
@@ -200,7 +199,9 @@ abstract class BaseDeviceSettingsViewModel(
                 File(it).delete()
             }
             photo.remotePath?.let {
-                // TODO: STOPSHIP: Call the delete endpoint for each one of them
+                viewModelScope.launch(dispatcher) {
+                    photosUseCase.deleteDevicePhoto(device.id, it)
+                }
             }
         }
     }
