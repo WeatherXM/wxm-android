@@ -1,7 +1,5 @@
 package com.weatherxm.ui.photoverification.gallery
 
-import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DevicePhotoUseCase
-import com.weatherxm.util.ImageFileHelper.getUriForFile
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +41,7 @@ class PhotoGalleryViewModel(
     fun deletePhoto(photo: StationPhoto) {
         photo.remotePath?.let { photoRemotePath ->
             if (photos.firstOrNull { it.remotePath == photoRemotePath } != null) {
-                viewModelScope.launch {
+                viewModelScope.launch(dispatcher) {
                     usecase.deleteDevicePhoto(device.id, photoRemotePath).onLeft {
                         Timber.e("Failed to delete photo $photo")
                     }
@@ -66,13 +63,13 @@ class PhotoGalleryViewModel(
         onPhotosNumber.postValue(photos.size)
     }
 
-    fun getUrisOfLocalPhotos(context: Context): ArrayList<Uri> {
-        val uris = arrayListOf<Uri>()
+    fun getPhotosLocalPaths(): ArrayList<String> {
+        val photosLocalPaths = arrayListOf<String>()
         photos.forEach {
             if (!it.localPath.isNullOrEmpty()) {
-                uris.add(File(it.localPath).getUriForFile(context))
+                photosLocalPaths.add(it.localPath)
             }
         }
-        return uris
+        return photosLocalPaths
     }
 }

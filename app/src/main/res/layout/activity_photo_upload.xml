@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/margin_normal"
+        android:layout_marginBottom="@dimen/margin_large">
+
+        <com.weatherxm.ui.components.EmptyView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:empty_animation="@raw/anim_loading"
+            app:empty_subtitle="@string/preparing_the_upload_subtitle"
+            app:empty_title="@string/preparing_the_upload"
+            app:layout_constraintBottom_toTopOf="@id/shareBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shareBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small_to_normal"
+            android:text="@string/share"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/continueBtn"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/continueBtn"
+            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_continue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

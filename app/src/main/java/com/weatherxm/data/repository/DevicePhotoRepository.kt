@@ -3,10 +3,16 @@ package com.weatherxm.data.repository
 import arrow.core.Either
 import com.weatherxm.data.datasource.DevicePhotoDataSource
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.PhotoPresignedMetadata
 
 interface DevicePhotoRepository {
     suspend fun getDevicePhotos(deviceId: String): Either<Failure, List<String>>
     suspend fun deleteDevicePhoto(deviceId: String, photoPath: String): Either<Failure, Unit>
+    suspend fun getPhotosMetadataForUpload(
+        deviceId: String,
+        photoPaths: List<String>
+    ): Either<Failure, List<PhotoPresignedMetadata>>
+
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
 }
@@ -29,6 +35,16 @@ class DevicePhotoRepositoryImpl(
          */
         val photoName = photoPath.substringAfterLast('/').substringBeforeLast('.')
         return datasource.deleteDevicePhoto(deviceId, photoName)
+    }
+
+    override suspend fun getPhotosMetadataForUpload(
+        deviceId: String,
+        photoPaths: List<String>
+    ): Either<Failure, List<PhotoPresignedMetadata>> {
+        val photoNames = photoPaths.mapIndexed { i, path ->
+            path.substringAfterLast('/').replaceBeforeLast('.', "img$i")
+        }
+        return datasource.getPhotosMetadataForUpload(deviceId, photoNames)
     }
 
     override fun getAcceptedTerms(): Boolean {

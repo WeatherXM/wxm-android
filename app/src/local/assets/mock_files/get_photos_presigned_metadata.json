@@ -1,0 +1,13 @@
+{
+    "url": "https://weatherxm.com",
+    "fields": {
+        "bucket": "bucket",
+        "X-Amz-Algorithm": "X-Amz-Algorithm",
+        "X-Amz-Credential": "X-Amz-Credential",
+        "X-Amz-Date": "X-Amz-Date",
+        "X-Amz-Security-Token": "X-Amz-Security-Token",
+        "key": "key",
+        "Policy": "Policy",
+        "X-Amz-Signature": "X-Amz-Signature"
+    }
+}

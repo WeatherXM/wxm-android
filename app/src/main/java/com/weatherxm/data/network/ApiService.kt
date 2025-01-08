@@ -11,6 +11,7 @@ import com.weatherxm.data.models.DeviceRewardsSummary
 import com.weatherxm.data.models.DevicesRewards
 import com.weatherxm.data.models.NetworkSearchResults
 import com.weatherxm.data.models.NetworkStatsResponse
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
 import com.weatherxm.data.models.RewardDetails
@@ -299,4 +300,13 @@ interface ApiService {
         @Path("deviceId") deviceId: String,
         @Path("photoId") photoName: String
     ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 204, body = "mock_files/get_photos_presigned_metadata.json")
+    @POST("/api/v1/me/devices/{deviceId}/photos")
+    suspend fun getPhotosMetadataForUpload(
+        @Path("deviceId") deviceId: String,
+        @Body photoNames: List<String>
+    ): NetworkResponse<List<PhotoPresignedMetadata>, ErrorResponse>
 }
