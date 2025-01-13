@@ -26,6 +26,7 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitsData
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
@@ -181,6 +182,9 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
             UIDeviceInfoItem("Last Station Activity", "Oct 1, 2024, 14:00"),
         ),
         stakeholderSplits
+    )
+    val stationPhotos = arrayListOf(
+        StationPhoto("remotePath", "localPath")
     )
 
     val invalidClaimIdFailure = ApiError.UserError.ClaimError.InvalidClaimId("")
@@ -418,6 +422,26 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
                 runTest { viewModel.getDevicePhotos() }
                 then("LiveData onPhotos should post the List<String> created") {
                     viewModel.onPhotos().value shouldBe listOf<String>()
+                }
+            }
+        }
+    }
+
+    context("Event onPhotosChanged has been triggered") {
+        given("an argument `shouldDeleteAllPhotos` and the respective list of photos to delete") {
+            When("it's true") {
+                then("it should delete all the photos passed as arguments") {
+                    viewModel.onPhotosChanged(true, stationPhotos)
+                }
+            }
+            When("it's false") {
+                then("get the updated device photos") {
+                    coMockEitherRight(
+                        { photosUseCase.getDevicePhotos(device.id) },
+                        listOf("testUrl")
+                    )
+                    runTest { viewModel.getDevicePhotos() }
+                    viewModel.onPhotos().value shouldBe listOf("testUrl")
                 }
             }
         }

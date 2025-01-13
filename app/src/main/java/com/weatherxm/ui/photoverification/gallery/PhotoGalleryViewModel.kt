@@ -37,19 +37,24 @@ class PhotoGalleryViewModel(
     }
 
     fun deletePhoto(photo: StationPhoto) {
-        if (photos.firstOrNull { it.remotePath == photo.remotePath } != null) {
+        photo.remotePath?.let {  photoRemotePath ->
             // TODO: STOPSHIP: Call the delete endpoint and post the new state on success
-            photos.remove(photo)
-            _onPhotos.remove(photo)
-            onPhotosNumber.postValue(photos.size)
-        } else if (photos.firstOrNull { it.localPath == photo.localPath } != null) {
-            photo.localPath?.let {
-                File(it).delete()
+            if (photos.firstOrNull { it.remotePath == photoRemotePath } != null) {
+                onDeletedPhoto(photo)
             }
-            photos.remove(photo)
-            _onPhotos.remove(photo)
-            onPhotosNumber.postValue(photos.size)
         }
+        photo.localPath?.let {  photoLocalPath ->
+            if (photos.firstOrNull { it.localPath == photoLocalPath } != null) {
+                File(photoLocalPath).delete()
+                onDeletedPhoto(photo)
+            }
+        }
+    }
+
+    private fun onDeletedPhoto(photo: StationPhoto) {
+        photos.remove(photo)
+        _onPhotos.remove(photo)
+        onPhotosNumber.postValue(photos.size)
     }
 
     fun getUrisOfLocalPhotos(context: Context): ArrayList<Uri> {

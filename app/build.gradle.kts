@@ -370,6 +370,7 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/widgets/currentweather/*.*",
         "**/ui/Navigator.class",
         "**/util/ChartsKt*.*",
+        "**/util/ImageFileHelperKt*.*",
         "**/util/CountDownTimerHelper*.*",
         "**/BuildConfig.class"
     )
