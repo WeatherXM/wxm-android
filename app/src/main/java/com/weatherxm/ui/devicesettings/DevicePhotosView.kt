@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.compose.runtime.collectAsState
-import coil.load
+import coil3.load
 import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.databinding.ViewStationSettingsDevicePhotosBinding
 import com.weatherxm.service.GlobalUploadObserverService
