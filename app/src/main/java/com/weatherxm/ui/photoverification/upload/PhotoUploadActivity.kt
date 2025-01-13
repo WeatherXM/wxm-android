@@ -94,7 +94,7 @@ class PhotoUploadActivity : BaseActivity() {
                     .addParameter("X-Amz-Signature", it.fields.xAmzSignature)
                     .addParameter("key", it.fields.key)
                     .addParameter("Policy", it.fields.policy)
-                    .addFileToUpload(file.path, file.name)
+                    .addFileToUpload(file.path, "file")
                 uploadRequest.startUpload()
             }
         }
