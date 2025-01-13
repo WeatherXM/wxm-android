@@ -3,6 +3,7 @@
     <string name="website_contact">https://weatherxm.com/contact/</string>
     <string name="suggested_wallets_documentation">https://docs.weatherxm.com/mobile-app/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
+    <string name="acceptable_use_policy_url">https://weatherxm.com/wp-content/uploads/2025/01/WeatherXM-Acceptable-Use-Policy.pdf</string>
     <string name="troubleshooting_m5_url">https://docs.weatherxm.com/wxm-devices/m5/troubleshooting</string>
     <string name="troubleshooting_d1_url">https://docs.weatherxm.com/wxm-devices/d1/troubleshooting</string>
     <string name="troubleshooting_helium_url">https://docs.weatherxm.com/wxm-devices/helium/troubleshooting</string>

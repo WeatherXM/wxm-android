@@ -112,17 +112,20 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
             onClose()
         }
 
-        with(binding.termsCheckboxDesc) {
+        with(binding.acceptableUsePolicyCheckboxDesc) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
                     navigator.openWebsite(activity, url)
                     return@setOnLinkClickListener true
                 }
             }
-            setHtml(R.string.accept_terms, getString(R.string.terms_of_service_url))
+            setHtml(
+                R.string.accept_acceptable_use_policy,
+                getString(R.string.acceptable_use_policy_url)
+            )
         }
 
-        binding.termsCheckbox.setOnCheckedChangeListener { _, isChecked ->
+        binding.acceptableUsePolicyCheckbox.setOnCheckedChangeListener { _, isChecked ->
             binding.takePhotoBtn.isEnabled = isChecked
         }
 
@@ -136,8 +139,8 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
         binding.closeOrBackButton.setOnClickListener {
             onBack()
         }
-        binding.termsCheckbox.visible(false)
-        binding.termsCheckboxDesc.visible(false)
+        binding.acceptableUsePolicyCheckbox.visible(false)
+        binding.acceptableUsePolicyCheckboxDesc.visible(false)
         binding.takePhotoBtn.visible(false)
     }
 
