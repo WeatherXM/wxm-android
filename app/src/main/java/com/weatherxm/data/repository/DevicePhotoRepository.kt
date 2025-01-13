@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.datasource.DevicePhotoDataSource
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.PhotoPresignedMetadata
+import java.util.UUID
 
 interface DevicePhotoRepository {
     suspend fun getDevicePhotos(deviceId: String): Either<Failure, List<String>>
@@ -41,8 +42,9 @@ class DevicePhotoRepositoryImpl(
         deviceId: String,
         photoPaths: List<String>
     ): Either<Failure, List<PhotoPresignedMetadata>> {
-        val photoNames = photoPaths.mapIndexed { i, path ->
-            path.substringAfterLast('/').replaceBeforeLast('.', "img$i")
+        val photoNames = photoPaths.map {
+            val uuid = UUID.nameUUIDFromBytes(it.substringAfterLast('/').toByteArray()).toString()
+            "$uuid.jpg"
         }
         return datasource.getPhotosMetadataForUpload(deviceId, photoNames)
     }

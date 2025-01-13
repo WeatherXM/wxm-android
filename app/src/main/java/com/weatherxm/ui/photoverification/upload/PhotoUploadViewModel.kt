@@ -46,7 +46,7 @@ class PhotoUploadViewModel(
                 .onRight {
                     onPhotosPresignedMetadata.postValue(Resource.success(it))
                 }.onLeft {
-                    // TODO: Handle Failer
+                    // TODO: Handle Failure
                 }
         }
     }
