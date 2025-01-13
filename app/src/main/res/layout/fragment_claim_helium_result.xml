@@ -124,9 +124,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:text="@string/action_go_to"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="@string/action_go_to" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <LinearLayout
             android:id="@+id/failureButtonsContainer"

@@ -30,6 +30,12 @@ class ClaimHeliumResultFragment : BaseFragment() {
     private val model: ClaimHeliumResultViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimHeliumResultBinding
 
+    companion object {
+        const val STEP_SET_UP_STATION = 0
+        const val STEP_REBOOT_STATION = 1
+        const val STEP_CLAIM_STATION = 2
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,13 +62,13 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
         model.onRebooting().observe(viewLifecycleOwner) {
             if (it) {
-                onStep(1)
+                onStep(STEP_REBOOT_STATION)
             }
         }
 
         model.onBLEConnection().observe(viewLifecycleOwner) {
             if (it) {
-                onStep(2)
+                onStep(STEP_CLAIM_STATION)
             }
         }
 
@@ -79,6 +85,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
             hideButtons()
             binding.retry.setOnClickListener {
                 uiError.retryFunction?.invoke()
+                onLoadingState()
             }
             binding.failureButtonsContainer.visible(true)
             binding.steps.visible(false)
@@ -98,11 +105,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
             updateUI(it)
         }
 
-        binding.status.clear()
-            .animation(R.raw.anim_loading)
-            .title(R.string.claiming_station)
-            .htmlSubtitle(R.string.claiming_station_helium_desc)
-            .show()
+        onLoadingState()
     }
 
     private fun onStep(currentStep: Int) {
@@ -111,8 +114,8 @@ class ClaimHeliumResultFragment : BaseFragment() {
             binding.steps.visible(true)
         }
         when (currentStep) {
-            0 -> binding.firstStep.typeface = Typeface.DEFAULT_BOLD
-            1 -> {
+            STEP_SET_UP_STATION -> binding.firstStep.typeface = Typeface.DEFAULT_BOLD
+            STEP_REBOOT_STATION -> {
                 binding.firstStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
@@ -123,7 +126,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 binding.firstStep.typeface = Typeface.DEFAULT
                 binding.secondStep.typeface = Typeface.DEFAULT_BOLD
             }
-            2 -> {
+            STEP_CLAIM_STATION -> {
                 binding.secondStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
@@ -142,7 +145,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
             Status.SUCCESS -> {
                 val device = resource.data
                 if (device != null && device.isHelium() && device.shouldPromptUpdate()) {
-
                     analytics.trackEventPrompt(
                         AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
                         AnalyticsService.ParamValue.WARN.paramValue,
@@ -158,6 +160,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                         .animation(R.raw.anim_success, false)
                         .title(R.string.station_claimed)
                         .htmlSubtitle(getString(R.string.success_claim_device, device.name))
+                    binding.firmwareUpdateButtonsContainer.visible(true)
                     binding.informationCard.visible(true)
                 } else if (device != null) {
                     hideButtons()
@@ -189,7 +192,8 @@ class ClaimHeliumResultFragment : BaseFragment() {
                             AnalyticsService.ParamValue.RETRY.paramValue
                         )
                     )
-                    onStep(2)
+                    onLoadingState()
+                    onStep(STEP_CLAIM_STATION)
                     parentModel.claimDevice(locationModel.getInstallationLocation())
                 }
                 binding.failureButtonsContainer.visible(true)
@@ -209,6 +213,14 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 // Do nothing
             }
         }
+    }
+
+    private fun onLoadingState() {
+        binding.status.clear()
+            .animation(R.raw.anim_loading)
+            .title(R.string.claiming_station)
+            .htmlSubtitle(R.string.claiming_station_helium_desc)
+            .show()
     }
 
     private fun onViewDevice(device: UIDevice) {

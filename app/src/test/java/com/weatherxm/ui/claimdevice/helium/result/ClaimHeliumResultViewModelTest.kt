@@ -39,7 +39,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
 
     val bluetoothDisabledFailure = BluetoothError.BluetoothDisabledException()
     val connectionLostFailure = BluetoothError.ConnectionLostException()
-    val connectionRejectedFailure = BluetoothError.ConnectionRejectedError()
+    val gattRequestRejectedFailure = BluetoothError.GattRequestRejectedException()
     val atCommandFailure = BluetoothError.ATCommandError()
     val bluetoothDisabled = "Bluetooth Disabled"
     val connectionLost = "Connection Lost"
@@ -105,7 +105,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
                 )
             }
             When("it's any other Failure") {
-                viewModel.onConnectionFailure(connectionRejectedFailure)
+                viewModel.onConnectionFailure(gattRequestRejectedFailure)
                 viewModel.onBLEError().value.testBLEError(null, connectionRejected)
             }
         }
@@ -129,14 +129,14 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
             When("it's a success start the reboot flow") {
                 coMockEitherRight({ usecase.setFrequency(frequency) }, Unit)
                 When("it's a failure") {
-                    coMockEitherLeft({ usecase.reboot() }, connectionRejectedFailure)
+                    coMockEitherLeft({ usecase.reboot() }, gattRequestRejectedFailure)
                     runTest { viewModel.setFrequency(frequency) }
                     then("LiveData onBLEError should post the respective error") {
                         viewModel.onBLEError().value.testBLEError(null, rebootFailed)
                     }
                     then("track the event's failure in analytics") {
                         verify(exactly = 1) {
-                            analytics.trackEventFailure(connectionRejectedFailure.code)
+                            analytics.trackEventFailure(gattRequestRejectedFailure.code)
                         }
                     }
                 }
