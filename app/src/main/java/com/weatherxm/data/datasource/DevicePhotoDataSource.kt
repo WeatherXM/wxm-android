@@ -5,6 +5,7 @@ import com.weatherxm.data.mapResponse
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.data.network.ApiService
+import com.weatherxm.data.network.PhotoNamesBody
 import com.weatherxm.data.services.CacheService
 
 interface DevicePhotoDataSource {
@@ -38,7 +39,8 @@ class DevicePhotoDataSourceImpl(
         deviceId: String,
         photoNames: List<String>
     ): Either<Failure, List<PhotoPresignedMetadata>> {
-        return apiService.getPhotosMetadataForUpload(deviceId, photoNames).mapResponse()
+        return apiService.getPhotosMetadataForUpload(deviceId, PhotoNamesBody(photoNames))
+            .mapResponse()
     }
 
     override fun getAcceptedTerms(): Boolean {

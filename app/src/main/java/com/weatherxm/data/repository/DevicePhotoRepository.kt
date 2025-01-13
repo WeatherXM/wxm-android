@@ -31,9 +31,9 @@ class DevicePhotoRepositoryImpl(
         /**
          * photoPath = https://weatherxm.com/my-weather-station/photo1.jpg
          * will become
-         * photoName = photo1
+         * photoName = photo1.jpg
          */
-        val photoName = photoPath.substringAfterLast('/').substringBeforeLast('.')
+        val photoName = photoPath.substringAfterLast('/')
         return datasource.deleteDevicePhoto(deviceId, photoName)
     }
 

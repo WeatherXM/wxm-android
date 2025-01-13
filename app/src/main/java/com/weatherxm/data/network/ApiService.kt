@@ -307,6 +307,6 @@ interface ApiService {
     @POST("/api/v1/me/devices/{deviceId}/photos")
     suspend fun getPhotosMetadataForUpload(
         @Path("deviceId") deviceId: String,
-        @Body photoNames: List<String>
+        @Body names: PhotoNamesBody
     ): NetworkResponse<List<PhotoPresignedMetadata>, ErrorResponse>
 }

@@ -186,6 +186,7 @@ abstract class BaseDeviceSettingsViewModel(
             onLoading.postValue(true)
             if (shouldDeleteAllPhotos == true) {
                 deleteAllPhotos(photosToDelete)
+                getDevicePhotos()
             } else {
                 getDevicePhotos()
             }
@@ -193,15 +194,13 @@ abstract class BaseDeviceSettingsViewModel(
         }
     }
 
-    private fun deleteAllPhotos(photos: ArrayList<StationPhoto>?) {
+    private suspend fun deleteAllPhotos(photos: ArrayList<StationPhoto>?) {
         photos?.forEach { photo ->
             photo.localPath?.let {
                 File(it).delete()
             }
             photo.remotePath?.let {
-                viewModelScope.launch(dispatcher) {
-                    photosUseCase.deleteDevicePhoto(device.id, it)
-                }
+                photosUseCase.deleteDevicePhoto(device.id, it)
             }
         }
     }

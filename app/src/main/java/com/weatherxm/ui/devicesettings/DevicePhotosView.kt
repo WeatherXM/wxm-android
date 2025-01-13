@@ -96,6 +96,8 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
     private fun onEmpty() {
         binding.inProgressText.visible(false)
         binding.inProgressUploadState.visible(false)
+        binding.photosText.visible(false)
+        binding.photosContainer.visible(false)
         binding.emptyText.visible(true)
         binding.startPhotoVerificationBtn.visible(true)
     }
@@ -114,8 +116,8 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
             binding.photosContainer.visible(true)
             if(devicePhotos.size > 2) {
                 binding.morePhotos.text = "+${devicePhotos.size - 2}"
-                binding.translucentViewOnSecondPhoto.visible(true)
             }
+            binding.translucentViewOnSecondPhoto.visible(devicePhotos.size > 2)
         }
     }
 }
