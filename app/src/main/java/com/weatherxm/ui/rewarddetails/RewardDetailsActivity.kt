@@ -2,7 +2,7 @@ package com.weatherxm.ui.rewarddetails
 
 import android.os.Bundle
 import android.widget.Toast
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService

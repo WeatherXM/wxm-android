@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.weatherxm.R
 import com.weatherxm.data.models.BoostReward
 import com.weatherxm.databinding.ListItemRewardBoostBinding

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimPulseClaimingCodeBinding
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel

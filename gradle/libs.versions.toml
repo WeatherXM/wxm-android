@@ -27,7 +27,7 @@ arrow = "1.2.4"
 barcode-scanner = "4.3.0"
 better-link-movement-method = "2.2.0"
 chucker = "4.1.0"
-coil-base = "2.7.0"
+coil = "3.0.4"
 desugar_jdk_libs = "2.1.4"
 dfu = "2.9.0"
 firebase-bom = "33.7.0"
@@ -103,8 +103,9 @@ barcode-scanner = { module = "com.journeyapps:zxing-android-embedded", version.r
 better-link-movement-method = { module = "me.saket:better-link-movement-method", version.ref = "better-link-movement-method" }
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
-coil-base = { module = "io.coil-kt:coil-base", version.ref = "coil-base" }
-coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil-base" }
+coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 dfu = { module = "no.nordicsemi.android:dfu", version.ref = "dfu" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }

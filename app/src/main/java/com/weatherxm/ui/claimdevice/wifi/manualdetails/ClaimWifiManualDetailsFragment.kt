@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimWifiManualDetailsBinding
@@ -15,8 +15,8 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.unmask
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel

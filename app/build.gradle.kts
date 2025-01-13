@@ -523,8 +523,9 @@ dependencies {
     implementation(libs.dfu)
 
     // Image Loader
-    implementation(libs.coil.base)
+    implementation(libs.coil.core)
     implementation(libs.coil.gif)
+    implementation(libs.coil.network)
 
     // Chucker - HTTP Inspector
     debugImplementation(libs.chucker)
