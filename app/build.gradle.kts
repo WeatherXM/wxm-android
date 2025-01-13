@@ -74,7 +74,7 @@ fun getFlavorProperty(propertyName: String, flavorEnvFile: String): String {
 android {
     namespace = "com.weatherxm"
     compileSdk = 35
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
 
     defaultConfig {
         applicationId = "com.weatherxm.app"
