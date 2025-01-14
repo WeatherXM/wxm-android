@@ -843,20 +843,20 @@ data class PhotoPresignedMetadata(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class AWSMetadata(
-    val bucket: String,
+    val bucket: String?,
     @Json(name = "X-Amz-Algorithm")
-    val xAmzAlgo: String,
+    val xAmzAlgo: String?,
     @Json(name = "X-Amz-Credential")
-    val xAmzCredentials: String,
+    val xAmzCredentials: String?,
     @Json(name = "X-Amz-Date")
-    val xAmzDate: String,
-// TODO STOPSHIP: Do what with this?   @Json(name = "X-Amz-Security-Token")
-//    val xAmzSecurityToken: String,
+    val xAmzDate: String?,
+    @Json(name = "X-Amz-Security-Token")
+    val xAmzSecurityToken: String?,
     @Json(name = "X-Amz-Signature")
-    val xAmzSignature: String,
-    val key: String,
+    val xAmzSignature: String?,
+    val key: String?,
     @Json(name = "Policy")
-    val policy: String,
+    val policy: String?,
 ) : Parcelable
 
 @Suppress("EnumNaming")

@@ -292,7 +292,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private fun createPhotoFile(): File {
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(model.device.normalizedName(), ".jpg", storageDir).apply {
+        return File.createTempFile(model.device.id, ".jpg", storageDir).apply {
             latestPhotoTakenPath = absolutePath
         }
     }

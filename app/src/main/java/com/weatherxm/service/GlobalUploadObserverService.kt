@@ -16,6 +16,7 @@ import net.gotev.uploadservice.exceptions.UserCancelledUploadException
 import net.gotev.uploadservice.network.ServerResponse
 import net.gotev.uploadservice.observer.request.RequestObserverDelegate
 import timber.log.Timber
+import java.io.File
 
 class GlobalUploadObserverService(
     private val analytics: AnalyticsWrapper
@@ -57,6 +58,10 @@ class GlobalUploadObserverService(
                 true
             )
         )
+
+        uploadInfo.files.forEach {
+            File(it.path).delete()
+        }
         onUploadPhotosState.resetReplayCache()
     }
 
