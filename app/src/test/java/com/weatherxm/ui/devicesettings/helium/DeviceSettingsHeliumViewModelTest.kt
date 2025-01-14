@@ -82,7 +82,7 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         null
     )
     val stakeholderSplits = RewardSplitsData(
-        listOf(RewardSplit("walletAddress", 50, 50F), RewardSplit("wallet", 50, 50F)),
+        listOf(RewardSplit("walletAddress", 50F, 50F), RewardSplit("wallet", 50F, 50F)),
         "walletAddress"
     )
     val deviceInfo = DeviceInfo(
