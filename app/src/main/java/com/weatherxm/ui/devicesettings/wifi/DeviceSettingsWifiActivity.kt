@@ -135,6 +135,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }
 
         binding.devicePhotosCard.initProgressView(
+            device = model.device,
             onError = {
                 // Trigger a refresh on the photos through the API
                 model.onPhotosChanged(false, null)

@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import coil3.load
 import com.weatherxm.databinding.ViewStationSettingsDevicePhotosBinding
 import com.weatherxm.service.GlobalUploadObserverService
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.PhotoUploadState
 import org.koin.core.component.KoinComponent
@@ -40,29 +41,31 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         orientation = VERTICAL
     }
 
-    fun initProgressView(onError: () -> Unit, onSuccess: () -> Unit) {
+    fun initProgressView(device: UIDevice, onError: () -> Unit, onSuccess: () -> Unit) {
         binding.inProgressUploadState.setContent {
             uploadObserverService.getUploadPhotosState().collectAsState(null).value?.let {
-                binding.photosText.visible(false)
-                binding.photosContainer.visible(false)
-                binding.emptyText.visible(false)
-                binding.startPhotoVerificationBtn.visible(false)
-                binding.cancelUploadBtn.visible(!it.isSuccess && it.error == null)
-                binding.inProgressText.visible(true)
-                binding.inProgressUploadState.visible(true)
+                if (device.id == it.device.id) {
+                    binding.photosText.visible(false)
+                    binding.photosContainer.visible(false)
+                    binding.emptyText.visible(false)
+                    binding.startPhotoVerificationBtn.visible(false)
+                    binding.cancelUploadBtn.visible(!it.isSuccess && it.error == null)
+                    binding.inProgressText.visible(true)
+                    binding.inProgressUploadState.visible(true)
 
-                if (it.error != null) {
-                    binding.inProgressText.visible(false)
-                    binding.inProgressUploadState.visible(false)
-                    onError()
-                    binding.errorCard.visible(true)
-                } else {
-                    binding.errorCard.visible(false)
+                    if (it.error != null) {
+                        binding.inProgressText.visible(false)
+                        binding.inProgressUploadState.visible(false)
+                        onError()
+                        binding.errorCard.visible(true)
+                    } else {
+                        binding.errorCard.visible(false)
+                    }
+                    if (it.isSuccess) {
+                        onSuccess()
+                    }
+                    PhotoUploadState(it, false)
                 }
-                if (it.isSuccess) {
-                    onSuccess()
-                }
-                PhotoUploadState(it, false)
             }
         }
     }
@@ -114,7 +117,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
             binding.firstPhoto.load(devicePhotos[0])
             binding.secondPhoto.load(devicePhotos[1])
             binding.photosContainer.visible(true)
-            if(devicePhotos.size > 2) {
+            if (devicePhotos.size > 2) {
                 binding.morePhotos.text = "+${devicePhotos.size - 2}"
             }
             binding.translucentViewOnSecondPhoto.visible(devicePhotos.size > 2)

@@ -30,7 +30,6 @@ import coil3.load
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
-import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
@@ -47,7 +46,6 @@ import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
@@ -57,8 +55,6 @@ class PhotoGalleryActivity : BaseActivity() {
         const val MIN_PHOTOS = 2
         const val MAX_PHOTOS = 6
     }
-
-    private val uploadObserverService: GlobalUploadObserverService by inject()
 
     private lateinit var binding: ActivityPhotoGalleryBinding
 
