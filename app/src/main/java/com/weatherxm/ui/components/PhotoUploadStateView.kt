@@ -68,7 +68,7 @@ fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
         }
         if (showStationName) {
             Text(
-                text = state.device.name,
+                text = state.device.getDefaultOrFriendlyName(),
                 style = MaterialTheme.typography.bodySmall,
                 color = colorResource(R.color.darkGrey)
             )

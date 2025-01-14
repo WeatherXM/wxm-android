@@ -161,7 +161,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             if (uploadState?.error != null) {
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
-                    deleteAllStationPhotos(context, uploadState?.device)
+                    deleteAllStationPhotos(context, uploadState.device)
                 }
                 binding.uploadStateCard.setOnClickListener {
                     // TODO: STOPSHIP: Invoke retry mechanism
