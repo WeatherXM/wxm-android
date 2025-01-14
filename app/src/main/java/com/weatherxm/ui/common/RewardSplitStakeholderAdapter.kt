@@ -11,6 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.databinding.ListItemRewardSplitStakeholderBinding
 import com.weatherxm.util.Mask
+import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.NumberUtils.formatTokens
 
 class RewardSplitStakeholderAdapter(
@@ -54,12 +55,13 @@ class RewardSplitStakeholderAdapter(
                 binding.address.text = Mask.maskHash(item.wallet)
             }
 
+            val formattedPercentage = formatNumber(item.stake, 2)
             if (isInStationSettings) {
-                binding.percentage.text = "${item.stake}%"
+                binding.percentage.text = "$formattedPercentage%"
             } else {
                 binding.amount.text =
                     itemView.context.getString(R.string.wxm_amount, formatTokens(item.reward))
-                binding.percentage.text = "(${item.stake}%)"
+                binding.percentage.text = "($formattedPercentage%)"
             }
         }
     }
