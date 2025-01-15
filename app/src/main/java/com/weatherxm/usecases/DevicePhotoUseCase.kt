@@ -59,7 +59,10 @@ class DevicePhotoUseCaseImpl(
 
     override fun retryUpload(deviceId: String) {
         getDevicePhotoUploadIds(deviceId).forEach {
-            repository.getUploadIdRequest(it)?.startUpload()
+            // TODO: STOPSHIP: This crashes. https://github.com/gotev/android-upload-service/issues/672 
+            val request = repository.getUploadIdRequest(it)
+            request?.setUploadID(it)
+            request?.startUpload()
         }
     }
 }

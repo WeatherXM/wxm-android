@@ -211,7 +211,11 @@ class CacheService(
     }
 
     fun addDevicePhotoUploadId(deviceId: String, uploadId: String) {
-        this.devicePhotoUploadIds[deviceId]?.add(uploadId)
+        if (this.devicePhotoUploadIds[deviceId] == null) {
+            this.devicePhotoUploadIds[deviceId] = mutableListOf(uploadId)
+        } else {
+            this.devicePhotoUploadIds[deviceId]?.add(uploadId)
+        }
     }
 
     fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {

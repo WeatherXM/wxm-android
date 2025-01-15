@@ -41,28 +41,28 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         orientation = VERTICAL
     }
 
-    fun initProgressView(device: UIDevice, onError: () -> Unit, onSuccess: () -> Unit) {
+    fun initProgressView(device: UIDevice, onRefresh: () -> Unit) {
         binding.inProgressUploadState.setContent {
             uploadObserverService.getUploadPhotosState().collectAsState(null).value?.let {
                 if (device.id == it.device.id) {
                     binding.photosText.visible(false)
                     binding.photosContainer.visible(false)
-                    binding.emptyText.visible(false)
-                    binding.startPhotoVerificationBtn.visible(false)
-                    binding.cancelUploadBtn.visible(!it.isSuccess && it.error == null)
+                    binding.emptyText.visible(it.isError)
+                    binding.startPhotoVerificationBtn.visible(it.isError)
+                    binding.cancelUploadBtn.visible(!it.isSuccess && !it.isError)
                     binding.inProgressText.visible(true)
                     binding.inProgressUploadState.visible(true)
 
-                    if (it.error != null) {
+                    if (it.isError) {
                         binding.inProgressText.visible(false)
                         binding.inProgressUploadState.visible(false)
-                        onError()
+                        onRefresh()
                         binding.errorCard.visible(true)
                     } else {
                         binding.errorCard.visible(false)
                     }
                     if (it.isSuccess) {
-                        onSuccess()
+                        onRefresh()
                     }
                     PhotoUploadState(it, false)
                 }

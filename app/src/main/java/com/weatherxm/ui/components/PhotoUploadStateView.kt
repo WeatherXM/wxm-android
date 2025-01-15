@@ -29,7 +29,7 @@ fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small))
         ) {
-            if (state.error == null) {
+            if (!state.isError) {
                 Text(
                     text = "${state.progress}%",
                     fontSize = 24.sp,
@@ -57,7 +57,7 @@ fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
                 )
             }
         }
-        if (state.error == null) {
+        if (!state.isError) {
             LinearProgressIndicator(
                 progress = { state.progress.toFloat() },
                 modifier = Modifier.fillMaxWidth(),

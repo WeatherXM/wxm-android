@@ -154,10 +154,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 uploadObserverService.getUploadPhotosState().collectAsState(null).value
             binding.uploadStateContainer.visible(uploadState != null)
 
-            binding.uploadAnimation.visible(uploadState?.error == null)
-            binding.uploadRetryIcon.visible(uploadState?.error != null)
+            binding.uploadAnimation.visible(uploadState?.isError == false)
+            binding.uploadRetryIcon.visible(uploadState?.isError == true)
 
-            if (uploadState?.error != null) {
+            if (uploadState?.isError == true) {
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
                     deleteAllStationPhotos(context, uploadState.device)

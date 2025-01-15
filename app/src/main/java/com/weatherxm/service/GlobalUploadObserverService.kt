@@ -36,7 +36,8 @@ class GlobalUploadObserverService(
             UploadPhotosState(
                 device,
                 uploadInfo.progressPercent,
-                false
+                isSuccess = false,
+                isError = false
             )
         )
     }
@@ -57,7 +58,8 @@ class GlobalUploadObserverService(
             UploadPhotosState(
                 device,
                 uploadInfo.progressPercent,
-                true
+                isSuccess = true,
+                isError = false
             )
         )
 
@@ -84,8 +86,8 @@ class GlobalUploadObserverService(
             UploadPhotosState(
                 device,
                 uploadInfo.progressPercent,
-                false,
-                uploadInfo
+                isSuccess = false,
+                isError = true
             )
         )
     }

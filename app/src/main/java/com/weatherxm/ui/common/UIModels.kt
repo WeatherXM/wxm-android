@@ -640,7 +640,7 @@ data class UploadPhotosState(
     val device: UIDevice,
     val progress: Int,
     val isSuccess: Boolean,
-    val error: UploadInfo? = null
+    val isError: Boolean
 )
 
 enum class RewardTimelineType {
