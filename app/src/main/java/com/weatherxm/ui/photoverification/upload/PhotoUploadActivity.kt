@@ -58,7 +58,13 @@ class PhotoUploadActivity : BaseActivity() {
                     binding.continueBtn.visible(true)
                 }
                 Status.ERROR -> {
-                    TODO()
+                    binding.status
+                        .clear()
+                        .animation(R.raw.anim_error)
+                        .title(R.string.upload_failed_to_start)
+                        .subtitle(resource.message)
+                        .action(getString(R.string.action_retry_upload))
+                        .setOnClickListener { model.prepareUpload() }
                 }
                 Status.LOADING -> {
                     // Do nothing. Already in loading state.

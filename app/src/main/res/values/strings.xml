@@ -701,5 +701,6 @@
     <string name="preparing_the_upload">Preparing the upload…</string>
     <string name="preparing_the_upload_subtitle">Almost there! We’ll let you know once everything is ready.</string>
     <string name="upload_started">Upload started successfully</string>
+    <string name="upload_failed_to_start">Upload failed to start</string>
     <string name="upload_started_subtitle">Thanks for helping us build a healthier network!\n\nOnce uploaded, the photos will appear in your station’s settings.</string>
 </resources>
