@@ -38,7 +38,6 @@ class App : Application() {
         )
         UploadServiceConfig.httpStack = OkHttpStack()
         UploadServiceLogger.setLogLevel(UploadServiceLogger.LogLevel.Debug)
-
         GlobalRequestObserver(this, uploadObserverService)
     }
 }

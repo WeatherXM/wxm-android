@@ -101,6 +101,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         binding.inProgressUploadState.visible(false)
         binding.photosText.visible(false)
         binding.photosContainer.visible(false)
+        binding.cancelUploadBtn.visible(false)
         binding.emptyText.visible(true)
         binding.startPhotoVerificationBtn.visible(true)
     }

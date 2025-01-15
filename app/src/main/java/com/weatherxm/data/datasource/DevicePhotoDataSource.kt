@@ -26,7 +26,6 @@ interface DevicePhotoDataSource {
         request: MultipartUploadRequest
     )
 
-    fun removeDevicePhotoUploadId(deviceId: String, uploadId: String)
     fun getUploadIdRequest(uploadId: String): MultipartUploadRequest?
 }
 
@@ -72,11 +71,6 @@ class DevicePhotoDataSourceImpl(
     ) {
         cacheService.setUploadIdRequest(uploadId, request)
         cacheService.addDevicePhotoUploadId(deviceId, uploadId)
-    }
-
-    override fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {
-        cacheService.removeUploadIdRequest(uploadId)
-        cacheService.removeDevicePhotoUploadId(deviceId, uploadId)
     }
 
     override fun getUploadIdRequest(uploadId: String): MultipartUploadRequest? {

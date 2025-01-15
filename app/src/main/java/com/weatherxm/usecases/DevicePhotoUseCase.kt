@@ -16,7 +16,6 @@ interface DevicePhotoUseCase {
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
     fun getDevicePhotoUploadIds(deviceId: String): List<String>
-    fun removeDevicePhotoUploadId(deviceId: String, uploadId: String)
     fun retryUpload(deviceId: String)
 }
 
@@ -51,10 +50,6 @@ class DevicePhotoUseCaseImpl(
 
     override fun getDevicePhotoUploadIds(deviceId: String): List<String> {
         return repository.getDevicePhotoUploadIds(deviceId)
-    }
-
-    override fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {
-        repository.removeDevicePhotoUploadId(deviceId, uploadId)
     }
 
     override fun retryUpload(deviceId: String) {

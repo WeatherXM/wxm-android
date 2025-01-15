@@ -194,8 +194,6 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                         UploadPhotoWorker.cancelWorkers(this, model.device.id)
                         model.getDevicePhotoUploadIds().onEach {
                             getCancelUploadIntent(it).send()
-                        }.also {
-                            model.cancelPhotoUploading(it)
                         }
                         model.onPhotosChanged(false, null)
                     }

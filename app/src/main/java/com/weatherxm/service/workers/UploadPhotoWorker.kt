@@ -8,10 +8,16 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.weatherxm.R
+import com.weatherxm.app.App.Companion.UPLOADING_NOTIFICATION_CHANNEL_ID
 import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.data.repository.DevicePhotoRepository
 import com.weatherxm.data.requireNetwork
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
+import net.gotev.uploadservice.data.UploadNotificationAction
+import net.gotev.uploadservice.data.UploadNotificationConfig
+import net.gotev.uploadservice.data.UploadNotificationStatusConfig
+import net.gotev.uploadservice.extensions.getCancelUploadIntent
 import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -104,10 +110,47 @@ class UploadPhotoWorker(
             key?.let { addParameter(KEY, key) }
             policy?.let { addParameter(POLICY, policy) }
             addFileToUpload(photoPath, "file")
+            setNotificationConfig { _, uploadId ->
+                getNotificationConfig(uploadId)
+            }
             val uploadId = startUpload()
             photoRepository.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, this)
         }
 
         return Result.success()
+    }
+
+    private fun getNotificationConfig(uploadId: String): UploadNotificationConfig {
+        return UploadNotificationConfig(
+            notificationChannelId = UPLOADING_NOTIFICATION_CHANNEL_ID,
+            isRingToneEnabled = true,
+            progress = UploadNotificationStatusConfig(
+                title = context.getString(R.string.upload_notification_in_progress_title),
+                iconResourceID = R.drawable.ic_logo,
+                message = "",
+                actions = arrayListOf(
+                    UploadNotificationAction(
+                        icon = 0,
+                        title = context.getString(R.string.action_cancel),
+                        intent = context.getCancelUploadIntent(uploadId)
+                    )
+                )
+            ),
+            success = UploadNotificationStatusConfig(
+                title = context.getString(R.string.upload_notification_success_title),
+                iconResourceID = R.drawable.ic_logo,
+                message = ""
+            ),
+            error = UploadNotificationStatusConfig(
+                title = context.getString(R.string.upload_notification_error_title),
+                iconResourceID = R.drawable.ic_logo,
+                message = context.getString(R.string.upload_notification_error_message)
+            ),
+            cancelled = UploadNotificationStatusConfig(
+                title = context.getString(R.string.upload_notification_cancelled_title),
+                iconResourceID = R.drawable.ic_logo,
+                message = ""
+            )
+        )
     }
 }

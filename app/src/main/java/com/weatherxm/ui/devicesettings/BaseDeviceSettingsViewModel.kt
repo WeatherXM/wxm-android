@@ -209,12 +209,6 @@ abstract class BaseDeviceSettingsViewModel(
         return photosUseCase.getDevicePhotoUploadIds(device.id)
     }
 
-    fun cancelPhotoUploading(uploadIds: List<String>) {
-        uploadIds.forEach {
-            photosUseCase.removeDevicePhotoUploadId(device.id, it)
-        }
-    }
-
     fun retryPhotoUpload() = photosUseCase.retryUpload(device.id)
 
     abstract fun getDeviceInformation(context: Context)
