@@ -7,6 +7,7 @@ import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.PhotoNamesBody
 import com.weatherxm.data.services.CacheService
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 
 interface DevicePhotoDataSource {
     suspend fun getDevicePhotos(deviceId: String): Either<Failure, List<String>>
@@ -18,9 +19,15 @@ interface DevicePhotoDataSource {
 
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
-    fun getDevicePhotoUploadingIds(deviceId: String): List<String>
-    fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String)
-    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String)
+    fun getDevicePhotoUploadIds(deviceId: String): List<String>
+    fun addDevicePhotoUploadIdAndRequest(
+        deviceId: String,
+        uploadId: String,
+        request: MultipartUploadRequest
+    )
+
+    fun removeDevicePhotoUploadId(deviceId: String, uploadId: String)
+    fun getUploadIdRequest(uploadId: String): MultipartUploadRequest?
 }
 
 class DevicePhotoDataSourceImpl(
@@ -54,15 +61,25 @@ class DevicePhotoDataSourceImpl(
         cacheService.setPhotoVerificationAcceptedTerms()
     }
 
-    override fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
-        return cacheService.getDevicePhotoUploadingIds(deviceId)
+    override fun getDevicePhotoUploadIds(deviceId: String): List<String> {
+        return cacheService.getDevicePhotoUploadIds(deviceId)
     }
 
-    override fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        cacheService.addDevicePhotoUploadingId(deviceId, uploadingId)
+    override fun addDevicePhotoUploadIdAndRequest(
+        deviceId: String,
+        uploadId: String,
+        request: MultipartUploadRequest
+    ) {
+        cacheService.setUploadIdRequest(uploadId, request)
+        cacheService.addDevicePhotoUploadId(deviceId, uploadId)
     }
 
-    override fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        cacheService.removeDevicePhotoUploadingId(deviceId, uploadingId)
+    override fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {
+        cacheService.removeUploadIdRequest(uploadId)
+        cacheService.removeDevicePhotoUploadId(deviceId, uploadId)
+    }
+
+    override fun getUploadIdRequest(uploadId: String): MultipartUploadRequest? {
+        return cacheService.getUploadIdRequest(uploadId)
     }
 }

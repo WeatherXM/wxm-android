@@ -18,6 +18,7 @@ import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.Resources
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 import okhttp3.Cache
 import java.util.concurrent.TimeUnit
 
@@ -70,7 +71,8 @@ class CacheService(
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
-    private var devicePhotoUploadingIds: ArrayMap<String, MutableList<String>> = ArrayMap()
+    private var devicePhotoUploadIds: ArrayMap<String, MutableList<String>> = ArrayMap()
+    private var uploadIdRequest: ArrayMap<String, MultipartUploadRequest> = ArrayMap()
     private var followedStationsIds = listOf<String>()
     private var userStationsIds = listOf<String>()
     private var countriesInfo = listOf<CountryInfo>()
@@ -204,16 +206,28 @@ class CacheService(
         locations[suggestion.id] = location
     }
 
-    fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
-        return devicePhotoUploadingIds[deviceId] ?: listOf()
+    fun getDevicePhotoUploadIds(deviceId: String): List<String> {
+        return devicePhotoUploadIds[deviceId] ?: listOf()
     }
 
-    fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        this.devicePhotoUploadingIds[deviceId]?.add(uploadingId)
+    fun addDevicePhotoUploadId(deviceId: String, uploadId: String) {
+        this.devicePhotoUploadIds[deviceId]?.add(uploadId)
     }
 
-    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        this.devicePhotoUploadingIds[deviceId]?.remove(uploadingId)
+    fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {
+        this.devicePhotoUploadIds[deviceId]?.remove(uploadId)
+    }
+
+    fun getUploadIdRequest(uploadId: String): MultipartUploadRequest? {
+        return uploadIdRequest[uploadId]
+    }
+
+    fun setUploadIdRequest(uploadId: String, request: MultipartUploadRequest) {
+        uploadIdRequest[uploadId] = request
+    }
+
+    fun removeUploadIdRequest(uploadId: String) {
+        uploadIdRequest.remove(uploadId)
     }
 
     fun setWalletWarningDismissTimestamp(timestamp: Long) {
@@ -353,14 +367,15 @@ class CacheService(
     }
 
     fun clearAll() {
-        this.walletAddress = null
-        this.user = null
-        this.forecasts.clear()
-        this.suggestions.clear()
-        this.devicePhotoUploadingIds.clear()
-        this.locations.clear()
-        this.followedStationsIds = listOf()
-        this.userStationsIds = listOf()
+        walletAddress = null
+        user = null
+        forecasts.clear()
+        suggestions.clear()
+        devicePhotoUploadIds.clear()
+        uploadIdRequest.clear()
+        locations.clear()
+        followedStationsIds = listOf()
+        userStationsIds = listOf()
 
         okHttpCache.evictAll()
         encryptedPreferences.edit().clear().apply()
@@ -370,7 +385,8 @@ class CacheService(
     fun isCacheEmpty(): Boolean {
         return walletAddress == null && user == null && forecasts.isEmpty()
             && suggestions.isEmpty() && locations.isEmpty() && followedStationsIds.isEmpty()
-            && userStationsIds.isEmpty() && devicePhotoUploadingIds.isEmpty()
+            && userStationsIds.isEmpty() && devicePhotoUploadIds.isEmpty()
+            && uploadIdRequest.isEmpty()
     }
 
     /**

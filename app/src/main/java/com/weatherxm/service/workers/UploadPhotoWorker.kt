@@ -105,7 +105,7 @@ class UploadPhotoWorker(
             policy?.let { addParameter(POLICY, policy) }
             addFileToUpload(photoPath, "file")
             val uploadId = startUpload()
-            photoRepository.addDevicePhotoUploadingId(deviceId, uploadId)
+            photoRepository.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, this)
         }
 
         return Result.success()

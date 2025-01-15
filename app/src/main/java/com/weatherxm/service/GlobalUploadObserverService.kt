@@ -64,7 +64,7 @@ class GlobalUploadObserverService(
         uploadInfo.files.forEach {
             File(it.path).delete()
         }
-        cacheService.removeDevicePhotoUploadingId(device.id, uploadInfo.uploadId)
+        cacheService.removeDevicePhotoUploadId(device.id, uploadInfo.uploadId)
         onUploadPhotosState.resetReplayCache()
     }
 

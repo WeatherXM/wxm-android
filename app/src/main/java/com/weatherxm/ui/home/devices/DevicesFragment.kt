@@ -34,7 +34,6 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.PhotoUploadState
-import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.ImageFileHelper.deleteAllStationPhotos
 import com.weatherxm.util.NumberUtils.formatTokens
@@ -164,7 +163,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     deleteAllStationPhotos(context, uploadState.device)
                 }
                 binding.uploadStateCard.setOnClickListener {
-                    // TODO: STOPSHIP: Invoke retry mechanism
+                    parentModel.retryPhotoUpload(uploadState.device.id)
                 }
             } else if (uploadState?.isSuccess == true) {
                 removeUploadStateOnPause = true

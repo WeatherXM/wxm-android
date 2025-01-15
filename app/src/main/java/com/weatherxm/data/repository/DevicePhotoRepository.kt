@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.datasource.DevicePhotoDataSource
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.PhotoPresignedMetadata
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 import java.util.UUID
 
 interface DevicePhotoRepository {
@@ -16,9 +17,15 @@ interface DevicePhotoRepository {
 
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
-    fun getDevicePhotoUploadingIds(deviceId: String): List<String>
-    fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String)
-    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String)
+    fun getDevicePhotoUploadIds(deviceId: String): List<String>
+    fun addDevicePhotoUploadIdAndRequest(
+        deviceId: String,
+        uploadId: String,
+        request: MultipartUploadRequest
+    )
+
+    fun removeDevicePhotoUploadId(deviceId: String, uploadId: String)
+    fun getUploadIdRequest(uploadId: String): MultipartUploadRequest?
 }
 
 class DevicePhotoRepositoryImpl(
@@ -60,15 +67,23 @@ class DevicePhotoRepositoryImpl(
         datasource.setAcceptedTerms()
     }
 
-    override fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
-        return datasource.getDevicePhotoUploadingIds(deviceId)
+    override fun getDevicePhotoUploadIds(deviceId: String): List<String> {
+        return datasource.getDevicePhotoUploadIds(deviceId)
     }
 
-    override fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        datasource.addDevicePhotoUploadingId(deviceId, uploadingId)
+    override fun addDevicePhotoUploadIdAndRequest(
+        deviceId: String,
+        uploadId: String,
+        request: MultipartUploadRequest
+    ) {
+        datasource.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, request)
     }
 
-    override fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        datasource.removeDevicePhotoUploadingId(deviceId, uploadingId)
+    override fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {
+        datasource.removeDevicePhotoUploadId(deviceId, uploadId)
+    }
+
+    override fun getUploadIdRequest(uploadId: String): MultipartUploadRequest? {
+        return datasource.getUploadIdRequest(uploadId)
     }
 }

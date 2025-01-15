@@ -52,10 +52,13 @@ class PhotoUploadViewModel(
             usecase.getPhotosMetadataForUpload(device.id, photos.mapNotNull { it.localPath })
                 .onRight {
                     onPhotosPresignedMetadata.postValue(Resource.success(it))
-                }.onLeft {
+                }
+                .onLeft {
                     analytics.trackEventFailure(it.code)
                     val errorMessage = when (it) {
-                        is ApiError.DeviceNotFound -> resources.getString(R.string.error_device_not_found)
+                        is ApiError.DeviceNotFound -> {
+                            resources.getString(R.string.error_device_not_found)
+                        }
                         is ApiError.GenericError.JWTError.UnauthorizedError -> it.message
                         else -> it.getDefaultMessage(R.string.error_reach_out_short)
                     } ?: resources.getString(R.string.error_reach_out_short)

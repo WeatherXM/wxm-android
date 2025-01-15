@@ -145,8 +145,8 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             device = model.device,
             onError = {
                 // Trigger a refresh on the photos through the API
+                model.retryPhotoUpload()
                 model.onPhotosChanged(false, null)
-                // TODO: STOPSHIP:  Trigger retry mechanism
             },
             onSuccess = {
                 // Trigger a refresh on the photos through the API
@@ -197,7 +197,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                         )
                         // Trigger a refresh on the photos through the API
                         UploadPhotoWorker.cancelWorkers(this, model.device.id)
-                        model.getDevicePhotoUploadingIds().onEach {
+                        model.getDevicePhotoUploadIds().onEach {
                             getCancelUploadIntent(it).send()
                         }.also {
                             model.cancelPhotoUploading(it)
@@ -208,10 +208,10 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                     .show(this)
             },
             onRetry = {
+                model.retryPhotoUpload()
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.RETRY_UPLOADING_PHOTOS.paramValue
                 )
-                // TODO: STOPSHIP:  Trigger retry mechanism
             }
         )
 

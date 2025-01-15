@@ -15,8 +15,9 @@ interface DevicePhotoUseCase {
 
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
-    fun getDevicePhotoUploadingIds(deviceId: String): List<String>
-    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String)
+    fun getDevicePhotoUploadIds(deviceId: String): List<String>
+    fun removeDevicePhotoUploadId(deviceId: String, uploadId: String)
+    fun retryUpload(deviceId: String)
 }
 
 class DevicePhotoUseCaseImpl(
@@ -48,11 +49,17 @@ class DevicePhotoUseCaseImpl(
         repository.setAcceptedTerms()
     }
 
-    override fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
-        return repository.getDevicePhotoUploadingIds(deviceId)
+    override fun getDevicePhotoUploadIds(deviceId: String): List<String> {
+        return repository.getDevicePhotoUploadIds(deviceId)
     }
 
-    override fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
-        repository.removeDevicePhotoUploadingId(deviceId, uploadingId)
+    override fun removeDevicePhotoUploadId(deviceId: String, uploadId: String) {
+        repository.removeDevicePhotoUploadId(deviceId, uploadId)
+    }
+
+    override fun retryUpload(deviceId: String) {
+        getDevicePhotoUploadIds(deviceId).forEach {
+            repository.getUploadIdRequest(it)?.startUpload()
+        }
     }
 }

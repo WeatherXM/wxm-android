@@ -4,7 +4,6 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testNetworkCall
-import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
 import io.kotest.core.spec.style.BehaviorSpec
@@ -19,8 +18,8 @@ class DevicePhotoDataSourceTest : BehaviorSpec({
     val datasource = DevicePhotoDataSourceImpl(apiService, cacheService)
 
     val deviceId = "deviceId"
-    val devicePhotos = listOf<DevicePhoto>()
-    val photosResponse = NetworkResponse.Success<List<DevicePhoto>, ErrorResponse>(
+    val devicePhotos = listOf<String>()
+    val photosResponse = NetworkResponse.Success<List<String>, ErrorResponse>(
         devicePhotos,
         retrofitResponse(devicePhotos)
     )

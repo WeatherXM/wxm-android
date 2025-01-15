@@ -140,8 +140,8 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             device = model.device,
             onError = {
                 // Trigger a refresh on the photos through the API
+                model.retryPhotoUpload()
                 model.onPhotosChanged(false, null)
-                // TODO: STOPSHIP:  Trigger retry mechanism
             },
             onSuccess = {
                 // Trigger a refresh on the photos through the API
@@ -192,7 +192,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     .onPositiveClick(getString(R.string.yes_cancel)) {
                         // Trigger a refresh on the photos through the API
                         UploadPhotoWorker.cancelWorkers(this, model.device.id)
-                        model.getDevicePhotoUploadingIds().onEach {
+                        model.getDevicePhotoUploadIds().onEach {
                             getCancelUploadIntent(it).send()
                         }.also {
                             model.cancelPhotoUploading(it)
@@ -203,10 +203,10 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     .show(this)
             },
             onRetry = {
+                model.retryPhotoUpload()
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.RETRY_UPLOADING_PHOTOS.paramValue
                 )
-                // TODO: STOPSHIP:  Trigger retry mechanism
             }
         )
         binding.devicePhotosCard.visible(true)
