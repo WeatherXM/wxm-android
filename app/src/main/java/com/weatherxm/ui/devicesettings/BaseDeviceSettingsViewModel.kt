@@ -205,6 +205,16 @@ abstract class BaseDeviceSettingsViewModel(
         }
     }
 
+    fun getDevicePhotoUploadingIds(): List<String> {
+        return photosUseCase.getDevicePhotoUploadingIds(device.id)
+    }
+
+    fun cancelPhotoUploading(uploadingIds: List<String>) {
+        uploadingIds.forEach {
+            photosUseCase.removeDevicePhotoUploadingId(device.id, it)
+        }
+    }
+
     abstract fun getDeviceInformation(context: Context)
     abstract suspend fun handleInfo(context: Context, info: DeviceInfo)
 }

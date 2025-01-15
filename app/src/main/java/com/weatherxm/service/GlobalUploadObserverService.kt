@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UploadPhotosState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,7 +20,8 @@ import timber.log.Timber
 import java.io.File
 
 class GlobalUploadObserverService(
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val cacheService: CacheService
 ) : RequestObserverDelegate {
 
     private var device = UIDevice.empty()
@@ -62,6 +64,7 @@ class GlobalUploadObserverService(
         uploadInfo.files.forEach {
             File(it.path).delete()
         }
+        cacheService.removeDevicePhotoUploadingId(device.id, uploadInfo.uploadId)
         onUploadPhotosState.resetReplayCache()
     }
 

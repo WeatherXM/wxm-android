@@ -18,6 +18,9 @@ interface DevicePhotoDataSource {
 
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
+    fun getDevicePhotoUploadingIds(deviceId: String): List<String>
+    fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String)
+    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String)
 }
 
 class DevicePhotoDataSourceImpl(
@@ -49,5 +52,17 @@ class DevicePhotoDataSourceImpl(
 
     override fun setAcceptedTerms() {
         cacheService.setPhotoVerificationAcceptedTerms()
+    }
+
+    override fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
+        return cacheService.getDevicePhotoUploadingIds(deviceId)
+    }
+
+    override fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
+        cacheService.addDevicePhotoUploadingId(deviceId, uploadingId)
+    }
+
+    override fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
+        cacheService.removeDevicePhotoUploadingId(deviceId, uploadingId)
     }
 }

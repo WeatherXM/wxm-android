@@ -8,6 +8,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsHeliumBinding
+import com.weatherxm.service.workers.UploadPhotoWorker
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
@@ -31,6 +32,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
 import com.weatherxm.util.MapboxUtils.getMinimap
+import net.gotev.uploadservice.extensions.getCancelUploadIntent
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -194,8 +196,13 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                             AnalyticsService.ParamValue.CANCEL_UPLOADING_PHOTOS.paramValue
                         )
                         // Trigger a refresh on the photos through the API
+                        UploadPhotoWorker.cancelWorkers(this, model.device.id)
+                        model.getDevicePhotoUploadingIds().onEach {
+                            getCancelUploadIntent(it).send()
+                        }.also {
+                            model.cancelPhotoUploading(it)
+                        }
                         model.onPhotosChanged(false, null)
-                        // TODO: STOPSHIP:  Cancel the current upload
                     }
                     .build()
                     .show(this)

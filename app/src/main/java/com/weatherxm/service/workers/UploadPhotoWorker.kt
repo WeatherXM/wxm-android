@@ -9,10 +9,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.weatherxm.data.models.PhotoPresignedMetadata
+import com.weatherxm.data.repository.DevicePhotoRepository
 import com.weatherxm.data.requireNetwork
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 
 class UploadPhotoWorker(
@@ -20,6 +22,7 @@ class UploadPhotoWorker(
     private val workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
+        private const val UPLOAD_PHOTO_PREFIX = "UPLOAD_PHOTO_"
         private const val UPLOAD_URL = "uploadUrl"
         private const val PHOTO_PATH = "photoPath"
         private const val BUCKET = "bucket"
@@ -30,6 +33,11 @@ class UploadPhotoWorker(
         private const val SIGNATURE = "X-Amz-Signature"
         private const val KEY = "key"
         private const val POLICY = "Policy"
+
+        fun cancelWorkers(context: Context, deviceId: String) {
+            Timber.d("Cancelling Upload Photos Work Manager for device [$deviceId].")
+            WorkManager.getInstance(context).cancelAllWorkByTag(UPLOAD_PHOTO_PREFIX + deviceId)
+        }
 
         fun initAndStart(
             context: Context,
@@ -52,17 +60,20 @@ class UploadPhotoWorker(
                 .putString(POLICY, metadata.fields.policy)
 
             val uploadRequest = OneTimeWorkRequestBuilder<UploadPhotoWorker>()
+                .addTag(UPLOAD_PHOTO_PREFIX + deviceId)
                 .setConstraints(Constraints.requireNetwork())
                 .setInputData(data.build())
                 .build()
 
             WorkManager.getInstance(context).enqueueUniqueWork(
-                "UPLOAD_PHOTO_${photoPath}_$deviceId",
+                "$UPLOAD_PHOTO_PREFIX${photoPath}_$deviceId",
                 ExistingWorkPolicy.REPLACE,
                 uploadRequest
             )
         }
     }
+
+    private val photoRepository: DevicePhotoRepository by inject()
 
     override suspend fun doWork(): Result {
         val deviceId = workerParams.inputData.getString(ARG_DEVICE_ID)
@@ -93,7 +104,8 @@ class UploadPhotoWorker(
             key?.let { addParameter(KEY, key) }
             policy?.let { addParameter(POLICY, policy) }
             addFileToUpload(photoPath, "file")
-            startUpload()
+            val uploadId = startUpload()
+            photoRepository.addDevicePhotoUploadingId(deviceId, uploadId)
         }
 
         return Result.success()

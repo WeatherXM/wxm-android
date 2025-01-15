@@ -70,6 +70,7 @@ class CacheService(
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
+    private var devicePhotoUploadingIds: ArrayMap<String, MutableList<String>> = ArrayMap()
     private var followedStationsIds = listOf<String>()
     private var userStationsIds = listOf<String>()
     private var countriesInfo = listOf<CountryInfo>()
@@ -201,6 +202,18 @@ class CacheService(
 
     fun setSuggestionLocation(suggestion: SearchSuggestion, location: Location) {
         locations[suggestion.id] = location
+    }
+
+    fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
+        return devicePhotoUploadingIds[deviceId] ?: listOf()
+    }
+
+    fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
+        this.devicePhotoUploadingIds[deviceId]?.add(uploadingId)
+    }
+
+    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
+        this.devicePhotoUploadingIds[deviceId]?.remove(uploadingId)
     }
 
     fun setWalletWarningDismissTimestamp(timestamp: Long) {
@@ -344,6 +357,7 @@ class CacheService(
         this.user = null
         this.forecasts.clear()
         this.suggestions.clear()
+        this.devicePhotoUploadingIds.clear()
         this.locations.clear()
         this.followedStationsIds = listOf()
         this.userStationsIds = listOf()
@@ -356,7 +370,7 @@ class CacheService(
     fun isCacheEmpty(): Boolean {
         return walletAddress == null && user == null && forecasts.isEmpty()
             && suggestions.isEmpty() && locations.isEmpty() && followedStationsIds.isEmpty()
-            && userStationsIds.isEmpty()
+            && userStationsIds.isEmpty() && devicePhotoUploadingIds.isEmpty()
     }
 
     /**

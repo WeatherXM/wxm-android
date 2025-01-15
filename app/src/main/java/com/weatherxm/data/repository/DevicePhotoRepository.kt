@@ -16,6 +16,9 @@ interface DevicePhotoRepository {
 
     fun getAcceptedTerms(): Boolean
     fun setAcceptedTerms()
+    fun getDevicePhotoUploadingIds(deviceId: String): List<String>
+    fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String)
+    fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String)
 }
 
 class DevicePhotoRepositoryImpl(
@@ -55,5 +58,17 @@ class DevicePhotoRepositoryImpl(
 
     override fun setAcceptedTerms() {
         datasource.setAcceptedTerms()
+    }
+
+    override fun getDevicePhotoUploadingIds(deviceId: String): List<String> {
+        return datasource.getDevicePhotoUploadingIds(deviceId)
+    }
+
+    override fun addDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
+        datasource.addDevicePhotoUploadingId(deviceId, uploadingId)
+    }
+
+    override fun removeDevicePhotoUploadingId(deviceId: String, uploadingId: String) {
+        datasource.removeDevicePhotoUploadingId(deviceId, uploadingId)
     }
 }
