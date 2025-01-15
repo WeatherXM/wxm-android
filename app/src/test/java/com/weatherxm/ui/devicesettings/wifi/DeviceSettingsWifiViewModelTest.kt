@@ -89,11 +89,11 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     )
     val newFriendlyName = "newFriendlyName"
     val stakeholderSplits = RewardSplitsData(
-        listOf(RewardSplit("walletAddress", 50, 50F), RewardSplit("wallet", 50, 50F)),
+        listOf(RewardSplit("walletAddress", 50F, 50F), RewardSplit("wallet", 50F, 50F)),
         "walletAddress"
     )
     val nonStakeholderSplits = RewardSplitsData(
-        listOf(RewardSplit("wallet", 50, 50F), RewardSplit("wallet2", 50, 50F)),
+        listOf(RewardSplit("wallet", 50F, 50F), RewardSplit("wallet2", 50F, 50F)),
         "non-stakeholder-wallet"
     )
     val uiDeviceInfoToShare = UIDeviceInfo(
