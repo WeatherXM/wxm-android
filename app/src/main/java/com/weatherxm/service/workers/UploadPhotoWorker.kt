@@ -113,6 +113,7 @@ class UploadPhotoWorker(
             setNotificationConfig { _, uploadId ->
                 getNotificationConfig(uploadId)
             }
+            setAutoDeleteFilesAfterSuccessfulUpload(true)
             val uploadId = startUpload()
             photoRepository.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, this)
         }
