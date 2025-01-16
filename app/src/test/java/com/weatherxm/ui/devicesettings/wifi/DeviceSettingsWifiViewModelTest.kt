@@ -186,6 +186,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     val stationPhotos = arrayListOf(
         StationPhoto("remotePath", "localPath")
     )
+    val uploadIds = listOf("uploadId")
 
     val invalidClaimIdFailure = ApiError.UserError.ClaimError.InvalidClaimId("")
 
@@ -240,6 +241,12 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         } returns "Last Station Activity"
         every { resources.getString(R.string.latest_hint) } returns "(latest)"
         every { resources.getString(R.string.firmware_version) } returns "Firmware Version"
+        coMockEitherRight(
+            { photosUseCase.deleteDevicePhoto(device.id, stationPhotos[0].remotePath!!) },
+            Unit
+        )
+        every { photosUseCase.getDevicePhotoUploadIds(device.id) } returns uploadIds
+        justRun { photosUseCase.retryUpload(device.id) }
 
         viewModel = DeviceSettingsWifiViewModel(
             device,
@@ -443,6 +450,23 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
                     runTest { viewModel.getDevicePhotos() }
                     viewModel.onPhotos().value shouldBe listOf("testUrl")
                 }
+            }
+        }
+    }
+
+    context("Get device photos upload IDs") {
+        given("a device ID") {
+            then("return the list of upload IDs") {
+                viewModel.getDevicePhotoUploadIds() shouldBe uploadIds
+            }
+        }
+    }
+
+    context("Retry photo uploading") {
+        given("a deviceId") {
+            then("trigger the retrying of photo uploading") {
+                viewModel.retryPhotoUpload()
+                verify(exactly = 1) { photosUseCase.retryUpload(device.id) }
             }
         }
     }
