@@ -3,11 +3,26 @@ package com.weatherxm.ui.claimdevice.selectstation
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimSelectStationBinding
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.CardViewClickable
+import com.weatherxm.ui.components.compose.MediumText
 
 class SelectStationTypeActivity : BaseActivity() {
     private lateinit var binding: ActivityClaimSelectStationBinding
@@ -29,20 +44,47 @@ class SelectStationTypeActivity : BaseActivity() {
             finish()
         }
 
-        binding.m5WifiCard.listener {
-            navigator.showClaimWifiFlow(claimingLauncher, this, DeviceType.M5_WIFI)
-        }
-
-        binding.d1WifiCard.listener {
-            navigator.showClaimWifiFlow(claimingLauncher, this, DeviceType.D1_WIFI)
-        }
-
-        binding.heliumCard.listener {
-            navigator.showClaimHeliumFlow(claimingLauncher, this)
-        }
-
-        binding.pulseCard.listener {
-            navigator.showClaimPulseFlow(claimingLauncher, this)
+        binding.deviceTypes.setContent {
+            Column(
+                verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+            ) {
+                Row(
+                    horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+                ) {
+                    Column(Modifier.weight(1F)) {
+                        CardViewClickable(
+                            onClickListener = { startClaimingFlow(DeviceType.M5_WIFI) }
+                        ) {
+                            TypeContent(getString(R.string.m5_wifi), R.drawable.device_type_m5)
+                        }
+                    }
+                    Column(Modifier.weight(1F)) {
+                        CardViewClickable(
+                            onClickListener = { startClaimingFlow(DeviceType.D1_WIFI) }
+                        ) {
+                            TypeContent(getString(R.string.d1_wifi), R.drawable.device_type_d1)
+                        }
+                    }
+                }
+                Row(
+                    horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+                ) {
+                    Column(Modifier.weight(1F)) {
+                        CardViewClickable(
+                            onClickListener = { startClaimingFlow(DeviceType.HELIUM) },
+                        ) {
+                            TypeContent(getString(R.string.helium), R.drawable.device_type_helium)
+                        }
+                    }
+                    Column(Modifier.weight(1F)) {
+                        CardViewClickable(
+                            onClickListener = { startClaimingFlow(DeviceType.PULSE_4G) },
+                        ) {
+                            TypeContent(getString(R.string.pulse_4g), R.drawable.device_type_pulse)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -51,5 +93,22 @@ class SelectStationTypeActivity : BaseActivity() {
         analytics.trackScreen(
             AnalyticsService.Screen.CLAIM_DEVICE_TYPE_SELECTION, classSimpleName()
         )
+    }
+
+    private fun startClaimingFlow(deviceType: DeviceType) {
+        navigator.showClaimFlow(claimingLauncher, this, deviceType)
+    }
+
+    @Suppress("FunctionNaming")
+    @Composable
+    fun TypeContent(name: String, imageResId: Int) {
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_normal)),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small))
+        ) {
+            Image(painter = painterResource(imageResId), contentDescription = null)
+            MediumText(text = name, fontWeight = FontWeight.Bold, colorRes = R.color.darkestBlue)
+        }
     }
 }
