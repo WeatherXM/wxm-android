@@ -1,10 +1,12 @@
 package com.weatherxm.ui.photoverification.upload
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.databinding.ActivityPhotoUploadBinding
 import com.weatherxm.service.GlobalUploadObserverService
+import com.weatherxm.service.workers.UploadPhotoWorker
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.StationPhoto
@@ -13,9 +15,13 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.util.ImageFileHelper.compressImageFile
+import com.weatherxm.util.ImageFileHelper.copyExifMetadata
+import com.weatherxm.util.ImageFileHelper.copyInputStreamToFile
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.io.File
 
 class PhotoUploadActivity : BaseActivity() {
     private val uploadObserverService: GlobalUploadObserverService by inject()
@@ -78,9 +84,26 @@ class PhotoUploadActivity : BaseActivity() {
     fun upload(photosPresignedMetadata: List<PhotoPresignedMetadata>) {
         uploadObserverService.setDevice(model.device)
         model.photos.forEachIndexed { index, stationPhoto ->
-            photosPresignedMetadata.getOrNull(index)?.let {
-                prepareAndStartUpload(this, stationPhoto.localPath, model.device.id, index, it)
+            photosPresignedMetadata.getOrNull(index)?.let { metadata ->
+                /**
+                 * Use the current photo name in cache otherwise default to "deviceId_img$index.jpg"
+                 */
+                val fileName = stationPhoto.localPath?.substringAfterLast('/')
+                    ?: "${model.device.id}_img$index.jpg"
+                val file = File(cacheDir, fileName)
+                val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
+                file.copyInputStreamToFile(compressImageFile(imageBitmap))
+                copyExifMetadata(stationPhoto.localPath, file.path)
+
+                // Copied the photo in cache. Delete it from the external storage it was saved.
+                stationPhoto.localPath?.let { path ->
+                    File(path).delete()
+                }
+
+                // Start the work manager to upload the photo.
+                UploadPhotoWorker.initAndStart(this, metadata, file.path, model.device.id)
             }
         }
     }
+
 }
