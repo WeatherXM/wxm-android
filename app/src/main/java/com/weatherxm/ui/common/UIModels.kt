@@ -16,7 +16,6 @@ import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
-import net.gotev.uploadservice.data.UploadInfo
 import java.time.LocalDate
 import java.time.ZonedDateTime
 

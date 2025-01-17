@@ -12,7 +12,6 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.ui.InstantExecutorListener
@@ -34,10 +33,8 @@ import io.mockk.mockkObject
 import kotlinx.coroutines.test.runTest
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.io.File
-import java.time.format.DateTimeFormatter
 
 class PhotoUploadViewModelTest : BehaviorSpec({
     val device = UIDevice.empty()
