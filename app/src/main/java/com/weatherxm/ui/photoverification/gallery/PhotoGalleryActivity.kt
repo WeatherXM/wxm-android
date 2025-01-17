@@ -49,6 +49,7 @@ import com.weatherxm.util.hasPermission
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
+import kotlin.math.sign
 
 class PhotoGalleryActivity : BaseActivity() {
     companion object {
@@ -204,7 +205,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private fun onPhotosNumber(photosNumber: Int) {
         binding.addPhotoBtn.visible(photosNumber < MAX_PHOTOS)
-        binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS
+        binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS && model.getLocalPhotosNumber() > 0
         when (photosNumber) {
             0 -> {
                 binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
@@ -216,7 +217,11 @@ class PhotoGalleryActivity : BaseActivity() {
                 binding.deletePhotoBtn.enable()
             }
             else -> {
-                binding.toolbar.subtitle = null
+                binding.toolbar.subtitle = if(model.getLocalPhotosNumber() == 0) {
+                    getString(R.string.add_1_more_to_upload)
+                } else {
+                    null
+                }
                 binding.deletePhotoBtn.enable()
             }
         }

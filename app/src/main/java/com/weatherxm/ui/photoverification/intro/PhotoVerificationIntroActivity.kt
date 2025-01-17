@@ -30,7 +30,12 @@ class PhotoVerificationIntroActivity : BaseActivity() {
         instructionsOnly = intent.getBooleanExtra(ARG_INSTRUCTIONS_ONLY, false)
         device = intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty()
 
-        if (viewModel.getAcceptedTerms()) {
+        /**
+         * User opened this screen from an empty state (either no photos in settings or in claiming
+         * but the user has already accepted the terms before, and it's not a "Show Instructions"
+         * case so we just redirect to Photo Gallery.
+         */
+        if (viewModel.getAcceptedTerms() && !instructionsOnly) {
             navigator.showPhotoGallery(null, this, device, arrayListOf(), true)
             finish()
         }

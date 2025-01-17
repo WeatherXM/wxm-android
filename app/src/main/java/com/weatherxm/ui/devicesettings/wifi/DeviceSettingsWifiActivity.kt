@@ -162,7 +162,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 devicePhotos.forEach {
                     photos.add(it)
                 }
-                if (photos.isEmpty()) {
+                if (photos.isEmpty() || !model.getAcceptedPhotoTerms()) {
                     navigator.showPhotoVerificationIntro(this, model.device)
                 } else {
                     navigator.showPhotoGallery(

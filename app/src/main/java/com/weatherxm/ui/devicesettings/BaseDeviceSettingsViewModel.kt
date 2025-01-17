@@ -210,6 +210,7 @@ abstract class BaseDeviceSettingsViewModel(
     }
 
     fun retryPhotoUpload() = photosUseCase.retryUpload(device.id)
+    fun getAcceptedPhotoTerms() = photosUseCase.getAcceptedTerms()
 
     abstract fun getDeviceInformation(context: Context)
     abstract suspend fun handleInfo(context: Context, info: DeviceInfo)

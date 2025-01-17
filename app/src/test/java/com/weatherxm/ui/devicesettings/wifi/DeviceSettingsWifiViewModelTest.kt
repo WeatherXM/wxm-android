@@ -504,6 +504,25 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         }
     }
 
+    context("Get if the user has accepted the uploading photos terms") {
+        given("The usecase providing the GET / SET mechanisms") {
+            When("We should get the user's accepted status") {
+                and("user has not accepted the terms") {
+                    every { photosUseCase.getAcceptedTerms() } returns false
+                    then("return false") {
+                        viewModel.getAcceptedPhotoTerms() shouldBe false
+                    }
+                }
+                and("user has accepted the terms") {
+                    every { photosUseCase.getAcceptedTerms() } returns true
+                    then("return true") {
+                        viewModel.getAcceptedPhotoTerms() shouldBe true
+                    }
+                }
+            }
+        }
+    }
+
     afterSpec {
         stopKoin()
     }

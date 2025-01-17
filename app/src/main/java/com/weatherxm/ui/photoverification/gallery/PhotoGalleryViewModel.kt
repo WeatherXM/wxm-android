@@ -29,6 +29,8 @@ class PhotoGalleryViewModel(
 
     fun onPhotosNumber(): LiveData<Int> = onPhotosNumber
 
+    fun getLocalPhotosNumber() = photos.filter { it.localPath != null }.size
+
     fun addPhoto(path: String) {
         if (path.isNotEmpty() && photos.firstOrNull { it.localPath == path } == null) {
             val stationPhoto = StationPhoto(null, path)
