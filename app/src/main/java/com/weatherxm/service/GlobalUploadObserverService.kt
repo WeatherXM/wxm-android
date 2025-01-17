@@ -70,22 +70,39 @@ class GlobalUploadObserverService(
         when (exception) {
             is UserCancelledUploadException -> {
                 Timber.e(exception, "[UPLOAD SERVICE] User Cancelled: $uploadInfo")
+                onUploadPhotosState.tryEmit(
+                    UploadPhotosState(
+                        device,
+                        uploadInfo.progressPercent,
+                        isSuccess = false,
+                        isError = false,
+                        isCancelled = true
+                    )
+                )
             }
             is UploadError -> {
                 Timber.e(exception, "[UPLOAD SERVICE] Error: ${exception.serverResponse}")
+                onUploadPhotosState.tryEmit(
+                    UploadPhotosState(
+                        device,
+                        uploadInfo.progressPercent,
+                        isSuccess = false,
+                        isError = true
+                    )
+                )
             }
             else -> {
                 Timber.e(exception, "[UPLOAD SERVICE] Error: $uploadInfo")
+                onUploadPhotosState.tryEmit(
+                    UploadPhotosState(
+                        device,
+                        uploadInfo.progressPercent,
+                        isSuccess = false,
+                        isError = true
+                    )
+                )
             }
         }
-        onUploadPhotosState.tryEmit(
-            UploadPhotosState(
-                device,
-                uploadInfo.progressPercent,
-                isSuccess = false,
-                isError = true
-            )
-        )
     }
 
     override fun onCompleted(context: Context, uploadInfo: UploadInfo) {

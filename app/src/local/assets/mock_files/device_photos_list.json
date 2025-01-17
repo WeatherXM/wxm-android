@@ -1,11 +1,5 @@
 [
-    {
-        "url": "https://i0.wp.com/weatherxm.com/wp-content/uploads/2023/09/5-5.png"
-    },
-    {
-        "url": "https://docs.weatherxm.com/img/wxm-devices/deployments/good-example-1.jpg"
-    },
-    {
-        "url": "https://docs.weatherxm.com/img/wxm-devices/deployments/good-example-2.jpg"
-    }
+    "https://i0.wp.com/weatherxm.com/wp-content/uploads/2023/09/5-5.png",
+    "https://docs.weatherxm.com/img/wxm-devices/deployments/good-example-1.jpg",
+    "https://docs.weatherxm.com/img/wxm-devices/deployments/good-example-2.jpg"
 ]

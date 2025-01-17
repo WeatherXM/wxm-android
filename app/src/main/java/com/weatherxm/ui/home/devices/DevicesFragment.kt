@@ -177,6 +177,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 binding.uploadAnimation.setAnimation(R.raw.anim_upload_success)
                 binding.uploadAnimation.repeatCount = 0
             } else if (uploadState?.progress == 0) {
+                binding.uploadStateCard.setOnClickListener {
+                    navigator.showStationSettings(context, uploadState.device)
+                    binding.uploadStateContainer.visible(false)
+                }
                 binding.uploadAnimation.setAnimation(R.raw.anim_uploading)
                 binding.uploadAnimation.repeatCount = INFINITE
             }

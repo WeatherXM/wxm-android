@@ -49,7 +49,7 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
                     binding.photosContainer.visible(false)
                     binding.emptyText.visible(it.isError)
                     binding.startPhotoVerificationBtn.visible(it.isError)
-                    binding.cancelUploadBtn.visible(!it.isSuccess && !it.isError)
+                    binding.cancelUploadBtn.visible(!it.isSuccess && !it.isError && !it.isCancelled)
                     binding.inProgressText.visible(true)
                     binding.inProgressUploadState.visible(true)
 
@@ -114,9 +114,16 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
         binding.inProgressUploadState.visible(false)
         binding.photosText.visible(true)
 
-        if (devicePhotos.size >= 2) {
+        if (devicePhotos.size == 1) {
+            binding.firstPhoto.load(devicePhotos[0])
+            binding.firstPhotoContainer.visible(true)
+            binding.secondPhotoContainer.visible(false)
+            binding.photosContainer.visible(true)
+        } else if (devicePhotos.size >= 2) {
             binding.firstPhoto.load(devicePhotos[0])
             binding.secondPhoto.load(devicePhotos[1])
+            binding.firstPhotoContainer.visible(true)
+            binding.secondPhotoContainer.visible(true)
             binding.photosContainer.visible(true)
             if (devicePhotos.size > 2) {
                 binding.morePhotos.text = "+${devicePhotos.size - 2}"
