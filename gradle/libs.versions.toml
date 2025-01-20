@@ -60,7 +60,7 @@ timber = "5.0.1"
 # Plugins
 android-gradle-plugin = "8.8.0"
 detekt-plugin = "1.23.7"
-firebase-appdistribution-plugin = "5.0.0"
+firebase-appdistribution-plugin = "5.1.0"
 firebase-crashlytics-plugin = "3.0.2"
 firebase-perf-plugin = "1.4.2"
 google-services-plugin = "4.4.2"
