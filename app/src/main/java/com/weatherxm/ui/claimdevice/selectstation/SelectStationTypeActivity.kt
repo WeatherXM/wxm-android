@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -104,7 +105,7 @@ class SelectStationTypeActivity : BaseActivity() {
         Column(
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_normal)),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small))
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small))
         ) {
             Image(painter = painterResource(imageResId), contentDescription = null)
             MediumText(text = name, fontWeight = FontWeight.Bold, colorRes = R.color.darkestBlue)
