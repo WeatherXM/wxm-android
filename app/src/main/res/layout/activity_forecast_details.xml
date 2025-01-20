@@ -42,11 +42,13 @@
                 android:id="@+id/header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintEnd_toStartOf="@id/ownershipIcon"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:composableName="com.weatherxm.ui.components.compose.HeaderViewKt.PreviewHeaderView" />
 
             <ImageView
                 android:id="@+id/ownershipIcon"

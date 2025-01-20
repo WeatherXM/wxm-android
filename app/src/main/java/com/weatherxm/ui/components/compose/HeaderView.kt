@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 
@@ -41,4 +42,10 @@ fun HeaderView(
             MediumText(subtitle, colorRes = R.color.darkGrey)
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewHeaderView() {
+    HeaderView(title = "Title", subtitle = "Subtitle", onInfoButton = {})
 }
