@@ -215,6 +215,10 @@ class PhotoGalleryActivity : BaseActivity() {
                 binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
                 binding.deletePhotoBtn.enable()
             }
+            6 -> {
+                binding.toolbar.subtitle = null
+                binding.deletePhotoBtn.enable()
+            }
             else -> {
                 binding.toolbar.subtitle = if (model.getLocalPhotosNumber() == 0) {
                     getString(R.string.add_1_more_to_upload)
