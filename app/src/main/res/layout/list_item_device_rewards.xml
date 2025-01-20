@@ -202,7 +202,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
 
-                <com.weatherxm.ui.components.RetryCardView
+                <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/retryCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
