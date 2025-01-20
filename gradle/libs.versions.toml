@@ -56,7 +56,7 @@ okhttp-bom = "4.12.0"
 retrofit = "2.11.0"
 retromock = "1.1.1"
 timber = "5.0.1"
-upload-service = "4.9.3"
+upload-service = "4.9.4"
 
 # Plugins
 android-gradle-plugin = "8.8.0"

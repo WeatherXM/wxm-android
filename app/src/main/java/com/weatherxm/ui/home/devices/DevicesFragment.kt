@@ -154,16 +154,16 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 uploadObserverService.getUploadPhotosState().collectAsState(null).value
             binding.uploadStateContainer.visible(uploadState != null)
 
-            binding.uploadAnimation.visible(uploadState?.error == null)
-            binding.uploadRetryIcon.visible(uploadState?.error != null)
+            binding.uploadAnimation.visible(uploadState?.isError == false)
+            binding.uploadRetryIcon.visible(uploadState?.isError == true)
 
-            if (uploadState?.error != null) {
+            if (uploadState?.isError == true) {
                 binding.uploadStateCard.swipeToDismiss {
                     binding.uploadStateContainer.visible(false)
-                    deleteAllStationPhotos(context, uploadState?.device)
+                    deleteAllStationPhotos(context, uploadState.device)
                 }
                 binding.uploadStateCard.setOnClickListener {
-                    // TODO: STOPSHIP: Invoke retry mechanism
+                    parentModel.retryPhotoUpload(uploadState.device.id)
                 }
             } else if (uploadState?.isSuccess == true) {
                 removeUploadStateOnPause = true
@@ -177,6 +177,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 binding.uploadAnimation.setAnimation(R.raw.anim_upload_success)
                 binding.uploadAnimation.repeatCount = 0
             } else if (uploadState?.progress == 0) {
+                binding.uploadStateCard.setOnClickListener {
+                    navigator.showStationSettings(context, uploadState.device)
+                    binding.uploadStateContainer.visible(false)
+                }
                 binding.uploadAnimation.setAnimation(R.raw.anim_uploading)
                 binding.uploadAnimation.repeatCount = INFINITE
             }

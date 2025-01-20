@@ -195,6 +195,7 @@ import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
+import com.weatherxm.ui.photoverification.upload.PhotoUploadViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
 import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
@@ -795,7 +796,7 @@ val clientIdentificationHelper = module {
 
 val uploadObserverService = module {
     single {
-        GlobalUploadObserverService(get())
+        GlobalUploadObserverService(get(), get())
     }
 }
 
@@ -990,7 +991,7 @@ private val viewmodels = module {
     viewModel { DeviceEditLocationViewModel(get(), get(), get(), get()) }
     viewModel { DevicesViewModel(get(), get(), get(), get()) }
     viewModel { ExplorerViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
@@ -1039,10 +1040,14 @@ private val viewmodels = module {
         PhotoGalleryViewModel(
             device = params.get(),
             photos = params.get(),
-            fromClaiming = params.get()
+            fromClaiming = params.get(),
+            get()
         )
     }
     viewModel { PhotoVerificationIntroViewModel(get()) }
+    viewModel { params ->
+        PhotoUploadViewModel(device = params.get(), photos = params.get(), get(), get(), get())
+    }
 }
 
 val modules = listOf(

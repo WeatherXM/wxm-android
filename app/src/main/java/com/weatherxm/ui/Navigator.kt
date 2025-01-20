@@ -41,9 +41,9 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
-import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
+import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -83,6 +83,7 @@ import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
+import com.weatherxm.ui.photoverification.upload.PhotoUploadActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewardboosts.RewardBoostActivity
@@ -509,6 +510,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showPhotoVerificationIntro(
         context: Context?,
         device: UIDevice,
+        photos: ArrayList<String> = arrayListOf(),
         instructionsOnly: Boolean = false
     ) {
         context?.let {
@@ -516,6 +518,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Intent(it, PhotoVerificationIntroActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_DEVICE, device)
+                    .putStringArrayListExtra(ARG_PHOTOS, photos)
                     .putExtra(ARG_INSTRUCTIONS_ONLY, instructionsOnly)
             )
         }
@@ -537,6 +540,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             context.startActivity(intent)
         } else {
             activityResultLauncher.launch(intent)
+        }
+    }
+
+    fun showPhotoUpload(
+        context: Context?,
+        device: UIDevice,
+        photos: ArrayList<String>
+    ) {
+        context?.let {
+            it.startActivity(
+                Intent(it, PhotoUploadActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
+                    .putStringArrayListExtra(ARG_PHOTOS, photos)
+            )
         }
     }
 

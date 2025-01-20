@@ -10,15 +10,18 @@ import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Suppress("TooManyFunctions")
 class HomeViewModel(
     private val userUseCase: UserUseCase,
     private val remoteBannersUseCase: RemoteBannersUseCase,
+    private val photoUseCase: DevicePhotoUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
@@ -101,4 +104,6 @@ class HomeViewModel(
     fun dismissInfoBanner(infoBannerId: String) {
         remoteBannersUseCase.dismissInfoBanner(infoBannerId)
     }
+
+    fun retryPhotoUpload(deviceId: String) = photoUseCase.retryUpload(deviceId)
 }

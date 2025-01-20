@@ -1,38 +1,31 @@
 package com.weatherxm.ui.photoverification.gallery
 
-import android.net.Uri
-import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.dispatcher
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.util.ImageFileHelper
-import com.weatherxm.util.ImageFileHelper.getUriForFile
+import com.weatherxm.usecases.DevicePhotoUseCase
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.clearMocks
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
-import java.io.File
 
 class PhotoGalleryViewModelTest : BehaviorSpec({
     val device = UIDevice.empty()
     val emptyPhotos = mutableListOf<StationPhoto>()
-    val viewModel = PhotoGalleryViewModel(device, mutableListOf(), false, dispatcher)
+    val usecase = mockk<DevicePhotoUseCase>()
+    val viewModel = PhotoGalleryViewModel(device, mutableListOf(), false, usecase, dispatcher)
 
     val localPath = "localPath"
     val localPhoto = StationPhoto(null, localPath)
     val remotePhoto = StationPhoto("remotePath", null)
     val photosListWithOneLocalPhoto = mutableListOf(StationPhoto(null, localPath))
-    val uri = mockk<Uri>()
-    val listOfUrisOfLocalPhotos = arrayListOf(uri)
 
     listener(InstantExecutorListener())
 
     beforeSpec {
-        mockkObject(ImageFileHelper)
-        every { File(localPath).getUriForFile(context) } returns uri
+        coMockEitherLeft({ usecase.deleteDevicePhoto(device.id, "remotePath") }, failure)
     }
 
     context("Get the initial states of the photos") {
@@ -104,7 +97,6 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
             When("the photo is a remote photo  and our photos var contain it") {
                 viewModel.photos.add(remotePhoto)
                 viewModel.deletePhoto(remotePhoto)
-                // TODO: STOPSHIP: Implement the delete endpoint's test
                 then("delete the photo in the constructor variable") {
                     viewModel.photos shouldBe emptyPhotos
                 }
@@ -118,21 +110,17 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
         }
     }
 
-    context("Get the URIs of the local photos") {
+    context("Get the list of the local photos paths") {
         When("There are no photos with local paths") {
             then("return an empty arraylist") {
-                viewModel.getUrisOfLocalPhotos(context) shouldBe arrayListOf()
+                viewModel.getPhotosLocalPaths() shouldBe arrayListOf()
             }
         }
         When("There are some photos with local path") {
             viewModel.photos.add(localPhoto)
-            then("return the arraylist containing the URIs of those photos") {
-                viewModel.getUrisOfLocalPhotos(context) shouldBe listOfUrisOfLocalPhotos
+            then("return the arraylist containing the paths as Strings of those photos") {
+                viewModel.getPhotosLocalPaths() shouldBe arrayListOf(localPhoto.localPath)
             }
         }
-    }
-
-    afterSpec {
-        clearMocks(ImageFileHelper)
     }
 })

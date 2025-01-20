@@ -71,3 +71,9 @@ data class LocationBody(
     val lat: Double,
     val lon: Double
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class PhotoNamesBody(
+    val names: List<String>
+) : Parcelable

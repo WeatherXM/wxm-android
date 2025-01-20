@@ -834,8 +834,29 @@ data class DeviceRewardsSummaryDetails(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class DevicePhoto(
-    val url: String
+data class PhotoPresignedMetadata(
+    val url: String,
+    val fields: AWSMetadata
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class AWSMetadata(
+    val bucket: String?,
+    @Json(name = "X-Amz-Algorithm")
+    val xAmzAlgo: String?,
+    @Json(name = "X-Amz-Credential")
+    val xAmzCredentials: String?,
+    @Json(name = "X-Amz-Date")
+    val xAmzDate: String?,
+    @Json(name = "X-Amz-Security-Token")
+    val xAmzSecurityToken: String?,
+    @Json(name = "X-Amz-Signature")
+    val xAmzSignature: String?,
+    val key: String?,
+    @Json(name = "Policy")
+    val policy: String?,
 ) : Parcelable
 
 @Suppress("EnumNaming")

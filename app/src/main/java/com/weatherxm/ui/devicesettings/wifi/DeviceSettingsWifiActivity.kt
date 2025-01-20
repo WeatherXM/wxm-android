@@ -8,8 +8,8 @@ import coil3.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.models.DevicePhoto
 import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
+import com.weatherxm.service.workers.UploadPhotoWorker
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -33,6 +33,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
 import com.weatherxm.util.MapboxUtils.getMinimap
+import net.gotev.uploadservice.extensions.getCancelUploadIntent
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -136,12 +137,8 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }
 
         binding.devicePhotosCard.initProgressView(
-            onError = {
-                // Trigger a refresh on the photos through the API
-                model.onPhotosChanged(false, null)
-                // TODO: STOPSHIP:  Trigger retry mechanism
-            },
-            onSuccess = {
+            device = model.device,
+            onRefresh = {
                 // Trigger a refresh on the photos through the API
                 model.onPhotosChanged(false, null)
             }
@@ -150,7 +147,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         setupStationLocation(false)
     }
 
-    private fun onPhotos(devicePhotos: List<DevicePhoto>) {
+    private fun onPhotos(devicePhotos: List<String>) {
         binding.devicePhotosCard.updateUI(devicePhotos)
         binding.devicePhotosCard.setOnClickListener(
             onClick = {
@@ -163,10 +160,10 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 )
                 val photos = arrayListOf<String>()
                 devicePhotos.forEach {
-                    photos.add(it.url)
+                    photos.add(it)
                 }
-                if (photos.isEmpty()) {
-                    navigator.showPhotoVerificationIntro(this, model.device)
+                if (photos.isEmpty() || !model.getAcceptedPhotoTerms()) {
+                    navigator.showPhotoVerificationIntro(this, model.device, photos)
                 } else {
                     navigator.showPhotoGallery(
                         photoGalleryLauncher,
@@ -189,17 +186,20 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     )
                     .onPositiveClick(getString(R.string.yes_cancel)) {
                         // Trigger a refresh on the photos through the API
+                        UploadPhotoWorker.cancelWorkers(this, model.device.id)
+                        model.getDevicePhotoUploadIds().onEach {
+                            getCancelUploadIntent(it).send()
+                        }
                         model.onPhotosChanged(false, null)
-                        // TODO: STOPSHIP: Cancel the current upload
                     }
                     .build()
                     .show(this)
             },
             onRetry = {
+                model.retryPhotoUpload()
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.RETRY_UPLOADING_PHOTOS.paramValue
                 )
-                // TODO: STOPSHIP:  Trigger retry mechanism
             }
         )
         binding.devicePhotosCard.visible(true)

@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UploadPhotosState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +19,8 @@ import net.gotev.uploadservice.observer.request.RequestObserverDelegate
 import timber.log.Timber
 
 class GlobalUploadObserverService(
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val cacheService: CacheService
 ) : RequestObserverDelegate {
 
     private var device = UIDevice.empty()
@@ -33,7 +35,8 @@ class GlobalUploadObserverService(
             UploadPhotosState(
                 device,
                 uploadInfo.progressPercent,
-                false
+                isSuccess = false,
+                isError = false
             )
         )
     }
@@ -54,9 +57,12 @@ class GlobalUploadObserverService(
             UploadPhotosState(
                 device,
                 uploadInfo.progressPercent,
-                true
+                isSuccess = true,
+                isError = false
             )
         )
+        cacheService.removeUploadIdRequest(uploadInfo.uploadId)
+        cacheService.removeDevicePhotoUploadId(device.id, uploadInfo.uploadId)
         onUploadPhotosState.resetReplayCache()
     }
 
@@ -64,22 +70,39 @@ class GlobalUploadObserverService(
         when (exception) {
             is UserCancelledUploadException -> {
                 Timber.e(exception, "[UPLOAD SERVICE] User Cancelled: $uploadInfo")
+                onUploadPhotosState.tryEmit(
+                    UploadPhotosState(
+                        device,
+                        uploadInfo.progressPercent,
+                        isSuccess = false,
+                        isError = false,
+                        isCancelled = true
+                    )
+                )
             }
             is UploadError -> {
                 Timber.e(exception, "[UPLOAD SERVICE] Error: ${exception.serverResponse}")
+                onUploadPhotosState.tryEmit(
+                    UploadPhotosState(
+                        device,
+                        uploadInfo.progressPercent,
+                        isSuccess = false,
+                        isError = true
+                    )
+                )
             }
             else -> {
                 Timber.e(exception, "[UPLOAD SERVICE] Error: $uploadInfo")
+                onUploadPhotosState.tryEmit(
+                    UploadPhotosState(
+                        device,
+                        uploadInfo.progressPercent,
+                        isSuccess = false,
+                        isError = true
+                    )
+                )
             }
         }
-        onUploadPhotosState.tryEmit(
-            UploadPhotosState(
-                device,
-                uploadInfo.progressPercent,
-                false,
-                uploadInfo
-            )
-        )
     }
 
     override fun onCompleted(context: Context, uploadInfo: UploadInfo) {

@@ -5,7 +5,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.models.DevicePhoto
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.data.repository.DevicePhotoRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -19,10 +19,14 @@ class DevicePhotoUseCaseTest : BehaviorSpec({
     val usecase = DevicePhotoUseCaseImpl(repo)
 
     val deviceId = "deviceId"
-    val devicePhotos = listOf<DevicePhoto>()
+    val photoPath = "photoPath"
+    val devicePhotos = listOf<String>()
+    val uploadIds = listOf("uploadId")
+    val photoMetadata = listOf<PhotoPresignedMetadata>()
 
     beforeSpec {
         justRun { repo.setAcceptedTerms() }
+        every { repo.getDevicePhotoUploadIds(deviceId) } returns uploadIds
     }
 
     context("Get device photos") {
@@ -35,9 +39,58 @@ class DevicePhotoUseCaseTest : BehaviorSpec({
             }
             When("the response is a success") {
                 coMockEitherRight({ repo.getDevicePhotos(deviceId) }, devicePhotos)
-                then("return the device photos") {
+                then("return the device photos (empty list)") {
                     usecase.getDevicePhotos(deviceId).isSuccess(devicePhotos)
                 }
+            }
+        }
+    }
+
+    context("Delete device photo") {
+        given("a device ID and a path") {
+            When("the response is a failure") {
+                coMockEitherLeft({ repo.deleteDevicePhoto(deviceId, photoPath) }, failure)
+                then("return the failure") {
+                    usecase.deleteDevicePhoto(deviceId, photoPath).isError()
+                }
+            }
+            When("the response is a success") {
+                coMockEitherRight({ repo.deleteDevicePhoto(deviceId, photoPath) }, Unit)
+                then("return Unit") {
+                    usecase.deleteDevicePhoto(deviceId, photoPath).isSuccess(Unit)
+                }
+            }
+        }
+    }
+
+    context("Get photos metadata") {
+        given("a device ID and a list of photo paths") {
+            When("the response is a failure") {
+                coMockEitherLeft(
+                    { repo.getPhotosMetadataForUpload(deviceId, listOf(photoPath)) },
+                    failure
+                )
+                then("return the failure") {
+                    usecase.getPhotosMetadataForUpload(deviceId, listOf(photoPath)).isError()
+                }
+            }
+            When("the response is a success") {
+                coMockEitherRight(
+                    { repo.getPhotosMetadataForUpload(deviceId, listOf(photoPath)) },
+                    photoMetadata
+                )
+                then("return the device photos metadata") {
+                    usecase.getPhotosMetadataForUpload(deviceId, listOf(photoPath))
+                        .isSuccess(photoMetadata)
+                }
+            }
+        }
+    }
+
+    context("Get device photos upload IDs") {
+        given("a device ID") {
+            then("return the list of upload IDs") {
+                usecase.getDevicePhotoUploadIds(deviceId) shouldBe uploadIds
             }
         }
     }

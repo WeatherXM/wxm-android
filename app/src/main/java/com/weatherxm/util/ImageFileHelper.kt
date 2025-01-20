@@ -45,7 +45,10 @@ object ImageFileHelper {
         }
     }
 
-    fun copyExifMetadata(sourcePath: String, destPath: String) {
+    fun copyExifMetadata(sourcePath: String?, destPath: String) {
+        if (sourcePath == null) {
+            return
+        }
         val oldExifInterface = ExifInterface(sourcePath)
         val newExifInterface = ExifInterface(destPath)
 
