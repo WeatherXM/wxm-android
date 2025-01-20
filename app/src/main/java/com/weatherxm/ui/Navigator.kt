@@ -510,6 +510,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showPhotoVerificationIntro(
         context: Context?,
         device: UIDevice,
+        photos: ArrayList<String> = arrayListOf(),
         instructionsOnly: Boolean = false
     ) {
         context?.let {
@@ -517,6 +518,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Intent(it, PhotoVerificationIntroActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_DEVICE, device)
+                    .putStringArrayListExtra(ARG_PHOTOS, photos)
                     .putExtra(ARG_INSTRUCTIONS_ONLY, instructionsOnly)
             )
         }

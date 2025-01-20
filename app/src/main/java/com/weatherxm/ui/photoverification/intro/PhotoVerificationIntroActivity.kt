@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoVerificationIntroBinding
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.UIDevice
@@ -20,6 +21,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
 
     private var instructionsOnly = false
     private var device = UIDevice.empty()
+    private var stationPhotoUrls: ArrayList<String> = arrayListOf()
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
 
         instructionsOnly = intent.getBooleanExtra(ARG_INSTRUCTIONS_ONLY, false)
         device = intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty()
+        stationPhotoUrls = intent.getStringArrayListExtra(Contracts.ARG_PHOTOS) ?: arrayListOf()
 
         /**
          * User opened this screen from an empty state (either no photos in settings or in claiming
@@ -36,7 +39,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
          * case so we just redirect to Photo Gallery.
          */
         if (viewModel.getAcceptedTerms() && !instructionsOnly) {
-            navigator.showPhotoGallery(null, this, device, arrayListOf(), true)
+            navigator.showPhotoGallery(null, this, device, stationPhotoUrls, true)
             finish()
         }
     }
@@ -73,7 +76,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                             null,
                             this@PhotoVerificationIntroActivity,
                             device,
-                            arrayListOf(),
+                            stationPhotoUrls,
                             true
                         )
                         finish()

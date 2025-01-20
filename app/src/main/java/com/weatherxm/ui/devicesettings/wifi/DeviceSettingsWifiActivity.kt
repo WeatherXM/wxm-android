@@ -163,7 +163,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     photos.add(it)
                 }
                 if (photos.isEmpty() || !model.getAcceptedPhotoTerms()) {
-                    navigator.showPhotoVerificationIntro(this, model.device)
+                    navigator.showPhotoVerificationIntro(this, model.device, photos)
                 } else {
                     navigator.showPhotoGallery(
                         photoGalleryLauncher,
