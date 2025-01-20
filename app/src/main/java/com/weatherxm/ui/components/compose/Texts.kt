@@ -29,11 +29,13 @@ fun MediumText(
 fun LargeText(
     text: String,
     fontWeight: FontWeight = FontWeight.Normal,
+    fontSize: TextUnit = 16.sp,
     colorRes: Int = R.color.colorOnSurface
 ) {
     Text(
         text = text,
         fontWeight = fontWeight,
+        fontSize = fontSize,
         color = colorResource(colorRes),
         style = MaterialTheme.typography.bodyLarge
     )
