@@ -39,12 +39,11 @@
             android:clipToPadding="false"
             android:paddingBottom="@dimen/padding_normal">
 
-            <com.weatherxm.ui.components.HeaderView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                app:header_title="@string/daily_reward"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RelativeLayout

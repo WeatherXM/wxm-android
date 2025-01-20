@@ -5,6 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 
 @Suppress("FunctionNaming")
@@ -34,5 +36,21 @@ fun LargeText(
         fontWeight = fontWeight,
         color = colorResource(colorRes),
         style = MaterialTheme.typography.bodyLarge
+    )
+}
+
+@Suppress("FunctionNaming")
+@Composable
+fun Title(
+    text: String,
+    fontSize: TextUnit = 24.sp,
+    colorRes: Int = R.color.colorOnSurface
+) {
+    Text(
+        text = text,
+        fontSize = fontSize,
+        fontWeight = FontWeight.SemiBold,
+        color = colorResource(colorRes),
+        style = MaterialTheme.typography.headlineSmall
     )
 }

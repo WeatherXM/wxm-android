@@ -359,6 +359,7 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/**/*CardView*.*",
         "**/ui/common/Animation*.*",
         "**/ui/common/Views*.*",
+        "**/ui/components/compose/**",
         "**/ui/components/Base*.*",
         "**/ui/components/*View.*",
         "**/ui/components/ChartsView*.*",

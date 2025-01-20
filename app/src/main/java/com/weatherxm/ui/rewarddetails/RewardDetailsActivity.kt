@@ -28,6 +28,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Rewards.isPoL
@@ -64,10 +65,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         }
 
         rewardDate = reward.timestamp.getFormattedDate(true)
-        val subtitle = "${getString(R.string.earnings_for, rewardDate)} (UTC)"
-        binding.header
-            .subtitle(subtitle)
-            .infoButton {
+        binding.header.setContent {
+            HeaderView(
+                title = getString(R.string.daily_reward),
+                subtitle = "${getString(R.string.earnings_for, rewardDate)} (UTC)"
+            ) {
                 onMessageDialog(
                     AnalyticsService.ParamValue.INFO_DAILY_REWARDS.paramValue,
                     getString(R.string.daily_reward),
@@ -76,6 +78,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                     analyticsScreen = AnalyticsService.Screen.DAILY_REWARD_INFO
                 )
             }
+        }
 
         model.onRewardDetails().observe(this) {
             when (it.status) {

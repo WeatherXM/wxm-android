@@ -38,7 +38,7 @@
             android:clipToPadding="false"
             android:paddingBottom="@dimen/padding_normal">
 
-            <com.weatherxm.ui.components.HeaderView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -46,8 +46,7 @@
                 android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintEnd_toStartOf="@id/ownershipIcon"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:header_title="My Home" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/ownershipIcon"
