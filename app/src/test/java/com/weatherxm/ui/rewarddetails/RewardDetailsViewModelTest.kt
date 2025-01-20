@@ -42,8 +42,8 @@ class RewardDetailsViewModelTest : BehaviorSpec({
     val walletAddress = "walletAddress"
     val timestamp = ZonedDateTime.now()
     val rewardSplits = listOf(
-        RewardSplit(walletAddress, 50, 50F),
-        RewardSplit("", 50, 50F)
+        RewardSplit(walletAddress, 50F, 50F),
+        RewardSplit("", 50F, 50F)
     )
     val rewardDetails = RewardDetails(
         timestamp,

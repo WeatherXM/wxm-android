@@ -1,14 +1,14 @@
 package com.weatherxm.ui.updateprompt
 
 import androidx.lifecycle.ViewModel
-import com.weatherxm.data.repository.AppConfigRepository
+import com.weatherxm.usecases.UpdatePromptUseCase
 
-class UpdatePromptViewModel(private val appConfigRepository: AppConfigRepository) : ViewModel() {
+class UpdatePromptViewModel(private val usecase: UpdatePromptUseCase) : ViewModel() {
     fun isUpdateMandatory(): Boolean {
-        return appConfigRepository.isUpdateMandatory()
+        return usecase.isUpdateMandatory()
     }
 
     fun getChangelog(): String {
-        return appConfigRepository.getChangelog()
+        return usecase.getChangelog()
     }
 }

@@ -755,7 +755,7 @@ data class WalletRewards(
 @Parcelize
 data class RewardSplit(
     val wallet: String,
-    val stake: Int,
+    val stake: Float,
     val reward: Float?
 ) : Parcelable
 

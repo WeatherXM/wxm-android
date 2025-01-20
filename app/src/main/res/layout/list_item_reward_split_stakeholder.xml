@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="6"
+        android:weightSum="9"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_weight="7"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
@@ -48,13 +49,13 @@
             android:id="@+id/percentage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="end"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
             android:textColor="@color/darkGrey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="(50%)" />
+            tools:text="(50.00%)" />
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider

@@ -250,6 +250,8 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.StationSettingsUseCaseImpl
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
+import com.weatherxm.usecases.UpdatePromptUseCase
+import com.weatherxm.usecases.UpdatePromptUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -582,6 +584,9 @@ private val usecases = module {
     }
     single<RemoteBannersUseCase> {
         RemoteBannersUseCaseImpl(get())
+    }
+    single<UpdatePromptUseCase> {
+        UpdatePromptUseCaseImpl(get())
     }
     single<DevicePhotoUseCase> {
         DevicePhotoUseCaseImpl(get())
