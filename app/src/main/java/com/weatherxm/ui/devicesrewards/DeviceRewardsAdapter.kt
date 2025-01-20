@@ -182,14 +182,12 @@ class DeviceRewardsAdapter(
             binding.detailsStatus.visible(false)
             binding.detailsContainer.invisible()
             binding.earnedBy.invisible()
-            binding.retryCard.setContent {
-                RetryCard {
-                    onFetchNewData.invoke(
-                        deviceId,
-                        absoluteAdapterPosition,
-                        binding.chartRangeSelector.checkedChipId()
-                    )
-                }
+            binding.retryCard.listener {
+                onFetchNewData.invoke(
+                    deviceId,
+                    absoluteAdapterPosition,
+                    binding.chartRangeSelector.checkedChipId()
+                )
             }
             binding.chartRangeSelector.enable()
             binding.retryCard.visible(true)

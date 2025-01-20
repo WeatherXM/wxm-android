@@ -21,18 +21,3 @@ fun MediumText(
         style = MaterialTheme.typography.bodyMedium
     )
 }
-
-@Suppress("FunctionNaming")
-@Composable
-fun LargeText(
-    text: String,
-    fontWeight: FontWeight = FontWeight.Normal,
-    colorRes: Int = R.color.colorOnSurface
-) {
-    Text(
-        text = text,
-        fontWeight = fontWeight,
-        color = colorResource(colorRes),
-        style = MaterialTheme.typography.bodyLarge
-    )
-}
