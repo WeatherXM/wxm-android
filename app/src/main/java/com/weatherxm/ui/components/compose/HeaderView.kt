@@ -44,6 +44,7 @@ fun HeaderView(
     }
 }
 
+@Suppress("FunctionNaming")
 @Preview
 @Composable
 fun PreviewHeaderView() {
