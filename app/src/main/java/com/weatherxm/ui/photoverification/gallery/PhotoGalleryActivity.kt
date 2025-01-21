@@ -173,7 +173,8 @@ class PhotoGalleryActivity : BaseActivity() {
                 .build()
                 .show(this)
         } else {
-            if (model.photos.size < 2) {
+            val remotePhotos = model.photos.filter { it.remotePath != null }.size
+            if (remotePhotos < 2) {
                 ActionDialogFragment
                     .Builder(
                         title = getString(R.string.exit_photo_verification),
