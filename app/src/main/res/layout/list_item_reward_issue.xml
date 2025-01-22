@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,8 +8,9 @@
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <com.weatherxm.ui.components.RewardIssueCardView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/annotationCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:composableName="com.weatherxm.ui.components.compose.RewardIssueViewKt.PreviewRewardIssueView" />
 </LinearLayout>
