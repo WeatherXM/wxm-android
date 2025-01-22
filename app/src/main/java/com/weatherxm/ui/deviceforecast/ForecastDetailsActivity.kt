@@ -23,6 +23,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
+import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
@@ -64,13 +65,16 @@ class ForecastDetailsActivity : BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-        val defaultOrFriendlyName = model.device.getDefaultOrFriendlyName()
-        binding.header.title(defaultOrFriendlyName)
-        if (defaultOrFriendlyName == model.device.name) {
-            binding.header.hideSubtitle()
-        } else {
-            binding.header.subtitle(model.device.name)
+        binding.header.setContent {
+            val defaultOrFriendlyName = model.device.getDefaultOrFriendlyName()
+            val subtitle = if (defaultOrFriendlyName == model.device.name) {
+                null
+            } else {
+                model.device.name
+            }
+            HeaderView(defaultOrFriendlyName, subtitle, null)
         }
+
         handleOwnershipIcon()
 
         binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
