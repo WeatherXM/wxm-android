@@ -127,6 +127,8 @@ open class DevicePhotosView : LinearLayout, KoinComponent {
             binding.photosContainer.visible(true)
             if (devicePhotos.size > 2) {
                 binding.morePhotos.text = "+${devicePhotos.size - 2}"
+            } else {
+                binding.morePhotos.text = null
             }
             binding.translucentViewOnSecondPhoto.visible(devicePhotos.size > 2)
         }
