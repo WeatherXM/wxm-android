@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.repository.RewardsRepositoryImpl
+import com.weatherxm.ui.common.Contracts.LOADING_DELAY
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.DevicesRewardsByRange
@@ -19,6 +20,7 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DevicesRewardsViewModel(
@@ -52,7 +54,11 @@ class DevicesRewardsViewModel(
         viewModelScope.launch(dispatcher) {
             onRewardsByRange.postValue(Resource.loading())
             totalRangeChipsToggleEnabled.value = false
-
+            /**
+             * Needed due to an issue with the chart drawing if the API replies very fast:
+             * https://linear.app/weatherxm/issue/FE-1564/fix-chart-in-devices-rewards-showing-no-data-at-first-open
+             */
+            delay(LOADING_DELAY)
             val mode = labelResIdToMode(selectedRangeChipId)
             usecase.getDevicesRewardsByRange(mode).onRight {
                 onRewardsByRange.postValue(Resource.success(it))
@@ -74,7 +80,11 @@ class DevicesRewardsViewModel(
             rewards.devices[position].details.status = Status.LOADING
             rewards.devices[position].details.mode = selectedMode
             onDeviceRewardDetails.postValue(Pair(position, rewards.devices[position].details))
-
+            /**
+             * Needed due to an issue with the chart drawing if the API replies very fast:
+             * https://linear.app/weatherxm/issue/FE-1564/fix-chart-in-devices-rewards-showing-no-data-at-first-open
+             */
+            delay(LOADING_DELAY)
             usecase.getDeviceRewardsByRange(deviceId, selectedMode).onRight {
                 rewards.devices[position].details = it
                 onDeviceRewardDetails.postValue(Pair(position, it))

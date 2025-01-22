@@ -52,6 +52,7 @@ fun RangeSelectorView(
     }
 }
 
+@Suppress("FunctionNaming")
 @Preview
 @Composable
 fun Chip(
