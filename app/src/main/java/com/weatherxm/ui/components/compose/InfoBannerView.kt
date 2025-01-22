@@ -77,7 +77,8 @@ fun InfoBannerView(
             Button(
                 onClick = { onAction?.invoke() },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(R.color.colorSurface)
+                    containerColor = colorResource(R.color.colorSurface),
+                    contentColor = colorResource(R.color.textColor)
                 ),
                 modifier = Modifier.padding(
                     0.dp, dimensionResource(R.dimen.padding_small), 0.dp, 0.dp

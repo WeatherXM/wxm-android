@@ -1,8 +1,11 @@
 package com.weatherxm.ui.components.compose
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
@@ -14,13 +17,15 @@ import com.weatherxm.R
 fun MediumText(
     text: String,
     fontWeight: FontWeight = FontWeight.Normal,
-    colorRes: Int = R.color.colorOnSurface
+    colorRes: Int = R.color.colorOnSurface,
+    paddingValues: PaddingValues = PaddingValues()
 ) {
     Text(
         text = text,
         fontWeight = fontWeight,
         color = colorResource(colorRes),
-        style = MaterialTheme.typography.bodyMedium
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(paddingValues)
     )
 }
 
