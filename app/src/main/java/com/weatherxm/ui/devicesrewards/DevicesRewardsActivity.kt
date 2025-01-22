@@ -30,6 +30,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.compose.LargeText
+import com.weatherxm.ui.components.compose.RangeSelectorView
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.initTotalEarnedChart
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,8 +57,15 @@ class DevicesRewardsActivity : BaseActivity() {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
-        binding.totalEarnedRangeSelector.listener {
-            model.getDevicesRewardsByRangeTotals(it)
+        binding.totalEarnedRangeSelector.setContent {
+            RangeSelectorView(
+                selectedChipLabelResId = model.totalSelectedRangeChip(),
+                enabledToggle = model.totalRangeChipsToggleEnabled()
+            ) {
+                if (model.totalSelectedRangeChip() != it) {
+                    model.getDevicesRewardsByRangeTotals(it)
+                }
+            }
         }
 
         model.onRewardsByRange().observe(this) {
@@ -65,7 +73,6 @@ class DevicesRewardsActivity : BaseActivity() {
                 Status.SUCCESS -> {
                     binding.totalEarnedStatus.visible(false)
                     binding.retryCard.visible(false)
-                    binding.totalEarnedRangeSelector.enable()
                     binding.totalEarned.text =
                         getString(R.string.wxm_amount, formatTokens(it.data?.total))
                     it.data?.let { data ->
@@ -81,7 +88,6 @@ class DevicesRewardsActivity : BaseActivity() {
                     onError()
                 }
                 Status.LOADING -> {
-                    binding.totalEarnedRangeSelector.disable()
                     binding.totalEarnedChart.invisible()
                     binding.totalEarned.invisible()
                     binding.retryCard.visible(false)
@@ -119,7 +125,6 @@ class DevicesRewardsActivity : BaseActivity() {
 
             adapter.submitList(model.rewards.devices)
 
-            binding.totalEarnedRangeSelector.checkWeek()
             model.getDevicesRewardsByRangeTotals()
             model.getDeviceRewardsByRange(model.rewards.devices[0].id, 0)
         } else {
@@ -133,15 +138,12 @@ class DevicesRewardsActivity : BaseActivity() {
     }
 
     private fun onError() {
-        binding.totalEarnedRangeSelector.enable()
         binding.totalEarnedChart.invisible()
         binding.totalEarned.invisible()
         binding.totalEarnedStatus.visible(false)
         binding.retryCard.setContent {
             RetryCard {
-                model.getDevicesRewardsByRangeTotals(
-                    binding.totalEarnedRangeSelector.checkedChipId()
-                )
+                model.getDevicesRewardsByRangeTotals()
             }
         }
         binding.retryCard.visible(true)

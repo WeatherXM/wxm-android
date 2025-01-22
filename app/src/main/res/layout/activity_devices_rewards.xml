@@ -143,12 +143,13 @@
                         app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle"
                         tools:text="389,023.54 $WXM" />
 
-                    <com.weatherxm.ui.components.RangeSelectorView
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/totalEarnedRangeSelector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:composableName="com.weatherxm.ui.components.compose.RangeSelectorViewKt.RangeSelectorView" />
 
                     <com.weatherxm.ui.components.EmptyView
                         android:id="@+id/totalEarnedStatus"

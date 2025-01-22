@@ -1,5 +1,7 @@
 package com.weatherxm.ui.devicesrewards
 
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +27,12 @@ class DevicesRewardsViewModel(
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
+    private val totalSelectedRangeChip = mutableIntStateOf(R.string.seven_days_abbr)
+    private val totalRangeChipsToggleEnabled = mutableStateOf(true)
+
+    fun totalSelectedRangeChip(): Int = totalSelectedRangeChip.intValue
+    fun totalRangeChipsToggleEnabled(): Boolean = totalRangeChipsToggleEnabled.value
+
     private val devicesJobs = mutableMapOf<Int, Job>()
 
     /**
@@ -38,27 +46,31 @@ class DevicesRewardsViewModel(
 
     fun onRewardsByRange(): LiveData<Resource<DevicesRewardsByRange>> = onRewardsByRange
 
-    fun getDevicesRewardsByRangeTotals(checkedRangeChipId: Int = R.id.week) {
+    fun getDevicesRewardsByRangeTotals(selectedRangeChipId: Int = totalSelectedRangeChip.intValue) {
+        totalSelectedRangeChip.intValue = selectedRangeChipId
+
         viewModelScope.launch(dispatcher) {
             onRewardsByRange.postValue(Resource.loading())
+            totalRangeChipsToggleEnabled.value = false
 
-            val mode = chipToMode(checkedRangeChipId)
+            val mode = labelResIdToMode(selectedRangeChipId)
             usecase.getDevicesRewardsByRange(mode).onRight {
                 onRewardsByRange.postValue(Resource.success(it))
             }.onLeft {
                 onRewardsByRange.postValue(Resource.error(it.getDefaultMessage()))
                 analytics.trackEventFailure(it.code)
             }
+            totalRangeChipsToggleEnabled.value = true
         }
     }
 
     fun getDeviceRewardsByRange(
         deviceId: String,
         position: Int,
-        checkedRangeChipId: Int = R.id.week
+        selectedRangeChipId: Int = R.string.seven_days_abbr
     ) {
         val job = viewModelScope.launch(dispatcher) {
-            val selectedMode = chipToMode(checkedRangeChipId)
+            val selectedMode = labelResIdToMode(selectedRangeChipId)
             rewards.devices[position].details.status = Status.LOADING
             rewards.devices[position].details.mode = selectedMode
             onDeviceRewardDetails.postValue(Pair(position, rewards.devices[position].details))
@@ -83,12 +95,13 @@ class DevicesRewardsViewModel(
         devicesJobs[position]?.cancel()
     }
 
-    private fun chipToMode(chipId: Int): RewardsRepositoryImpl.Companion.RewardsSummaryMode {
-        return when (chipId) {
-            R.id.week -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
-            R.id.month -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH
-            else -> throw NotImplementedError("Unknown chip ID $chipId")
+    private fun labelResIdToMode(
+        labelResId: Int
+    ): RewardsRepositoryImpl.Companion.RewardsSummaryMode {
+        return when (labelResId) {
+            R.string.seven_days_abbr -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
+            R.string.one_month_abbr -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH
+            else -> throw NotImplementedError("Unknown chip ID $labelResId")
         }
     }
-
 }
