@@ -95,15 +95,19 @@ class PhotoUploadActivity : BaseActivity() {
                 file.copyInputStreamToFile(compressImageFile(imageBitmap))
                 copyExifMetadata(stationPhoto.localPath, file.path)
 
-                // Copied the photo in cache. Delete it from the external storage it was saved.
-                stationPhoto.localPath?.let { path ->
-                    File(path).delete()
-                }
-
                 // Start the work manager to upload the photo.
                 UploadPhotoWorker.initAndStart(this, metadata, file.path, model.device.id)
             }
         }
     }
 
+    override fun onDestroy() {
+        // Delete the photos from the external storage they were saved.
+        model.photos.forEach {
+            it.localPath?.let { path ->
+                File(path).delete()
+            }
+        }
+        super.onDestroy()
+    }
 }
