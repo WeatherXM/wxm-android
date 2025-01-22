@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimSelectStationBinding
@@ -44,46 +46,7 @@ class SelectStationTypeActivity : BaseActivity() {
         }
 
         binding.deviceTypes.setContent {
-            Column(
-                verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
-            ) {
-                Row(
-                    horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
-                ) {
-                    Column(Modifier.weight(1F)) {
-                        CardViewClickable(
-                            onClickListener = { startClaimingFlow(DeviceType.M5_WIFI) }
-                        ) {
-                            TypeContent(getString(R.string.m5_wifi), R.drawable.device_type_m5)
-                        }
-                    }
-                    Column(Modifier.weight(1F)) {
-                        CardViewClickable(
-                            onClickListener = { startClaimingFlow(DeviceType.D1_WIFI) }
-                        ) {
-                            TypeContent(getString(R.string.d1_wifi), R.drawable.device_type_d1)
-                        }
-                    }
-                }
-                Row(
-                    horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
-                ) {
-                    Column(Modifier.weight(1F)) {
-                        CardViewClickable(
-                            onClickListener = { startClaimingFlow(DeviceType.HELIUM) },
-                        ) {
-                            TypeContent(getString(R.string.helium), R.drawable.device_type_helium)
-                        }
-                    }
-                    Column(Modifier.weight(1F)) {
-                        CardViewClickable(
-                            onClickListener = { startClaimingFlow(DeviceType.PULSE_4G) },
-                        ) {
-                            TypeContent(getString(R.string.pulse_4g), R.drawable.device_type_pulse)
-                        }
-                    }
-                }
-            }
+            DeviceTypes()
         }
     }
 
@@ -96,6 +59,52 @@ class SelectStationTypeActivity : BaseActivity() {
 
     private fun startClaimingFlow(deviceType: DeviceType) {
         navigator.showClaimFlow(claimingLauncher, this, deviceType)
+    }
+
+    @Suppress("FunctionNaming")
+    @Preview
+    @Composable
+    fun DeviceTypes() {
+        Column(
+            verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+        ) {
+            Row(
+                horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+            ) {
+                Column(Modifier.weight(1F)) {
+                    CardViewClickable(
+                        onClickListener = { startClaimingFlow(DeviceType.M5_WIFI) }
+                    ) {
+                        TypeContent(stringResource(R.string.m5_wifi), R.drawable.device_type_m5)
+                    }
+                }
+                Column(Modifier.weight(1F)) {
+                    CardViewClickable(
+                        onClickListener = { startClaimingFlow(DeviceType.D1_WIFI) }
+                    ) {
+                        TypeContent(stringResource(R.string.d1_wifi), R.drawable.device_type_d1)
+                    }
+                }
+            }
+            Row(
+                horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+            ) {
+                Column(Modifier.weight(1F)) {
+                    CardViewClickable(
+                        onClickListener = { startClaimingFlow(DeviceType.HELIUM) },
+                    ) {
+                        TypeContent(stringResource(R.string.helium), R.drawable.device_type_helium)
+                    }
+                }
+                Column(Modifier.weight(1F)) {
+                    CardViewClickable(
+                        onClickListener = { startClaimingFlow(DeviceType.PULSE_4G) },
+                    ) {
+                        TypeContent(stringResource(R.string.pulse_4g), R.drawable.device_type_pulse)
+                    }
+                }
+            }
+        }
     }
 
     @Suppress("FunctionNaming")

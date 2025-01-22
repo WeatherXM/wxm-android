@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import timber.log.Timber
 
@@ -39,7 +40,9 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
         }
         val subtitle =
             "${getString(R.string.report_for, reward.timestamp.getFormattedDate(true))} (UTC)"
-        binding.header.subtitle(subtitle)
+        binding.header.setContent {
+            HeaderView(title = getString(R.string.reward_issues), subtitle = subtitle, null)
+        }
 
         val adapter = RewardIssuesAdapter(device, this)
         binding.recycler.adapter = adapter

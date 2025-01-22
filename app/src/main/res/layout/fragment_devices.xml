@@ -134,12 +134,13 @@
                 android:background="@color/layer1"
                 android:clipChildren="false">
 
-                <com.weatherxm.ui.components.InfoBannerCardView
+                <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/infoBanner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
+                    tools:composableName="com.weatherxm.ui.components.compose.InfoBannerViewKt.PreviewInfoBannerView"
                     tools:visibility="visible" />
 
                 <com.google.android.material.card.MaterialCardView
