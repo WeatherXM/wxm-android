@@ -54,6 +54,8 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         val resetPassBtn: Preference? = findPreference(getString(R.string.change_password))
         val deleteAccountButton: Preference? = findPreference(getString(R.string.delete_account))
         val appVersionPref: Preference? = findPreference(getString(R.string.title_app_version))
+        val openTermsOfUse: Preference? = findPreference(getString(R.string.terms_of_use))
+        val openPrivacyPolicy: Preference? = findPreference(getString(R.string.privacy_policy))
 
         /*
          * Disable switching of notifications toggle as we prompt user to do it via the settings
@@ -86,6 +88,17 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             displayModeHelper.setDisplayMode(newValue.toString())
             true
         }
+        openTermsOfUse?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.DOCUMENTATION.paramValue)
+            navigator.openWebsite(context, getString(R.string.terms_of_use_owners_url))
+            true
+        }
+        openPrivacyPolicy?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.DOCUMENTATION.paramValue)
+            navigator.openWebsite(context, getString(R.string.privacy_policy_owners_url))
+            true
+        }
+
         /**
          * If `installationId` is available, append it at the end of the app version
          */
