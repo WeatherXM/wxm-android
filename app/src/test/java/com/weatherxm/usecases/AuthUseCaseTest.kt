@@ -8,17 +8,20 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.NotificationsRepository
+import com.weatherxm.data.repository.UserPreferencesRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 
 class AuthUseCaseTest : BehaviorSpec({
     val authRepository = mockk<AuthRepository>()
     val notificationsRepository = mockk<NotificationsRepository>()
-    val usecase = AuthUseCaseImpl(authRepository, notificationsRepository)
+    val userPreferenceRepo = mockk<UserPreferencesRepository>()
+    val usecase = AuthUseCaseImpl(authRepository, userPreferenceRepo, notificationsRepository)
 
     val username = "username"
     val password = "password"
@@ -29,6 +32,7 @@ class AuthUseCaseTest : BehaviorSpec({
     beforeSpec {
         coJustRun { notificationsRepository.setFcmToken() }
         coJustRun { authRepository.logout() }
+        coJustRun { userPreferenceRepo.setAcceptTerms() }
     }
 
     context("Get if a user is logged in or not") {
@@ -60,6 +64,9 @@ class AuthUseCaseTest : BehaviorSpec({
                 coMockEitherRight({ authRepository.signup(username, firstName, lastName) }, Unit)
                 then("return the username") {
                     usecase.signup(username, firstName, lastName).isSuccess(username)
+                }
+                then("verify that the setting the acceptance of terms has taken place") {
+                    verify(exactly = 1) { userPreferenceRepo.setAcceptTerms() }
                 }
             }
         }

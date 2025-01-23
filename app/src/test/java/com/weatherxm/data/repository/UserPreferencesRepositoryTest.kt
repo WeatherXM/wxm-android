@@ -22,6 +22,7 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
         justRun { dataSource.setWalletWarningDismissTimestamp() }
         every { dataSource.getWalletWarningDismissTimestamp() } returns 0
         justRun { dataSource.setDevicesSortFilterOptions(sort, filter, group) }
+        justRun { dataSource.setAcceptTerms() }
         every { dataSource.getDevicesSortFilterOptions() } returns sortFilterGroupOptions
     }
 
@@ -79,6 +80,30 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
             then("set them") {
                 repo.setDevicesSortFilterOptions(sort, filter, group)
                 verify(exactly = 1) { dataSource.setDevicesSortFilterOptions(sort, filter, group) }
+            }
+        }
+    }
+
+    context("Get if we should show the terms prompt") {
+        When("we should show it") {
+            every { dataSource.getAcceptTermsTimestamp() } returns 0
+            then("return true") {
+                repo.shouldShowTermsPrompt() shouldBe true
+            }
+        }
+        When("we should NOT show it") {
+            every { dataSource.getAcceptTermsTimestamp() } returns 1
+            then("return false") {
+                repo.shouldShowTermsPrompt() shouldBe false
+            }
+        }
+    }
+
+    context("SET accept terms timestamp") {
+        When("Using the Cache Source") {
+            repo.setAcceptTerms()
+            then("set the timestamp in cache") {
+                verify(exactly = 1) { dataSource.setAcceptTerms() }
             }
         }
     }

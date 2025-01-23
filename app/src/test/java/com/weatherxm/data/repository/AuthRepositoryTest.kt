@@ -19,6 +19,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 
 class AuthRepositoryTest : BehaviorSpec({
     lateinit var networkAuthDataSource: NetworkAuthDataSource
@@ -55,6 +56,7 @@ class AuthRepositoryTest : BehaviorSpec({
         coJustRun { databaseExplorerDataSource.deleteAll() }
         coJustRun { networkAuthDataSource.logout(authToken.access, installationId) }
         justRun { cacheService.clearAll() }
+        justRun { cacheService.setAcceptTermsTimestamp(any()) }
         coMockEitherRight({ cacheUserDataSource.getUserUsername() }, email)
     }
 
@@ -147,6 +149,9 @@ class AuthRepositoryTest : BehaviorSpec({
                 )
                 then("return that Unit indicating the success") {
                     authRepository.signup(email, firstName, lastName).isSuccess(Unit)
+                }
+                then("verify that setting the acceptance of terms has taken place") {
+                    verify(exactly = 1) { cacheService.setAcceptTermsTimestamp(any()) }
                 }
             }
             When("signup failed") {

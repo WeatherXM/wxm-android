@@ -242,6 +242,7 @@
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to login.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
+    <string name="registration_terms_privacy_policy"><![CDATA[I have read and accept the <a href="%1$s">Terms of Use</a> and <a href="%2$s">Privacy Policy</a>.]]></string>
 
     <!-- Rewards -->
     <string name="title_reward_timeline">Reward Timeline</string>

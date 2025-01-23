@@ -2,6 +2,7 @@ package com.weatherxm.data.services
 
 import android.content.SharedPreferences
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.data.services.CacheService.Companion.KEY_ACCEPT_TERMS_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BANNER_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
@@ -64,6 +65,15 @@ class PrefsSingleVarTest(
             { prefEditor.putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, timestamp) },
             { cacheService.getAnalyticsDecisionTimestamp() },
             { cacheService.setAnalyticsDecisionTimestamp(timestamp) }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "Accept Terms Timestamp",
+            timestamp,
+            { sharedPref.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0) },
+            { prefEditor.putLong(KEY_ACCEPT_TERMS_TIMESTAMP, timestamp) },
+            { cacheService.getAcceptTermsTimestamp() },
+            { cacheService.setAcceptTermsTimestamp(timestamp) }
         )
 
         behaviorSpec.testGetSetSingleVar(

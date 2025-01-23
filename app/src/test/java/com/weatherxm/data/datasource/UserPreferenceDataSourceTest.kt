@@ -8,6 +8,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.verify
 
 class UserPreferenceDataSourceTest : BehaviorSpec({
@@ -24,16 +25,34 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
         every { cacheService.getWalletWarningDismissTimestamp() } returns timestamp
         every { cacheService.getAnalyticsDecisionTimestamp() } returns timestamp
         every { cacheService.getDevicesSortFilterOptions() } returns filters
+        every { cacheService.getAcceptTermsTimestamp() } returns timestamp
         coJustRun { cacheService.setAnalyticsEnabled(enabled) }
         coJustRun { cacheService.setAnalyticsDecisionTimestamp(any()) }
         coJustRun { cacheService.setWalletWarningDismissTimestamp(any()) }
         coJustRun { cacheService.setDevicesSortFilterOptions(sortOrder, filter, groupBy) }
+        justRun { cacheService.setAcceptTermsTimestamp(any()) }
     }
 
     context("Get analytics opt-in or opt-out timestamp") {
         When("Using the Cache Source") {
             then("return the timestamp") {
                 datasource.getAnalyticsDecisionTimestamp() shouldBe timestamp
+            }
+        }
+    }
+
+    context("GET / SET accept terms timestamp") {
+        When("Using the Cache Source") {
+            and("GET the timestamp") {
+                then("return the timestamp") {
+                    datasource.getAcceptTermsTimestamp() shouldBe timestamp
+                }
+            }
+            and("SET the timestamp") {
+                datasource.setAcceptTerms()
+                then("set the timestamp in cache") {
+                    verify(exactly = 1) { cacheService.setAcceptTermsTimestamp(any()) }
+                }
             }
         }
     }

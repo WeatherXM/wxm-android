@@ -57,6 +57,8 @@ class AuthRepositoryImpl(
         lastName: String?
     ): Either<Failure, Unit> {
         return networkAuthDataSource.signup(username, firstName, lastName).onRight {
+            // The user has signed-up successfully so the terms should be marked as accepted
+            cacheService.setAcceptTermsTimestamp(System.currentTimeMillis())
             Timber.d("Signup success. Email sent to user: $username")
         }
     }
