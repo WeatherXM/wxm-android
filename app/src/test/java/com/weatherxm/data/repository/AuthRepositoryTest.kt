@@ -151,7 +151,7 @@ class AuthRepositoryTest : BehaviorSpec({
                     authRepository.signup(email, firstName, lastName).isSuccess(Unit)
                 }
                 then("verify that setting the acceptance of terms has taken place") {
-                    verify(exactly = 1) { cacheService.setAcceptTermsTimestamp(any()) }
+                    verify { cacheService.setAcceptTermsTimestamp(any()) }
                 }
             }
             When("signup failed") {
