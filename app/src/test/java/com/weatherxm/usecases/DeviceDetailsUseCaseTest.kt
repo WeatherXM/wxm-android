@@ -16,24 +16,30 @@ import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.RewardsRepository
+import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.empty
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 
 class DeviceDetailsUseCaseTest : BehaviorSpec({
     val deviceRepo = mockk<DeviceRepository>()
     val deviceOTARepo = mockk<DeviceOTARepository>()
     val rewardsRepo = mockk<RewardsRepository>()
     val explorerRepo = mockk<ExplorerRepository>()
+    val userPreferencesRepository = mockk<UserPreferencesRepository>()
     val usecase = DeviceDetailsUseCaseImpl(
         deviceRepo,
         rewardsRepo,
         explorerRepo,
-        deviceOTARepo
+        deviceOTARepo,
+        userPreferencesRepository
     )
 
     val publicDevice = PublicDevice(
@@ -77,6 +83,8 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
     val rewards = mockk<Rewards>()
 
     beforeSpec {
+        justRun { userPreferencesRepository.setAcceptTerms() }
+        every { userPreferencesRepository.shouldShowTermsPrompt() } returns true
         every { deviceOTARepo.shouldNotifyOTA(any(), any()) } returns false
     }
 
@@ -130,6 +138,23 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
                 then("return the rewards") {
                     usecase.getRewards(ownedDevice.id).isSuccess(rewards)
                 }
+            }
+        }
+    }
+
+    context("Get if we should show the terms prompt or not") {
+        given("The repository which returns the answer") {
+            then("return the answer") {
+                usecase.shouldShowTermsPrompt() shouldBe true
+            }
+        }
+    }
+
+    context("Set the Accept Terms") {
+        given("A repository providing the SET functionality") {
+            usecase.setAcceptTerms()
+            then("make the respective call") {
+                verify(exactly = 1) { userPreferencesRepository.setAcceptTerms() }
             }
         }
     }

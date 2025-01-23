@@ -44,7 +44,9 @@ class UserUseCaseTest : BehaviorSpec({
 
     beforeSpec {
         justRun { userPreferencesRepository.setWalletWarningDismissTimestamp() }
+        justRun { userPreferencesRepository.setAcceptTerms() }
         every { userPreferencesRepository.shouldShowAnalyticsOptIn() } returns true
+        every { userPreferencesRepository.shouldShowTermsPrompt() } returns true
     }
 
     context("Get the Wallet Address") {
@@ -200,6 +202,23 @@ class UserUseCaseTest : BehaviorSpec({
                         usecase.getWalletRewards(walletAddress).isError()
                     }
                 }
+            }
+        }
+    }
+
+    context("Get if we should show the terms prompt or not") {
+        given("The repository which returns the answer") {
+            then("return the answer") {
+                usecase.shouldShowTermsPrompt() shouldBe true
+            }
+        }
+    }
+
+    context("Set the Accept Terms") {
+        given("A repository providing the SET functionality") {
+            usecase.setAcceptTerms()
+            then("make the respective call") {
+                verify(exactly = 1) { userPreferencesRepository.setAcceptTerms() }
             }
         }
     }

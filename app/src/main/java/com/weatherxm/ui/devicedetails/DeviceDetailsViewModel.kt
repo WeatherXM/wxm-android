@@ -139,6 +139,9 @@ class DeviceDetailsViewModel(
         onFollowStatus.postValue(Resource.error(errorMessage))
     }
 
+    fun shouldShowTermsPrompt() = deviceDetailsUseCase.shouldShowTermsPrompt()
+    fun setAcceptTerms() = deviceDetailsUseCase.setAcceptTerms()
+
     init {
         viewModelScope.launch(dispatcher) {
             isLoggedIn = authUseCase.isLoggedIn()

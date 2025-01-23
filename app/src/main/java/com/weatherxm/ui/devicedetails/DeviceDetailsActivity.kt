@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.warningChip
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.TermsDialogFragment
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
@@ -138,6 +139,10 @@ class DeviceDetailsActivity : BaseActivity() {
         }.attach()
 
         updateDeviceInfo()
+
+        lifecycleScope.launch {
+            handleTermsDialog()
+        }
     }
 
     override fun onResume() {
@@ -146,6 +151,15 @@ class DeviceDetailsActivity : BaseActivity() {
             analytics.trackScreen(
                 AnalyticsService.Screen.EXPLORER_DEVICE, classSimpleName(), model.device.id
             )
+        }
+    }
+
+    private fun handleTermsDialog() {
+        if (model.shouldShowTermsPrompt()) {
+            TermsDialogFragment(
+                onLinkClicked = { navigator.openWebsite(this, it) },
+                onClick = { model.setAcceptTerms() }
+            ).show(this)
         }
     }
 

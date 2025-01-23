@@ -40,7 +40,9 @@ class HomeViewModelTest : BehaviorSpec({
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
         justRun { userUseCase.setWalletWarningDismissTimestamp() }
+        justRun { userUseCase.setAcceptTerms() }
         every { userUseCase.shouldShowWalletMissingWarning(emptyWalletAddress) } returns true
+        every { userUseCase.shouldShowTermsPrompt() } returns true
         every { remoteBannersUseCase.getSurvey() } returns survey
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
         every { remoteBannersUseCase.getInfoBanner() } returns infoBanner
@@ -144,6 +146,23 @@ class HomeViewModelTest : BehaviorSpec({
                 then("the respective function in the usecase should be called") {
                     verify(exactly = 1) { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
                 }
+            }
+        }
+    }
+
+    context("Get if we should show the terms prompt or not") {
+        given("A use case returning the result") {
+            then("return that result") {
+                viewModel.shouldShowTermsPrompt() shouldBe true
+            }
+        }
+    }
+
+    context("Set the Accept Terms") {
+        given("the call to the respective function") {
+            viewModel.setAcceptTerms()
+            then("the respective function in the usecase should be called") {
+                verify(exactly = 1) { userUseCase.setAcceptTerms() }
             }
         }
     }

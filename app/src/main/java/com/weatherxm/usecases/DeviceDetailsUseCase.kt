@@ -9,4 +9,6 @@ interface DeviceDetailsUseCase {
     suspend fun getDevice(device: UIDevice): Either<Failure, UIDevice>
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
     suspend fun getUserDevice(deviceId: String): Either<Failure, UIDevice>
+    fun setAcceptTerms()
+    fun shouldShowTermsPrompt(): Boolean
 }

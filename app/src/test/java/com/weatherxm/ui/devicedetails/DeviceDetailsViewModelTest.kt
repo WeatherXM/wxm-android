@@ -111,6 +111,8 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         }
         every { authUseCase.isLoggedIn() } returns true
         every { resources.getString(R.string.error_max_followed) } returns maxFollowedMsg
+        justRun { deviceDetailsUseCase.setAcceptTerms() }
+        every { deviceDetailsUseCase.shouldShowTermsPrompt() } returns true
 
         viewModel = DeviceDetailsViewModel(
             emptyDevice,
@@ -377,6 +379,23 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                         }
                     }
                 }
+            }
+        }
+    }
+
+    context("Get if we should show the terms prompt or not") {
+        given("A use case returning the result") {
+            then("return that result") {
+                viewModel.shouldShowTermsPrompt() shouldBe true
+            }
+        }
+    }
+
+    context("Set the Accept Terms") {
+        given("the call to the respective function") {
+            viewModel.setAcceptTerms()
+            then("the respective function in the usecase should be called") {
+                verify(exactly = 1) { deviceDetailsUseCase.setAcceptTerms() }
             }
         }
     }
