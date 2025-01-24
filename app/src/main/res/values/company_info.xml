@@ -27,6 +27,6 @@
     <string name="share_cell_url">https://explorer.weatherxm.com/cells/%s</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>
-    <string name="terms_of_use_owners_url">https://docs.google.com/document/d/1-Ee_5VPlVmvutISvQzc8A5Ws-o_eJv-U/edit</string>
-    <string name="privacy_policy_owners_url">https://docs.google.com/document/d/1-D80sV70S8dybsrvB0QX7np7D7n8t8-M/edit</string>
+    <string name="terms_of_use_owners_url">https://weatherxm.network/terms-of-use.pdf</string>
+    <string name="privacy_policy_owners_url">https://weatherxm.network/privacy-policy.pdf</string>
 </resources>
