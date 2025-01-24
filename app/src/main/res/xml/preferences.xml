@@ -131,6 +131,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:key="@string/legal"
         app:title="@string/legal">
         <Preference
             app:iconSpaceReserved="false"
