@@ -504,7 +504,7 @@ private val usecases = module {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(get(), get(), get(), get())
+        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get())
     }
     single<ForecastUseCase> {
         ForecastUseCaseImpl(get())

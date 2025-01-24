@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Suppress("TooManyFunctions")
 class HomeViewModel(
     private val userUseCase: UserUseCase,
     private val remoteBannersUseCase: RemoteBannersUseCase,
@@ -101,4 +102,7 @@ class HomeViewModel(
     fun dismissInfoBanner(infoBannerId: String) {
         remoteBannersUseCase.dismissInfoBanner(infoBannerId)
     }
+
+    fun shouldShowTermsPrompt() = userUseCase.shouldShowTermsPrompt()
+    fun setAcceptTerms() = userUseCase.setAcceptTerms()
 }

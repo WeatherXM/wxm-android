@@ -11,6 +11,7 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
@@ -50,11 +51,13 @@ class DeviceDetailsViewModel(
     private val onDevicePolling = MutableLiveData<UIDevice>()
     private val onUpdatedDevice = MutableLiveData<UIDevice>()
     private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
+    private val onShowLegalTerms = SingleLiveEvent<Boolean>()
 
     fun onDeviceFirstFetch(): LiveData<UIDevice> = onDeviceFirstFetch
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
+    fun onShowLegalTerms() = onShowLegalTerms
 
     fun isLoggedIn() = isLoggedIn
 
@@ -139,9 +142,14 @@ class DeviceDetailsViewModel(
         onFollowStatus.postValue(Resource.error(errorMessage))
     }
 
+    fun setAcceptTerms() = deviceDetailsUseCase.setAcceptTerms()
+
     init {
         viewModelScope.launch(dispatcher) {
             isLoggedIn = authUseCase.isLoggedIn()
+            if (isLoggedIn == true) {
+                onShowLegalTerms.postValue(deviceDetailsUseCase.shouldShowTermsPrompt())
+            }
         }
     }
 }

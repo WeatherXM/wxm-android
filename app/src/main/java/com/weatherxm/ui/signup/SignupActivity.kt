@@ -4,16 +4,18 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
-import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
-import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -30,9 +32,28 @@ class SignupActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        with(binding.termsCheckboxDesc) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    navigator.openWebsite(this@SignupActivity, url)
+                    return@setOnLinkClickListener true
+                }
+            }
+            setHtml(
+                R.string.registration_terms_privacy_policy,
+                getString(R.string.terms_of_use_owners_url),
+                getString(R.string.privacy_policy_owners_url)
+            )
+        }
+
         binding.username.onTextChanged {
             binding.usernameContainer.error = null
-            binding.signup.isEnabled = !binding.username.text.isNullOrEmpty()
+            binding.signup.isEnabled =
+                !binding.username.text.isNullOrEmpty() && binding.termsCheckbox.isChecked
+        }
+
+        binding.termsCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            binding.signup.isEnabled = !binding.username.text.isNullOrEmpty() && isChecked
         }
 
         binding.done.setOnClickListener {

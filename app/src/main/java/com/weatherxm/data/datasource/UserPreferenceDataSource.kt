@@ -9,6 +9,8 @@ interface UserPreferenceDataSource {
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String)
     fun setWalletWarningDismissTimestamp()
     fun getWalletWarningDismissTimestamp(): Long
+    fun getAcceptTermsTimestamp(): Long
+    fun setAcceptTerms()
 }
 
 class UserPreferenceDataSourceImpl(
@@ -37,5 +39,13 @@ class UserPreferenceDataSourceImpl(
 
     override fun getWalletWarningDismissTimestamp(): Long {
         return cacheService.getWalletWarningDismissTimestamp()
+    }
+
+    override fun getAcceptTermsTimestamp(): Long {
+        return cacheService.getAcceptTermsTimestamp()
+    }
+
+    override fun setAcceptTerms() {
+        cacheService.setAcceptTermsTimestamp(System.currentTimeMillis())
     }
 }

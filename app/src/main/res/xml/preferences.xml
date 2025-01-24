@@ -131,6 +131,22 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:key="@string/legal"
+        app:title="@string/legal">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/terms_of_use"
+            app:summary="@string/terms_of_use_read"
+            app:title="@string/terms_of_use" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/privacy_policy"
+            app:summary="@string/privacy_policy_read"
+            app:title="@string/privacy_policy" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/about">
         <Preference
             app:enableCopying="true"

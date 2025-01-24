@@ -64,6 +64,13 @@
     <string name="announcements_title">Announcements</string>
     <string name="announcements_desc">Visit our announcements portal to get up to date with WeatherXM.</string>
 
+    <!-- Legal -->
+    <string name="legal">Legal</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="terms_of_use_read">Read about our terms and conditions.</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_read">Read about our privacy standards.</string>
+
     <!-- About -->
     <string name="about">About</string>
     <string name="title_app_version">App Version</string>
