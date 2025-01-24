@@ -125,10 +125,12 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         model.onShowLegalTerms().observe(this) {
-            TermsDialogFragment(
-                onLinkClicked = { navigator.openWebsite(this, it) },
-                onClick = { model.setAcceptTerms() }
-            ).show(this)
+            if (it == true) {
+                TermsDialogFragment(
+                    onLinkClicked = { navigator.openWebsite(this, it) },
+                    onClick = { model.setAcceptTerms() }
+                ).show(this)
+            }
         }
 
         val adapter = ViewPagerAdapter(this)
