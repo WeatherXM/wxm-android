@@ -89,12 +89,12 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             true
         }
         openTermsOfUse?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(AnalyticsService.ParamValue.DOCUMENTATION.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.TERMS_OF_USE.paramValue)
             navigator.openWebsite(context, getString(R.string.terms_of_use_owners_url))
             true
         }
         openPrivacyPolicy?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(AnalyticsService.ParamValue.DOCUMENTATION.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.PRIVACY_POLICY.paramValue)
             navigator.openWebsite(context, getString(R.string.privacy_policy_owners_url))
             true
         }
