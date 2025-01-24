@@ -124,6 +124,13 @@ class DeviceDetailsActivity : BaseActivity() {
             updateDeviceInfo(it)
         }
 
+        model.onShowLegalTerms().observe(this) {
+            TermsDialogFragment(
+                onLinkClicked = { navigator.openWebsite(this, it) },
+                onClick = { model.setAcceptTerms() }
+            ).show(this)
+        }
+
         val adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
         binding.viewPager.offscreenPageLimit = adapter.itemCount - 1
@@ -139,10 +146,6 @@ class DeviceDetailsActivity : BaseActivity() {
         }.attach()
 
         updateDeviceInfo()
-
-        lifecycleScope.launch {
-            handleTermsDialog()
-        }
     }
 
     override fun onResume() {
@@ -151,15 +154,6 @@ class DeviceDetailsActivity : BaseActivity() {
             analytics.trackScreen(
                 AnalyticsService.Screen.EXPLORER_DEVICE, classSimpleName(), model.device.id
             )
-        }
-    }
-
-    private fun handleTermsDialog() {
-        if (model.shouldShowTermsPrompt()) {
-            TermsDialogFragment(
-                onLinkClicked = { navigator.openWebsite(this, it) },
-                onClick = { model.setAcceptTerms() }
-            ).show(this)
         }
     }
 
