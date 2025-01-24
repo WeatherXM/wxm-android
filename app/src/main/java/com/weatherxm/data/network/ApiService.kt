@@ -282,4 +282,12 @@ interface ApiService {
         @Path("installationId") installationId: String,
         @Path("fcmToken") fcmToken: String
     ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @POST("/api/v1/me/devices/frequency")
+    suspend fun setDeviceFrequency(
+        @Body deviceFrequency: DeviceFrequencyBody
+    ): NetworkResponse<Unit, ErrorResponse>
 }
