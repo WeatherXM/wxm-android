@@ -133,6 +133,9 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                     runTest { viewModel.isLoggedIn() }
                     viewModel.isLoggedIn() shouldBe true
                 }
+                then("get if we should show a failure or not") {
+                    viewModel.onShowLegalTerms().value shouldBe true
+                }
             }
         }
     }
@@ -379,14 +382,6 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                         }
                     }
                 }
-            }
-        }
-    }
-
-    context("Get if we should show the terms prompt or not") {
-        given("A use case returning the result") {
-            then("return that result") {
-                viewModel.shouldShowTermsPrompt() shouldBe true
             }
         }
     }
