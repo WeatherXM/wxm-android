@@ -116,13 +116,14 @@
                         app:layout_constraintTop_toBottomOf="@id/earnedByTitle"
                         tools:text="389,023.54 $WXM" />
 
-                    <com.weatherxm.ui.components.RangeSelectorView
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/chartRangeSelector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown" />
+                        app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown"
+                        tools:composableName="com.weatherxm.ui.components.compose.RangeSelectorViewKt.RangeSelectorView" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

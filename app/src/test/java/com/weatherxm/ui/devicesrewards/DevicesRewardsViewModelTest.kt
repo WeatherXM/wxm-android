@@ -73,7 +73,7 @@ class DevicesRewardsViewModelTest : BehaviorSpec({
                     failure
                 )
                 testHandleFailureViewModel(
-                    { viewModel.getDevicesRewardsByRangeTotals(R.id.week) },
+                    { viewModel.getDevicesRewardsByRangeTotals(R.string.seven_days_abbr) },
                     analytics,
                     viewModel.onRewardsByRange(),
                     1,
@@ -101,7 +101,7 @@ class DevicesRewardsViewModelTest : BehaviorSpec({
                     failure
                 )
                 erroneousDetails.mode = RewardsSummaryMode.MONTH
-                runTest { viewModel.getDeviceRewardsByRange(deviceId, 0, R.id.month) }
+                runTest { viewModel.getDeviceRewardsByRange(deviceId, 0, R.string.one_month_abbr) }
                 then("the rewards object in the ViewModel should be updated") {
                     viewModel.rewards.devices[0].details shouldBe erroneousDetails
                 }
