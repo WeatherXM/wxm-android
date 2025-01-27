@@ -7,6 +7,7 @@ import com.weatherxm.data.datasource.DeviceFrequencyDataSource
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
+import com.weatherxm.ui.common.unmask
 import kotlinx.coroutines.flow.Flow
 
 class BluetoothConnectionRepositoryImpl(
@@ -45,7 +46,7 @@ class BluetoothConnectionRepositoryImpl(
     override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
         return dataSource.setFrequency(frequency).flatMap {
             fetchDeviceEUI().flatMap {
-                deviceFrequencyDataSource.setDeviceFrequency(it, frequency.name)
+                deviceFrequencyDataSource.setDeviceFrequency(it.unmask(), frequency.name)
             }
         }
     }
