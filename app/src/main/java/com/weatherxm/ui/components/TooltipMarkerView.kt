@@ -1,3 +1,5 @@
+package com.weatherxm.ui.components
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas

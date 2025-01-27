@@ -70,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_small"
                 android:text="15:45 am"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
@@ -98,7 +99,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_small"
                 android:text="M5"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <LinearLayout
@@ -697,7 +699,7 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_weather_solar"
                             android:tint="@color/colorPrimaryVariant"
-                            tools:ignore="UseAppTint,contentDescription" />
+                            tools:ignore="TooManyViews,UseAppTint,contentDescription" />
                     </LinearLayout>
 
                     <TextView

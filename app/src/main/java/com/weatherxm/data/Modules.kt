@@ -41,6 +41,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
+import com.mapbox.search.ApiType
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
 import com.mixpanel.android.mpmetrics.MixpanelAPI
@@ -857,7 +858,7 @@ private val utilities = module {
         }
     }
     single<SearchEngine> {
-        SearchEngine.createSearchEngine(SearchEngineSettings())
+        SearchEngine.createSearchEngine(apiType = ApiType.GEOCODING, SearchEngineSettings())
     }
     single<Moshi> {
         Moshi.Builder()

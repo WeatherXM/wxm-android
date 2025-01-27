@@ -127,7 +127,7 @@ class DeviceDetailsActivity : BaseActivity() {
         model.onShowLegalTerms().observe(this) {
             if (it == true) {
                 TermsDialogFragment(
-                    onLinkClicked = { navigator.openWebsite(this, it) },
+                    onLinkClicked = { url -> navigator.openWebsite(this, url) },
                     onClick = { model.setAcceptTerms() }
                 ).show(this)
             }
