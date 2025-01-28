@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.FragmentProfileBinding
+import com.weatherxm.ui.common.ActionForMessageView
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.Contracts.NOT_AVAILABLE_VALUE
+import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -23,6 +27,7 @@ import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.compose.MessageCardView
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
@@ -203,22 +208,40 @@ class ProfileFragment : BaseFragment() {
 
             if (parentModel.hasDevices() == false) {
                 binding.rewardsContainerCard.setCardStroke(R.color.colorPrimary, 2)
-                binding.allocatedRewardsSecondaryCard
-                    .title(R.string.start_earning)
-                    .message(R.string.start_earning_desc)
-                    .actionPrimaryBtn(
-                        getString(R.string.action_buy_station),
-                        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_cart),
-                    ) {
-                        navigator.openWebsite(requireContext(), getString(R.string.shop_url))
-                    }
-                    .visible(true)
+                binding.allocatedRewardsSecondaryCard.setContent {
+                    MessageCardView(data = DataForMessageView(
+                        extraTopPadding = 24.dp,
+                        title = R.string.start_earning,
+                        subtitle = SubtitleForMessageView(message = R.string.start_earning_desc),
+                        action = ActionForMessageView(
+                            label = getString(R.string.action_buy_station),
+                            backgroundTint = R.color.colorPrimary,
+                            foregroundTint = R.color.colorOnPrimary,
+                            icon = R.drawable.ic_cart,
+                            onClickListener = {
+                                navigator.openWebsite(
+                                    requireContext(),
+                                    getString(R.string.shop_url)
+                                )
+                            }
+                        )
+                    ))
+                }
+                binding.allocatedRewardsSecondaryCard.visible(true)
             }
         } else {
             binding.rewardsContainerCard.strokeWidth = 0
-            binding.allocatedRewardsSecondaryCard
-                .htmlMessage(getString(R.string.allocated_rewards_alternative_claiming))
-                .visible(true)
+            binding.allocatedRewardsSecondaryCard.setContent {
+                MessageCardView(
+                    data = DataForMessageView(
+                        extraTopPadding = 24.dp,
+                        subtitle = SubtitleForMessageView(
+                            htmlMessage = R.string.allocated_rewards_alternative_claiming
+                        )
+                    )
+                )
+            }
+            binding.allocatedRewardsSecondaryCard.visible(true)
             binding.rewards
                 .subtitle(
                     getString(
@@ -241,6 +264,17 @@ class ProfileFragment : BaseFragment() {
         } ?: kotlin.run {
             binding.wallet.subtitle(getString(R.string.no_wallet_added))
             if (parentModel.hasDevices() == true) {
+                binding.noWalletCard.setContent {
+                    MessageCardView(
+                        data = DataForMessageView(
+                            extraTopPadding = 24.dp,
+                            title = R.string.losing_rewards,
+                            subtitle = SubtitleForMessageView(message = R.string.losing_rewards_desc),
+                            iconResId = R.drawable.ic_error_hex_filled,
+                            severityLevel = SeverityLevel.ERROR,
+                        )
+                    )
+                }
                 binding.noWalletCard.visible(true)
                 binding.walletContainerCard.setCardStroke(R.color.error, 2)
             }
