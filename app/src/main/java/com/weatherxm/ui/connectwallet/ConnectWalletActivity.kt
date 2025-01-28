@@ -3,14 +3,17 @@ package com.weatherxm.ui.connectwallet
 import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ActivityConnectWalletBinding
+import com.weatherxm.ui.common.ActionForMessageView
+import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
@@ -20,6 +23,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.MessageCardView
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -38,28 +42,7 @@ class ConnectWalletActivity : BaseActivity() {
         setContentView(binding.root)
 
         setListeners()
-
-        binding.walletCompatibilityCard
-            .action(
-                getString(R.string.check_wallet_compatibility),
-                ResourcesCompat.getDrawable(resources, R.drawable.ic_open_new, this.theme)
-            ) {
-                navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
-                    AnalyticsService.ParamValue.INFO.paramValue,
-                    AnalyticsService.ParamValue.ACTION.paramValue
-                )
-            }
-
-        binding.walletCompatibilityCard.closeButton {
-            binding.walletCompatibilityCard.visible(false)
-            analytics.trackEventPrompt(
-                AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
-                AnalyticsService.ParamValue.INFO.paramValue,
-                AnalyticsService.ParamValue.DISMISS.paramValue
-            )
-        }
+        setWalletCompatibilityCard()
 
         with(binding.termsCheckboxDesc) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
@@ -174,6 +157,44 @@ class ConnectWalletActivity : BaseActivity() {
             }
 
             showConfirmWalletDialog(address)
+        }
+    }
+
+    private fun setWalletCompatibilityCard() {
+        binding.walletCompatibilityCard.setContent {
+            MessageCardView(
+                data = DataForMessageView(
+                    title = R.string.wallet_compatibility,
+                    subtitle = SubtitleForMessageView(message = R.string.wallet_compatibility_desc),
+                    iconResId = R.drawable.ic_error_hex_filled,
+                    useStroke = true,
+                    action = ActionForMessageView(
+                        label = R.string.check_wallet_compatibility,
+                        endIcon = R.drawable.ic_open_new,
+                        onClickListener = {
+                            navigator.openWebsite(
+                                this,
+                                getString(R.string.suggested_wallets_documentation)
+                            )
+                            analytics.trackEventPrompt(
+                                AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                                AnalyticsService.ParamValue.INFO.paramValue,
+                                AnalyticsService.ParamValue.ACTION.paramValue
+                            )
+                        }
+                    ),
+                    severityLevel = SeverityLevel.ERROR,
+                    showCloseButton = true,
+                    onCloseListener = {
+                        binding.walletCompatibilityCard.visible(false)
+                        analytics.trackEventPrompt(
+                            AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                            AnalyticsService.ParamValue.INFO.paramValue,
+                            AnalyticsService.ParamValue.DISMISS.paramValue
+                        )
+                    }
+                )
+            )
         }
     }
 
