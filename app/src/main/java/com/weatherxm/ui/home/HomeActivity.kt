@@ -69,7 +69,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             }
         }
 
-        devicesViewModel.showOverlayViews().observe(this) { shouldShow ->
+        model.showOverlayViews().observe(this) { shouldShow ->
             if (shouldShow) {
                 binding.addDevice.show()
                 binding.navView.show()

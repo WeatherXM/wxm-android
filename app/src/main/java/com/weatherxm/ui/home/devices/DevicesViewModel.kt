@@ -38,13 +38,9 @@ class DevicesViewModel(
     private val onUnFollowStatus = MutableLiveData<Resource<Unit>>()
     private val onDevicesRewards = MutableLiveData<DevicesRewards>()
 
-    // Needed for passing info to the activity to show/hide elements when scrolling on the list
-    private val showOverlayViews = MutableLiveData(true)
-
     fun devices(): LiveData<Resource<List<UIDevice>>> = devices
     fun onDevicesRewards(): LiveData<DevicesRewards> = onDevicesRewards
     fun onUnFollowStatus(): LiveData<Resource<Unit>> = onUnFollowStatus
-    fun showOverlayViews() = showOverlayViews
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
@@ -79,10 +75,6 @@ class DevicesViewModel(
             }
         }
         onDevicesRewards.postValue(DevicesRewards(totalRewards, latestRewards, devicesWithRewards))
-    }
-
-    fun onScroll(dy: Int) {
-        showOverlayViews.postValue(dy <= 0)
     }
 
     fun unFollowStation(deviceId: String) {

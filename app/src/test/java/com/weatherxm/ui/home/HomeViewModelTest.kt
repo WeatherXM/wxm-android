@@ -76,6 +76,29 @@ class HomeViewModelTest : BehaviorSpec({
         }
     }
 
+    context("Flow to be called when scrolling takes place") {
+        given("a dy value") {
+            When("it's > 0") {
+                viewModel.onScroll(1)
+                then("LiveData showOverlayViews posts false") {
+                    viewModel.showOverlayViews().value shouldBe false
+                }
+            }
+            When("it's < 0") {
+                viewModel.onScroll(-1)
+                then("LiveData showOverlayViews posts true") {
+                    viewModel.showOverlayViews().value shouldBe true
+                }
+            }
+            When("it's = 0") {
+                viewModel.onScroll(0)
+                then("LiveData showOverlayViews posts true") {
+                    viewModel.showOverlayViews().value shouldBe true
+                }
+            }
+        }
+    }
+
     context("Get Wallet Warnings") {
         given("a usecase returning the wallet address in order to create the WalletWarnings") {
             When("it's a failure") {

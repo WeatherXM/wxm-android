@@ -68,7 +68,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         }
 
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-            model.onScroll(scrollY - oldScrollY)
+            parentModel.onScroll(scrollY - oldScrollY)
         }
 
         binding.sortFilterBtn.setOnClickListener {
