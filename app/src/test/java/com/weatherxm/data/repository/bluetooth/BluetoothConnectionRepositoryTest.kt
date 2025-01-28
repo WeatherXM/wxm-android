@@ -6,8 +6,9 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.models.Frequency
+import com.weatherxm.data.datasource.DeviceFrequencyDataSource
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
+import com.weatherxm.data.models.Frequency
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 
 class BluetoothConnectionRepositoryTest : BehaviorSpec({
     lateinit var dataSource: BluetoothConnectionDataSource
+    lateinit var deviceFrequencyDataSource: DeviceFrequencyDataSource
     lateinit var repository: BluetoothConnectionRepository
 
     val pairedDevices = listOf<BluetoothDevice>(mockk())
@@ -29,7 +31,8 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
 
     beforeContainer {
         dataSource = mockk<BluetoothConnectionDataSource>()
-        repository = BluetoothConnectionRepositoryImpl(dataSource)
+        deviceFrequencyDataSource = mockk<DeviceFrequencyDataSource>()
+        repository = BluetoothConnectionRepositoryImpl(dataSource, deviceFrequencyDataSource)
         coEvery { dataSource.getPairedDevices() } returns pairedDevices
         coEvery { dataSource.registerOnBondStatus() } returns bondStatusFlow
         coJustRun { dataSource.disconnectFromPeripheral() }
@@ -85,20 +88,43 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                     repository.fetchClaimingKey().isError()
                 }
             }
-            and("Fetch Device EUI") {
-                When("success") {
-                    coMockEitherRight({ dataSource.fetchDeviceEUI() }, testDeviceEUI)
-                    repository.fetchDeviceEUI().isSuccess(testDeviceEUI)
-                }
-                When("failure") {
-                    coMockEitherLeft({ dataSource.fetchClaimingKey() }, failure)
-                    repository.fetchClaimingKey().isError()
-                }
-            }
             and("Set Frequency") {
                 When("success") {
-                    coMockEitherRight({ dataSource.setFrequency(frequency) }, Unit)
-                    repository.setFrequency(frequency).isSuccess(Unit)
+                    and("Fetch Device EUI fails") {
+                        coMockEitherRight({ dataSource.setFrequency(frequency) }, Unit)
+                        coMockEitherLeft({ dataSource.fetchDeviceEUI() }, failure)
+                        repository.setFrequency(frequency).isError()
+                    }
+                    and("Fetch Device EUI is a success") {
+                        and("Setting the Device EUI through datasource is a failure") {
+                            coMockEitherRight({ dataSource.setFrequency(frequency) }, Unit)
+                            coMockEitherRight({ dataSource.fetchDeviceEUI() }, testDeviceEUI)
+                            coMockEitherLeft(
+                                {
+                                    deviceFrequencyDataSource.setDeviceFrequency(
+                                        testDeviceEUI, frequency.name
+                                    )
+                                },
+                                failure
+                            )
+                            repository.setFrequency(frequency).isError()
+                        }
+                        and("Setting the Device EUI through datasource is a success") {
+                            coMockEitherRight({ dataSource.setFrequency(frequency) }, Unit)
+                            coMockEitherRight({ dataSource.fetchDeviceEUI() }, testDeviceEUI)
+                            coMockEitherRight(
+                                {
+                                    deviceFrequencyDataSource.setDeviceFrequency(
+                                        testDeviceEUI, frequency.name
+                                    )
+                                },
+                                Unit
+                            )
+                            then("return Unit as success") {
+                                repository.setFrequency(frequency).isSuccess(Unit)
+                            }
+                        }
+                    }
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.setFrequency(frequency) }, failure)
