@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -122,21 +124,42 @@ fun MessageCardView(data: DataForMessageView) {
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.padding_small_to_normal))
                 ) {
-                    data.action.icon?.let {
-                        Icon(
-                            painter = painterResource(it),
-                            contentDescription = null,
-                            tint = colorResource(data.action.foregroundTint),
-                            modifier = Modifier.padding(
-                                end = dimensionResource(R.dimen.padding_small)
+                    if (data.action.endIcon != null) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Spacer(modifier = Modifier.width(24.dp))
+                            MediumText(
+                                stringResource(data.action.label),
+                                fontWeight = FontWeight.Bold,
+                                colorRes = data.action.foregroundTint
                             )
+                            Icon(
+                                painter = painterResource(data.action.endIcon),
+                                contentDescription = null,
+                                tint = colorResource(data.action.foregroundTint),
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    } else {
+                        data.action.startIcon?.let {
+                            Icon(
+                                painter = painterResource(it),
+                                contentDescription = null,
+                                tint = colorResource(data.action.foregroundTint),
+                                modifier = Modifier.padding(
+                                    end = dimensionResource(R.dimen.padding_small)
+                                )
+                            )
+                        }
+                        MediumText(
+                            stringResource(data.action.label),
+                            fontWeight = FontWeight.Bold,
+                            colorRes = data.action.foregroundTint
                         )
                     }
-                    MediumText(
-                        data.action.label,
-                        fontWeight = FontWeight.Bold,
-                        colorRes = data.action.foregroundTint
-                    )
                 }
             }
         }
@@ -154,10 +177,10 @@ fun PreviewMessageCardView() {
             subtitle = SubtitleForMessageView(message = R.string.preview_message_subtitle),
             iconResId = R.drawable.ic_warning_hex_filled,
             action = ActionForMessageView(
-                label = "Action",
+                label = R.string.action_ok,
                 backgroundTint = R.color.colorPrimary,
                 foregroundTint = R.color.colorOnPrimary,
-                icon = null,
+                startIcon = null,
                 onClickListener = {}
             ),
             useStroke = false,
@@ -179,10 +202,11 @@ fun PreviewMessageCardViewWithTopPadding() {
             subtitle = SubtitleForMessageView(message = R.string.preview_message_subtitle),
             iconResId = R.drawable.ic_warning_hex_filled,
             action = ActionForMessageView(
-                label = "Action",
+                label = R.string.action_ok,
                 backgroundTint = R.color.colorPrimary,
                 foregroundTint = R.color.colorOnPrimary,
-                icon = null,
+                startIcon = null,
+                endIcon = R.drawable.ic_open_new,
                 onClickListener = {}
             ),
             useStroke = false,

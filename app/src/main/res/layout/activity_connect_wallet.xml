@@ -164,20 +164,13 @@
                     android:text="@string/view_transaction_history"
                     app:backgroundTint="@color/colorSurface" />
 
-                <com.weatherxm.ui.components.MessageCardView
+                <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/walletCompatibilityCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/margin_normal"
                     android:visibility="gone"
-                    app:message_background_tint="@color/errorTint"
-                    app:message_icon="@drawable/ic_error_hex_filled"
-                    app:message_icon_color="@color/error"
-                    app:message_includes_close_button="true"
-                    app:message_message="@string/wallet_compatibility_desc"
-                    app:message_stroke_color="@color/error"
-                    app:message_title="@string/wallet_compatibility" />
-
+                    tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardViewWithTopPadding" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

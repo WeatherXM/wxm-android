@@ -9,6 +9,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.HourlyWeather
@@ -670,10 +671,11 @@ data class SubtitleForMessageView(
 @Keep
 @JsonClass(generateAdapter = true)
 data class ActionForMessageView(
-    val label: String,
-    val backgroundTint: Int,
-    val foregroundTint: Int,
-    val icon: Int? = null,
+    val label: Int,
+    val backgroundTint: Int = R.color.translucent,
+    val foregroundTint: Int = R.color.colorPrimary,
+    val startIcon: Int? = null,
+    val endIcon: Int? = null,
     val onClickListener: () -> Unit
 )
 

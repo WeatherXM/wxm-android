@@ -214,10 +214,10 @@ class ProfileFragment : BaseFragment() {
                         title = R.string.start_earning,
                         subtitle = SubtitleForMessageView(message = R.string.start_earning_desc),
                         action = ActionForMessageView(
-                            label = getString(R.string.action_buy_station),
+                            label = R.string.action_buy_station,
                             backgroundTint = R.color.colorPrimary,
                             foregroundTint = R.color.colorOnPrimary,
-                            icon = R.drawable.ic_cart,
+                            startIcon = R.drawable.ic_cart,
                             onClickListener = {
                                 navigator.openWebsite(
                                     requireContext(),
