@@ -270,7 +270,7 @@ class ProfileFragment : BaseFragment() {
                             extraTopPadding = 24.dp,
                             title = R.string.losing_rewards,
                             subtitle = SubtitleForMessageView(message = R.string.losing_rewards_desc),
-                            iconResId = R.drawable.ic_error_hex_filled,
+                            drawable = R.drawable.ic_error_hex_filled,
                             severityLevel = SeverityLevel.ERROR,
                         )
                     )

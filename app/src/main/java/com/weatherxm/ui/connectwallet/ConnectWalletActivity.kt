@@ -166,7 +166,7 @@ class ConnectWalletActivity : BaseActivity() {
                 data = DataForMessageView(
                     title = R.string.wallet_compatibility,
                     subtitle = SubtitleForMessageView(message = R.string.wallet_compatibility_desc),
-                    iconResId = R.drawable.ic_error_hex_filled,
+                    drawable = R.drawable.ic_error_hex_filled,
                     useStroke = true,
                     action = ActionForMessageView(
                         label = R.string.check_wallet_compatibility,
@@ -184,7 +184,6 @@ class ConnectWalletActivity : BaseActivity() {
                         }
                     ),
                     severityLevel = SeverityLevel.ERROR,
-                    showCloseButton = true,
                     onCloseListener = {
                         binding.walletCompatibilityCard.visible(false)
                         analytics.trackEventPrompt(

@@ -16,14 +16,18 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.service.GlobalUploadObserverService
+import com.weatherxm.ui.common.ActionForMessageView
+import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.DeviceAdapter
 import com.weatherxm.ui.common.DeviceListener
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -35,6 +39,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.compose.InfoBannerView
 import com.weatherxm.ui.components.compose.PhotoUploadState
+import com.weatherxm.ui.components.compose.MessageCardView
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.ImageFileHelper.deleteAllStationPhotos
 import com.weatherxm.util.NumberUtils.formatTokens
@@ -282,29 +287,45 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {
         if (walletMissing && parentModel.hasDevices() == true) {
-            binding.walletWarning.action(getString(R.string.add_wallet_now)) {
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.ACTION.paramValue
+            binding.walletWarning.setContent {
+                MessageCardView(
+                    DataForMessageView(
+                        title = R.string.wallet_address_missing,
+                        subtitle = SubtitleForMessageView(R.string.wallet_address_missing_desc),
+                        drawable = R.drawable.ic_warning_hex_filled,
+                        severityLevel = SeverityLevel.WARNING,
+                        action = ActionForMessageView(
+                            label = R.string.add_wallet_now,
+                            onClickListener = {
+                                analytics.trackEventPrompt(
+                                    AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
+                                    AnalyticsService.ParamValue.WARN.paramValue,
+                                    AnalyticsService.ParamValue.ACTION.paramValue
+                                )
+                                navigator.showConnectWallet(connectWalletLauncher, this)
+                            }
+                        ),
+                        onCloseListener = {
+                            analytics.trackEventPrompt(
+                                AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
+                                AnalyticsService.ParamValue.WARN.paramValue,
+                                AnalyticsService.ParamValue.DISMISS.paramValue
+                            )
+                            binding.walletWarning.visible(false)
+                            parentModel.setWalletWarningDismissTimestamp()
+                        }
+                    )
                 )
-                navigator.showConnectWallet(connectWalletLauncher, this)
-            }.closeButton {
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.DISMISS.paramValue
-                )
-                binding.walletWarning.visible(false)
-                parentModel.setWalletWarningDismissTimestamp()
             }
             analytics.trackEventPrompt(
                 AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
                 AnalyticsService.ParamValue.WARN.paramValue,
                 AnalyticsService.ParamValue.VIEW.paramValue
             )
+            binding.walletWarning.visible(true)
+        } else {
+            binding.walletWarning.visible(false)
         }
-        binding.walletWarning.visible(walletMissing && parentModel.hasDevices() == true)
     }
 
     override fun onResume() {

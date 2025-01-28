@@ -652,11 +652,10 @@ data class DataForMessageView(
     val extraTopPadding: Dp = 0.dp,
     val title: Int? = null,
     val subtitle: SubtitleForMessageView? = null,
-    val iconResId: Int? = null,
+    val drawable: Int? = null,
     val action: ActionForMessageView? = null,
     val useStroke: Boolean = false,
     val severityLevel: SeverityLevel = SeverityLevel.INFO,
-    val showCloseButton: Boolean = false,
     val onCloseListener: (() -> Unit)? = null
 )
 

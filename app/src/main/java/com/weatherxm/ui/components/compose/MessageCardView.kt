@@ -65,7 +65,7 @@ fun MessageCardView(data: DataForMessageView) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = spacedBy(dimensionResource(R.dimen.padding_small))
             ) {
-                data.iconResId?.let {
+                data.drawable?.let {
                     Icon(
                         painter = painterResource(it),
                         tint = colorResource(strokeAndIconColor),
@@ -84,11 +84,12 @@ fun MessageCardView(data: DataForMessageView) {
                                 fontWeight = FontWeight.Bold,
                                 color = colorResource(R.color.colorOnSurface),
                                 style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.weight(if (data.showCloseButton) 0.8F else 1F)
+                                modifier = Modifier
+                                    .weight(if (data.onCloseListener != null) 0.8F else 1F)
                             )
-                            if (data.showCloseButton) {
+                            if (data.onCloseListener != null) {
                                 IconButton(
-                                    onClick = { data.onCloseListener?.invoke() },
+                                    onClick = { data.onCloseListener.invoke() },
                                     modifier = Modifier.size(20.dp)
                                 ) {
                                     Icon(
@@ -175,7 +176,7 @@ fun PreviewMessageCardView() {
             extraTopPadding = 0.dp,
             title = R.string.preview_message_title,
             subtitle = SubtitleForMessageView(message = R.string.preview_message_subtitle),
-            iconResId = R.drawable.ic_warning_hex_filled,
+            drawable = R.drawable.ic_warning_hex_filled,
             action = ActionForMessageView(
                 label = R.string.action_ok,
                 backgroundTint = R.color.colorPrimary,
@@ -185,7 +186,6 @@ fun PreviewMessageCardView() {
             ),
             useStroke = false,
             severityLevel = SeverityLevel.WARNING,
-            showCloseButton = true,
             onCloseListener = {}
         )
     )
@@ -200,7 +200,7 @@ fun PreviewMessageCardViewWithTopPadding() {
             extraTopPadding = 16.dp,
             title = R.string.preview_message_title,
             subtitle = SubtitleForMessageView(message = R.string.preview_message_subtitle),
-            iconResId = R.drawable.ic_warning_hex_filled,
+            drawable = R.drawable.ic_warning_hex_filled,
             action = ActionForMessageView(
                 label = R.string.action_ok,
                 backgroundTint = R.color.colorPrimary,
@@ -211,8 +211,7 @@ fun PreviewMessageCardViewWithTopPadding() {
             ),
             useStroke = false,
             severityLevel = SeverityLevel.WARNING,
-            showCloseButton = true,
-            onCloseListener = {}
+            onCloseListener = null
         )
     )
 }
