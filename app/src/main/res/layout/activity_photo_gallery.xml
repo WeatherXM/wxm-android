@@ -140,7 +140,7 @@
             android:text="@string/action_instructions"
             android:textColor="@color/alternativeTextColor"
             app:backgroundTint="@color/layer1"
-            app:cornerRadius="@dimen/radius_large"
+            app:cornerRadius="@dimen/radius_extra_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
