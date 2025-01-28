@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
+import androidx.lifecycle.withCreated
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimResultBinding
@@ -43,7 +43,7 @@ class ClaimResultFragment : BaseFragment() {
 
     init {
         lifecycleScope.launch {
-            whenCreated {
+            withCreated {
                 arguments?.parcelable<DeviceType>(ARG_DEVICE_TYPE)?.let {
                     deviceType = it
                 }

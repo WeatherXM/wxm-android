@@ -31,7 +31,6 @@ class StartupActivity : BaseActivity() {
                 }
             }
             finish()
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
         model.handleStartup(intent)

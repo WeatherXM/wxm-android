@@ -11,10 +11,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
+import androidx.lifecycle.withCreated
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentPasswordPromptBinding
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
@@ -48,7 +48,7 @@ class PasswordPromptFragment : BaseBottomSheetDialogFragment() {
 
     init {
         lifecycleScope.launch {
-            whenCreated {
+            withCreated {
                 if (requireArguments().containsKey(ARG_MESSAGE_RES_ID)) {
                     messageResId = requireArguments().getInt(ARG_MESSAGE_RES_ID)
                 }
