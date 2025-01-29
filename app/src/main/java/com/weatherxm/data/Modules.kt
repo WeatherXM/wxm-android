@@ -74,6 +74,8 @@ import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
+import com.weatherxm.data.datasource.DeviceFrequencyDataSource
+import com.weatherxm.data.datasource.DeviceFrequencyDataSourceImpl
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
@@ -429,6 +431,9 @@ private val datasources = module {
     single<RemoteBannersDataSource> {
         RemoteBannersDataSourceImpl(get(), get())
     }
+    single<DeviceFrequencyDataSource> {
+        DeviceFrequencyDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
@@ -469,7 +474,7 @@ private val repositories = module {
         UserPreferencesRepositoryImpl(get())
     }
     single<BluetoothConnectionRepository> {
-        BluetoothConnectionRepositoryImpl(get())
+        BluetoothConnectionRepositoryImpl(get(), get())
     }
     single<BluetoothUpdaterRepository> {
         BluetoothUpdaterRepositoryImpl(get())

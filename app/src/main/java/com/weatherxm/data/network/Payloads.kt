@@ -71,3 +71,10 @@ data class LocationBody(
     val lat: Double,
     val lon: Double
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceFrequencyBody(
+    val serialNumber: String,
+    val freq: String
+) : Parcelable
