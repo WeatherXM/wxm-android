@@ -142,6 +142,31 @@ class AuthRepositoryTest : BehaviorSpec({
             }
         }
         given("A Signup action") {
+            and("first name and last name are not null") {
+                When("signup is successful") {
+                    coMockEitherRight(
+                        { networkAuthDataSource.signup(email, firstName, lastName) },
+                        Unit
+                    )
+                    then("return that Unit indicating the success") {
+                        authRepository.signup(email, firstName, lastName).isSuccess(Unit)
+                    }
+                    then("verify that setting the acceptance of terms has taken place") {
+                        verify { cacheService.setAcceptTermsTimestamp(any()) }
+                    }
+                }
+            }
+            and("first name and last name are empty") {
+                When("signup is successful") {
+                    coMockEitherRight({ networkAuthDataSource.signup(email, null, null) }, Unit)
+                    then("return that Unit indicating the success") {
+                        authRepository.signup(email, "", "").isSuccess(Unit)
+                    }
+                    then("verify that setting the acceptance of terms has taken place") {
+                        verify { cacheService.setAcceptTermsTimestamp(any()) }
+                    }
+                }
+            }
             When("signup is successful") {
                 coMockEitherRight(
                     { networkAuthDataSource.signup(email, firstName, lastName) },
