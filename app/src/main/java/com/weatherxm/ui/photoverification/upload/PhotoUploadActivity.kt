@@ -82,7 +82,11 @@ class PhotoUploadActivity : BaseActivity() {
     }
 
     fun upload(photosPresignedMetadata: List<PhotoPresignedMetadata>) {
-        uploadObserverService.setDevice(model.device)
+        val numberOfPhotosToUpload = List(model.photos.size) { index ->
+            photosPresignedMetadata.getOrNull(index)
+        }.filterNotNull().size
+        uploadObserverService.setData(model.device, numberOfPhotosToUpload)
+
         model.photos.forEachIndexed { index, stationPhoto ->
             photosPresignedMetadata.getOrNull(index)?.let { metadata ->
                 /**

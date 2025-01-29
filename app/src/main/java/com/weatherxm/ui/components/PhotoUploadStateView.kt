@@ -16,6 +16,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import arrow.core.Predicate
 import com.weatherxm.R
 import com.weatherxm.ui.common.UploadPhotosState
 
@@ -58,8 +59,9 @@ fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
             }
         }
         if (!state.isError) {
+            val progressForIndicator = state.progress.toFloat() / 100
             LinearProgressIndicator(
-                progress = { state.progress.toFloat() },
+                progress = { progressForIndicator },
                 modifier = Modifier.fillMaxWidth(),
                 strokeCap = StrokeCap.Round,
                 color = colorResource(R.color.colorPrimary),
