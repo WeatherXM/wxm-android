@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 import com.weatherxm.data.models.SeverityLevel
 
-@Suppress("FunctionNaming", "LongParameterList", "MagicNumber")
+@Suppress("FunctionNaming", "MagicNumber")
 @Composable
 fun RewardIssueView(
     title: String?,
