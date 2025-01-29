@@ -38,19 +38,14 @@
         tools:text="@string/action_update_firmware"
         tools:visibility="visible" />
 
-    <com.weatherxm.ui.components.MessageCardView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/infoBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small_to_normal"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBtn"
-        app:message_background_tint="@color/warningTint"
-        app:message_icon="@drawable/ic_warning_hex_filled"
-        app:message_includes_close_button="false"
-        app:message_message="@string/updated_needed_desc"
+        tools:composableName="com.weatherxm.ui.devicesettings.DeviceInfoItemAlertViewKt.PreviewDeviceInfoItemAlertView"
         tools:visibility="visible" />
 
     <View

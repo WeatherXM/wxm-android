@@ -269,7 +269,9 @@ class ProfileFragment : BaseFragment() {
                         data = DataForMessageView(
                             extraTopPadding = 24.dp,
                             title = R.string.losing_rewards,
-                            subtitle = SubtitleForMessageView(message = R.string.losing_rewards_desc),
+                            subtitle = SubtitleForMessageView(
+                                message = R.string.losing_rewards_desc
+                            ),
                             drawable = R.drawable.ic_error_hex_filled,
                             severityLevel = SeverityLevel.ERROR,
                         )
