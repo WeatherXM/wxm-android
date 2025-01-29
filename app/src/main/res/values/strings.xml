@@ -697,7 +697,7 @@
     <string name="yes_cancel">Yes, cancel</string>
     <string name="cancel_upload_message">Are you sure you want to cancel the upload and lose the photos?\nYou will need to retake them.</string>
     <string name="upload_unexpected_error">We faced an unexpected error while uploading your photos.</string>
-    <string name="accept_acceptable_use_policy"><![CDATA[I have read and accept the <a href="%1$s">Acceptable Use Policy (AUP)</a>]]></string>
+    <string name="accept_acceptable_use_policy"><![CDATA[I have read and accept the <a href="%1$s">Acceptable Use Policy (AUP)</a>.]]></string>
     <string name="preparing_the_upload">Preparing the upload…</string>
     <string name="preparing_the_upload_subtitle">Almost there! We’ll let you know once everything is ready.</string>
     <string name="upload_started">Upload started successfully</string>

@@ -288,7 +288,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
                 android:text="@string/accept_acceptable_use_policy"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
