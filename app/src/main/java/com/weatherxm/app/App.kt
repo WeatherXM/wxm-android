@@ -26,7 +26,7 @@ class App : Application() {
         val channel = NotificationChannel(
             UPLOADING_NOTIFICATION_CHANNEL_ID,
             UPLOADING_NOTIFICATION_CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_LOW
+            NotificationManager.IMPORTANCE_DEFAULT
         )
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
