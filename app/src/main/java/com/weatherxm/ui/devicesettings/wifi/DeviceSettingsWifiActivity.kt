@@ -22,6 +22,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.parcelableList
@@ -94,11 +95,16 @@ class DeviceSettingsWifiActivity : BaseActivity() {
 
         setupInfo()
 
+        binding.swiperefresh.setOnRefreshListener {
+            model.getDeviceInformation(this)
+        }
+
         model.onLoading().observe(this) {
-            if (it) {
-                binding.progress.visibility = View.VISIBLE
+            if (it && !binding.swiperefresh.isRefreshing) {
+                binding.progress.visible(true)
             } else {
-                binding.progress.visibility = View.INVISIBLE
+                binding.swiperefresh.isRefreshing = false
+                binding.progress.invisible()
             }
         }
 
@@ -145,6 +151,12 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         )
 
         setupStationLocation(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
+        model.getDeviceInformation(this)
     }
 
     private fun onPhotos(devicePhotos: List<String>) {
@@ -282,11 +294,6 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }.show(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
-    }
-
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
         if (model.device.isOwned()) {
@@ -333,8 +340,6 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 )
             }
         }
-
-        model.getDeviceInformation(this)
     }
 
     private fun handleSplitRewards(data: RewardSplitsData?) {

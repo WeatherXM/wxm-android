@@ -48,6 +48,7 @@ class GlobalUploadObserverService(
         )
     }
 
+    @Suppress("MagicNumber")
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onSuccess(
         context: Context,

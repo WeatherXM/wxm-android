@@ -91,10 +91,15 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
 
         setupInfo()
 
+        binding.swiperefresh.setOnRefreshListener {
+            model.getDeviceInformation(this)
+        }
+
         model.onLoading().observe(this) {
-            if (it) {
+            if (it && !binding.swiperefresh.isRefreshing) {
                 binding.progress.visible(true)
             } else {
+                binding.swiperefresh.isRefreshing = false
                 binding.progress.invisible()
             }
         }
@@ -150,6 +155,12 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         )
 
         setupStationLocation(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
+        model.getDeviceInformation(this)
     }
 
     private fun onPhotos(devicePhotos: List<String>) {
@@ -284,11 +295,6 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         }.show(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
-    }
-
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
         binding.deleteStationCard.visible(model.device.isOwned())
@@ -360,8 +366,6 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                 )
             }
         }
-
-        model.getDeviceInformation(this)
     }
 
     private fun handleSplitRewards(data: RewardSplitsData?) {
