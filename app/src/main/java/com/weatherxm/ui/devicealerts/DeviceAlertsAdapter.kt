@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ListItemAlertBinding
+import com.weatherxm.ui.common.ActionForMessageView
+import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
+import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.components.compose.MessageCardView
 
 class DeviceAlertsAdapter(
     private val deviceAlertListener: DeviceAlertListener,
@@ -37,44 +40,68 @@ class DeviceAlertsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: DeviceAlert) {
-            if (item.severity == SeverityLevel.ERROR) {
-                binding.alert.error(true)
-            } else {
-                binding.alert.warning(true)
-            }
-
             when (item.alert) {
-                DeviceAlertType.NEEDS_UPDATE -> {
-                    binding.alert
-                        .icon(R.drawable.ic_update_alt)
-                        .title(R.string.updated_needed_title)
-                        .message(R.string.updated_needed_desc)
-                        .action(itemView.context.getString(R.string.update_station_now)) {
-                            deviceAlertListener.onUpdateStationClicked()
-                        }
-                }
                 DeviceAlertType.OFFLINE -> {
-                    binding.alert.title(R.string.inactive)
-                    if (device?.isOwned() == true) {
-                        binding.alert.message(R.string.station_inactive_alert_message)
-                            .action(itemView.context.getString(R.string.contact_support_title)) {
-                                deviceAlertListener.onContactSupportClicked()
-                            }
+                    val message = if (device?.isOwned() == true) {
+                        R.string.station_inactive_alert_message
                     } else {
-                        binding.alert.message(R.string.station_inactive_alert_message_public)
+                        R.string.station_inactive_alert_message_public
+                    }
+                    binding.alert.setContent {
+                        MessageCardView(
+                            data = DataForMessageView(
+                                title = R.string.inactive,
+                                subtitle = SubtitleForMessageView(message = message),
+                                drawable = R.drawable.ic_error_hex_filled,
+                                action = if (device?.isOwned() == true) {
+                                    ActionForMessageView(label = R.string.contact_support_title) {
+                                        deviceAlertListener.onContactSupportClicked()
+                                    }
+                                } else null,
+                                useStroke = true,
+                                severityLevel = item.severity,
+                            )
+                        )
                     }
                 }
                 DeviceAlertType.LOW_BATTERY -> {
-                    binding.alert
-                        .icon(R.drawable.ic_low_battery)
-                        .title(R.string.low_battery)
-                        .message(R.string.low_battery_desc)
-                        .action(itemView.context.getString(R.string.read_more)) {
-                            deviceAlertListener.onLowBatteryReadMoreClicked()
-                        }
+                    binding.alert.setContent {
+                        MessageCardView(
+                            data = DataForMessageView(
+                                title = R.string.low_battery,
+                                subtitle = SubtitleForMessageView(
+                                    message = R.string.low_battery_desc
+                                ),
+                                drawable = R.drawable.ic_low_battery,
+                                action = ActionForMessageView(label = R.string.read_more) {
+                                    deviceAlertListener.onLowBatteryReadMoreClicked()
+                                },
+                                useStroke = true,
+                                severityLevel = item.severity,
+                            )
+                        )
+                    }
+                }
+                DeviceAlertType.NEEDS_UPDATE -> {
+                    binding.alert.setContent {
+                        MessageCardView(
+                            data = DataForMessageView(
+                                title = R.string.updated_needed_title,
+                                subtitle = SubtitleForMessageView(
+                                    message = R.string.updated_needed_desc
+                                ),
+                                drawable = R.drawable.ic_update_alt,
+                                action = ActionForMessageView(label = R.string.update_station_now) {
+                                    deviceAlertListener.onUpdateStationClicked()
+                                },
+                                useStroke = true,
+                                severityLevel = item.severity,
+                            )
+                        )
+                    }
                 }
                 DeviceAlertType.LOW_STATION_RSSI -> {
-                    // TODO: Currently do nothing. Maybe we'll handle it in the future. 
+                    // TODO: Currently do nothing. Maybe we'll handle it in the future.
                 }
             }
         }
