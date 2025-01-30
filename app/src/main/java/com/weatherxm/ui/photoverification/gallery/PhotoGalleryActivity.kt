@@ -162,9 +162,9 @@ class PhotoGalleryActivity : BaseActivity() {
                 .Builder(
                     title = getString(R.string.exit_photo_verification),
                     message = getString(R.string.exit_photo_verification_message),
-                    negative = getString(R.string.action_back)
+                    positive = getString(R.string.action_keep_taking_photos)
                 )
-                .onPositiveClick(getString(R.string.action_exit)) {
+                .onNegativeClick(getString(R.string.action_exit)) {
                     analytics.trackEventUserAction(
                         AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
                     )
@@ -179,9 +179,9 @@ class PhotoGalleryActivity : BaseActivity() {
                     .Builder(
                         title = getString(R.string.exit_photo_verification),
                         message = getString(R.string.exit_photo_verification_start_over),
-                        negative = getString(R.string.action_back)
+                        positive = getString(R.string.action_keep_taking_photos)
                     )
-                    .onPositiveClick(getString(R.string.action_exit)) {
+                    .onNegativeClick(getString(R.string.action_exit)) {
                         analytics.trackEventUserAction(
                             AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
                         )
