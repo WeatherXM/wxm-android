@@ -166,7 +166,7 @@
                             android:layout_marginTop="@dimen/margin_normal_to_large"
                             android:visibility="gone"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardViewWithTopPadding"
+                            tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardView"
                             tools:visibility="visible" />
 
                         <com.google.android.material.textview.MaterialTextView

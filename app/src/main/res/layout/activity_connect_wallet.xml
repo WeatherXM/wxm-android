@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/margin_normal"
                     android:visibility="gone"
-                    tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardViewWithTopPadding" />
+                    tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardView" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
