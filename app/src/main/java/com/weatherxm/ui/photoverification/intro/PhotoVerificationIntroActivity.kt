@@ -59,9 +59,9 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                             .Builder(
                                 title = getString(R.string.exit_photo_verification),
                                 message = getString(R.string.exit_photo_verification_message),
-                                positive = getString(R.string.action_keep_taking_photos)
+                                positive = getString(R.string.action_stay_and_verify)
                             )
-                            .onNegativeClick(getString(R.string.action_exit)) {
+                            .onNegativeClick(getString(R.string.action_exit_anyway)) {
                                 analytics.trackEventUserAction(
                                     AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
                                 )

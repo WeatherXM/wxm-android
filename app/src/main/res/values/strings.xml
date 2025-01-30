@@ -15,8 +15,8 @@
     <string name="action_skip">Skip</string>
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
-    <string name="action_exit">Exit</string>
-    <string name="action_keep_taking_photos">Keep taking photos</string>
+    <string name="action_exit_anyway">Exit anyway</string>
+    <string name="action_stay_and_verify">Stay &amp; verify</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_pair_station_via_bluetooth">Pair station via Bluetooth</string>
     <string name="action_upload">Upload</string>
