@@ -116,13 +116,14 @@
                         app:layout_constraintTop_toBottomOf="@id/earnedByTitle"
                         tools:text="389,023.54 $WXM" />
 
-                    <com.weatherxm.ui.components.RangeSelectorView
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/chartRangeSelector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown" />
+                        app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown"
+                        tools:composableName="com.weatherxm.ui.components.compose.RangeSelectorViewKt.RangeSelectorView" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -202,13 +203,14 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
 
-                <com.weatherxm.ui.components.RetryCardView
+                <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/retryCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
+                    app:layout_constraintTop_toBottomOf="@id/detailsHeader"
+                    tools:composableName="com.weatherxm.ui.devicesrewards.DevicesRewardsActivityKt.PreviewRetryCard" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
 

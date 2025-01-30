@@ -39,13 +39,14 @@
             android:clipToPadding="false"
             android:paddingBottom="@dimen/padding_normal">
 
-            <com.weatherxm.ui.components.HeaderView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginTop="@dimen/margin_small"
-                app:header_title="@string/daily_reward"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:composableName="com.weatherxm.ui.components.compose.HeaderViewKt.PreviewHeaderView" />
 
             <RelativeLayout
                 android:id="@+id/totalDailyRewardContainer"
@@ -110,12 +111,13 @@
                 app:layout_constraintTop_toBottomOf="@id/issuesTitle"
                 tools:text="1 minor issue affecting station rewards." />
 
-            <com.weatherxm.ui.components.RewardIssueCardView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/issueCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipToPadding="false"
+                tools:composableName="com.weatherxm.ui.components.compose.RewardIssueViewKt.PreviewRewardIssueView"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/issuesDesc"
                 tools:visibility="visible" />
