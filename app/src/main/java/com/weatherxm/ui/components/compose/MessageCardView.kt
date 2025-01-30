@@ -37,7 +37,7 @@ import com.weatherxm.ui.common.ActionForMessageView
 import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.SubtitleForMessageView
 
-@Suppress("FunctionNaming", "LongMethod", "MagicNumber")
+@Suppress("FunctionNaming", "LongMethod", "MagicNumber", "CyclomaticComplexMethod")
 @Composable
 fun MessageCardView(data: DataForMessageView) {
     val (backgroundResId, strokeAndIconColor) = when (data.severityLevel) {
@@ -109,6 +109,13 @@ fun MessageCardView(data: DataForMessageView) {
                             color = colorResource(R.color.colorOnSurface),
                             style = MaterialTheme.typography.bodyMedium,
                             text = AnnotatedString.fromHtml(htmlString = stringResource(id = it))
+                        )
+                    }
+                    data.subtitle?.htmlMessageAsString?.let {
+                        Text(
+                            color = colorResource(R.color.colorOnSurface),
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = AnnotatedString.fromHtml(htmlString = it)
                         )
                     }
                 }
