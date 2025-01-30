@@ -630,6 +630,7 @@ data class DataForMessageView(
 data class SubtitleForMessageView(
     val message: Int? = null,
     val htmlMessage: Int? = null,
+    val htmlMessageAsString: String? = null,
     val onLinkClickedListener: (() -> Unit)? = null
 )
 

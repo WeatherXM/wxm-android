@@ -167,21 +167,15 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.weatherxm.ui.components.MessageCardView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/annotationCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-16dp"
-                android:background="@color/errorTint"
+                android:layout_marginTop="-24dp"
                 android:elevation="0dp"
-                android:paddingTop="8dp"
                 android:visibility="gone"
-                app:message_includes_close_button="false"
-                tools:message_background_tint="@color/errorTint"
-                tools:message_icon_color="@color/error"
-                tools:message_message="@string/annotation_issue_warn_error_text"
+                tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardViewWithTopPadding"
                 tools:visibility="visible" />
-
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

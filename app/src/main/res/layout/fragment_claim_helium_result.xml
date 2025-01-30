@@ -65,6 +65,7 @@
             app:drawableTint="@color/midGrey" />
     </LinearLayout>
 
+    <!-- STOPSHIP: Is already fixed in the feature/station-photo-verification -->
     <com.weatherxm.ui.components.MessageCardView
         android:id="@+id/informationCard"
         android:layout_width="match_parent"
