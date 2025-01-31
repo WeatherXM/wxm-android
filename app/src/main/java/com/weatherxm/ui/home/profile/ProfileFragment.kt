@@ -164,6 +164,10 @@ class ProfileFragment : BaseFragment() {
                 .visible(true)
         }
 
+        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            parentModel.onScroll(scrollY - oldScrollY)
+        }
+
         model.fetchUser()
         parentModel.getSurvey()
     }

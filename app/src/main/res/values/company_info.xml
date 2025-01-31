@@ -28,4 +28,6 @@
     <string name="share_cell_url">https://explorer.weatherxm.com/cells/%s</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>
+    <string name="terms_of_use_owners_url">https://weatherxm.network/terms-of-use.pdf</string>
+    <string name="privacy_policy_owners_url">https://weatherxm.network/privacy-policy.pdf</string>
 </resources>

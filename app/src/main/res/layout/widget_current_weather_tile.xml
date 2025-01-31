@@ -27,7 +27,8 @@
                 android:gravity="center_vertical"
                 android:paddingHorizontal="@dimen/padding_small"
                 android:paddingVertical="@dimen/padding_extra_small"
-                tools:background="@drawable/background_rounded_success">
+                tools:background="@drawable/background_rounded_success"
+                tools:ignore="RelativeOverlap">
 
                 <ImageView
                     android:id="@+id/statusIcon"

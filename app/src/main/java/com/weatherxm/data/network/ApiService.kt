@@ -286,6 +286,14 @@ interface ApiService {
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @POST("/api/v1/me/devices/frequency")
+    suspend fun setDeviceFrequency(
+        @Body deviceFrequency: DeviceFrequencyBody
+    ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @MockResponse(code = 200, body = "mock_files/device_photos_list.json")
     @GET("/api/v1/me/devices/{deviceId}/photos")
     suspend fun getDevicePhotos(

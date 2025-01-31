@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
@@ -86,6 +87,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             displayModeHelper.setDisplayMode(newValue.toString())
             true
         }
+
         /**
          * If `installationId` is available, append it at the end of the app version
          */
@@ -102,16 +104,12 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun onLoggedOut(
-        logoutBtn: Preference?,
-        resetPassBtn: Preference?,
-        deleteAccountButton: Preference?,
-        analyticsPreference: SwitchPreferenceCompat?
-    ) {
-        logoutBtn?.isVisible = false
-        resetPassBtn?.isVisible = false
-        deleteAccountButton?.isVisible = false
-        analyticsPreference?.isVisible = false
+    private fun onLoggedOut(vararg preferences: Preference?) {
+        val legalCategory: PreferenceCategory? = findPreference(getString(R.string.legal))
+        legalCategory?.isVisible = false
+        preferences.forEach {
+            it?.isVisible = false
+        }
     }
 
     private fun onLoggedIn(
@@ -134,6 +132,19 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         }
         deleteAccountButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             navigator.showDeleteAccount(this)
+            true
+        }
+
+        val openTermsOfUse: Preference? = findPreference(getString(R.string.terms_of_use))
+        val openPrivacyPolicy: Preference? = findPreference(getString(R.string.privacy_policy))
+        openTermsOfUse?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.TERMS_OF_USE.paramValue)
+            navigator.openWebsite(context, getString(R.string.terms_of_use_owners_url))
+            true
+        }
+        openPrivacyPolicy?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.PRIVACY_POLICY.paramValue)
+            navigator.openWebsite(context, getString(R.string.privacy_policy_owners_url))
             true
         }
     }

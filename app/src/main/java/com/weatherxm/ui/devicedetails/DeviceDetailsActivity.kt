@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.warningChip
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.TermsDialogFragment
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
@@ -121,6 +122,15 @@ class DeviceDetailsActivity : BaseActivity() {
 
         model.onUpdatedDevice().observe(this) {
             updateDeviceInfo(it)
+        }
+
+        model.onShowLegalTerms().observe(this) {
+            if (it == true) {
+                TermsDialogFragment(
+                    onLinkClicked = { url -> navigator.openWebsite(this, url) },
+                    onClick = { model.setAcceptTerms() }
+                ).show(this)
+            }
         }
 
         val adapter = ViewPagerAdapter(this)

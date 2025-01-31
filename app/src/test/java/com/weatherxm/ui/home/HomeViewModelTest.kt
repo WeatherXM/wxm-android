@@ -43,7 +43,9 @@ class HomeViewModelTest : BehaviorSpec({
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
         justRun { userUseCase.setWalletWarningDismissTimestamp() }
+        justRun { userUseCase.setAcceptTerms() }
         every { userUseCase.shouldShowWalletMissingWarning(emptyWalletAddress) } returns true
+        every { userUseCase.shouldShowTermsPrompt() } returns true
         every { remoteBannersUseCase.getSurvey() } returns survey
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
         every { remoteBannersUseCase.getInfoBanner() } returns infoBanner
@@ -75,6 +77,29 @@ class HomeViewModelTest : BehaviorSpec({
             }
             then("GET the property again") {
                 viewModel.hasDevices() shouldBe false
+            }
+        }
+    }
+
+    context("Flow to be called when scrolling takes place") {
+        given("a dy value") {
+            When("it's > 0") {
+                viewModel.onScroll(1)
+                then("LiveData showOverlayViews posts false") {
+                    viewModel.showOverlayViews().value shouldBe false
+                }
+            }
+            When("it's < 0") {
+                viewModel.onScroll(-1)
+                then("LiveData showOverlayViews posts true") {
+                    viewModel.showOverlayViews().value shouldBe true
+                }
+            }
+            When("it's = 0") {
+                viewModel.onScroll(0)
+                then("LiveData showOverlayViews posts true") {
+                    viewModel.showOverlayViews().value shouldBe true
+                }
             }
         }
     }
@@ -149,6 +174,23 @@ class HomeViewModelTest : BehaviorSpec({
                 then("the respective function in the usecase should be called") {
                     verify(exactly = 1) { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
                 }
+            }
+        }
+    }
+
+    context("Get if we should show the terms prompt or not") {
+        given("A use case returning the result") {
+            then("return that result") {
+                viewModel.shouldShowTermsPrompt() shouldBe true
+            }
+        }
+    }
+
+    context("Set the Accept Terms") {
+        given("the call to the respective function") {
+            viewModel.setAcceptTerms()
+            then("the respective function in the usecase should be called") {
+                verify(exactly = 1) { userUseCase.setAcceptTerms() }
             }
         }
     }

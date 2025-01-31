@@ -74,6 +74,13 @@ data class LocationBody(
 
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class DeviceFrequencyBody(
+    val serialNumber: String,
+    val freq: String
+) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class PhotoNamesBody(
     val names: List<String>
 ) : Parcelable

@@ -39,6 +39,7 @@
     <string name="action_view_all_issues">View All Issues</string>
     <string name="action_open">Open</string>
     <string name="action_done">Done</string>
+    <string name="action_i_understand">I understand</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -183,7 +184,6 @@
     <string name="update_prompt_on_claiming_flow"><![CDATA[<b>We strongly recommend you to update for a better station experience!</b><br>You will be able to photo verify your station after the update.]]></string>
     <string name="update_prompt_on_dialog">We highly recommend you update, as this will improve the experience you’ll have with your WeatherXM station!</string>
 
-    Y
     <!-- Update Prompt -->
     <string name="title_update_prompt">New Update</string>
     <string name="desc_update_prompt"><![CDATA[A new update of this app has been released. Please click the button below to go to Play Store and update the app.<br><br>After updating please restart the app.]]></string>
@@ -252,6 +252,7 @@
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to login.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
+    <string name="registration_terms_privacy_policy"><![CDATA[I have read and accept the <a href="%1$s">Terms of Use</a> and <a href="%2$s">Privacy Policy</a>.]]></string>
 
     <!-- Rewards -->
     <string name="title_reward_timeline">Reward Timeline</string>
@@ -636,6 +637,10 @@
     <string name="station_health_data_quality_explanation"><![CDATA[The network’s effectiveness relies on meaningful, usable data, measured by the Quality-of-Data (QoD) score, which <b>updates daily</b>. This score motivates weather station owners to follow guidelines for optimal data quality. A station’s daily reward is tied to its QoD, calculated using an open-source algorithm that assesses data quality and provides a confidence level in the data received.]]></string>
     <string name="station_health_location_quality_explanation"><![CDATA[It is crucial for the Network that a station stays in the same location throughout its lifetime.<br>The Proof-of-Location algorithm, which also <b>updates daily</b>, assesses the accuracy and consistency of the station’s location data, generating a confidence score for its position.]]></string>
     <string name="station_has_started_transmitting_data">Your station has started transmitting its initial data. Sit back and relax, your rewards are on the way!</string>
+
+    <!-- Terms Dialog -->
+    <string name="terms_dialog_title">About our legal terms</string>
+    <string name="terms_dialog_message"><![CDATA[We’ve implemented the new <a href="%1$s">Terms of Use</a> and <a href="%2$s">Privacy Policy</a> to better serve you and ensure alignment with best practices and applicable laws. By continuing to use the app for the next 30 days, it is considered that you accept the new terms and privacy policy mentioned above.<br><br>By accepting these Terms of Use and Privacy Policy, you agree that they apply to all prior and future interactions with the app.]]></string>
 
     <!-- Photo Verification -->
     <string name="skip_photo_verification">Skip Photo Verification</string>

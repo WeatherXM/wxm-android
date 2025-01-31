@@ -2,7 +2,6 @@
 
 package com.weatherxm.util
 
-import TooltipMarkerView
 import android.content.Context
 import android.content.res.Resources
 import android.view.MotionEvent
@@ -20,6 +19,7 @@ import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
+import com.weatherxm.ui.components.TooltipMarkerView
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
 

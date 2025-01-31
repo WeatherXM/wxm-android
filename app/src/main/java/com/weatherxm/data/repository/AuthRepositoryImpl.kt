@@ -56,7 +56,11 @@ class AuthRepositoryImpl(
         firstName: String?,
         lastName: String?
     ): Either<Failure, Unit> {
-        return networkAuthDataSource.signup(username, firstName, lastName).onRight {
+        val first = if (firstName.isNullOrEmpty()) null else firstName
+        val last = if (lastName.isNullOrEmpty()) null else lastName
+        return networkAuthDataSource.signup(username, first, last).onRight {
+            // The user has signed-up successfully so the terms should be marked as accepted
+            cacheService.setAcceptTermsTimestamp(System.currentTimeMillis())
             Timber.d("Signup success. Email sent to user: $username")
         }
     }

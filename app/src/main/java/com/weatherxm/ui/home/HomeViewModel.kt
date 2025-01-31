@@ -34,10 +34,14 @@ class HomeViewModel(
     private val onInfoBanner = SingleLiveEvent<InfoBanner?>()
     private val onOpenExplorer = SingleLiveEvent<Boolean>()
 
+    // Needed for passing info to the activity to show/hide elements when scrolling on the list
+    private val showOverlayViews = MutableLiveData(true)
+
     fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onSurvey(): LiveData<Survey> = onSurvey
     fun onInfoBanner(): LiveData<InfoBanner?> = onInfoBanner
     fun onOpenExplorer() = onOpenExplorer
+    fun showOverlayViews() = showOverlayViews
 
     fun openExplorer() {
         onOpenExplorer.postValue(true)
@@ -47,6 +51,10 @@ class HomeViewModel(
 
     fun setHasDevices(devices: List<UIDevice>?) {
         hasDevices = devices?.firstOrNull { it.isOwned() } != null
+    }
+
+    fun onScroll(dy: Int) {
+        showOverlayViews.postValue(dy <= 0)
     }
 
     fun getWalletWarnings() {
@@ -104,6 +112,9 @@ class HomeViewModel(
     fun dismissInfoBanner(infoBannerId: String) {
         remoteBannersUseCase.dismissInfoBanner(infoBannerId)
     }
+
+    fun shouldShowTermsPrompt() = userUseCase.shouldShowTermsPrompt()
+    fun setAcceptTerms() = userUseCase.setAcceptTerms()
 
     fun retryPhotoUpload(deviceId: String) = photoUseCase.retryUpload(deviceId)
 }

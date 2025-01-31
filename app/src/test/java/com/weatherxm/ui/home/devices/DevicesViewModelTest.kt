@@ -138,29 +138,6 @@ class DevicesViewModelTest : BehaviorSpec({
         }
     }
 
-    context("Flow to be called when scrolling takes place") {
-        given("a dy value") {
-            When("it's > 0") {
-                viewModel.onScroll(1)
-                then("LiveData showOverlayViews posts false") {
-                    viewModel.showOverlayViews().value shouldBe false
-                }
-            }
-            When("it's < 0") {
-                viewModel.onScroll(-1)
-                then("LiveData showOverlayViews posts true") {
-                    viewModel.showOverlayViews().value shouldBe true
-                }
-            }
-            When("it's = 0") {
-                viewModel.onScroll(0)
-                then("LiveData showOverlayViews posts true") {
-                    viewModel.showOverlayViews().value shouldBe true
-                }
-            }
-        }
-    }
-
     context("Unfollow a station") {
         given("a usecase returning the response of the unfollow request") {
             When("it's failure") {

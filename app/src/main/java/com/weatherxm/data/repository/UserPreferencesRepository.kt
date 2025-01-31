@@ -9,6 +9,8 @@ interface UserPreferencesRepository {
     fun setWalletWarningDismissTimestamp()
     fun getDevicesSortFilterOptions(): List<String>
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String)
+    fun shouldShowTermsPrompt(): Boolean
+    fun setAcceptTerms()
 }
 
 class UserPreferencesRepositoryImpl(
@@ -37,5 +39,13 @@ class UserPreferencesRepositoryImpl(
 
     override fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String) {
         datasource.setDevicesSortFilterOptions(sortOrder, filter, groupBy)
+    }
+
+    override fun shouldShowTermsPrompt(): Boolean {
+        return datasource.getAcceptTermsTimestamp() == 0L
+    }
+
+    override fun setAcceptTerms() {
+        datasource.setAcceptTerms()
     }
 }

@@ -47,6 +47,7 @@ class CacheService(
         const val KEY_INSTALLATION_ID = "installation_id"
         const val KEY_DISMISSED_SURVEY_ID = "dismissed_survey_id"
         const val KEY_DISMISSED_INFO_BANNER_ID = "dismissed_info_banner_id"
+        const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
 
         // Default in-memory cache expiration time 15 minutes
@@ -121,6 +122,14 @@ class CacheService(
 
     fun getAnalyticsDecisionTimestamp(): Long {
         return preferences.getLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L)
+    }
+
+    fun setAcceptTermsTimestamp(timestamp: Long) {
+        preferences.edit().putLong(KEY_ACCEPT_TERMS_TIMESTAMP, timestamp).apply()
+    }
+
+    fun getAcceptTermsTimestamp(): Long {
+        return preferences.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0L)
     }
 
     fun getAnalyticsEnabled(): Boolean {
@@ -413,6 +422,7 @@ class CacheService(
         val savedAnalyticsOptInOrOutTimestamp = preferences.getLong(
             KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
         )
+        val savedAcceptTermsTimestamp = preferences.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0L)
         val widgetIds = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
         val devicesOfWidgets = mutableMapOf<String, String>()
         widgetIds?.forEach {
@@ -431,6 +441,7 @@ class CacheService(
             .putString(resources.getString(KEY_PRESSURE), savedPressure)
             .putBoolean(resources.getString(KEY_ANALYTICS), savedAnalyticsEnabled)
             .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
+            .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
             .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
             .apply()
 

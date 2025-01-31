@@ -19,6 +19,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
+import com.weatherxm.ui.components.TermsDialogFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import dev.chrisbanes.insetter.applyInsetter
@@ -68,7 +69,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             }
         }
 
-        devicesViewModel.showOverlayViews().observe(this) { shouldShow ->
+        model.showOverlayViews().observe(this) { shouldShow ->
             if (shouldShow) {
                 binding.addDevice.show()
                 binding.navView.show()
@@ -126,6 +127,19 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 )
                 explorerModel.navigateToLocation(it)
             }
+        }
+
+        lifecycleScope.launch {
+            handleTermsDialog()
+        }
+    }
+
+    private fun handleTermsDialog() {
+        if (model.shouldShowTermsPrompt()) {
+            TermsDialogFragment(
+                onLinkClicked = { navigator.openWebsite(this, it) },
+                onClick = { model.setAcceptTerms() }
+            ).show(this)
         }
     }
 

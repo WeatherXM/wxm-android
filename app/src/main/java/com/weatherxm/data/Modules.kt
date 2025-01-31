@@ -41,6 +41,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
+import com.mapbox.search.ApiType
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
 import com.mixpanel.android.mpmetrics.MixpanelAPI
@@ -73,6 +74,8 @@ import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
+import com.weatherxm.data.datasource.DeviceFrequencyDataSource
+import com.weatherxm.data.datasource.DeviceFrequencyDataSourceImpl
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.DevicePhotoDataSource
@@ -438,6 +441,9 @@ private val datasources = module {
     single<RemoteBannersDataSource> {
         RemoteBannersDataSourceImpl(get(), get())
     }
+    single<DeviceFrequencyDataSource> {
+        DeviceFrequencyDataSourceImpl(get())
+    }
     single<DevicePhotoDataSource> {
         DevicePhotoDataSourceImpl(get(), get())
     }
@@ -481,7 +487,7 @@ private val repositories = module {
         UserPreferencesRepositoryImpl(get())
     }
     single<BluetoothConnectionRepository> {
-        BluetoothConnectionRepositoryImpl(get())
+        BluetoothConnectionRepositoryImpl(get(), get())
     }
     single<BluetoothUpdaterRepository> {
         BluetoothUpdaterRepositoryImpl(get())
@@ -520,7 +526,7 @@ private val usecases = module {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(get(), get(), get(), get())
+        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get())
     }
     single<ForecastUseCase> {
         ForecastUseCaseImpl(get())
@@ -882,7 +888,7 @@ private val utilities = module {
         }
     }
     single<SearchEngine> {
-        SearchEngine.createSearchEngine(SearchEngineSettings())
+        SearchEngine.createSearchEngine(apiType = ApiType.GEOCODING, SearchEngineSettings())
     }
     single<Moshi> {
         Moshi.Builder()

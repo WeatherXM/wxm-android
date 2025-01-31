@@ -2,13 +2,17 @@ package com.weatherxm.data.repository.bluetooth
 
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
+import arrow.core.flatMap
+import com.weatherxm.data.datasource.DeviceFrequencyDataSource
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
+import com.weatherxm.ui.common.unmask
 import kotlinx.coroutines.flow.Flow
 
 class BluetoothConnectionRepositoryImpl(
-    private val dataSource: BluetoothConnectionDataSource
+    private val dataSource: BluetoothConnectionDataSource,
+    private val deviceFrequencyDataSource: DeviceFrequencyDataSource
 ) : BluetoothConnectionRepository {
 
     override fun getPairedDevices(): List<BluetoothDevice> {
@@ -40,7 +44,11 @@ class BluetoothConnectionRepositoryImpl(
     }
 
     override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
-        return dataSource.setFrequency(frequency)
+        return dataSource.setFrequency(frequency).flatMap {
+            fetchDeviceEUI().flatMap {
+                deviceFrequencyDataSource.setDeviceFrequency(it.unmask(), frequency.name)
+            }
+        }
     }
 
     override suspend fun reboot(): Either<Failure, Unit> {

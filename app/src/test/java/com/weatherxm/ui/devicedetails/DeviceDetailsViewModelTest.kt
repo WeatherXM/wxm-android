@@ -110,6 +110,8 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         }
         every { authUseCase.isLoggedIn() } returns true
         every { resources.getString(R.string.error_max_followed) } returns maxFollowedMsg
+        justRun { deviceDetailsUseCase.setAcceptTerms() }
+        every { deviceDetailsUseCase.shouldShowTermsPrompt() } returns true
 
         viewModel = DeviceDetailsViewModel(
             emptyDevice,
@@ -129,6 +131,9 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
                     viewModel.isLoggedIn() shouldBe true
+                }
+                then("get if we should show a failure or not") {
+                    viewModel.onShowLegalTerms().value shouldBe true
                 }
             }
         }
@@ -359,6 +364,15 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                         }
                     }
                 }
+            }
+        }
+    }
+
+    context("Set the Accept Terms") {
+        given("the call to the respective function") {
+            viewModel.setAcceptTerms()
+            then("the respective function in the usecase should be called") {
+                verify(exactly = 1) { deviceDetailsUseCase.setAcceptTerms() }
             }
         }
     }
