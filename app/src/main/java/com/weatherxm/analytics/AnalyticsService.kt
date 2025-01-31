@@ -256,7 +256,6 @@ interface AnalyticsService {
         TOKENS_EARNED_PRESSED("Tokens Earned pressed"),
         DEVICE_REWARD_ANALYTICS_CARD("Device Reward Analytics Card"),
         OPEN("open"),
-        CLOSED("closed"),
         TERMS_OF_USE("Terms Of Use"),
         PRIVACY_POLICY("Privacy Policy"),
         CLOSED("closed"),
