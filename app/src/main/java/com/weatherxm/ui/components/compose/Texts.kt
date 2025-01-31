@@ -12,6 +12,24 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 
+
+@Suppress("FunctionNaming")
+@Composable
+fun SmallText(
+    text: String,
+    fontWeight: FontWeight = FontWeight.Normal,
+    colorRes: Int = R.color.colorOnSurface,
+    paddingValues: PaddingValues = PaddingValues()
+) {
+    Text(
+        text = text,
+        fontWeight = fontWeight,
+        color = colorResource(colorRes),
+        style = MaterialTheme.typography.bodySmall,
+        modifier = Modifier.padding(paddingValues)
+    )
+}
+
 @Suppress("FunctionNaming")
 @Composable
 fun MediumText(
