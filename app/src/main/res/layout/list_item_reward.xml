@@ -47,13 +47,15 @@
         app:layout_constraintTop_toTopOf="@id/date_point"
         tools:text="Tue, 01/02 2022" />
 
-    <com.weatherxm.ui.components.DailyRewardsCardView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/mainCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:layout_marginHorizontal="@dimen/margin_normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.6"
-        app:layout_constraintTop_toBottomOf="@id/current_line" />
-
+        app:layout_constraintTop_toBottomOf="@id/current_line"
+        tools:composableName="com.weatherxm.ui.components.compose.DailyRewardsViewKt.PreviewDailyRewardsView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

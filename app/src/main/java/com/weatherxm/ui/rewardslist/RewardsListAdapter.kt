@@ -10,6 +10,7 @@ import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.DailyRewardsView
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Resources
 import org.koin.core.component.KoinComponent
@@ -79,10 +80,13 @@ class RewardsListAdapter(
                 onEndOfData()
             }
             updateDateAndLines(item.timestamp, position)
-            binding.mainCard.setOnClickListener {
-                onRewardDetails(item)
+            binding.mainCard.setContent {
+                DailyRewardsView(
+                    data = item,
+                    useShortAnnotationText = true,
+                    onCardClick = { onRewardDetails(item) }
+                )
             }
-            binding.mainCard.updateUI(item, true)
         }
 
         /**
