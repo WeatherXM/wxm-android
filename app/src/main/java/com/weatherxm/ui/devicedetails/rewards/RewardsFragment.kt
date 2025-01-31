@@ -37,6 +37,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.compose.DailyRewardsView
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils.formatTokens
@@ -75,18 +76,22 @@ class RewardsFragment : BaseFragment() {
             val totalRewards = it.totalRewards ?: 0F
             binding.emptyCard.visible(it.isEmpty())
             if (!it.isEmpty()) {
-                binding.dailyRewardsCard.updateUI(
-                    it.latest,
-                    parentModel.device.relation != DeviceRelation.OWNED
-                ) {
-                    navigator.showRewardDetails(requireContext(), parentModel.device, it.latest)
-                }
                 binding.totalRewards.text =
                     getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
                 updateWeeklyStreak(it.timeline)
-                binding.dailyRewardsCard.visible(true)
                 binding.totalCard.visible(true)
                 binding.weeklyCard.visible(true)
+            }
+            it.latest?.let { reward ->
+                binding.dailyRewardsCard.setContent {
+                    DailyRewardsView(
+                        data = reward,
+                        useShortAnnotationText = parentModel.device.relation != DeviceRelation.OWNED
+                    ) {
+                        navigator.showRewardDetails(requireContext(), parentModel.device, reward)
+                    }
+                }
+                binding.dailyRewardsCard.visible(true)
             }
         }
 
