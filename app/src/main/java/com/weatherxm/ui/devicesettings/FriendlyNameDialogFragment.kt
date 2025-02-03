@@ -11,19 +11,31 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ViewEditNameBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.components.TermsDialogFragment
 import com.weatherxm.util.Validator
 import org.koin.android.ext.android.inject
 
-class FriendlyNameDialogFragment(
-    private val currentFriendlyName: String?,
-    private val deviceId: String,
-    private val resultCallback: (String?) -> Unit
-) : DialogFragment() {
+class FriendlyNameDialogFragment() : DialogFragment() {
     private val analytics: AnalyticsWrapper by inject()
     private lateinit var binding: ViewEditNameBinding
 
+    private var resultCallback: ((String?) -> Unit)? = null
+    private var currentFriendlyName: String? = null
+    private var deviceId: String? = null
+
     companion object {
         const val TAG = "FRIENDLY_NAME_DIALOG"
+        const val AUTO_DISMISS_DIALOG = "AUTO_DISMISS_DIALOG"
+    }
+
+    constructor(
+        currentFriendlyName: String?,
+        deviceId: String,
+        resultCallback: (String?) -> Unit
+    ) : this() {
+        this.currentFriendlyName = currentFriendlyName
+        this.deviceId = deviceId
+        this.resultCallback = resultCallback
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -60,7 +72,7 @@ class FriendlyNameDialogFragment(
                     AnalyticsService.ParamValue.CLEAR.paramValue
                 )
             )
-            resultCallback(null)
+            resultCallback?.invoke(null)
             dismiss()
         }
 
@@ -78,12 +90,28 @@ class FriendlyNameDialogFragment(
                         AnalyticsService.ParamValue.EDIT.paramValue
                     )
                 )
-                resultCallback(newName)
+                resultCallback?.invoke(newName)
+                dismiss()
+            }
+        }
+
+        /**
+         * Enabling "Don't keep activities" causes a crash, and we cannot save the listeners
+         * in the savedInstanceState to restore the dialog so we dismiss it automatically
+         * and it's the caller's responsibility to re-instantiate it.
+         */
+        savedInstanceState?.let {
+            if (it.getBoolean(AUTO_DISMISS_DIALOG, false)) {
                 dismiss()
             }
         }
 
         return builder.create()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(TermsDialogFragment.AUTO_DISMISS_DIALOG, true)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
