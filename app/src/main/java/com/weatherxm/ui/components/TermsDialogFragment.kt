@@ -10,14 +10,20 @@ import com.weatherxm.databinding.ViewTermsDialogBinding
 import com.weatherxm.ui.common.setHtml
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-class TermsDialogFragment(
-    private val onLinkClicked: (String) -> Unit,
-    private val onClick: () -> Unit
-) : DialogFragment() {
+class TermsDialogFragment() : DialogFragment() {
     private lateinit var binding: ViewTermsDialogBinding
+
+    private var onLinkClicked: ((String) -> Unit)? = null
+    private var onClick: (() -> Unit)? = null
 
     companion object {
         const val TAG = "TERMS_DIALOG_FRAGMENT"
+        const val AUTO_DISMISS_DIALOG = "AUTO_DISMISS_DIALOG"
+    }
+
+    constructor(onLinkClicked: (String) -> Unit, onClick: () -> Unit) : this() {
+        this.onLinkClicked = onLinkClicked
+        this.onClick = onClick
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -31,7 +37,7 @@ class TermsDialogFragment(
         with(binding.message) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
-                    onLinkClicked(url)
+                    onLinkClicked?.invoke(url)
                     return@setOnLinkClickListener true
                 }
             }
@@ -43,16 +49,34 @@ class TermsDialogFragment(
         }
 
         binding.understandBtn.setOnClickListener {
-            onClick.invoke()
+            onClick?.invoke()
             dismiss()
         }
 
         isCancelable = false
 
+        /**
+         * Enabling "Don't keep activities" causes a crash, and we cannot save the listeners
+         * in the savedInstanceState to restore the dialog so we dismiss it automatically
+         * and it's the caller's responsibility to re-instantiate it.
+         */
+        savedInstanceState?.let {
+            if (it.getBoolean(AUTO_DISMISS_DIALOG, false)) {
+                dismiss()
+            }
+        }
+
         return builder.create()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(AUTO_DISMISS_DIALOG, true)
+        super.onSaveInstanceState(outState)
+    }
+
     fun show(activity: FragmentActivity) {
-        show(activity.supportFragmentManager, TAG)
+        if (onLinkClicked != null && onClick != null) {
+            show(activity.supportFragmentManager, TAG)
+        }
     }
 }
