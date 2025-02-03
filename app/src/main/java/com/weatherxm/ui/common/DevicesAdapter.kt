@@ -146,7 +146,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             return oldItem.id == newItem.id
         }
 
-        @Suppress("MaxLineLength", "CyclomaticComplexMethod")
+        @Suppress("CyclomaticComplexMethod")
         override fun areContentsTheSame(oldItem: UIDevice, newItem: UIDevice): Boolean {
             return oldItem.name == newItem.name &&
                 oldItem.currentWeather?.icon == newItem.currentWeather?.icon &&
@@ -167,6 +167,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.currentFirmware == newItem.currentFirmware &&
                 oldItem.assignedFirmware == newItem.assignedFirmware &&
                 oldItem.friendlyName == newItem.friendlyName &&
+                oldItem.relation == newItem.relation &&
                 oldItem.lastWeatherStationActivity == newItem.lastWeatherStationActivity &&
                 oldItem.isActive == newItem.isActive
         }
