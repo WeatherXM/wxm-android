@@ -10,11 +10,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.load
@@ -140,6 +148,10 @@ class PhotoGalleryActivity : BaseActivity() {
             onDeletePhoto()
         }
 
+        binding.maxPhotosReachedView.setContent {
+            MaxPhotosReached()
+        }
+
         binding.thumbnails.setContent {
             Thumbnails()
         }
@@ -204,20 +216,26 @@ class PhotoGalleryActivity : BaseActivity() {
     }
 
     private fun onPhotosNumber(photosNumber: Int) {
-        binding.addPhotoBtn.visible(photosNumber < MAX_PHOTOS)
         binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS && model.getLocalPhotosNumber() > 0
+        binding.maxPhotosReachedView.visible(photosNumber == 6)
         when (photosNumber) {
             0 -> {
                 binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
                 binding.emptyPhotosText.visible(true)
+                binding.addPhotoBtn.enable()
                 binding.deletePhotoBtn.disable()
             }
             1 -> {
                 binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
+                binding.addPhotoBtn.enable()
                 binding.deletePhotoBtn.enable()
+            }
+            6 -> {
+                binding.addPhotoBtn.disable()
             }
             else -> {
                 binding.toolbar.subtitle = null
+                binding.addPhotoBtn.enable()
                 binding.deletePhotoBtn.enable()
             }
         }
@@ -295,6 +313,33 @@ class PhotoGalleryActivity : BaseActivity() {
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(model.device.id, ".jpg", storageDir).apply {
             latestPhotoTakenPath = absolutePath
+        }
+    }
+
+    @Suppress("FunctionNaming")
+    @Composable
+    fun MaxPhotosReached() {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = colorResource(R.color.layer1)),
+            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_extra_large)),
+            modifier = Modifier.padding(top = dimensionResource(R.dimen.margin_normal))
+        ) {
+            Row(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small_to_normal)),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_learn_more_info),
+                    contentDescription = null,
+                    tint = colorResource(R.color.colorPrimary)
+                )
+                Text(
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small)),
+                    text = stringResource(R.string.max_photos_reached_message),
+                    color = colorResource(R.color.colorOnSurface),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 

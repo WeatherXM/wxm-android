@@ -714,4 +714,5 @@
     <string name="upload_notification_error_title">Upload failed</string>
     <string name="upload_notification_error_message">An error occurred</string>
     <string name="upload_notification_cancelled_title">Upload cancelled</string>
+    <string name="max_photos_reached_message">You’ve reached the limit of 6 photos. Remove some photos to add new ones if needed.</string>
 </resources>

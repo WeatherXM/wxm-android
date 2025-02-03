@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -41,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/margin_large"
+        android:clipChildren="false"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
@@ -73,11 +75,11 @@
             android:id="@+id/selectedPhoto"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/padding_extra_large"
+            android:layout_marginTop="@dimen/margin_large"
             android:layout_marginBottom="@dimen/margin_large"
             android:adjustViewBounds="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
+            app:layout_constraintBottom_toTopOf="@id/maxPhotosReachedView"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription"
             tools:visibility="visible" />
@@ -94,12 +96,21 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/maxPhotosReachedView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small_to_normal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
+            tools:visibility="visible" />
+
         <LinearLayout
             android:id="@+id/thumbnailsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="@dimen/margin_extra_large"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@id/instructionsBtn">
