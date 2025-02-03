@@ -215,6 +215,7 @@ class PhotoGalleryActivity : BaseActivity() {
         setResult(RESULT_OK, intent)
     }
 
+    @Suppress("MagicNumber")
     private fun onPhotosNumber(photosNumber: Int) {
         binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS && model.getLocalPhotosNumber() > 0
         binding.maxPhotosReachedView.visible(photosNumber == 6)
