@@ -131,11 +131,6 @@ class PhotoGalleryActivity : BaseActivity() {
             wentToSettingsForPermissions = true
         }
 
-        binding.addPhotoBtn.setOnClickListener {
-            analytics.trackEventUserAction(AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue)
-            getCameraPermissions()
-        }
-
         binding.deletePhotoBtn.setOnClickListener {
             onDeletePhoto()
         }
@@ -204,8 +199,19 @@ class PhotoGalleryActivity : BaseActivity() {
     }
 
     private fun onPhotosNumber(photosNumber: Int) {
-        binding.addPhotoBtn.visible(photosNumber < MAX_PHOTOS)
         binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS && model.getLocalPhotosNumber() > 0
+        if (photosNumber == MAX_PHOTOS) {
+            binding.addPhotoBtn.setOnClickListener {
+                showSnackbarMessage(binding.root, getString(R.string.max_photos_reached_message))
+            }
+        } else {
+            binding.addPhotoBtn.setOnClickListener {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue
+                )
+                getCameraPermissions()
+            }
+        }
         when (photosNumber) {
             0 -> {
                 binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
