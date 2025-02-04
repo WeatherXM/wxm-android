@@ -8,7 +8,9 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import androidx.preference.PreferenceManager
 import com.weatherxm.R
+import com.weatherxm.data.services.CacheService.Companion.KEY_CURRENT_WEATHER_WIDGET_IDS
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
@@ -58,11 +60,11 @@ class CurrentWeatherWidgetDetailed : AppWidgetProvider(), KoinComponent {
         val validWidgetTypeForUpdate =
             extras?.parcelable<WidgetType>(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER_DETAILED
 
-        /*
-        * Only update widget on actions we have triggered:
-        * a. Creation of widget
-        * b. Login/Logout
-        * c. Work Manager Update
+        /**
+         * Only update widget on actions we have triggered:
+         * a. Creation of widget
+         * b. Login/Logout
+         * c. Work Manager Update
          */
         val shouldUpdate = intent?.action == ACTION_APPWIDGET_UPDATE
             && extras?.getBoolean(ARG_IS_CUSTOM_APPWIDGET_UPDATE) ?: false
@@ -70,7 +72,18 @@ class CurrentWeatherWidgetDetailed : AppWidgetProvider(), KoinComponent {
         if (!shouldUpdate && (widgetIdsFromIntent == null || widgetIdsFromIntent.isEmpty())) {
             return
         } else if (!shouldUpdate) {
-            CurrentWeatherWidgetWorkerUpdate.restartAllWorkers(context)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val ids = prefs.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
+
+            /**
+             * The first line covers the case of a user clearing app storage & cache so we reset
+             * the widget to the "Select Station" state
+             */
+            if (ids.isNullOrEmpty()) {
+                CurrentWeatherWidgetWorkerUpdate.clearAllWidgets(context, widgetHelper)
+            } else {
+                CurrentWeatherWidgetWorkerUpdate.restartAllWorkers(context)
+            }
             return
         }
 

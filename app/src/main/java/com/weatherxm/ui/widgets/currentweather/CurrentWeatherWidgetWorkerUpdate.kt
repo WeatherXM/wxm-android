@@ -2,6 +2,7 @@ package com.weatherxm.ui.widgets.currentweather
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
@@ -41,6 +42,34 @@ class CurrentWeatherWidgetWorkerUpdate(
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
         private const val UPDATE_INTERVAL_IN_MINS = 15L
+
+        fun clearAllWidgets(context: Context, widgetHelper: WidgetHelper) {
+            val weatherWidgets = AppWidgetManager.getInstance(context).getAppWidgetIds(
+                ComponentName(context, CurrentWeatherWidget::class.java)
+            ).toList()
+            val weatherTilesWidgets = AppWidgetManager.getInstance(context).getAppWidgetIds(
+                ComponentName(context, CurrentWeatherWidgetTile::class.java)
+            ).toList()
+            val weatherDetailedWidgets = AppWidgetManager.getInstance(context).getAppWidgetIds(
+                ComponentName(context, CurrentWeatherWidgetDetailed::class.java)
+            ).toList()
+            val allWidgets = buildList {
+                addAll(weatherWidgets)
+                addAll(weatherTilesWidgets)
+                addAll(weatherDetailedWidgets)
+            }
+
+            allWidgets.forEach {
+                val widgetType =
+                    widgetHelper.getWidgetTypeById(AppWidgetManager.getInstance(context), it)
+                val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, it)
+                intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                intent.putExtra(ARG_WIDGET_SHOULD_SELECT_STATION, true)
+                intent.putExtra(ARG_WIDGET_TYPE, widgetType as Parcelable)
+                context.sendBroadcast(intent)
+            }
+        }
 
         fun restartAllWorkers(context: Context) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
