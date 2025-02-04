@@ -79,7 +79,7 @@
             android:layout_marginBottom="@dimen/margin_large"
             android:adjustViewBounds="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/maxPhotosReachedView"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription"
             tools:visibility="visible" />
@@ -94,15 +94,6 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/maxPhotosReachedView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_small_to_normal"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
             tools:visibility="visible" />
 
         <LinearLayout
