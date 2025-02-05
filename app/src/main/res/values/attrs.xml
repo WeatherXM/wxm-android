@@ -6,17 +6,6 @@
         <attr name="empty_action" format="string" />
         <attr name="empty_animation" format="reference" />
     </declare-styleable>
-    <declare-styleable name="MessageCardView">
-        <attr name="message_title" format="string" />
-        <attr name="message_message" format="string" />
-        <attr name="message_html_message" format="string" />
-        <attr name="message_includes_close_button" format="boolean" />
-        <attr name="message_icon" format="reference" />
-        <attr name="message_icon_color" format="reference" />
-        <attr name="message_stroke_color" format="color" />
-        <attr name="message_background_tint" format="color" />
-        <attr name="message_card_radius" format="reference" />
-    </declare-styleable>
     <declare-styleable name="StatusView">
         <attr name="status_title" format="string" />
         <attr name="status_subtitle" format="string" />
@@ -53,9 +42,6 @@
         <attr name="profile_item_title" format="string" />
         <attr name="profile_item_subtitle" format="string" />
         <attr name="profile_item_icon" format="reference" />
-    </declare-styleable>
-    <declare-styleable name="HeaderView">
-        <attr name="header_title" format="string" />
     </declare-styleable>
     <declare-styleable name="RewardsQualityCardView">
         <attr name="reward_quality_title" format="string" />
