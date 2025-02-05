@@ -13,22 +13,27 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 
 class DevicePhotoRepositoryTest : BehaviorSpec({
     val dataSource = mockk<DevicePhotoDataSource>()
     val repo = DevicePhotoRepositoryImpl(dataSource)
 
     val deviceId = "deviceId"
-    val uploadIds = listOf("uploadId")
+    val uploadId = "uploadId"
+    val uploadIds = listOf(uploadId)
     val photoName = "photo.jpg"
     val photoPath = "path/to/$photoName"
     val uuidNameOfPhoto = "72acded3-acd4-3e4c-8b6e-d680854b8ab1.jpg"
     val metadata = listOf<PhotoPresignedMetadata>()
     val devicePhotos = listOf<String>()
+    val uploadRequest = mockk<MultipartUploadRequest>()
 
     beforeSpec {
         justRun { dataSource.setAcceptedTerms() }
+        justRun { dataSource.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, uploadRequest) }
         every { dataSource.getDevicePhotoUploadIds(deviceId) } returns uploadIds
+        every { dataSource.getUploadIdRequest(uploadId) } returns uploadRequest
     }
 
     context("Get device photos") {
@@ -116,6 +121,25 @@ class DevicePhotoRepositoryTest : BehaviorSpec({
         given("a device ID") {
             then("return the list of upload IDs") {
                 repo.getDevicePhotoUploadIds(deviceId) shouldBe uploadIds
+            }
+        }
+    }
+
+    context("Add a device photo along with an upload ID") {
+        given("save through the respective function") {
+            repo.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, uploadRequest)
+            then("save them in cache") {
+                verify(exactly = 1) {
+                    dataSource.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, uploadRequest)
+                }
+            }
+        }
+    }
+
+    context("Get the upload ID's request") {
+        given("an upload ID") {
+            then("return that request") {
+                repo.getUploadIdRequest(uploadId) shouldBe uploadRequest
             }
         }
     }

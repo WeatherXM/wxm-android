@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 
 class DevicePhotoUseCaseTest : BehaviorSpec({
     val repo = mockk<DevicePhotoRepository>()
@@ -20,13 +21,17 @@ class DevicePhotoUseCaseTest : BehaviorSpec({
 
     val deviceId = "deviceId"
     val photoPath = "photoPath"
+    val uploadId = "uploadId"
     val devicePhotos = listOf<String>()
-    val uploadIds = listOf("uploadId")
+    val uploadIds = listOf(uploadId)
     val photoMetadata = listOf<PhotoPresignedMetadata>()
+    val uploadRequest = mockk<MultipartUploadRequest>()
 
     beforeSpec {
         justRun { repo.setAcceptedTerms() }
         every { repo.getDevicePhotoUploadIds(deviceId) } returns uploadIds
+        every { uploadRequest.setUploadID(uploadId) } returns uploadRequest
+        every { uploadRequest.startUpload() } returns uploadId
     }
 
     context("Get device photos") {
@@ -115,6 +120,19 @@ class DevicePhotoUseCaseTest : BehaviorSpec({
                 then("ensure that the SET takes place in the repository") {
                     usecase.setAcceptedTerms()
                     verify(exactly = 1) { repo.setAcceptedTerms() }
+                }
+            }
+        }
+    }
+
+    context("Retry an upload") {
+        given("Some Upload IDs associated with a deviceId") {
+            and("the upload request associated with that upload ID") {
+                every { repo.getUploadIdRequest(uploadId) } returns uploadRequest
+                then("restart those uploads") {
+                    usecase.retryUpload(deviceId)
+                    verify(exactly = 1) { uploadRequest.setUploadID(uploadId) }
+                    verify(exactly = 1) { uploadRequest.startUpload() }
                 }
             }
         }

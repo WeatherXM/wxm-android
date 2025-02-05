@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 
 class DevicePhotoDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
@@ -23,8 +24,10 @@ class DevicePhotoDataSourceTest : BehaviorSpec({
     val deviceId = "deviceId"
     val photoName = "photoName"
     val emptyListString = listOf<String>()
-    val uploadIds = listOf("uploadIds")
+    val uploadId = "uploadId"
+    val uploadIds = listOf(uploadId)
     val photosMetadata = listOf<PhotoPresignedMetadata>()
+    val uploadRequest = mockk<MultipartUploadRequest>()
     val devicePhotosResponse = NetworkResponse.Success<List<String>, ErrorResponse>(
         emptyListString,
         retrofitResponse(emptyListString)
@@ -37,7 +40,10 @@ class DevicePhotoDataSourceTest : BehaviorSpec({
 
     beforeSpec {
         justRun { cacheService.setPhotoVerificationAcceptedTerms() }
+        justRun { cacheService.setUploadIdRequest(uploadId, uploadRequest) }
+        justRun { cacheService.addDevicePhotoUploadId(deviceId, uploadId) }
         every { cacheService.getDevicePhotoUploadIds(deviceId) } returns uploadIds
+        every { cacheService.getUploadIdRequest(uploadId) } returns uploadRequest
     }
 
     context("Get device photos") {
@@ -110,6 +116,24 @@ class DevicePhotoDataSourceTest : BehaviorSpec({
         given("a device ID") {
             then("return the list of upload IDs") {
                 datasource.getDevicePhotoUploadIds(deviceId) shouldBe uploadIds
+            }
+        }
+    }
+
+    context("Add a device photo along with an upload ID") {
+        given("save through the respective function in the DataSource") {
+            datasource.addDevicePhotoUploadIdAndRequest(deviceId, uploadId, uploadRequest)
+            then("save them in cache") {
+                verify(exactly = 1) { cacheService.setUploadIdRequest(uploadId, uploadRequest) }
+                verify(exactly = 1) { cacheService.addDevicePhotoUploadId(deviceId, uploadId) }
+            }
+        }
+    }
+
+    context("Get the Multipart Upload Request") {
+        given("an upload ID") {
+            then("return that request") {
+                datasource.getUploadIdRequest(uploadId) shouldBe uploadRequest
             }
         }
     }

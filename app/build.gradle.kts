@@ -367,12 +367,14 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/components/HidingBottomNavigationView*.*",
         "**/ui/components/DateNavigator*.class",
         "**/ui/components/DatePicker.class",
+        "**/ui/devicesettings/DevicePhotosView*.*",
         "**/ui/widgets/RemoteViews*.*",
         "**/ui/widgets/currentweather/*.*",
         "**/ui/Navigator.class",
         "**/util/ChartsKt*.*",
         "**/util/ImageFileHelperKt*.*",
         "**/util/CountDownTimerHelper*.*",
+        "**/util/ImageFileHelper*.*",
         "**/BuildConfig.class"
     )
     val debugTree = fileTree(

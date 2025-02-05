@@ -68,6 +68,11 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
                         viewModel.onPhotosNumber().value shouldBe photosListWithOneLocalPhoto.size
                     }
                 }
+                and("the number of local photos should be one") {
+                    then("getLocalPhotosNumber should return 1") {
+                        viewModel.getLocalPhotosNumber() shouldBe photosListWithOneLocalPhoto.size
+                    }
+                }
             }
         }
     }
