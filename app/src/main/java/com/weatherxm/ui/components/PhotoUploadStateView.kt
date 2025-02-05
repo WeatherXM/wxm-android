@@ -38,7 +38,7 @@ fun PhotoUploadState(state: UploadPhotosState, showStationName: Boolean) {
                 )
                 if (state.isSuccess) {
                     Text(
-                        text = stringResource(R.string.completed),
+                        text = stringResource(R.string.photo_upload_completed),
                         style = MaterialTheme.typography.bodyMedium,
                         color = colorResource(R.color.colorOnSurface)
                     )
