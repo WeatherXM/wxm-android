@@ -33,6 +33,7 @@ import com.weatherxm.ui.common.swipeToDismiss
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.compose.InfoBannerView
 import com.weatherxm.ui.components.PhotoUploadState
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.ImageFileHelper.deleteAllStationPhotos
@@ -111,23 +112,28 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     private fun onInfoBanner(infoBanner: InfoBanner?) {
         if (infoBanner != null) {
-            binding.infoBanner
-                .title(infoBanner.title)
-                .message(infoBanner.message)
-                .action(infoBanner.actionLabel, infoBanner.showActionButton) {
-                    analytics.trackEventSelectContent(
-                        contentType = AnalyticsService.ParamValue.ANNOUNCEMENT_BUTTON.paramValue,
-                        Pair(FirebaseAnalytics.Param.ITEM_ID, infoBanner.url)
-                    )
-                    navigator.openWebsite(context, infoBanner.url)
-                }
-                .close(infoBanner.showCloseButton) {
-                    parentModel.dismissInfoBanner(infoBanner.id)
-                    binding.contentContainerCard.setCardRadius(0F, 0F, 0F, 0F)
-                    binding.infoBanner.visible(false)
-                }
-                .visible(true)
-
+            binding.infoBanner.setContent {
+                InfoBannerView(
+                    title = infoBanner.title,
+                    subtitle = infoBanner.message,
+                    actionLabel = infoBanner.actionLabel,
+                    showActionButton = infoBanner.showActionButton,
+                    showCloseButton = infoBanner.showCloseButton,
+                    onAction = {
+                        analytics.trackEventSelectContent(
+                            contentType = AnalyticsService.ParamValue.ANNOUNCEMENT_BUTTON.paramValue,
+                            Pair(FirebaseAnalytics.Param.ITEM_ID, infoBanner.url)
+                        )
+                        navigator.openWebsite(context, infoBanner.url)
+                    },
+                    onClose = {
+                        parentModel.dismissInfoBanner(infoBanner.id)
+                        binding.contentContainerCard.setCardRadius(0F, 0F, 0F, 0F)
+                        binding.infoBanner.visible(false)
+                    }
+                )
+            }
+            binding.infoBanner.visible(true)
             val radius = resources.getDimension(R.dimen.radius_large)
             binding.contentContainerCard.setCardRadius(radius, radius, 0F, 0F)
         } else if (binding.infoBanner.isVisible) {

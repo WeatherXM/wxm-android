@@ -3,6 +3,7 @@ package com.weatherxm.ui.common
 import com.weatherxm.BuildConfig
 
 object Contracts {
+    const val LOADING_DELAY = 200L
     const val EMPTY_VALUE = "?"
     const val DEGREES_MARK = "°"
     const val NOT_AVAILABLE_VALUE = "N/A"

@@ -349,40 +349,19 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
-    fun showClaimWifiFlow(
+    fun showClaimFlow(
         activityResultLauncher: ActivityResultLauncher<Intent>?,
         context: Context,
         deviceType: DeviceType
     ) {
-        val intent = Intent(context, ClaimWifiActivity::class.java)
+        val activity = when (deviceType) {
+            DeviceType.M5_WIFI, DeviceType.D1_WIFI -> ClaimWifiActivity::class.java
+            DeviceType.PULSE_4G -> ClaimPulseActivity::class.java
+            DeviceType.HELIUM -> ClaimHeliumActivity::class.java
+        }
+        val intent = Intent(context, activity)
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .putExtra(ARG_DEVICE_TYPE, deviceType as Parcelable)
-        if (activityResultLauncher == null) {
-            context.startActivity(intent)
-        } else {
-            activityResultLauncher.launch(intent)
-        }
-    }
-
-    fun showClaimHeliumFlow(
-        activityResultLauncher: ActivityResultLauncher<Intent>?,
-        context: Context
-    ) {
-        val intent = Intent(context, ClaimHeliumActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        if (activityResultLauncher == null) {
-            context.startActivity(intent)
-        } else {
-            activityResultLauncher.launch(intent)
-        }
-    }
-
-    fun showClaimPulseFlow(
-        activityResultLauncher: ActivityResultLauncher<Intent>?,
-        context: Context
-    ) {
-        val intent = Intent(context, ClaimPulseActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         if (activityResultLauncher == null) {
             context.startActivity(intent)
         } else {

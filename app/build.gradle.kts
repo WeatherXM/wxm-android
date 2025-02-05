@@ -359,6 +359,7 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/**/*CardView*.*",
         "**/ui/common/Animation*.*",
         "**/ui/common/Views*.*",
+        "**/ui/components/compose/**",
         "**/ui/components/Base*.*",
         "**/ui/components/*View.*",
         "**/ui/components/ChartsView*.*",
@@ -423,6 +424,8 @@ dependencies {
     implementation(libs.androidx.collection.ktx)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.preview)
+    implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.androidx.core.ktx)

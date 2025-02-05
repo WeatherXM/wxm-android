@@ -143,12 +143,13 @@
                         app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle"
                         tools:text="389,023.54 $WXM" />
 
-                    <com.weatherxm.ui.components.RangeSelectorView
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/totalEarnedRangeSelector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:composableName="com.weatherxm.ui.components.compose.RangeSelectorViewKt.RangeSelectorView" />
 
                     <com.weatherxm.ui.components.EmptyView
                         android:id="@+id/totalEarnedStatus"
@@ -160,7 +161,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector" />
 
-                    <com.weatherxm.ui.components.RetryCardView
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/retryCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -168,6 +169,7 @@
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector"
+                        tools:composableName="com.weatherxm.ui.devicesrewards.DevicesRewardsActivityKt.PreviewRetryCard"
                         tools:visibility="visible" />
 
                     <com.github.mikephil.charting.charts.LineChart
@@ -226,7 +228,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/darkGrey"
             tools:ignore="ContentDescription" />
-
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"

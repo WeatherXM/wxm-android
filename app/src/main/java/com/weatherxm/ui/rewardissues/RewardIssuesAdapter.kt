@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.models.RewardsAnnotationGroup
-import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ListItemRewardIssueBinding
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.components.compose.RewardIssueView
 
 class RewardIssuesAdapter(
     private val device: UIDevice,
@@ -36,47 +36,43 @@ class RewardIssuesAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: RewardsAnnotationGroup) {
-            with(binding.annotationCard) {
-                when (item.severityLevel) {
-                    SeverityLevel.INFO -> {
-                        setBackground(R.color.blueTint)
-                        setStrokeColor(R.color.infoStrokeColor)
-                    }
-                    SeverityLevel.WARNING -> {
-                        setBackground(R.color.warningTint)
-                        setStrokeColor(R.color.warning)
-                    }
-                    SeverityLevel.ERROR -> {
-                        setBackground(R.color.errorTint)
-                        setStrokeColor(R.color.error)
-                    }
-                    else -> {
-                        setBackground(R.color.blueTint)
-                        setStrokeColor(R.color.infoStrokeColor)
-                    }
-                }
-                title(item.title)
-                message(item.message)
-                setAction(item.toAnnotationGroupCode(), item.docUrl)
+            val (actionLabel, actionToRun) = getAction(
+                item.toAnnotationGroupCode(),
+                item.docUrl
+            )?.run {
+                first to second
+            } ?: (null to null)
+
+            binding.annotationCard.setContent {
+                RewardIssueView(
+                    title = item.title,
+                    subtitle = item.message,
+                    action = actionLabel,
+                    severityLevel = item.severityLevel,
+                    onClickListener = actionToRun
+                )
             }
         }
 
-        private fun setAction(code: AnnotationGroupCode?, docUrl: String?) {
-            with(itemView.context) {
+        private fun getAction(
+            code: AnnotationGroupCode?,
+            docUrl: String?
+        ): Pair<String, () -> Unit>? {
+            return with(itemView.context) {
                 if (code == AnnotationGroupCode.NO_WALLET && device.isOwned()) {
-                    binding.annotationCard.action(getString(R.string.add_wallet_now)) {
-                        listener.onAddWallet(code.toString())
-                    }
+                    Pair(
+                        getString(R.string.add_wallet_now)
+                    ) { listener.onAddWallet(code.toString()) }
                 } else if (code == AnnotationGroupCode.LOCATION_NOT_VERIFIED && device.isOwned()) {
-                    binding.annotationCard.action(getString(R.string.edit_location)) {
-                        listener.onEditLocation(device, code.toString())
-                    }
+                    Pair(
+                        getString(R.string.edit_location)
+                    ) { listener.onEditLocation(device, code.toString()) }
                 } else if (!docUrl.isNullOrEmpty()) {
-                    binding.annotationCard.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(docUrl, code.toString())
-                    }
+                    Pair(
+                        getString(R.string.read_more)
+                    ) { listener.onDocumentation(docUrl, code.toString()) }
                 } else {
-                    // Do nothing
+                    null
                 }
             }
         }

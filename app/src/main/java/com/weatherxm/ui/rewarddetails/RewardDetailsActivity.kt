@@ -28,6 +28,8 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.HeaderView
+import com.weatherxm.ui.components.compose.RewardIssueView
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Rewards.isPoL
@@ -64,10 +66,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         }
 
         rewardDate = reward.timestamp.getFormattedDate(true)
-        val subtitle = "${getString(R.string.earnings_for, rewardDate)} (UTC)"
-        binding.header
-            .subtitle(subtitle)
-            .infoButton {
+        binding.header.setContent {
+            HeaderView(
+                title = getString(R.string.daily_reward),
+                subtitle = "${getString(R.string.earnings_for, rewardDate)} (UTC)"
+            ) {
                 onMessageDialog(
                     AnalyticsService.ParamValue.INFO_DAILY_REWARDS.paramValue,
                     getString(R.string.daily_reward),
@@ -76,6 +79,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                     analyticsScreen = AnalyticsService.Screen.DAILY_REWARD_INFO
                 )
             }
+        }
 
         model.onRewardDetails().observe(this) {
             when (it.status) {
@@ -342,62 +346,53 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.statusView.visible(true)
     }
 
-    private fun onIssueCard(
+    private fun onIssueCard(issue: RewardsAnnotationGroup, hasMoreThanOneIssues: Boolean) {
+        val (actionLabel, actionToRun) = getIssueAction(issue, hasMoreThanOneIssues)?.run {
+            first to second
+        } ?: (null to null)
+
+        binding.issueCard.setContent {
+            RewardIssueView(
+                title = issue.title,
+                subtitle = issue.message,
+                action = actionLabel,
+                severityLevel = issue.severityLevel,
+                onClickListener = actionToRun
+            )
+        }
+        binding.issueCard.visible(true)
+    }
+
+    private fun getIssueAction(
         issue: RewardsAnnotationGroup,
         hasMoreThanOneIssues: Boolean
-    ) {
-        val strokeColor: Int
-        val backgroundColor: Int
-        when (issue.severityLevel) {
-            SeverityLevel.INFO -> {
-                strokeColor = R.color.infoStrokeColor
-                backgroundColor = R.color.blueTint
-            }
-            SeverityLevel.WARNING -> {
-                strokeColor = R.color.warning
-                backgroundColor = R.color.warningTint
-            }
-            SeverityLevel.ERROR -> {
-                strokeColor = R.color.error
-                backgroundColor = R.color.errorTint
-            }
-            else -> {
-                strokeColor = R.color.infoStrokeColor
-                backgroundColor = R.color.blueTint
-            }
-        }
-
-        binding.issueCard
-            .setStrokeColor(strokeColor)
-            .setBackground(backgroundColor)
-            .title(issue.title)
-            .message(issue.message)
-
-        if (hasMoreThanOneIssues) {
-            binding.issueCard.action(getString(R.string.action_view_all_issues)) {
+    ): Pair<String, () -> Unit>? {
+        return if (hasMoreThanOneIssues) {
+            Pair(getString(R.string.action_view_all_issues)) {
                 navigator.showRewardIssues(this, model.device, model.onRewardDetails().value?.data)
             }
         } else {
             val code = issue.toAnnotationGroupCode()
             if (code == AnnotationGroupCode.NO_WALLET && model.device.isOwned()) {
-                binding.issueCard.action(getString(R.string.add_wallet_now)) {
+                Pair(getString(R.string.add_wallet_now)) {
                     navigator.showConnectWallet(this)
                 }
             } else if (code == LOCATION_NOT_VERIFIED && model.device.isOwned()) {
-                binding.issueCard.action(getString(R.string.edit_location)) {
+                Pair(getString(R.string.edit_location)) {
                     navigator.showEditLocation(null, this, model.device)
                 }
             } else if (!issue.docUrl.isNullOrEmpty()) {
-                binding.issueCard.action(getString(R.string.read_more)) {
+                Pair(getString(R.string.read_more)) {
                     analytics.trackEventSelectContent(
                         AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
                         Pair(FirebaseAnalytics.Param.ITEM_ID, issue.docUrl)
                     )
                     navigator.openWebsite(this, issue.docUrl)
                 }
+            } else {
+                null
             }
         }
-        binding.issueCard.visible(true)
     }
 
     private fun onMessageDialog(
