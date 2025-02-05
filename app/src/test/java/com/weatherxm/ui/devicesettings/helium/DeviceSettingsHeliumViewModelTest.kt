@@ -26,6 +26,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
 import com.weatherxm.ui.devicesettings.UIDeviceInfoItem
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
@@ -45,6 +46,7 @@ import java.time.format.DateTimeFormatter
 
 class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
     val settingsUseCase = mockk<StationSettingsUseCase>()
+    val photosUseCase = mockk<DevicePhotoUseCase>()
     val userUseCase = mockk<UserUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -180,12 +182,25 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         viewModel = DeviceSettingsHeliumViewModel(
             device,
             settingsUseCase,
+            photosUseCase,
             userUseCase,
             authUseCase,
             resources,
             analytics,
             dispatcher
         )
+    }
+
+    context("Get Device Photos") {
+        given("a usecase returning the result of the photos") {
+            When("it's a success") {
+                coMockEitherRight({ photosUseCase.getDevicePhotos(device.id) }, listOf<String>())
+                runTest { viewModel.getDevicePhotos() }
+                then("LiveData onPhotos should post the List<String> created") {
+                    viewModel.onPhotos().value shouldBe listOf<String>()
+                }
+            }
+        }
     }
 
     context("Get Device Info") {

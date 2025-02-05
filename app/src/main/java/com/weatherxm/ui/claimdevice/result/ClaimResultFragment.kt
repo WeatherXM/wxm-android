@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimResultBinding
@@ -21,6 +22,7 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -111,20 +113,35 @@ class ClaimResultFragment : BaseFragment() {
                     )
                 val device = resource.data
                 if (device != null) {
-                    binding.goToStationBtn.setOnClickListener {
-                        analytics.trackEventUserAction(
-                            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+                    binding.skipAndGoToStationBtn.setOnClickListener {
+                        ActionDialogFragment.createSkipPhotoVerification(requireContext()) {
+                            analytics.trackEventUserAction(
+                                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+                                Pair(
+                                    AnalyticsService.CustomParam.ACTION.paramName,
+                                    AnalyticsService.ParamValue.VIEW_STATION.paramValue
+                                )
+                            )
+                            navigator.showDeviceDetails(activity, device = device)
+                            activity?.setResult(Activity.RESULT_OK)
+                            activity?.finish()
+                        }.show(this)
+                    }
+                    binding.photoVerificationBtn.setOnClickListener {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
                             Pair(
-                                AnalyticsService.CustomParam.ACTION.paramName,
-                                AnalyticsService.ParamValue.VIEW_STATION.paramValue
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.CLAIMING_ID.paramValue
                             )
                         )
-                        navigator.showDeviceDetails(activity, device = device)
+                        navigator.showPhotoVerificationIntro(context, device)
                         activity?.setResult(Activity.RESULT_OK)
                         activity?.finish()
                     }
-                    binding.goToStationBtn.visible(true)
+                    binding.skipAndGoToStationBtn.visible(true)
+                    binding.photoVerificationBtn.visible(true)
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,

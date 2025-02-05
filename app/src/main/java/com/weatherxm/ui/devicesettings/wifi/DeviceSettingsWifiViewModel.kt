@@ -19,6 +19,7 @@ import com.weatherxm.ui.devicesettings.BaseDeviceSettingsViewModel
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
 import com.weatherxm.ui.devicesettings.UIDeviceInfoItem
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
@@ -33,12 +34,13 @@ import timber.log.Timber
 class DeviceSettingsWifiViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
+    private val photosUseCase: DevicePhotoUseCase,
     private val userUseCase: UserUseCase,
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : BaseDeviceSettingsViewModel(device, usecase, resources, analytics, dispatcher) {
+) : BaseDeviceSettingsViewModel(device, usecase, photosUseCase, resources, analytics, dispatcher) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 
     private lateinit var data: UIDeviceInfo
@@ -74,6 +76,7 @@ class DeviceSettingsWifiViewModel(
                 handleInfo(context, info)
                 onDeviceInfo.postValue(data)
             }
+            super.getDevicePhotos()
             onLoading.postValue(false)
         }
     }

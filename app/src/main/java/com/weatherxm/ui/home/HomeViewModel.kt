@@ -10,6 +10,7 @@ import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val userUseCase: UserUseCase,
     private val remoteBannersUseCase: RemoteBannersUseCase,
+    private val photoUseCase: DevicePhotoUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
@@ -113,4 +115,6 @@ class HomeViewModel(
 
     fun shouldShowTermsPrompt() = userUseCase.shouldShowTermsPrompt()
     fun setAcceptTerms() = userUseCase.setAcceptTerms()
+
+    fun retryPhotoUpload(deviceId: String) = photoUseCase.retryUpload(deviceId)
 }

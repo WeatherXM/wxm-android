@@ -158,14 +158,81 @@
                         android:layout_height="match_parent"
                         android:clipChildren="false">
 
-                        <com.weatherxm.ui.components.MessageCardView
-                            android:id="@+id/walletWarning"
+                        <androidx.coordinatorlayout.widget.CoordinatorLayout
+                            android:id="@+id/uploadStateContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_normal"
                             android:layout_marginTop="@dimen/margin_normal_to_large"
                             android:visibility="gone"
                             app:layout_constraintTop_toTopOf="parent"
+                            tools:visibility="visible">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/uploadStateCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardElevation="@dimen/elevation_normal"
+                                app:contentPadding="@dimen/padding_normal">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <FrameLayout
+                                        android:id="@+id/uploadAnimationContainer"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        tools:ignore="TooDeepLayout">
+
+                                        <com.airbnb.lottie.LottieAnimationView
+                                            android:id="@+id/uploadAnimation"
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:layout_gravity="center"
+                                            app:lottie_autoPlay="true"
+                                            app:lottie_loop="true"
+                                            app:lottie_rawRes="@raw/anim_uploading"
+                                            tools:ignore="TooDeepLayout" />
+
+                                        <ImageView
+                                            android:id="@+id/uploadRetryIcon"
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:layout_gravity="center"
+                                            android:importantForAccessibility="no"
+                                            android:src="@drawable/ic_retry"
+                                            android:visibility="gone"
+                                            app:tint="@color/colorPrimary"
+                                            tools:visibility="visible" />
+                                    </FrameLayout>
+
+                                    <androidx.compose.ui.platform.ComposeView
+                                        android:id="@+id/uploadStateView"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/margin_small_to_normal"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@id/uploadAnimationContainer"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+                        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                        <com.weatherxm.ui.components.MessageCardView
+                            android:id="@+id/walletWarning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/uploadStateContainer"
                             app:message_background_tint="@color/warningTint"
                             app:message_icon="@drawable/ic_warning_hex_filled"
                             app:message_includes_close_button="true"

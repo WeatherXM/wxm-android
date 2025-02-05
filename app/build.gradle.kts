@@ -357,8 +357,10 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/**/*Adapter*.*",
         "**/ui/**/*DiffCallback*.*",
         "**/ui/**/*CardView*.*",
-        "**/ui/common/Animation*.*",
-        "**/ui/common/Views*.*",
+        "**/ui/common/*Animation*.*",
+        "**/ui/common/*Views*.*",
+        "**/ui/common/*AnimationKt.*",
+        "**/ui/common/*ViewsKt.*",
         "**/ui/components/compose/**",
         "**/ui/components/Base*.*",
         "**/ui/components/*View.*",
@@ -367,11 +369,14 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/components/HidingBottomNavigationView*.*",
         "**/ui/components/DateNavigator*.class",
         "**/ui/components/DatePicker.class",
+        "**/ui/devicesettings/DevicePhotosView*.*",
         "**/ui/widgets/RemoteViews*.*",
         "**/ui/widgets/currentweather/*.*",
         "**/ui/Navigator.class",
         "**/util/ChartsKt*.*",
+        "**/util/ImageFileHelperKt*.*",
         "**/util/CountDownTimerHelper*.*",
+        "**/util/ImageFileHelper*.*",
         "**/BuildConfig.class"
     )
     val debugTree = fileTree(
@@ -528,9 +533,14 @@ dependencies {
     // Image Loader
     implementation(libs.coil.core)
     implementation(libs.coil.gif)
+    implementation(libs.coil.compose)
     implementation(libs.coil.network)
 
     // Chucker - HTTP Inspector
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
+
+    // Upload Service
+    implementation(libs.upload.service)
+    implementation(libs.upload.service.okhttp)
 }

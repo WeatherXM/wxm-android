@@ -1,6 +1,7 @@
 package com.weatherxm.ui.common
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
@@ -170,6 +171,14 @@ data class UIDevice(
     fun isHelium() = connectivity == "helium"
     fun isWifi() = connectivity == "wifi"
     fun isCellular() = connectivity == "cellular"
+
+    fun normalizedName(): String {
+        return if (!isEmpty()) {
+            name.replace(" ", "-").lowercase()
+        } else {
+            String.empty()
+        }
+    }
 }
 
 @Keep
@@ -604,9 +613,34 @@ data class DeviceTotalRewardsBoost(
 ) : Parcelable
 
 @Keep
+@JsonClass(generateAdapter = true)
+data class PhotoExample(
+    @DrawableRes val image: Int,
+    val feedbackResId: List<Int>,
+    val isGoodExample: Boolean
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class StationPhoto(
+    val remotePath: String?,
+    val localPath: String?
+) : Parcelable
+
+@Keep
 data class WeatherUnit(
     val type: WeatherUnitType,
     val unit: String
+)
+
+@Keep
+data class UploadPhotosState(
+    val device: UIDevice,
+    val progress: Int,
+    val isSuccess: Boolean,
+    val isError: Boolean,
+    val isCancelled: Boolean = false
 )
 
 enum class RewardTimelineType {

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
@@ -40,7 +41,11 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
+import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
+import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
+import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
@@ -76,6 +81,9 @@ import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
+import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
+import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
+import com.weatherxm.ui.photoverification.upload.PhotoUploadActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewardboosts.RewardBoostActivity
@@ -86,7 +94,9 @@ import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
+import com.weatherxm.util.ImageFileHelper.getUriForFile
 import timber.log.Timber
+import java.io.File
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
@@ -226,11 +236,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     }
 
     fun openShare(context: Context, text: String) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+        with(Intent()) {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+            context.startActivity(Intent.createChooser(this, context.getString(R.string.share)))
+        }
+    }
+
+    fun openShareImages(context: Context, photoUris: ArrayList<Uri>) {
+        with(Intent()) {
+            action = Intent.ACTION_SEND_MULTIPLE
+            type = "image/*"
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, photoUris)
+            context.startActivity(Intent.createChooser(this, context.getString(R.string.share)))
+        }
     }
 
     fun showDeleteAccountSurvey(
@@ -349,23 +369,18 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun showDeviceHeliumOTA(fragment: Fragment, device: UIDevice?, deviceIsBleConnected: Boolean) {
-        fragment.context?.let {
-            it.startActivity(
-                Intent(it, DeviceHeliumOTAActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_DEVICE, device)
-                    .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
-            )
-        }
-    }
-
-    fun showDeviceHeliumOTA(context: Context, device: UIDevice?, deviceIsBleConnected: Boolean) {
-        context.startActivity(
+    fun showDeviceHeliumOTA(
+        context: Context?,
+        device: UIDevice?,
+        deviceIsBleConnected: Boolean = false,
+        needsPhotoVerification: Boolean = false
+    ) {
+        context?.startActivity(
             Intent(context, DeviceHeliumOTAActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
                 .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
+                .putExtra(ARG_NEEDS_PHOTO_VERIFICATION, needsPhotoVerification)
         )
     }
 
@@ -471,6 +486,57 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
+    fun showPhotoVerificationIntro(
+        context: Context?,
+        device: UIDevice,
+        photos: ArrayList<String> = arrayListOf(),
+        instructionsOnly: Boolean = false
+    ) {
+        context?.let {
+            it.startActivity(
+                Intent(it, PhotoVerificationIntroActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
+                    .putStringArrayListExtra(ARG_PHOTOS, photos)
+                    .putExtra(ARG_INSTRUCTIONS_ONLY, instructionsOnly)
+            )
+        }
+    }
+
+    fun showPhotoGallery(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context,
+        device: UIDevice,
+        photos: ArrayList<String>,
+        newPhotoVerification: Boolean
+    ) {
+        val intent = Intent(context, PhotoGalleryActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_DEVICE, device)
+            .putStringArrayListExtra(ARG_PHOTOS, photos)
+            .putExtra(ARG_NEW_PHOTO_VERIFICATION, newPhotoVerification)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
+    }
+
+    fun showPhotoUpload(
+        context: Context?,
+        device: UIDevice,
+        photos: ArrayList<String>
+    ) {
+        context?.let {
+            it.startActivity(
+                Intent(it, PhotoUploadActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
+                    .putStringArrayListExtra(ARG_PHOTOS, photos)
+            )
+        }
+    }
+
     @Suppress("LongParameterList")
     fun showMessageDialog(
         fragmentManager: FragmentManager,
@@ -562,6 +628,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Timber.d(e, "Could not open support center.")
                 it.toast(R.string.error_cannot_open_support_center)
             }
+        }
+    }
+
+    fun openCamera(launcher: ActivityResultLauncher<Intent>, context: Context, destFile: File) {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, destFile.getUriForFile(context))
+            launcher.launch(takePictureIntent)
         }
     }
 

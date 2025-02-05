@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimHeliumResultBinding
@@ -18,6 +19,7 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -144,6 +146,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
         when (resource.status) {
             Status.SUCCESS -> {
                 val device = resource.data
+                hideButtons()
                 if (device != null && device.isHelium() && device.shouldPromptUpdate()) {
                     analytics.trackEventPrompt(
                         AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
@@ -153,27 +156,26 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     binding.updateBtn.setOnClickListener {
                         onUpdate(device)
                     }
-                    binding.viewStationSecondaryBtn.setOnClickListener {
+                    initPhotoVerificationBtn(device)
+                    binding.skipAndGoToStationBtn.setOnClickListener {
                         showConfirmBypassOTADialog(device)
                     }
-                    binding.status.clear()
-                        .animation(R.raw.anim_success, false)
-                        .title(R.string.station_claimed)
-                        .htmlSubtitle(getString(R.string.success_claim_device, device.name))
-                    binding.firmwareUpdateButtonsContainer.visible(true)
+                    binding.infoMessage.setHtml(R.string.update_prompt_on_claiming_flow)
                     binding.informationCard.visible(true)
                 } else if (device != null) {
-                    hideButtons()
-                    binding.steps.visible(false)
-                    binding.viewStationPrimaryBtn.setOnClickListener {
-                        onViewDevice(device)
+                    initPhotoVerificationBtn(device)
+                    binding.skipAndGoToStationBtn.setOnClickListener {
+                        ActionDialogFragment.createSkipPhotoVerification(requireContext()) {
+                            onViewDevice(device)
+                        }.show(this)
                     }
-                    binding.viewStationPrimaryBtn.visible(true)
-                    binding.status.clear()
-                        .animation(R.raw.anim_success, false)
-                        .title(R.string.station_claimed)
-                        .htmlSubtitle(getString(R.string.success_claim_device, device.name))
                 }
+                binding.steps.visible(false)
+                binding.status.clear()
+                    .animation(R.raw.anim_success, false)
+                    .title(R.string.station_claimed)
+                    .htmlSubtitle(getString(R.string.success_claim_device, device?.name))
+                binding.successButtonsContainer.visible(true)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
@@ -244,7 +246,12 @@ class ClaimHeliumResultFragment : BaseFragment() {
             AnalyticsService.ParamValue.WARN.paramValue,
             AnalyticsService.ParamValue.ACTION.paramValue
         )
-        navigator.showDeviceHeliumOTA(this, device, true)
+        navigator.showDeviceHeliumOTA(
+            context,
+            device,
+            deviceIsBleConnected = true,
+            needsPhotoVerification = true
+        )
         activity?.finish()
     }
 
@@ -265,8 +272,22 @@ class ClaimHeliumResultFragment : BaseFragment() {
     }
 
     private fun hideButtons() {
-        binding.firmwareUpdateButtonsContainer.invisible()
         binding.failureButtonsContainer.invisible()
-        binding.viewStationPrimaryBtn.invisible()
+        binding.successButtonsContainer.invisible()
+    }
+
+    private fun initPhotoVerificationBtn(device: UIDevice) {
+        binding.photoVerificationBtn.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.SOURCE,
+                    AnalyticsService.ParamValue.CLAIMING_ID.paramValue
+                )
+            )
+            navigator.showPhotoVerificationIntro(context, device)
+            activity?.setResult(Activity.RESULT_OK)
+            activity?.finish()
+        }
     }
 }

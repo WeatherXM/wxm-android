@@ -78,6 +78,8 @@ import com.weatherxm.data.datasource.DeviceFrequencyDataSource
 import com.weatherxm.data.datasource.DeviceFrequencyDataSourceImpl
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
+import com.weatherxm.data.datasource.DevicePhotoDataSource
+import com.weatherxm.data.datasource.DevicePhotoDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
@@ -120,6 +122,8 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceOTARepositoryImpl
+import com.weatherxm.data.repository.DevicePhotoRepository
+import com.weatherxm.data.repository.DevicePhotoRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
@@ -155,6 +159,7 @@ import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepositoryImpl
 import com.weatherxm.data.services.CacheService
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.analytics.AnalyticsOptInViewModel
 import com.weatherxm.ui.cellinfo.CellInfoViewModel
@@ -191,6 +196,9 @@ import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
+import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
+import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
+import com.weatherxm.ui.photoverification.upload.PhotoUploadViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
 import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
@@ -221,6 +229,8 @@ import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.DeviceListUseCaseImpl
+import com.weatherxm.usecases.DevicePhotoUseCase
+import com.weatherxm.usecases.DevicePhotoUseCaseImpl
 import com.weatherxm.usecases.EditLocationUseCase
 import com.weatherxm.usecases.EditLocationUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
@@ -434,6 +444,9 @@ private val datasources = module {
     single<DeviceFrequencyDataSource> {
         DeviceFrequencyDataSourceImpl(get())
     }
+    single<DevicePhotoDataSource> {
+        DevicePhotoDataSourceImpl(get(), get())
+    }
 }
 
 private val repositories = module {
@@ -499,6 +512,9 @@ private val repositories = module {
     }
     single<RemoteBannersRepository> {
         RemoteBannersRepositoryImpl(get())
+    }
+    single<DevicePhotoRepository> {
+        DevicePhotoRepositoryImpl(get())
     }
 }
 
@@ -577,6 +593,9 @@ private val usecases = module {
     }
     single<UpdatePromptUseCase> {
         UpdatePromptUseCaseImpl(get())
+    }
+    single<DevicePhotoUseCase> {
+        DevicePhotoUseCaseImpl(get())
     }
 }
 
@@ -786,6 +805,12 @@ val clientIdentificationHelper = module {
     }
 }
 
+val uploadObserverService = module {
+    single {
+        GlobalUploadObserverService(get(), get())
+    }
+}
+
 val analytics = module {
     single<FirebaseAnalytics> {
         Firebase.analytics
@@ -924,12 +949,14 @@ private val viewmodels = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
     viewModel { params ->
         DeviceSettingsHeliumViewModel(
             device = params.get(),
+            get(),
             get(),
             get(),
             get(),
@@ -957,6 +984,7 @@ private val viewmodels = module {
         DeviceHeliumOTAViewModel(
             device = params.get(),
             deviceIsBleConnected = params.get(),
+            needsPhotoVerification = params.get(),
             get(),
             get(),
             get(),
@@ -974,7 +1002,7 @@ private val viewmodels = module {
     viewModel { DeviceEditLocationViewModel(get(), get(), get(), get()) }
     viewModel { DevicesViewModel(get(), get(), get(), get()) }
     viewModel { ExplorerViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
@@ -1019,6 +1047,18 @@ private val viewmodels = module {
     }
     viewModel { ClaimPulseViewModel(get(), get(), get()) }
     viewModel { DevicesRewardsViewModel(get(), get(), get()) }
+    viewModel { params ->
+        PhotoGalleryViewModel(
+            device = params.get(),
+            photos = params.get(),
+            fromClaiming = params.get(),
+            get()
+        )
+    }
+    viewModel { PhotoVerificationIntroViewModel(get()) }
+    viewModel { params ->
+        PhotoUploadViewModel(device = params.get(), photos = params.get(), get(), get(), get())
+    }
 }
 
 val modules = listOf(
@@ -1041,5 +1081,6 @@ val modules = listOf(
     clientIdentificationHelper,
     utilities,
     widgetHelper,
+    uploadObserverService,
     viewmodels
 )
