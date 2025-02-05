@@ -2,6 +2,8 @@ package com.weatherxm.ui.devicesrewards
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,6 +20,7 @@ import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.RangeSelectorView
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.initRewardsBreakdownChart
 import org.koin.core.component.KoinComponent
@@ -58,14 +61,22 @@ class DeviceRewardsAdapter(
         val adapter = DeviceRewardsBoostAdapter()
         private var ignoreRangeChipListener = false
 
+        private val selectedRangeChip = mutableIntStateOf(R.string.seven_days_abbr)
+        private val enabledRangeToggle = mutableStateOf(true)
+
         fun bind(item: DeviceTotalRewards) {
             binding.headerCard.setOnClickListener {
                 onExpandClick(item)
             }
 
-            binding.chartRangeSelector.listener {
-                if (!ignoreRangeChipListener) {
-                    onFetchNewData.invoke(item.id, absoluteAdapterPosition, it)
+            binding.chartRangeSelector.setContent {
+                RangeSelectorView(
+                    selectedChipLabelResId = selectedRangeChip.intValue,
+                    enabledToggle = enabledRangeToggle.value
+                ) {
+                    if (!ignoreRangeChipListener && selectedRangeChip.intValue != it) {
+                        onFetchNewData.invoke(item.id, absoluteAdapterPosition, it)
+                    }
                 }
             }
 
@@ -87,7 +98,7 @@ class DeviceRewardsAdapter(
                     onError(item.id)
                 }
                 Status.LOADING -> {
-                    binding.chartRangeSelector.disable()
+                    enabledRangeToggle.value = false
                     binding.detailsContainer.invisible()
                     binding.earnedBy.invisible()
                     binding.retryCard.visible(false)
@@ -99,8 +110,8 @@ class DeviceRewardsAdapter(
         private fun preCheckMode(mode: RewardsSummaryMode?) {
             ignoreRangeChipListener = true
             when (mode) {
-                RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
-                RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
+                RewardsSummaryMode.WEEK -> selectedRangeChip.intValue = R.string.seven_days_abbr
+                RewardsSummaryMode.MONTH -> selectedRangeChip.intValue = R.string.one_month_abbr
                 else -> throw NotImplementedError("Unknown rewards mode $mode")
             }.also {
                 ignoreRangeChipListener = false
@@ -126,7 +137,7 @@ class DeviceRewardsAdapter(
             binding.othersRewardsLegend.visible(details.otherChartData.isDataValid())
             binding.retryCard.visible(false)
             binding.detailsStatus.visible(false)
-            binding.chartRangeSelector.enable()
+            enabledRangeToggle.value = true
             binding.earnedBy.visible(true)
             binding.detailsContainer.visible(true)
         }
@@ -159,7 +170,7 @@ class DeviceRewardsAdapter(
                     onFetchNewData.invoke(
                         item.id,
                         absoluteAdapterPosition,
-                        binding.chartRangeSelector.checkedChipId()
+                        selectedRangeChip.intValue
                     )
                 } else {
                     binding.detailsWithLoadingContainer.show()
@@ -182,14 +193,16 @@ class DeviceRewardsAdapter(
             binding.detailsStatus.visible(false)
             binding.detailsContainer.invisible()
             binding.earnedBy.invisible()
-            binding.retryCard.listener {
-                onFetchNewData.invoke(
-                    deviceId,
-                    absoluteAdapterPosition,
-                    binding.chartRangeSelector.checkedChipId()
-                )
+            binding.retryCard.setContent {
+                RetryCard {
+                    onFetchNewData.invoke(
+                        deviceId,
+                        absoluteAdapterPosition,
+                        selectedRangeChip.intValue
+                    )
+                }
             }
-            binding.chartRangeSelector.enable()
+            enabledRangeToggle.value = true
             binding.retryCard.visible(true)
         }
     }

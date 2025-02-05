@@ -36,12 +36,12 @@
             android:layout_height="wrap_content"
             android:clipChildren="false">
 
-            <com.weatherxm.ui.components.HeaderView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:header_title="@string/reward_issues"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:composableName="com.weatherxm.ui.components.compose.HeaderViewKt.PreviewHeaderView" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
