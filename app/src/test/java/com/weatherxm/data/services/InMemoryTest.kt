@@ -76,6 +76,7 @@ class InMemoryTest(private val cacheService: CacheService) {
         return this
     }
 
+    @Suppress("LongMethod")
     fun test(behaviorSpec: BehaviorSpec) {
         behaviorSpec.testInMemoryEither(
             "Wallet Address",
