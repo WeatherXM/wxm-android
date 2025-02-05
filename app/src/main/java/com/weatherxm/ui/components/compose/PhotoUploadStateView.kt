@@ -1,4 +1,4 @@
-package com.weatherxm.ui.components
+package com.weatherxm.ui.components.compose
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

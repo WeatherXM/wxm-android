@@ -11,7 +11,7 @@ import com.weatherxm.databinding.ViewStationSettingsDevicePhotosBinding
 import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.components.PhotoUploadState
+import com.weatherxm.ui.components.compose.PhotoUploadState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

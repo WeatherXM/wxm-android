@@ -34,7 +34,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.compose.InfoBannerView
-import com.weatherxm.ui.components.PhotoUploadState
+import com.weatherxm.ui.components.compose.PhotoUploadState
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.ImageFileHelper.deleteAllStationPhotos
 import com.weatherxm.util.NumberUtils.formatTokens
@@ -121,7 +121,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     showCloseButton = infoBanner.showCloseButton,
                     onAction = {
                         analytics.trackEventSelectContent(
-                            contentType = AnalyticsService.ParamValue.ANNOUNCEMENT_BUTTON.paramValue,
+                            AnalyticsService.ParamValue.ANNOUNCEMENT_BUTTON.paramValue,
                             Pair(FirebaseAnalytics.Param.ITEM_ID, infoBanner.url)
                         )
                         navigator.openWebsite(context, infoBanner.url)
