@@ -181,7 +181,7 @@ class HomeViewModelTest : BehaviorSpec({
     context("Get if we should show the terms prompt or not") {
         given("A use case returning the result") {
             then("return that result") {
-                viewModel.shouldShowTermsPrompt() shouldBe true
+                viewModel.shouldShowTerms.value shouldBe true
             }
         }
     }
