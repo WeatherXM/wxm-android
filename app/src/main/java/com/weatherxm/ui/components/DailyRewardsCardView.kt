@@ -6,15 +6,20 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardsAnnotationGroup
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
+import com.weatherxm.ui.common.ActionForMessageView
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
+import com.weatherxm.ui.common.DataForMessageView
+import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.MessageCardView
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Rewards.getRewardIcon
@@ -166,34 +171,28 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         text: String,
         onViewDetails: (() -> Unit)? = null
     ) {
-        val strokeColor: Int
-        val backgroundColor: Int
-        when (severityLevel) {
-            SeverityLevel.ERROR -> {
-                strokeColor = R.color.error
-                backgroundColor = R.color.errorTint
-            }
-            SeverityLevel.WARNING -> {
-                strokeColor = R.color.warning
-                backgroundColor = R.color.warningTint
-            }
-            SeverityLevel.INFO -> {
-                strokeColor = R.color.infoStrokeColor
-                backgroundColor = R.color.blueTint
-            }
+        val strokeColor: Int = when (severityLevel) {
+            SeverityLevel.ERROR -> R.color.error
+            SeverityLevel.WARNING -> R.color.warning
+            SeverityLevel.INFO -> R.color.infoStrokeColor
         }
 
         binding.parentCard.setCardStroke(strokeColor, 2)
-        with(binding.annotationCard) {
-            setBackgroundColor(context.getColor(backgroundColor))
-            setBackground(backgroundColor)
-            htmlMessage(text)
-            if (onViewDetails != null) {
-                action(context.getString(R.string.view_reward_details)) {
-                    onViewDetails.invoke()
-                }
-            }
-            visible(true)
+
+        binding.annotationCard.setContent {
+            MessageCardView(
+                data = DataForMessageView(
+                    extraTopPadding = 24.dp,
+                    subtitle = SubtitleForMessageView(htmlMessageAsString = text),
+                    action = onViewDetails?.let {
+                        ActionForMessageView(label = R.string.view_reward_details) {
+                            onViewDetails.invoke()
+                        }
+                    },
+                    severityLevel = severityLevel
+                )
+            )
         }
+        binding.annotationCard.visible(true)
     }
 }

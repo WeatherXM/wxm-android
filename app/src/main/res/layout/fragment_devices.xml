@@ -225,7 +225,7 @@
                             </com.google.android.material.card.MaterialCardView>
                         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                        <com.weatherxm.ui.components.MessageCardView
+                        <androidx.compose.ui.platform.ComposeView
                             android:id="@+id/walletWarning"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -233,11 +233,7 @@
                             android:layout_marginTop="@dimen/margin_normal"
                             android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/uploadStateContainer"
-                            app:message_background_tint="@color/warningTint"
-                            app:message_icon="@drawable/ic_warning_hex_filled"
-                            app:message_includes_close_button="true"
-                            app:message_message="@string/wallet_address_missing_desc"
-                            app:message_title="@string/wallet_address_missing"
+                            tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardView"
                             tools:visibility="visible" />
 
                         <com.google.android.material.textview.MaterialTextView

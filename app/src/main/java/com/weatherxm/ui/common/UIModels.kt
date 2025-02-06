@@ -3,10 +3,13 @@ package com.weatherxm.ui.common
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.HourlyWeather
@@ -641,6 +644,39 @@ data class UploadPhotosState(
     val isSuccess: Boolean,
     val isError: Boolean,
     val isCancelled: Boolean = false
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class DataForMessageView(
+    val extraTopPadding: Dp = 0.dp,
+    val title: Int? = null,
+    val subtitle: SubtitleForMessageView? = null,
+    val drawable: Int? = null,
+    val action: ActionForMessageView? = null,
+    val useStroke: Boolean = false,
+    val severityLevel: SeverityLevel = SeverityLevel.INFO,
+    val onCloseListener: (() -> Unit)? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class SubtitleForMessageView(
+    val message: Int? = null,
+    val htmlMessage: Int? = null,
+    val htmlMessageAsString: String? = null,
+    val onLinkClickedListener: (() -> Unit)? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class ActionForMessageView(
+    val label: Int,
+    val backgroundTint: Int = R.color.translucent,
+    val foregroundTint: Int = R.color.colorPrimary,
+    val startIcon: Int? = null,
+    val endIcon: Int? = null,
+    val onClickListener: () -> Unit
 )
 
 enum class RewardTimelineType {

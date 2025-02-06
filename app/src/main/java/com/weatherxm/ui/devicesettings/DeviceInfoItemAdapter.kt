@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ListItemDeviceInfoBinding
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
@@ -48,44 +47,21 @@ class DeviceInfoItemAdapter(
             binding.title.text = item.title
             binding.value.text = item.value
 
-            if (item.deviceAlert?.alert == DeviceAlertType.LOW_BATTERY) {
-                with(binding.infoBox) {
-                    htmlMessage(resources.getString(R.string.battery_level_low_message))
-                    clearMessageMargin()
-                    visible(true)
-                }
-            } else if (item.deviceAlert?.alert == DeviceAlertType.NEEDS_UPDATE) {
-                with(binding.actionBtn) {
-                    text = resources.getString(R.string.action_update_firmware)
-                    icon = AppCompatResources.getDrawable(context, R.drawable.ic_update)
-                    setOnClickListener { listener?.invoke(item.deviceAlert) }
-                    visible(true)
-                }
-            } else if (item.deviceAlert?.alert == DeviceAlertType.LOW_STATION_RSSI) {
-                handleLowStationRSSISignal(item)
-            }
-        }
-
-        private fun handleLowStationRSSISignal(item: UIDeviceInfoItem) {
-            if (item.deviceAlert?.severity == SeverityLevel.WARNING) {
-                with(binding.infoBox) {
-                    warning()
-                    message(resources.getString(R.string.station_signal_low))
-                    troubleshootMessage {
-                        listener?.invoke(item.deviceAlert)
+            item.deviceAlert?.let { deviceAlert ->
+                if (deviceAlert.alert == DeviceAlertType.NEEDS_UPDATE) {
+                    with(binding.actionBtn) {
+                        text = resources.getString(R.string.action_update_firmware)
+                        icon = AppCompatResources.getDrawable(context, R.drawable.ic_update)
+                        setOnClickListener { listener?.invoke(deviceAlert) }
+                        visible(true)
                     }
-                    clearMessageMargin()
-                    visible(true)
-                }
-            } else if (item.deviceAlert?.severity == SeverityLevel.ERROR) {
-                with(binding.infoBox) {
-                    error()
-                    htmlMessage(resources.getString(R.string.station_signal_no_signal))
-                    troubleshootMessage {
-                        listener?.invoke(item.deviceAlert)
+                } else {
+                    binding.infoBox.setContent {
+                        DeviceInfoItemAlertView(deviceAlert) {
+                            listener?.invoke(deviceAlert)
+                        }
                     }
-                    clearMessageMargin()
-                    visible(true)
+                    binding.infoBox.visible(true)
                 }
             }
         }
