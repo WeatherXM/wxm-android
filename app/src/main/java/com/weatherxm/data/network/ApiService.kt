@@ -11,6 +11,7 @@ import com.weatherxm.data.models.DeviceRewardsSummary
 import com.weatherxm.data.models.DevicesRewards
 import com.weatherxm.data.models.NetworkSearchResults
 import com.weatherxm.data.models.NetworkStatsResponse
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
 import com.weatherxm.data.models.RewardDetails
@@ -290,4 +291,30 @@ interface ApiService {
     suspend fun setDeviceFrequency(
         @Body deviceFrequency: DeviceFrequencyBody
     ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/device_photos_list.json")
+    @GET("/api/v1/me/devices/{deviceId}/photos")
+    suspend fun getDevicePhotos(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<List<String>, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 204, body = "mock_files/empty_response.json")
+    @DELETE("/api/v1/me/devices/{deviceId}/photos/{photoId}")
+    suspend fun deleteDevicePhoto(
+        @Path("deviceId") deviceId: String,
+        @Path("photoId") photoName: String
+    ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 204, body = "mock_files/get_photos_presigned_metadata.json")
+    @POST("/api/v1/me/devices/{deviceId}/photos")
+    suspend fun getPhotosMetadataForUpload(
+        @Path("deviceId") deviceId: String,
+        @Body names: PhotoNamesBody
+    ): NetworkResponse<List<PhotoPresignedMetadata>, ErrorResponse>
 }

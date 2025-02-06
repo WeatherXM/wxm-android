@@ -65,7 +65,7 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
             AnalyticsService.ParamValue.WARN.paramValue,
             AnalyticsService.ParamValue.ACTION.paramValue
         )
-        navigator.showDeviceHeliumOTA(this, device, false)
+        navigator.showDeviceHeliumOTA(this, device)
         finish()
     }
 

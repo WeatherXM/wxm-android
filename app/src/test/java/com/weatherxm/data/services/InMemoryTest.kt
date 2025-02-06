@@ -17,6 +17,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.every
 import io.mockk.mockk
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest
 
 class InMemoryTest(private val cacheService: CacheService) {
     private val walletAddress = "walletAddress"
@@ -28,8 +29,11 @@ class InMemoryTest(private val cacheService: CacheService) {
     private val location = Location(0.0, 0.0)
     private val query = "query"
     private val deviceId = "deviceId"
+    private val uploadId = "uploadId"
     private val deviceIds = listOf(deviceId)
     private val countriesInfo = listOf<CountryInfo>(mockk())
+    private val uploadIds = listOf(uploadId)
+    private val uploadIdRequest = mockk<MultipartUploadRequest>()
 
     private fun BehaviorSpec.testInMemoryEither(
         dataTitle: String,
@@ -72,6 +76,7 @@ class InMemoryTest(private val cacheService: CacheService) {
         return this
     }
 
+    @Suppress("LongMethod")
     fun test(behaviorSpec: BehaviorSpec) {
         behaviorSpec.testInMemoryEither(
             "Wallet Address",
@@ -114,12 +119,46 @@ class InMemoryTest(private val cacheService: CacheService) {
             { cacheService.getSuggestionLocation(searchSuggestion) },
             { cacheService.setSuggestionLocation(searchSuggestion, location) }
         )
+
         behaviorSpec.testInMemorySingleVar(
             "IDs of the followed devices",
             deviceIds,
             { cacheService.getFollowedDevicesIds() },
             { cacheService.setFollowedDevicesIds(deviceIds) }
         )
+
+        behaviorSpec.testInMemorySingleVar(
+            "Device's photo upload IDs",
+            uploadIds,
+            { cacheService.getDevicePhotoUploadIds(deviceId) },
+            { cacheService.addDevicePhotoUploadId(deviceId, uploadId) }
+        ).apply {
+            given("one more uploadId") {
+                then("add it") {
+                    cacheService.addDevicePhotoUploadId(deviceId, "uploadId2")
+                }
+                and("remove the first one") {
+                    cacheService.removeDevicePhotoUploadId(deviceId, uploadId)
+                    then("return the second one") {
+                        cacheService.getDevicePhotoUploadIds(deviceId) shouldBe listOf("uploadId2")
+                    }
+                }
+            }
+        }
+
+        behaviorSpec.testInMemorySingleVar(
+            "Upload ID's Multipart Request",
+            uploadIdRequest,
+            { cacheService.getUploadIdRequest(uploadId)!! },
+            { cacheService.setUploadIdRequest(uploadId, uploadIdRequest) }
+        ).apply {
+            given("an action to remove it") {
+                cacheService.removeUploadIdRequest(uploadId)
+                then("null should be returned") {
+                    cacheService.getUploadIdRequest(uploadId) shouldBe null
+                }
+            }
+        }
 
         behaviorSpec.testInMemorySingleVar(
             "IDs of the user devices",

@@ -10,6 +10,7 @@ import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import io.kotest.core.spec.style.BehaviorSpec
@@ -23,6 +24,7 @@ import kotlinx.coroutines.test.runTest
 class HomeViewModelTest : BehaviorSpec({
     val userUseCase = mockk<UserUseCase>()
     val remoteBannersUseCase = mockk<RemoteBannersUseCase>()
+    val photosUseCase = mockk<DevicePhotoUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: HomeViewModel
 
@@ -33,6 +35,7 @@ class HomeViewModelTest : BehaviorSpec({
     val infoBanner = mockk<InfoBanner>()
     val surveyId = "surveyId"
     val infoBannerId = "infoBannerId"
+    val deviceId = "deviceId"
     val devices = listOf(UIDevice.empty())
 
     listener(InstantExecutorListener())
@@ -47,8 +50,10 @@ class HomeViewModelTest : BehaviorSpec({
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
         every { remoteBannersUseCase.getInfoBanner() } returns infoBanner
         justRun { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
+        justRun { photosUseCase.retryUpload(deviceId) }
 
-        viewModel = HomeViewModel(userUseCase, remoteBannersUseCase, analytics, dispatcher)
+        viewModel =
+            HomeViewModel(userUseCase, remoteBannersUseCase, photosUseCase, analytics, dispatcher)
     }
 
     context("Flow when openExplorer is called") {
@@ -186,6 +191,15 @@ class HomeViewModelTest : BehaviorSpec({
             viewModel.setAcceptTerms()
             then("the respective function in the usecase should be called") {
                 verify(exactly = 1) { userUseCase.setAcceptTerms() }
+            }
+        }
+    }
+
+    context("Retry photo uploading") {
+        given("a deviceId") {
+            then("trigger the retrying of photo uploading") {
+                viewModel.retryPhotoUpload(deviceId)
+                verify(exactly = 1) { photosUseCase.retryUpload(deviceId) }
             }
         }
     }

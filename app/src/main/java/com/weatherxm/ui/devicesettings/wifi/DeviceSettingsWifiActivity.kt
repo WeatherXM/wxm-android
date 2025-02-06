@@ -9,25 +9,32 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
+import com.weatherxm.service.workers.UploadPhotoWorker
 import com.weatherxm.ui.common.BundleName
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.common.RewardSplitsData
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.parcelableList
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
 import com.weatherxm.util.MapboxUtils.getMinimap
+import net.gotev.uploadservice.extensions.getCancelUploadIntent
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -53,6 +60,21 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             }
         }
 
+    // Register the launcher for the photo gallery activity and wait for a possible result
+    private val photoGalleryLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            /**
+             * Some changes happened in the photos so we need to fetch them again or delete all of
+             * them if the user left the screen with <2 photos left.
+             */
+            val shouldDeleteAllPhotos =
+                it.data?.getBooleanExtra(Contracts.ARG_DELETE_ALL_PHOTOS, false)
+            val photos = it.data?.parcelableList<StationPhoto>(Contracts.ARG_PHOTOS)
+            if (it.resultCode == Activity.RESULT_OK) {
+                model.onPhotosChanged(shouldDeleteAllPhotos, photos)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceSettingsWifiBinding.inflate(layoutInflater)
@@ -73,11 +95,16 @@ class DeviceSettingsWifiActivity : BaseActivity() {
 
         setupInfo()
 
+        binding.swiperefresh.setOnRefreshListener {
+            model.getDeviceInformation(this)
+        }
+
         model.onLoading().observe(this) {
-            if (it) {
-                binding.progress.visibility = View.VISIBLE
+            if (it && !binding.swiperefresh.isRefreshing) {
+                binding.progress.visible(true)
             } else {
-                binding.progress.visibility = View.INVISIBLE
+                binding.swiperefresh.isRefreshing = false
+                binding.progress.invisible()
             }
         }
 
@@ -93,6 +120,10 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         model.onDeviceRemoved().observe(this) {
             navigator.showHome(this)
             finish()
+        }
+
+        model.onPhotos().observe(this) {
+            onPhotos(it)
         }
 
         binding.changeStationNameBtn.setOnClickListener {
@@ -111,7 +142,79 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             binding.contactSupportBtn.text = getString(R.string.see_something_wrong_contact_support)
         }
 
+        binding.devicePhotosCard.initProgressView(
+            device = model.device,
+            onRefresh = {
+                // Trigger a refresh on the photos through the API
+                model.onPhotosChanged(false, null)
+            }
+        )
+
         setupStationLocation(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
+        model.getDeviceInformation(this)
+    }
+
+    private fun onPhotos(devicePhotos: List<String>) {
+        binding.devicePhotosCard.updateUI(devicePhotos)
+        binding.devicePhotosCard.setOnClickListener(
+            onClick = {
+                analytics.trackEventSelectContent(
+                    contentType = AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.SETTINGS.paramValue
+                    )
+                )
+                val photos = arrayListOf<String>()
+                devicePhotos.forEach {
+                    photos.add(it)
+                }
+                if (photos.isEmpty() || !model.getAcceptedPhotoTerms()) {
+                    navigator.showPhotoVerificationIntro(this, model.device, photos)
+                } else {
+                    navigator.showPhotoGallery(
+                        photoGalleryLauncher,
+                        this,
+                        model.device,
+                        photos,
+                        false
+                    )
+                }
+            },
+            onCancelUpload = {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.CANCEL_UPLOADING_PHOTOS.paramValue
+                )
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.cancel_upload),
+                        message = getString(R.string.cancel_upload_message),
+                        negative = getString(R.string.action_back)
+                    )
+                    .onPositiveClick(getString(R.string.yes_cancel)) {
+                        // Trigger a refresh on the photos through the API
+                        UploadPhotoWorker.cancelWorkers(this, model.device.id)
+                        model.getDevicePhotoUploadIds().onEach {
+                            getCancelUploadIntent(it).send()
+                        }
+                        model.onPhotosChanged(false, null)
+                    }
+                    .build()
+                    .show(this)
+            },
+            onRetry = {
+                model.retryPhotoUpload()
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.RETRY_UPLOADING_PHOTOS.paramValue
+                )
+            }
+        )
+        binding.devicePhotosCard.visible(true)
     }
 
     private fun setupRecyclers() {
@@ -191,11 +294,6 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }.show(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
-    }
-
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
         if (model.device.isOwned()) {
@@ -242,8 +340,6 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 )
             }
         }
-
-        model.getDeviceInformation(this)
     }
 
     private fun handleSplitRewards(data: RewardSplitsData?) {

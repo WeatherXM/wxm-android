@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_rounded_bottom">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorSurface"
+            app:navigationIconTint="@color/colorOnSurface"
+            app:title="@string/station_photos"
+            tools:navigationIcon="@drawable/ic_close"
+            tools:subtitle="@string/add_1_more_to_upload">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/uploadBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_gravity="end"
+                android:enabled="false"
+                android:paddingHorizontal="@dimen/padding_normal"
+                android:paddingVertical="@dimen/padding_small"
+                android:text="@string/action_upload"
+                app:cornerRadius="@dimen/radius_large" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/margin_large"
+        android:clipChildren="false"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:id="@+id/permissionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/camera_permission_photo_verification"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/openSettingsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:text="@string/action_open_settings" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/selectedPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/emptyPhotosText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/tap_plus_icon"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/thumbnailsContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/thumbnailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin_extra_large"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/instructionsBtn">
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/thumbnails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small" />
+
+            <ImageButton
+                android:id="@+id/addPhotoBtn"
+                android:layout_width="48dp"
+                android:layout_height="70dp"
+                android:background="@drawable/background_imagebutton_smaller_radius_layer1"
+                android:contentDescription="@string/add_photo"
+                android:src="@drawable/ic_add"
+                app:tint="@color/colorPrimary" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/deletePhotoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_extra_large"
+            android:background="@drawable/background_imagebutton_circular_layer1"
+            android:contentDescription="@string/delete_this_photo"
+            android:padding="@dimen/padding_normal"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/instructionsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_extra_large"
+            android:text="@string/action_instructions"
+            android:textColor="@color/alternativeTextColor"
+            app:backgroundTint="@color/layer1"
+            app:cornerRadius="@dimen/radius_extra_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

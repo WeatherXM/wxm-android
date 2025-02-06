@@ -179,7 +179,7 @@ class DeviceDetailsActivity : BaseActivity() {
                 )
                 navigator.openShare(
                     this,
-                    getString(R.string.share_station_url, model.createNormalizedName())
+                    getString(R.string.share_station_url, model.device.normalizedName())
                 )
                 true
             }

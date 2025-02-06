@@ -256,9 +256,18 @@ interface AnalyticsService {
         TOKENS_EARNED_PRESSED("Tokens Earned pressed"),
         DEVICE_REWARD_ANALYTICS_CARD("Device Reward Analytics Card"),
         OPEN("open"),
-        CLOSED("closed"),
         TERMS_OF_USE("Terms Of Use"),
         PRIVACY_POLICY("Privacy Policy"),
+        CLOSED("closed"),
+        ADD_STATION_PHOTO("Add Station Photo"),
+        EXIT_PHOTO_VERIFICATION("Exit Photo Verification"),
+        CANCEL_UPLOADING_PHOTOS("Cancel Uploading Photos"),
+        RETRY_UPLOADING_PHOTOS("Retry Uploading Photos"),
+        START_UPLOADING_PHOTOS("Start Uploading Photos"),
+        UPLOADING_PHOTOS_SUCCESS("Uploading Photos Success"),
+        GO_TO_PHOTO_VERIFICATION("Go To Photo Verification"),
+        CLAIMING_ID("claiming"),
+        ANNOUNCEMENT_BUTTON("Announcement Button")
     }
 
     // Custom Param Names

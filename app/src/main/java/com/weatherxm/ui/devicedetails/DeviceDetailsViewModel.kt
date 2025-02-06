@@ -13,7 +13,6 @@ import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
@@ -85,14 +84,6 @@ class DeviceDetailsViewModel(
     fun updateDevice(device: UIDevice) {
         this.device = device
         onUpdatedDevice.postValue(device)
-    }
-
-    fun createNormalizedName(): String {
-        return if (!device.isEmpty()) {
-            device.name.replace(" ", "-").lowercase()
-        } else {
-            String.empty()
-        }
     }
 
     fun followStation() {

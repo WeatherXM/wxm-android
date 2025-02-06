@@ -57,10 +57,13 @@
 
     <!-- Translucent -->
     <color name="translucent_light_layer1">#33EAEBF9</color>
+    <color name="translucent_black">#66000000</color>
+    <color name="translucent_black_darker">#99000000</color>
 
     <!-- Fade -->
     <color name="fade_light_top">#00FEFBFF</color>
     <color name="fade_dark_top">#0031364A</color>
+    <color name="fade_dark_background">#001B1C22</color>
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>

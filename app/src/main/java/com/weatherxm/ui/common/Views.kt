@@ -3,6 +3,7 @@
 package com.weatherxm.ui.common
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -38,6 +40,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.BundleCompat
@@ -53,6 +56,7 @@ import coil3.request.ImageRequest
 import coil3.request.target
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.behavior.SwipeDismissBehavior
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
@@ -121,6 +125,24 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? =
         BundleCompat.getParcelable(this, key, T::class.java)
     } else {
         @Suppress("DEPRECATION") getParcelable(key) as? T
+    }
+
+inline fun <reified T : Parcelable> Intent.putParcelableList(key: String, data: List<T?>): Intent {
+    val arraylist = arrayListOf<T?>()
+    data.forEach {
+        arraylist.add(it)
+    }
+    putParcelableArrayListExtra(key, arraylist)
+    return this
+}
+
+// https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
+@SuppressLint("NewApi")
+inline fun <reified T : Parcelable> Intent.parcelableList(key: String): ArrayList<T>? =
+    if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
+        getParcelableArrayListExtra(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION") getParcelableArrayListExtra<T>(key)
     }
 
 /**
@@ -238,6 +260,19 @@ fun ImageView.loadImage(imageLoader: ImageLoader, data: Any?) {
             .target(this)
             .build()
     )
+}
+
+fun ImageButton.enable() {
+    alpha = 1.0F
+    isEnabled = true
+    isClickable = true
+}
+
+@Suppress("MagicNumber")
+fun ImageButton.disable() {
+    alpha = 0.4F
+    isEnabled = false
+    isClickable = false
 }
 
 @Suppress("EmptyFunctionBlock")
@@ -466,6 +501,23 @@ fun MaterialCardView.setCardRadius(
 fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {
     strokeColor = context.getColor(colorResId)
     strokeWidth = width
+}
+
+fun MaterialCardView.swipeToDismiss(onDismiss: () -> Unit) {
+    val swipeDismissBehavior = SwipeDismissBehavior<View>()
+    swipeDismissBehavior.setSwipeDirection(SwipeDismissBehavior.SWIPE_DIRECTION_ANY)
+
+    (layoutParams as (CoordinatorLayout.LayoutParams)).behavior = swipeDismissBehavior
+
+    swipeDismissBehavior.listener = object : SwipeDismissBehavior.OnDismissListener {
+        override fun onDismiss(view: View?) {
+            onDismiss()
+        }
+
+        override fun onDragStateChanged(state: Int) {
+            // Do nothing
+        }
+    }
 }
 
 /**

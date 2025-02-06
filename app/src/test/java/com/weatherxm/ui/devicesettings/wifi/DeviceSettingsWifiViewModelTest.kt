@@ -24,13 +24,16 @@ import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitsData
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
 import com.weatherxm.ui.devicesettings.UIDeviceInfoItem
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
@@ -51,6 +54,7 @@ import java.time.format.DateTimeFormatter
 
 class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     val settingsUseCase = mockk<StationSettingsUseCase>()
+    val photosUseCase = mockk<DevicePhotoUseCase>()
     val userUseCase = mockk<UserUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -60,7 +64,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         "deviceId",
         "My Weather Station",
         String.empty(),
-        null,
+        DeviceRelation.OWNED,
         "la:bel",
         "friendlyName",
         BundleName.d1,
@@ -179,6 +183,10 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         ),
         stakeholderSplits
     )
+    val stationPhotos = arrayListOf(
+        StationPhoto("remotePath", "localPath")
+    )
+    val uploadIds = listOf("uploadId")
 
     val invalidClaimIdFailure = ApiError.UserError.ClaimError.InvalidClaimId("")
 
@@ -233,10 +241,17 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         } returns "Last Station Activity"
         every { resources.getString(R.string.latest_hint) } returns "(latest)"
         every { resources.getString(R.string.firmware_version) } returns "Firmware Version"
+        coMockEitherRight(
+            { photosUseCase.deleteDevicePhoto(device.id, stationPhotos[0].remotePath!!) },
+            Unit
+        )
+        every { photosUseCase.getDevicePhotoUploadIds(device.id) } returns uploadIds
+        justRun { photosUseCase.retryUpload(device.id) }
 
         viewModel = DeviceSettingsWifiViewModel(
             device,
             settingsUseCase,
+            photosUseCase,
             userUseCase,
             authUseCase,
             resources,
@@ -407,6 +422,55 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         }
     }
 
+    context("Get Device Photos") {
+        given("a usecase returning the result of the photos") {
+            When("it's a success") {
+                coMockEitherRight({ photosUseCase.getDevicePhotos(device.id) }, listOf<String>())
+                runTest { viewModel.getDevicePhotos() }
+                then("LiveData onPhotos should post the List<String> created") {
+                    viewModel.onPhotos().value shouldBe listOf<String>()
+                }
+            }
+        }
+    }
+
+    context("Event onPhotosChanged has been triggered") {
+        given("an argument `shouldDeleteAllPhotos` and the respective list of photos to delete") {
+            When("it's true") {
+                then("it should delete all the photos passed as arguments") {
+                    viewModel.onPhotosChanged(true, stationPhotos)
+                }
+            }
+            When("it's false") {
+                then("get the updated device photos") {
+                    coMockEitherRight(
+                        { photosUseCase.getDevicePhotos(device.id) },
+                        listOf("testUrl")
+                    )
+                    runTest { viewModel.getDevicePhotos() }
+                    viewModel.onPhotos().value shouldBe listOf("testUrl")
+                }
+            }
+        }
+    }
+
+    context("Get device photos upload IDs") {
+        given("a device ID") {
+            then("return the list of upload IDs") {
+                viewModel.getDevicePhotoUploadIds() shouldBe uploadIds
+            }
+        }
+    }
+
+    context("Retry photo uploading") {
+        given("a deviceId") {
+            then("trigger the retrying of photo uploading") {
+                viewModel.retryPhotoUpload()
+                verify(exactly = 1) { photosUseCase.retryUpload(device.id) }
+            }
+        }
+    }
+
     context("Get Device Info") {
         given("a usecase returning the result of getting device info") {
             When("it's a failure") {
@@ -435,6 +499,25 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
                 }
                 then("LiveData onLoading should have the value false") {
                     viewModel.onLoading().value shouldBe false
+                }
+            }
+        }
+    }
+
+    context("Get if the user has accepted the uploading photos terms") {
+        given("The usecase providing the GET / SET mechanisms") {
+            When("We should get the user's accepted status") {
+                and("user has not accepted the terms") {
+                    every { photosUseCase.getAcceptedTerms() } returns false
+                    then("return false") {
+                        viewModel.getAcceptedPhotoTerms() shouldBe false
+                    }
+                }
+                and("user has accepted the terms") {
+                    every { photosUseCase.getAcceptedTerms() } returns true
+                    then("return true") {
+                        viewModel.getAcceptedPhotoTerms() shouldBe true
+                    }
                 }
             }
         }
