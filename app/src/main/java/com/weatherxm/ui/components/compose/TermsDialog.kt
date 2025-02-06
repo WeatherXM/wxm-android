@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.weatherxm.R
 
+@Suppress("FunctionNaming")
 @Composable
 fun TermsDialog(shouldShow: Boolean, onUnderstand: () -> Unit) {
     if (shouldShow) {
