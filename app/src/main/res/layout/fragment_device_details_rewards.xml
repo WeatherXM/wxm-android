@@ -88,13 +88,15 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.weatherxm.ui.components.DailyRewardsCardView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/dailyRewardsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_normal"
-                app:layout_constraintTop_toBottomOf="@id/totalCard" />
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@id/totalCard"
+                tools:composableName="com.weatherxm.ui.components.compose.DailyRewardsViewKt.PreviewDailyRewardsView" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/weeklyCard"
