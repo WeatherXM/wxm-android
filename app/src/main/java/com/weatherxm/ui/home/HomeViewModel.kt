@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,6 +35,7 @@ class HomeViewModel(
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
+    val shouldShowTerms = mutableStateOf(userUseCase.shouldShowTermsPrompt())
 
     fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onSurvey(): LiveData<Survey> = onSurvey
@@ -111,6 +113,8 @@ class HomeViewModel(
         remoteBannersUseCase.dismissInfoBanner(infoBannerId)
     }
 
-    fun shouldShowTermsPrompt() = userUseCase.shouldShowTermsPrompt()
-    fun setAcceptTerms() = userUseCase.setAcceptTerms()
+    fun setAcceptTerms() {
+        shouldShowTerms.value = false
+        userUseCase.setAcceptTerms()
+    }
 }
