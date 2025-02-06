@@ -133,7 +133,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                     viewModel.isLoggedIn() shouldBe true
                 }
                 then("get if we should show a failure or not") {
-                    viewModel.onShowLegalTerms().value shouldBe true
+                    viewModel.shouldShowTerms.value shouldBe true
                 }
             }
         }

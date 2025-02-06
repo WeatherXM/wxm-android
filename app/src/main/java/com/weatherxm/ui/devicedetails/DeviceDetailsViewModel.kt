@@ -1,5 +1,6 @@
 package com.weatherxm.ui.devicedetails
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,6 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -50,13 +50,13 @@ class DeviceDetailsViewModel(
     private val onDevicePolling = MutableLiveData<UIDevice>()
     private val onUpdatedDevice = MutableLiveData<UIDevice>()
     private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
-    private val onShowLegalTerms = SingleLiveEvent<Boolean>()
+
+    val shouldShowTerms = mutableStateOf(false)
 
     fun onDeviceFirstFetch(): LiveData<UIDevice> = onDeviceFirstFetch
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
-    fun onShowLegalTerms() = onShowLegalTerms
 
     fun isLoggedIn() = isLoggedIn
 
@@ -133,13 +133,16 @@ class DeviceDetailsViewModel(
         onFollowStatus.postValue(Resource.error(errorMessage))
     }
 
-    fun setAcceptTerms() = deviceDetailsUseCase.setAcceptTerms()
+    fun setAcceptTerms() {
+        shouldShowTerms.value = false
+        deviceDetailsUseCase.setAcceptTerms()
+    }
 
     init {
         viewModelScope.launch(dispatcher) {
             isLoggedIn = authUseCase.isLoggedIn()
             if (isLoggedIn == true) {
-                onShowLegalTerms.postValue(deviceDetailsUseCase.shouldShowTermsPrompt())
+                shouldShowTerms.value = deviceDetailsUseCase.shouldShowTermsPrompt()
             }
         }
     }

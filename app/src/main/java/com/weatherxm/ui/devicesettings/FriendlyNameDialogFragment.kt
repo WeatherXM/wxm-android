@@ -11,7 +11,6 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ViewEditNameBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
-import com.weatherxm.ui.components.TermsDialogFragment
 import com.weatherxm.util.Validator
 import org.koin.android.ext.android.inject
 
@@ -110,7 +109,7 @@ class FriendlyNameDialogFragment() : DialogFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(TermsDialogFragment.AUTO_DISMISS_DIALOG, true)
+        outState.putBoolean(AUTO_DISMISS_DIALOG, true)
         super.onSaveInstanceState(outState)
     }
 
