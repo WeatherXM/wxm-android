@@ -52,6 +52,7 @@ fun MessageCardView(data: DataForMessageView) {
     }
     val paddingNormal = dimensionResource(R.dimen.padding_normal)
     Card(
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = colorResource(backgroundResId)),
         border = border,
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large))
