@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import kotlin.uuid.ExperimentalUuidApi
 
 @Suppress("TooManyFunctions")
 class BluetoothConnectionManager(
@@ -121,7 +122,7 @@ class BluetoothConnectionManager(
     fun setPeripheral(address: String): Either<Failure, Unit> {
         return try {
             if (this::peripheral.isInitialized) {
-                peripheral.cancel()
+                peripheral.scope.cancel()
             }
             macAddress = address
             initBondStateChangeReceiver()
@@ -134,7 +135,7 @@ class BluetoothConnectionManager(
     }
 
     private fun tryToSetCharacteristics() {
-        peripheral.launch {
+        peripheral.scope.launch {
             isSettingCharacteristics = true
             delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
             setReadWriteCharacteristic()
@@ -215,6 +216,7 @@ class BluetoothConnectionManager(
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private suspend fun setReadWriteCharacteristic() {
         if (readCharacteristic != null && writeCharacteristic != null) {
             isSettingCharacteristics = false
