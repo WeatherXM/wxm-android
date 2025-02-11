@@ -143,8 +143,8 @@ abstract class BaseDeviceSettingsViewModel(
         })
     }
 
-    fun isStakeholder(rewardSplitsData: RewardSplitsData): Boolean {
-        return rewardSplitsData.splits.firstOrNull { split ->
+    fun isStakeholder(rewardSplitsData: RewardSplitsData?): Boolean {
+        return rewardSplitsData?.splits?.firstOrNull { split ->
             rewardSplitsData.wallet == split.wallet
         } != null
     }
