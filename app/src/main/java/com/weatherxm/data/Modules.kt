@@ -611,8 +611,8 @@ val analytics = module {
         }
     }
 
-    factory { FirebaseAnalyticsService(get()) as AnalyticsService }
-    factory { MixpanelAnalyticsService(get()) as AnalyticsService }
+    factoryOf(::FirebaseAnalyticsService) { bind<AnalyticsService>() }
+    factoryOf(::MixpanelAnalyticsService) { bind<AnalyticsService>() }
 
     single<AnalyticsWrapper> {
         AnalyticsWrapper(getAll<AnalyticsService>(), androidContext())
