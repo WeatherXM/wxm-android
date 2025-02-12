@@ -318,37 +318,6 @@ private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 1800L
 private const val COIL_MEMORY_CACHE_SIZE_PERCENTAGE = 0.25
 private const val COIL_DISK_CACHE_SIZE_PERCENTAGE = 0.02
 
-/**
- * single:
- * creates the instances when requested, and then keeps them in memory.
- * Start-up memory: around 300mb.
- * After going to device details -> history -> claim: around 360mb
- *
- *
- *
- *
- *
- *
- *
- *
- *
- * SORT ALPHABETICALLY
- * SORT ALPHABETICALLY
- * SORT ALPHABETICALLY
- * SORT ALPHABETICALLY
- * SORT ALPHABETICALLY
- * SORT ALPHABETICALLY
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
 private val logging = module {
     single(createdAtStart = true) {
         Timber.also {
@@ -389,93 +358,93 @@ private val preferences = module {
 }
 
 private val datasources = module {
-    singleOf(::LocationDataSourceImpl) { bind<LocationDataSource>() }
-    factoryOf(::NetworkWeatherHistoryDataSource)
-    factoryOf(::DatabaseWeatherHistoryDataSource)
-    singleOf(::NetworkUserDataSource)
-    singleOf(::CacheUserDataSource)
-    singleOf(::NetworkDeviceDataSource)
-    singleOf(::CacheDeviceDataSource)
-    singleOf(::NetworkWalletDataSource)
-    singleOf(::CacheWalletDataSource)
-    singleOf(::RewardsDataSourceImpl) { bind<RewardsDataSource>() }
-    singleOf(::NetworkAuthDataSource)
-    singleOf(::CacheAuthDataSource)
-    singleOf(::AppConfigDataSourceImpl) { bind<AppConfigDataSource>() }
-    singleOf(::UserPreferenceDataSourceImpl) { bind<UserPreferenceDataSource>() }
-    singleOf(::NetworkExplorerDataSource)
-    singleOf(::DatabaseExplorerDataSource)
     singleOf(::AddressDataSourceImpl) { bind<AddressDataSource>() }
-    singleOf(::NetworkWeatherForecastDataSource)
-    singleOf(::CacheWeatherForecastDataSource)
-    singleOf(::NetworkAddressSearchDataSource)
-    singleOf(::CacheAddressSearchDataSource)
-    factoryOf(::BluetoothScannerDataSourceImpl) { bind<BluetoothScannerDataSource>() }
+    singleOf(::AppConfigDataSourceImpl) { bind<AppConfigDataSource>() }
     factoryOf(::BluetoothConnectionDataSourceImpl) { bind<BluetoothConnectionDataSource>() }
+    factoryOf(::BluetoothScannerDataSourceImpl) { bind<BluetoothScannerDataSource>() }
     factoryOf(::BluetoothUpdaterDataSourceImpl) { bind<BluetoothUpdaterDataSource>() }
-    singleOf(::DeviceOTADataSourceImpl) { bind<DeviceOTADataSource>() }
-    factoryOf(::WidgetDataSourceImpl) { bind<WidgetDataSource>() }
-    factoryOf(::StatsDataSourceImpl) { bind<StatsDataSource>() }
-    singleOf(::NetworkFollowDataSource)
+    singleOf(::CacheAddressSearchDataSource)
+    singleOf(::CacheAuthDataSource)
+    singleOf(::CacheDeviceDataSource)
     singleOf(::CacheFollowDataSource)
+    singleOf(::CacheUserDataSource)
+    singleOf(::CacheWalletDataSource)
+    singleOf(::CacheWeatherForecastDataSource)
+    factoryOf(::DatabaseExplorerDataSource)
+    factoryOf(::DatabaseWeatherHistoryDataSource)
+    singleOf(::DeviceFrequencyDataSourceImpl) { bind<DeviceFrequencyDataSource>() }
+    singleOf(::DeviceOTADataSourceImpl) { bind<DeviceOTADataSource>() }
+    singleOf(::DevicePhotoDataSourceImpl) { bind<DevicePhotoDataSource>() }
+    singleOf(::LocationDataSourceImpl) { bind<LocationDataSource>() }
+    singleOf(::NetworkAddressSearchDataSource)
+    singleOf(::NetworkAuthDataSource)
+    singleOf(::NetworkDeviceDataSource)
+    singleOf(::NetworkExplorerDataSource)
+    singleOf(::NetworkFollowDataSource)
+    singleOf(::NetworkUserDataSource)
+    singleOf(::NetworkWalletDataSource)
+    factoryOf(::NetworkWeatherHistoryDataSource)
+    singleOf(::NetworkWeatherForecastDataSource)
     singleOf(::NotificationsDataSourceImpl) { bind<NotificationsDataSource>() }
     singleOf(::RemoteBannersDataSourceImpl) { bind<RemoteBannersDataSource>() }
-    singleOf(::DeviceFrequencyDataSourceImpl) { bind<DeviceFrequencyDataSource>() }
-    singleOf(::DevicePhotoDataSourceImpl) { bind<DevicePhotoDataSource>() }
+    singleOf(::RewardsDataSourceImpl) { bind<RewardsDataSource>() }
+    factoryOf(::StatsDataSourceImpl) { bind<StatsDataSource>() }
+    singleOf(::UserPreferenceDataSourceImpl) { bind<UserPreferenceDataSource>() }
+    factoryOf(::WidgetDataSourceImpl) { bind<WidgetDataSource>() }
 }
 
 private val repositories = module {
-    singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
-    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
-    singleOf(::WalletRepositoryImpl) { bind<WalletRepository>() }
-    singleOf(::DeviceRepositoryImpl) { bind<DeviceRepository>() }
-    singleOf(::ExplorerRepositoryImpl) { bind<ExplorerRepository>() }
-    singleOf(::RewardsRepositoryImpl) { bind<RewardsRepository>() }
-    singleOf(::WeatherForecastRepositoryImpl) { bind<WeatherForecastRepository>() }
-    factoryOf(::WeatherHistoryRepositoryImpl) { bind<WeatherHistoryRepository>() }
-    singleOf(::AppConfigRepositoryImpl) { bind<AppConfigRepository>() }
     factoryOf(::AddressRepositoryImpl) { bind<AddressRepository>() }
-    singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
-    factoryOf(::BluetoothScannerRepositoryImpl) { bind<BluetoothScannerRepository>() }
+    singleOf(::AppConfigRepositoryImpl) { bind<AppConfigRepository>() }
+    singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
     factoryOf(::BluetoothConnectionRepositoryImpl) { bind<BluetoothConnectionRepository>() }
+    factoryOf(::BluetoothScannerRepositoryImpl) { bind<BluetoothScannerRepository>() }
     factoryOf(::BluetoothUpdaterRepositoryImpl) { bind<BluetoothUpdaterRepository>() }
     singleOf(::DeviceOTARepositoryImpl) { bind<DeviceOTARepository>() }
-    factoryOf(::WidgetRepositoryImpl) { bind<WidgetRepository>() }
-    factoryOf(::StatsRepositoryImpl) { bind<StatsRepository>() }
+    singleOf(::DevicePhotoRepositoryImpl) { bind<DevicePhotoRepository>() }
+    singleOf(::DeviceRepositoryImpl) { bind<DeviceRepository>() }
+    singleOf(::ExplorerRepositoryImpl) { bind<ExplorerRepository>() }
     singleOf(::FollowRepositoryImpl) { bind<FollowRepository>() }
     singleOf(::LocationRepositoryImpl) { bind<LocationRepository>() }
     singleOf(::NotificationsRepositoryImpl) { bind<NotificationsRepository>() }
     singleOf(::RemoteBannersRepositoryImpl) { bind<RemoteBannersRepository>() }
-    singleOf(::DevicePhotoRepositoryImpl) { bind<DevicePhotoRepository>() }
+    singleOf(::RewardsRepositoryImpl) { bind<RewardsRepository>() }
+    singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
+    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
+    singleOf(::WalletRepositoryImpl) { bind<WalletRepository>() }
+    factoryOf(::StatsRepositoryImpl) { bind<StatsRepository>() }
+    factoryOf(::WidgetRepositoryImpl) { bind<WidgetRepository>() }
+    factoryOf(::WeatherHistoryRepositoryImpl) { bind<WeatherHistoryRepository>() }
+    singleOf(::WeatherForecastRepositoryImpl) { bind<WeatherForecastRepository>() }
 }
 
 private val usecases = module {
-    factoryOf(::StartupUseCaseImpl) { bind<StartupUseCase>() }
-    singleOf(::ExplorerUseCaseImpl) { bind<ExplorerUseCase>() }
-    singleOf(::DeviceDetailsUseCaseImpl) { bind<DeviceDetailsUseCase>() }
-    singleOf(::ForecastUseCaseImpl) { bind<ForecastUseCase>() }
-    factoryOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
+    factoryOf(::AnalyticsOptInUseCaseImpl) { bind<AnalyticsOptInUseCase>() }
+    singleOf(::AuthUseCaseImpl) { bind<AuthUseCase>() }
+    factoryOf(::BluetoothConnectionUseCaseImpl) { bind<BluetoothConnectionUseCase>() }
+    factoryOf(::BluetoothScannerUseCaseImpl) { bind<BluetoothScannerUseCase>() }
+    factoryOf(::BluetoothUpdaterUseCaseImpl) { bind<BluetoothUpdaterUseCase>() }
     factoryOf(::ChartsUseCaseImpl) { bind<ChartsUseCase>() }
     factoryOf(::ClaimDeviceUseCaseImpl) { bind<ClaimDeviceUseCase>() }
-    singleOf(::RewardsUseCaseImpl) { bind<RewardsUseCase>() }
-    singleOf(::AuthUseCaseImpl) { bind<AuthUseCase>() }
-    singleOf(::UserUseCaseImpl) { bind<UserUseCase>() }
-    factoryOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
     factoryOf(::DeleteAccountUseCaseImpl) { bind<DeleteAccountUseCase>() }
-    factoryOf(::BluetoothScannerUseCaseImpl) { bind<BluetoothScannerUseCase>() }
-    factoryOf(::BluetoothConnectionUseCaseImpl) { bind<BluetoothConnectionUseCase>() }
-    factoryOf(::BluetoothUpdaterUseCaseImpl) { bind<BluetoothUpdaterUseCase>() }
-    factoryOf(::AnalyticsOptInUseCaseImpl) { bind<AnalyticsOptInUseCase>() }
-    factoryOf(::StationSettingsUseCaseImpl) { bind<StationSettingsUseCase>() }
-    factoryOf(::WidgetSelectStationUseCaseImpl) { bind<WidgetSelectStationUseCase>() }
-    factoryOf(::WidgetCurrentWeatherUseCaseImpl) { bind<WidgetCurrentWeatherUseCase>() }
-    factoryOf(::StatsUseCaseImpl) { bind<StatsUseCase>() }
-    singleOf(::FollowUseCaseImpl) { bind<FollowUseCase>() }
+    singleOf(::DeviceDetailsUseCaseImpl) { bind<DeviceDetailsUseCase>() }
     singleOf(::DeviceListUseCaseImpl) { bind<DeviceListUseCase>() }
-    factoryOf(::EditLocationUseCaseImpl) { bind<EditLocationUseCase>() }
-    singleOf(::RemoteBannersUseCaseImpl) { bind<RemoteBannersUseCase>() }
-    factoryOf(::UpdatePromptUseCaseImpl) { bind<UpdatePromptUseCase>() }
     singleOf(::DevicePhotoUseCaseImpl) { bind<DevicePhotoUseCase>() }
+    factoryOf(::EditLocationUseCaseImpl) { bind<EditLocationUseCase>() }
+    singleOf(::ExplorerUseCaseImpl) { bind<ExplorerUseCase>() }
+    singleOf(::FollowUseCaseImpl) { bind<FollowUseCase>() }
+    singleOf(::ForecastUseCaseImpl) { bind<ForecastUseCase>() }
+    factoryOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
+    factoryOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
+    singleOf(::RemoteBannersUseCaseImpl) { bind<RemoteBannersUseCase>() }
+    singleOf(::RewardsUseCaseImpl) { bind<RewardsUseCase>() }
+    factoryOf(::StartupUseCaseImpl) { bind<StartupUseCase>() }
+    factoryOf(::StationSettingsUseCaseImpl) { bind<StationSettingsUseCase>() }
+    factoryOf(::StatsUseCaseImpl) { bind<StatsUseCase>() }
+    factoryOf(::UpdatePromptUseCaseImpl) { bind<UpdatePromptUseCase>() }
+    singleOf(::UserUseCaseImpl) { bind<UserUseCase>() }
+    factoryOf(::WidgetCurrentWeatherUseCaseImpl) { bind<WidgetCurrentWeatherUseCase>() }
+    factoryOf(::WidgetSelectStationUseCaseImpl) { bind<WidgetSelectStationUseCase>() }
 }
 
 private val location = module {
@@ -501,11 +470,11 @@ private val network = module {
         MoshiConverterFactory.create(get()).asLenient()
     }
 
-    singleOf(::ChuckerInterceptor)
-    singleOf(::ClientIdentificationRequestInterceptor)
-    singleOf(::AuthTokenAuthenticator)
     singleOf(::ApiRequestInterceptor)
     singleOf(::AuthRequestInterceptor)
+    singleOf(::AuthTokenAuthenticator)
+    singleOf(::ChuckerInterceptor)
+    singleOf(::ClientIdentificationRequestInterceptor)
 
     single<Retrofit>(named(RETROFIT_AUTH)) {
         // Create client
@@ -556,8 +525,8 @@ private val bluetooth = module {
     single<BluetoothAdapter?> {
         ContextCompat.getSystemService(androidContext(), BluetoothManager::class.java)?.adapter
     }
-    factoryOf(::BluetoothScanner)
     singleOf(::BluetoothConnectionManager)
+    factoryOf(::BluetoothScanner)
     factoryOf(::BluetoothUpdater)
 }
 
@@ -651,13 +620,13 @@ val analytics = module {
 }
 
 private val utilities = module {
-    singleOf(::LocationHelper) { createdAtStart() }
-    singleOf(::ClientIdentificationHelper) { createdAtStart() }
-    singleOf(::Navigator)
-    singleOf(::GlobalUploadObserverService)
-    singleOf(::WidgetHelper)
-    singleOf(::UICellJsonAdapter)
     singleOf(::AuthTokenJsonAdapter)
+    singleOf(::ClientIdentificationHelper) { createdAtStart() }
+    singleOf(::GlobalUploadObserverService)
+    singleOf(::LocationHelper) { createdAtStart() }
+    singleOf(::Navigator)
+    singleOf(::UICellJsonAdapter)
+    singleOf(::WidgetHelper)
     single<Resources> {
         Resources(androidContext().resources)
     }
@@ -755,69 +724,69 @@ private val utilities = module {
 }
 
 private val viewmodels = module {
-    viewModelOf(::DeviceDetailsViewModel)
-    viewModelOf(::DeviceSettingsWifiViewModel)
-    viewModelOf(::DeviceSettingsHeliumViewModel)
-    viewModelOf(::RebootViewModel)
-    viewModelOf(::ChangeFrequencyViewModel)
-    viewModelOf(::CurrentViewModel)
-    viewModelOf(::ForecastViewModel)
-    viewModelOf(::RewardsViewModel)
-    viewModelOf(::HistoryViewModel)
-    viewModelOf(::DeviceHeliumOTAViewModel)
-    viewModelOf(::CellInfoViewModel)
-    viewModelOf(::StartupViewModel)
     viewModelOf(::AnalyticsOptInViewModel)
-    viewModelOf(::ConnectWalletViewModel)
-    viewModelOf(::DeleteAccountViewModel)
-    viewModelOf(::DeviceEditLocationViewModel)
-    viewModelOf(::DevicesViewModel)
-    viewModelOf(::ExplorerViewModel)
-    viewModelOf(::HomeViewModel)
-    viewModelOf(::ProfileViewModel)
-    viewModelOf(::LoginViewModel)
-    viewModelOf(::NetworkStatsViewModel)
-    viewModelOf(::PasswordPromptViewModel)
-    viewModelOf(::PreferenceViewModel)
-    viewModelOf(::ResetPasswordViewModel)
-    viewModelOf(::RewardsClaimViewModel)
-    viewModelOf(::RewardsListViewModel)
-    viewModelOf(::RewardDetailsViewModel)
-    viewModelOf(::RewardBoostViewModel)
-    viewModelOf(::DeleteAccountSurveyViewModel)
-    viewModelOf(::SignupViewModel)
-    viewModelOf(::UpdatePromptViewModel)
-    viewModelOf(::DeepLinkRouterViewModel)
-    viewModelOf(::SelectStationViewModel)
-    viewModelOf(::ClaimLocationViewModel)
-    viewModelOf(::ClaimHeliumViewModel)
+    viewModelOf(::CellInfoViewModel)
+    viewModelOf(::ChangeFrequencyViewModel)
+    viewModelOf(::ClaimHeliumFrequencyViewModel)
     viewModelOf(::ClaimHeliumPairViewModel)
     viewModelOf(::ClaimHeliumResultViewModel)
-    viewModelOf(::ClaimHeliumFrequencyViewModel)
-    viewModelOf(::ClaimWifiViewModel)
+    viewModelOf(::ClaimHeliumViewModel)
+    viewModelOf(::ClaimLocationViewModel)
     viewModelOf(::ClaimPulseViewModel)
-    viewModelOf(::NetworkSearchViewModel)
-    viewModelOf(::ForecastDetailsViewModel)
+    viewModelOf(::ClaimWifiViewModel)
+    viewModelOf(::ConnectWalletViewModel)
+    viewModelOf(::CurrentViewModel)
+    viewModelOf(::DeepLinkRouterViewModel)
+    viewModelOf(::DeleteAccountSurveyViewModel)
+    viewModelOf(::DeleteAccountViewModel)
+    viewModelOf(::DeviceDetailsViewModel)
+    viewModelOf(::DeviceEditLocationViewModel)
+    viewModelOf(::DeviceHeliumOTAViewModel)
+    viewModelOf(::DeviceSettingsHeliumViewModel)
+    viewModelOf(::DeviceSettingsWifiViewModel)
     viewModelOf(::DevicesRewardsViewModel)
+    viewModelOf(::DevicesViewModel)
+    viewModelOf(::ExplorerViewModel)
+    viewModelOf(::ForecastDetailsViewModel)
+    viewModelOf(::ForecastViewModel)
+    viewModelOf(::HistoryViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::NetworkSearchViewModel)
+    viewModelOf(::NetworkStatsViewModel)
+    viewModelOf(::PasswordPromptViewModel)
     viewModelOf(::PhotoGalleryViewModel)
-    viewModelOf(::PhotoVerificationIntroViewModel)
     viewModelOf(::PhotoUploadViewModel)
+    viewModelOf(::PhotoVerificationIntroViewModel)
+    viewModelOf(::PreferenceViewModel)
+    viewModelOf(::ProfileViewModel)
+    viewModelOf(::RebootViewModel)
+    viewModelOf(::ResetPasswordViewModel)
+    viewModelOf(::RewardBoostViewModel)
+    viewModelOf(::RewardDetailsViewModel)
+    viewModelOf(::RewardsClaimViewModel)
+    viewModelOf(::RewardsListViewModel)
+    viewModelOf(::RewardsViewModel)
+    viewModelOf(::SelectStationViewModel)
+    viewModelOf(::SignupViewModel)
+    viewModelOf(::StartupViewModel)
+    viewModelOf(::UpdatePromptViewModel)
 }
 
 val modules = listOf(
-    logging,
-    dispatchers,
     analytics,
-    preferences,
-    network,
-    bluetooth,
-    datasources,
-    repositories,
-    location,
-    usecases,
-    firebase,
     apiServiceModule,
+    bluetooth,
     database,
+    datasources,
+    dispatchers,
+    firebase,
+    location,
+    logging,
+    network,
+    preferences,
+    repositories,
+    usecases,
     utilities,
     viewmodels
 )
