@@ -15,7 +15,7 @@ import timber.log.Timber
 
 class NetworkStatsViewModel(
     private val usecase: StatsUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val onNetworkStats = MutableLiveData<Resource<NetworkStats>>()

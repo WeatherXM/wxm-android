@@ -30,7 +30,7 @@ class CellInfoViewModel(
     private val followUseCase: FollowUseCase,
     private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onCellDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()

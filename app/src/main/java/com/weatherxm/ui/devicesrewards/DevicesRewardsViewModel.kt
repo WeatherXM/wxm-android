@@ -27,7 +27,7 @@ class DevicesRewardsViewModel(
     val rewards: DevicesRewards,
     val usecase: RewardsUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val totalSelectedRangeChip = mutableIntStateOf(R.string.seven_days_abbr)
     private val totalRangeChipsToggleEnabled = mutableStateOf(true)

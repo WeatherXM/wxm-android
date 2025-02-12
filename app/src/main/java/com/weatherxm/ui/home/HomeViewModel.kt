@@ -24,7 +24,7 @@ class HomeViewModel(
     private val remoteBannersUseCase: RemoteBannersUseCase,
     private val photoUseCase: DevicePhotoUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var hasDevices: Boolean? = null

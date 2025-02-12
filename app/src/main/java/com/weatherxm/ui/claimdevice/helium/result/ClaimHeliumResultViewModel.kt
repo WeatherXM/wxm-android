@@ -24,7 +24,7 @@ class ClaimHeliumResultViewModel(
     connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics, dispatcher) {
     companion object {
         val CONNECT_DELAY_ON_REBOOT = TimeUnit.SECONDS.toMillis(10L)

@@ -30,7 +30,7 @@ class ForecastDetailsViewModel(
     private val analytics: AnalyticsWrapper,
     private val chartsUseCase: ChartsUseCase,
     private val forecastUseCase: ForecastUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onForecastLoaded = MutableLiveData<Resource<Unit>>()
     fun onForecastLoaded(): LiveData<Resource<Unit>> = onForecastLoaded

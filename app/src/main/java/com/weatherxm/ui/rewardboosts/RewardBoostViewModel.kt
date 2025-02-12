@@ -25,7 +25,7 @@ class RewardBoostViewModel(
     private val analytics: AnalyticsWrapper,
     private val resources: Resources,
     private val usecase: RewardsUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val onBoostReward = MutableLiveData<Resource<UIBoost>>()

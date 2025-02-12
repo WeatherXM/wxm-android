@@ -29,7 +29,7 @@ class ClaimPulseViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val onNext = MutableLiveData<Int>()

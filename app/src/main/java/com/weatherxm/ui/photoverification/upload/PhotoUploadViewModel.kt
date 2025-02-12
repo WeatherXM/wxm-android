@@ -28,7 +28,7 @@ class PhotoUploadViewModel(
     private val usecase: DevicePhotoUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val onPhotosPresignedMetadata =
         MutableLiveData<Resource<List<PhotoPresignedMetadata>>>()

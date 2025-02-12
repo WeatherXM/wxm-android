@@ -25,7 +25,7 @@ class ClaimHeliumPairViewModel(
     connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics, dispatcher) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 

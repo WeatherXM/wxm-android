@@ -17,7 +17,7 @@ import timber.log.Timber
 class SelectStationViewModel(
     private val usecase: WidgetSelectStationUseCase,
     private val authUseCase: AuthUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val onDevices = MutableLiveData<Resource<List<UIDevice>>>()

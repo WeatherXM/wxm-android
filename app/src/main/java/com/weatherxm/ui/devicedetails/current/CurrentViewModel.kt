@@ -24,7 +24,7 @@ class CurrentViewModel(
     private val resources: Resources,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onDevice = MutableLiveData<UIDevice>()
     private val onLoading = MutableLiveData<Boolean>()

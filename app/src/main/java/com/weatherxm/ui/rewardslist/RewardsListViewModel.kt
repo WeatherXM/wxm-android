@@ -19,7 +19,7 @@ import timber.log.Timber
 class RewardsListViewModel(
     private val usecase: RewardsUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private var currentPage = 0
     private var hasNextPage = false

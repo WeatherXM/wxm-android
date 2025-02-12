@@ -22,7 +22,7 @@ import timber.log.Timber
 class NetworkSearchViewModel(
     private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     companion object {
         const val NETWORK_SEARCH_REQUEST_THRESHOLD = 1000L

@@ -19,7 +19,7 @@ class PhotoGalleryViewModel(
     val photos: MutableList<StationPhoto>,
     val fromClaiming: Boolean,
     private val usecase: DevicePhotoUseCase,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val onPhotosNumber = MutableLiveData(photos.size)
     private val _onPhotos = mutableStateListOf<StationPhoto>().apply {

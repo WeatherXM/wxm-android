@@ -20,7 +20,7 @@ import timber.log.Timber
 class ProfileViewModel(
     private val useCase: UserUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private var currentWalletRewards: UIWalletRewards? = null
 

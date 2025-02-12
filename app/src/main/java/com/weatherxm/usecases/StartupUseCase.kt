@@ -27,7 +27,7 @@ class StartupUseCaseImpl(
     private val authRepository: AuthRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val appConfigRepository: AppConfigRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : StartupUseCase {
 
     companion object {

@@ -32,7 +32,7 @@ class ExplorerViewModel(
     private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     companion object {
         const val FILL_OPACITY_HEXAGONS: Double = 0.5

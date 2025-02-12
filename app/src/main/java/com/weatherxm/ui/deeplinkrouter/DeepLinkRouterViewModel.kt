@@ -33,7 +33,7 @@ class DeepLinkRouterViewModel(
     private val usecase: ExplorerUseCase,
     private val devicesUseCase: DeviceListUseCase,
     private val resources: Resources,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     companion object {
         const val STATIONS_PATH_SEGMENT = "stations"

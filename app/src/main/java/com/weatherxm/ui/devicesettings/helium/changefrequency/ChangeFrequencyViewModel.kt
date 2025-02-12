@@ -31,7 +31,7 @@ class ChangeFrequencyViewModel(
     scanUseCase: BluetoothScannerUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,

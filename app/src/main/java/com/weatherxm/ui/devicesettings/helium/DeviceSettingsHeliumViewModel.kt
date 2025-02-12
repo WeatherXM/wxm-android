@@ -38,7 +38,7 @@ class DeviceSettingsHeliumViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BaseDeviceSettingsViewModel(device, usecase, photosUseCase, resources, analytics, dispatcher) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 

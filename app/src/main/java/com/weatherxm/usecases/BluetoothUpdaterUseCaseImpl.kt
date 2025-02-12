@@ -20,7 +20,7 @@ class BluetoothUpdaterUseCaseImpl(
     private val context: Context,
     private val repo: BluetoothUpdaterRepository,
     private val deviceOTARepository: DeviceOTARepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : BluetoothUpdaterUseCase {
 
     override suspend fun downloadFirmwareAndGetFileURI(deviceId: String): Either<Failure, Uri> {

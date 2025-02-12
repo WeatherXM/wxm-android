@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class StartupViewModel(
     private val startupUseCase: StartupUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val onStartupState = MutableLiveData<StartupState>()

@@ -24,7 +24,7 @@ class RewardsViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private var fetchRewardsJob: Job? = null
 

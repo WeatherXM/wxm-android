@@ -33,7 +33,7 @@ class RewardDetailsViewModel(
     private val usecase: RewardsUseCase,
     private val userUseCase: UserUseCase,
     private val authUseCase: AuthUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val onRewardDetails = MutableLiveData<Resource<RewardDetails>>()
