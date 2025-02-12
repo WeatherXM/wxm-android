@@ -9,13 +9,12 @@ import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.databinding.ListItemHourlyForecastBinding
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
-import org.koin.core.component.KoinComponent
 
 class HourlyForecastAdapter(
     private val onClickListener: ((HourlyWeather) -> Unit)?
 ) : ListAdapter<HourlyWeather, HourlyForecastAdapter.HourlyForecastViewHolder>(
     HourlyWeatherDiffCallback()
-), KoinComponent {
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyForecastViewHolder {
         val binding = ListItemHourlyForecastBinding.inflate(
