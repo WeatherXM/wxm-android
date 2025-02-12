@@ -275,6 +275,7 @@ import okio.Path.Companion.toOkioPath
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.createdAtStart
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
@@ -317,6 +318,37 @@ private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 1800L
 private const val COIL_MEMORY_CACHE_SIZE_PERCENTAGE = 0.25
 private const val COIL_DISK_CACHE_SIZE_PERCENTAGE = 0.02
 
+/**
+ * single:
+ * creates the instances when requested, and then keeps them in memory.
+ * Start-up memory: around 300mb.
+ * After going to device details -> history -> claim: around 360mb
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * SORT ALPHABETICALLY
+ * SORT ALPHABETICALLY
+ * SORT ALPHABETICALLY
+ * SORT ALPHABETICALLY
+ * SORT ALPHABETICALLY
+ * SORT ALPHABETICALLY
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 private val logging = module {
     single(createdAtStart = true) {
         Timber.also {
@@ -358,8 +390,8 @@ private val preferences = module {
 
 private val datasources = module {
     singleOf(::LocationDataSourceImpl) { bind<LocationDataSource>() }
-    singleOf(::NetworkWeatherHistoryDataSource)
-    singleOf(::DatabaseWeatherHistoryDataSource)
+    factoryOf(::NetworkWeatherHistoryDataSource)
+    factoryOf(::DatabaseWeatherHistoryDataSource)
     singleOf(::NetworkUserDataSource)
     singleOf(::CacheUserDataSource)
     singleOf(::NetworkDeviceDataSource)
@@ -378,12 +410,12 @@ private val datasources = module {
     singleOf(::CacheWeatherForecastDataSource)
     singleOf(::NetworkAddressSearchDataSource)
     singleOf(::CacheAddressSearchDataSource)
-    singleOf(::BluetoothScannerDataSourceImpl) { bind<BluetoothScannerDataSource>() }
-    singleOf(::BluetoothConnectionDataSourceImpl) { bind<BluetoothConnectionDataSource>() }
-    singleOf(::BluetoothUpdaterDataSourceImpl) { bind<BluetoothUpdaterDataSource>() }
+    factoryOf(::BluetoothScannerDataSourceImpl) { bind<BluetoothScannerDataSource>() }
+    factoryOf(::BluetoothConnectionDataSourceImpl) { bind<BluetoothConnectionDataSource>() }
+    factoryOf(::BluetoothUpdaterDataSourceImpl) { bind<BluetoothUpdaterDataSource>() }
     singleOf(::DeviceOTADataSourceImpl) { bind<DeviceOTADataSource>() }
-    singleOf(::WidgetDataSourceImpl) { bind<WidgetDataSource>() }
-    singleOf(::StatsDataSourceImpl) { bind<StatsDataSource>() }
+    factoryOf(::WidgetDataSourceImpl) { bind<WidgetDataSource>() }
+    factoryOf(::StatsDataSourceImpl) { bind<StatsDataSource>() }
     singleOf(::NetworkFollowDataSource)
     singleOf(::CacheFollowDataSource)
     singleOf(::NotificationsDataSourceImpl) { bind<NotificationsDataSource>() }
@@ -400,16 +432,16 @@ private val repositories = module {
     singleOf(::ExplorerRepositoryImpl) { bind<ExplorerRepository>() }
     singleOf(::RewardsRepositoryImpl) { bind<RewardsRepository>() }
     singleOf(::WeatherForecastRepositoryImpl) { bind<WeatherForecastRepository>() }
-    singleOf(::WeatherHistoryRepositoryImpl) { bind<WeatherHistoryRepository>() }
+    factoryOf(::WeatherHistoryRepositoryImpl) { bind<WeatherHistoryRepository>() }
     singleOf(::AppConfigRepositoryImpl) { bind<AppConfigRepository>() }
-    singleOf(::AddressRepositoryImpl) { bind<AddressRepository>() }
+    factoryOf(::AddressRepositoryImpl) { bind<AddressRepository>() }
     singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
-    singleOf(::BluetoothScannerRepositoryImpl) { bind<BluetoothScannerRepository>() }
-    singleOf(::BluetoothConnectionRepositoryImpl) { bind<BluetoothConnectionRepository>() }
-    singleOf(::BluetoothUpdaterRepositoryImpl) { bind<BluetoothUpdaterRepository>() }
+    factoryOf(::BluetoothScannerRepositoryImpl) { bind<BluetoothScannerRepository>() }
+    factoryOf(::BluetoothConnectionRepositoryImpl) { bind<BluetoothConnectionRepository>() }
+    factoryOf(::BluetoothUpdaterRepositoryImpl) { bind<BluetoothUpdaterRepository>() }
     singleOf(::DeviceOTARepositoryImpl) { bind<DeviceOTARepository>() }
-    singleOf(::WidgetRepositoryImpl) { bind<WidgetRepository>() }
-    singleOf(::StatsRepositoryImpl) { bind<StatsRepository>() }
+    factoryOf(::WidgetRepositoryImpl) { bind<WidgetRepository>() }
+    factoryOf(::StatsRepositoryImpl) { bind<StatsRepository>() }
     singleOf(::FollowRepositoryImpl) { bind<FollowRepository>() }
     singleOf(::LocationRepositoryImpl) { bind<LocationRepository>() }
     singleOf(::NotificationsRepositoryImpl) { bind<NotificationsRepository>() }
@@ -418,31 +450,31 @@ private val repositories = module {
 }
 
 private val usecases = module {
-    singleOf(::StartupUseCaseImpl) { bind<StartupUseCase>() }
+    factoryOf(::StartupUseCaseImpl) { bind<StartupUseCase>() }
     singleOf(::ExplorerUseCaseImpl) { bind<ExplorerUseCase>() }
     singleOf(::DeviceDetailsUseCaseImpl) { bind<DeviceDetailsUseCase>() }
     singleOf(::ForecastUseCaseImpl) { bind<ForecastUseCase>() }
-    singleOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
-    singleOf(::ChartsUseCaseImpl) { bind<ChartsUseCase>() }
-    singleOf(::ClaimDeviceUseCaseImpl) { bind<ClaimDeviceUseCase>() }
+    factoryOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
+    factoryOf(::ChartsUseCaseImpl) { bind<ChartsUseCase>() }
+    factoryOf(::ClaimDeviceUseCaseImpl) { bind<ClaimDeviceUseCase>() }
     singleOf(::RewardsUseCaseImpl) { bind<RewardsUseCase>() }
     singleOf(::AuthUseCaseImpl) { bind<AuthUseCase>() }
     singleOf(::UserUseCaseImpl) { bind<UserUseCase>() }
-    singleOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
-    singleOf(::DeleteAccountUseCaseImpl) { bind<DeleteAccountUseCase>() }
-    singleOf(::BluetoothScannerUseCaseImpl) { bind<BluetoothScannerUseCase>() }
-    singleOf(::BluetoothConnectionUseCaseImpl) { bind<BluetoothConnectionUseCase>() }
-    singleOf(::BluetoothUpdaterUseCaseImpl) { bind<BluetoothUpdaterUseCase>() }
-    singleOf(::AnalyticsOptInUseCaseImpl) { bind<AnalyticsOptInUseCase>() }
-    singleOf(::StationSettingsUseCaseImpl) { bind<StationSettingsUseCase>() }
-    singleOf(::WidgetSelectStationUseCaseImpl) { bind<WidgetSelectStationUseCase>() }
-    singleOf(::WidgetCurrentWeatherUseCaseImpl) { bind<WidgetCurrentWeatherUseCase>() }
-    singleOf(::StatsUseCaseImpl) { bind<StatsUseCase>() }
+    factoryOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
+    factoryOf(::DeleteAccountUseCaseImpl) { bind<DeleteAccountUseCase>() }
+    factoryOf(::BluetoothScannerUseCaseImpl) { bind<BluetoothScannerUseCase>() }
+    factoryOf(::BluetoothConnectionUseCaseImpl) { bind<BluetoothConnectionUseCase>() }
+    factoryOf(::BluetoothUpdaterUseCaseImpl) { bind<BluetoothUpdaterUseCase>() }
+    factoryOf(::AnalyticsOptInUseCaseImpl) { bind<AnalyticsOptInUseCase>() }
+    factoryOf(::StationSettingsUseCaseImpl) { bind<StationSettingsUseCase>() }
+    factoryOf(::WidgetSelectStationUseCaseImpl) { bind<WidgetSelectStationUseCase>() }
+    factoryOf(::WidgetCurrentWeatherUseCaseImpl) { bind<WidgetCurrentWeatherUseCase>() }
+    factoryOf(::StatsUseCaseImpl) { bind<StatsUseCase>() }
     singleOf(::FollowUseCaseImpl) { bind<FollowUseCase>() }
     singleOf(::DeviceListUseCaseImpl) { bind<DeviceListUseCase>() }
-    singleOf(::EditLocationUseCaseImpl) { bind<EditLocationUseCase>() }
+    factoryOf(::EditLocationUseCaseImpl) { bind<EditLocationUseCase>() }
     singleOf(::RemoteBannersUseCaseImpl) { bind<RemoteBannersUseCase>() }
-    singleOf(::UpdatePromptUseCaseImpl) { bind<UpdatePromptUseCase>() }
+    factoryOf(::UpdatePromptUseCaseImpl) { bind<UpdatePromptUseCase>() }
     singleOf(::DevicePhotoUseCaseImpl) { bind<DevicePhotoUseCase>() }
 }
 
@@ -524,9 +556,9 @@ private val bluetooth = module {
     single<BluetoothAdapter?> {
         ContextCompat.getSystemService(androidContext(), BluetoothManager::class.java)?.adapter
     }
-    singleOf(::BluetoothScanner)
+    factoryOf(::BluetoothScanner)
     singleOf(::BluetoothConnectionManager)
-    singleOf(::BluetoothUpdater)
+    factoryOf(::BluetoothUpdater)
 }
 
 val firebase = module {
