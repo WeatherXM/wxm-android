@@ -12,10 +12,9 @@ import com.weatherxm.ui.common.WeatherUnitType
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.NumberUtils.roundToDecimals
-import org.koin.core.component.KoinComponent
 
 @Suppress("TooManyFunctions")
-object Weather : KoinComponent {
+object Weather {
     private const val DECIMALS_PRECIPITATION_INCHES = 2
     private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
     private const val DECIMALS_PRESSURE_INHG = 2

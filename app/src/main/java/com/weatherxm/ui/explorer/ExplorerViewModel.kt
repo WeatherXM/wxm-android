@@ -23,7 +23,6 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -32,7 +31,7 @@ class ExplorerViewModel(
     private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     companion object {
         const val FILL_OPACITY_HEXAGONS: Double = 0.5

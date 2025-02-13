@@ -17,7 +17,6 @@ import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -28,7 +27,7 @@ class ClaimLocationViewModel(
     private val editLocationUseCase: EditLocationUseCase,
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null
     private var installationLocation = Location(0.0, 0.0)

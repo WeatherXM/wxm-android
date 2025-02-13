@@ -15,7 +15,6 @@ import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
@@ -24,7 +23,7 @@ class HomeViewModel(
     private val remoteBannersUseCase: RemoteBannersUseCase,
     private val photoUseCase: DevicePhotoUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var hasDevices: Boolean? = null

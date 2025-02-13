@@ -12,7 +12,6 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -22,7 +21,7 @@ import timber.log.Timber
 class NetworkSearchViewModel(
     private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     companion object {
         const val NETWORK_SEARCH_REQUEST_THRESHOLD = 1000L

@@ -21,7 +21,6 @@ import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -30,7 +29,7 @@ class DevicesViewModel(
     private val followUseCase: FollowUseCase,
     private val analytics: AnalyticsWrapper,
     private val resources: Resources,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val devices = MutableLiveData<Resource<List<UIDevice>>>().apply {
         value = Resource.loading()

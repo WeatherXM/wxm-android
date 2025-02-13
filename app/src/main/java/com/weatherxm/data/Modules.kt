@@ -265,13 +265,19 @@ import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
 import com.weatherxm.util.WidgetHelper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import okio.Path.Companion.toOkioPath
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.createdAtStart
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -325,6 +331,10 @@ private val logging = module {
     }
 }
 
+private val dispatchers = module {
+    single<CoroutineDispatcher> { Dispatchers.IO }
+}
+
 private val preferences = module {
     single<SharedPreferences> {
         PreferenceManager.getDefaultSharedPreferences(androidContext())
@@ -348,255 +358,93 @@ private val preferences = module {
 }
 
 private val datasources = module {
-    single<LocationDataSource> {
-        LocationDataSourceImpl(androidContext(), get(), get())
-    }
-    single<NetworkWeatherHistoryDataSource> {
-        NetworkWeatherHistoryDataSource(get())
-    }
-    single<DatabaseWeatherHistoryDataSource> {
-        DatabaseWeatherHistoryDataSource(get())
-    }
-    single<NetworkUserDataSource> {
-        NetworkUserDataSource(get())
-    }
-    single<CacheUserDataSource> {
-        CacheUserDataSource(get())
-    }
-    single<NetworkDeviceDataSource> {
-        NetworkDeviceDataSource(get())
-    }
-    single<CacheDeviceDataSource> {
-        CacheDeviceDataSource(get())
-    }
-    single<NetworkWalletDataSource> {
-        NetworkWalletDataSource(get())
-    }
-    single<CacheWalletDataSource> {
-        CacheWalletDataSource(get())
-    }
-    single<RewardsDataSource> {
-        RewardsDataSourceImpl(get())
-    }
-    single<NetworkAuthDataSource> {
-        NetworkAuthDataSource(get())
-    }
-    single<CacheAuthDataSource> {
-        CacheAuthDataSource(get())
-    }
-    single<AppConfigDataSource> {
-        AppConfigDataSourceImpl(get(), get(), get())
-    }
-    single<UserPreferenceDataSource> {
-        UserPreferenceDataSourceImpl(get())
-    }
-    single<NetworkExplorerDataSource> {
-        NetworkExplorerDataSource(get())
-    }
-    single<DatabaseExplorerDataSource> {
-        DatabaseExplorerDataSource(get())
-    }
-    single<AddressDataSource> {
-        AddressDataSourceImpl(androidContext(), get(), get())
-    }
-    single<NetworkWeatherForecastDataSource> {
-        NetworkWeatherForecastDataSource(get())
-    }
-    single<CacheWeatherForecastDataSource> {
-        CacheWeatherForecastDataSource(get())
-    }
-    single<NetworkAddressSearchDataSource> {
-        NetworkAddressSearchDataSource(get())
-    }
-    single<CacheAddressSearchDataSource> {
-        CacheAddressSearchDataSource(get())
-    }
-    single<BluetoothScannerDataSource> {
-        BluetoothScannerDataSourceImpl(get())
-    }
-    single<BluetoothConnectionDataSource> {
-        BluetoothConnectionDataSourceImpl(get())
-    }
-    single<BluetoothUpdaterDataSource> {
-        BluetoothUpdaterDataSourceImpl(get())
-    }
-    single<DeviceOTADataSource> {
-        DeviceOTADataSourceImpl(get(), get())
-    }
-    single<WidgetDataSource> {
-        WidgetDataSourceImpl(get())
-    }
-    single<StatsDataSource> {
-        StatsDataSourceImpl(get())
-    }
-    single<NetworkFollowDataSource> {
-        NetworkFollowDataSource(get())
-    }
-    single<CacheFollowDataSource> {
-        CacheFollowDataSource(get())
-    }
-    single<NotificationsDataSource> {
-        NotificationsDataSourceImpl(get(), get())
-    }
-    single<RemoteBannersDataSource> {
-        RemoteBannersDataSourceImpl(get(), get())
-    }
-    single<DeviceFrequencyDataSource> {
-        DeviceFrequencyDataSourceImpl(get())
-    }
-    single<DevicePhotoDataSource> {
-        DevicePhotoDataSourceImpl(get(), get())
-    }
+    singleOf(::AddressDataSourceImpl) { bind<AddressDataSource>() }
+    singleOf(::AppConfigDataSourceImpl) { bind<AppConfigDataSource>() }
+    factoryOf(::BluetoothConnectionDataSourceImpl) { bind<BluetoothConnectionDataSource>() }
+    factoryOf(::BluetoothScannerDataSourceImpl) { bind<BluetoothScannerDataSource>() }
+    factoryOf(::BluetoothUpdaterDataSourceImpl) { bind<BluetoothUpdaterDataSource>() }
+    singleOf(::CacheAddressSearchDataSource)
+    singleOf(::CacheAuthDataSource)
+    singleOf(::CacheDeviceDataSource)
+    singleOf(::CacheFollowDataSource)
+    singleOf(::CacheUserDataSource)
+    singleOf(::CacheWalletDataSource)
+    singleOf(::CacheWeatherForecastDataSource)
+    factoryOf(::DatabaseExplorerDataSource)
+    factoryOf(::DatabaseWeatherHistoryDataSource)
+    singleOf(::DeviceFrequencyDataSourceImpl) { bind<DeviceFrequencyDataSource>() }
+    singleOf(::DeviceOTADataSourceImpl) { bind<DeviceOTADataSource>() }
+    singleOf(::DevicePhotoDataSourceImpl) { bind<DevicePhotoDataSource>() }
+    singleOf(::LocationDataSourceImpl) { bind<LocationDataSource>() }
+    singleOf(::NetworkAddressSearchDataSource)
+    singleOf(::NetworkAuthDataSource)
+    singleOf(::NetworkDeviceDataSource)
+    singleOf(::NetworkExplorerDataSource)
+    singleOf(::NetworkFollowDataSource)
+    singleOf(::NetworkUserDataSource)
+    singleOf(::NetworkWalletDataSource)
+    factoryOf(::NetworkWeatherHistoryDataSource)
+    singleOf(::NetworkWeatherForecastDataSource)
+    singleOf(::NotificationsDataSourceImpl) { bind<NotificationsDataSource>() }
+    singleOf(::RemoteBannersDataSourceImpl) { bind<RemoteBannersDataSource>() }
+    singleOf(::RewardsDataSourceImpl) { bind<RewardsDataSource>() }
+    factoryOf(::StatsDataSourceImpl) { bind<StatsDataSource>() }
+    singleOf(::UserPreferenceDataSourceImpl) { bind<UserPreferenceDataSource>() }
+    factoryOf(::WidgetDataSourceImpl) { bind<WidgetDataSource>() }
 }
 
 private val repositories = module {
-    single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get(), get(), get(), get())
-    }
-    single<UserRepository> {
-        UserRepositoryImpl(get(), get())
-    }
-    single<WalletRepository> {
-        WalletRepositoryImpl(get(), get())
-    }
-    single<DeviceRepository> {
-        DeviceRepositoryImpl(get(), get(), get())
-    }
-    single<ExplorerRepository> {
-        ExplorerRepositoryImpl(get(), get())
-    }
-    single<RewardsRepository> {
-        RewardsRepositoryImpl(get())
-    }
-    single<WeatherForecastRepository> {
-        WeatherForecastRepositoryImpl(get(), get())
-    }
-    single<WeatherHistoryRepository> {
-        WeatherHistoryRepositoryImpl(get(), get())
-    }
-    single<AppConfigRepository> {
-        AppConfigRepositoryImpl(get())
-    }
-    single<AddressRepository> {
-        AddressRepositoryImpl(get(), get(), get(), get())
-    }
-    single<BluetoothScannerRepository> {
-        BluetoothScannerRepositoryImpl(get())
-    }
-    single<UserPreferencesRepository> {
-        UserPreferencesRepositoryImpl(get())
-    }
-    single<BluetoothConnectionRepository> {
-        BluetoothConnectionRepositoryImpl(get(), get())
-    }
-    single<BluetoothUpdaterRepository> {
-        BluetoothUpdaterRepositoryImpl(get())
-    }
-    single<DeviceOTARepository> {
-        DeviceOTARepositoryImpl(get())
-    }
-    single<WidgetRepository> {
-        WidgetRepositoryImpl(get())
-    }
-    single<StatsRepository> {
-        StatsRepositoryImpl(get())
-    }
-    single<FollowRepository> {
-        FollowRepositoryImpl(get(), get())
-    }
-    single<LocationRepository> {
-        LocationRepositoryImpl(get(), get(), get())
-    }
-    single<NotificationsRepository> {
-        NotificationsRepositoryImpl(get(), get())
-    }
-    single<RemoteBannersRepository> {
-        RemoteBannersRepositoryImpl(get())
-    }
-    single<DevicePhotoRepository> {
-        DevicePhotoRepositoryImpl(get())
-    }
+    factoryOf(::AddressRepositoryImpl) { bind<AddressRepository>() }
+    singleOf(::AppConfigRepositoryImpl) { bind<AppConfigRepository>() }
+    singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
+    factoryOf(::BluetoothConnectionRepositoryImpl) { bind<BluetoothConnectionRepository>() }
+    factoryOf(::BluetoothScannerRepositoryImpl) { bind<BluetoothScannerRepository>() }
+    factoryOf(::BluetoothUpdaterRepositoryImpl) { bind<BluetoothUpdaterRepository>() }
+    singleOf(::DeviceOTARepositoryImpl) { bind<DeviceOTARepository>() }
+    singleOf(::DevicePhotoRepositoryImpl) { bind<DevicePhotoRepository>() }
+    singleOf(::DeviceRepositoryImpl) { bind<DeviceRepository>() }
+    singleOf(::ExplorerRepositoryImpl) { bind<ExplorerRepository>() }
+    singleOf(::FollowRepositoryImpl) { bind<FollowRepository>() }
+    singleOf(::LocationRepositoryImpl) { bind<LocationRepository>() }
+    singleOf(::NotificationsRepositoryImpl) { bind<NotificationsRepository>() }
+    singleOf(::RemoteBannersRepositoryImpl) { bind<RemoteBannersRepository>() }
+    singleOf(::RewardsRepositoryImpl) { bind<RewardsRepository>() }
+    singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
+    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
+    singleOf(::WalletRepositoryImpl) { bind<WalletRepository>() }
+    factoryOf(::StatsRepositoryImpl) { bind<StatsRepository>() }
+    factoryOf(::WidgetRepositoryImpl) { bind<WidgetRepository>() }
+    factoryOf(::WeatherHistoryRepositoryImpl) { bind<WeatherHistoryRepository>() }
+    singleOf(::WeatherForecastRepositoryImpl) { bind<WeatherForecastRepository>() }
 }
 
 private val usecases = module {
-    single<StartupUseCase> {
-        StartupUseCaseImpl(androidContext(), get(), get(), get())
-    }
-    single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get())
-    }
-    single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get())
-    }
-    single<ForecastUseCase> {
-        ForecastUseCaseImpl(get())
-    }
-    single<HistoryUseCase> {
-        HistoryUseCaseImpl(get())
-    }
-    single<ChartsUseCase> {
-        ChartsUseCaseImpl(androidContext())
-    }
-    single<ClaimDeviceUseCase> {
-        ClaimDeviceUseCaseImpl(get(), get())
-    }
-    single<RewardsUseCase> {
-        RewardsUseCaseImpl(get(), androidContext())
-    }
-    single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get())
-    }
-    single<UserUseCase> {
-        UserUseCaseImpl(get(), get(), get(), get())
-    }
-    single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get())
-    }
-    single<DeleteAccountUseCase> {
-        DeleteAccountUseCaseImpl(get(), get())
-    }
-    single<BluetoothScannerUseCase> {
-        BluetoothScannerUseCaseImpl(get())
-    }
-    single<BluetoothConnectionUseCase> {
-        BluetoothConnectionUseCaseImpl(get())
-    }
-    single<BluetoothUpdaterUseCase> {
-        BluetoothUpdaterUseCaseImpl(androidContext(), get(), get())
-    }
-    single<AnalyticsOptInUseCase> {
-        AnalyticsOptInUseCaseImpl(get())
-    }
-    single<StationSettingsUseCase> {
-        StationSettingsUseCaseImpl(get(), get(), get())
-    }
-    single<WidgetSelectStationUseCase> {
-        WidgetSelectStationUseCaseImpl(get(), get())
-    }
-    single<WidgetCurrentWeatherUseCase> {
-        WidgetCurrentWeatherUseCaseImpl(get(), get())
-    }
-    single<StatsUseCase> {
-        StatsUseCaseImpl(get(), get())
-    }
-    single<FollowUseCase> {
-        FollowUseCaseImpl(get(), get())
-    }
-    single<DeviceListUseCase> {
-        DeviceListUseCaseImpl(get(), get(), get())
-    }
-    single<EditLocationUseCase> {
-        EditLocationUseCaseImpl(get(), get())
-    }
-    single<RemoteBannersUseCase> {
-        RemoteBannersUseCaseImpl(get())
-    }
-    single<UpdatePromptUseCase> {
-        UpdatePromptUseCaseImpl(get())
-    }
-    single<DevicePhotoUseCase> {
-        DevicePhotoUseCaseImpl(get())
-    }
+    factoryOf(::AnalyticsOptInUseCaseImpl) { bind<AnalyticsOptInUseCase>() }
+    singleOf(::AuthUseCaseImpl) { bind<AuthUseCase>() }
+    factoryOf(::BluetoothConnectionUseCaseImpl) { bind<BluetoothConnectionUseCase>() }
+    factoryOf(::BluetoothScannerUseCaseImpl) { bind<BluetoothScannerUseCase>() }
+    factoryOf(::BluetoothUpdaterUseCaseImpl) { bind<BluetoothUpdaterUseCase>() }
+    factoryOf(::ChartsUseCaseImpl) { bind<ChartsUseCase>() }
+    factoryOf(::ClaimDeviceUseCaseImpl) { bind<ClaimDeviceUseCase>() }
+    factoryOf(::DeleteAccountUseCaseImpl) { bind<DeleteAccountUseCase>() }
+    singleOf(::DeviceDetailsUseCaseImpl) { bind<DeviceDetailsUseCase>() }
+    singleOf(::DeviceListUseCaseImpl) { bind<DeviceListUseCase>() }
+    singleOf(::DevicePhotoUseCaseImpl) { bind<DevicePhotoUseCase>() }
+    factoryOf(::EditLocationUseCaseImpl) { bind<EditLocationUseCase>() }
+    singleOf(::ExplorerUseCaseImpl) { bind<ExplorerUseCase>() }
+    singleOf(::FollowUseCaseImpl) { bind<FollowUseCase>() }
+    singleOf(::ForecastUseCaseImpl) { bind<ForecastUseCase>() }
+    factoryOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
+    factoryOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
+    singleOf(::RemoteBannersUseCaseImpl) { bind<RemoteBannersUseCase>() }
+    singleOf(::RewardsUseCaseImpl) { bind<RewardsUseCase>() }
+    factoryOf(::StartupUseCaseImpl) { bind<StartupUseCase>() }
+    factoryOf(::StationSettingsUseCaseImpl) { bind<StationSettingsUseCase>() }
+    factoryOf(::StatsUseCaseImpl) { bind<StatsUseCase>() }
+    factoryOf(::UpdatePromptUseCaseImpl) { bind<UpdatePromptUseCase>() }
+    singleOf(::UserUseCaseImpl) { bind<UserUseCase>() }
+    factoryOf(::WidgetCurrentWeatherUseCaseImpl) { bind<WidgetCurrentWeatherUseCase>() }
+    factoryOf(::WidgetSelectStationUseCaseImpl) { bind<WidgetSelectStationUseCase>() }
 }
 
 private val location = module {
@@ -618,29 +466,15 @@ private val network = module {
         HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BASIC else Level.NONE)
     }
 
-    single<ChuckerInterceptor> {
-        ChuckerInterceptor(androidContext())
-    }
-
-    single<ClientIdentificationRequestInterceptor> {
-        ClientIdentificationRequestInterceptor(get())
-    }
-
     single<MoshiConverterFactory> {
         MoshiConverterFactory.create(get()).asLenient()
     }
 
-    single<AuthTokenAuthenticator> {
-        AuthTokenAuthenticator(get(), get(), get(), get())
-    }
-
-    single<ApiRequestInterceptor> {
-        ApiRequestInterceptor(get())
-    }
-
-    single<AuthRequestInterceptor> {
-        AuthRequestInterceptor(get(), get())
-    }
+    singleOf(::ApiRequestInterceptor)
+    singleOf(::AuthRequestInterceptor)
+    singleOf(::AuthTokenAuthenticator)
+    singleOf(::ChuckerInterceptor)
+    singleOf(::ClientIdentificationRequestInterceptor)
 
     single<Retrofit>(named(RETROFIT_AUTH)) {
         // Create client
@@ -691,15 +525,9 @@ private val bluetooth = module {
     single<BluetoothAdapter?> {
         ContextCompat.getSystemService(androidContext(), BluetoothManager::class.java)?.adapter
     }
-    single<BluetoothScanner> {
-        BluetoothScanner()
-    }
-    single<BluetoothConnectionManager> {
-        BluetoothConnectionManager(get(), get())
-    }
-    single<BluetoothUpdater> {
-        BluetoothUpdater(get(), get())
-    }
+    singleOf(::BluetoothConnectionManager)
+    factoryOf(::BluetoothScanner)
+    factoryOf(::BluetoothUpdater)
 }
 
 val firebase = module {
@@ -755,18 +583,6 @@ val firebase = module {
     }
 }
 
-val navigator = module {
-    single {
-        Navigator(get())
-    }
-}
-
-val resources = module {
-    single {
-        Resources(androidContext().resources)
-    }
-}
-
 val database = module {
     single<AppDatabase> {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, APP_DATABASE_NAME)
@@ -784,33 +600,6 @@ val database = module {
     }
 }
 
-val displayModeHelper = module {
-    single(createdAtStart = true) {
-        DisplayModeHelper(androidContext().resources, get(), get()).apply {
-            // Set light/dark theme at startup
-            setDisplayMode()
-        }
-    }
-}
-
-val locationHelper = module {
-    single(createdAtStart = true) {
-        LocationHelper(androidContext(), get())
-    }
-}
-
-val clientIdentificationHelper = module {
-    single {
-        ClientIdentificationHelper(androidContext(), get())
-    }
-}
-
-val uploadObserverService = module {
-    single {
-        GlobalUploadObserverService(get(), get())
-    }
-}
-
 val analytics = module {
     single<FirebaseAnalytics> {
         Firebase.analytics
@@ -822,21 +611,31 @@ val analytics = module {
         }
     }
 
-    factory { FirebaseAnalyticsService(get()) as AnalyticsService }
-    factory { MixpanelAnalyticsService(get()) as AnalyticsService }
+    factoryOf(::FirebaseAnalyticsService) { bind<AnalyticsService>() }
+    factoryOf(::MixpanelAnalyticsService) { bind<AnalyticsService>() }
 
     single<AnalyticsWrapper> {
         AnalyticsWrapper(getAll<AnalyticsService>(), androidContext())
     }
 }
 
-val widgetHelper = module {
-    single {
-        WidgetHelper(get(), get())
-    }
-}
-
 private val utilities = module {
+    singleOf(::AuthTokenJsonAdapter)
+    singleOf(::ClientIdentificationHelper) { createdAtStart() }
+    singleOf(::GlobalUploadObserverService)
+    singleOf(::LocationHelper) { createdAtStart() }
+    singleOf(::Navigator)
+    singleOf(::UICellJsonAdapter)
+    singleOf(::WidgetHelper)
+    single<Resources> {
+        Resources(androidContext().resources)
+    }
+    single<DisplayModeHelper>(createdAtStart = true) {
+        DisplayModeHelper(androidContext().resources, get(), get()).apply {
+            // Set light/dark theme at startup
+            setDisplayMode()
+        }
+    }
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
     }
@@ -902,12 +701,6 @@ private val utilities = module {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
     }
-    single<UICellJsonAdapter> {
-        UICellJsonAdapter(get())
-    }
-    single<AuthTokenJsonAdapter> {
-        AuthTokenJsonAdapter(get())
-    }
     single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
         DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
     }
@@ -931,156 +724,69 @@ private val utilities = module {
 }
 
 private val viewmodels = module {
-    viewModel { params ->
-        DeviceDetailsViewModel(
-            device = params.get(),
-            openExplorerOnBack = params.get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params ->
-        DeviceSettingsWifiViewModel(
-            device = params.get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params ->
-        DeviceSettingsHeliumViewModel(
-            device = params.get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params -> RebootViewModel(device = params.get(), get(), get(), get(), get()) }
-    viewModel { params ->
-        ChangeFrequencyViewModel(device = params.get(), get(), get(), get(), get(), get())
-    }
-    viewModel { params -> CurrentViewModel(device = params.get(), get(), get(), get()) }
-    viewModel { params -> ForecastViewModel(device = params.get(), get(), get(), get()) }
-    viewModel { params -> RewardsViewModel(device = params.get(), get(), get()) }
-    viewModel { params ->
-        HistoryViewModel(
-            device = params.get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params ->
-        DeviceHeliumOTAViewModel(
-            device = params.get(),
-            deviceIsBleConnected = params.get(),
-            needsPhotoVerification = params.get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params ->
-        CellInfoViewModel(cell = params.get(), get(), get(), get(), get(), get())
-    }
-    viewModel { StartupViewModel(get()) }
-    viewModel { AnalyticsOptInViewModel(get(), get()) }
-    viewModel { ConnectWalletViewModel(get(), get(), get()) }
-    viewModel { DeleteAccountViewModel(get(), get(), get()) }
-    viewModel { DeviceEditLocationViewModel(get(), get(), get(), get()) }
-    viewModel { DevicesViewModel(get(), get(), get(), get()) }
-    viewModel { ExplorerViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get()) }
-    viewModel { ProfileViewModel(get(), get()) }
-    viewModel { LoginViewModel(get(), get(), get(), get()) }
-    viewModel { NetworkStatsViewModel(get()) }
-    viewModel { PasswordPromptViewModel(get(), get(), get()) }
-    viewModel { PreferenceViewModel(get(), get(), get()) }
-    viewModel { ResetPasswordViewModel(get(), get(), get()) }
-    viewModel { RewardsClaimViewModel(get(), get()) }
-    viewModel { RewardsListViewModel(get(), get()) }
-    viewModel { params ->
-        RewardDetailsViewModel(
-            device = params.get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params -> RewardBoostViewModel(params.get(), get(), get(), get()) }
-    viewModel { DeleteAccountSurveyViewModel(get(), get()) }
-    viewModel { SignupViewModel(get(), get(), get()) }
-    viewModel { UpdatePromptViewModel(get()) }
-    viewModel { DeepLinkRouterViewModel(get(), get(), get()) }
-    viewModel { SelectStationViewModel(get(), get()) }
-    viewModel { ClaimLocationViewModel(get(), get(), get()) }
-    viewModel { ClaimHeliumViewModel(get(), get(), get()) }
-    viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }
-    viewModel { ClaimHeliumResultViewModel(get(), get(), get()) }
-    viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
-    viewModel { NetworkSearchViewModel(get(), get()) }
-    viewModel { params ->
-        ForecastDetailsViewModel(
-            params.get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { params ->
-        ClaimWifiViewModel(deviceType = params.get(), get(), get(), get())
-    }
-    viewModel { ClaimPulseViewModel(get(), get(), get()) }
-    viewModel { DevicesRewardsViewModel(get(), get(), get()) }
-    viewModel { params ->
-        PhotoGalleryViewModel(
-            device = params.get(),
-            photos = params.get(),
-            fromClaiming = params.get(),
-            get()
-        )
-    }
-    viewModel { PhotoVerificationIntroViewModel(get()) }
-    viewModel { params ->
-        PhotoUploadViewModel(device = params.get(), photos = params.get(), get(), get(), get())
-    }
+    viewModelOf(::AnalyticsOptInViewModel)
+    viewModelOf(::CellInfoViewModel)
+    viewModelOf(::ChangeFrequencyViewModel)
+    viewModelOf(::ClaimHeliumFrequencyViewModel)
+    viewModelOf(::ClaimHeliumPairViewModel)
+    viewModelOf(::ClaimHeliumResultViewModel)
+    viewModelOf(::ClaimHeliumViewModel)
+    viewModelOf(::ClaimLocationViewModel)
+    viewModelOf(::ClaimPulseViewModel)
+    viewModelOf(::ClaimWifiViewModel)
+    viewModelOf(::ConnectWalletViewModel)
+    viewModelOf(::CurrentViewModel)
+    viewModelOf(::DeepLinkRouterViewModel)
+    viewModelOf(::DeleteAccountSurveyViewModel)
+    viewModelOf(::DeleteAccountViewModel)
+    viewModelOf(::DeviceDetailsViewModel)
+    viewModelOf(::DeviceEditLocationViewModel)
+    viewModelOf(::DeviceHeliumOTAViewModel)
+    viewModelOf(::DeviceSettingsHeliumViewModel)
+    viewModelOf(::DeviceSettingsWifiViewModel)
+    viewModelOf(::DevicesRewardsViewModel)
+    viewModelOf(::DevicesViewModel)
+    viewModelOf(::ExplorerViewModel)
+    viewModelOf(::ForecastDetailsViewModel)
+    viewModelOf(::ForecastViewModel)
+    viewModelOf(::HistoryViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::NetworkSearchViewModel)
+    viewModelOf(::NetworkStatsViewModel)
+    viewModelOf(::PasswordPromptViewModel)
+    viewModelOf(::PhotoGalleryViewModel)
+    viewModelOf(::PhotoUploadViewModel)
+    viewModelOf(::PhotoVerificationIntroViewModel)
+    viewModelOf(::PreferenceViewModel)
+    viewModelOf(::ProfileViewModel)
+    viewModelOf(::RebootViewModel)
+    viewModelOf(::ResetPasswordViewModel)
+    viewModelOf(::RewardBoostViewModel)
+    viewModelOf(::RewardDetailsViewModel)
+    viewModelOf(::RewardsClaimViewModel)
+    viewModelOf(::RewardsListViewModel)
+    viewModelOf(::RewardsViewModel)
+    viewModelOf(::SelectStationViewModel)
+    viewModelOf(::SignupViewModel)
+    viewModelOf(::StartupViewModel)
+    viewModelOf(::UpdatePromptViewModel)
 }
 
 val modules = listOf(
-    logging,
     analytics,
-    preferences,
-    network,
-    bluetooth,
-    datasources,
-    repositories,
-    location,
-    navigator,
-    usecases,
-    resources,
-    firebase,
     apiServiceModule,
+    bluetooth,
     database,
-    displayModeHelper,
-    locationHelper,
-    clientIdentificationHelper,
+    datasources,
+    dispatchers,
+    firebase,
+    location,
+    logging,
+    network,
+    preferences,
+    repositories,
+    usecases,
     utilities,
-    widgetHelper,
-    uploadObserverService,
     viewmodels
 )

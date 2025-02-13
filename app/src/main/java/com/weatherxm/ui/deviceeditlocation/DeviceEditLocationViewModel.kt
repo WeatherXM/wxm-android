@@ -23,7 +23,6 @@ import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -36,7 +35,7 @@ class DeviceEditLocationViewModel(
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
     private val resources: Resources,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null
 

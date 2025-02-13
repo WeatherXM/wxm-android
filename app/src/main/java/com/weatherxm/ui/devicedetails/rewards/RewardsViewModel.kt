@@ -15,7 +15,6 @@ import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class RewardsViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private var fetchRewardsJob: Job? = null
 

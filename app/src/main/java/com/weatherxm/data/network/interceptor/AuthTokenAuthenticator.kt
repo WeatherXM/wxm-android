@@ -24,7 +24,6 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
 class AuthTokenAuthenticator(
@@ -32,7 +31,7 @@ class AuthTokenAuthenticator(
     private val cacheAuthDataSource: CacheAuthDataSource,
     private val navigator: Navigator,
     private val context: Context,
-) : Authenticator, KoinComponent {
+) : Authenticator {
     private lateinit var refreshJob: Deferred<AuthToken?>
 
     override fun authenticate(route: Route?, response: Response): Request? {

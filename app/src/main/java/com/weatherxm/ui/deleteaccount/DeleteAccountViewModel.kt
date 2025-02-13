@@ -15,7 +15,6 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -23,7 +22,7 @@ class DeleteAccountViewModel(
     private val usecase: DeleteAccountUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     companion object {
         const val DELETE_ACCOUNT_DELAY = 1000L

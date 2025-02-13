@@ -17,7 +17,6 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -26,7 +25,7 @@ class ForecastViewModel(
     private val resources: Resources,
     private val forecastUseCase: ForecastUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onLoading = MutableLiveData<Boolean>()
 

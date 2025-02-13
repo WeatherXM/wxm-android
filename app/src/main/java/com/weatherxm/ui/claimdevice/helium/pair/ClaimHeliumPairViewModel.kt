@@ -16,7 +16,6 @@ import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -25,7 +24,7 @@ class ClaimHeliumPairViewModel(
     connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics, dispatcher) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
