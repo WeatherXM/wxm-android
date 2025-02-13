@@ -5,7 +5,7 @@
         "base_reward": 2.34,
         "total_business_boost_reward": 1.23,
         "total_reward": 3.57,
-        "base_reward_score": 95,
+        "base_reward_score": 99,
         "annotation_summary": [
             {
                 "severity_level": "INFO",

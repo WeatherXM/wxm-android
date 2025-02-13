@@ -10,6 +10,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
+import com.weatherxm.util.Rewards.THRESHOLD_SCORE_TO_SHOW_ISSUES
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.LocalDate
@@ -576,6 +577,10 @@ data class Reward(
     companion object {
         fun initWithTimestamp(ts: ZonedDateTime?) = Reward(ts, null, null, null, null, null)
     }
+
+    fun shouldShowAnnotations() = !annotationSummary.isNullOrEmpty()
+        && baseRewardScore != null
+        && baseRewardScore < THRESHOLD_SCORE_TO_SHOW_ISSUES
 }
 
 @Keep
@@ -639,6 +644,10 @@ data class RewardDetails(
 
     fun isEmpty() = timestamp == null && totalDailyReward == null && base == null
         && boost == null && annotationSummary == null && rewardSplit == null
+
+    fun shouldShowAnnotations() = !annotationSummary.isNullOrEmpty()
+        && base?.rewardScore != null
+        && base.rewardScore < THRESHOLD_SCORE_TO_SHOW_ISSUES
 }
 
 @Keep

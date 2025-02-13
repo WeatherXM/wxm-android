@@ -123,7 +123,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
         handleSplitRewards(data)
 
-        updateIssues(sortedIssues)
+        updateIssues(data, sortedIssues)
 
         data.base?.qodScore?.let {
             updateDataQualityCard(it)
@@ -194,8 +194,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         )
     }
 
-    private fun updateIssues(sortedIssues: List<RewardsAnnotationGroup>?) {
-        if (sortedIssues.isNullOrEmpty()) {
+    private fun updateIssues(data: RewardDetails, sortedIssues: List<RewardsAnnotationGroup>?) {
+        if (sortedIssues.isNullOrEmpty() || !data.shouldShowAnnotations()) {
             binding.issuesTitle.visible(false)
             binding.issuesDesc.visible(false)
             binding.issueCard.visible(false)

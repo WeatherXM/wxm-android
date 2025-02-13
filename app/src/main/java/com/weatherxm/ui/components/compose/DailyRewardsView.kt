@@ -52,14 +52,17 @@ fun DailyRewardsView(
     val sortedSeverities = data.annotationSummary?.map {
         it.severityLevel
     }?.sortedByDescending { it }?.filterNotNull()
-    val topSeverity = sortedSeverities?.getOrNull(0)
 
-    val border = topSeverity?.let {
-        when (it) {
-            SeverityLevel.ERROR -> BorderStroke(1.dp, colorResource(R.color.error))
-            SeverityLevel.WARNING -> BorderStroke(1.dp, colorResource(R.color.warning))
-            SeverityLevel.INFO -> BorderStroke(1.dp, colorResource(R.color.infoStrokeColor))
+    val border = if (data.shouldShowAnnotations()) {
+        sortedSeverities?.getOrNull(0)?.let {
+            when (it) {
+                SeverityLevel.ERROR -> BorderStroke(1.dp, colorResource(R.color.error))
+                SeverityLevel.WARNING -> BorderStroke(1.dp, colorResource(R.color.warning))
+                SeverityLevel.INFO -> BorderStroke(1.dp, colorResource(R.color.infoStrokeColor))
+            }
         }
+    } else {
+        null
     }
 
     if (onCardClick != null) {
@@ -156,7 +159,7 @@ private fun DailyRewardsContents(
                     }
                 }
 
-                if (onViewDetails != null && data.annotationSummary.isNullOrEmpty()) {
+                if (onViewDetails != null && !data.shouldShowAnnotations()) {
                     Button(
                         onClick = { onViewDetails() },
                         colors = ButtonDefaults.buttonColors(
@@ -178,11 +181,11 @@ private fun DailyRewardsContents(
             }
         }
 
-        if (!sortedSeverities.isNullOrEmpty() && data.annotationSummary != null) {
+        if (!sortedSeverities.isNullOrEmpty() && data.shouldShowAnnotations()) {
             val annotationMessage = getAnnotationMessage(
                 useShortAnnotationText,
                 sortedSeverities,
-                data.annotationSummary.size
+                data.annotationSummary?.size!!
             )
 
             MessageCardView(
