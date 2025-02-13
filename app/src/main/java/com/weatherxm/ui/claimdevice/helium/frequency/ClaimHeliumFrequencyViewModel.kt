@@ -10,7 +10,6 @@ import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ClaimHeliumFrequencyViewModel(

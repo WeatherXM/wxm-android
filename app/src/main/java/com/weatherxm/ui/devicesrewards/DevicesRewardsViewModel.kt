@@ -18,7 +18,6 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

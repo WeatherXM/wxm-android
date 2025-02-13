@@ -18,7 +18,6 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.ImageFileHelper.getUriForFile
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 

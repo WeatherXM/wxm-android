@@ -23,7 +23,6 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

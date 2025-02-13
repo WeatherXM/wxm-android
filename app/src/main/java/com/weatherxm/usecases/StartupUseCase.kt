@@ -7,7 +7,6 @@ import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.startup.StartupState
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

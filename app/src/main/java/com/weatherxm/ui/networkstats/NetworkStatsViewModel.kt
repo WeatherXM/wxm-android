@@ -8,7 +8,6 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber

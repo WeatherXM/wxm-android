@@ -13,7 +13,6 @@ import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.StartupUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

@@ -15,7 +15,6 @@ import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")

@@ -18,7 +18,6 @@ import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
