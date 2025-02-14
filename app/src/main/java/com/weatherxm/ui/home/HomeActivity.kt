@@ -15,6 +15,7 @@ import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
@@ -80,13 +81,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         devicesViewModel.devices().observe(this) {
-            val currentDestination = navController.currentDestination?.id
-            if (it.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
-                model.getInfoBanner()
-                checkForEmptyContainer()
-            } else {
-                binding.emptyContainer.visible(false)
-            }
+            onDevices(it)
         }
 
         /**
@@ -148,6 +143,39 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Fetch user's devices
+        devicesViewModel.fetch()
+
+        /**
+         * Changing the theme from Profile -> Settings and going back to profile
+         * shows the "Add Device" floating button visible again. This code is to fix this.
+         */
+        val navDestination = navController.currentDestination?.id
+        binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
+        binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
+        /**
+         * Don't use the visible function for the addButton
+         * because of a specific case hiding it in the devices list.
+         * Therefore we use the hide() function which fits our purpose.
+         */
+        if (navDestination == R.id.navigation_profile) {
+            binding.addDevice.hide()
+        }
+    }
+
+    private fun onDevices(resource: Resource<List<UIDevice>>) {
+        val currentDestination = navController.currentDestination?.id
+        if (resource.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
+            model.getInfoBanner()
+            checkForEmptyContainer()
+        } else {
+            binding.emptyContainer.visible(false)
+        }
+    }
+
     private fun checkForEmptyContainer() {
         if (devicesViewModel.hasNoDevices()) {
             binding.emptyContainer.visible(true)
@@ -174,29 +202,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         binding.navView.show()
         binding.networkStatsBtn.visible(destination.id == R.id.navigation_explorer)
         binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // Fetch user's devices
-        devicesViewModel.fetch()
-
-        /**
-         * Changing the theme from Profile -> Settings and going back to profile
-         * shows the "Add Device" floating button visible again. This code is to fix this.
-         */
-        val navDestination = navController.currentDestination?.id
-        binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
-        binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
-        /**
-         * Don't use the visible function for the addButton
-         * because of a specific case hiding it in the devices list.
-         * Therefore we use the hide() function which fits our purpose.
-         */
-        if (navDestination == R.id.navigation_profile) {
-            binding.addDevice.hide()
-        }
     }
 
     private fun onExplorerState(resource: Resource<Unit>) {
