@@ -6,6 +6,7 @@ import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.ErrorType
 
 object Rewards {
+    const val THRESHOLD_SCORE_TO_SHOW_ISSUES = 99
 
     @Suppress("MagicNumber")
     fun metricsErrorType(score: Int?, polReason: AnnotationGroupCode?): ErrorType? {
