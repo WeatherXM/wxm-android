@@ -116,7 +116,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     private fun onInfoBanner(infoBanner: InfoBanner?) {
-        if (infoBanner != null) {
+        if (infoBanner != null && !model.hasNoDevices()) {
             binding.infoBanner.setContent {
                 InfoBannerView(
                     title = infoBanner.title,
@@ -205,16 +205,16 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private fun onUnFollowStatus(status: Resource<Unit>) {
         when (status.status) {
             Status.SUCCESS -> {
-                binding.empty.visible(false)
+                binding.statusView.visible(false)
                 dialogOverlay.cancel()
             }
             Status.ERROR -> {
                 context.toast(status.message ?: getString(R.string.error_reach_out_short))
-                binding.empty.visible(false)
+                binding.statusView.visible(false)
                 dialogOverlay.cancel()
             }
             Status.LOADING -> {
-                binding.empty.animation(R.raw.anim_loading).visible(true)
+                binding.statusView.animation(R.raw.anim_loading).visible(true)
                 dialogOverlay.show()
             }
         }
@@ -229,43 +229,39 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()
-                    binding.empty.visible(false)
+                    binding.statusView.visible(false)
+                    binding.contentContainerCard.visible(true)
                     binding.recycler.visible(true)
                 } else {
-                    binding.empty.clear()
-                        .animation(R.raw.anim_empty_devices, false)
-                        .title(getString(R.string.empty_weather_stations))
-                        .htmlSubtitle(getString(R.string.add_weather_station_or_browser_map))
-                        .action(getString(R.string.view_explorer_map))
-                        .listener {
-                            parentModel.openExplorer()
-                        }
-                        .visible(true)
+                    binding.statusView.visible(false)
                     adapter.submitList(mutableListOf())
                     binding.recycler.visible(false)
+                    binding.contentContainerCard.visible(false)
                 }
             }
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
                 binding.totalEarnedCard.visible(true)
                 binding.totalEarned.text = getString(R.string.wxm_amount, "?")
-                binding.empty.animation(R.raw.anim_error, false)
+                binding.statusView.animation(R.raw.anim_error, false)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(devices.message)
                     .action(getString(R.string.action_retry))
                     .listener { model.fetch() }
                     .visible(true)
                 binding.recycler.visible(false)
+                binding.contentContainerCard.visible(true)
             }
             Status.LOADING -> {
                 if (binding.swiperefresh.isRefreshing) {
-                    binding.empty.clear().visible(false)
+                    binding.statusView.clear().visible(false)
                 } else if (adapter.currentList.isNotEmpty()) {
-                    binding.empty.clear().visible(false)
+                    binding.statusView.clear().visible(false)
                     binding.swiperefresh.isRefreshing = true
                 } else {
                     binding.recycler.visible(false)
-                    binding.empty.clear().animation(R.raw.anim_loading).visible(true)
+                    binding.contentContainerCard.visible(false)
+                    binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
                     binding.totalEarnedCard.invisible()
                 }
             }

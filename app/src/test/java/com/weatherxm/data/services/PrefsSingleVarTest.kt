@@ -8,6 +8,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BAN
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_LAST_REMINDED_VERSION
 import com.weatherxm.data.services.CacheService.Companion.KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS
+import com.weatherxm.data.services.CacheService.Companion.KEY_SHOULD_SHOW_CLAIMING_BADGE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WALLET_WARNING_DISMISSED_TIMESTAMP
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -49,6 +50,7 @@ class PrefsSingleVarTest(
         }
     }
 
+    @Suppress("LongMethod")
     fun test(behaviorSpec: BehaviorSpec) {
         behaviorSpec.testGetSetSingleVar(
             "Last Reminded Version",
@@ -130,6 +132,14 @@ class PrefsSingleVarTest(
             { cacheService.getPhotoVerificationAcceptedTerms() },
             { cacheService.setPhotoVerificationAcceptedTerms() }
         )
-    }
 
+        behaviorSpec.testGetSetSingleVar(
+            "if we should show the badge for claiming or not",
+            false,
+            { sharedPref.getBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, true) },
+            { prefEditor.putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, false) },
+            { cacheService.getClaimingBadgeShouldShow() },
+            { cacheService.setClaimingBadgeShouldShow(false) }
+        )
+    }
 }

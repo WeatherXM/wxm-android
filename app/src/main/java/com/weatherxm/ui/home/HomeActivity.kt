@@ -15,6 +15,7 @@ import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
@@ -69,17 +70,15 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             }
         }
 
-        model.showOverlayViews().observe(this) { shouldShow ->
-            if (shouldShow) {
-                binding.addDevice.show()
-                binding.navView.show()
-            } else if (!shouldShow) {
-                binding.addDevice.hide()
-                binding.navView.hide()
-            }
+        model.showOverlayViews().observe(this) {
+            onScroll(it)
         }
 
-        /*
+        devicesViewModel.devices().observe(this) {
+            onDevices(it)
+        }
+
+        /**
          * Show/hide FAB and devices count label
          * based on selected navigation item and dismiss snackbar if shown
          */
@@ -92,6 +91,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.addDevice.setOnClickListener {
+            model.setClaimingBadgeShouldShow(false)
             navigator.showClaimSelectStationType(this)
         }
 
@@ -99,16 +99,18 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             navigator.showNetworkStats(this)
         }
 
-        model.onWalletWarnings().observe(this) {
-            handleBadge(it.showMissingBadge)
+        binding.buyStationBtn.setOnClickListener {
+            navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
-        model.onOpenExplorer().observe(this) {
-            if (it == true) {
-                NavigationUI.onNavDestinationSelected(
-                    binding.navView.menu.findItem(R.id.navigation_explorer), navController
-                )
-            }
+        binding.followStationExplorerBtn.setOnClickListener {
+            NavigationUI.onNavDestinationSelected(
+                binding.navView.menu.findItem(R.id.navigation_explorer), navController
+            )
+        }
+
+        model.onWalletWarnings().observe(this) {
+            handleBadge(it.showMissingBadge)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
@@ -136,28 +138,11 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
     }
 
-    private fun onNavigationChanged(destination: NavDestination) {
-        if (snackbar?.isShown == true) snackbar?.dismiss()
-        when (destination.id) {
-            R.id.navigation_devices -> binding.addDevice.show()
-            R.id.navigation_explorer -> {
-                explorerModel.setExplorerAfterLoggedIn(true)
-                binding.addDevice.hide()
-            }
-
-            else -> binding.addDevice.hide()
-        }
-        binding.navView.show()
-        binding.networkStatsBtn.visible(destination.id == R.id.navigation_explorer)
-        binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
-    }
-
     override fun onResume() {
         super.onResume()
 
         // Fetch user's devices
         devicesViewModel.fetch()
-        model.getInfoBanner()
 
         /**
          * Changing the theme from Profile -> Settings and going back to profile
@@ -174,6 +159,62 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         if (navDestination == R.id.navigation_profile) {
             binding.addDevice.hide()
         }
+    }
+
+    private fun onScroll(shouldShowOverlayItems: Boolean) {
+        if (shouldShowOverlayItems) {
+            if (navController.currentDestination?.id == R.id.navigation_devices) {
+                binding.addDevice.show()
+            }
+            binding.navView.show()
+        } else {
+            binding.addDevice.hide()
+            binding.navView.hide()
+        }
+    }
+
+    private fun onDevices(resource: Resource<List<UIDevice>>) {
+        val currentDestination = navController.currentDestination?.id
+        if (resource.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
+            model.getInfoBanner()
+            checkForNoDevices()
+        } else {
+            binding.emptyContainer.visible(false)
+            binding.claimRedDot.visible(false)
+        }
+    }
+
+    private fun checkForNoDevices() {
+        if (devicesViewModel.hasNoDevices()) {
+            binding.emptyContainer.visible(true)
+        }
+        if (model.getClaimingBadgeShouldShow()) {
+            binding.claimRedDot.visible(true)
+        }
+    }
+
+    private fun onNavigationChanged(destination: NavDestination) {
+        if (snackbar?.isShown == true) snackbar?.dismiss()
+        when (destination.id) {
+            R.id.navigation_devices -> {
+                checkForNoDevices()
+                binding.addDevice.show()
+            }
+            R.id.navigation_explorer -> {
+                explorerModel.setExplorerAfterLoggedIn(true)
+                binding.emptyContainer.visible(false)
+                binding.claimRedDot.visible(false)
+                binding.addDevice.hide()
+            }
+            else -> {
+                binding.emptyContainer.visible(false)
+                binding.claimRedDot.visible(false)
+                binding.addDevice.hide()
+            }
+        }
+        binding.navView.show()
+        binding.networkStatsBtn.visible(destination.id == R.id.navigation_explorer)
+        binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
     }
 
     private fun onExplorerState(resource: Resource<Unit>) {
