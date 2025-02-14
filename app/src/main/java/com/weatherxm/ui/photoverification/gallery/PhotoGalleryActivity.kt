@@ -34,6 +34,7 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.StationPhoto
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.disable
 import com.weatherxm.ui.common.empty
@@ -139,6 +140,13 @@ class PhotoGalleryActivity : BaseActivity() {
             Thumbnails()
         }
 
+        model.onDeletingPhotoStatus().observe(this) {
+            binding.loading.visible(it.status == Status.LOADING)
+            if (it.status == Status.ERROR && it.message != null) {
+                showSnackbarMessage(binding.root, it.message)
+            }
+        }
+
         if (model.photos.isEmpty()) {
             binding.addPhotoBtn.performClick()
         }
@@ -241,13 +249,11 @@ class PhotoGalleryActivity : BaseActivity() {
                     .onPositiveClick(getString(R.string.action_delete)) {
                         setResult(false)
                         model.deletePhoto(it)
-                        selectedPhoto.value = null
                     }
                     .build()
                     .show(this)
             } else {
                 model.deletePhoto(it)
-                selectedPhoto.value = null
             }
         }
     }

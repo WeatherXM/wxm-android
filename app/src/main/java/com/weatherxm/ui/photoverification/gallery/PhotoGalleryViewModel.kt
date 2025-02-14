@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DevicePhotoUseCase
+import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,12 +24,14 @@ class PhotoGalleryViewModel(
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val onPhotosNumber = MutableLiveData(photos.size)
+    private val onDeletingPhotoStatus = MutableLiveData<Resource<Unit>>()
     private val _onPhotos = mutableStateListOf<StationPhoto>().apply {
         addAll(photos)
     }
     val onPhotos: List<StationPhoto> = _onPhotos
 
     fun onPhotosNumber(): LiveData<Int> = onPhotosNumber
+    fun onDeletingPhotoStatus(): LiveData<Resource<Unit>> = onDeletingPhotoStatus
 
     fun getLocalPhotosNumber() = photos.filter { it.localPath != null }.size
 
@@ -44,11 +48,15 @@ class PhotoGalleryViewModel(
         photo.remotePath?.let { photoRemotePath ->
             if (photos.firstOrNull { it.remotePath == photoRemotePath } != null) {
                 viewModelScope.launch(dispatcher) {
+                    onDeletingPhotoStatus.postValue(Resource.loading())
                     usecase.deleteDevicePhoto(device.id, photoRemotePath).onLeft {
                         Timber.e("Failed to delete photo $photo")
+                        onDeletingPhotoStatus.postValue(Resource.error(it.getDefaultMessage()))
+                    }.onRight {
+                        onDeletingPhotoStatus.postValue(Resource.success(Unit))
+                        onDeletedPhoto(photo)
                     }
                 }
-                onDeletedPhoto(photo)
             }
         }
         photo.localPath?.let { photoLocalPath ->

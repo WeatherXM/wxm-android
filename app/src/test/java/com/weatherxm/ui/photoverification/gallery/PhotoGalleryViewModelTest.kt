@@ -1,15 +1,25 @@
 package com.weatherxm.ui.photoverification.gallery
 
+import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DevicePhotoUseCase
+import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 class PhotoGalleryViewModelTest : BehaviorSpec({
     val device = UIDevice.empty()
@@ -25,7 +35,15 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
     listener(InstantExecutorListener())
 
     beforeSpec {
-        coMockEitherLeft({ usecase.deleteDevicePhoto(device.id, "remotePath") }, failure)
+        startKoin {
+            modules(
+                module {
+                    single<Resources> {
+                        resources
+                    }
+                }
+            )
+        }
     }
 
     context("Get the initial states of the photos") {
@@ -101,15 +119,34 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
             }
             When("the photo is a remote photo  and our photos var contain it") {
                 viewModel.photos.add(remotePhoto)
-                viewModel.deletePhoto(remotePhoto)
-                then("delete the photo in the constructor variable") {
-                    viewModel.photos shouldBe emptyPhotos
+                and("it's a failure") {
+                    coMockEitherLeft(
+                        { usecase.deleteDevicePhoto(device.id, "remotePath") },
+                        failure
+                    )
+                    runTest { viewModel.deletePhoto(remotePhoto) }
+                    then("LiveData posts an error with a specific error message") {
+                        viewModel.onDeletingPhotoStatus().isError(REACH_OUT_MSG)
+                    }
                 }
-                then("The onPhotos function should return the empty list") {
-                    viewModel.onPhotos shouldBe emptyPhotos
-                }
-                then("LiveData onPhotosNumber should post the size of an empty list") {
-                    viewModel.onPhotosNumber().value shouldBe emptyPhotos.size
+                and("it's a success") {
+                    coMockEitherRight(
+                        { usecase.deleteDevicePhoto(device.id, "remotePath") },
+                        Unit
+                    )
+                    runTest { viewModel.deletePhoto(remotePhoto) }
+                    then("LiveData posts a success") {
+                        viewModel.onDeletingPhotoStatus().isSuccess(Unit)
+                    }
+                    then("delete the photo in the constructor variable") {
+                        viewModel.photos shouldBe emptyPhotos
+                    }
+                    then("The onPhotos function should return the empty list") {
+                        viewModel.onPhotos shouldBe emptyPhotos
+                    }
+                    then("LiveData onPhotosNumber should post the size of an empty list") {
+                        viewModel.onPhotosNumber().value shouldBe emptyPhotos.size
+                    }
                 }
             }
         }
@@ -127,5 +164,9 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
                 viewModel.getPhotosLocalPaths() shouldBe arrayListOf(localPhoto.localPath)
             }
         }
+    }
+
+    afterSpec {
+        stopKoin()
     }
 })
