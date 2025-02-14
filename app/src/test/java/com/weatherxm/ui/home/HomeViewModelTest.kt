@@ -56,15 +56,6 @@ class HomeViewModelTest : BehaviorSpec({
             HomeViewModel(userUseCase, remoteBannersUseCase, photosUseCase, analytics, dispatcher)
     }
 
-    context("Flow when openExplorer is called") {
-        given("the call") {
-            viewModel.openExplorer()
-            then("LiveData onOpenExplorer should post the value true") {
-                viewModel.onOpenExplorer().value shouldBe true
-            }
-        }
-    }
-
     context("GET and SET the hasDevices property") {
         When("GET the hasDevices") {
             then("get the initial null value") {

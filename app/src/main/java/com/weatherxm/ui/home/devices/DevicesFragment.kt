@@ -91,14 +91,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             SortFilterDialogFragment().show(this)
         }
 
-        binding.buyStationBtn.setOnClickListener {
-            navigator.openWebsite(context, getString(R.string.shop_url))
-        }
-
-        binding.followStationExplorerBtn.setOnClickListener {
-            parentModel.openExplorer()
-        }
-
         model.devices().observe(viewLifecycleOwner) {
             onDevices(it)
         }
@@ -124,7 +116,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     private fun onInfoBanner(infoBanner: InfoBanner?) {
-        if (infoBanner != null) {
+        if (infoBanner != null && !model.hasNoDevices()) {
             binding.infoBanner.setContent {
                 InfoBannerView(
                     title = infoBanner.title,
@@ -238,11 +230,9 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()
                     binding.statusView.visible(false)
-                    binding.emptyContainer.visible(false)
                     binding.contentContainerCard.visible(true)
                     binding.recycler.visible(true)
                 } else {
-                    binding.emptyContainer.visible(true)
                     binding.statusView.visible(false)
                     adapter.submitList(mutableListOf())
                     binding.recycler.visible(false)
@@ -260,7 +250,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     .listener { model.fetch() }
                     .visible(true)
                 binding.recycler.visible(false)
-                binding.emptyContainer.visible(false)
                 binding.contentContainerCard.visible(true)
             }
             Status.LOADING -> {
@@ -270,7 +259,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     binding.statusView.clear().visible(false)
                     binding.swiperefresh.isRefreshing = true
                 } else {
-                    binding.emptyContainer.visible(false)
                     binding.recycler.visible(false)
                     binding.contentContainerCard.visible(false)
                     binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
