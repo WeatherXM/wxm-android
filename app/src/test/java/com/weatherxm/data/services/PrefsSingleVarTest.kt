@@ -50,6 +50,7 @@ class PrefsSingleVarTest(
         }
     }
 
+    @Suppress("LongMethod")
     fun test(behaviorSpec: BehaviorSpec) {
         behaviorSpec.testGetSetSingleVar(
             "Last Reminded Version",
