@@ -24,6 +24,10 @@ class DeviceListUseCaseImpl(
                 }
             }
 
+            if (devices.firstOrNull { it.isOwned() } != null) {
+                userPreferencesRepository.setClaimingBadgeShouldShow(false)
+            }
+
             with(getDevicesSortFilterOptions()) {
                 /**
                  * 1. Apply Sort then...

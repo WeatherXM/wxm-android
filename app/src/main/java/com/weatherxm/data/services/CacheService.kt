@@ -49,6 +49,7 @@ class CacheService(
         const val KEY_DISMISSED_INFO_BANNER_ID = "dismissed_info_banner_id"
         const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
+        const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -370,6 +371,14 @@ class CacheService(
         countriesInfo = info ?: mutableListOf()
     }
 
+    fun getClaimingBadgeShouldShow(): Boolean {
+        return preferences.getBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, true)
+    }
+
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        preferences.edit().putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow).apply()
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -423,6 +432,7 @@ class CacheService(
             KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
         )
         val savedAcceptTermsTimestamp = preferences.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0L)
+        val setClaimingBadgeShouldShow = getClaimingBadgeShouldShow()
         val widgetIds = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
         val devicesOfWidgets = mutableMapOf<String, String>()
         widgetIds?.forEach {
@@ -440,6 +450,7 @@ class CacheService(
             .putString(resources.getString(KEY_WIND_DIR), savedWindDir)
             .putString(resources.getString(KEY_PRESSURE), savedPressure)
             .putBoolean(resources.getString(KEY_ANALYTICS), savedAnalyticsEnabled)
+            .putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, setClaimingBadgeShouldShow)
             .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
             .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
             .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
