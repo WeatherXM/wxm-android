@@ -187,9 +187,9 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private fun checkForNoDevices() {
         if (devicesViewModel.hasNoDevices()) {
             binding.emptyContainer.visible(true)
-            if (model.getClaimingBadgeShouldShow()) {
-                binding.claimRedDot.visible(true)
-            }
+        }
+        if (model.getClaimingBadgeShouldShow()) {
+            binding.claimRedDot.visible(true)
         }
     }
 
