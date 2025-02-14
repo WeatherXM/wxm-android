@@ -82,9 +82,10 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         devicesViewModel.devices().observe(this) {
             val currentDestination = navController.currentDestination?.id
             if (it.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
-                checkForClaimingPrompt()
+                model.getInfoBanner()
+                checkForEmptyContainer()
             } else {
-                binding.claimStationHere.visible(false)
+                binding.emptyContainer.visible(false)
             }
         }
 
@@ -108,16 +109,18 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             navigator.showNetworkStats(this)
         }
 
-        model.onWalletWarnings().observe(this) {
-            handleBadge(it.showMissingBadge)
+        binding.buyStationBtn.setOnClickListener {
+            navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
-        model.onOpenExplorer().observe(this) {
-            if (it == true) {
-                NavigationUI.onNavDestinationSelected(
-                    binding.navView.menu.findItem(R.id.navigation_explorer), navController
-                )
-            }
+        binding.followStationExplorerBtn.setOnClickListener {
+            NavigationUI.onNavDestinationSelected(
+                binding.navView.menu.findItem(R.id.navigation_explorer), navController
+            )
+        }
+
+        model.onWalletWarnings().observe(this) {
+            handleBadge(it.showMissingBadge)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
@@ -145,10 +148,9 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
     }
 
-    private fun checkForClaimingPrompt() {
+    private fun checkForEmptyContainer() {
         if (devicesViewModel.hasNoDevices()) {
-            binding.claimStationHere.visible(true)
-            binding.claimAnimation.playAnimation()
+            binding.emptyContainer.visible(true)
         }
     }
 
@@ -156,16 +158,16 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         if (snackbar?.isShown == true) snackbar?.dismiss()
         when (destination.id) {
             R.id.navigation_devices -> {
-                checkForClaimingPrompt()
+                checkForEmptyContainer()
                 binding.addDevice.show()
             }
             R.id.navigation_explorer -> {
                 explorerModel.setExplorerAfterLoggedIn(true)
-                binding.claimStationHere.visible(false)
+                binding.emptyContainer.visible(false)
                 binding.addDevice.hide()
             }
             else -> {
-                binding.claimStationHere.visible(false)
+                binding.emptyContainer.visible(false)
                 binding.addDevice.hide()
             }
         }
@@ -179,7 +181,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
 
         // Fetch user's devices
         devicesViewModel.fetch()
-        model.getInfoBanner()
 
         /**
          * Changing the theme from Profile -> Settings and going back to profile
