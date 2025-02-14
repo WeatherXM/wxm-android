@@ -12,7 +12,6 @@ import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.Weather.getFormattedTemperature
 import com.weatherxm.util.getShortName
-import org.koin.core.component.KoinComponent
 import java.time.LocalDate
 
 class DailyTileForecastAdapter(
@@ -21,7 +20,7 @@ class DailyTileForecastAdapter(
     private val onClickListener: (UIForecastDay) -> Unit
 ) : ListAdapter<UIForecastDay, DailyTileForecastAdapter.DailyTileViewHolder>(
     UIForecastDayDiffCallback()
-), KoinComponent {
+) {
 
     private var selectedPosition = 0
 

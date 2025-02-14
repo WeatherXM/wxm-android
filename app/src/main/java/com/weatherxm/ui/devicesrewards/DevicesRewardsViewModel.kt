@@ -18,7 +18,6 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,7 +26,7 @@ class DevicesRewardsViewModel(
     val rewards: DevicesRewards,
     val usecase: RewardsUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val totalSelectedRangeChip = mutableIntStateOf(R.string.seven_days_abbr)
     private val totalRangeChipsToggleEnabled = mutableStateOf(true)

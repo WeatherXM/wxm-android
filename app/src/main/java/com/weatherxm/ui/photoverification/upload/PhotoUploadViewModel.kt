@@ -18,7 +18,6 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.ImageFileHelper.getUriForFile
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -28,7 +27,7 @@ class PhotoUploadViewModel(
     private val usecase: DevicePhotoUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val onPhotosPresignedMetadata =
         MutableLiveData<Resource<List<PhotoPresignedMetadata>>>()

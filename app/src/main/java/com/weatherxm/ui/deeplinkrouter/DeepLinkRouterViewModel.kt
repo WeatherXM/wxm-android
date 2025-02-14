@@ -25,7 +25,6 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -33,7 +32,7 @@ class DeepLinkRouterViewModel(
     private val usecase: ExplorerUseCase,
     private val devicesUseCase: DeviceListUseCase,
     private val resources: Resources,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     companion object {
         const val STATIONS_PATH_SEGMENT = "stations"

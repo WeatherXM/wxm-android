@@ -14,13 +14,15 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 
 class StartupUseCaseTest : BehaviorSpec({
     val authRepo = mockk<AuthRepository>()
     val appConfigRepo = mockk<AppConfigRepository>()
     val userPreferencesRepo = mockk<UserPreferencesRepository>()
-    val usecase = StartupUseCaseImpl(context, authRepo, userPreferencesRepo, appConfigRepo)
+    val usecase =
+        StartupUseCaseImpl(context, authRepo, userPreferencesRepo, appConfigRepo, Dispatchers.IO)
 
     beforeSpec {
         coJustRun { appConfigRepo.setLastRemindedVersion() }

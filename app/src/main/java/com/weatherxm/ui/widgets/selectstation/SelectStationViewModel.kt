@@ -7,17 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.AuthUseCase
-import kotlinx.coroutines.CoroutineDispatcher
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SelectStationViewModel(
     private val usecase: WidgetSelectStationUseCase,
     private val authUseCase: AuthUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val onDevices = MutableLiveData<Resource<List<UIDevice>>>()

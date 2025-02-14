@@ -24,7 +24,6 @@ import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -38,7 +37,7 @@ class DeviceSettingsHeliumViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BaseDeviceSettingsViewModel(device, usecase, photosUseCase, resources, analytics, dispatcher) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 

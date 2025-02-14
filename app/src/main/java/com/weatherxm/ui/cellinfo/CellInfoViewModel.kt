@@ -18,7 +18,6 @@ import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -30,7 +29,7 @@ class CellInfoViewModel(
     private val followUseCase: FollowUseCase,
     private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onCellDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()

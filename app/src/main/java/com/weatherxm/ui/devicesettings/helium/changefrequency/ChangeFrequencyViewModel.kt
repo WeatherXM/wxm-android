@@ -20,7 +20,6 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions", "LongParameterList")
@@ -31,7 +30,7 @@ class ChangeFrequencyViewModel(
     scanUseCase: BluetoothScannerUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,

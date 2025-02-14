@@ -9,7 +9,6 @@ import com.weatherxm.data.models.OTAState
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import okio.Buffer
@@ -20,7 +19,7 @@ class BluetoothUpdaterUseCaseImpl(
     private val context: Context,
     private val repo: BluetoothUpdaterRepository,
     private val deviceOTARepository: DeviceOTARepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcher: CoroutineDispatcher,
 ) : BluetoothUpdaterUseCase {
 
     override suspend fun downloadFirmwareAndGetFileURI(deviceId: String): Either<Failure, Uri> {

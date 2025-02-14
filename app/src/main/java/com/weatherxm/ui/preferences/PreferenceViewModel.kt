@@ -9,14 +9,13 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.PreferencesUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PreferenceViewModel(
     private val preferencesUseCase: PreferencesUseCase,
     private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         analytics.setUserProperties()
