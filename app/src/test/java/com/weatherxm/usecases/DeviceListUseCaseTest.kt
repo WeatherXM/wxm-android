@@ -99,6 +99,7 @@ class DeviceListUseCaseTest : BehaviorSpec({
                 defaultOptions.groupBy.name
             )
         }
+        justRun { userPreferencesRepo.setClaimingBadgeShouldShow(any()) }
         every { deviceOTARepo.shouldNotifyOTA(any(), any()) } returns false
     }
 
@@ -130,6 +131,11 @@ class DeviceListUseCaseTest : BehaviorSpec({
                     every { userPreferencesRepo.getDevicesSortFilterOptions() } returns emptyList()
                     then("return these devices with alerts and default options") {
                         usecase.getUserDevices().isSuccess(uiDevices)
+                    }
+                    then("set the flag indicating if we should show the badge for the claiming") {
+                        verify(exactly = 1) {
+                            userPreferencesRepo.setClaimingBadgeShouldShow(false)
+                        }
                     }
                 }
                 and("sorting = NAME, filtering = OWNED, grouping = RELATIONSHIP") {

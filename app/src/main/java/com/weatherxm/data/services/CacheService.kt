@@ -432,7 +432,6 @@ class CacheService(
             KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
         )
         val savedAcceptTermsTimestamp = preferences.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0L)
-        val setClaimingBadgeShouldShow = getClaimingBadgeShouldShow()
         val widgetIds = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
         val devicesOfWidgets = mutableMapOf<String, String>()
         widgetIds?.forEach {
@@ -450,7 +449,6 @@ class CacheService(
             .putString(resources.getString(KEY_WIND_DIR), savedWindDir)
             .putString(resources.getString(KEY_PRESSURE), savedPressure)
             .putBoolean(resources.getString(KEY_ANALYTICS), savedAnalyticsEnabled)
-            .putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, setClaimingBadgeShouldShow)
             .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
             .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
             .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)

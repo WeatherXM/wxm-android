@@ -23,7 +23,9 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
         every { dataSource.getWalletWarningDismissTimestamp() } returns 0
         justRun { dataSource.setDevicesSortFilterOptions(sort, filter, group) }
         justRun { dataSource.setAcceptTerms() }
+        justRun { dataSource.setClaimingBadgeShouldShow(any()) }
         every { dataSource.getDevicesSortFilterOptions() } returns sortFilterGroupOptions
+        every { dataSource.getClaimingBadgeShouldShow() } returns true
     }
 
     context("Enable/Disable analytics") {
@@ -104,6 +106,22 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
             repo.setAcceptTerms()
             then("set the timestamp in cache") {
                 verify(exactly = 1) { dataSource.setAcceptTerms() }
+            }
+        }
+    }
+
+    context("GET / SET if we should show the badge for the claiming") {
+        When("Using the Cache Source") {
+            and("GET the shouldShow flag") {
+                then("return that flag") {
+                    repo.getClaimingBadgeShouldShow() shouldBe true
+                }
+            }
+            and("SET the shouldShow flag") {
+                repo.setClaimingBadgeShouldShow(true)
+                then("set the shouldShow in cache") {
+                    verify(exactly = 1) { dataSource.setClaimingBadgeShouldShow(any()) }
+                }
             }
         }
     }

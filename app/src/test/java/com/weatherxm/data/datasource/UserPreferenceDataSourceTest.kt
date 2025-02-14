@@ -26,11 +26,13 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
         every { cacheService.getAnalyticsDecisionTimestamp() } returns timestamp
         every { cacheService.getDevicesSortFilterOptions() } returns filters
         every { cacheService.getAcceptTermsTimestamp() } returns timestamp
+        every { cacheService.getClaimingBadgeShouldShow() } returns true
         coJustRun { cacheService.setAnalyticsEnabled(enabled) }
         coJustRun { cacheService.setAnalyticsDecisionTimestamp(any()) }
         coJustRun { cacheService.setWalletWarningDismissTimestamp(any()) }
         coJustRun { cacheService.setDevicesSortFilterOptions(sortOrder, filter, groupBy) }
         justRun { cacheService.setAcceptTermsTimestamp(any()) }
+        justRun { cacheService.setClaimingBadgeShouldShow(any()) }
     }
 
     context("Get analytics opt-in or opt-out timestamp") {
@@ -101,6 +103,22 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
             then("set the timestamp in cache") {
                 datasource.setWalletWarningDismissTimestamp()
                 verify(exactly = 1) { cacheService.setWalletWarningDismissTimestamp(any()) }
+            }
+        }
+    }
+
+    context("GET / SET if we should show the badge for the claiming") {
+        When("Using the Cache Source") {
+            and("GET the shouldShow flag") {
+                then("return that flag") {
+                    datasource.getClaimingBadgeShouldShow() shouldBe true
+                }
+            }
+            and("SET the shouldShow flag") {
+                datasource.setClaimingBadgeShouldShow(true)
+                then("set the shouldShow in cache") {
+                    verify(exactly = 1) { cacheService.setClaimingBadgeShouldShow(any()) }
+                }
             }
         }
     }

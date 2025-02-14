@@ -45,8 +45,10 @@ class UserUseCaseTest : BehaviorSpec({
     beforeSpec {
         justRun { userPreferencesRepository.setWalletWarningDismissTimestamp() }
         justRun { userPreferencesRepository.setAcceptTerms() }
+        justRun { userPreferencesRepository.setClaimingBadgeShouldShow(any()) }
         every { userPreferencesRepository.shouldShowAnalyticsOptIn() } returns true
         every { userPreferencesRepository.shouldShowTermsPrompt() } returns true
+        every { userPreferencesRepository.getClaimingBadgeShouldShow() } returns true
     }
 
     context("Get the Wallet Address") {
@@ -219,6 +221,23 @@ class UserUseCaseTest : BehaviorSpec({
             usecase.setAcceptTerms()
             then("make the respective call") {
                 verify(exactly = 1) { userPreferencesRepository.setAcceptTerms() }
+            }
+        }
+    }
+
+    context("Get if we should show the badge for the claiming or not") {
+        given("The repository which returns the answer") {
+            then("return the answer") {
+                usecase.getClaimingBadgeShouldShow() shouldBe true
+            }
+        }
+    }
+
+    context("Set if we should show the badge for the claiming or not") {
+        given("A repository providing the SET functionality") {
+            usecase.setClaimingBadgeShouldShow(true)
+            then("make the respective call") {
+                verify(exactly = 1) { userPreferencesRepository.setClaimingBadgeShouldShow(true) }
             }
         }
     }
