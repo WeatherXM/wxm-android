@@ -22,6 +22,8 @@ interface UserUseCase {
     fun shouldShowAnalyticsOptIn(): Boolean
     fun setAcceptTerms()
     fun shouldShowTermsPrompt(): Boolean
+    fun getClaimingBadgeShouldShow(): Boolean
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean)
 }
 
 class UserUseCaseImpl(
@@ -84,4 +86,12 @@ class UserUseCaseImpl(
 
     override fun shouldShowTermsPrompt() = userPreferencesRepository.shouldShowTermsPrompt()
     override fun setAcceptTerms() = userPreferencesRepository.setAcceptTerms()
+
+    override fun getClaimingBadgeShouldShow(): Boolean {
+        return userPreferencesRepository.getClaimingBadgeShouldShow()
+    }
+
+    override fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        userPreferencesRepository.setClaimingBadgeShouldShow(shouldShow)
+    }
 }

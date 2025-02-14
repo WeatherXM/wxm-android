@@ -125,6 +125,20 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/claimRedDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="9dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_circle_badge"
+        android:translationX="4dp"
+        android:translationY="-4dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/add_device"
+        app:layout_constraintTop_toTopOf="@id/add_device"
+        tools:visibility="visible" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_device"
         android:layout_width="wrap_content"

@@ -114,4 +114,12 @@ class HomeViewModel(
     }
 
     fun retryPhotoUpload(deviceId: String) = photoUseCase.retryUpload(deviceId)
+
+    fun getClaimingBadgeShouldShow(): Boolean {
+        return userUseCase.getClaimingBadgeShouldShow()
+    }
+
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        userUseCase.setClaimingBadgeShouldShow(shouldShow)
+    }
 }

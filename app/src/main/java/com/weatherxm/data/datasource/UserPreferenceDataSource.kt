@@ -11,6 +11,8 @@ interface UserPreferenceDataSource {
     fun getWalletWarningDismissTimestamp(): Long
     fun getAcceptTermsTimestamp(): Long
     fun setAcceptTerms()
+    fun getClaimingBadgeShouldShow(): Boolean
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean)
 }
 
 class UserPreferenceDataSourceImpl(
@@ -47,5 +49,13 @@ class UserPreferenceDataSourceImpl(
 
     override fun setAcceptTerms() {
         cacheService.setAcceptTermsTimestamp(System.currentTimeMillis())
+    }
+
+    override fun getClaimingBadgeShouldShow(): Boolean {
+        return cacheService.getClaimingBadgeShouldShow()
+    }
+
+    override fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        cacheService.setClaimingBadgeShouldShow(shouldShow)
     }
 }

@@ -70,14 +70,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             }
         }
 
-        model.showOverlayViews().observe(this) { shouldShow ->
-            if (shouldShow) {
-                binding.addDevice.show()
-                binding.navView.show()
-            } else if (!shouldShow) {
-                binding.addDevice.hide()
-                binding.navView.hide()
-            }
+        model.showOverlayViews().observe(this) {
+            onScroll(it)
         }
 
         devicesViewModel.devices().observe(this) {
@@ -97,6 +91,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.addDevice.setOnClickListener {
+            model.setClaimingBadgeShouldShow(false)
             navigator.showClaimSelectStationType(this)
         }
 
@@ -166,19 +161,35 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
     }
 
+    private fun onScroll(shouldShowOverlayItems: Boolean) {
+        if (shouldShowOverlayItems) {
+            if (navController.currentDestination?.id == R.id.navigation_devices) {
+                binding.addDevice.show()
+            }
+            binding.navView.show()
+        } else {
+            binding.addDevice.hide()
+            binding.navView.hide()
+        }
+    }
+
     private fun onDevices(resource: Resource<List<UIDevice>>) {
         val currentDestination = navController.currentDestination?.id
         if (resource.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
             model.getInfoBanner()
-            checkForEmptyContainer()
+            checkForNoDevices()
         } else {
             binding.emptyContainer.visible(false)
+            binding.claimRedDot.visible(false)
         }
     }
 
-    private fun checkForEmptyContainer() {
+    private fun checkForNoDevices() {
         if (devicesViewModel.hasNoDevices()) {
             binding.emptyContainer.visible(true)
+            if (model.getClaimingBadgeShouldShow()) {
+                binding.claimRedDot.visible(true)
+            }
         }
     }
 
@@ -186,16 +197,18 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         if (snackbar?.isShown == true) snackbar?.dismiss()
         when (destination.id) {
             R.id.navigation_devices -> {
-                checkForEmptyContainer()
+                checkForNoDevices()
                 binding.addDevice.show()
             }
             R.id.navigation_explorer -> {
                 explorerModel.setExplorerAfterLoggedIn(true)
                 binding.emptyContainer.visible(false)
+                binding.claimRedDot.visible(false)
                 binding.addDevice.hide()
             }
             else -> {
                 binding.emptyContainer.visible(false)
+                binding.claimRedDot.visible(false)
                 binding.addDevice.hide()
             }
         }
