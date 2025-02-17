@@ -11,6 +11,8 @@ interface UserPreferencesRepository {
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String)
     fun shouldShowTermsPrompt(): Boolean
     fun setAcceptTerms()
+    fun getClaimingBadgeShouldShow(): Boolean
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean)
 }
 
 class UserPreferencesRepositoryImpl(
@@ -47,5 +49,13 @@ class UserPreferencesRepositoryImpl(
 
     override fun setAcceptTerms() {
         datasource.setAcceptTerms()
+    }
+
+    override fun getClaimingBadgeShouldShow(): Boolean {
+        return datasource.getClaimingBadgeShouldShow()
+    }
+
+    override fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        datasource.setClaimingBadgeShouldShow(shouldShow)
     }
 }

@@ -49,6 +49,7 @@ class CacheService(
         const val KEY_DISMISSED_INFO_BANNER_ID = "dismissed_info_banner_id"
         const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
+        const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -368,6 +369,14 @@ class CacheService(
 
     fun setCountriesInfo(info: List<CountryInfo>?) {
         countriesInfo = info ?: mutableListOf()
+    }
+
+    fun getClaimingBadgeShouldShow(): Boolean {
+        return preferences.getBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, true)
+    }
+
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        preferences.edit().putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow).apply()
     }
 
     fun getPreferredUnit(

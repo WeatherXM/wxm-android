@@ -46,23 +46,16 @@ class HomeViewModelTest : BehaviorSpec({
         justRun { userUseCase.setAcceptTerms() }
         every { userUseCase.shouldShowWalletMissingWarning(emptyWalletAddress) } returns true
         every { userUseCase.shouldShowTermsPrompt() } returns true
+        every { userUseCase.getClaimingBadgeShouldShow() } returns true
         every { remoteBannersUseCase.getSurvey() } returns survey
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
+        justRun { userUseCase.setClaimingBadgeShouldShow(any()) }
         every { remoteBannersUseCase.getInfoBanner() } returns infoBanner
         justRun { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
         justRun { photosUseCase.retryUpload(deviceId) }
 
         viewModel =
             HomeViewModel(userUseCase, remoteBannersUseCase, photosUseCase, analytics, dispatcher)
-    }
-
-    context("Flow when openExplorer is called") {
-        given("the call") {
-            viewModel.openExplorer()
-            then("LiveData onOpenExplorer should post the value true") {
-                viewModel.onOpenExplorer().value shouldBe true
-            }
-        }
     }
 
     context("GET and SET the hasDevices property") {
@@ -200,6 +193,23 @@ class HomeViewModelTest : BehaviorSpec({
             then("trigger the retrying of photo uploading") {
                 viewModel.retryPhotoUpload(deviceId)
                 verify(exactly = 1) { photosUseCase.retryUpload(deviceId) }
+            }
+        }
+    }
+
+    context("Get if we should show the badge for the claiming or not") {
+        given("A use case returning the result") {
+            then("return that result") {
+                viewModel.getClaimingBadgeShouldShow() shouldBe true
+            }
+        }
+    }
+
+    context("Set if we should show the badge for the claiming or not") {
+        given("the call to the respective function") {
+            viewModel.setClaimingBadgeShouldShow(false)
+            then("the respective function in the usecase should be called") {
+                verify(exactly = 1) { userUseCase.setClaimingBadgeShouldShow(false) }
             }
         }
     }

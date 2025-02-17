@@ -289,7 +289,7 @@
     <!-- Empty -->
 
     <com.weatherxm.ui.components.EmptyView
-        android:id="@+id/empty"
+        android:id="@+id/statusView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -297,7 +297,6 @@
         android:visibility="gone"
         app:empty_animation="@raw/anim_empty_devices"
         tools:empty_subtitle="How are you?"
-        tools:empty_title="Nothing here"
-        tools:visibility="visible" />
+        tools:empty_title="Nothing here" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

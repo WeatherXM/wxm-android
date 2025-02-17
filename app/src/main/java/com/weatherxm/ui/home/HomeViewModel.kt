@@ -32,7 +32,6 @@ class HomeViewModel(
     private val onWalletWarnings = MutableLiveData<WalletWarnings>()
     private val onSurvey = SingleLiveEvent<Survey>()
     private val onInfoBanner = SingleLiveEvent<InfoBanner?>()
-    private val onOpenExplorer = SingleLiveEvent<Boolean>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
@@ -41,12 +40,7 @@ class HomeViewModel(
     fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onSurvey(): LiveData<Survey> = onSurvey
     fun onInfoBanner(): LiveData<InfoBanner?> = onInfoBanner
-    fun onOpenExplorer() = onOpenExplorer
     fun showOverlayViews() = showOverlayViews
-
-    fun openExplorer() {
-        onOpenExplorer.postValue(true)
-    }
 
     fun hasDevices() = hasDevices
 
@@ -120,4 +114,12 @@ class HomeViewModel(
     }
 
     fun retryPhotoUpload(deviceId: String) = photoUseCase.retryUpload(deviceId)
+
+    fun getClaimingBadgeShouldShow(): Boolean {
+        return userUseCase.getClaimingBadgeShouldShow()
+    }
+
+    fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
+        userUseCase.setClaimingBadgeShouldShow(shouldShow)
+    }
 }
