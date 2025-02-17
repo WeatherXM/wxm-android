@@ -242,7 +242,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
                 binding.totalEarnedCard.visible(true)
-                binding.totalEarned.text = getString(R.string.wxm_amount, "?")
+                binding.stationRewards.text = getString(R.string.wxm_amount, "?")
                 binding.statusView.animation(R.raw.anim_error, false)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(devices.message)
@@ -276,7 +276,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             )
             navigator.showDevicesRewards(this, rewards)
         }
-        binding.totalEarned.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
+        binding.stationRewards.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
         binding.totalEarnedContainer.visible(rewards.devices.isEmpty() || rewards.total > 0F)
         binding.noRewardsYet.visible(rewards.devices.isNotEmpty() && rewards.total == 0F)
     }

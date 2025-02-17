@@ -61,10 +61,9 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/totalEarnedTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/total_earned"
+                                android:text="@string/station_rewards"
                                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,7 +72,7 @@
                                 android:layout_height="wrap_content">
 
                                 <com.google.android.material.textview.MaterialTextView
-                                    android:id="@+id/totalEarned"
+                                    android:id="@+id/stationRewards"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
