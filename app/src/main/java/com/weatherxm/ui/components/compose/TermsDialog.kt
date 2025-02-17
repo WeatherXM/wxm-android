@@ -32,8 +32,7 @@ fun TermsDialog(shouldShow: Boolean, onUnderstand: () -> Unit) {
     if (shouldShow) {
         AlertDialog(
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_normal)),
-            containerColor = MaterialTheme.colorScheme.surface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            containerColor = colorResource(R.color.colorSurface),
             onDismissRequest = { },
             title = {
                 Text(
