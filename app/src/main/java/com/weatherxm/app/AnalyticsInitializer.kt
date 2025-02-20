@@ -16,6 +16,7 @@ class AnalyticsInitializer : Initializer<Unit>, KoinComponent {
         Timber.d("Basic configuration for Analytics Wrapper")
         val enabled = cacheService.getAnalyticsEnabled()
         Timber.d("Initializing Analytics [enabled=$enabled]")
+        analyticsWrapper.bindCacheService(cacheService)
         analyticsWrapper.setAnalyticsEnabled(enabled)
         analyticsWrapper.setUserId(cacheService.getUserId())
         analyticsWrapper.setDevicesSortFilterOptions(cacheService.getDevicesSortFilterOptions())
