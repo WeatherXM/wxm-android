@@ -2,6 +2,7 @@ package com.weatherxm.analytics
 
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
@@ -21,6 +22,17 @@ class AnalyticsWrapper(
     private var devicesSortFilterOptions: List<String> = mutableListOf()
     private var devicesOwn: Int = 0
     private var hasWallet: Boolean = false
+
+    fun bindCacheService(cacheService: CacheService) {
+        cacheService.setUserPropertiesChangeListener { key, value ->
+            when (key) {
+                CacheService.KEY_DEVICES_OWN -> setDevicesOwn(value as Int)
+                CacheService.KEY_HAS_WALLET -> setHasWallet(value as Boolean)
+                CacheService.KEY_USER_ID -> setUserId(value as String)
+            }
+            setUserProperties()
+        }
+    }
 
     fun setDevicesOwn(devicesOwn: Int) {
         this.devicesOwn = devicesOwn

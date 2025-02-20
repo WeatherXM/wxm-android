@@ -79,6 +79,12 @@ class CacheService(
     private var userStationsIds = listOf<String>()
     private var countriesInfo = listOf<CountryInfo>()
 
+    private var onUserPropertiesChangeListener: ((String, Any) -> Unit)? = null
+
+    fun setUserPropertiesChangeListener(listener: (String, Any) -> Unit) {
+        onUserPropertiesChangeListener = listener
+    }
+
     fun getAuthToken(): Either<Failure, AuthToken> {
         val access = encryptedPreferences.getString(KEY_ACCESS, null)
         val refresh = encryptedPreferences.getString(KEY_REFRESH, null)
@@ -163,6 +169,7 @@ class CacheService(
     fun setWalletAddress(address: String) {
         this.walletAddress = address
         preferences.edit().putBoolean(KEY_HAS_WALLET, true).apply()
+        onUserPropertiesChangeListener?.invoke(KEY_HAS_WALLET, true)
     }
 
     fun hasWallet(): Boolean {
@@ -175,6 +182,7 @@ class CacheService(
 
     fun setUser(user: User) {
         preferences.edit().putString(KEY_USER_ID, user.id).apply()
+        onUserPropertiesChangeListener?.invoke(KEY_USER_ID, user.id)
         this.user = user
     }
 
@@ -333,6 +341,7 @@ class CacheService(
     fun setUserDevicesIds(ids: List<String>) {
         userStationsIds = ids
         preferences.edit().putInt(KEY_DEVICES_OWN, ids.size).apply()
+        onUserPropertiesChangeListener?.invoke(KEY_DEVICES_OWN, ids.size)
     }
 
     fun getDevicesOwn(): Int {
