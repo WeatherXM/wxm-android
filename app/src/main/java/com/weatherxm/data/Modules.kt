@@ -601,20 +601,20 @@ val database = module {
 }
 
 val analytics = module {
-    single<FirebaseAnalytics> {
+    single<FirebaseAnalytics>(createdAtStart = true) {
         Firebase.analytics
     }
 
-    single<MixpanelAPI> {
+    single<MixpanelAPI>(createdAtStart = true) {
         MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
             setEnableLogging(true)
         }
     }
 
-    factoryOf(::FirebaseAnalyticsService) { bind<AnalyticsService>() }
-    factoryOf(::MixpanelAnalyticsService) { bind<AnalyticsService>() }
+    singleOf(::FirebaseAnalyticsService) { bind<AnalyticsService>() }
+    singleOf(::MixpanelAnalyticsService) { bind<AnalyticsService>() }
 
-    single<AnalyticsWrapper> {
+    single<AnalyticsWrapper>(createdAtStart = true) {
         AnalyticsWrapper(getAll<AnalyticsService>(), androidContext())
     }
 }
