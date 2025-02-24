@@ -61,7 +61,7 @@ upload-service = "4.9.4"
 
 # Plugins
 android-gradle-plugin = "8.8.1"
-detekt-plugin = "1.23.7"
+detekt-plugin = "1.23.8"
 firebase-appdistribution-plugin = "5.1.1"
 firebase-crashlytics-plugin = "3.0.3"
 firebase-perf-plugin = "1.4.2"
