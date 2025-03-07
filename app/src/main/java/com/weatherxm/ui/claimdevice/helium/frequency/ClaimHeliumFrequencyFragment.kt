@@ -35,7 +35,7 @@ class ClaimHeliumFrequencyFragment : BaseFragment() {
                 navigator.openWebsite(context, it)
             },
             onBack = {
-               // parentModel.backToLocation()
+                // Do nothing. Not applicable.
             },
             onSet = {
                 parentModel.setFrequency(

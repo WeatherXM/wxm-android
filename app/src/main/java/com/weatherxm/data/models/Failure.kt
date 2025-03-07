@@ -39,6 +39,7 @@ sealed class Failure(val code: String? = null) {
     object CountryNotFound : Failure()
     object InvalidRefreshTokenError : Failure()
     object InstallationIdNotFound : Failure()
+    object FirmwareBytesParsingError : Failure()
 }
 
 @Keep
