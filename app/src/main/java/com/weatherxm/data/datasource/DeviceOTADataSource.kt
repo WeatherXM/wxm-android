@@ -1,10 +1,13 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
+import arrow.core.flatMap
 import com.weatherxm.data.mapResponse
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.services.CacheService
+import timber.log.Timber
+import java.io.IOException
 
 interface DeviceOTADataSource {
     suspend fun getFirmware(deviceId: String): Either<Failure, ByteArray>
@@ -24,8 +27,13 @@ class DeviceOTADataSourceImpl(
     }
 
     override suspend fun getFirmware(deviceId: String): Either<Failure, ByteArray> {
-        return apiService.getFirmware(deviceId).mapResponse().map {
-            it.bytes()
+        return apiService.getFirmware(deviceId).mapResponse().flatMap {
+            try {
+                Either.Right(it.bytes())
+            } catch (e: IOException) {
+                Timber.e(e)
+                Either.Left(Failure.FirmwareBytesParsingError)
+            }
         }
     }
 
