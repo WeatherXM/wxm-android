@@ -72,6 +72,14 @@ class PhotoGalleryActivity : BaseActivity() {
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                    null,
+                    Pair(
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        AnalyticsService.ParamValue.COMPLETED.paramValue
+                    )
+                )
                 model.addPhoto(latestPhotoTakenPath)
             }
         }
@@ -149,7 +157,7 @@ class PhotoGalleryActivity : BaseActivity() {
         }
 
         if (model.photos.isEmpty()) {
-            binding.addPhotoBtn.performClick()
+            getCameraPermissions()
         }
         analytics.trackScreen(AnalyticsService.Screen.STATION_PHOTOS_GALLERY, classSimpleName())
     }
@@ -217,7 +225,12 @@ class PhotoGalleryActivity : BaseActivity() {
         } else {
             binding.addPhotoBtn.setOnClickListener {
                 analytics.trackEventUserAction(
-                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                    null,
+                    Pair(
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        AnalyticsService.ParamValue.STARTED.paramValue
+                    )
                 )
                 getCameraPermissions()
             }

@@ -270,7 +270,9 @@ interface AnalyticsService {
         UPLOADING_PHOTOS_SUCCESS("Uploading Photos Success"),
         GO_TO_PHOTO_VERIFICATION("Go To Photo Verification"),
         CLAIMING_ID("claiming"),
-        ANNOUNCEMENT_BUTTON("Announcement Button")
+        ANNOUNCEMENT_BUTTON("Announcement Button"),
+        STARTED("started"),
+        COMPLETED("completed")
     }
 
     // Custom Param Names
