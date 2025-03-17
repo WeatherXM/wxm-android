@@ -84,7 +84,11 @@ class ClaimWifiActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.CLAIM_M5, classSimpleName())
+        if (model.deviceType == DeviceType.M5_WIFI) {
+            analytics.trackScreen(AnalyticsService.Screen.CLAIM_M5, classSimpleName())
+        } else {
+            analytics.trackScreen(AnalyticsService.Screen.CLAIM_D1, classSimpleName())
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

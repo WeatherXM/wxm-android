@@ -159,7 +159,7 @@ class DeviceRewardsAdapter(
 
             if (willBeExpanded) {
                 analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.DEVICE_REWARD_ANALYTICS_CARD.paramValue,
+                    AnalyticsService.ParamValue.DEVICE_REWARDS_CARD.paramValue,
                     Pair(
                         AnalyticsService.CustomParam.STATE.paramName,
                         AnalyticsService.ParamValue.OPEN.paramValue
@@ -177,7 +177,7 @@ class DeviceRewardsAdapter(
                 }
             } else {
                 analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.DEVICE_REWARD_ANALYTICS_CARD.paramValue,
+                    AnalyticsService.ParamValue.DEVICE_REWARDS_CARD.paramValue,
                     Pair(
                         AnalyticsService.CustomParam.STATE.paramName,
                         AnalyticsService.ParamValue.CLOSED.paramValue

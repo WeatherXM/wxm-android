@@ -71,7 +71,7 @@ class ClaimResultFragment : BaseFragment() {
                 contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                 Pair(
                     AnalyticsService.CustomParam.ACTION.paramName,
-                    AnalyticsService.ParamValue.QUIT.paramValue
+                    AnalyticsService.ParamValue.CANCEL.paramValue
                 )
             )
             if (deviceType == PULSE_4G) {
@@ -82,6 +82,14 @@ class ClaimResultFragment : BaseFragment() {
         }
 
         binding.retry.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.RETRY.paramValue
+                )
+            )
             if (deviceType == PULSE_4G) {
                 pulseParentModel.claimDevice(locationModel.getInstallationLocation())
             } else {

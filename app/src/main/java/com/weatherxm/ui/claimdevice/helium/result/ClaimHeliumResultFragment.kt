@@ -244,6 +244,14 @@ class ClaimHeliumResultFragment : BaseFragment() {
             AnalyticsService.ParamValue.WARN.paramValue,
             AnalyticsService.ParamValue.ACTION.paramValue
         )
+        analytics.trackEventUserAction(
+            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+            Pair(
+                AnalyticsService.CustomParam.ACTION.paramName,
+                AnalyticsService.ParamValue.UPDATE_STATION.paramValue
+            )
+        )
         navigator.showDeviceHeliumOTA(
             context,
             device,
