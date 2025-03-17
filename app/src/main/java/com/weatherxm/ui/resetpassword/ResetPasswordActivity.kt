@@ -3,9 +3,9 @@ package com.weatherxm.ui.resetpassword
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
-import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.visible
@@ -64,7 +64,6 @@ class ResetPasswordActivity : BaseActivity() {
 
                 analytics.trackEventViewContent(
                     AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
-                    AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
                     success = 1L
                 )
             }
@@ -82,7 +81,6 @@ class ResetPasswordActivity : BaseActivity() {
 
                 analytics.trackEventViewContent(
                     AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
-                    AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
                     success = 0L
                 )
             }

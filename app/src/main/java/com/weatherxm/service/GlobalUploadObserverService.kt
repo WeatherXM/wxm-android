@@ -64,7 +64,6 @@ class GlobalUploadObserverService(
             Timber.d("[UPLOAD SERVICE] All photos uploaded successfully.")
             analytics.trackEventViewContent(
                 contentName = AnalyticsService.ParamValue.UPLOADING_PHOTOS_SUCCESS.paramValue,
-                null,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, device.name)
             )
             onUploadPhotosState.tryEmit(

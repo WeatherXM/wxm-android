@@ -110,7 +110,6 @@ class SignupActivity : BaseActivity() {
 
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
-                    contentId = AnalyticsService.ParamValue.SIGNUP_ID.paramValue,
                     Pair(
                         FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue
                     ),
@@ -136,7 +135,6 @@ class SignupActivity : BaseActivity() {
 
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
-                    contentId = AnalyticsService.ParamValue.SIGNUP_ID.paramValue,
                     Pair(
                         FirebaseAnalytics.Param.METHOD,
                         AnalyticsService.ParamValue.EMAIL.paramValue

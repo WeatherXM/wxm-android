@@ -209,7 +209,6 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         justRun {
             analytics.trackEventViewContent(
                 AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                 success = any()
             )
         }
@@ -264,7 +263,6 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         verify(exactly = verifyNumberOfEvents) {
             analytics.trackEventViewContent(
                 AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                 success = success
             )
         }

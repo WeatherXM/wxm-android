@@ -178,7 +178,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 binding.successButtonsContainer.visible(true)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
@@ -207,7 +206,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     .listener { navigator.openSupportCenter(context) }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 0L
                 )
             }

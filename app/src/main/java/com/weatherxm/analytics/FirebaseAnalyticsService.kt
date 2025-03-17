@@ -66,16 +66,11 @@ class FirebaseAnalyticsService(
 
     override fun trackEventViewContent(
         contentName: String,
-        contentId: String?,
         vararg customParams: Pair<String, String>,
         success: Long?
     ) {
         val params = ParametersBuilder().apply {
             param(AnalyticsService.CustomParam.CONTENT_NAME.paramName, contentName)
-
-            contentId?.let {
-                param(AnalyticsService.CustomParam.CONTENT_ID.paramName, it)
-            }
 
             customParams.forEach {
                 param(it.first, it.second)

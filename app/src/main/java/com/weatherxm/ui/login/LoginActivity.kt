@@ -135,7 +135,6 @@ class LoginActivity : BaseActivity() {
             Status.ERROR -> {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
-                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
                     Pair(
                         FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue
                     ),
@@ -172,7 +171,6 @@ class LoginActivity : BaseActivity() {
                  */
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
-                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
                     Pair(
                         FirebaseAnalytics.Param.METHOD,
                         AnalyticsService.ParamValue.EMAIL.paramValue
@@ -196,7 +194,6 @@ class LoginActivity : BaseActivity() {
             Status.ERROR -> {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
-                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
                     Pair(
                         FirebaseAnalytics.Param.METHOD,
                         AnalyticsService.ParamValue.EMAIL.paramValue

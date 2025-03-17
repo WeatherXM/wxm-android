@@ -9,15 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.BluetoothError
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
@@ -164,7 +164,6 @@ class ChangeFrequencyActivity : BaseActivity() {
                 )
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
@@ -175,7 +174,6 @@ class ChangeFrequencyActivity : BaseActivity() {
                 onErrorStatusUpdate(it)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
                     success = 0L
                 )
             }

@@ -34,7 +34,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
         justRun { trackScreen(any() as AnalyticsService.Screen, any(), any()) }
         justRun { trackEventUserAction(any(), any()) }
         justRun { trackEventViewContent(any(), any()) }
-        justRun { trackEventViewContent(any(), any(), any()) }
+        justRun { trackEventViewContent(any()) }
         justRun { trackEventPrompt(any(), any(), any()) }
         justRun { trackEventSelectContent(any()) }
     }
@@ -105,8 +105,8 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     verifier.verifyTrackEventUserAction(testArg, testArg, 1)
                 }
                 then("tracking View Content events should work") {
-                    analyticsWrapper.trackEventViewContent(testArg, testArg)
-                    verifier.verifyTrackEventViewContent(testArg, testArg, 1)
+                    analyticsWrapper.trackEventViewContent(testArg)
+                    verifier.verifyTrackEventViewContent(testArg, 1)
                 }
                 then("tracking failure events should work") {
                     analyticsWrapper.trackEventFailure(testArg)
@@ -141,8 +141,8 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     verifier.verifyTrackEventFailure(testArg, 0)
                 }
                 then("tracking view content should NOT work") {
-                    analyticsWrapper.trackEventViewContent(testArg, testArg)
-                    verifier.verifyTrackEventViewContent(testArg, testArg, 0)
+                    analyticsWrapper.trackEventViewContent(testArg)
+                    verifier.verifyTrackEventViewContent(testArg, 0)
                 }
                 then("tracking prompts should NOT work") {
                     analyticsWrapper.trackEventPrompt(testArg, testArg, testArg)

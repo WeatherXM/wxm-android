@@ -188,7 +188,6 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     private fun trackRewardSplitViewContent(deviceState: String, userState: String) {
         analytics.trackEventViewContent(
             AnalyticsService.ParamValue.REWARD_SPLITTING_DAILY_REWARD.paramValue,
-            contentId = null,
             Pair(AnalyticsService.CustomParam.DEVICE_STATE.paramName, deviceState),
             Pair(AnalyticsService.CustomParam.USER_STATE.paramName, userState)
         )

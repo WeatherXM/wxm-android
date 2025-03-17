@@ -152,7 +152,6 @@ class DeviceHeliumOTAActivity : BaseActivity() {
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.OTA_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.OTA_RESULT_ID.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
                     success = 1L
                 )
@@ -164,7 +163,6 @@ class DeviceHeliumOTAActivity : BaseActivity() {
                 onErrorStatusUpdate(it)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.OTA_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.OTA_RESULT_ID.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
                     success = 0L
                 )
@@ -213,7 +211,6 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
         analytics.trackEventViewContent(
             contentName = AnalyticsService.ParamValue.OTA_ERROR.paramValue,
-            contentId = AnalyticsService.ParamValue.OTA_ERROR_ID.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
             Pair(
                 AnalyticsService.CustomParam.STEP.paramName,

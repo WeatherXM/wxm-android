@@ -55,23 +55,21 @@ class AnalyticsWrapperTestCallVerifier(
         verify(exactly = times) { service2.trackEventUserAction(arg1, arg2) }
     }
 
-    fun verifyTrackEventViewContent(arg1: String, arg2: String, times: Int) {
-        verify(exactly = times) { service1.trackEventViewContent(arg1, arg2) }
-        verify(exactly = times) { service2.trackEventViewContent(arg1, arg2) }
+    fun verifyTrackEventViewContent(arg1: String, times: Int) {
+        verify(exactly = times) { service1.trackEventViewContent(arg1) }
+        verify(exactly = times) { service2.trackEventViewContent(arg1) }
     }
 
     fun verifyTrackEventFailure(failureId: String, times: Int) {
         verify(exactly = times) {
             service1.trackEventViewContent(
                 AnalyticsService.ParamValue.FAILURE.paramValue,
-                AnalyticsService.ParamValue.FAILURE_ID.paramValue,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, failureId)
             )
         }
         verify(exactly = times) {
             service2.trackEventViewContent(
                 AnalyticsService.ParamValue.FAILURE.paramValue,
-                AnalyticsService.ParamValue.FAILURE_ID.paramValue,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, failureId)
             )
         }

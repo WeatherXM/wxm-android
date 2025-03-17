@@ -145,7 +145,6 @@ class ClaimResultFragment : BaseFragment() {
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
@@ -159,7 +158,6 @@ class ClaimResultFragment : BaseFragment() {
                     }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 0L
                 )
             }
