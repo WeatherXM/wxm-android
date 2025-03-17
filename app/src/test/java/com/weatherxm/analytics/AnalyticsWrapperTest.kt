@@ -96,7 +96,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     verifier.verifyAnalyticsEnabled(true)
                 }
                 then("tracking Screens should work") {
-                    val screen = AnalyticsService.Screen.ANALYTICS
+                    val screen = AnalyticsService.Screen.DEVICE_FORECAST_DETAILS
                     analyticsWrapper.trackScreen(screen, testArg, testArg)
                     verifier.verifyTrackScreen(screen, testArg, testArg, 1)
                 }
@@ -128,7 +128,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     verifier.verifyAnalyticsEnabled(false)
                 }
                 then("tracking screens should NOT work") {
-                    val screen = AnalyticsService.Screen.ANALYTICS
+                    val screen = AnalyticsService.Screen.DEVICE_FORECAST_DETAILS
                     analyticsWrapper.trackScreen(screen, testArg)
                     verifier.verifyTrackScreen(screen, testArg, null, 0)
                 }
