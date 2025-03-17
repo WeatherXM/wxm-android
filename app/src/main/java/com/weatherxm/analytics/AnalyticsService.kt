@@ -18,7 +18,6 @@ interface AnalyticsService {
     // Screen Names
     @Parcelize
     enum class Screen(val screenName: String) : Parcelable {
-        ANALYTICS("Analytics Opt-In Prompt"),
         EXPLORER_LANDING("Explorer (Landing)"),
         EXPLORER("Explorer"),
         CLAIM_M5("Claim M5"),
