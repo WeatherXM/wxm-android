@@ -33,6 +33,7 @@ class HomeViewModel(
     private val onWalletWarnings = MutableLiveData<WalletWarnings>()
     private val onSurvey = SingleLiveEvent<Survey>()
     private val onInfoBanner = SingleLiveEvent<RemoteBanner?>()
+    private val onAnnouncementBanner = SingleLiveEvent<RemoteBanner?>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
@@ -41,6 +42,7 @@ class HomeViewModel(
     fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onSurvey(): LiveData<Survey> = onSurvey
     fun onInfoBanner(): LiveData<RemoteBanner?> = onInfoBanner
+    fun onAnnouncementBanner(): LiveData<RemoteBanner?> = onAnnouncementBanner
     fun showOverlayViews() = showOverlayViews
 
     fun hasDevices() = hasDevices
@@ -99,14 +101,17 @@ class HomeViewModel(
         remoteBannersUseCase.dismissSurvey(surveyId)
     }
 
-    fun getInfoBanner() {
+    fun getRemoteBanners() {
         remoteBannersUseCase.getRemoteBanner(RemoteBannerType.INFO_BANNER).apply {
             onInfoBanner.postValue(this)
         }
+        remoteBannersUseCase.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT).apply {
+            onAnnouncementBanner.postValue(this)
+        }
     }
 
-    fun dismissInfoBanner(infoBannerId: String) {
-        remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, infoBannerId)
+    fun dismissRemoteBanner(bannerType: RemoteBannerType, bannerId: String) {
+        remoteBannersUseCase.dismissRemoteBanner(bannerType, bannerId)
     }
 
     fun setAcceptTerms() {

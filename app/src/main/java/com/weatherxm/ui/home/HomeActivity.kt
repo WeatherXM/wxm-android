@@ -176,7 +176,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private fun onDevices(resource: Resource<List<UIDevice>>) {
         val currentDestination = navController.currentDestination?.id
         if (resource.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
-            model.getInfoBanner()
+            model.getRemoteBanners()
             checkForNoDevices()
         } else {
             binding.emptyContainer.visible(false)
