@@ -52,7 +52,12 @@ class HomeViewModelTest : BehaviorSpec({
         every { remoteBannersUseCase.getSurvey() } returns survey
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
         justRun { userUseCase.setClaimingBadgeShouldShow(any()) }
-        every { remoteBannersUseCase.getRemoteBanner(any()) } returns infoBanner
+        every {
+            remoteBannersUseCase.getRemoteBanner(RemoteBannerType.INFO_BANNER)
+        } returns infoBanner
+        every {
+            remoteBannersUseCase.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT)
+        } returns announcementBanner
         justRun { remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId) }
         justRun {
             remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
