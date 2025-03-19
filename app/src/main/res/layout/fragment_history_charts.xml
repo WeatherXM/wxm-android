@@ -29,12 +29,22 @@
                 android:layout_height="wrap_content"
                 android:clipChildren="false">
 
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/proPromotionCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:clipChildren="false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
+
                 <com.weatherxm.ui.components.ChartsView
                     android:id="@+id/charts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_large"
                     android:clipChildren="false"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/proPromotionCard" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/displayTimeNotice"

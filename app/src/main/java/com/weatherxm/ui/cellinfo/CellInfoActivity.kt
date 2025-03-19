@@ -19,6 +19,8 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.ProPromotionDialogFragment
+import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.ui.explorer.UICell
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -130,14 +132,19 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
             Status.SUCCESS -> {
                 if (!response.data.isNullOrEmpty()) {
                     updateCellStats(response.data)
+                    binding.proPromotionCard.setContent {
+                        ProPromotionCard(R.string.get_hyperlocal_forecasts) {
+                            ProPromotionDialogFragment().show(this)
+                        }
+                    }
                     adapter.submitList(response.data)
                     binding.empty.visible(false)
-                    binding.recycler.visible(true)
+                    binding.mainContainer.visible(true)
                 } else {
                     binding.empty.clear()
                         .animation(R.raw.anim_error)
                         .title(getString(R.string.error_generic_message))
-                    binding.recycler.visible(false)
+                    binding.mainContainer.visible(false)
                     binding.empty.visible(true)
                 }
             }
@@ -147,12 +154,12 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
                     .animation(R.raw.anim_error)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(response.message)
-                binding.recycler.visible(false)
+                binding.mainContainer.visible(false)
                 binding.empty.visible(true)
             }
             Status.LOADING -> {
                 binding.empty.clear().animation(R.raw.anim_loading)
-                binding.recycler.visible(false)
+                binding.mainContainer.visible(false)
                 binding.empty.visible(true)
             }
         }
