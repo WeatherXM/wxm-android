@@ -34,8 +34,9 @@ class HomeViewModelTest : BehaviorSpec({
     val emptyWalletAddress = ""
     val survey = mockk<Survey>()
     val infoBanner = mockk<RemoteBanner>()
+    val announcementBanner = mockk<RemoteBanner>()
     val surveyId = "surveyId"
-    val infoBannerId = "infoBannerId"
+    val bannerId = "bannerId"
     val deviceId = "deviceId"
     val devices = listOf(UIDevice.empty())
 
@@ -52,7 +53,10 @@ class HomeViewModelTest : BehaviorSpec({
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
         justRun { userUseCase.setClaimingBadgeShouldShow(any()) }
         every { remoteBannersUseCase.getRemoteBanner(any()) } returns infoBanner
-        justRun { remoteBannersUseCase.dismissRemoteBanner(any(), infoBannerId) }
+        justRun { remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId) }
+        justRun {
+            remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
+        }
         justRun { photosUseCase.retryUpload(deviceId) }
 
         viewModel =
@@ -158,18 +162,32 @@ class HomeViewModelTest : BehaviorSpec({
     context("Get an RemoteBanner and then dismiss it") {
         given("an info banner ID") {
             and("get the RemoteBanner") {
-                viewModel.getInfoBanner()
+                viewModel.getRemoteBanners()
                 then("LiveData onInfoBanner should post that RemoteBanner value") {
                     viewModel.onInfoBanner().value shouldBe infoBanner
                 }
+                then("LiveData onAnnouncementBanner should post that RemoteBanner value") {
+                    viewModel.onAnnouncementBanner().value shouldBe announcementBanner
+                }
             }
-            and("dismiss it") {
-                viewModel.dismissInfoBanner(infoBannerId)
+            and("dismiss the info banner") {
+                viewModel.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId)
                 then("the respective function in the usecase should be called") {
                     verify(exactly = 1) {
                         remoteBannersUseCase.dismissRemoteBanner(
                             RemoteBannerType.INFO_BANNER,
-                            infoBannerId
+                            bannerId
+                        )
+                    }
+                }
+            }
+            and("dismiss the announcement banner") {
+                viewModel.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
+                then("the respective function in the usecase should be called") {
+                    verify(exactly = 1) {
+                        remoteBannersUseCase.dismissRemoteBanner(
+                            RemoteBannerType.ANNOUNCEMENT,
+                            bannerId
                         )
                     }
                 }

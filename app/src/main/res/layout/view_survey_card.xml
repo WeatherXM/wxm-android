@@ -17,7 +17,7 @@
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
-            android:src="@drawable/survey_background" />
+            android:src="@drawable/gradient_background" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
