@@ -39,6 +39,7 @@ import com.weatherxm.ui.common.swipeToDismiss
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.AnnouncementBannerView
 import com.weatherxm.ui.components.compose.InfoBannerView
 import com.weatherxm.ui.components.compose.MessageCardView
@@ -165,7 +166,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     showCloseButton = it.showCloseButton,
                     onAction = {
                         if (it.url == ANNOUNCEMENT_LOCAL_PRO_ACTION_URL) {
-                            // TODO: Open Bottom Sheet
+                            ProPromotionDialogFragment().show(this)
                         } else {
                             navigator.openWebsite(context, it.url)
                         }

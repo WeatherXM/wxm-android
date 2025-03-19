@@ -82,7 +82,9 @@ class RemoteBannersDataSourceTest : BehaviorSpec({
         every {
             remoteConfig.getString(RemoteBannersDataSourceImpl.ANNOUNCEMENT_ACTION_LABEL)
         } returns actionLabel
-        every { remoteConfig.getBoolean(RemoteBannersDataSourceImpl.ANNOUNCEMENT_SHOW) } returns true
+        every {
+            remoteConfig.getBoolean(RemoteBannersDataSourceImpl.ANNOUNCEMENT_SHOW)
+        } returns true
         every {
             remoteConfig.getBoolean(RemoteBannersDataSourceImpl.ANNOUNCEMENT_ACTION_SHOW)
         } returns true

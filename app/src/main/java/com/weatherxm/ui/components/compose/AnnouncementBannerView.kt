@@ -111,7 +111,8 @@ fun AnnouncementBannerView(
 fun PreviewAnnouncementBanner() {
     AnnouncementBannerView(
         title = "Upgrade to WeatherXM Pro!",
-        subtitle = "Get exclusive Pro features, better forecasts, more data, and advanced tools. Take your weather insights to the next level.",
+        subtitle = "Get exclusive Pro features, better forecasts, more data, and advanced tools. " +
+            "Take your weather insights to the next level.",
         actionLabel = "Explore Pro Features",
         showActionButton = true,
         showCloseButton = true,
