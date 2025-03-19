@@ -86,6 +86,7 @@ fun ProPromotionCard(subtitleResId: Int, onClickListener: () -> Unit) {
     }
 }
 
+@Suppress("FunctionNaming")
 @Preview
 @Composable
 fun PreviewProPromotionCard() {
