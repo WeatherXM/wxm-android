@@ -15,7 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.RemoteBanner
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.service.GlobalUploadObserverService
@@ -115,7 +115,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         return binding.root
     }
 
-    private fun onInfoBanner(infoBanner: InfoBanner?) {
+    private fun onInfoBanner(infoBanner: RemoteBanner?) {
         if (infoBanner != null && !model.hasNoDevices()) {
             binding.infoBanner.setContent {
                 InfoBannerView(

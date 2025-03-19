@@ -1,6 +1,7 @@
 package com.weatherxm.usecases
 
-import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.RemoteBanner
+import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.Survey
 import com.weatherxm.data.repository.RemoteBannersRepository
 import io.kotest.core.spec.style.BehaviorSpec
@@ -16,12 +17,12 @@ class RemoteBannersUseCaseTest : BehaviorSpec({
 
     val survey = mockk<Survey>()
     val surveyId = "surveyId"
-    val infoBanner = mockk<InfoBanner>()
-    val infoBannerId = "infoBannerId"
+    val infoBanner = mockk<RemoteBanner>()
+    val bannerId = "bannerId"
 
     beforeSpec {
         justRun { repo.dismissSurvey(surveyId) }
-        justRun { repo.dismissInfoBanner(infoBannerId) }
+        justRun { repo.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId) }
     }
 
     context("Get survey related information") {
@@ -50,15 +51,15 @@ class RemoteBannersUseCaseTest : BehaviorSpec({
 
     context("Get info banner related information") {
         When("there is an info banner available that should be shown") {
-            every { repo.getInfoBanner() } returns infoBanner
+            every { repo.getRemoteBanner(RemoteBannerType.INFO_BANNER) } returns infoBanner
             then("return that info banner") {
-                usecase.getInfoBanner() shouldBe infoBanner
+                usecase.getRemoteBanner(RemoteBannerType.INFO_BANNER) shouldBe infoBanner
             }
         }
         When("there is no info banner available") {
-            every { repo.getInfoBanner() } returns null
+            every { repo.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT) } returns null
             then("return null") {
-                usecase.getInfoBanner() shouldBe null
+                usecase.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT) shouldBe null
             }
         }
     }
@@ -66,8 +67,10 @@ class RemoteBannersUseCaseTest : BehaviorSpec({
     context("Dismiss Info Banner") {
         given("the info banner ID") {
             then("dismiss this info banner with that ID") {
-                usecase.dismissInfoBanner(infoBannerId)
-                verify(exactly = 1) { repo.dismissInfoBanner(infoBannerId) }
+                usecase.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId)
+                verify(exactly = 1) {
+                    repo.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId)
+                }
             }
         }
     }
