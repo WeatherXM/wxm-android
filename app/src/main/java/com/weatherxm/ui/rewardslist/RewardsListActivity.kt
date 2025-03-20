@@ -3,16 +3,16 @@ package com.weatherxm.ui.rewardslist
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -45,13 +45,7 @@ class RewardsListActivity : BaseActivity() {
 
         // Initialize the adapter with empty data
         adapter = RewardsListAdapter(
-            onRewardDetails = {
-                analytics.trackEventUserAction(
-                    AnalyticsService.ParamValue.IDENTIFY_PROBLEMS.paramValue,
-                    AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
-                )
-                navigator.showRewardDetails(this, device, it)
-            },
+            onRewardDetails = { navigator.showRewardDetails(this, device, it) },
             onEndOfData = { endOfDataListener() }
         )
         binding.recycler.adapter = adapter

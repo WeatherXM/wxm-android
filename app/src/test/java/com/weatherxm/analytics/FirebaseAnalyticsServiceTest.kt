@@ -3,7 +3,7 @@ package com.weatherxm.analytics
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ParametersBuilder
-import com.weatherxm.ui.startup.StartupActivity
+import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.justRun
 import io.mockk.mockk
@@ -17,14 +17,13 @@ class FirebaseAnalyticsServiceTest : KoinTest, BehaviorSpec({
 
     val userId = "userId"
     val userProperties = listOf("key" to "value")
-    val screen = AnalyticsService.Screen.SPLASH
-    val screenClass = StartupActivity::class.java.name
+    val screen = AnalyticsService.Screen.DEVICE_FORECAST_DETAILS
+    val screenClass = ForecastDetailsActivity::class.java.name
     val screenViewItemId = "screenViewItemId"
     val actionName = "actionName"
     val userActionCustomParam = "userActionParamKey" to "userActionParamValue"
     val userActionContentType = "userActionContentType"
     val contentName = "contentName"
-    val contentId = "contentId"
     val viewContentCustomParam = "viewContentParamKey" to "viewContentParamValue"
     val success = 0L
     val promptName = "promptName"
@@ -147,7 +146,6 @@ class FirebaseAnalyticsServiceTest : KoinTest, BehaviorSpec({
         given("the invocation of trackEventViewContent method") {
             service.trackEventViewContent(
                 contentName,
-                contentId,
                 viewContentCustomParam,
                 success = success
             )
@@ -160,9 +158,6 @@ class FirebaseAnalyticsServiceTest : KoinTest, BehaviorSpec({
                 verify(exactly = 1) {
                     anyConstructed<ParametersBuilder>().param(
                         AnalyticsService.CustomParam.CONTENT_NAME.paramName, contentName
-                    )
-                    anyConstructed<ParametersBuilder>().param(
-                        AnalyticsService.CustomParam.CONTENT_ID.paramName, contentId
                     )
                     anyConstructed<ParametersBuilder>().param(
                         viewContentCustomParam.first, viewContentCustomParam.second

@@ -291,7 +291,6 @@ class ProfileFragment : BaseFragment() {
         }
         analytics.trackEventViewContent(
             contentName = AnalyticsService.ParamValue.TOKEN_CLAIMING_RESULT.paramValue,
-            contentId = null,
             customParams = arrayOf(Pair(AnalyticsService.CustomParam.STATE.paramName, statusValue))
         )
     }

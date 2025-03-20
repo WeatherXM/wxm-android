@@ -62,7 +62,6 @@ abstract class BaseDeviceSettingsViewModel(
                 usecase.setFriendlyName(device.id, friendlyName).onRight {
                     analytics.trackEventViewContent(
                         AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                         success = 1L
                     )
                     device.friendlyName = friendlyName
@@ -71,7 +70,6 @@ abstract class BaseDeviceSettingsViewModel(
                     analytics.trackEventFailure(it.code)
                     analytics.trackEventViewContent(
                         AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                         success = 0L
                     )
                     onError.postValue(
@@ -90,7 +88,6 @@ abstract class BaseDeviceSettingsViewModel(
                 usecase.clearFriendlyName(device.id).onRight {
                     analytics.trackEventViewContent(
                         AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                         success = 1L
                     )
                     device.friendlyName = null
@@ -99,7 +96,6 @@ abstract class BaseDeviceSettingsViewModel(
                     analytics.trackEventFailure(it.code)
                     analytics.trackEventViewContent(
                         AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                         success = 0L
                     )
                     onError.postValue(

@@ -1,7 +1,7 @@
 package com.weatherxm.analytics
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import com.weatherxm.ui.startup.StartupActivity
+import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.justRun
 import io.mockk.mockk
@@ -15,14 +15,13 @@ class MixpanelAnalyticsServiceTest : KoinTest, BehaviorSpec({
 
     val userId = "userId"
     val userProperties = listOf("key" to "value")
-    val screen = AnalyticsService.Screen.SPLASH
+    val screen = AnalyticsService.Screen.DEVICE_FORECAST_DETAILS
     val screenViewItemId = "screenViewItemId"
-    val screenClass = StartupActivity::class.java.name
+    val screenClass = ForecastDetailsActivity::class.java.name
     val actionName = "actionName"
     val userActionCustomParam = "userActionParamKey" to "userActionParamValue"
     val userActionContentType = "userActionContentType"
     val contentName = "contentName"
-    val contentId = "contentId"
     val viewContentCustomParam = "viewContentParamKey" to "viewContentParamValue"
     val success = 0L
     val promptName = "promptName"
@@ -45,7 +44,6 @@ class MixpanelAnalyticsServiceTest : KoinTest, BehaviorSpec({
     val viewContentParams = listOf(
         Pair(AnalyticsService.CustomParam.CONTENT_NAME.paramName, contentName),
         Pair(viewContentCustomParam.first, viewContentCustomParam.second),
-        Pair(AnalyticsService.CustomParam.CONTENT_ID.paramName, contentId),
         Pair(AnalyticsService.EventKey.SUCCESS.key, success)
     )
     val promptParams = listOf(
@@ -149,7 +147,6 @@ class MixpanelAnalyticsServiceTest : KoinTest, BehaviorSpec({
         given("the invocation of trackEventViewContent method") {
             service.trackEventViewContent(
                 contentName,
-                contentId,
                 viewContentCustomParam,
                 success = success
             )

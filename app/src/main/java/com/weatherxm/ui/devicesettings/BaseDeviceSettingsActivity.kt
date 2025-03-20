@@ -253,7 +253,6 @@ abstract class BaseDeviceSettingsActivity : BaseActivity() {
     protected fun trackRewardSplitViewContent(deviceState: String, userState: String) {
         analytics.trackEventViewContent(
             AnalyticsService.ParamValue.REWARD_SPLITTING_DEVICE_SETTINGS.paramValue,
-            contentId = null,
             Pair(AnalyticsService.CustomParam.DEVICE_STATE.paramName, deviceState),
             Pair(AnalyticsService.CustomParam.USER_STATE.paramName, userState)
         )

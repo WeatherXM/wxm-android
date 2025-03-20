@@ -178,7 +178,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 binding.successButtonsContainer.visible(true)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
@@ -207,7 +206,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     .listener { navigator.openSupportCenter(context) }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 0L
                 )
             }
@@ -245,6 +243,14 @@ class ClaimHeliumResultFragment : BaseFragment() {
             AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
             AnalyticsService.ParamValue.WARN.paramValue,
             AnalyticsService.ParamValue.ACTION.paramValue
+        )
+        analytics.trackEventUserAction(
+            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
+            Pair(
+                AnalyticsService.CustomParam.ACTION.paramName,
+                AnalyticsService.ParamValue.UPDATE_STATION.paramValue
+            )
         )
         navigator.showDeviceHeliumOTA(
             context,

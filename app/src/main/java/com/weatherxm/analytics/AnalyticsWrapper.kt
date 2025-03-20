@@ -199,18 +199,12 @@ class AnalyticsWrapper(
 
     fun trackEventViewContent(
         contentName: String,
-        contentId: String?,
         vararg customParams: Pair<String, String>,
         success: Long? = null
     ) {
         if (areAnalyticsEnabled) {
             analytics.forEach {
-                it.trackEventViewContent(
-                    contentName,
-                    contentId,
-                    *customParams,
-                    success = success
-                )
+                it.trackEventViewContent(contentName, *customParams, success = success)
             }
         }
     }
@@ -218,7 +212,6 @@ class AnalyticsWrapper(
     fun trackEventFailure(failureId: String?) {
         trackEventViewContent(
             AnalyticsService.ParamValue.FAILURE.paramValue,
-            AnalyticsService.ParamValue.FAILURE_ID.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
         )
     }
