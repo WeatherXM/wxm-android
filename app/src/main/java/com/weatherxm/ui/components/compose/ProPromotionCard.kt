@@ -29,7 +29,6 @@ fun ProPromotionCard(subtitleResId: Int, onClickListener: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.blueTint)
         ),
-        onClick = { onClickListener() },
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.elevation_normal)
