@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.RemoteBanner
+import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
@@ -31,7 +32,8 @@ class HomeViewModel(
     // Needed for passing info to show the wallet missing warning card and badges
     private val onWalletWarnings = MutableLiveData<WalletWarnings>()
     private val onSurvey = SingleLiveEvent<Survey>()
-    private val onInfoBanner = SingleLiveEvent<InfoBanner?>()
+    private val onInfoBanner = SingleLiveEvent<RemoteBanner?>()
+    private val onAnnouncementBanner = SingleLiveEvent<RemoteBanner?>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
@@ -39,7 +41,8 @@ class HomeViewModel(
 
     fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onSurvey(): LiveData<Survey> = onSurvey
-    fun onInfoBanner(): LiveData<InfoBanner?> = onInfoBanner
+    fun onInfoBanner(): LiveData<RemoteBanner?> = onInfoBanner
+    fun onAnnouncementBanner(): LiveData<RemoteBanner?> = onAnnouncementBanner
     fun showOverlayViews() = showOverlayViews
 
     fun hasDevices() = hasDevices
@@ -98,14 +101,17 @@ class HomeViewModel(
         remoteBannersUseCase.dismissSurvey(surveyId)
     }
 
-    fun getInfoBanner() {
-        remoteBannersUseCase.getInfoBanner().apply {
+    fun getRemoteBanners() {
+        remoteBannersUseCase.getRemoteBanner(RemoteBannerType.INFO_BANNER).apply {
             onInfoBanner.postValue(this)
+        }
+        remoteBannersUseCase.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT).apply {
+            onAnnouncementBanner.postValue(this)
         }
     }
 
-    fun dismissInfoBanner(infoBannerId: String) {
-        remoteBannersUseCase.dismissInfoBanner(infoBannerId)
+    fun dismissRemoteBanner(bannerType: RemoteBannerType, bannerId: String) {
+        remoteBannersUseCase.dismissRemoteBanner(bannerType, bannerId)
     }
 
     fun setAcceptTerms() {

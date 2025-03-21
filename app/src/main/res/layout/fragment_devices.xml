@@ -225,13 +225,24 @@
                         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
                         <androidx.compose.ui.platform.ComposeView
-                            android:id="@+id/walletWarning"
+                            android:id="@+id/announcementBanner"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_normal"
                             android:layout_marginTop="@dimen/margin_normal"
                             android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/uploadStateContainer"
+                            tools:composableName="com.weatherxm.ui.components.compose.AnnouncementBannerViewKt.PreviewAnnouncementBanner"
+                            tools:visibility="visible" />
+
+                        <androidx.compose.ui.platform.ComposeView
+                            android:id="@+id/walletWarning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/announcementBanner"
                             tools:composableName="com.weatherxm.ui.components.compose.MessageCardViewKt.PreviewMessageCardView"
                             tools:visibility="visible" />
 

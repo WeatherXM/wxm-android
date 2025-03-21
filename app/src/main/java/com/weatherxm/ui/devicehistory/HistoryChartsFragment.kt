@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.common.Charts
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.setDisplayTimezone
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.ProPromotionDialogFragment
+import com.weatherxm.ui.components.compose.ProPromotionCard
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
 import java.time.format.DateTimeFormatter.ofLocalizedDate
@@ -61,6 +63,12 @@ class HistoryChartsFragment : BaseFragment() {
         model.charts().observe(viewLifecycleOwner) { resource ->
             Timber.d("Charts updated: ${resource.status}")
             onCharts(resource)
+        }
+
+        binding.proPromotionCard.setContent {
+            ProPromotionCard(R.string.unlock_full_weather_history) {
+                ProPromotionDialogFragment().show(this)
+            }
         }
     }
 

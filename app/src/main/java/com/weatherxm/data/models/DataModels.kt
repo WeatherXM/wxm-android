@@ -69,7 +69,7 @@ data class Survey(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class InfoBanner(
+data class RemoteBanner(
     val id: String,
     val title: String,
     val message: String,
@@ -78,6 +78,11 @@ data class InfoBanner(
     val showActionButton: Boolean,
     val showCloseButton: Boolean
 ) : Parcelable
+
+enum class RemoteBannerType{
+    INFO_BANNER,
+    ANNOUNCEMENT
+}
 
 enum class Frequency {
     EU868,

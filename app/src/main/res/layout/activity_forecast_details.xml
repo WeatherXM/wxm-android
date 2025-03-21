@@ -252,6 +252,16 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/proPromotionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@id/dailyMainCard"
+                tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/hourlyTitle"
                 android:layout_width="match_parent"
@@ -262,7 +272,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/dailyMainCard" />
+                app:layout_constraintTop_toBottomOf="@id/proPromotionCard" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hourlyForecastRecycler"

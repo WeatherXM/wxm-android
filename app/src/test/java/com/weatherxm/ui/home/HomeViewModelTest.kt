@@ -5,7 +5,8 @@ import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.RemoteBanner
+import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.UIDevice
@@ -32,9 +33,10 @@ class HomeViewModelTest : BehaviorSpec({
     val walletOK = WalletWarnings(showMissingBadge = false, showMissingWarning = false)
     val emptyWalletAddress = ""
     val survey = mockk<Survey>()
-    val infoBanner = mockk<InfoBanner>()
+    val infoBanner = mockk<RemoteBanner>()
+    val announcementBanner = mockk<RemoteBanner>()
     val surveyId = "surveyId"
-    val infoBannerId = "infoBannerId"
+    val bannerId = "bannerId"
     val deviceId = "deviceId"
     val devices = listOf(UIDevice.empty())
 
@@ -50,8 +52,16 @@ class HomeViewModelTest : BehaviorSpec({
         every { remoteBannersUseCase.getSurvey() } returns survey
         justRun { remoteBannersUseCase.dismissSurvey(surveyId) }
         justRun { userUseCase.setClaimingBadgeShouldShow(any()) }
-        every { remoteBannersUseCase.getInfoBanner() } returns infoBanner
-        justRun { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
+        every {
+            remoteBannersUseCase.getRemoteBanner(RemoteBannerType.INFO_BANNER)
+        } returns infoBanner
+        every {
+            remoteBannersUseCase.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT)
+        } returns announcementBanner
+        justRun { remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId) }
+        justRun {
+            remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
+        }
         justRun { photosUseCase.retryUpload(deviceId) }
 
         viewModel =
@@ -154,18 +164,37 @@ class HomeViewModelTest : BehaviorSpec({
         }
     }
 
-    context("Get an InfoBanner and then dismiss it") {
+    context("Get an RemoteBanner and then dismiss it") {
         given("an info banner ID") {
-            and("get the InfoBanner") {
-                viewModel.getInfoBanner()
-                then("LiveData onInfoBanner should post that InfoBanner value") {
+            and("get the RemoteBanner") {
+                viewModel.getRemoteBanners()
+                then("LiveData onInfoBanner should post that RemoteBanner value") {
                     viewModel.onInfoBanner().value shouldBe infoBanner
                 }
+                then("LiveData onAnnouncementBanner should post that RemoteBanner value") {
+                    viewModel.onAnnouncementBanner().value shouldBe announcementBanner
+                }
             }
-            and("dismiss it") {
-                viewModel.dismissInfoBanner(infoBannerId)
+            and("dismiss the info banner") {
+                viewModel.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId)
                 then("the respective function in the usecase should be called") {
-                    verify(exactly = 1) { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
+                    verify(exactly = 1) {
+                        remoteBannersUseCase.dismissRemoteBanner(
+                            RemoteBannerType.INFO_BANNER,
+                            bannerId
+                        )
+                    }
+                }
+            }
+            and("dismiss the announcement banner") {
+                viewModel.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
+                then("the respective function in the usecase should be called") {
+                    verify(exactly = 1) {
+                        remoteBannersUseCase.dismissRemoteBanner(
+                            RemoteBannerType.ANNOUNCEMENT,
+                            bannerId
+                        )
+                    }
                 }
             }
         }

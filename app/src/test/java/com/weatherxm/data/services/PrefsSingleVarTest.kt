@@ -2,8 +2,10 @@ package com.weatherxm.data.services
 
 import android.content.SharedPreferences
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCEPT_TERMS_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
+import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_ANNOUNCEMENT_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BANNER_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_LAST_REMINDED_VERSION
@@ -23,6 +25,7 @@ class PrefsSingleVarTest(
     private val otaKey = "otaKey"
     private val surveyId = "surveyId"
     private val infoBannerId = "infoBannerId"
+    private val announcementBannerId = "announcementBannerId"
     private val lastRemindedVersion = 0
 
     @Suppress("LongParameterList")
@@ -120,8 +123,27 @@ class PrefsSingleVarTest(
             infoBannerId,
             { sharedPref.getString(KEY_DISMISSED_INFO_BANNER_ID, null) },
             { prefEditor.putString(KEY_DISMISSED_INFO_BANNER_ID, infoBannerId) },
-            { cacheService.getLastDismissedInfoBannerId() },
-            { cacheService.setLastDismissedInfoBannerId(infoBannerId) }
+            { cacheService.getLastDismissedRemoteBannerId(RemoteBannerType.INFO_BANNER) },
+            {
+                cacheService.setLastDismissedRemoteBannerId(
+                    RemoteBannerType.INFO_BANNER,
+                    infoBannerId
+                )
+            }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "ID of the last dismissed announcement banner",
+            announcementBannerId,
+            { sharedPref.getString(KEY_DISMISSED_ANNOUNCEMENT_ID, null) },
+            { prefEditor.putString(KEY_DISMISSED_ANNOUNCEMENT_ID, announcementBannerId) },
+            { cacheService.getLastDismissedRemoteBannerId(RemoteBannerType.ANNOUNCEMENT) },
+            {
+                cacheService.setLastDismissedRemoteBannerId(
+                    RemoteBannerType.ANNOUNCEMENT,
+                    announcementBannerId
+                )
+            }
         )
 
         behaviorSpec.testGetSetSingleVar(

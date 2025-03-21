@@ -1,14 +1,15 @@
 package com.weatherxm.data.repository
 
-import com.weatherxm.data.models.InfoBanner
-import com.weatherxm.data.models.Survey
 import com.weatherxm.data.datasource.RemoteBannersDataSource
+import com.weatherxm.data.models.RemoteBanner
+import com.weatherxm.data.models.RemoteBannerType
+import com.weatherxm.data.models.Survey
 
 interface RemoteBannersRepository {
     fun getSurvey(): Survey?
     fun dismissSurvey(surveyId: String)
-    fun getInfoBanner(): InfoBanner?
-    fun dismissInfoBanner(infoBannerId: String)
+    fun getRemoteBanner(bannerType: RemoteBannerType): RemoteBanner?
+    fun dismissRemoteBanner(bannerType: RemoteBannerType, bannerId: String)
 }
 
 class RemoteBannersRepositoryImpl(
@@ -22,11 +23,11 @@ class RemoteBannersRepositoryImpl(
         dataSource.dismissSurvey(surveyId)
     }
 
-    override fun getInfoBanner(): InfoBanner? {
-        return dataSource.getInfoBanner()
+    override fun getRemoteBanner(bannerType: RemoteBannerType): RemoteBanner? {
+        return dataSource.getRemoteBanner(bannerType)
     }
 
-    override fun dismissInfoBanner(infoBannerId: String) {
-        dataSource.dismissInfoBanner(infoBannerId)
+    override fun dismissRemoteBanner(bannerType: RemoteBannerType, bannerId: String) {
+        dataSource.dismissRemoteBanner(bannerType, bannerId)
     }
 }

@@ -30,4 +30,5 @@
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>
     <string name="terms_of_use_owners_url">https://weatherxm.network/terms-of-use.pdf</string>
     <string name="privacy_policy_owners_url">https://weatherxm.network/privacy-policy.pdf</string>
+    <string name="pro_url">https://pro.weatherxm.com/</string>
 </resources>

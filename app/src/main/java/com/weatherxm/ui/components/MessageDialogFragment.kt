@@ -11,17 +11,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentMessageDialogBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 class MessageDialogFragment : BaseBottomSheetDialogFragment() {
     private lateinit var binding: FragmentMessageDialogBinding
-    private val navigator: Navigator by inject()
 
     private var title: String? = null
     private var message: String? = null
