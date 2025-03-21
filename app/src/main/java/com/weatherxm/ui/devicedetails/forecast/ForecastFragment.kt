@@ -17,6 +17,8 @@ import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.ProPromotionDialogFragment
+import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.toISODate
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -101,6 +103,7 @@ class ForecastFragment : BaseFragment() {
         model.onForecast().observe(viewLifecycleOwner) {
             hourlyForecastAdapter.submitList(it.next24Hours)
             dailyForecastAdapter.submitList(it.forecastDays)
+            binding.proPromotionCard.visible(true)
             binding.dailyForecastRecycler.visible(true)
             binding.dailyForecastTitle.visible(true)
             binding.temperatureBarsInfoButton.visible(true)
@@ -116,6 +119,12 @@ class ForecastFragment : BaseFragment() {
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
+        binding.proPromotionCard.setContent {
+            ProPromotionCard(R.string.fine_tune_forecast) {
+                ProPromotionDialogFragment().show(this)
+            }
+        }
+
         fetchOrHideContent()
     }
 
@@ -128,6 +137,7 @@ class ForecastFragment : BaseFragment() {
         if (isLoading && binding.swiperefresh.isRefreshing) {
             binding.progress.invisible()
         } else if (isLoading) {
+            binding.proPromotionCard.visible(false)
             binding.dailyForecastTitle.visible(false)
             binding.temperatureBarsInfoButton.visible(false)
             binding.hourlyForecastTitle.visible(false)
@@ -141,8 +151,10 @@ class ForecastFragment : BaseFragment() {
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
+            binding.proPromotionCard.visible(true)
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
+            binding.proPromotionCard.visible(false)
             binding.hourlyForecastTitle.visible(false)
             binding.hourlyForecastRecycler.visible(false)
             binding.dailyForecastRecycler.visible(false)
