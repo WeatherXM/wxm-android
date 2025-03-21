@@ -160,6 +160,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipChildren="false"
                 android:orientation="vertical">
 
                 <com.weatherxm.ui.components.SurveyCardView
@@ -259,6 +260,14 @@
                         app:profile_item_title="@string/preferences_settings" />
 
                 </com.google.android.material.card.MaterialCardView>
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/proPromotionCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipChildren="false"
+                    tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
 
             </LinearLayout>
 

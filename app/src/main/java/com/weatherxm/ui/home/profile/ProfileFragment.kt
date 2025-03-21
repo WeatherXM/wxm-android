@@ -27,7 +27,9 @@ import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.MessageCardView
+import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
@@ -173,6 +175,12 @@ class ProfileFragment : BaseFragment() {
             parentModel.onScroll(scrollY - oldScrollY)
         }
 
+        binding.proPromotionCard.setContent {
+            ProPromotionCard(R.string.take_weather_insights_next_level) {
+                ProPromotionDialogFragment().show(this)
+            }
+        }
+
         model.fetchUser()
         parentModel.getSurvey()
     }
@@ -209,8 +217,9 @@ class ProfileFragment : BaseFragment() {
             if (parentModel.hasDevices() == false) {
                 binding.rewardsContainerCard.setCardStroke(R.color.colorPrimary, 2)
                 binding.allocatedRewardsSecondaryCard.setContent {
-                    MessageCardView(data = DataForMessageView(
-                        extraTopPadding = 24.dp,
+                    MessageCardView(
+                        data = DataForMessageView(
+                            extraTopPadding = 24.dp,
                         title = R.string.start_earning,
                         subtitle = SubtitleForMessageView(message = R.string.start_earning_desc),
                         action = ActionForMessageView(

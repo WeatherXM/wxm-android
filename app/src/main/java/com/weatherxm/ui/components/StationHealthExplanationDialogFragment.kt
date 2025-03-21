@@ -10,13 +10,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentStationHealthExplanationBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.setHtml
-import org.koin.android.ext.android.inject
 
 class StationHealthExplanationDialogFragment : BaseBottomSheetDialogFragment() {
     private lateinit var binding: FragmentStationHealthExplanationBinding
-    private val navigator: Navigator by inject()
 
     companion object {
         const val TAG = "StationHealthExplanationDialogFragment"
