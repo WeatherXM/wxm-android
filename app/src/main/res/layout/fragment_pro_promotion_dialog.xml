@@ -134,7 +134,7 @@
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/photoVerificationBtn"
+            android:id="@+id/learnMoreBtn"
             style="@style/Widget.WeatherXM.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

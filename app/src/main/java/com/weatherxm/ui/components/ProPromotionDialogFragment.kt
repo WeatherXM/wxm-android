@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.weatherxm.R
 import com.weatherxm.databinding.FragmentProPromotionDialogBinding
 
 class ProPromotionDialogFragment : BaseBottomSheetDialogFragment() {
@@ -31,6 +32,14 @@ class ProPromotionDialogFragment : BaseBottomSheetDialogFragment() {
     ): View {
         binding = FragmentProPromotionDialogBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.learnMoreBtn.setOnClickListener {
+            navigator.openWebsite(context, getString(R.string.pro_url))
+        }
     }
 
     fun show(fragment: Fragment) {
