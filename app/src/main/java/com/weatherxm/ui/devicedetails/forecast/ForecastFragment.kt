@@ -121,6 +121,13 @@ class ForecastFragment : BaseFragment() {
 
         binding.proPromotionCard.setContent {
             ProPromotionCard(R.string.fine_tune_forecast) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LOCAL_FORECAST.paramValue
+                    )
+                )
                 ProPromotionDialogFragment().show(this)
             }
         }
