@@ -5,18 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.databinding.FragmentStationHealthExplanationBinding
-import com.weatherxm.ui.common.setHtml
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.databinding.FragmentProPromotionDialogBinding
 
-class StationHealthExplanationDialogFragment : BaseBottomSheetDialogFragment() {
-    private lateinit var binding: FragmentStationHealthExplanationBinding
+class ProPromotionDialogFragment : BaseBottomSheetDialogFragment() {
+    private lateinit var binding: FragmentProPromotionDialogBinding
 
     companion object {
-        const val TAG = "StationHealthExplanationDialogFragment"
+        const val TAG = "ProPromotionDialogFragment"
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -30,23 +32,30 @@ class StationHealthExplanationDialogFragment : BaseBottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStationHealthExplanationBinding.inflate(inflater, container, false)
+        binding = FragmentProPromotionDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.dataQualityExplanation.setHtml(R.string.station_health_data_quality_explanation)
-        binding.locationQualityExplanation.setHtml(
-            R.string.station_health_location_quality_explanation
-        )
 
-        binding.readMoreAction.setOnClickListener {
-            navigator.openWebsite(context, getString(R.string.docs_url_qod_algorithm))
+        binding.learnMoreBtn.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.PRO_PROMOTION.paramValue
+                )
+            )
+            navigator.openWebsite(context, getString(R.string.pro_url))
         }
     }
 
     fun show(fragment: Fragment) {
         show(fragment.childFragmentManager, TAG)
+    }
+
+    fun show(activity: AppCompatActivity) {
+        show(activity.supportFragmentManager, TAG)
     }
 }

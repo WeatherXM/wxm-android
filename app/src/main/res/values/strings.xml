@@ -41,6 +41,8 @@
     <string name="action_open">Open</string>
     <string name="action_done">Done</string>
     <string name="action_i_understand">I understand</string>
+    <string name="action_learn_more">Learn more</string>
+    <string name="action_get_pro">Get Pro</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -646,6 +648,23 @@
     <!-- Terms Dialog -->
     <string name="terms_dialog_title">About our legal terms</string>
     <string name="terms_dialog_message"><![CDATA[We’ve implemented the new <a href="%1$s">Terms of Use</a> and <a href="%2$s">Privacy Policy</a> to better serve you and ensure alignment with best practices and applicable laws. By continuing to use the app for the next 30 days, it is considered that you accept the new terms and privacy policy mentioned above.<br><br>By accepting these Terms of Use and Privacy Policy, you agree that they apply to all prior and future interactions with the app.]]></string>
+
+    <!-- Pro Promotion -->
+    <string name="pro_promotion_dialog_title">WeatherXM PRO</string>
+    <string name="pro_promotion_dialog_message">Gain accurate, localized weather forecasts by combining the best data from multiple models and track model performance.</string>
+    <string name="forecast_accuracy_tracking">Forecast Accuracy Tracking</string>
+    <string name="hyperlocal_weather_forecasts">Hyperlocal Weather Forecasts</string>
+    <string name="historical_and_current_data">Historical &amp; Current Data</string>
+    <string name="cell_forecast">Cell forecast</string>
+    <string name="access_hyperlocal_data_api">Access hyperlocal weather data via API</string>
+    <string name="and_more_coming_soon">and more coming soon!</string>
+    <string name="choose_perfect_plan">Choose the perfect plan for your needs and start today!</string>
+    <string name="weatherxm_pro">WeatherXM Pro</string>
+    <string name="fine_tune_forecast">Fine-tune your forecasting!</string>
+    <string name="want_more_accurate_forecasts">Want more accurate forecasts?</string>
+    <string name="unlock_full_weather_history">Unlock full weather history!</string>
+    <string name="get_hyperlocal_forecasts">Get Hyperlocal Forecasts</string>
+    <string name="take_weather_insights_next_level">Take your weather insights to the next level.</string>
 
     <!-- Photo Verification -->
     <string name="skip_photo_verification">Skip Photo Verification</string>

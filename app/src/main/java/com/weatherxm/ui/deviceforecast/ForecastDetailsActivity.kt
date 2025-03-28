@@ -23,7 +23,9 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
+import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.HeaderView
+import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
@@ -104,6 +106,19 @@ class ForecastDetailsActivity : BaseActivity() {
                     binding.mainContainer.visible(false)
                     binding.statusView.visible(true)
                 }
+            }
+        }
+
+        binding.proPromotionCard.setContent {
+            ProPromotionCard(R.string.want_more_accurate_forecasts) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
+                    )
+                )
+                ProPromotionDialogFragment().show(this)
             }
         }
 

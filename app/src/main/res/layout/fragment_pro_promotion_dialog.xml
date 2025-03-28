@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_rounded_layer_1_big_radius"
+    android:fitsSystemWindows="false"
+    tools:context=".ui.components.MessageDialogFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_large">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/background_top_rounded_corners_with_gradient">
+
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:id="@+id/dragHandler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/dark_dark_grey" />
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="240dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:src="@drawable/pro_promotion_screenshots"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/pro_promotion_dialog_title"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Title"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/pro_promotion_dialog_message"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:drawableStart="@drawable/ic_checkmark_only"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/forecast_accuracy_tracking"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:drawableStart="@drawable/ic_checkmark_only"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/hyperlocal_weather_forecasts"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:drawableStart="@drawable/ic_checkmark_only"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/historical_and_current_data"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:drawableStart="@drawable/ic_checkmark_only"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/cell_forecast"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:drawableStart="@drawable/ic_checkmark_only"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/access_hyperlocal_data_api"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:drawableStart="@drawable/ic_checkmark_only"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/and_more_coming_soon"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/choose_perfect_plan"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/learnMoreBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:backgroundTint="@color/colorSurface"
+            android:text="@string/action_learn_more"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@id/skipAndGoToStationBtn" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,8 +1,9 @@
 package com.weatherxm.data.repository
 
-import com.weatherxm.data.models.InfoBanner
-import com.weatherxm.data.models.Survey
 import com.weatherxm.data.datasource.RemoteBannersDataSource
+import com.weatherxm.data.models.RemoteBanner
+import com.weatherxm.data.models.RemoteBannerType
+import com.weatherxm.data.models.Survey
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -16,12 +17,13 @@ class RemoteBannersRepositoryTest : BehaviorSpec({
 
     val survey = mockk<Survey>()
     val surveyId = "surveyId"
-    val infoBanner = mockk<InfoBanner>()
-    val infoBannerId = "infoBannerId"
+    val infoBanner = mockk<RemoteBanner>()
+    val bannerId = "bannerId"
 
     beforeSpec {
         justRun { dataSource.dismissSurvey(surveyId) }
-        justRun { dataSource.dismissInfoBanner(infoBannerId) }
+        justRun { dataSource.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId) }
+        justRun { dataSource.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId) }
     }
 
     context("Get survey related information") {
@@ -50,15 +52,15 @@ class RemoteBannersRepositoryTest : BehaviorSpec({
 
     context("Get info banner related information") {
         When("there is an info banner available that should be shown") {
-            every { dataSource.getInfoBanner() } returns infoBanner
+            every { dataSource.getRemoteBanner(RemoteBannerType.INFO_BANNER) } returns infoBanner
             then("return that info banner") {
-                repo.getInfoBanner() shouldBe infoBanner
+                repo.getRemoteBanner(RemoteBannerType.INFO_BANNER) shouldBe infoBanner
             }
         }
         When("there is no info banner available") {
-            every { dataSource.getInfoBanner() } returns null
+            every { dataSource.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT) } returns null
             then("return null") {
-                repo.getInfoBanner() shouldBe null
+                repo.getRemoteBanner(RemoteBannerType.ANNOUNCEMENT) shouldBe null
             }
         }
     }
@@ -66,8 +68,27 @@ class RemoteBannersRepositoryTest : BehaviorSpec({
     context("Dismiss Info Banner") {
         given("the info banner ID") {
             then("dismiss this info banner with that ID") {
-                repo.dismissInfoBanner(infoBannerId)
-                verify(exactly = 1) { dataSource.dismissInfoBanner(infoBannerId) }
+                repo.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, bannerId)
+                verify(exactly = 1) {
+                    dataSource.dismissRemoteBanner(
+                        RemoteBannerType.INFO_BANNER,
+                        bannerId
+                    )
+                }
+            }
+        }
+    }
+
+    context("Dismiss Announcement Banner") {
+        given("the announcement banner ID") {
+            then("dismiss this announcement banner with that ID") {
+                repo.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
+                verify(exactly = 1) {
+                    dataSource.dismissRemoteBanner(
+                        RemoteBannerType.ANNOUNCEMENT,
+                        bannerId
+                    )
+                }
             }
         }
     }

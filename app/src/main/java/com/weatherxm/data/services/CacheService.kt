@@ -3,6 +3,7 @@ package com.weatherxm.data.services
 import android.content.SharedPreferences
 import androidx.annotation.StringRes
 import androidx.collection.ArrayMap
+import androidx.core.content.edit
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
@@ -13,6 +14,7 @@ import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.User
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.AuthToken
@@ -47,6 +49,7 @@ class CacheService(
         const val KEY_INSTALLATION_ID = "installation_id"
         const val KEY_DISMISSED_SURVEY_ID = "dismissed_survey_id"
         const val KEY_DISMISSED_INFO_BANNER_ID = "dismissed_info_banner_id"
+        const val KEY_DISMISSED_ANNOUNCEMENT_ID = "dismissed_announcement_id"
         const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
         const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
@@ -96,10 +99,10 @@ class CacheService(
     }
 
     fun setAuthToken(token: AuthToken) {
-        encryptedPreferences.edit().apply {
+        encryptedPreferences.edit {
             putString(KEY_ACCESS, token.access)
             putString(KEY_REFRESH, token.refresh)
-        }.apply()
+        }
     }
 
     fun getInstallationId(): Either<Failure, String> {
@@ -112,7 +115,7 @@ class CacheService(
     }
 
     fun setInstallationId(installationId: String) {
-        preferences.edit().putString(KEY_INSTALLATION_ID, installationId).apply()
+        preferences.edit { putString(KEY_INSTALLATION_ID, installationId) }
     }
 
     fun getLastRemindedVersion(): Int {
@@ -120,11 +123,11 @@ class CacheService(
     }
 
     fun setLastRemindedVersion(lastVersion: Int) {
-        preferences.edit().putInt(KEY_LAST_REMINDED_VERSION, lastVersion).apply()
+        preferences.edit { putInt(KEY_LAST_REMINDED_VERSION, lastVersion) }
     }
 
     fun setAnalyticsDecisionTimestamp(timestamp: Long) {
-        preferences.edit().putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, timestamp).apply()
+        preferences.edit { putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, timestamp) }
     }
 
     fun getAnalyticsDecisionTimestamp(): Long {
@@ -132,7 +135,7 @@ class CacheService(
     }
 
     fun setAcceptTermsTimestamp(timestamp: Long) {
-        preferences.edit().putLong(KEY_ACCEPT_TERMS_TIMESTAMP, timestamp).apply()
+        preferences.edit { putLong(KEY_ACCEPT_TERMS_TIMESTAMP, timestamp) }
     }
 
     fun getAcceptTermsTimestamp(): Long {
@@ -144,7 +147,7 @@ class CacheService(
     }
 
     fun setAnalyticsEnabled(enabled: Boolean) {
-        preferences.edit().putBoolean(resources.getString(KEY_ANALYTICS), enabled).apply()
+        preferences.edit { putBoolean(resources.getString(KEY_ANALYTICS), enabled) }
     }
 
     fun getUserUsername(): Either<Failure, String> {
@@ -157,7 +160,7 @@ class CacheService(
     }
 
     fun setUserUsername(username: String) {
-        preferences.edit().putString(KEY_USERNAME, username).apply()
+        preferences.edit { putString(KEY_USERNAME, username) }
     }
 
     fun getWalletAddress(): Either<Failure, String?> {
@@ -168,7 +171,7 @@ class CacheService(
 
     fun setWalletAddress(address: String) {
         this.walletAddress = address
-        preferences.edit().putBoolean(KEY_HAS_WALLET, true).apply()
+        preferences.edit { putBoolean(KEY_HAS_WALLET, true) }
         onUserPropertiesChangeListener?.invoke(KEY_HAS_WALLET, true)
     }
 
@@ -181,7 +184,7 @@ class CacheService(
     }
 
     fun setUser(user: User) {
-        preferences.edit().putString(KEY_USER_ID, user.id).apply()
+        preferences.edit { putString(KEY_USER_ID, user.id) }
         onUserPropertiesChangeListener?.invoke(KEY_USER_ID, user.id)
         this.user = user
     }
@@ -253,7 +256,7 @@ class CacheService(
     }
 
     fun setWalletWarningDismissTimestamp(timestamp: Long) {
-        preferences.edit().putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, timestamp).apply()
+        preferences.edit { putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, timestamp) }
     }
 
     fun getWalletWarningDismissTimestamp(): Long {
@@ -261,7 +264,7 @@ class CacheService(
     }
 
     fun setDeviceLastOtaVersion(key: String, lastOtaVersion: String) {
-        preferences.edit().putString(key, lastOtaVersion).apply()
+        preferences.edit { putString(key, lastOtaVersion) }
     }
 
     fun getDeviceLastOtaVersion(key: String): Either<Failure, String> {
@@ -274,7 +277,7 @@ class CacheService(
     }
 
     fun setDeviceLastOtaTimestamp(key: String, timestamp: Long) {
-        preferences.edit().putLong(key, timestamp).apply()
+        preferences.edit { putLong(key, timestamp) }
     }
 
     fun getDeviceLastOtaTimestamp(key: String): Long {
@@ -289,19 +292,19 @@ class CacheService(
     }
 
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String) {
-        with(preferences.edit()) {
+        preferences.edit {
             putString(KEY_DEVICES_SORT, sortOrder)
             putString(KEY_DEVICES_FILTER, filter)
             putString(KEY_DEVICES_GROUP_BY, groupBy)
-        }.apply()
+        }
     }
 
     fun removeDeviceOfWidget(key: String) {
-        preferences.edit().remove(key).apply()
+        preferences.edit { remove(key) }
     }
 
     fun setWidgetDevice(key: String, deviceId: String) {
-        preferences.edit().putString(key, deviceId).apply()
+        preferences.edit { putString(key, deviceId) }
     }
 
     fun getWidgetDevice(key: String): Either<Failure, String> {
@@ -323,7 +326,7 @@ class CacheService(
     }
 
     fun setWidgetIds(ids: List<String>) {
-        preferences.edit().putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, ids.toSet()).apply()
+        preferences.edit { putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, ids.toSet()) }
     }
 
     fun getFollowedDevicesIds(): List<String> {
@@ -340,7 +343,7 @@ class CacheService(
 
     fun setUserDevicesIds(ids: List<String>) {
         userStationsIds = ids
-        preferences.edit().putInt(KEY_DEVICES_OWN, ids.size).apply()
+        preferences.edit { putInt(KEY_DEVICES_OWN, ids.size) }
         onUserPropertiesChangeListener?.invoke(KEY_DEVICES_OWN, ids.size)
     }
 
@@ -353,15 +356,29 @@ class CacheService(
     }
 
     fun setLastDismissedSurveyId(surveyId: String) {
-        preferences.edit().putString(KEY_DISMISSED_SURVEY_ID, surveyId).apply()
+        preferences.edit { putString(KEY_DISMISSED_SURVEY_ID, surveyId) }
     }
 
-    fun getLastDismissedInfoBannerId(): String? {
-        return preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
+    fun getLastDismissedRemoteBannerId(bannerType: RemoteBannerType): String? {
+        return when (bannerType) {
+            RemoteBannerType.INFO_BANNER -> preferences.getString(
+                KEY_DISMISSED_INFO_BANNER_ID,
+                null
+            )
+            RemoteBannerType.ANNOUNCEMENT -> preferences.getString(
+                KEY_DISMISSED_ANNOUNCEMENT_ID,
+                null
+            )
+        }
     }
 
-    fun setLastDismissedInfoBannerId(infoBannerId: String) {
-        preferences.edit().putString(KEY_DISMISSED_INFO_BANNER_ID, infoBannerId).apply()
+    fun setLastDismissedRemoteBannerId(bannerType: RemoteBannerType, bannerId: String) {
+        preferences.edit {
+            when (bannerType) {
+                RemoteBannerType.INFO_BANNER -> putString(KEY_DISMISSED_INFO_BANNER_ID, bannerId)
+                RemoteBannerType.ANNOUNCEMENT -> putString(KEY_DISMISSED_ANNOUNCEMENT_ID, bannerId)
+            }
+        }
     }
 
     fun getPhotoVerificationAcceptedTerms(): Boolean {
@@ -369,7 +386,7 @@ class CacheService(
     }
 
     fun setPhotoVerificationAcceptedTerms() {
-        preferences.edit().putBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, true).apply()
+        preferences.edit { putBoolean(KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS, true) }
     }
 
     fun getCountriesInfo(): List<CountryInfo> {
@@ -385,7 +402,7 @@ class CacheService(
     }
 
     fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
-        preferences.edit().putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow).apply()
+        preferences.edit { putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow) }
     }
 
     fun getPreferredUnit(
@@ -409,7 +426,7 @@ class CacheService(
         userStationsIds = listOf()
 
         okHttpCache.evictAll()
-        encryptedPreferences.edit().clear().apply()
+        encryptedPreferences.edit { clear() }
         clearUserPreferences()
     }
 
@@ -451,20 +468,22 @@ class CacheService(
             }
         }
 
-        preferences.edit().clear().putString(resources.getString(KEY_THEME), savedTheme)
-            .putString(resources.getString(KEY_TEMPERATURE), savedTemperature)
-            .putString(resources.getString(KEY_PRECIP), savedPrecipitation)
-            .putString(resources.getString(KEY_WIND), savedWind)
-            .putString(resources.getString(KEY_WIND_DIR), savedWindDir)
-            .putString(resources.getString(KEY_PRESSURE), savedPressure)
-            .putBoolean(resources.getString(KEY_ANALYTICS), savedAnalyticsEnabled)
-            .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
-            .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
-            .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
-            .apply()
+        preferences.edit {
+            clear()
+                .putString(resources.getString(KEY_THEME), savedTheme)
+                .putString(resources.getString(KEY_TEMPERATURE), savedTemperature)
+                .putString(resources.getString(KEY_PRECIP), savedPrecipitation)
+                .putString(resources.getString(KEY_WIND), savedWind)
+                .putString(resources.getString(KEY_WIND_DIR), savedWindDir)
+                .putString(resources.getString(KEY_PRESSURE), savedPressure)
+                .putBoolean(resources.getString(KEY_ANALYTICS), savedAnalyticsEnabled)
+                .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
+                .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
+                .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
+        }
 
         devicesOfWidgets.forEach {
-            preferences.edit().putString(it.key, it.value).apply()
+            preferences.edit { putString(it.key, it.value) }
         }
     }
 

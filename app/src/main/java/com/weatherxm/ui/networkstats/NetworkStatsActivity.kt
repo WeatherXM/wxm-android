@@ -6,13 +6,15 @@ import androidx.annotation.StringRes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityNetworkStatsBinding
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.removeLinksUnderline
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.ProPromotionDialogFragment
+import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.initializeNetworkStatsChart
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -89,6 +91,19 @@ class NetworkStatsActivity : BaseActivity() {
                         .animation(R.raw.anim_loading)
                         .visible(true)
                 }
+            }
+        }
+
+        binding.proPromotionCard.setContent {
+            ProPromotionCard(R.string.want_more_accurate_forecasts) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LOCAL_NETWORK_STATS.paramValue
+                    )
+                )
+                ProPromotionDialogFragment().show(this)
             }
         }
 

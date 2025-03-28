@@ -261,7 +261,16 @@ interface AnalyticsService {
         CLAIMING_ID("claiming"),
         ANNOUNCEMENT_BUTTON("Announcement Button"),
         STARTED("started"),
-        COMPLETED("completed")
+        COMPLETED("completed"),
+        PRO_PROMOTION("pro_promotion"),
+        PRO_PROMOTION_CTA("Pro Promotion CTA"),
+        REMOTE_DEVICES_LIST("remote_devices_list"),
+        LOCAL_FORECAST("local_forecast"),
+        LOCAL_FORECAST_DETAILS("local_forecast_details"),
+        LOCAL_HISTORY("local_history"),
+        LOCAL_CELL("local_cell"),
+        LOCAL_PROFILE("local_profile"),
+        LOCAL_NETWORK_STATS("local_network_stats")
     }
 
     // Custom Param Names

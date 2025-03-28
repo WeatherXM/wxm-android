@@ -31,6 +31,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:clipChildren="false"
             android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
@@ -717,6 +718,16 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/proPromotionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@id/tokenCard"
+                tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/stationsCard"
                 style="@style/Widget.WeatherXM.MaterialCard"
@@ -726,7 +737,7 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 app:cardElevation="@dimen/elevation_small"
                 app:contentPadding="@dimen/padding_small_to_normal"
-                app:layout_constraintTop_toBottomOf="@id/tokenCard">
+                app:layout_constraintTop_toBottomOf="@id/proPromotionCard">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

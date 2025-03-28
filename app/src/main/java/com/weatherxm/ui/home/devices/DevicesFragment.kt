@@ -15,7 +15,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl.Companion.ANNOUNCEMENT_LOCAL_PRO_ACTION_URL
+import com.weatherxm.data.models.RemoteBanner
+import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.service.GlobalUploadObserverService
@@ -37,6 +39,8 @@ import com.weatherxm.ui.common.swipeToDismiss
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.ProPromotionDialogFragment
+import com.weatherxm.ui.components.compose.AnnouncementBannerView
 import com.weatherxm.ui.components.compose.InfoBannerView
 import com.weatherxm.ui.components.compose.MessageCardView
 import com.weatherxm.ui.components.compose.PhotoUploadState
@@ -79,7 +83,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         binding.recycler.adapter = adapter
 
         binding.swiperefresh.setOnRefreshListener {
-            parentModel.getInfoBanner()
+            parentModel.getRemoteBanners()
             model.fetch()
         }
 
@@ -107,6 +111,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onInfoBanner(it)
         }
 
+        parentModel.onAnnouncementBanner().observe(viewLifecycleOwner) {
+            onAnnouncementBanner(it)
+        }
+
         parentModel.onWalletWarnings().observe(viewLifecycleOwner) {
             onWalletMissingWarning(it.showMissingWarning)
         }
@@ -115,7 +123,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         return binding.root
     }
 
-    private fun onInfoBanner(infoBanner: InfoBanner?) {
+    private fun onInfoBanner(infoBanner: RemoteBanner?) {
         if (infoBanner != null && !model.hasNoDevices()) {
             binding.infoBanner.setContent {
                 InfoBannerView(
@@ -132,7 +140,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                         navigator.openWebsite(context, infoBanner.url)
                     },
                     onClose = {
-                        parentModel.dismissInfoBanner(infoBanner.id)
+                        parentModel.dismissRemoteBanner(RemoteBannerType.INFO_BANNER, infoBanner.id)
                         binding.contentContainerCard.setCardRadius(0F, 0F, 0F, 0F)
                         binding.infoBanner.visible(false)
                     }
@@ -145,6 +153,40 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             binding.infoBanner.visible(false)
             binding.contentContainerCard.setCardRadius(0F, 0F, 0F, 0F)
         }
+    }
+
+    private fun onAnnouncementBanner(announcementBanner: RemoteBanner?) {
+        announcementBanner?.let {
+            binding.announcementBanner.setContent {
+                AnnouncementBannerView(
+                    title = it.title,
+                    subtitle = it.message,
+                    actionLabel = it.actionLabel,
+                    showActionButton = it.showActionButton,
+                    showCloseButton = it.showCloseButton,
+                    onAction = {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                            Pair(FirebaseAnalytics.Param.ITEM_ID, it.url),
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.REMOTE_DEVICES_LIST.paramValue
+                            )
+                        )
+                        if (it.url == ANNOUNCEMENT_LOCAL_PRO_ACTION_URL) {
+                            ProPromotionDialogFragment().show(this)
+                        } else {
+                            navigator.openWebsite(context, it.url)
+                        }
+                    },
+                    onClose = {
+                        parentModel.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, it.id)
+                        binding.announcementBanner.visible(false)
+                    }
+                )
+            }
+            binding.announcementBanner.visible(true)
+        } ?: binding.announcementBanner.visible(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
