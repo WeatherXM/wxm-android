@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.ui.unit.dp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.SeverityLevel
@@ -175,14 +176,25 @@ class ProfileFragment : BaseFragment() {
             parentModel.onScroll(scrollY - oldScrollY)
         }
 
-        binding.proPromotionCard.setContent {
-            ProPromotionCard(R.string.take_weather_insights_next_level) {
-                ProPromotionDialogFragment().show(this)
-            }
-        }
+        initProPromotionCard()
 
         model.fetchUser()
         parentModel.getSurvey()
+    }
+
+    private fun initProPromotionCard() {
+        binding.proPromotionCard.setContent {
+            ProPromotionCard(R.string.take_weather_insights_next_level) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LOCAL_PROFILE.paramValue
+                    )
+                )
+                ProPromotionDialogFragment().show(this)
+            }
+        }
     }
 
     private fun toggleLoading(isLoading: Boolean) {
@@ -220,21 +232,23 @@ class ProfileFragment : BaseFragment() {
                     MessageCardView(
                         data = DataForMessageView(
                             extraTopPadding = 24.dp,
-                        title = R.string.start_earning,
-                        subtitle = SubtitleForMessageView(message = R.string.start_earning_desc),
-                        action = ActionForMessageView(
-                            label = R.string.action_buy_station,
-                            backgroundTint = R.color.colorPrimary,
-                            foregroundTint = R.color.colorOnPrimary,
-                            startIcon = R.drawable.ic_cart,
-                            onClickListener = {
-                                navigator.openWebsite(
-                                    requireContext(),
-                                    getString(R.string.shop_url)
-                                )
-                            }
-                        )
-                    ))
+                            title = R.string.start_earning,
+                            subtitle = SubtitleForMessageView(
+                                message = R.string.start_earning_desc
+                            ),
+                            action = ActionForMessageView(
+                                label = R.string.action_buy_station,
+                                backgroundTint = R.color.colorPrimary,
+                                foregroundTint = R.color.colorOnPrimary,
+                                startIcon = R.drawable.ic_cart,
+                                onClickListener = {
+                                    navigator.openWebsite(
+                                        requireContext(),
+                                        getString(R.string.shop_url)
+                                    )
+                                }
+                            )
+                        ))
                 }
                 binding.allocatedRewardsSecondaryCard.visible(true)
             }

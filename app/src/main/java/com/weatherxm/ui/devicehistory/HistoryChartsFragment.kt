@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Resource
@@ -67,6 +69,13 @@ class HistoryChartsFragment : BaseFragment() {
 
         binding.proPromotionCard.setContent {
             ProPromotionCard(R.string.unlock_full_weather_history) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LOCAL_HISTORY.paramValue
+                    )
+                )
                 ProPromotionDialogFragment().show(this)
             }
         }

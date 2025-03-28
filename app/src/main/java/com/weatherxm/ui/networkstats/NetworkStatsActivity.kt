@@ -96,6 +96,13 @@ class NetworkStatsActivity : BaseActivity() {
 
         binding.proPromotionCard.setContent {
             ProPromotionCard(R.string.want_more_accurate_forecasts) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LOCAL_NETWORK_STATS.paramValue
+                    )
+                )
                 ProPromotionDialogFragment().show(this)
             }
         }

@@ -134,6 +134,13 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
                     updateCellStats(response.data)
                     binding.proPromotionCard.setContent {
                         ProPromotionCard(R.string.get_hyperlocal_forecasts) {
+                            analytics.trackEventSelectContent(
+                                AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                                Pair(
+                                    FirebaseAnalytics.Param.SOURCE,
+                                    AnalyticsService.ParamValue.LOCAL_CELL.paramValue
+                                )
+                            )
                             ProPromotionDialogFragment().show(this)
                         }
                     }

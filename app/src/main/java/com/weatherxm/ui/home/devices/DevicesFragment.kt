@@ -165,6 +165,14 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     showActionButton = it.showActionButton,
                     showCloseButton = it.showCloseButton,
                     onAction = {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                            Pair(FirebaseAnalytics.Param.ITEM_ID, it.url),
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.REMOTE_DEVICES_LIST.paramValue
+                            )
+                        )
                         if (it.url == ANNOUNCEMENT_LOCAL_PRO_ACTION_URL) {
                             ProPromotionDialogFragment().show(this)
                         } else {

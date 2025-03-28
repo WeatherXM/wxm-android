@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentProPromotionDialogBinding
 
 class ProPromotionDialogFragment : BaseBottomSheetDialogFragment() {
@@ -38,6 +40,13 @@ class ProPromotionDialogFragment : BaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.learnMoreBtn.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.PRO_PROMOTION.paramValue
+                )
+            )
             navigator.openWebsite(context, getString(R.string.pro_url))
         }
     }
