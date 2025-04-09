@@ -290,19 +290,19 @@ class DeviceDetailsActivity : BaseActivity() {
     }
 
     private fun setupAlertChipClickListener(analyticsItemId: String?) {
-        analyticsItemId?.let {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.WARNINGS.paramValue,
-                customParams = arrayOf(
-                    Pair(
-                        AnalyticsService.CustomParam.CONTENT_NAME.paramName,
-                        AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
-                    ),
-                    Pair(FirebaseAnalytics.Param.ITEM_ID, it)
-                )
-            )
-        }
         binding.alertChip.setOnClickListener {
+            analyticsItemId?.let {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.WARNINGS.paramValue,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.CONTENT_NAME.paramName,
+                            AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
+                        ),
+                        Pair(FirebaseAnalytics.Param.ITEM_ID, it)
+                    )
+                )
+            }
             navigator.showDeviceAlerts(this, model.device)
         }
     }
