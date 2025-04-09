@@ -197,6 +197,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         if (snackbar?.isShown == true) snackbar?.dismiss()
         when (destination.id) {
             R.id.navigation_devices -> {
+                model.getRemoteBanners()
                 checkForNoDevices()
                 binding.addDevice.show()
             }
