@@ -90,6 +90,11 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
                 R.drawable.photo_bad_example_3,
                 listOf(R.string.photo_bad_example_3_1, R.string.photo_bad_example_3_2),
                 false
+            ),
+            PhotoExample(
+                R.drawable.photo_bad_example_4,
+                listOf(R.string.photo_bad_example_4_1, R.string.photo_bad_example_4_2),
+                false
             )
         )
 
