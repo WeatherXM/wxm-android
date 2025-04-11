@@ -676,11 +676,7 @@
     <string name="photos_instruction_rotate">Rotate to landscape and use a wide-angle lens to include as much of the horizon as possible.</string>
     <string name="photos_instruction_surface">Ensure at least 1 photo clearly shows the surface where the station is installed.</string>
     <string name="photos_instruction_faces_personal_items">Avoid capturing faces or personal items in any of the photos.</string>
-    <string name="photos_instruction_angles">Take 2–4 photos of the station from the following angles:</string>
-    <string name="photos_instruction_angles_1">from the rain gauge looking towards the anemometer</string>
-    <string name="photos_instruction_angles_2">from the anemometer looking towards the rain gauge</string>
-    <string name="photos_instruction_angles_3">from the side, showing the rain gauge on the left and anemometer on the right</string>
-    <string name="photos_instruction_angles_4">from the other side, showing the anemometer on the left and rain gauge on the right</string>
+    <string name="photos_instruction_angles">Take 4 photos of your station from each cardinal direction: North, East, South, and West.</string>
     <string name="photo_examples">Photo Examples</string>
     <string name="exit_photo_verification">Exit Photo Verification</string>
     <string name="exit_photo_verification_message">Are you sure you want to exit the Photo Verification process?\n\nYou can always do it later from the station’s settings.</string>
