@@ -674,6 +674,7 @@
     <string name="boost_network_health_photos">Boost network health with a few photos of your setup!</string>
     <string name="how_to_take_photos">How to take the photos</string>
     <string name="photos_instruction_rotate">Rotate to landscape and use a wide-angle lens to include as much of the horizon as possible.</string>
+    <string name="photos_instruction_zoom">If your station is in a hard-to-reach place, zoom in just enough to keep the image clear and without overly cropping the surroundings.</string>
     <string name="photos_instruction_surface">Ensure at least 1 photo clearly shows the surface where the station is installed.</string>
     <string name="photos_instruction_faces_personal_items">Avoid capturing faces or personal items in any of the photos.</string>
     <string name="photos_instruction_angles">Take 4 photos of your station from each cardinal direction: North, East, South, and West.</string>
