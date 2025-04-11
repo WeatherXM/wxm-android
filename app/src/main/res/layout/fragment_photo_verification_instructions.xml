@@ -94,6 +94,16 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_large"
+            android:drawableStart="@drawable/ic_photo_zoom"
+            android:drawablePadding="@dimen/padding_normal"
+            android:text="@string/photos_instruction_zoom"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
             android:drawableStart="@drawable/ic_photo_surface"
             android:drawablePadding="@dimen/padding_normal"
             android:text="@string/photos_instruction_surface"
