@@ -37,10 +37,6 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.photoAmountInstructionsList.setContent {
-            PhotoAmountInstructionsList()
-        }
-
         val goodExamples = listOf(
             PhotoExample(
                 R.drawable.photo_good_example_1,
@@ -159,17 +155,6 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
                 fontSize = 14.sp,
                 color = Color(requireContext().getColor(R.color.colorOnSurface)),
             )
-        }
-    }
-
-    @Suppress("FunctionNaming")
-    @Composable
-    internal fun PhotoAmountInstructionsList() {
-        Column {
-            BulletWithText(getString(R.string.photos_instruction_angles_1))
-            BulletWithText(getString(R.string.photos_instruction_angles_2))
-            BulletWithText(getString(R.string.photos_instruction_angles_3))
-            BulletWithText(getString(R.string.photos_instruction_angles_4))
         }
     }
 }
