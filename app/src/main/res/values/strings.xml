@@ -700,7 +700,7 @@
     <string name="photo_bad_example_1_1">Facing bottom up</string>
     <string name="photo_bad_example_1_2">Not showing surrounding area</string>
     <string name="photo_bad_example_1_3">Too close</string>
-    <string name="photo_bad_example_2_1">Not showing possible obstacles</string>
+    <string name="photo_bad_example_2_1">Too far from station</string>
     <string name="photo_bad_example_2_2">No surface of installation</string>
     <string name="photo_bad_example_3_1">Tilted angle</string>
     <string name="photo_bad_example_3_2">Subject not in the middle</string>
