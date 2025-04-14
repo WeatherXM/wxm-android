@@ -145,6 +145,10 @@ class PhotoGalleryActivity : BaseActivity() {
             onDeletePhoto()
         }
 
+        binding.galleryBtn.setOnClickListener {
+            onGalleryBtn()
+        }
+
         binding.thumbnails.setContent {
             Thumbnails()
         }
@@ -222,6 +226,10 @@ class PhotoGalleryActivity : BaseActivity() {
             binding.addPhotoBtn.setOnClickListener {
                 showSnackbarMessage(binding.root, getString(R.string.max_photos_reached_message))
             }
+
+            binding.galleryBtn.setOnClickListener {
+                showSnackbarMessage(binding.root, getString(R.string.max_photos_reached_message))
+            }
         } else {
             binding.addPhotoBtn.setOnClickListener {
                 analytics.trackEventUserAction(
@@ -271,6 +279,10 @@ class PhotoGalleryActivity : BaseActivity() {
                 model.deletePhoto(it)
             }
         }
+    }
+
+    private fun onGalleryBtn() {
+
     }
 
     @Suppress("MagicNumber")
