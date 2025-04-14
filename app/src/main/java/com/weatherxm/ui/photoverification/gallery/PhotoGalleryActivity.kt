@@ -97,7 +97,21 @@ class PhotoGalleryActivity : BaseActivity() {
         registerForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) { uri ->
-            // TODO: track event
+            analytics.trackEventUserAction(
+                AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                null,
+                customParams = arrayOf(
+                    Pair(
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        AnalyticsService.ParamValue.COMPLETED.paramValue
+                    ),
+                    Pair(
+                        AnalyticsService.CustomParam.SOURCE.paramName,
+                        AnalyticsService.ParamValue.GALLERY.paramValue
+                    )
+                )
+            )
+
             uri?.let {
                 val file = createPhotoFile()
                 try {
@@ -280,7 +294,20 @@ class PhotoGalleryActivity : BaseActivity() {
             }
 
             binding.galleryBtn.setOnClickListener {
-                // TODO: track event
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                    null,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.STARTED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.GALLERY.paramValue
+                        )
+                    )
+                )
                 navigator.openPhotoPicker(photoPickerLauncher)
             }
         }
