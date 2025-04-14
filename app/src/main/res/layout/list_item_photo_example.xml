@@ -25,8 +25,9 @@
 
         <ImageView
             android:id="@+id/badExampleImage"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            app:layout_constraintDimensionRatio="0.8"
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:visibility="gone"

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -36,10 +35,6 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.photoAmountInstructionsList.setContent {
-            PhotoAmountInstructionsList()
-        }
 
         val goodExamples = listOf(
             PhotoExample(
@@ -93,6 +88,11 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
             PhotoExample(
                 R.drawable.photo_bad_example_3,
                 listOf(R.string.photo_bad_example_3_1, R.string.photo_bad_example_3_2),
+                false
+            ),
+            PhotoExample(
+                R.drawable.photo_bad_example_4,
+                listOf(R.string.photo_bad_example_4_1, R.string.photo_bad_example_4_2),
                 false
             )
         )
@@ -159,17 +159,6 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
                 fontSize = 14.sp,
                 color = Color(requireContext().getColor(R.color.colorOnSurface)),
             )
-        }
-    }
-
-    @Suppress("FunctionNaming")
-    @Composable
-    internal fun PhotoAmountInstructionsList() {
-        Column {
-            BulletWithText(getString(R.string.photos_instruction_angles_1))
-            BulletWithText(getString(R.string.photos_instruction_angles_2))
-            BulletWithText(getString(R.string.photos_instruction_angles_3))
-            BulletWithText(getString(R.string.photos_instruction_angles_4))
         }
     }
 }
