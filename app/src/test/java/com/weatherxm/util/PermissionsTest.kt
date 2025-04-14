@@ -1,24 +1,21 @@
 package com.weatherxm.util
 
 import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
 import com.weatherxm.TestConfig.context
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockkStatic
 
 class PermissionsTest : BehaviorSpec({
     val grantedPermission = "grantedPermission"
     val deniedPermission = "deniedPermission"
 
     beforeSpec {
-        mockkStatic(ContextCompat::class)
         every {
-            ContextCompat.checkSelfPermission(context, grantedPermission)
+            context.checkSelfPermission(grantedPermission)
         } returns PackageManager.PERMISSION_GRANTED
         every {
-            ContextCompat.checkSelfPermission(context, deniedPermission)
+            context.checkSelfPermission(deniedPermission)
         } returns PackageManager.PERMISSION_DENIED
     }
 

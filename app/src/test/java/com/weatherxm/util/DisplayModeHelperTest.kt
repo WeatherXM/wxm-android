@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.content.res.Resources
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
@@ -18,14 +17,14 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.verify
 
 class DisplayModeHelperTest : BehaviorSpec({
     val androidResources = mockk<Resources>()
     val configuration = mockk<Configuration>()
     val analyticsWrapper = mockk<AnalyticsWrapper>()
-    val displayModeHelper = DisplayModeHelper(androidResources, sharedPref, analyticsWrapper)
+    val displayModeHelper = spyk(DisplayModeHelper(androidResources, sharedPref, analyticsWrapper))
 
     val theme = "theme"
     val system = "system"
@@ -39,8 +38,9 @@ class DisplayModeHelperTest : BehaviorSpec({
         every { androidResources.getString(R.string.light_value) } returns light
         every { androidResources.getString(R.string.system_value) } returns system
         justRun { analyticsWrapper.setDisplayMode(any()) }
-        mockkStatic(AppCompatDelegate::class)
-        justRun { AppCompatDelegate.setDefaultNightMode(any()) }
+        justRun { displayModeHelper.setDefaultNightMode(MODE_NIGHT_YES) }
+        justRun { displayModeHelper.setDefaultNightMode(MODE_NIGHT_NO) }
+        justRun { displayModeHelper.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM) }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testDisplayMode(
@@ -53,7 +53,7 @@ class DisplayModeHelperTest : BehaviorSpec({
         then("The setter should work properly") {
             displayModeHelper.setDisplayMode(mode)
             verify(exactly = 1) {
-                AppCompatDelegate.setDefaultNightMode(setDefaultNightMode)
+                displayModeHelper.setDefaultNightMode(setDefaultNightMode)
             }
         }
         and("The getter should work properly") {
@@ -103,14 +103,11 @@ class DisplayModeHelperTest : BehaviorSpec({
             }
         }
         given("no selected display mode") {
-            // Re-mock AppCompatDelegate to reset calls and use the `exactly` arg below
-            mockkStatic(AppCompatDelegate::class)
-            justRun { AppCompatDelegate.setDefaultNightMode(any()) }
             every { sharedPref.getString(theme, system) } returns system
             displayModeHelper.setDisplayMode()
             then("System should be set") {
-                verify(exactly = 1) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
+                verify(exactly = 2) {
+                    displayModeHelper.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
                 }
             }
 
