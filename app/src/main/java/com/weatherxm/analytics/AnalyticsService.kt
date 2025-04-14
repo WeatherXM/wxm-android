@@ -253,6 +253,7 @@ interface AnalyticsService {
         PRIVACY_POLICY("Privacy Policy"),
         CLOSED("closed"),
         ADD_STATION_PHOTO("Add Station Photo"),
+        REMOVE_STATION_PHOTO("Remove Station Photo"),
         EXIT_PHOTO_VERIFICATION("Exit Photo Verification"),
         CANCEL_UPLOADING_PHOTOS("Cancel Uploading Photos"),
         RETRY_UPLOADING_PHOTOS("Retry Uploading Photos"),
@@ -273,7 +274,9 @@ interface AnalyticsService {
         LOCAL_PROFILE("local_profile"),
         LOCAL_NETWORK_STATS("local_network_stats"),
         CAMERA("camera"),
-        GALLERY("gallery")
+        GALLERY("gallery"),
+        LOCAL("local"),
+        REMOTE("remote")
     }
 
     // Custom Param Names

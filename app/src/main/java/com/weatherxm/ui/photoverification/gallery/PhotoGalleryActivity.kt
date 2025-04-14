@@ -27,6 +27,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.load
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
@@ -329,6 +330,22 @@ class PhotoGalleryActivity : BaseActivity() {
     }
 
     private fun onDeletePhoto() {
+        val itemId: AnalyticsService.ParamValue = selectedPhoto.value?.isLocal.let {
+            if (it == true) {
+                AnalyticsService.ParamValue.LOCAL
+            } else {
+                AnalyticsService.ParamValue.REMOTE
+            }
+        }
+        analytics.trackEventUserAction(
+            AnalyticsService.ParamValue.REMOVE_STATION_PHOTO.paramValue,
+            contentType = null,
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                itemId.paramValue
+            )
+        )
+
         selectedPhoto.value?.let {
             if (it.remotePath != null) {
                 ActionDialogFragment
