@@ -50,6 +50,7 @@ import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.io.File
 
 class PhotoGalleryActivity : BaseActivity() {
@@ -90,7 +91,17 @@ class PhotoGalleryActivity : BaseActivity() {
         ) { uris ->
             // TODO: track event
             uris.forEach { uri ->
-                model.addPhoto(uri.toString())
+                val file = createPhotoFile()
+                try {
+                    contentResolver.openInputStream(uri)?.use { inputStream ->
+                        file.outputStream().use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    model.addPhoto(file.absolutePath) // Save the file path to the model
+                } catch (e: Exception) {
+                    Timber.d(e, "Could not copy file")
+                }
             }
         }
 
