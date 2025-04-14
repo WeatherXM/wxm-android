@@ -16,6 +16,7 @@ class DisplayModeHelper(
     private val sharedPreferences: SharedPreferences,
     private val analyticsWrapper: AnalyticsWrapper
 ) {
+    fun setDefaultNightMode(mode: Int) = AppCompatDelegate.setDefaultNightMode(mode)
 
     fun setDisplayMode() {
         val displayModeKey = resources.getString(R.string.key_theme)
@@ -27,7 +28,8 @@ class DisplayModeHelper(
 
     fun setDisplayMode(savedValue: String?) {
         updateDisplayModeInAnalytics(savedValue)
-        AppCompatDelegate.setDefaultNightMode(
+
+        setDefaultNightMode(
             when (savedValue) {
                 resources.getString(R.string.dark_value) -> MODE_NIGHT_YES
                 resources.getString(R.string.light_value) -> MODE_NIGHT_NO
