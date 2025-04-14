@@ -93,7 +93,8 @@ interface AnalyticsService {
         STATE("STATE"),
         APP_ID("APP_ID"),
         DEVICE_STATE("DEVICE_STATE"),
-        USER_STATE("USER_STATE")
+        USER_STATE("USER_STATE"),
+        SOURCE("SOURCE")
     }
 
     // Custom Param Names
@@ -270,7 +271,9 @@ interface AnalyticsService {
         LOCAL_HISTORY("local_history"),
         LOCAL_CELL("local_cell"),
         LOCAL_PROFILE("local_profile"),
-        LOCAL_NETWORK_STATS("local_network_stats")
+        LOCAL_NETWORK_STATS("local_network_stats"),
+        CAMERA("camera"),
+        GALLERY("gallery")
     }
 
     // Custom Param Names

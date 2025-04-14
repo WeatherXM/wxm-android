@@ -78,9 +78,15 @@ class PhotoGalleryActivity : BaseActivity() {
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
                     null,
-                    Pair(
-                        AnalyticsService.CustomParam.ACTION.paramName,
-                        AnalyticsService.ParamValue.COMPLETED.paramValue
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.COMPLETED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.GALLERY.paramValue
+                        )
                     )
                 )
                 model.addPhoto(latestPhotoTakenPath, PhotoSource.CAMERA)
@@ -259,9 +265,15 @@ class PhotoGalleryActivity : BaseActivity() {
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
                     null,
-                    Pair(
-                        AnalyticsService.CustomParam.ACTION.paramName,
-                        AnalyticsService.ParamValue.STARTED.paramValue
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.STARTED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.CAMERA.paramValue
+                        )
                     )
                 )
                 getCameraPermissions()
