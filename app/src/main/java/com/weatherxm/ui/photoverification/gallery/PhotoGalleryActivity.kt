@@ -84,6 +84,16 @@ class PhotoGalleryActivity : BaseActivity() {
             }
         }
 
+    private val photoPickerLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.PickMultipleVisualMedia()
+        ) { uris ->
+            // TODO: track event
+            uris.forEach { uri ->
+                model.addPhoto(uri.toString())
+            }
+        }
+
     private var wentToSettingsForPermissions = false
     private var latestPhotoTakenPath: String = String.empty()
     private var selectedPhoto: MutableState<StationPhoto?> = mutableStateOf(null)
@@ -242,6 +252,11 @@ class PhotoGalleryActivity : BaseActivity() {
                 )
                 getCameraPermissions()
             }
+
+            binding.galleryBtn.setOnClickListener {
+                // TODO: track event
+                openPhotoPicker()
+            }
         }
         when (photosNumber) {
             0 -> {
@@ -328,6 +343,10 @@ class PhotoGalleryActivity : BaseActivity() {
             onDenied = { onCameraDenied() },
             showOnPermanentlyDenied = false
         )
+    }
+
+    private fun openPhotoPicker() {
+        navigator.openPhotoPicker(photoPickerLauncher)
     }
 
     private fun createPhotoFile(): File {

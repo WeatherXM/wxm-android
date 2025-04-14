@@ -11,6 +11,8 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
@@ -636,6 +638,10 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, destFile.getUriForFile(context))
             launcher.launch(takePictureIntent)
         }
+    }
+
+    fun openPhotoPicker(launcher: ActivityResultLauncher<PickVisualMediaRequest>) {
+        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     fun openWebsite(context: Context?, url: String) {
