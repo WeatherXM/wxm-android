@@ -48,6 +48,7 @@ import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
+import kotlinx.io.files.FileNotFoundException
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -99,7 +100,7 @@ class PhotoGalleryActivity : BaseActivity() {
                         }
                     }
                     model.addPhoto(file.absolutePath) // Save the file path to the model
-                } catch (e: Exception) {
+                } catch (e: FileNotFoundException) {
                     Timber.d(e, "Could not copy file")
                 }
             }
@@ -164,10 +165,6 @@ class PhotoGalleryActivity : BaseActivity() {
 
         binding.deletePhotoBtn.setOnClickListener {
             onDeletePhoto()
-        }
-
-        binding.galleryBtn.setOnClickListener {
-            onGalleryBtn()
         }
 
         binding.thumbnails.setContent {
@@ -305,10 +302,6 @@ class PhotoGalleryActivity : BaseActivity() {
                 model.deletePhoto(it)
             }
         }
-    }
-
-    private fun onGalleryBtn() {
-
     }
 
     @Suppress("MagicNumber")
