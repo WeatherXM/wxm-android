@@ -130,17 +130,38 @@
                 app:tint="@color/colorPrimary" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/deletePhotoBtn"
+        <LinearLayout
+            android:id="@+id/photoActionsContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginBottom="@dimen/margin_extra_large"
-            android:background="@drawable/background_imagebutton_circular_layer1"
-            android:contentDescription="@string/delete_this_photo"
-            android:padding="@dimen/padding_normal"
-            android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageButton
+                android:id="@+id/deletePhotoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_imagebutton_circular_layer1"
+                android:contentDescription="@string/delete_this_photo"
+                android:padding="@dimen/padding_normal"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageButton
+                android:id="@+id/galleryBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_imagebutton_circular_layer1"
+                android:contentDescription="@string/phone_gallery"
+                android:padding="@dimen/padding_normal"
+                android:src="@drawable/ic_gallery"
+                android:layout_marginStart="@dimen/padding_large"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/instructionsBtn"
@@ -153,6 +174,7 @@
             app:cornerRadius="@dimen/radius_extra_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

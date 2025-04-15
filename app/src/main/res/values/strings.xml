@@ -710,6 +710,7 @@
     <string name="add_1_more_to_upload">Add 1 more photo to upload</string>
     <string name="add_2_more_to_upload">Add 2 more photos to upload</string>
     <string name="delete_this_photo">Delete this photo?</string>
+    <string name="phone_gallery">Phone Gallery</string>
     <string name="add_photo">Add photo</string>
     <string name="delete_this_photo_message">This photo is already uploaded, are you sure you want to delete it?</string>
     <string name="camera_permission_photo_verification">Allow WeatherXM to access your camera to continue with Photo Verification.</string>

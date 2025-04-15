@@ -628,8 +628,12 @@ data class PhotoExample(
 @Parcelize
 data class StationPhoto(
     val remotePath: String?,
-    val localPath: String?
-) : Parcelable
+    val localPath: String?,
+    val source: PhotoSource? = null
+) : Parcelable {
+    val isLocal: Boolean
+        get() = localPath != null
+}
 
 @Keep
 data class WeatherUnit(
@@ -682,6 +686,11 @@ data class ActionForMessageView(
 enum class RewardTimelineType {
     DATA,
     END_OF_LIST
+}
+
+enum class PhotoSource(val exifUserComment: String) {
+    CAMERA("wxm-device-photo-camera"),
+    GALLERY("wxm-device-photo-library")
 }
 
 @Parcelize

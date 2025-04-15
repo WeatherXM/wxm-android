@@ -11,6 +11,8 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
@@ -53,8 +55,10 @@ import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIWalletRewards
+import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.DatePicker
@@ -525,14 +529,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showPhotoUpload(
         context: Context?,
         device: UIDevice,
-        photos: ArrayList<String>
+        photos: List<StationPhoto>
     ) {
         context?.let {
             it.startActivity(
                 Intent(it, PhotoUploadActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_DEVICE, device)
-                    .putStringArrayListExtra(ARG_PHOTOS, photos)
+                    .putParcelableList(ARG_PHOTOS, photos)
             )
         }
     }
@@ -636,6 +640,10 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, destFile.getUriForFile(context))
             launcher.launch(takePictureIntent)
         }
+    }
+
+    fun openPhotoPicker(launcher: ActivityResultLauncher<PickVisualMediaRequest>) {
+        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     fun openWebsite(context: Context?, url: String) {

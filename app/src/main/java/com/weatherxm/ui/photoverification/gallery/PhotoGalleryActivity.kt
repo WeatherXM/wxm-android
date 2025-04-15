@@ -33,6 +33,7 @@ import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
+import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -48,8 +49,10 @@ import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
+import kotlinx.io.files.FileNotFoundException
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.io.File
 
 class PhotoGalleryActivity : BaseActivity() {
@@ -80,7 +83,28 @@ class PhotoGalleryActivity : BaseActivity() {
                         AnalyticsService.ParamValue.COMPLETED.paramValue
                     )
                 )
-                model.addPhoto(latestPhotoTakenPath)
+                model.addPhoto(latestPhotoTakenPath, PhotoSource.CAMERA)
+            }
+        }
+
+    private val photoPickerLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
+            // TODO: track event
+            uri?.let {
+                val file = createPhotoFile()
+                try {
+                    contentResolver.openInputStream(it)?.use { inputStream ->
+                        file.outputStream().use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    // Save the file path to the model
+                    model.addPhoto(file.absolutePath, PhotoSource.GALLERY)
+                } catch (e: FileNotFoundException) {
+                    Timber.d(e, "Could not copy file")
+                }
             }
         }
 
@@ -125,7 +149,11 @@ class PhotoGalleryActivity : BaseActivity() {
                     analytics.trackEventUserAction(
                         AnalyticsService.ParamValue.START_UPLOADING_PHOTOS.paramValue
                     )
-                    navigator.showPhotoUpload(this, model.device, model.getPhotosLocalPaths())
+                    navigator.showPhotoUpload(
+                        this,
+                        model.device,
+                        model.photos.filter { it.isLocal }
+                    )
                     finish()
                 }
                 .build()
@@ -222,6 +250,10 @@ class PhotoGalleryActivity : BaseActivity() {
             binding.addPhotoBtn.setOnClickListener {
                 showSnackbarMessage(binding.root, getString(R.string.max_photos_reached_message))
             }
+
+            binding.galleryBtn.setOnClickListener {
+                showSnackbarMessage(binding.root, getString(R.string.max_photos_reached_message))
+            }
         } else {
             binding.addPhotoBtn.setOnClickListener {
                 analytics.trackEventUserAction(
@@ -233,6 +265,11 @@ class PhotoGalleryActivity : BaseActivity() {
                     )
                 )
                 getCameraPermissions()
+            }
+
+            binding.galleryBtn.setOnClickListener {
+                // TODO: track event
+                navigator.openPhotoPicker(photoPickerLauncher)
             }
         }
         when (photosNumber) {

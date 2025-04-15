@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.parcelableList
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.ImageFileHelper.compressImageFile
@@ -29,10 +30,9 @@ class PhotoUploadActivity : BaseActivity() {
     private lateinit var binding: ActivityPhotoUploadBinding
 
     private val model: PhotoUploadViewModel by viewModel {
-        val photoLocalPaths = intent.getStringArrayListExtra(Contracts.ARG_PHOTOS) ?: arrayListOf()
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
-            photoLocalPaths.map { StationPhoto(null, it) }
+            intent.parcelableList<StationPhoto>(Contracts.ARG_PHOTOS)
         )
     }
 
@@ -97,7 +97,11 @@ class PhotoUploadActivity : BaseActivity() {
                 val file = File(cacheDir, fileName)
                 val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
                 file.copyInputStreamToFile(compressImageFile(imageBitmap))
-                copyExifMetadata(stationPhoto.localPath, file.path)
+                copyExifMetadata(
+                    stationPhoto.localPath,
+                    file.path,
+                    stationPhoto.source?.exifUserComment
+                )
 
                 // Start the work manager to upload the photo.
                 UploadPhotoWorker.initAndStart(this, metadata, file.path, model.device.id)
