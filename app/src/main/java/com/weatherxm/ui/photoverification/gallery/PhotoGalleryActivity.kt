@@ -86,7 +86,7 @@ class PhotoGalleryActivity : BaseActivity() {
                         ),
                         Pair(
                             AnalyticsService.CustomParam.SOURCE.paramName,
-                            AnalyticsService.ParamValue.GALLERY.paramValue
+                            AnalyticsService.ParamValue.CAMERA.paramValue
                         )
                     )
                 )
@@ -330,23 +330,22 @@ class PhotoGalleryActivity : BaseActivity() {
     }
 
     private fun onDeletePhoto() {
-        val itemId: AnalyticsService.ParamValue = selectedPhoto.value?.isLocal.let {
-            if (it == true) {
+        selectedPhoto.value?.let {
+            val itemId = if (it.isLocal) {
                 AnalyticsService.ParamValue.LOCAL
             } else {
                 AnalyticsService.ParamValue.REMOTE
             }
-        }
-        analytics.trackEventUserAction(
-            AnalyticsService.ParamValue.REMOVE_STATION_PHOTO.paramValue,
-            contentType = null,
-            Pair(
-                FirebaseAnalytics.Param.ITEM_ID,
-                itemId.paramValue
-            )
-        )
 
-        selectedPhoto.value?.let {
+            analytics.trackEventUserAction(
+                AnalyticsService.ParamValue.REMOVE_STATION_PHOTO.paramValue,
+                contentType = null,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    itemId.paramValue
+                )
+            )
+
             if (it.remotePath != null) {
                 ActionDialogFragment
                     .Builder(
