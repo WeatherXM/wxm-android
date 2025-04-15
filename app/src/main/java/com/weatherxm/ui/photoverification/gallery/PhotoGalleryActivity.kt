@@ -98,22 +98,22 @@ class PhotoGalleryActivity : BaseActivity() {
         registerForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) { uri ->
-            analytics.trackEventUserAction(
-                AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
-                null,
-                customParams = arrayOf(
-                    Pair(
-                        AnalyticsService.CustomParam.ACTION.paramName,
-                        AnalyticsService.ParamValue.COMPLETED.paramValue
-                    ),
-                    Pair(
-                        AnalyticsService.CustomParam.SOURCE.paramName,
-                        AnalyticsService.ParamValue.GALLERY.paramValue
+            uri?.let {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                    null,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.COMPLETED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.GALLERY.paramValue
+                        )
                     )
                 )
-            )
 
-            uri?.let {
                 val file = createPhotoFile()
                 try {
                     contentResolver.openInputStream(it)?.use { inputStream ->
