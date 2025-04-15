@@ -263,7 +263,7 @@ class PhotoGalleryActivity : BaseActivity() {
 
             binding.galleryBtn.setOnClickListener {
                 // TODO: track event
-                openPhotoPicker()
+                navigator.openPhotoPicker(photoPickerLauncher)
             }
         }
         when (photosNumber) {
@@ -347,10 +347,6 @@ class PhotoGalleryActivity : BaseActivity() {
             onDenied = { onCameraDenied() },
             showOnPermanentlyDenied = false
         )
-    }
-
-    private fun openPhotoPicker() {
-        navigator.openPhotoPicker(photoPickerLauncher)
     }
 
     private fun createPhotoFile(): File {
