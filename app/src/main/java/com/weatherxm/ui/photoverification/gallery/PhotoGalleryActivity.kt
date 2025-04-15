@@ -33,6 +33,7 @@ import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
+import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -53,6 +54,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.File
+import java.util.ArrayList
 
 class PhotoGalleryActivity : BaseActivity() {
     companion object {
@@ -82,7 +84,7 @@ class PhotoGalleryActivity : BaseActivity() {
                         AnalyticsService.ParamValue.COMPLETED.paramValue
                     )
                 )
-                model.addPhoto(latestPhotoTakenPath)
+                model.addPhoto(latestPhotoTakenPath, PhotoSource.CAMERA)
             }
         }
 
@@ -99,7 +101,7 @@ class PhotoGalleryActivity : BaseActivity() {
                             inputStream.copyTo(outputStream)
                         }
                     }
-                    model.addPhoto(file.absolutePath) // Save the file path to the model
+                    model.addPhoto(file.absolutePath, PhotoSource.GALLERY) // Save the file path to the model
                 } catch (e: FileNotFoundException) {
                     Timber.d(e, "Could not copy file")
                 }
@@ -147,7 +149,7 @@ class PhotoGalleryActivity : BaseActivity() {
                     analytics.trackEventUserAction(
                         AnalyticsService.ParamValue.START_UPLOADING_PHOTOS.paramValue
                     )
-                    navigator.showPhotoUpload(this, model.device, model.getPhotosLocalPaths())
+                    navigator.showPhotoUpload(this, model.device, ArrayList(model.photos.filter { it.isLocal }))
                     finish()
                 }
                 .build()

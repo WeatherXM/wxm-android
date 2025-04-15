@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
@@ -34,9 +35,9 @@ class PhotoGalleryViewModel(
 
     fun getLocalPhotosNumber() = photos.filter { it.localPath != null }.size
 
-    fun addPhoto(path: String) {
+    fun addPhoto(path: String, photoSource: PhotoSource?) {
         if (path.isNotEmpty() && photos.firstOrNull { it.localPath == path } == null) {
-            val stationPhoto = StationPhoto(null, path)
+            val stationPhoto = StationPhoto(null, path, photoSource)
             photos.add(stationPhoto)
             _onPhotos.add(stationPhoto)
             onPhotosNumber.postValue(photos.size)
