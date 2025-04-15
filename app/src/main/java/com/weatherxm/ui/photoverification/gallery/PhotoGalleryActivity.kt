@@ -101,7 +101,8 @@ class PhotoGalleryActivity : BaseActivity() {
                             inputStream.copyTo(outputStream)
                         }
                     }
-                    model.addPhoto(file.absolutePath, PhotoSource.GALLERY) // Save the file path to the model
+                    // Save the file path to the model
+                    model.addPhoto(file.absolutePath, PhotoSource.GALLERY)
                 } catch (e: FileNotFoundException) {
                     Timber.d(e, "Could not copy file")
                 }
@@ -149,7 +150,11 @@ class PhotoGalleryActivity : BaseActivity() {
                     analytics.trackEventUserAction(
                         AnalyticsService.ParamValue.START_UPLOADING_PHOTOS.paramValue
                     )
-                    navigator.showPhotoUpload(this, model.device, ArrayList(model.photos.filter { it.isLocal }))
+                    navigator.showPhotoUpload(
+                        this,
+                        model.device,
+                        ArrayList(model.photos.filter { it.isLocal })
+                    )
                     finish()
                 }
                 .build()

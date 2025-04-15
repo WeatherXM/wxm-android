@@ -58,7 +58,6 @@ import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.DatePicker

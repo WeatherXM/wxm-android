@@ -61,13 +61,13 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
         given("the path of the photo") {
             When("the path is empty") {
                 then("Do nothing. So the photos should still be the same empty list.") {
-                    viewModel.addPhoto("")
+                    viewModel.addPhoto("", null)
                     viewModel.onPhotos shouldBe emptyPhotos
                 }
             }
             When("the path is not empty") {
                 and("the list of the photos doesn't contain that photo") {
-                    viewModel.addPhoto(localPath)
+                    viewModel.addPhoto(localPath, null)
                     then("Add the photo in the constructor variable") {
                         viewModel.photos shouldBe photosListWithOneLocalPhoto
                     }
@@ -80,7 +80,7 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
                 }
                 and("the list of the photos already contains that photo") {
                     then("Do nothing. So the photos should still be the same list.") {
-                        viewModel.addPhoto("")
+                        viewModel.addPhoto("", null)
                         viewModel.photos shouldBe photosListWithOneLocalPhoto
                         viewModel.onPhotos shouldBe photosListWithOneLocalPhoto
                         viewModel.onPhotosNumber().value shouldBe photosListWithOneLocalPhoto.size

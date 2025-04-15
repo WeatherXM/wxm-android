@@ -96,7 +96,10 @@ class PhotoUploadActivity : BaseActivity() {
                 val file = File(cacheDir, fileName)
                 val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
                 file.copyInputStreamToFile(compressImageFile(imageBitmap))
-                copyExifMetadata(stationPhoto.localPath, file.path, stationPhoto.source?.exifUserComment)
+                copyExifMetadata(
+                    stationPhoto.localPath, file.path,
+                    stationPhoto.source?.exifUserComment
+                )
 
                 // Start the work manager to upload the photo.
                 UploadPhotoWorker.initAndStart(this, metadata, file.path, model.device.id)
