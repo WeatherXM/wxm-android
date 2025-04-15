@@ -35,7 +35,7 @@ class PhotoGalleryViewModel(
 
     fun getLocalPhotosNumber() = photos.filter { it.localPath != null }.size
 
-    fun addPhoto(path: String, photoSource: PhotoSource?) {
+    fun addPhoto(path: String, photoSource: PhotoSource) {
         if (path.isNotEmpty() && photos.firstOrNull { it.localPath == path } == null) {
             val stationPhoto = StationPhoto(null, path, photoSource)
             photos.add(stationPhoto)
@@ -71,15 +71,5 @@ class PhotoGalleryViewModel(
         photos.remove(photo)
         _onPhotos.remove(photo)
         onPhotosNumber.postValue(photos.size)
-    }
-
-    fun getPhotosLocalPaths(): ArrayList<String> {
-        val photosLocalPaths = arrayListOf<String>()
-        photos.forEach {
-            if (!it.localPath.isNullOrEmpty()) {
-                photosLocalPaths.add(it.localPath)
-            }
-        }
-        return photosLocalPaths
     }
 }

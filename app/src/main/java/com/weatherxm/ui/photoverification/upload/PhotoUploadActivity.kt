@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.parcelableList
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.ImageFileHelper.compressImageFile
@@ -31,7 +32,7 @@ class PhotoUploadActivity : BaseActivity() {
     private val model: PhotoUploadViewModel by viewModel {
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
-            intent.getParcelableArrayListExtra<StationPhoto>(Contracts.ARG_PHOTOS)
+            intent.parcelableList<StationPhoto>(Contracts.ARG_PHOTOS)
         )
     }
 

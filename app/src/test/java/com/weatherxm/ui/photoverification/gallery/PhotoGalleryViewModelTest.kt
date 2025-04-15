@@ -9,6 +9,7 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.ui.InstantExecutorListener
+import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DevicePhotoUseCase
@@ -28,9 +29,9 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
     val viewModel = PhotoGalleryViewModel(device, mutableListOf(), false, usecase, dispatcher)
 
     val localPath = "localPath"
-    val localPhoto = StationPhoto(null, localPath)
+    val localPhoto = StationPhoto(null, localPath, PhotoSource.GALLERY)
     val remotePhoto = StationPhoto("remotePath", null)
-    val photosListWithOneLocalPhoto = mutableListOf(StationPhoto(null, localPath))
+    val photosListWithOneLocalPhoto = mutableListOf(StationPhoto(null, localPath, PhotoSource.GALLERY))
 
     listener(InstantExecutorListener())
 
@@ -61,13 +62,13 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
         given("the path of the photo") {
             When("the path is empty") {
                 then("Do nothing. So the photos should still be the same empty list.") {
-                    viewModel.addPhoto("", null)
+                    viewModel.addPhoto("", PhotoSource.GALLERY)
                     viewModel.onPhotos shouldBe emptyPhotos
                 }
             }
             When("the path is not empty") {
                 and("the list of the photos doesn't contain that photo") {
-                    viewModel.addPhoto(localPath, null)
+                    viewModel.addPhoto(localPath, PhotoSource.GALLERY)
                     then("Add the photo in the constructor variable") {
                         viewModel.photos shouldBe photosListWithOneLocalPhoto
                     }
@@ -80,7 +81,7 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
                 }
                 and("the list of the photos already contains that photo") {
                     then("Do nothing. So the photos should still be the same list.") {
-                        viewModel.addPhoto("", null)
+                        viewModel.addPhoto("", PhotoSource.GALLERY)
                         viewModel.photos shouldBe photosListWithOneLocalPhoto
                         viewModel.onPhotos shouldBe photosListWithOneLocalPhoto
                         viewModel.onPhotosNumber().value shouldBe photosListWithOneLocalPhoto.size
@@ -148,20 +149,6 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
                         viewModel.onPhotosNumber().value shouldBe emptyPhotos.size
                     }
                 }
-            }
-        }
-    }
-
-    context("Get the list of the local photos paths") {
-        When("There are no photos with local paths") {
-            then("return an empty arraylist") {
-                viewModel.getPhotosLocalPaths() shouldBe arrayListOf()
-            }
-        }
-        When("There are some photos with local path") {
-            viewModel.photos.add(localPhoto)
-            then("return the arraylist containing the paths as Strings of those photos") {
-                viewModel.getPhotosLocalPaths() shouldBe arrayListOf(localPhoto.localPath)
             }
         }
     }

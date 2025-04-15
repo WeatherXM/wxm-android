@@ -688,15 +688,9 @@ enum class RewardTimelineType {
     END_OF_LIST
 }
 
-enum class PhotoSource {
-    CAMERA,
-    GALLERY;
-
-    val exifUserComment: String
-        get() = when (this) {
-            CAMERA -> "wxm-device-photo-camera"
-            GALLERY -> "wxm-device-photo-library"
-        }
+enum class PhotoSource(val exifUserComment: String) {
+    CAMERA("wxm-device-photo-camera"),
+    GALLERY("wxm-device-photo-library")
 }
 
 @Parcelize
