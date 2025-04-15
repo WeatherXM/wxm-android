@@ -31,7 +31,13 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
     val localPath = "localPath"
     val localPhoto = StationPhoto(null, localPath, PhotoSource.GALLERY)
     val remotePhoto = StationPhoto("remotePath", null)
-    val photosListWithOneLocalPhoto = mutableListOf(StationPhoto(null, localPath, PhotoSource.GALLERY))
+    val photosListWithOneLocalPhoto = mutableListOf(
+        StationPhoto(
+            null,
+            localPath,
+            PhotoSource.GALLERY
+        )
+    )
 
     listener(InstantExecutorListener())
 
