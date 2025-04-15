@@ -88,13 +88,13 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private val photoPickerLauncher =
         registerForActivityResult(
-            ActivityResultContracts.PickMultipleVisualMedia()
-        ) { uris ->
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
             // TODO: track event
-            uris.forEach { uri ->
+            uri?.let {
                 val file = createPhotoFile()
                 try {
-                    contentResolver.openInputStream(uri)?.use { inputStream ->
+                    contentResolver.openInputStream(it)?.use { inputStream ->
                         file.outputStream().use { outputStream ->
                             inputStream.copyTo(outputStream)
                         }
