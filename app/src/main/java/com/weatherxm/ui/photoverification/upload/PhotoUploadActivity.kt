@@ -98,7 +98,8 @@ class PhotoUploadActivity : BaseActivity() {
                 val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
                 file.copyInputStreamToFile(compressImageFile(imageBitmap))
                 copyExifMetadata(
-                    stationPhoto.localPath, file.path,
+                    stationPhoto.localPath,
+                    file.path,
                     stationPhoto.source?.exifUserComment
                 )
 

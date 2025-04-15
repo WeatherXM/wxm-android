@@ -54,7 +54,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 
 class PhotoGalleryActivity : BaseActivity() {
     companion object {
@@ -153,7 +152,7 @@ class PhotoGalleryActivity : BaseActivity() {
                     navigator.showPhotoUpload(
                         this,
                         model.device,
-                        ArrayList(model.photos.filter { it.isLocal })
+                        model.photos.filter { it.isLocal }
                     )
                     finish()
                 }
