@@ -45,7 +45,7 @@ object ImageFileHelper {
         }
     }
 
-    fun copyExifMetadata(sourcePath: String?, destPath: String) {
+    fun copyExifMetadata(sourcePath: String?, destPath: String, userComment: String?) {
         if (sourcePath == null) {
             return
         }
@@ -62,6 +62,12 @@ object ImageFileHelper {
             ExifInterface.TAG_ORIENTATION,
             oldExifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
         )
+        userComment?.let {
+            newExifInterface.setAttribute(
+                ExifInterface.TAG_USER_COMMENT,
+                it
+            )
+        }
         newExifInterface.saveAttributes()
     }
 

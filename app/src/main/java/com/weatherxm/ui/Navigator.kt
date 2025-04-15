@@ -55,8 +55,10 @@ import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIWalletRewards
+import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.DatePicker
@@ -527,14 +529,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showPhotoUpload(
         context: Context?,
         device: UIDevice,
-        photos: ArrayList<String>
+        photos: ArrayList<StationPhoto>
     ) {
         context?.let {
             it.startActivity(
                 Intent(it, PhotoUploadActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_DEVICE, device)
-                    .putStringArrayListExtra(ARG_PHOTOS, photos)
+                    .putParcelableArrayListExtra(ARG_PHOTOS, photos)
             )
         }
     }
