@@ -93,7 +93,8 @@ interface AnalyticsService {
         STATE("STATE"),
         APP_ID("APP_ID"),
         DEVICE_STATE("DEVICE_STATE"),
-        USER_STATE("USER_STATE")
+        USER_STATE("USER_STATE"),
+        SOURCE("SOURCE")
     }
 
     // Custom Param Names
@@ -252,6 +253,7 @@ interface AnalyticsService {
         PRIVACY_POLICY("Privacy Policy"),
         CLOSED("closed"),
         ADD_STATION_PHOTO("Add Station Photo"),
+        REMOVE_STATION_PHOTO("Remove Station Photo"),
         EXIT_PHOTO_VERIFICATION("Exit Photo Verification"),
         CANCEL_UPLOADING_PHOTOS("Cancel Uploading Photos"),
         RETRY_UPLOADING_PHOTOS("Retry Uploading Photos"),
@@ -270,7 +272,11 @@ interface AnalyticsService {
         LOCAL_HISTORY("local_history"),
         LOCAL_CELL("local_cell"),
         LOCAL_PROFILE("local_profile"),
-        LOCAL_NETWORK_STATS("local_network_stats")
+        LOCAL_NETWORK_STATS("local_network_stats"),
+        CAMERA("camera"),
+        GALLERY("gallery"),
+        LOCAL("local"),
+        REMOTE("remote")
     }
 
     // Custom Param Names

@@ -27,6 +27,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.load
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
@@ -78,9 +79,15 @@ class PhotoGalleryActivity : BaseActivity() {
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
                     null,
-                    Pair(
-                        AnalyticsService.CustomParam.ACTION.paramName,
-                        AnalyticsService.ParamValue.COMPLETED.paramValue
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.COMPLETED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.CAMERA.paramValue
+                        )
                     )
                 )
                 model.addPhoto(latestPhotoTakenPath, PhotoSource.CAMERA)
@@ -91,8 +98,22 @@ class PhotoGalleryActivity : BaseActivity() {
         registerForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) { uri ->
-            // TODO: track event
             uri?.let {
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                    null,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.COMPLETED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.GALLERY.paramValue
+                        )
+                    )
+                )
+
                 val file = createPhotoFile()
                 try {
                     contentResolver.openInputStream(it)?.use { inputStream ->
@@ -259,16 +280,35 @@ class PhotoGalleryActivity : BaseActivity() {
                 analytics.trackEventUserAction(
                     AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
                     null,
-                    Pair(
-                        AnalyticsService.CustomParam.ACTION.paramName,
-                        AnalyticsService.ParamValue.STARTED.paramValue
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.STARTED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.CAMERA.paramValue
+                        )
                     )
                 )
                 getCameraPermissions()
             }
 
             binding.galleryBtn.setOnClickListener {
-                // TODO: track event
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.ADD_STATION_PHOTO.paramValue,
+                    null,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.STARTED.paramValue
+                        ),
+                        Pair(
+                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            AnalyticsService.ParamValue.GALLERY.paramValue
+                        )
+                    )
+                )
                 navigator.openPhotoPicker(photoPickerLauncher)
             }
         }
@@ -291,6 +331,21 @@ class PhotoGalleryActivity : BaseActivity() {
 
     private fun onDeletePhoto() {
         selectedPhoto.value?.let {
+            val itemId = if (it.isLocal) {
+                AnalyticsService.ParamValue.LOCAL
+            } else {
+                AnalyticsService.ParamValue.REMOTE
+            }
+
+            analytics.trackEventUserAction(
+                AnalyticsService.ParamValue.REMOVE_STATION_PHOTO.paramValue,
+                contentType = null,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    itemId.paramValue
+                )
+            )
+
             if (it.remotePath != null) {
                 ActionDialogFragment
                     .Builder(
