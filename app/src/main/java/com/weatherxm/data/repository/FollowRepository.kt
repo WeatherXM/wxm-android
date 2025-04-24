@@ -1,15 +1,14 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
+import com.weatherxm.data.models.Failure
 
 interface FollowRepository {
     suspend fun followStation(deviceId: String): Either<Failure, Unit>
     suspend fun unfollowStation(deviceId: String): Either<Failure, Unit>
     suspend fun getFollowedDevicesIds(): List<String>
-    suspend fun setFollowedDevicesIds(ids: List<String>)
 }
 
 class FollowRepositoryImpl(
@@ -33,9 +32,5 @@ class FollowRepositoryImpl(
 
     override suspend fun getFollowedDevicesIds(): List<String> {
         return cacheFollowDataSource.getFollowedDevicesIds()
-    }
-
-    override suspend fun setFollowedDevicesIds(ids: List<String>) {
-        cacheFollowDataSource.setFollowedDevicesIds(ids)
     }
 }

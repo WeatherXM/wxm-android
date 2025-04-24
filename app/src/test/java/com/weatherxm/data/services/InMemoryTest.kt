@@ -9,6 +9,7 @@ import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.User
+import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_FAVORITE
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_OWN
 import com.weatherxm.data.services.CacheService.Companion.KEY_HAS_WALLET
 import com.weatherxm.data.services.CacheService.Companion.KEY_USER_ID
@@ -125,7 +126,14 @@ class InMemoryTest(private val cacheService: CacheService) {
             deviceIds,
             { cacheService.getFollowedDevicesIds() },
             { cacheService.setFollowedDevicesIds(deviceIds) }
-        )
+        ).apply {
+            given("that the user has some favorite devices") {
+                every { sharedPref.getInt(KEY_DEVICES_FAVORITE, 0) } returns deviceIds.size
+                then("return the number of owned devices") {
+                    cacheService.getDevicesFavorite() shouldBe deviceIds.size
+                }
+            }
+        }
 
         behaviorSpec.testInMemorySingleVar(
             "Device's photo upload IDs",

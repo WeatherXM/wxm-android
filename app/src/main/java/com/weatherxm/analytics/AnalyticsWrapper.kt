@@ -21,12 +21,14 @@ class AnalyticsWrapper(
     private var displayMode: String = AnalyticsService.UserProperty.SYSTEM.propertyName
     private var devicesSortFilterOptions: List<String> = mutableListOf()
     private var devicesOwn: Int = 0
+    private var devicesFavorite: Int = 0
     private var hasWallet: Boolean = false
 
     fun bindCacheService(cacheService: CacheService) {
         cacheService.setUserPropertiesChangeListener { key, value ->
             when (key) {
                 CacheService.KEY_DEVICES_OWN -> setDevicesOwn(value as Int)
+                CacheService.KEY_DEVICES_FAVORITE -> setDevicesFavorite(value as Int)
                 CacheService.KEY_HAS_WALLET -> setHasWallet(value as Boolean)
                 CacheService.KEY_USER_ID -> setUserId(value as String)
             }
@@ -36,6 +38,10 @@ class AnalyticsWrapper(
 
     fun setDevicesOwn(devicesOwn: Int) {
         this.devicesOwn = devicesOwn
+    }
+
+    fun setDevicesFavorite(devicesFavorite: Int) {
+        this.devicesFavorite = devicesFavorite
     }
 
     fun setHasWallet(hasWallet: Boolean) {
@@ -160,6 +166,13 @@ class AnalyticsWrapper(
 
         userParams.add(
             Pair(AnalyticsService.UserProperty.STATIONS_OWN.propertyName, devicesOwn.toString())
+        )
+
+        userParams.add(
+            Pair(
+                AnalyticsService.UserProperty.STATIONS_FAVORITE.propertyName,
+                devicesFavorite.toString()
+            )
         )
 
         userParams.add(

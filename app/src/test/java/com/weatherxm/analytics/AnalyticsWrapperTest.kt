@@ -24,6 +24,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     val testUserID = "test123"
     val testDisplayMode = "dark"
     val testDevicesOwn = 6
+    val testDevicesFavorite = 5
     val testHasWallet = true
 
     fun AnalyticsService.mockResponses() {
@@ -64,6 +65,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
 
                 analyticsWrapper.setUserId(testUserID)
                 analyticsWrapper.setDevicesOwn(testDevicesOwn)
+                analyticsWrapper.setDevicesFavorite(testDevicesFavorite)
                 analyticsWrapper.setHasWallet(testHasWallet)
                 analyticsWrapper.setDisplayMode(testDisplayMode)
                 analyticsWrapper.setDevicesSortFilterOptions(
@@ -71,7 +73,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 )
 
                 with(analyticsWrapper.setUserProperties()) {
-                    size shouldBe 11
+                    size shouldBe 12
                     this[0] shouldBe ("theme" to testDisplayMode)
                     this[1] shouldBe ("UNIT_TEMPERATURE" to "c")
                     this[2] shouldBe ("UNIT_WIND" to "mps")
@@ -82,7 +84,8 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     this[7] shouldBe ("FILTER" to "all")
                     this[8] shouldBe ("GROUP_BY" to "no_grouping")
                     this[9] shouldBe ("STATIONS_OWN" to "$testDevicesOwn")
-                    this[10] shouldBe ("HAS_WALLET" to "$testHasWallet")
+                    this[10] shouldBe ("STATIONS_FAVORITE" to "$testDevicesFavorite")
+                    this[11] shouldBe ("HAS_WALLET" to "$testHasWallet")
                 }
                 verifier.verifyUserIdSet(testUserID)
                 verifier.verifyUserPropertiesSet()

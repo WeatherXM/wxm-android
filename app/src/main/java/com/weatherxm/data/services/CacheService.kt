@@ -43,6 +43,7 @@ class CacheService(
         const val KEY_DEVICES_FILTER = "devices_filter"
         const val KEY_DEVICES_GROUP_BY = "devices_group_by"
         const val KEY_DEVICES_OWN = "devices_own"
+        const val KEY_DEVICES_FAVORITE = "devices_favorite"
         const val KEY_HAS_WALLET = "has_wallet"
         const val WIDGET_ID = "widget_id"
         const val KEY_USER_ID = "user_id"
@@ -335,6 +336,12 @@ class CacheService(
 
     fun setFollowedDevicesIds(ids: List<String>) {
         followedStationsIds = ids
+        preferences.edit { putInt(KEY_DEVICES_FAVORITE, ids.size) }
+        onUserPropertiesChangeListener?.invoke(KEY_DEVICES_FAVORITE, ids.size)
+    }
+
+    fun getDevicesFavorite(): Int {
+        return preferences.getInt(KEY_DEVICES_FAVORITE, 0)
     }
 
     fun getUserDevicesIds(): List<String> {
