@@ -40,7 +40,7 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     val device = Device.empty()
     val deviceInfo = mockk<DeviceInfo>()
-    val devicesIds = listOf(deviceId)
+    val devices = listOf(device)
 
     val deviceResponse = NetworkResponse.Success<Device, ErrorResponse>(
         device, retrofitResponse(device)
@@ -60,8 +60,8 @@ class DeviceDataSourceTest : BehaviorSpec({
     )
 
     beforeSpec {
-        every { cacheService.getUserDevicesIds() } returns devicesIds
-        justRun { cacheService.setUserDevicesIds(devicesIds) }
+        every { cacheService.getUserDevices() } returns devices
+        justRun { cacheService.setUserDevices(devices) }
     }
 
     context("Get user devices") {
@@ -158,23 +158,23 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     context("Get the IDs of user devices") {
         When("Using the Network Source") {
-            testThrowNotImplemented { networkSource.getUserDevicesIds() }
+            testThrowNotImplemented { networkSource.getUserDevicesFromCache() }
         }
         When("Using the Cache Source") {
             then("return the list of IDs") {
-                cacheSource.getUserDevicesIds() shouldBe devicesIds
+                cacheSource.getUserDevicesFromCache() shouldBe devices
             }
         }
     }
 
     context("Set the IDs of user devices") {
         When("Using the Network Source") {
-            testThrowNotImplemented { networkSource.setUserDevicesIds(devicesIds) }
+            testThrowNotImplemented { networkSource.setUserDevices(devices) }
         }
         When("Using the Cache Source") {
             then("set the list of IDs in cache") {
-                cacheSource.setUserDevicesIds(devicesIds)
-                verify(exactly = 1) { cacheService.setUserDevicesIds(devicesIds) }
+                cacheSource.setUserDevices(devices)
+                verify(exactly = 1) { cacheService.setUserDevices(devices) }
             }
         }
     }

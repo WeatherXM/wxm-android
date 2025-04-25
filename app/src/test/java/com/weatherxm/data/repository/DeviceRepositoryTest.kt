@@ -8,6 +8,7 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.datasource.CacheDeviceDataSource
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkDeviceDataSource
+import com.weatherxm.data.models.Bundle
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Location
@@ -33,7 +34,14 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         null,
-        null,
+        Bundle(
+            name = "m5",
+            null,
+            null,
+            null,
+            null,
+            null
+        ),
         null,
         null,
         null,
@@ -72,9 +80,9 @@ class DeviceRepositoryTest : BehaviorSpec({
             cacheDeviceSource,
             cacheFollowSource
         )
-        coJustRun { cacheDeviceSource.setUserDevicesIds(any()) }
+        coJustRun { cacheDeviceSource.setUserDevices(any()) }
         coJustRun { cacheFollowSource.setFollowedDevicesIds(any()) }
-        coEvery { cacheDeviceSource.getUserDevicesIds() } returns emptyList()
+        coEvery { cacheDeviceSource.getUserDevicesFromCache() } returns emptyList()
     }
 
     context("Get user devices") {
@@ -96,7 +104,9 @@ class DeviceRepositoryTest : BehaviorSpec({
                     }
                 }
                 then("save owned devices in cache") {
-                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevicesIds(listOf(ownedId)) }
+                    coVerify(exactly = 1) {
+                        cacheDeviceSource.setUserDevices(listOf(ownedDevice))
+                    }
                 }
                 then("save followed devices in cache") {
                     coVerify(exactly = 1) {
@@ -154,11 +164,10 @@ class DeviceRepositoryTest : BehaviorSpec({
                     repo.claimDevice(serialNumber, location).isSuccess(ownedDevice)
                 }
                 then("save this device along with the rest owned devices in cache") {
-                    coVerify(exactly = 1) { cacheDeviceSource.getUserDevicesIds() }
-                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevicesIds(listOf(ownedId)) }
+                    coVerify(exactly = 1) { cacheDeviceSource.getUserDevicesFromCache() }
+                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevices(listOf(ownedDevice)) }
                 }
             }
-
         }
     }
 
@@ -176,9 +185,11 @@ class DeviceRepositoryTest : BehaviorSpec({
                     repo.removeDevice(serialNumber, ownedId).isSuccess(Unit)
                 }
                 then("remove this device from the rest owned devices in cache") {
-                    coEvery { cacheDeviceSource.getUserDevicesIds() } returns listOf(ownedId)
-                    coVerify(exactly = 1) { cacheDeviceSource.getUserDevicesIds() }
-                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevicesIds(listOf()) }
+                    coEvery {
+                        cacheDeviceSource.getUserDevicesFromCache()
+                    } returns listOf(ownedDevice)
+                    coVerify(exactly = 1) { cacheDeviceSource.getUserDevicesFromCache() }
+                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevices(listOf()) }
                 }
             }
 
@@ -220,7 +231,10 @@ class DeviceRepositoryTest : BehaviorSpec({
                     }
                 }
                 When("the response is a success") {
-                    coMockEitherRight({ networkDeviceSource.clearFriendlyName(serialNumber) }, Unit)
+                    coMockEitherRight(
+                        { networkDeviceSource.clearFriendlyName(serialNumber) },
+                        Unit
+                    )
                     then("return that success") {
                         repo.clearFriendlyName(serialNumber).isSuccess(Unit)
                     }

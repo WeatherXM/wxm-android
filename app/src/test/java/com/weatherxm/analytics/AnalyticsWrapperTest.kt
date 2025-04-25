@@ -25,7 +25,9 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     val testDisplayMode = "dark"
     val testDevicesOwn = 6
     val testDevicesFavorite = 5
+    val testDevicesOfBundle = 2
     val testHasWallet = true
+    val bundleKey = "KEY"
 
     fun AnalyticsService.mockResponses() {
         justRun { setAnalyticsEnabled(any() as Boolean) }
@@ -66,6 +68,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 analyticsWrapper.setUserId(testUserID)
                 analyticsWrapper.setDevicesOwn(testDevicesOwn)
                 analyticsWrapper.setDevicesFavorite(testDevicesFavorite)
+                analyticsWrapper.setDeviceBundlesOwn(bundleKey, testDevicesOfBundle)
                 analyticsWrapper.setHasWallet(testHasWallet)
                 analyticsWrapper.setDisplayMode(testDisplayMode)
                 analyticsWrapper.setDevicesSortFilterOptions(
@@ -73,7 +76,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 )
 
                 with(analyticsWrapper.setUserProperties()) {
-                    size shouldBe 12
+                    size shouldBe 13
                     this[0] shouldBe ("theme" to testDisplayMode)
                     this[1] shouldBe ("UNIT_TEMPERATURE" to "c")
                     this[2] shouldBe ("UNIT_WIND" to "mps")
@@ -84,8 +87,9 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     this[7] shouldBe ("FILTER" to "all")
                     this[8] shouldBe ("GROUP_BY" to "no_grouping")
                     this[9] shouldBe ("STATIONS_OWN" to "$testDevicesOwn")
-                    this[10] shouldBe ("STATIONS_FAVORITE" to "$testDevicesFavorite")
-                    this[11] shouldBe ("HAS_WALLET" to "$testHasWallet")
+                    this[10] shouldBe ("STATIONS_OWN_KEY" to "$testDevicesOfBundle")
+                    this[11] shouldBe ("STATIONS_FAVORITE" to "$testDevicesFavorite")
+                    this[12] shouldBe ("HAS_WALLET" to "$testHasWallet")
                 }
                 verifier.verifyUserIdSet(testUserID)
                 verifier.verifyUserPropertiesSet()

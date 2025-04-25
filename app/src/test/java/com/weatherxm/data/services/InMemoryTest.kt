@@ -6,6 +6,7 @@ import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.User
@@ -31,6 +32,7 @@ class InMemoryTest(private val cacheService: CacheService) {
     private val query = "query"
     private val deviceId = "deviceId"
     private val uploadId = "uploadId"
+    private val devices= listOf(Device.empty())
     private val deviceIds = listOf(deviceId)
     private val countriesInfo = listOf<CountryInfo>(mockk())
     private val uploadIds = listOf(uploadId)
@@ -170,14 +172,14 @@ class InMemoryTest(private val cacheService: CacheService) {
 
         behaviorSpec.testInMemorySingleVar(
             "IDs of the user devices",
-            deviceIds,
-            { cacheService.getUserDevicesIds() },
-            { cacheService.setUserDevicesIds(deviceIds) }
+            devices,
+            { cacheService.getUserDevices() },
+            { cacheService.setUserDevices(devices) }
         ).apply {
             given("that the user has some owned devices") {
-                every { sharedPref.getInt(KEY_DEVICES_OWN, 0) } returns deviceIds.size
+                every { sharedPref.getInt(KEY_DEVICES_OWN, 0) } returns devices.size
                 then("return the number of owned devices") {
-                    cacheService.getDevicesOwn() shouldBe deviceIds.size
+                    cacheService.getDevicesOwn() shouldBe devices.size
                 }
             }
         }

@@ -70,11 +70,11 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
         return apiService.getUserDeviceInfo(deviceId).mapResponse()
     }
 
-    override suspend fun getUserDevicesIds(): List<String> {
+    override suspend fun getUserDevicesFromCache(): List<Device> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun setUserDevicesIds(ids: List<String>) {
+    override suspend fun setUserDevices(devices: List<Device>) {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 

@@ -12,6 +12,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
 import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBannerType
@@ -70,6 +71,10 @@ class CacheService(
         fun getWidgetFormattedKey(widgetId: Int): String {
             return "${WIDGET_ID}_${widgetId}"
         }
+
+        fun getUserDeviceOwnFormattedKey(deviceBundleName: String): String {
+            return "${KEY_DEVICES_OWN}_${deviceBundleName}"
+        }
     }
 
     private var user: User? = null
@@ -80,7 +85,7 @@ class CacheService(
     private var devicePhotoUploadIds: ArrayMap<String, MutableList<String>> = ArrayMap()
     private var uploadIdRequest: ArrayMap<String, MultipartUploadRequest> = ArrayMap()
     private var followedStationsIds = listOf<String>()
-    private var userStationsIds = listOf<String>()
+    private var userDevices = listOf<Device>()
     private var countriesInfo = listOf<CountryInfo>()
 
     private var onUserPropertiesChangeListener: ((String, Any) -> Unit)? = null
@@ -344,18 +349,33 @@ class CacheService(
         return preferences.getInt(KEY_DEVICES_FAVORITE, 0)
     }
 
-    fun getUserDevicesIds(): List<String> {
-        return userStationsIds
+    fun getUserDevices(): List<Device> {
+        return userDevices
     }
 
-    fun setUserDevicesIds(ids: List<String>) {
-        userStationsIds = ids
-        preferences.edit { putInt(KEY_DEVICES_OWN, ids.size) }
-        onUserPropertiesChangeListener?.invoke(KEY_DEVICES_OWN, ids.size)
+    fun setUserDevices(devices: List<Device>) {
+        userDevices = devices
+        preferences.edit { putInt(KEY_DEVICES_OWN, devices.size) }
+        onUserPropertiesChangeListener?.invoke(KEY_DEVICES_OWN, devices.size)
     }
 
     fun getDevicesOwn(): Int {
         return preferences.getInt(KEY_DEVICES_OWN, 0)
+    }
+
+    fun setUserDevicesOfBundle(bundleKey: String, size: Int) {
+        preferences.edit { putInt(bundleKey, size) }
+        onUserPropertiesChangeListener?.invoke(bundleKey, size)
+    }
+
+    fun getUserDevicesOfBundles(): Map<String, Int> {
+        return preferences.all.filter {
+            it.key.startsWith(KEY_DEVICES_OWN + "_")
+        }.mapKeys {
+            it.key.removePrefix(KEY_DEVICES_OWN + "_")
+        }.mapValues {
+            it.value as Int
+        }
     }
 
     fun getLastDismissedSurveyId(): String? {
@@ -430,7 +450,7 @@ class CacheService(
         uploadIdRequest.clear()
         locations.clear()
         followedStationsIds = listOf()
-        userStationsIds = listOf()
+        userDevices = listOf()
 
         okHttpCache.evictAll()
         encryptedPreferences.edit { clear() }
@@ -440,7 +460,7 @@ class CacheService(
     fun isCacheEmpty(): Boolean {
         return walletAddress == null && user == null && forecasts.isEmpty()
             && suggestions.isEmpty() && locations.isEmpty() && followedStationsIds.isEmpty()
-            && userStationsIds.isEmpty() && devicePhotoUploadIds.isEmpty()
+            && userDevices.isEmpty() && devicePhotoUploadIds.isEmpty()
             && uploadIdRequest.isEmpty()
     }
 
