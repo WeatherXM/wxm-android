@@ -7,6 +7,7 @@ import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testNetworkCall
 import com.weatherxm.TestUtils.testThrowNotImplemented
 import com.weatherxm.data.datasource.NetworkDeviceDataSource.Companion.CLAIM_MAX_RETRIES
+import com.weatherxm.data.models.Bundle
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Location
@@ -38,7 +39,28 @@ class DeviceDataSourceTest : BehaviorSpec({
     val location = Location(0.0, 0.0)
     val friendlyName = "friendlyName"
 
-    val device = Device.empty()
+    val device = Device(
+        deviceId,
+        "",
+        null,
+        null,
+        null,
+        Bundle(
+            "bundleName",
+            null,
+            null,
+            null,
+            null,
+            null
+        ),
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
     val deviceInfo = mockk<DeviceInfo>()
     val devices = listOf(device)
 
@@ -61,6 +83,7 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     beforeSpec {
         every { cacheService.getUserDevices() } returns devices
+        justRun { cacheService.setUserDevicesOfBundle(any(), any()) }
         justRun { cacheService.setUserDevices(devices) }
     }
 

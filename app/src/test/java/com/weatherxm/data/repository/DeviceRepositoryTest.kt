@@ -50,6 +50,28 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null
     )
+    val ownedDevice2 = Device(
+        "ownedId2",
+        "",
+        null,
+        null,
+        null,
+        Bundle(
+            name = "m5",
+            null,
+            null,
+            null,
+            null,
+            null
+        ),
+        null,
+        null,
+        null,
+        null,
+        Relation.owned,
+        null,
+        null
+    )
     val followedDevice = Device(
         followedId,
         "",
@@ -65,7 +87,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null
     )
-    val devices = mutableListOf(ownedDevice, followedDevice)
+    val devices = mutableListOf(ownedDevice, ownedDevice2, followedDevice)
     val serialNumber = "serialNumber"
     val location = Location.empty()
     val deviceInfo = mockk<DeviceInfo>()
@@ -105,7 +127,7 @@ class DeviceRepositoryTest : BehaviorSpec({
                 }
                 then("save owned devices in cache") {
                     coVerify(exactly = 1) {
-                        cacheDeviceSource.setUserDevices(listOf(ownedDevice))
+                        cacheDeviceSource.setUserDevices(listOf(ownedDevice, ownedDevice2))
                     }
                 }
                 then("save followed devices in cache") {
@@ -181,18 +203,26 @@ class DeviceRepositoryTest : BehaviorSpec({
             }
             When("the response is a success") {
                 coMockEitherRight({ networkDeviceSource.removeDevice(serialNumber) }, Unit)
+                coEvery {
+                    cacheDeviceSource.getUserDevicesFromCache()
+                } returns listOf(ownedDevice, ownedDevice2)
                 then("return that success") {
                     repo.removeDevice(serialNumber, ownedId).isSuccess(Unit)
                 }
                 then("remove this device from the rest owned devices in cache") {
-                    coEvery {
-                        cacheDeviceSource.getUserDevicesFromCache()
-                    } returns listOf(ownedDevice)
                     coVerify(exactly = 1) { cacheDeviceSource.getUserDevicesFromCache() }
-                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevices(listOf()) }
+                    coVerify(exactly = 1) { cacheDeviceSource.setUserDevices(listOf(ownedDevice2)) }
                 }
             }
+        }
+    }
 
+    context("GET user devices IDs") {
+        given("The cache that contains the user devices IDs") {
+            coEvery { cacheDeviceSource.getUserDevicesFromCache() } returns listOf(ownedDevice)
+            then("return the IDs") {
+                repo.getUserDevicesIds() shouldBe listOf(ownedDevice.id)
+            }
         }
     }
 
