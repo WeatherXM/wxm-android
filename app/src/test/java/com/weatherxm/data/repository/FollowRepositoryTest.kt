@@ -79,13 +79,7 @@ class FollowRepositoryTest : BehaviorSpec({
         }
     }
 
-    context("Get/set followed devices IDs") {
-        given("a list of device IDs") {
-            then("Set them in cache") {
-                repo.setFollowedDevicesIds(ids)
-                coVerify(exactly = 1) { cacheSource.setFollowedDevicesIds(ids) }
-            }
-        }
+    context("Get followed devices IDs") {
         given("a request to get the device IDs of followed stations") {
             then("Get them from cache") {
                 repo.getFollowedDevicesIds() shouldBe ids

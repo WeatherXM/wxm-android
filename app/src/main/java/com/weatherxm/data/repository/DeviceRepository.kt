@@ -34,11 +34,7 @@ class DeviceRepositoryImpl(
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         return networkDeviceDataSource.getUserDevices().map { devices ->
             devices.apply {
-                cacheDeviceDataSource.setUserDevicesIds(this.filter {
-                    it.relation == Relation.owned
-                }.map {
-                    it.id
-                })
+                cacheDeviceDataSource.setUserDevices(this.filter { it.relation == Relation.owned })
                 cacheFollowDataSource.setFollowedDevicesIds(this.filter {
                     it.relation == Relation.followed
                 }.map {
@@ -56,9 +52,9 @@ class DeviceRepositoryImpl(
         serialNumber: String, location: Location, secret: String?
     ): Either<Failure, Device> {
         return networkDeviceDataSource.claimDevice(serialNumber, location, secret).onRight {
-            val userDevicesIds = getUserDevicesIds().toMutableList()
-            userDevicesIds.add(it.id)
-            cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
+            val userDevices = cacheDeviceDataSource.getUserDevicesFromCache().toMutableList()
+            userDevices.add(it)
+            cacheDeviceDataSource.setUserDevices(userDevices)
         }
     }
 
@@ -74,9 +70,9 @@ class DeviceRepositoryImpl(
 
     override suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit> {
         return networkDeviceDataSource.removeDevice(serialNumber).onRight {
-            val userDevicesIds = getUserDevicesIds().toMutableList()
-            userDevicesIds.remove(id)
-            cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
+            val userDevices = cacheDeviceDataSource.getUserDevicesFromCache().toMutableList()
+            userDevices.removeIf { it.id == id }
+            cacheDeviceDataSource.setUserDevices(userDevices)
         }
     }
 
@@ -85,7 +81,7 @@ class DeviceRepositoryImpl(
     }
 
     override suspend fun getUserDevicesIds(): List<String> {
-        return cacheDeviceDataSource.getUserDevicesIds()
+        return cacheDeviceDataSource.getUserDevicesFromCache().map { it.id }
     }
 
     override suspend fun setLocation(

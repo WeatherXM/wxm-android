@@ -20,8 +20,8 @@ interface DeviceDataSource {
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     suspend fun removeDevice(serialNumber: String): Either<Failure, Unit>
     suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
-    suspend fun getUserDevicesIds(): List<String>
-    suspend fun setUserDevicesIds(ids: List<String>)
+    suspend fun getUserDevicesFromCache(): List<Device>
+    suspend fun setUserDevices(devices: List<Device>)
     suspend fun setLocation(
         deviceId: String,
         lat: Double,

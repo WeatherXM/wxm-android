@@ -304,7 +304,8 @@ interface AnalyticsService {
         HPA("hpa"),
         INHG("inhg"),
         STATIONS_OWN("STATIONS_OWN"),
-        HAS_WALLET("HAS_WALLET")
+        HAS_WALLET("HAS_WALLET"),
+        STATIONS_FAVORITE("STATIONS_FAVORITE"),
     }
 
     fun setUserId(userId: String)

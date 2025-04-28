@@ -21,6 +21,10 @@ class AnalyticsInitializer : Initializer<Unit>, KoinComponent {
         analyticsWrapper.setUserId(cacheService.getUserId())
         analyticsWrapper.setDevicesSortFilterOptions(cacheService.getDevicesSortFilterOptions())
         analyticsWrapper.setDevicesOwn(cacheService.getDevicesOwn())
+        cacheService.getUserDevicesOfBundles().forEach { (bundleId, devices) ->
+            analyticsWrapper.setDeviceBundlesOwn(bundleId, devices)
+        }
+        analyticsWrapper.setDevicesFavorite(cacheService.getDevicesFavorite())
         analyticsWrapper.setHasWallet(cacheService.hasWallet())
         analyticsWrapper.setUserProperties()
         return

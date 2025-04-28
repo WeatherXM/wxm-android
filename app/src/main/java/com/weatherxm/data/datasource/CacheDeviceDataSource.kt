@@ -44,12 +44,20 @@ class CacheDeviceDataSource(private val cacheService: CacheService) : DeviceData
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun getUserDevicesIds(): List<String> {
-        return cacheService.getUserDevicesIds()
+    override suspend fun getUserDevicesFromCache(): List<Device> {
+        return cacheService.getUserDevices()
     }
 
-    override suspend fun setUserDevicesIds(ids: List<String>) {
-        cacheService.setUserDevicesIds(ids)
+    override suspend fun setUserDevices(devices: List<Device>) {
+        cacheService.setUserDevices(devices)
+        devices.groupBy { it.bundle }.forEach {
+            it.key?.name?.let { name ->
+                cacheService.setUserDevicesOfBundle(
+                    CacheService.getUserDeviceOwnFormattedKey(name),
+                    it.value.size
+                )
+            }
+        }
     }
 
     override suspend fun setLocation(

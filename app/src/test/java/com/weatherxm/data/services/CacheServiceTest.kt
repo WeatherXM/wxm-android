@@ -13,6 +13,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_ACCESS
 import com.weatherxm.data.services.CacheService.Companion.KEY_CURRENT_WEATHER_WIDGET_IDS
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_FILTER
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_GROUP_BY
+import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_OWN
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_SORT
 import com.weatherxm.data.services.CacheService.Companion.KEY_REFRESH
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
@@ -39,6 +40,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     val groupByOption = "groupByOption"
     val deviceId = "deviceId"
     val celsiusUnit = "°C"
+    val bundleKey = "bundleKey"
     val weatherData = listOf<WeatherData>(mockk())
 
     beforeSpec {
@@ -52,6 +54,10 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
         every { prefEditor.remove(any()) } returns prefEditor
         every { prefEditor.clear() } returns prefEditor
         every { sharedPref.getStringSet("current_weather_widget_ids", setOf()) } returns setOf()
+        every { sharedPref.all } returns mapOf(
+            KEY_DEVICES_OWN to 5,
+            KEY_DEVICES_OWN + "_" + bundleKey to 1
+        )
         justRun { okHttpCache.evictAll() }
         justRun { prefEditor.apply() }
     }
@@ -249,6 +255,21 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
             then("call the respective clearAll function") {
                 cacheService.clearAll()
                 cacheService.isCacheEmpty() shouldBe true
+            }
+        }
+    }
+
+    context("GET / SET User Devices Of Bundle") {
+        When("We want to GET all the user devices of each bundle") {
+            then("return the respective map of elements") {
+                val k = cacheService.getUserDevicesOfBundles()
+                k shouldBe mapOf(bundleKey to 1)
+            }
+        }
+        When("We have a bundle and its size") {
+            cacheService.setUserDevicesOfBundle(bundleKey, 1)
+            then("set the respective size in the Shared Preferences") {
+                verify(exactly = 1) { prefEditor.putInt(bundleKey, 1) }
             }
         }
     }

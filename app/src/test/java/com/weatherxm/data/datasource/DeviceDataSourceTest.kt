@@ -7,6 +7,7 @@ import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testNetworkCall
 import com.weatherxm.TestUtils.testThrowNotImplemented
 import com.weatherxm.data.datasource.NetworkDeviceDataSource.Companion.CLAIM_MAX_RETRIES
+import com.weatherxm.data.models.Bundle
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Location
@@ -38,9 +39,30 @@ class DeviceDataSourceTest : BehaviorSpec({
     val location = Location(0.0, 0.0)
     val friendlyName = "friendlyName"
 
-    val device = Device.empty()
+    val device = Device(
+        deviceId,
+        "",
+        null,
+        null,
+        null,
+        Bundle(
+            "bundleName",
+            null,
+            null,
+            null,
+            null,
+            null
+        ),
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
     val deviceInfo = mockk<DeviceInfo>()
-    val devicesIds = listOf(deviceId)
+    val devices = listOf(device)
 
     val deviceResponse = NetworkResponse.Success<Device, ErrorResponse>(
         device, retrofitResponse(device)
@@ -60,8 +82,9 @@ class DeviceDataSourceTest : BehaviorSpec({
     )
 
     beforeSpec {
-        every { cacheService.getUserDevicesIds() } returns devicesIds
-        justRun { cacheService.setUserDevicesIds(devicesIds) }
+        every { cacheService.getUserDevices() } returns devices
+        justRun { cacheService.setUserDevicesOfBundle(any(), any()) }
+        justRun { cacheService.setUserDevices(devices) }
     }
 
     context("Get user devices") {
@@ -158,23 +181,23 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     context("Get the IDs of user devices") {
         When("Using the Network Source") {
-            testThrowNotImplemented { networkSource.getUserDevicesIds() }
+            testThrowNotImplemented { networkSource.getUserDevicesFromCache() }
         }
         When("Using the Cache Source") {
             then("return the list of IDs") {
-                cacheSource.getUserDevicesIds() shouldBe devicesIds
+                cacheSource.getUserDevicesFromCache() shouldBe devices
             }
         }
     }
 
     context("Set the IDs of user devices") {
         When("Using the Network Source") {
-            testThrowNotImplemented { networkSource.setUserDevicesIds(devicesIds) }
+            testThrowNotImplemented { networkSource.setUserDevices(devices) }
         }
         When("Using the Cache Source") {
             then("set the list of IDs in cache") {
-                cacheSource.setUserDevicesIds(devicesIds)
-                verify(exactly = 1) { cacheService.setUserDevicesIds(devicesIds) }
+                cacheSource.setUserDevices(devices)
+                verify(exactly = 1) { cacheService.setUserDevices(devices) }
             }
         }
     }
