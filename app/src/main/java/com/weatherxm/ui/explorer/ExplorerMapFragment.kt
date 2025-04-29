@@ -51,9 +51,11 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class ExplorerMapFragment : BaseMapFragment() {
     companion object {
         const val CAMERA_ANIMATION_DURATION = 400L
+        const val STATION_COUNT_POINT_TEXT_SIZE = 16.0
     }
 
     /*
@@ -105,18 +107,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
-        map.subscribeCameraChanged {
-            model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
-            lifecycleScope.launch(Dispatchers.IO) {
-                if (it.cameraState.zoom >= SHOW_STATION_COUNT_ZOOM_LEVEL && !labelsShown) {
-                    labelsShown = true
-                    pointManager.textSize = 16.0
-                } else if (it.cameraState.zoom < SHOW_STATION_COUNT_ZOOM_LEVEL && labelsShown) {
-                    labelsShown = false
-                    pointManager.textSize = 0.0
-                }
-            }
-        }
+        map.subscribeCameraChanged { onCameraChanged(it.cameraState.zoom, it.cameraState.center) }
 
         getMapView().location.updateSettings {
             enabled = true
@@ -177,6 +168,19 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         // Fetch data
         model.fetch()
+    }
+
+    private fun onCameraChanged(zoom: Double, center: Point) {
+        model.setCurrentCamera(zoom, center)
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (zoom >= SHOW_STATION_COUNT_ZOOM_LEVEL && !labelsShown) {
+                labelsShown = true
+                pointManager.textSize = STATION_COUNT_POINT_TEXT_SIZE
+            } else if (zoom < SHOW_STATION_COUNT_ZOOM_LEVEL && labelsShown) {
+                labelsShown = false
+                pointManager.textSize = 0.0
+            }
+        }
     }
 
     private fun handleRecentSearches(searchResults: List<SearchResult>) {
