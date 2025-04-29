@@ -3,10 +3,11 @@ package com.weatherxm.ui.explorer
 import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
-import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.android.material.search.SearchView.TransitionState
@@ -68,7 +69,7 @@ class ExplorerMapFragment : BaseMapFragment() {
     private var useSearchOnTextChangedListener = true
 
     override fun onMapReady(map: MapboxMap) {
-        binding.appBar.applyInsetter {
+        binding.topBar.applyInsetter {
             type(statusBars = true) {
                 margin(left = false, top = true, right = false, bottom = false)
             }
@@ -118,12 +119,16 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         setSearchListeners()
 
-        activity?.onBackPressedDispatcher?.addCallback(this, false) {
+        activity?.onBackPressedDispatcher?.addCallback {
             if (model.onSearchOpenStatus().value == true) {
                 binding.searchView.hide()
                 model.onSearchOpenStatus(false)
             } else {
-                activity?.finish()
+                if(model.isExplorerAfterLoggedIn()) {
+                    findNavController().popBackStack()
+                } else {
+                    activity?.finish()
+                }
             }
         }
 
@@ -168,6 +173,12 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
+        // TODO: STOPSHIP: Open settings from menu
+//        analytics.trackEventSelectContent(
+//            contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
+//        )
+//        navigator.showPreferences(this)
+
         // Fetch data
         model.fetch()
     }
@@ -194,6 +205,10 @@ class ExplorerMapFragment : BaseMapFragment() {
     }
 
     private fun setSearchListeners() {
+        binding.searchBtn.setOnClickListener {
+            binding.searchView.show()
+        }
+
         binding.searchView.addTransitionListener { _, _, newState ->
             if (newState == TransitionState.SHOWING) {
                 analytics.trackEventUserAction(
@@ -243,22 +258,6 @@ class ExplorerMapFragment : BaseMapFragment() {
                     searchModel.getRecentSearches()
                 }
             }
-        }
-
-        binding.searchBar.setOnMenuItemClickListener {
-            onSearchBarMenuItem(it)
-        }
-    }
-
-    private fun onSearchBarMenuItem(menuItem: MenuItem): Boolean {
-        return if (menuItem.itemId == R.id.settings) {
-            analytics.trackEventSelectContent(
-                contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
-            )
-            navigator.showPreferences(this)
-            true
-        } else {
-            false
         }
     }
 
@@ -346,7 +345,8 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.searchBar.menu[0].isVisible = !model.isExplorerAfterLoggedIn()
+        // TODO: STOPSHIP: Hide "settings" option from the menu
+        //binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
             analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
         } else {
