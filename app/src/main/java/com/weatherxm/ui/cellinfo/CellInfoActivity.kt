@@ -178,7 +178,8 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
                 binding.activeChip.text =
                     resources.getQuantityString(R.plurals.cell_active_station, this, this)
             } else {
-                binding.activeChip.visible(false)
+                binding.activeChip.text = getString(R.string.no_active_stations)
+                binding.activeChip.setChipBackgroundColorResource(R.color.errorTint)
             }
         }
         binding.capacityChip.text = getString(R.string.cell_stations_present, data.size)
