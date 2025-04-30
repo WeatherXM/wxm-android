@@ -33,6 +33,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.toCameraOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Resource
@@ -53,6 +54,7 @@ import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.util.MapboxUtils
+import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -111,10 +113,13 @@ class ExplorerMapFragment : BaseMapFragment() {
             model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
         }
 
-        getMapView().location.updateSettings {
-            enabled = true
-            pulsingEnabled = true
+        map.subscribeMapIdle {
+            with(map.coordinateBoundsForCamera(map.cameraState.toCameraOptions())) {
+                model.getActiveStationsInViewPort(north(), south(), east(), west())
+            }
         }
+
+        getMapView().location.updateSettings { enabled = true }
 
         setSearchListeners()
 
@@ -136,12 +141,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         model.onMyLocationClicked().observe(this) {
-            if (it == true) {
-                getLocationPermissions()
-                analytics.trackEventUserAction(
-                    actionName = AnalyticsService.ParamValue.MY_LOCATION.paramValue
-                )
-            }
+            onMyLocationClicked(it)
         }
 
         searchModel.onSearchResults().observe(this) {
@@ -172,6 +172,10 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
+        model.onViewportStations().observe(this) {
+            binding.activeStations.text = formatNumber(it)
+        }
+
         binding.menuBtn.setOnClickListener {
             setupMenu()
         }
@@ -191,6 +195,13 @@ class ExplorerMapFragment : BaseMapFragment() {
             binding.resultsRecycler.visible(true)
             binding.searchEmptyResultsContainer.visible(false)
             adapter.updateData(String.empty(), searchResults)
+        }
+    }
+
+    private fun onMyLocationClicked(isClicked: Boolean?) {
+        if (isClicked == true) {
+            getLocationPermissions()
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
         }
     }
 

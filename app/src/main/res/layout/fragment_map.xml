@@ -30,6 +30,39 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/light_layer1" />
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/menuBtn"
+            app:layout_constraintEnd_toStartOf="@id/searchBtn"
+            app:layout_constraintStart_toEndOf="@id/menuBtn"
+            app:layout_constraintTop_toTopOf="@id/menuBtn">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/activeStations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textColor="@color/dark_text"
+                tools:text="14.535" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:text="@string/active_stations_in_area"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/dark_text"
+                app:layout_constraintEnd_toStartOf="@id/searchBtn"
+                app:layout_constraintStart_toEndOf="@id/menuBtn"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/searchBtn"
             style="@style/Widget.WeatherXM.ImageButton"
