@@ -86,6 +86,7 @@
 
     <!-- Network Stats -->
     <string name="network_stats">Network Statistics</string>
+    <string name="network_stats_subtitle">View real-time network health, station activity, $WXM rewards and more.</string>
     <string name="claimed">Claimed</string>
     <string name="active">Active</string>
     <string name="data_days">Weather Station-Days</string>

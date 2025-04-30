@@ -1,4 +1,5 @@
 <resources>
+    <string name="weatherxm">WeatherXM</string>
     <string name="support_center_url">https://support.weatherxm.com</string>
     <string name="website_contact">https://weatherxm.com/contact/</string>
     <string name="suggested_wallets_documentation">https://docs.weatherxm.com/mobile-app/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>

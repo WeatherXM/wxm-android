@@ -3,6 +3,12 @@ package com.weatherxm.ui.explorer
 import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ImageButton
+import android.widget.PopupWindow
 import androidx.activity.addCallback
 import androidx.core.view.get
 import androidx.core.view.isVisible
@@ -10,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.search.SearchView.TransitionState
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mapbox.geojson.Point
@@ -35,6 +42,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
@@ -76,16 +84,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         adapter = NetworkSearchResultsListAdapter {
-            binding.searchView.hide()
-            model.onSearchOpenStatus(false)
-            searchModel.onSearchClicked(it)
-            it.center?.let { location ->
-                cameraFly(Point.fromLngLat(location.lon, location.lat))
-            }
-            if (it.stationId != null) {
-                navigator.showDeviceDetails(context, device = it.toUIDevice())
-            }
-            trackOnSearchResult(it.stationId != null)
+            onNetworkSearchResultClicked(it)
         }
         binding.resultsRecycler.adapter = adapter
 
@@ -124,7 +123,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                 binding.searchView.hide()
                 model.onSearchOpenStatus(false)
             } else {
-                if(model.isExplorerAfterLoggedIn()) {
+                if (model.isExplorerAfterLoggedIn()) {
                     findNavController().popBackStack()
                 } else {
                     activity?.finish()
@@ -173,11 +172,9 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
-        // TODO: STOPSHIP: Open settings from menu
-//        analytics.trackEventSelectContent(
-//            contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
-//        )
-//        navigator.showPreferences(this)
+        binding.menuBtn.setOnClickListener {
+            setupMenu()
+        }
 
         // Fetch data
         model.fetch()
@@ -195,6 +192,19 @@ class ExplorerMapFragment : BaseMapFragment() {
             binding.searchEmptyResultsContainer.visible(false)
             adapter.updateData(String.empty(), searchResults)
         }
+    }
+
+    private fun onNetworkSearchResultClicked(networkSearchResult: SearchResult) {
+        binding.searchView.hide()
+        model.onSearchOpenStatus(false)
+        searchModel.onSearchClicked(networkSearchResult)
+        networkSearchResult.center?.let { location ->
+            cameraFly(Point.fromLngLat(location.lon, location.lat))
+        }
+        if (networkSearchResult.stationId != null) {
+            navigator.showDeviceDetails(context, device = networkSearchResult.toUIDevice())
+        }
+        trackOnSearchResult(networkSearchResult.stationId != null)
     }
 
     private fun cameraFly(center: Point, zoomLevel: Double = ZOOMED_IN_ZOOM_LEVEL) {
@@ -345,8 +355,6 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     override fun onResume() {
         super.onResume()
-        // TODO: STOPSHIP: Hide "settings" option from the menu
-        //binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
             analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
         } else {
@@ -413,6 +421,60 @@ class ExplorerMapFragment : BaseMapFragment() {
                 } else {
                     cameraFly(Point.fromLngLat(it.lon, it.lat))
                 }
+            }
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun setupMenu() {
+        val popupView = layoutInflater.inflate(R.layout.view_map_menu, binding.root, false)
+        val popupWindow = PopupWindow(popupView, MATCH_PARENT, WRAP_CONTENT, true)
+
+        /**
+         * Create translucent background for popup window
+         */
+        View(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            context?.getColor(R.color.translucent_black_darker)?.let {
+                setBackgroundColor(it)
+            }
+        }.apply {
+            val rootLayout = activity?.window?.decorView as ViewGroup
+            rootLayout.addView(this)
+
+            popupWindow.setOnDismissListener {
+                rootLayout.removeView(this)
+            }
+        }
+
+        /**
+         * Show the popup aligned to the anchor (the 3-dots button)
+         */
+        popupWindow.showAsDropDown(
+            binding.menuBtn,
+            0,
+            context?.resources?.getDimension(R.dimen.margin_normal)?.toInt() ?: 16
+        )
+
+        popupView.findViewById<ImageButton>(R.id.closeBtn).setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+        popupView.findViewById<MaterialCardView>(R.id.networkStatsContainer).setOnClickListener {
+            navigator.showNetworkStats(context)
+            popupWindow.dismiss()
+        }
+
+        if (!model.isExplorerAfterLoggedIn()) {
+            popupView.findViewById<MaterialCardView>(R.id.settingsContainer).apply {
+                setOnClickListener {
+                    analytics.trackEventSelectContent(
+                        contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
+                    )
+                    navigator.showPreferences(this@ExplorerMapFragment)
+                    popupWindow.dismiss()
+                }
+                show()
             }
         }
     }
