@@ -11,7 +11,6 @@ import android.widget.ImageButton
 import android.widget.PopupWindow
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
