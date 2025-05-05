@@ -9,6 +9,7 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
@@ -19,6 +20,8 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.weatherxm.databinding.FragmentMapBinding
 import com.weatherxm.ui.components.BaseMapFragment.OnMapDebugInfoListener
+import com.weatherxm.ui.explorer.ExplorerMapFragment.Companion.STATION_COUNT_POINT_TEXT_SIZE
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.POINT_LAYER
 import com.weatherxm.util.DisplayModeHelper
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
@@ -98,9 +101,10 @@ open class BaseMapFragment : BaseFragment() {
             binding.mapView.scalebar.enabled = false
 
             with(binding.mapView.annotations) {
-                polygonManager = this.createPolygonAnnotationManager()
-                pointManager = this.createPointAnnotationManager().apply {
-                    textSize = 0.0
+                polygonManager = createPolygonAnnotationManager()
+                val config = AnnotationConfig(layerId = POINT_LAYER)
+                pointManager = createPointAnnotationManager(config).apply {
+                    textSize = STATION_COUNT_POINT_TEXT_SIZE
                 }
             }
 

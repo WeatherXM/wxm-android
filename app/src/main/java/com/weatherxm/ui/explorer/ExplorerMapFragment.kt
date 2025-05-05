@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.core.view.get
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.android.material.search.SearchView.TransitionState
@@ -16,6 +15,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.extension.style.layers.addLayerAbove
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSource
@@ -38,6 +38,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.POINT_LAYER
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
@@ -45,8 +46,6 @@ import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -67,7 +66,6 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     private lateinit var adapter: NetworkSearchResultsListAdapter
     private var useSearchOnTextChangedListener = true
-    private var labelsShown = false
 
     override fun onMapReady(map: MapboxMap) {
         binding.appBar.applyInsetter {
@@ -102,12 +100,16 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
+        map.getLayer(POINT_LAYER)?.minZoom(SHOW_STATION_COUNT_ZOOM_LEVEL)
+
         map.addOnMapClickListener {
             model.onMapClick()
             true
         }
 
-        map.subscribeCameraChanged { onCameraChanged(it.cameraState.zoom, it.cameraState.center) }
+        map.subscribeCameraChanged {
+            model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
+        }
 
         getMapView().location.updateSettings {
             enabled = true
@@ -168,19 +170,6 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         // Fetch data
         model.fetch()
-    }
-
-    private fun onCameraChanged(zoom: Double, center: Point) {
-        model.setCurrentCamera(zoom, center)
-        lifecycleScope.launch(Dispatchers.IO) {
-            if (zoom >= SHOW_STATION_COUNT_ZOOM_LEVEL && !labelsShown) {
-                labelsShown = true
-                pointManager.textSize = STATION_COUNT_POINT_TEXT_SIZE
-            } else if (zoom < SHOW_STATION_COUNT_ZOOM_LEVEL && labelsShown) {
-                labelsShown = false
-                pointManager.textSize = 0.0
-            }
-        }
     }
 
     private fun handleRecentSearches(searchResults: List<SearchResult>) {
