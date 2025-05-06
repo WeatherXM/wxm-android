@@ -50,6 +50,7 @@ class UIModelsTest : BehaviorSpec({
         qodScore = null,
         polReason = null,
         metricsTimestamp = null,
+        cellDataQuality = null,
         hasLowBattery = null
     )
 
@@ -83,7 +84,8 @@ class UIModelsTest : BehaviorSpec({
         qodScore = null,
         polReason = null,
         metricsTimestamp = null,
-        hasLowBattery = null
+        hasLowBattery = null,
+        cellDataQuality = null
     )
 
     context("Get a UIDevice from a SearchResult") {
