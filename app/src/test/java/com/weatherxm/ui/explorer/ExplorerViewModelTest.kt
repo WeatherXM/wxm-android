@@ -67,8 +67,8 @@ class ExplorerViewModelTest : BehaviorSpec({
      */
     val geoJsonSource = mockk<GeoJsonSource>()
 
-    val publicHex = PublicHex("cellIndex", 1, location, listOf())
-    val publicHex2 = PublicHex("cellIndex2", 1, location, listOf())
+    val publicHex = PublicHex("cellIndex", 1, 1, 1, location, listOf())
+    val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
     val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
     val explorerData = ExplorerData(geoJsonSource, listOf(publicHex), listOf())
