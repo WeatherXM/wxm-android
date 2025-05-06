@@ -10,6 +10,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageButton
 import android.widget.PopupWindow
 import androidx.activity.addCallback
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -83,6 +85,13 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.statusBarGradient) { view, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            view.layoutParams.height = statusBarHeight
+            view.requestLayout()
+            insets
+        }
+
         adapter = NetworkSearchResultsListAdapter {
             onNetworkSearchResultClicked(it)
         }
@@ -122,16 +131,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         setSearchListeners()
 
         activity?.onBackPressedDispatcher?.addCallback {
-            if (model.onSearchOpenStatus().value == true) {
-                binding.searchView.hide()
-                model.onSearchOpenStatus(false)
-            } else {
-                if (model.isExplorerAfterLoggedIn()) {
-                    findNavController().popBackStack()
-                } else {
-                    activity?.finish()
-                }
-            }
+            onBackPressed()
         }
 
         searchModel.onRecentSearches().observe(this) {
@@ -180,6 +180,19 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         // Fetch data
         model.fetch()
+    }
+
+    private fun onBackPressed() {
+        if (model.onSearchOpenStatus().value == true) {
+            binding.searchView.hide()
+            model.onSearchOpenStatus(false)
+        } else {
+            if (model.isExplorerAfterLoggedIn()) {
+                findNavController().popBackStack()
+            } else {
+                activity?.finish()
+            }
+        }
     }
 
     private fun handleRecentSearches(searchResults: List<SearchResult>) {

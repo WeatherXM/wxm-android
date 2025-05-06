@@ -11,12 +11,17 @@
         tools:background="@color/black"
         tools:context=".ui.components.BaseMapFragment" />
 
+    <FrameLayout
+        android:id="@+id/statusBarGradient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_layer2_gradient" />
+
     <!-- Header -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bakground_layer2_gradient"
         android:padding="@dimen/padding_large">
 
         <ImageButton
