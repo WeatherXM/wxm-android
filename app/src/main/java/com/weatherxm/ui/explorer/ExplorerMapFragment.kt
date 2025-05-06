@@ -5,6 +5,7 @@ import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.MenuItem
 import androidx.activity.addCallback
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
@@ -14,11 +15,13 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.extension.style.layers.addLayerAbove
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -35,6 +38,8 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.POINT_LAYER
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
@@ -45,9 +50,11 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class ExplorerMapFragment : BaseMapFragment() {
     companion object {
         const val CAMERA_ANIMATION_DURATION = 400L
+        const val STATION_COUNT_POINT_TEXT_SIZE = 16.0
     }
 
     /*
@@ -92,6 +99,8 @@ class ExplorerMapFragment : BaseMapFragment() {
             MapboxUtils.getCustomData(it)?.let { cell -> navigator.showCellInfo(context, cell) }
             true
         }
+
+        map.getLayer(POINT_LAYER)?.minZoom(SHOW_STATION_COUNT_ZOOM_LEVEL)
 
         map.addOnMapClickListener {
             model.onMapClick()
@@ -332,11 +341,12 @@ class ExplorerMapFragment : BaseMapFragment() {
             mapStyle?.addLayerAbove(model.heatmapLayer, "waterway-label")
         }
         onPolygonPointsUpdated(data.polygonsToDraw)
+        onPointsUpdated(data.pointsToDraw)
     }
 
     override fun onResume() {
         super.onResume()
-        binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
+        binding.searchBar.menu[0].isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
             analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
         } else {
@@ -371,6 +381,15 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         polygonManager.create(polygonsToDraw)
+    }
+
+    private fun onPointsUpdated(pointsToDraw: List<PointAnnotationOptions>) {
+        if (pointsToDraw.isEmpty()) {
+            Timber.d("No new points found. Skipping map update.")
+            return
+        }
+
+        pointManager.create(pointsToDraw)
     }
 
     override fun getMapStyle(): String {

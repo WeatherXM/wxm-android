@@ -5,6 +5,7 @@ import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.dispatcher
@@ -27,6 +28,7 @@ import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_WEIGHT_KEY
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
+import com.weatherxm.util.MapboxUtils.toPointAnnotationOptions
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -68,6 +70,7 @@ class ExplorerViewModelTest : BehaviorSpec({
     val publicHex = PublicHex("cellIndex", 1, location, listOf())
     val publicHex2 = PublicHex("cellIndex2", 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
+    val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
     val explorerData = ExplorerData(geoJsonSource, listOf(publicHex), listOf())
     val newExplorerData =
         ExplorerData(geoJsonSource, listOf(publicHex2), newPolygonAnnotationOptions)
@@ -194,6 +197,11 @@ class ExplorerViewModelTest : BehaviorSpec({
         every {
             newExplorerData.publicHexes.toPolygonAnnotationOptions()
         } returns newPolygonAnnotationOptions
+        every { explorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
+        every { fullExplorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
+        every {
+            newExplorerData.publicHexes.toPointAnnotationOptions()
+        } returns newPointAnnotationOptions
 
         viewModel = ExplorerViewModel(usecase, analytics, locationHelper, dispatcher)
     }
