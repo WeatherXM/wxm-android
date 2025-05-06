@@ -307,7 +307,7 @@ class ExplorerViewModel(
             onViewportStations.postValue(
                 onExplorerData.value?.publicHexes?.sumOf {
                     if (it.center.lat in southLat..northLat && it.center.lon in westLon..eastLon) {
-                        it.deviceCount ?: 0
+                        it.activeDeviceCount ?: 0
                     } else {
                         0
                     }
