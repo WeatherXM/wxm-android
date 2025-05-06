@@ -21,6 +21,7 @@ import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVE
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
+import com.weatherxm.util.MapboxUtils.toPointAnnotationOptions
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -39,6 +40,8 @@ class ExplorerViewModel(
         const val HEATMAP_LAYER_ID = "heatmap-layer"
         const val HEATMAP_LAYER_SOURCE = "heatmap"
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
+        const val SHOW_STATION_COUNT_ZOOM_LEVEL: Double = 10.0
+        const val POINT_LAYER: String = "point_layer"
     }
 
     // Explorer Data
@@ -224,6 +227,7 @@ class ExplorerViewModel(
                      * The explorer map is empty so send all the hexes to be drawn
                      */
                     response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions()
+                    response.pointsToDraw = response.publicHexes.toPointAnnotationOptions()
                     onExplorerData.postValue(response)
                 } else {
                     val newHexes = mutableListOf<PublicHex>()
