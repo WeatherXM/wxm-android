@@ -70,37 +70,11 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
         }
 
         binding.capacityChip.setOnCloseIconClickListener {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.ITEM_ID,
-                    AnalyticsService.ParamValue.INFO_CELL_CAPACITY.paramValue
-                )
-            )
-            navigator.showMessageDialog(
-                supportFragmentManager,
-                title = getString(R.string.cell_capacity),
-                message = getString(R.string.cell_capacity_explanation),
-                readMoreUrl = getString(R.string.docs_url_cell_capacity),
-                analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
-            )
+            onCellCapacityInfo()
         }
 
         binding.dataQualityChip.setOnCloseIconClickListener {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.ITEM_ID,
-                    AnalyticsService.ParamValue.INFO_CELL_DATA_QUALITY.paramValue
-                )
-            )
-            navigator.showMessageDialog(
-                supportFragmentManager,
-                title = getString(R.string.cell_data_quality),
-                message = getString(R.string.cell_data_quality_explanation),
-                readMoreUrl = null,
-                analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
-            )
+            onDataQualityInfo()
         }
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
@@ -143,6 +117,40 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
             AnalyticsService.Screen.EXPLORER_CELL, classSimpleName(), model.cell.index
         )
         model.fetchDevices()
+    }
+
+    private fun onCellCapacityInfo() {
+        analytics.trackEventSelectContent(
+            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                AnalyticsService.ParamValue.INFO_CELL_CAPACITY.paramValue
+            )
+        )
+        navigator.showMessageDialog(
+            supportFragmentManager,
+            title = getString(R.string.cell_capacity),
+            message = getString(R.string.cell_capacity_explanation),
+            readMoreUrl = getString(R.string.docs_url_cell_capacity),
+            analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
+        )
+    }
+
+    private fun onDataQualityInfo() {
+        analytics.trackEventSelectContent(
+            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                AnalyticsService.ParamValue.INFO_CELL_DATA_QUALITY.paramValue
+            )
+        )
+        navigator.showMessageDialog(
+            supportFragmentManager,
+            title = getString(R.string.cell_data_quality),
+            message = getString(R.string.cell_data_quality_explanation),
+            readMoreUrl = null,
+            analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
+        )
     }
 
     private fun updateUI(response: Resource<List<UIDevice>>) {
