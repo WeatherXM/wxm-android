@@ -80,8 +80,7 @@ data class PublicDevice(
     val cellCenter: Location?,
     val address: String?,
     val metrics: Metrics?,
-    @Json(name = "avg_data_quality")
-    val avgDataQuality: Int?,
+    val cellAvgDataQuality: Int?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -89,7 +88,7 @@ data class PublicDevice(
         return UIDevice(
             id = id,
             name = name,
-            cellDataQuality = avgDataQuality,
+            cellDataQuality = cellAvgDataQuality,
             cellIndex = cellIndex,
             cellCenter = cellCenter,
             bundleName = try {
