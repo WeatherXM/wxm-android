@@ -67,8 +67,8 @@ class ExplorerViewModelTest : BehaviorSpec({
      */
     val geoJsonSource = mockk<GeoJsonSource>()
 
-    val publicHex = PublicHex("cellIndex", 1, location, listOf())
-    val publicHex2 = PublicHex("cellIndex2", 1, location, listOf())
+    val publicHex = PublicHex("cellIndex", 1, 1, 1, location, listOf())
+    val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
     val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
     val explorerData = ExplorerData(geoJsonSource, listOf(publicHex), listOf())
@@ -264,6 +264,12 @@ class ExplorerViewModelTest : BehaviorSpec({
                     1,
                     REACH_OUT_MSG
                 )
+                and("get active stations in ViewPort") {
+                    runTest { viewModel.getActiveStationsInViewPort(180.0, -180.0, 90.0, -90.0) }
+                    then("it should return 0") {
+                        viewModel.onViewportStations().value shouldBe 0
+                    }
+                }
             }
             When("it's a success") {
                 coMockEitherRight({ usecase.getCells() }, explorerData)
@@ -295,6 +301,26 @@ class ExplorerViewModelTest : BehaviorSpec({
                         }
                         then("LiveData onStatus should post the success value Unit") {
                             viewModel.onStatus().isSuccess(Unit)
+                        }
+                    }
+                }
+                and("get active stations in user's ViewPort") {
+                    When("the station is in that the user's viewport") {
+                        runTest { viewModel.getActiveStationsInViewPort(180.0, -10.0, 90.0, -90.0) }
+                        then("it should return 1") {
+                            viewModel.onViewportStations().value shouldBe 1
+                        }
+                    }
+                    When("the station isn't in that latitude of the viewport") {
+                        runTest { viewModel.getActiveStationsInViewPort(180.0, 15.0, 90.0, -90.0) }
+                        then("it should return zero") {
+                            viewModel.onViewportStations().value shouldBe 0
+                        }
+                    }
+                    When("the station isn't in that longitude of the viewport") {
+                        runTest { viewModel.getActiveStationsInViewPort(180.0, -180.0, 90.0, 15.0) }
+                        then("it should return 0") {
+                            viewModel.onViewportStations().value shouldBe 0
                         }
                     }
                 }

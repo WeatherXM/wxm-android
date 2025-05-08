@@ -11,26 +11,76 @@
         tools:background="@color/black"
         tools:context=".ui.components.BaseMapFragment" />
 
-    <!-- Header -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+    <FrameLayout
+        android:id="@+id/statusBarGradient"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_layer2_gradient" />
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/searchBar"
-            style="@style/Widget.WeatherXM.SearchBar"
-            android:layout_width="match_parent"
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large">
+
+        <ImageButton
+            android:id="@+id/menuBtn"
+            style="@style/Widget.WeatherXM.ImageButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/action_close"
+            android:src="@drawable/ic_3_dots"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/light_layer1" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/search_station_name_address"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-            app:backgroundTint="@color/colorSurface"
-            app:defaultScrollFlagsEnabled="false"
-            app:menu="@menu/explorer_menu"
-            app:navigationIcon="@drawable/ic_logo"
-            app:tintNavigationIcon="false" />
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/menuBtn"
+            app:layout_constraintEnd_toStartOf="@id/searchBtn"
+            app:layout_constraintStart_toEndOf="@id/menuBtn"
+            app:layout_constraintTop_toTopOf="@id/menuBtn">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/activeStations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textColor="@color/dark_text"
+                tools:text="14.535" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:text="@string/active_stations_in_area"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/dark_text"
+                app:layout_constraintEnd_toStartOf="@id/searchBtn"
+                app:layout_constraintStart_toEndOf="@id/menuBtn"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/searchBtn"
+            style="@style/Widget.WeatherXM.ImageButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/action_close"
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/light_layer1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.search.SearchView
         android:id="@+id/searchView"
@@ -42,7 +92,7 @@
         app:backgroundTint="@color/colorSurface"
         app:closeIcon="@drawable/ic_close"
         app:iconifiedByDefault="true"
-        app:layout_anchor="@id/searchBar">
+        app:layout_anchor="@id/topBar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
