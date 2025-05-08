@@ -64,6 +64,7 @@ data class SearchResult(
         return UIDevice(
             id = stationId ?: String.empty(),
             name = name ?: String.empty(),
+            cellDataQuality = null,
             cellIndex = stationCellIndex ?: String.empty(),
             cellCenter = center,
             relation = relation,

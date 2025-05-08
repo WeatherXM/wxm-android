@@ -62,6 +62,7 @@ class SelectStationViewModelTest : BehaviorSpec({
             null,
             null,
             null,
+            null,
             null
         )
     )
