@@ -22,6 +22,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -69,20 +70,11 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
         }
 
         binding.capacityChip.setOnCloseIconClickListener {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.ITEM_ID,
-                    AnalyticsService.ParamValue.INFO_CELL_CAPACITY.paramValue
-                )
-            )
-            navigator.showMessageDialog(
-                supportFragmentManager,
-                title = getString(R.string.cell_capacity),
-                message = getString(R.string.cell_capacity_explanation),
-                readMoreUrl = getString(R.string.docs_url_cell_capacity),
-                analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
-            )
+            onCellCapacityInfo()
+        }
+
+        binding.dataQualityChip.setOnCloseIconClickListener {
+            onDataQualityInfo()
         }
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
@@ -125,6 +117,40 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
             AnalyticsService.Screen.EXPLORER_CELL, classSimpleName(), model.cell.index
         )
         model.fetchDevices()
+    }
+
+    private fun onCellCapacityInfo() {
+        analytics.trackEventSelectContent(
+            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                AnalyticsService.ParamValue.INFO_CELL_CAPACITY.paramValue
+            )
+        )
+        navigator.showMessageDialog(
+            supportFragmentManager,
+            title = getString(R.string.cell_capacity),
+            message = getString(R.string.cell_capacity_explanation),
+            readMoreUrl = getString(R.string.docs_url_cell_capacity),
+            analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
+        )
+    }
+
+    private fun onDataQualityInfo() {
+        analytics.trackEventSelectContent(
+            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                AnalyticsService.ParamValue.INFO_CELL_DATA_QUALITY.paramValue
+            )
+        )
+        navigator.showMessageDialog(
+            supportFragmentManager,
+            title = getString(R.string.cell_data_quality),
+            message = getString(R.string.cell_data_quality_explanation),
+            readMoreUrl = null,
+            analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
+        )
     }
 
     private fun updateUI(response: Resource<List<UIDevice>>) {
@@ -182,8 +208,17 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
                 binding.activeChip.setChipBackgroundColorResource(R.color.errorTint)
             }
         }
+        data.firstOrNull()?.cellDataQuality?.let {
+            binding.dataQualityChip.text = getString(R.string.cell_data_quality_value, it)
+            binding.dataQualityChip.setChipIconTintResource(getRewardScoreColor(it))
+        } ?: run {
+            binding.dataQualityChip.text = getString(R.string.cell_data_quality_no_data)
+            binding.dataQualityChip.setChipIconTintResource(R.color.darkGrey)
+
+        }
         binding.capacityChip.text = getString(R.string.cell_stations_present, data.size)
-        binding.cellStatsContainer.visible(true)
+        binding.cellTotalsContainer.visible(true)
+        binding.dataQualityChip.visible(true)
     }
 
     override fun onDeviceClicked(device: UIDevice) {

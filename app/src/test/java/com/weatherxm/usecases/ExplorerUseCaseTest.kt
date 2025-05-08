@@ -57,6 +57,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
         null,
         address,
         null,
+        null,
         null
     )
     val followedDevice =
@@ -71,6 +72,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
             null,
             address,
             null,
+            null,
             null
         )
     val publicDevice =
@@ -84,6 +86,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
             index,
             null,
             address,
+            null,
             null,
             null
         )
