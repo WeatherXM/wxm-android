@@ -34,7 +34,7 @@
             app:cardUseCompatPadding="false"
             app:contentPadding="@dimen/padding_small"
             app:layout_constraintBottom_toTopOf="@id/login_signup_view"
-            app:layout_constraintEnd_toStartOf="@id/networkStatsBtn"
+            app:layout_constraintEnd_toStartOf="@id/myLocationBtn"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
@@ -64,23 +64,6 @@
             app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
             app:tint="@color/colorOnSurface" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/networkStatsBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:contentDescription="@string/network_stats"
-            android:elevation="@dimen/elevation_normal"
-            android:src="@drawable/ic_network_stats"
-            app:backgroundTint="@color/network_stats_button"
-            app:layout_anchor="@id/login_signup_view"
-            app:layout_anchorGravity="top"
-            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/myLocationBtn"
-            app:tint="@color/light_text" />
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/login_signup_view"
             android:layout_width="match_parent"
@@ -91,7 +74,7 @@
             app:contentPadding="@dimen/padding_normal_to_large"
             app:contentPaddingBottom="0dp"
             app:elevation="@dimen/elevation_small"
-            app:layout_constraintTop_toBottomOf="@id/networkStatsBtn">
+            app:layout_constraintTop_toBottomOf="@id/myLocationBtn">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
