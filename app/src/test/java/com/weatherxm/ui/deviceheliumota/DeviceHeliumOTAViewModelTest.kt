@@ -56,6 +56,7 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         firmware,
         null,
         null,

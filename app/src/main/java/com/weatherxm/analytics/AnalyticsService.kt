@@ -217,6 +217,7 @@ interface AnalyticsService {
         INFO_POL("info_pol"),
         INFO_CELL_POSITION("info_cell_position"),
         INFO_CELL_CAPACITY("info_cell_capacity"),
+        INFO_CELL_DATA_QUALITY("info_cell_data_quality"),
         STATION_OFFLINE("station_offline"),
         STATION_DETAILS_CHIP("Station Details Chip"),
         OTA_UPDATE_ID("ota_update"),

@@ -69,6 +69,7 @@ class CellInfoViewModelTest : BehaviorSpec({
             null,
             null,
             null,
+            null,
             address = address,
             null,
             null,
