@@ -59,6 +59,8 @@ class MapboxUtilsTest : BehaviorSpec({
     val publicHex = PublicHex(
         "cellIndex",
         0,
+        0,
+        null,
         Location(lat = 38.71742582818318, lon = 27.22897028978693),
         listOf(
             Location(lat = 38.72482636074315, lon = 27.214679947948405),

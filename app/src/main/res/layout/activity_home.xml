@@ -32,26 +32,10 @@
         android:src="@drawable/ic_my_location"
         app:backgroundTint="@color/colorSurface"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
-        app:layout_constraintBottom_toTopOf="@id/networkStatsBtn"
-        app:layout_constraintEnd_toEndOf="@id/networkStatsBtn"
-        app:layout_constraintStart_toStartOf="@id/networkStatsBtn"
-        app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
-        app:tint="@color/colorOnSurface" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/networkStatsBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginBottom="@dimen/margin_large"
-        android:contentDescription="@string/network_stats"
-        android:elevation="@dimen/elevation_normal"
-        android:src="@drawable/ic_network_stats"
-        app:backgroundTint="@color/network_stats_button"
-        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintStart_toEndOf="@id/nav_view"
-        app:tint="@color/light_text" />
+        app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
+        app:tint="@color/colorOnSurface" />
 
     <com.weatherxm.ui.components.HidingBottomNavigationView
         android:id="@+id/nav_view"

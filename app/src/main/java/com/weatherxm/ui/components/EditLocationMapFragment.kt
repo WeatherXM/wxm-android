@@ -29,7 +29,7 @@ class EditLocationMapFragment : BaseMapFragment() {
         }
         this.map = map
 
-        binding.appBar.visible(false)
+        binding.topBar.visible(false)
         binding.searchView.visible(false)
         this.listener?.onMapReady()
     }

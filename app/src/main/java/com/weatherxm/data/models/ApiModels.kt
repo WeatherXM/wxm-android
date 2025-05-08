@@ -360,6 +360,10 @@ data class PublicHex(
     val index: String,
     @Json(name = "device_count")
     val deviceCount: Int?,
+    @Json(name = "active_device_count")
+    val activeDeviceCount: Int?,
+    @Json(name = "avg_data_quality")
+    val avgDataQuality: Int?,
     val center: Location,
     val polygon: List<Location>,
 ) : Parcelable
