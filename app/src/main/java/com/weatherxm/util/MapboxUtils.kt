@@ -101,11 +101,13 @@ object MapboxUtils : KoinComponent {
     }
 
     fun List<PublicHex>.toPointAnnotationOptions(): List<PointAnnotationOptions> {
-        return map {
-            PointAnnotationOptions()
-                .withPoint(Point.fromLngLat(it.center.lon, it.center.lat))
-                .withTextField(it.deviceCount?.toString() ?: "")
-                .withTextColor(resources.getColor(R.color.dark_text))
+        return mapNotNull { hex ->
+            hex.activeDeviceCount?.takeIf { it > 0 }?.let {
+                PointAnnotationOptions()
+                    .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
+                    .withTextField(it.toString())
+                    .withTextColor(resources.getColor(R.color.dark_text))
+            }
         }
     }
 

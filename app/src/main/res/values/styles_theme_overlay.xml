@@ -11,12 +11,6 @@
         <item name="navigationIconTint">@color/colorPrimary</item>
     </style>
 
-    <style name="ThemeOverlay.WeatherXM.SearchBar" parent="ThemeOverlay.WeatherXM.Toolbar">
-        <item name="colorSurface">@color/colorSurface</item>
-        <item name="navigationIconTint">@color/colorOnSurface</item>
-        <item name="android:textColorHint">@color/darkGrey</item>
-    </style>
-
     <style name="ThemeOverlay.WeatherXM.SearchView" parent="ThemeOverlay.WeatherXM.Toolbar">
         <item name="colorSurface">@color/colorSurface</item>
         <item name="navigationIconTint">@color/colorOnSurface</item>
