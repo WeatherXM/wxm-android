@@ -85,7 +85,7 @@ class PhotoGalleryActivity : BaseActivity() {
                             AnalyticsService.ParamValue.COMPLETED.paramValue
                         ),
                         Pair(
-                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            FirebaseAnalytics.Param.SOURCE,
                             AnalyticsService.ParamValue.CAMERA.paramValue
                         )
                     )
@@ -108,7 +108,7 @@ class PhotoGalleryActivity : BaseActivity() {
                             AnalyticsService.ParamValue.COMPLETED.paramValue
                         ),
                         Pair(
-                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            FirebaseAnalytics.Param.SOURCE,
                             AnalyticsService.ParamValue.GALLERY.paramValue
                         )
                     )
@@ -286,7 +286,7 @@ class PhotoGalleryActivity : BaseActivity() {
                             AnalyticsService.ParamValue.STARTED.paramValue
                         ),
                         Pair(
-                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            FirebaseAnalytics.Param.SOURCE,
                             AnalyticsService.ParamValue.CAMERA.paramValue
                         )
                     )
@@ -304,7 +304,7 @@ class PhotoGalleryActivity : BaseActivity() {
                             AnalyticsService.ParamValue.STARTED.paramValue
                         ),
                         Pair(
-                            AnalyticsService.CustomParam.SOURCE.paramName,
+                            FirebaseAnalytics.Param.SOURCE,
                             AnalyticsService.ParamValue.GALLERY.paramValue
                         )
                     )

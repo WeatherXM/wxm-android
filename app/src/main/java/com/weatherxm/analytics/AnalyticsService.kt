@@ -93,8 +93,7 @@ interface AnalyticsService {
         STATE("STATE"),
         APP_ID("APP_ID"),
         DEVICE_STATE("DEVICE_STATE"),
-        USER_STATE("USER_STATE"),
-        SOURCE("SOURCE")
+        USER_STATE("USER_STATE")
     }
 
     // Custom Param Names
