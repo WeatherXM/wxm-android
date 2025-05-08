@@ -75,7 +75,7 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
         }
 
         binding.mapLayerPickerBtn.setOnClickListener {
-            // TODO: Handle this
+            MapLayerPickerDialogFragment().show(this)
         }
 
         binding.myLocationBtn.setOnClickListener {

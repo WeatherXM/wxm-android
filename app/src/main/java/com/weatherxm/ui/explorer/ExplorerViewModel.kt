@@ -71,8 +71,9 @@ class ExplorerViewModel(
     // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onSearchOpenStatus = MutableLiveData(false)
 
-    // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onViewportStations = MutableLiveData(0)
+
+    private val onMapLayer = MutableLiveData(MapLayer.DEFAULT)
 
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
@@ -195,6 +196,7 @@ class ExplorerViewModel(
     fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
     fun onExplorerData(): LiveData<ExplorerData> = onExplorerData
     fun onViewportStations(): LiveData<Int> = onViewportStations
+    fun onMapLayer(): LiveData<MapLayer> = onMapLayer
 
     fun navigateToLocation(location: Location, isUserLocation: Boolean = false) {
         Timber.d("Got starting location [${location.lat}, ${location.lon}")
@@ -204,6 +206,10 @@ class ExplorerViewModel(
             useUserLocation = false
             onNavigateToLocation.postValue(NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location))
         }
+    }
+
+    fun setMapLayer(mapLayer: MapLayer) {
+        onMapLayer.postValue(mapLayer)
     }
 
     fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {

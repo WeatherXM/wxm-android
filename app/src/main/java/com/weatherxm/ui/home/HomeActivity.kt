@@ -22,6 +22,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.explorer.ExplorerViewModel
+import com.weatherxm.ui.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.launch
@@ -87,7 +88,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.mapLayerPickerBtn.setOnClickListener {
-            // TODO: Handle this
+            MapLayerPickerDialogFragment().show(this)
         }
 
         binding.myLocationBtn.setOnClickListener {
