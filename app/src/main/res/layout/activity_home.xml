@@ -22,6 +22,20 @@
         tools:ignore="FragmentTagUsage" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mapLayerPickerBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_normal_to_large"
+        android:contentDescription="@string/go_to_your_location"
+        android:elevation="@dimen/elevation_normal"
+        android:src="@drawable/ic_layers"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:layout_constraintBottom_toTopOf="@id/myLocationBtn"
+        app:layout_constraintStart_toEndOf="@id/nav_view"
+        app:tint="@color/colorOnPrimary" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/myLocationBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
