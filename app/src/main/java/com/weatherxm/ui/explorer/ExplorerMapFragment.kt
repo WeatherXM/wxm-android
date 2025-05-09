@@ -409,7 +409,6 @@ class ExplorerMapFragment : BaseMapFragment() {
         )
     }
 
-    var annotations = listOf<PolygonAnnotation>()
     private fun onPolygonPointsUpdated(
         polygonsToDraw: List<PolygonAnnotationOptions>?,
         shouldDeleteAllFirst: Boolean
