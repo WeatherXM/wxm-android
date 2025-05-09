@@ -155,7 +155,11 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         model.onNewPolygons().observe(this) {
-            onPolygonPointsUpdated(it)
+            onPolygonPointsUpdated(it, false)
+        }
+
+        model.onRedrawPolygons().observe(this) {
+            onPolygonPointsUpdated(it, true)
         }
 
         // Set camera to the last saved location the user was at
@@ -371,7 +375,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             mapStyle?.addSource(data.geoJsonSource)
             mapStyle?.addLayerAbove(model.heatmapLayer, "waterway-label")
         }
-        onPolygonPointsUpdated(data.polygonsToDraw)
+        onPolygonPointsUpdated(data.polygonsToDraw, false)
         onPointsUpdated(data.pointsToDraw)
     }
 
@@ -404,12 +408,18 @@ class ExplorerMapFragment : BaseMapFragment() {
         )
     }
 
-    private fun onPolygonPointsUpdated(polygonsToDraw: List<PolygonAnnotationOptions>?) {
+    private fun onPolygonPointsUpdated(
+        polygonsToDraw: List<PolygonAnnotationOptions>?,
+        shouldDeleteAllFirst: Boolean
+    ) {
         if (polygonsToDraw.isNullOrEmpty()) {
             Timber.d("No new polygons found. Skipping map update.")
             return
         }
 
+        if (shouldDeleteAllFirst) {
+            polygonManager.deleteAll()
+        }
         polygonManager.create(polygonsToDraw)
     }
 

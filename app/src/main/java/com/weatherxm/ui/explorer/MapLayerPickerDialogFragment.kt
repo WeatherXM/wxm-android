@@ -63,7 +63,7 @@ class MapLayerPickerDialogFragment : BaseBottomSheetDialogFragment() {
     private fun check(radioButton: RadioButton, cardContainer: MaterialCardView) {
         radioButton.isChecked = true
         with(cardContainer) {
-            setCardStroke(R.color.colorPrimary, 3)
+            setCardStroke(R.color.colorPrimary, 5)
             setCardBackgroundColor(this.context.getColor(R.color.layer2))
         }
     }

@@ -53,6 +53,9 @@ class ExplorerViewModel(
     // New Polygons to be drawn
     private val onNewPolygons = SingleLiveEvent<List<PolygonAnnotationOptions>>()
 
+    // Polygons that need to be redraw
+    private val onRedrawPolygons = SingleLiveEvent<List<PolygonAnnotationOptions>>()
+
     /**
      * Needed for passing info to the fragment to handle when a prefilled location is used
      * so we want the camera to move directly to that point
@@ -194,6 +197,7 @@ class ExplorerViewModel(
     fun onSearchOpenStatus() = onSearchOpenStatus
     fun onStatus(): LiveData<Resource<Unit>> = onStatus
     fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
+    fun onRedrawPolygons(): LiveData<List<PolygonAnnotationOptions>> = onRedrawPolygons
     fun onExplorerData(): LiveData<ExplorerData> = onExplorerData
     fun onViewportStations(): LiveData<Int> = onViewportStations
     fun onMapLayer(): LiveData<MapLayer> = onMapLayer
@@ -209,7 +213,16 @@ class ExplorerViewModel(
     }
 
     fun setMapLayer(mapLayer: MapLayer) {
-        onMapLayer.postValue(mapLayer)
+        if (onMapLayer.value != mapLayer) {
+            onMapLayer.postValue(mapLayer)
+            viewModelScope.launch(dispatcher) {
+                with(onExplorerData.value) {
+                    this?.polygonsToDraw =
+                        this?.publicHexes?.toPolygonAnnotationOptions(mapLayer) ?: mutableListOf()
+                    onRedrawPolygons.postValue(this?.polygonsToDraw)
+                }
+            }
+        }
     }
 
     fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
@@ -236,7 +249,9 @@ class ExplorerViewModel(
                     /**
                      * The explorer map is empty so send all the hexes to be drawn
                      */
-                    response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions()
+                    response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions(
+                        onMapLayer.value ?: MapLayer.DEFAULT
+                    )
                     response.pointsToDraw = response.publicHexes.toPointAnnotationOptions()
                     onExplorerData.postValue(response)
                 } else {
@@ -263,13 +278,17 @@ class ExplorerViewModel(
                      * screen and comes back in the explorer
                      */
                     onExplorerData.value?.polygonsToDraw =
-                        response.publicHexes.toPolygonAnnotationOptions()
+                        response.publicHexes.toPolygonAnnotationOptions(
+                            onMapLayer.value ?: MapLayer.DEFAULT
+                        )
 
                     /**
                      * Send only the new polygons in the response
                      * in order not to re-draw the whole explorer map but only the new hexes
                      */
-                    onNewPolygons.postValue(newHexes.toPolygonAnnotationOptions())
+                    onNewPolygons.postValue(
+                        newHexes.toPolygonAnnotationOptions(onMapLayer.value ?: MapLayer.DEFAULT)
+                    )
                 }
                 onStatus.postValue(Resource.success(Unit))
             }.onLeft {
@@ -321,7 +340,6 @@ class ExplorerViewModel(
             )
         }
     }
-
 
     init {
         if (locationHelper.hasLocationPermissions()) {
