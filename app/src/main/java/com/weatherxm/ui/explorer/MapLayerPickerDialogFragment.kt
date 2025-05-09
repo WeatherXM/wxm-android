@@ -50,10 +50,12 @@ class MapLayerPickerDialogFragment : BaseBottomSheetDialogFragment() {
 
         binding.defaultCard.setOnClickListener {
             model.setMapLayer(MapLayer.DEFAULT)
+            dismiss()
         }
 
         binding.dataQualityCard.setOnClickListener {
             model.setMapLayer(MapLayer.DATA_QUALITY)
+            dismiss()
         }
     }
 
