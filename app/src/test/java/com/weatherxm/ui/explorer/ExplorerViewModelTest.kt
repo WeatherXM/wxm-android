@@ -192,10 +192,14 @@ class ExplorerViewModelTest : BehaviorSpec({
         every { locationHelper.hasLocationPermissions() } returns false
         coEvery { usecase.getUserCountryLocation() } returns startingLocation
         mockkObject(MapboxUtils)
-        every { explorerData.publicHexes.toPolygonAnnotationOptions() } returns emptyList()
-        every { fullExplorerData.publicHexes.toPolygonAnnotationOptions() } returns emptyList()
         every {
-            newExplorerData.publicHexes.toPolygonAnnotationOptions()
+            explorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DEFAULT)
+        } returns emptyList()
+        every {
+            fullExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DEFAULT)
+        } returns emptyList()
+        every {
+            newExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DEFAULT)
         } returns newPolygonAnnotationOptions
         every { explorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
         every { fullExplorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
