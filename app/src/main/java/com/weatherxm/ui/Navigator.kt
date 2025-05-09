@@ -159,8 +159,8 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
-    fun showNetworkStats(context: Context) {
-        context.startActivity(
+    fun showNetworkStats(context: Context?) {
+        context?.startActivity(
             Intent(context, NetworkStatsActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
@@ -588,7 +588,8 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         htmlMessage: String? = null,
     ) {
         fragmentActivity?.let {
-            LoginPromptDialogFragment(title,
+            LoginPromptDialogFragment(
+                title,
                 message,
                 htmlMessage,
                 onLogin = {

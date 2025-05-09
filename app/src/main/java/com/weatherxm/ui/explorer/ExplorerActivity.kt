@@ -7,11 +7,11 @@ import androidx.lifecycle.withCreated
 import com.mapbox.geojson.Point
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.models.Location
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityExplorerBinding
 import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToBottom
 import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.show
@@ -65,26 +65,21 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
                 }
             }
         }
-        binding.networkStatsBtn.setOnClickListener {
-            navigator.showNetworkStats(this)
-        }
 
         model.onSearchOpenStatus().observe(this) { isOpened ->
             if (isOpened) {
                 binding.overlayContainer.hide(SlideOutToBottom)
-                binding.networkStatsBtn.hide()
             } else {
                 binding.overlayContainer.show(SlideInFromBottom)
-                binding.networkStatsBtn.show()
             }
+        }
+
+        binding.mapLayerPickerBtn.setOnClickListener {
+            MapLayerPickerDialogFragment().show(this)
         }
 
         binding.myLocationBtn.setOnClickListener {
             model.onMyLocation()
-        }
-
-        binding.networkStatsBtn.setOnClickListener {
-            navigator.showNetworkStats(this)
         }
 
         binding.login.setOnClickListener {

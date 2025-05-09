@@ -80,6 +80,7 @@ data class PublicDevice(
     val cellCenter: Location?,
     val address: String?,
     val metrics: Metrics?,
+    val cellAvgDataQuality: Int?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -87,6 +88,7 @@ data class PublicDevice(
         return UIDevice(
             id = id,
             name = name,
+            cellDataQuality = cellAvgDataQuality,
             cellIndex = cellIndex,
             cellCenter = cellCenter,
             bundleName = try {
@@ -170,6 +172,7 @@ data class Device(
         return UIDevice(
             id = id,
             name = name,
+            cellDataQuality = null,
             cellIndex = attributes?.hex7?.index ?: String.empty(),
             cellCenter = attributes?.hex7?.center,
             bundleName = try {
@@ -360,6 +363,10 @@ data class PublicHex(
     val index: String,
     @Json(name = "device_count")
     val deviceCount: Int?,
+    @Json(name = "active_device_count")
+    val activeDeviceCount: Int?,
+    @Json(name = "avg_data_quality")
+    val avgDataQuality: Int?,
     val center: Location,
     val polygon: List<Location>,
 ) : Parcelable

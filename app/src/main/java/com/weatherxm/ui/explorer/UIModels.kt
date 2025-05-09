@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.models.Bundle
@@ -21,7 +22,8 @@ import timber.log.Timber
 data class ExplorerData(
     val geoJsonSource: GeoJsonSource,
     val publicHexes: List<PublicHex>,
-    var polygonsToDraw: List<PolygonAnnotationOptions> = listOf()
+    var polygonsToDraw: List<PolygonAnnotationOptions> = listOf(),
+    var pointsToDraw: List<PointAnnotationOptions> = listOf()
 )
 
 @Keep
@@ -62,6 +64,7 @@ data class SearchResult(
         return UIDevice(
             id = stationId ?: String.empty(),
             name = name ?: String.empty(),
+            cellDataQuality = null,
             cellIndex = stationCellIndex ?: String.empty(),
             cellCenter = center,
             relation = relation,
@@ -97,4 +100,9 @@ data class SearchResult(
             hasLowBattery = null
         )
     }
+}
+
+enum class MapLayer {
+    DEFAULT,
+    DATA_QUALITY
 }
