@@ -746,4 +746,15 @@
     <string name="upload_notification_error_message">An error occurred</string>
     <string name="upload_notification_cancelled_title">Upload cancelled</string>
     <string name="max_photos_reached_message">You’ve reached the limit of 6 photos. Remove some photos to add new ones if needed.</string>
+
+    <!-- Map Layer Picker -->
+    <string name="map_layers">Map Layers</string>
+    <string name="map_layer_default">Default</string>
+    <string name="map_layer_default_subtitle">Concise view showing all stations that exist in each cell.</string>
+    <string name="map_layer_data_quality_score">Data quality score</string>
+    <string name="map_layer_data_quality_score_subtitle">Display a color-coded map indicating station data quality levels.</string>
+    <string name="map_layer_no_data">No data</string>
+    <string name="map_layer_error">0–19%</string>
+    <string name="map_layer_warning">20–79%</string>
+    <string name="map_layer_success">80–100%</string>
 </resources>

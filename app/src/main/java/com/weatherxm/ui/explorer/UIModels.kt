@@ -101,3 +101,8 @@ data class SearchResult(
         )
     }
 }
+
+enum class MapLayer {
+    DEFAULT,
+    DATA_QUALITY
+}
