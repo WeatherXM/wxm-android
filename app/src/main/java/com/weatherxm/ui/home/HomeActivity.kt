@@ -22,6 +22,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.explorer.ExplorerViewModel
+import com.weatherxm.ui.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.launch
@@ -61,9 +62,11 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         explorerModel.onSearchOpenStatus().observe(this) { isOpened ->
             if (isOpened) {
                 binding.navView.hide()
+                binding.mapLayerPickerBtn.hide()
                 binding.myLocationBtn.hide()
             } else {
                 binding.navView.show()
+                binding.mapLayerPickerBtn.show()
                 binding.myLocationBtn.show()
             }
         }
@@ -82,6 +85,10 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
          */
         navController.addOnDestinationChangedListener { _, destination, _ ->
             onNavigationChanged(destination)
+        }
+
+        binding.mapLayerPickerBtn.setOnClickListener {
+            MapLayerPickerDialogFragment().show(this)
         }
 
         binding.myLocationBtn.setOnClickListener {
@@ -143,6 +150,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
          * shows the "Add Device" floating button visible again. This code is to fix this.
          */
         val navDestination = navController.currentDestination?.id
+        binding.mapLayerPickerBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
         /**
          * Don't use the visible function for the addButton
@@ -207,6 +215,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             }
         }
         binding.navView.show()
+        binding.mapLayerPickerBtn.visible(destination.id == R.id.navigation_explorer)
         binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
     }
 
