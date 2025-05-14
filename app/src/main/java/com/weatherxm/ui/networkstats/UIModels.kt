@@ -1,11 +1,14 @@
 package com.weatherxm.ui.networkstats
 
+import android.os.Parcelable
 import androidx.annotation.Keep
 import com.github.mikephil.charting.data.Entry
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class NetworkStats(
     val totalDataDays: String,
     val totalDataDays30D: String,
@@ -32,13 +35,14 @@ data class NetworkStats(
     val activeStations: String,
     val activeStationStats: List<NetworkStationStats>,
     val lastUpdated: String
-)
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class NetworkStationStats(
     val name: String,
     val url: String,
     val percentage: Double,
     val amount: String
-)
+) : Parcelable
