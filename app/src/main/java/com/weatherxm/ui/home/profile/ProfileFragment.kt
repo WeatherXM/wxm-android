@@ -237,7 +237,7 @@ class ProfileFragment : BaseFragment() {
                                 message = R.string.start_earning_desc
                             ),
                             action = ActionForMessageView(
-                                label = R.string.action_buy_station,
+                                label = R.string.action_buy_a_station,
                                 backgroundTint = R.color.colorPrimary,
                                 foregroundTint = R.color.colorOnPrimary,
                                 startIcon = R.drawable.ic_cart,

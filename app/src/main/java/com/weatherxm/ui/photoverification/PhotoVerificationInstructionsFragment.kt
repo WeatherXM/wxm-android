@@ -4,14 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentPhotoVerificationInstructionsBinding
 import com.weatherxm.ui.common.PhotoExample
@@ -142,23 +134,5 @@ class PhotoVerificationInstructionsFragment : BaseFragment() {
         binding.acceptableUsePolicyCheckbox.visible(false)
         binding.acceptableUsePolicyCheckboxDesc.visible(false)
         binding.takePhotoBtn.visible(false)
-    }
-
-    @Suppress("FunctionNaming")
-    @Composable
-    internal fun BulletWithText(text: String) {
-        Row(Modifier.padding(6.dp, 2.dp, 0.dp, 0.dp)) {
-            Text(
-                text = "•",
-                fontSize = 14.sp,
-                color = Color(requireContext().getColor(R.color.colorOnSurface)),
-            )
-            Text(
-                modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp),
-                text = text,
-                fontSize = 14.sp,
-                color = Color(requireContext().getColor(R.color.colorOnSurface)),
-            )
-        }
     }
 }
