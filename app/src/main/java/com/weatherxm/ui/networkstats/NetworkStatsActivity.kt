@@ -15,7 +15,6 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.ProPromotionCard
-import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.initializeNetworkStatsChart
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -64,6 +63,12 @@ class NetworkStatsActivity : BaseActivity() {
         binding.contactUsBtn.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.website_contact))
             analytics.trackEventSelectContent(AnalyticsService.ParamValue.MANUFACTURER.paramValue)
+        }
+
+        binding.rewardsCard.setOnClickListener {
+            model.onNetworkStats().value?.data?.let {
+                navigator.showTokenMetrics(this, it)
+            }
         }
 
         setInfoButtonListeners()
@@ -144,22 +149,6 @@ class NetworkStatsActivity : BaseActivity() {
             )
         }
 
-        binding.totalSupplyBtn.setOnClickListener {
-            openMessageDialog(
-                R.string.total_supply,
-                R.string.total_supply_explanation,
-                AnalyticsService.ParamValue.TOTAL_SUPPLY.paramValue
-            )
-        }
-
-        binding.circSupplyBtn.setOnClickListener {
-            openMessageDialog(
-                R.string.circulating_supply,
-                R.string.circulating_supply_explanation,
-                AnalyticsService.ParamValue.CIRCULATING_SUPPLY.paramValue
-            )
-        }
-
         binding.totalInfoBtn.setOnClickListener {
             openMessageDialog(
                 R.string.total_weather_stations,
@@ -226,17 +215,6 @@ class NetworkStatsActivity : BaseActivity() {
 
             earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
-            totalSupply.text = compactNumber(data.totalSupply)
-            binding.circSupply.text = compactNumber(data.circulatingSupply)
-            if (data.totalSupply != null && data.circulatingSupply != null
-                && data.totalSupply >= data.circulatingSupply
-            ) {
-                binding.circSupplyBar.valueTo = data.totalSupply.toFloat()
-                binding.circSupplyBar.values = listOf(data.circulatingSupply.toFloat())
-            } else {
-                binding.circSupplyBar.visible(false)
-            }
-
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations
@@ -281,27 +259,6 @@ class NetworkStatsActivity : BaseActivity() {
                 navigator.openWebsite(this@NetworkStatsActivity, txUrl)
             }
             binding.lastRunOpenInNew.visible(true)
-        }
-
-        data.tokenUrl?.let {
-            with(binding.viewTokenContractBtn) {
-                movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                    setOnLinkClickListener { _, url ->
-                        analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
-                            Pair(
-                                FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.REWARD_CONTRACT.paramValue
-                            )
-                        )
-                        navigator.openWebsite(this@NetworkStatsActivity, url)
-                        return@setOnLinkClickListener true
-                    }
-                }
-                setHtml(R.string.view_token_contract, it)
-                removeLinksUnderline()
-                visible(true)
-            }
         }
     }
 }

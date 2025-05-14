@@ -67,7 +67,8 @@ interface AnalyticsService {
         REWARD_ANALYTICS("Reward Analytics"),
         STATION_PHOTOS_INSTRUCTIONS("Station Photos Instructions"),
         STATION_PHOTOS_INTRO("Station Photos Intro"),
-        STATION_PHOTOS_GALLERY("Station Photos Gallery")
+        STATION_PHOTOS_GALLERY("Station Photos Gallery"),
+        TOKEN_METRICS("Token Metrics")
     }
 
     // Custom Event Names
