@@ -31,8 +31,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:clipChildren="false"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/dataCard"
@@ -265,6 +265,17 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:contentDescription="@string/action_open"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="@id/rewardsTitle"
+                        app:layout_constraintStart_toEndOf="@id/rewardsTitle"
+                        app:layout_constraintTop_toTopOf="@id/rewardsTitle"
+                        app:tint="@color/colorOnSurface" />
+
                     <ImageButton
                         android:id="@+id/rewardsInfoBtn"
                         style="@style/Widget.WeatherXM.ImageButton"
@@ -277,7 +288,7 @@
                         app:layout_constraintTop_toTopOf="@id/rewardsTitle" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/viewRewardsContractBtn"
+                        android:id="@+id/viewRewardMechanismBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_small_to_normal"
@@ -286,7 +297,7 @@
                         android:drawableEnd="@drawable/ic_open_new"
                         android:drawablePadding="@dimen/padding_extra_small"
                         android:drawableTint="@color/colorPrimary"
-                        android:text="@string/view_rewards_contract"
+                        android:text="@string/view_reward_mechanism"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold"
@@ -301,7 +312,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small_to_normal"
                         android:paddingVertical="@dimen/padding_small"
-                        app:layout_constraintTop_toBottomOf="@id/viewRewardsContractBtn">
+                        app:layout_constraintTop_toBottomOf="@id/viewRewardMechanismBtn">
 
                         <LinearLayout
                             android:id="@+id/rewardsInfoContainer"
