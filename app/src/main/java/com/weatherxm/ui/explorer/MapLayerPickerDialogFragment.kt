@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentMapLayerPickerDialogBinding
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -49,14 +52,30 @@ class MapLayerPickerDialogFragment : BaseBottomSheetDialogFragment() {
         }
 
         binding.defaultCard.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.SELECT_MAP_LAYER.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.DEFAULT.paramValue
+                )
+            )
             model.setMapLayer(MapLayer.DEFAULT)
             dismiss()
         }
 
         binding.dataQualityCard.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.SELECT_MAP_LAYER.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.DATA_QUALITY.paramValue
+                )
+            )
             model.setMapLayer(MapLayer.DATA_QUALITY)
             dismiss()
         }
+
+        analytics.trackScreen(AnalyticsService.Screen.MAP_LAYER_PICKER, classSimpleName())
     }
 
     @Suppress("MagicNumber")

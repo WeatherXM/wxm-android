@@ -67,7 +67,8 @@ interface AnalyticsService {
         REWARD_ANALYTICS("Reward Analytics"),
         STATION_PHOTOS_INSTRUCTIONS("Station Photos Instructions"),
         STATION_PHOTOS_INTRO("Station Photos Intro"),
-        STATION_PHOTOS_GALLERY("Station Photos Gallery")
+        STATION_PHOTOS_GALLERY("Station Photos Gallery"),
+        MAP_LAYER_PICKER("Map Layer Picker")
     }
 
     // Custom Event Names
@@ -276,7 +277,10 @@ interface AnalyticsService {
         CAMERA("camera"),
         GALLERY("gallery"),
         LOCAL("local"),
-        REMOTE("remote")
+        REMOTE("remote"),
+        SELECT_MAP_LAYER("Select Map Layer"),
+        DEFAULT("default"),
+        DATA_QUALITY("data_quality")
     }
 
     // Custom Param Names
