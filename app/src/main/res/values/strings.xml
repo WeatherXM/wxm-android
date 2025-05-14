@@ -108,7 +108,7 @@
     <string name="earn_wxm">Earn %s $WXM/mo</string>
     <string name="wxm_token">$WXM Token</string>
     <string name="view_token_contract"><![CDATA[<a href="%1$s">View token contract on Etherscan</a>]]></string>
-    <string name="view_rewards_contract"><![CDATA[<a href="%1$s">View rewards contract on Arbiscan</a>]]></string>
+    <string name="view_reward_mechanism"><![CDATA[<a href="%1$s">Learn more about our reward mechanism</a>]]></string>
     <string name="total_supply">Total Supply</string>
     <string name="total_supply_explanation">Total supply refers to the number of $WXM that have already been created and are either in circulation or locked.</string>
     <string name="circulating_supply">Circulating Supply</string>
