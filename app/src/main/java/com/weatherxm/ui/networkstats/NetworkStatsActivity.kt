@@ -250,25 +250,23 @@ class NetworkStatsActivity : BaseActivity() {
     }
 
     private fun updateContractsAndTxHash(data: NetworkStats) {
-        data.rewardsUrl?.let {
-            with(binding.viewRewardsContractBtn) {
-                movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                    setOnLinkClickListener { _, url ->
-                        analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
-                            Pair(
-                                FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
-                            )
+        with(binding.viewRewardMechanismBtn) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    analytics.trackEventSelectContent(
+                        AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.SOURCE,
+                            AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
                         )
-                        navigator.openWebsite(this@NetworkStatsActivity, url)
-                        return@setOnLinkClickListener true
-                    }
+                    )
+                    navigator.openWebsite(this@NetworkStatsActivity, url)
+                    return@setOnLinkClickListener true
                 }
-                setHtml(R.string.view_rewards_contract, it)
-                removeLinksUnderline()
-                visible(true)
             }
+            setHtml(R.string.view_reward_mechanism, getString(R.string.docs_url_reward_mechanism))
+            removeLinksUnderline()
+            visible(true)
         }
 
         data.lastTxHashUrl?.let { txUrl ->
