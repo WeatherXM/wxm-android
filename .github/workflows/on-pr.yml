@@ -129,7 +129,7 @@ jobs:
                 run: ./gradlew :app:testRemoteProdDebugUnitTest -PSKIP_PRODUCTION_ENV -PSKIP_TAGS_LOGGING
             -   name: Create Test Report
                 uses: dorny/test-reporter@v2
-                if:  ${{ github.actor != "dependabot[bot]" && success() || failure() # run this step even if previous step failed
+                if: ${{ always() && github.actor != "dependabot[bot]"}}  # run this step even if previous step failed in non-dependabot PRs
                 with:
                     name: Test Report
                     path: app/build/test-results/testRemoteProdDebugUnitTest/*.xml
