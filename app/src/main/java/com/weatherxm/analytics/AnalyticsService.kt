@@ -260,7 +260,7 @@ interface AnalyticsService {
         UPLOADING_PHOTOS_SUCCESS("Uploading Photos Success"),
         GO_TO_PHOTO_VERIFICATION("Go To Photo Verification"),
         CLAIMING_ID("claiming"),
-        ANNOUNCEMENT_BUTTON("Announcement Button"),
+        INFO_BANNER_BUTTON("Info Banner Button"),
         STARTED("started"),
         COMPLETED("completed"),
         PRO_PROMOTION("pro_promotion"),
@@ -275,7 +275,8 @@ interface AnalyticsService {
         CAMERA("camera"),
         GALLERY("gallery"),
         LOCAL("local"),
-        REMOTE("remote")
+        REMOTE("remote"),
+        ANNOUNCEMENT_CTA("Announcement CTA")
     }
 
     // Custom Param Names
