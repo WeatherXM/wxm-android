@@ -134,7 +134,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     showCloseButton = infoBanner.showCloseButton,
                     onAction = {
                         analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.ANNOUNCEMENT_BUTTON.paramValue,
+                            AnalyticsService.ParamValue.INFO_BANNER_BUTTON.paramValue,
                             Pair(FirebaseAnalytics.Param.ITEM_ID, infoBanner.url)
                         )
                         navigator.openWebsite(context, infoBanner.url)
@@ -166,14 +166,18 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     showCloseButton = it.showCloseButton,
                     onAction = {
                         analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                            AnalyticsService.ParamValue.ANNOUNCEMENT_CTA.paramValue,
                             Pair(FirebaseAnalytics.Param.ITEM_ID, it.url),
-                            Pair(
-                                FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.REMOTE_DEVICES_LIST.paramValue
-                            )
                         )
                         if (it.url == ANNOUNCEMENT_LOCAL_PRO_ACTION_URL) {
+                            analytics.trackEventSelectContent(
+                                AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                                Pair(FirebaseAnalytics.Param.ITEM_ID, it.url),
+                                Pair(
+                                    FirebaseAnalytics.Param.SOURCE,
+                                    AnalyticsService.ParamValue.REMOTE_DEVICES_LIST.paramValue
+                                )
+                            )
                             ProPromotionDialogFragment().show(this)
                         } else {
                             navigator.openWebsite(context, it.url)
