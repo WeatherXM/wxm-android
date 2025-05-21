@@ -32,7 +32,8 @@
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_delete">Delete</string>
-    <string name="action_buy_station">Buy a Station</string>
+    <string name="action_buy_a_station">Buy a Station</string>
+    <string name="action_buy_station">Buy Station</string>
     <string name="action_follow_a_station_in_explorer">Follow a station in Explorer Map</string>
     <string name="action_claim">Claim</string>
     <string name="action_dismiss">Dismiss</string>
@@ -98,12 +99,9 @@
     <string name="claimed_weather_stations_explanation">The number of weather stations already claimed by users.</string>
     <string name="active_weather_stations">Active Weather Stations</string>
     <string name="active_weather_stations_explanation">The number of weather stations that were active during the last day.</string>
-    <string name="average_monthly_rewards_explanation">The average amount of tokens rewarded to a weather station in the last 30 days.</string>
     <string name="last_day">Last Day</string>
     <string name="last_run">Last Run</string>
     <string name="last_30_days">Last 30 Days</string>
-    <string name="earn_prompt">Join the weather revolution</string>
-    <string name="earn_wxm">Earn %s $WXM/mo</string>
     <string name="wxm_token">$WXM Token</string>
     <string name="view_token_contract"><![CDATA[<a href="%1$s">View token contract on Etherscan</a>]]></string>
     <string name="view_reward_mechanism"><![CDATA[<a href="%1$s">Learn more about our reward mechanism</a>]]></string>
@@ -116,6 +114,10 @@
     <string name="last_updated">Last Updated on %s</string>
     <string name="total">Total</string>
     <string name="token_metrics">Token Metrics</string>
+    <string name="enter_weather_3_0">Enter Weather 3.0</string>
+    <string name="deploy_your_station">Deploy your Station</string>
+    <string name="check_the_weather">Check the Weather</string>
+    <string name="earn_wxm_tokens">Earn $WXM tokens</string>
 
     <!-- Network Stats & Search -->
     <string name="search_station_name_address">Search station name or address</string>

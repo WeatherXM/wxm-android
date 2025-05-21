@@ -260,7 +260,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
-            android:text="@string/action_buy_station"
+            android:text="@string/action_buy_a_station"
             app:icon="@drawable/ic_cart"
             app:iconGravity="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
