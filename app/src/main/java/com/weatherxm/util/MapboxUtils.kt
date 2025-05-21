@@ -110,7 +110,7 @@ object MapboxUtils : KoinComponent {
 
     fun List<PublicHex>.toPointAnnotationOptions(): List<PointAnnotationOptions> {
         return mapNotNull { hex ->
-            hex.activeDeviceCount?.takeIf { it > 0 }?.let {
+            hex.deviceCount?.takeIf { it > 0 }?.let {
                 PointAnnotationOptions()
                     .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
                     .withTextField(it.toString())

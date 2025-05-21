@@ -62,7 +62,7 @@
     <string name="you_are_owner_of_station">You are the owner of this station!</string>
     <string name="preview_message_title">Title goes here…</string>
     <string name="preview_message_subtitle">Subtitle goes here…</string>
-    <string name="active_stations_in_area">Active stations in this area</string>
+    <string name="stations_in_area">Stations in this area</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>

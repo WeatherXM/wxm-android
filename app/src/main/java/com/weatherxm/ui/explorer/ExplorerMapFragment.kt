@@ -122,7 +122,7 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         map.subscribeMapIdle {
             with(map.coordinateBoundsForCamera(map.cameraState.toCameraOptions())) {
-                model.getActiveStationsInViewPort(north(), south(), east(), west())
+                model.getStationsInViewPort(north(), south(), east(), west())
             }
         }
 

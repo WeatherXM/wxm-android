@@ -268,8 +268,8 @@ class ExplorerViewModelTest : BehaviorSpec({
                     1,
                     REACH_OUT_MSG
                 )
-                and("get active stations in ViewPort") {
-                    runTest { viewModel.getActiveStationsInViewPort(180.0, -180.0, 90.0, -90.0) }
+                and("get stations in ViewPort") {
+                    runTest { viewModel.getStationsInViewPort(180.0, -180.0, 90.0, -90.0) }
                     then("it should return 0") {
                         viewModel.onViewportStations().value shouldBe 0
                     }
@@ -308,21 +308,21 @@ class ExplorerViewModelTest : BehaviorSpec({
                         }
                     }
                 }
-                and("get active stations in user's ViewPort") {
+                and("get stations in user's ViewPort") {
                     When("the station is in that the user's viewport") {
-                        runTest { viewModel.getActiveStationsInViewPort(180.0, -10.0, 90.0, -90.0) }
+                        runTest { viewModel.getStationsInViewPort(180.0, -10.0, 90.0, -90.0) }
                         then("it should return 1") {
                             viewModel.onViewportStations().value shouldBe 1
                         }
                     }
                     When("the station isn't in that latitude of the viewport") {
-                        runTest { viewModel.getActiveStationsInViewPort(180.0, 15.0, 90.0, -90.0) }
+                        runTest { viewModel.getStationsInViewPort(180.0, 15.0, 90.0, -90.0) }
                         then("it should return zero") {
                             viewModel.onViewportStations().value shouldBe 0
                         }
                     }
                     When("the station isn't in that longitude of the viewport") {
-                        runTest { viewModel.getActiveStationsInViewPort(180.0, -180.0, 90.0, 15.0) }
+                        runTest { viewModel.getStationsInViewPort(180.0, -180.0, 90.0, 15.0) }
                         then("it should return 0") {
                             viewModel.onViewportStations().value shouldBe 0
                         }

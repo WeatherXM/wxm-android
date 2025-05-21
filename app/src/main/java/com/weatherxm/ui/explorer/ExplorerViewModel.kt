@@ -322,7 +322,7 @@ class ExplorerViewModel(
         locationHelper.getLocationAndThen(onLocation)
     }
 
-    fun getActiveStationsInViewPort(
+    fun getStationsInViewPort(
         northLat: Double,
         southLat: Double,
         eastLon: Double,
@@ -332,7 +332,7 @@ class ExplorerViewModel(
             onViewportStations.postValue(
                 onExplorerData.value?.publicHexes?.sumOf {
                     if (it.center.lat in southLat..northLat && it.center.lon in westLon..eastLon) {
-                        it.activeDeviceCount ?: 0
+                        it.deviceCount ?: 0
                     } else {
                         0
                     }
