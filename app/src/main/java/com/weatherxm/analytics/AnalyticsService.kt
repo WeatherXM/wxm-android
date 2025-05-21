@@ -69,7 +69,6 @@ interface AnalyticsService {
         STATION_PHOTOS_INTRO("Station Photos Intro"),
         STATION_PHOTOS_GALLERY("Station Photos Gallery"),
         MAP_LAYER_PICKER("Map Layer Picker"),
-        STATION_PHOTOS_GALLERY("Station Photos Gallery"),
         TOKEN_METRICS("Token Metrics")
     }
 
@@ -178,7 +177,6 @@ interface AnalyticsService {
         TOTAL_STATIONS("total_stations"),
         CLAIMED_STATIONS("claimed_stations"),
         ACTIVE_STATIONS("active_stations"),
-        BUY_STATION("buy_station"),
         MANUFACTURER("Open Manufacturer Contact"),
         EXPLORER_SEARCH("Explorer Search"),
         EXPLORER_SETTINGS("Explorer Settings"),
