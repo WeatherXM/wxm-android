@@ -15,7 +15,7 @@
     <string name="d1_connect_wifi_instructional_video">https://www.youtube.com/watch?v=D3rz1Y01Qhg</string>
     <string name="helium_frequencies_mapping_url">https://docs.helium.com/iot/lorawan-region-plans/</string>
     <string name="wallet_explorer_arbitrum">https://arbiscan.io/address/%s#tokentxns</string>
-    <string name="shop_url">https://shop.weatherxm.com/</string>
+    <string name="shop_url">https://weatherxm.com/shop/</string>
     <string name="docs_url">https://docs.weatherxm.com</string>
     <string name="announcements_url">https://announcements.weatherxm.com</string>
     <string name="docs_url_cell_capacity">https://docs.weatherxm.com/rewards/cell-capacity</string>

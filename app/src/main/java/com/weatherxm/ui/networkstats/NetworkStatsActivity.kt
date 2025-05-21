@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.ProPromotionDialogFragment
+import com.weatherxm.ui.components.compose.BuyStationPromptCard
 import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.util.initializeNetworkStatsChart
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -55,9 +56,11 @@ class NetworkStatsActivity : BaseActivity() {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
-        binding.buyStationBtn.setOnClickListener {
-            navigator.openWebsite(this, getString(R.string.shop_url))
-            analytics.trackEventSelectContent(AnalyticsService.ParamValue.OPEN_SHOP.paramValue)
+        binding.buyCard.setContent {
+            BuyStationPromptCard {
+                navigator.openWebsite(this, getString(R.string.shop_url))
+                analytics.trackEventSelectContent(AnalyticsService.ParamValue.OPEN_SHOP.paramValue)
+            }
         }
 
         binding.contactUsBtn.setOnClickListener {
@@ -141,14 +144,6 @@ class NetworkStatsActivity : BaseActivity() {
             )
         }
 
-        binding.earnWxmInfoBtn.setOnClickListener {
-            openMessageDialog(
-                null,
-                R.string.average_monthly_rewards_explanation,
-                AnalyticsService.ParamValue.BUY_STATION.paramValue
-            )
-        }
-
         binding.totalInfoBtn.setOnClickListener {
             openMessageDialog(
                 R.string.total_weather_stations,
@@ -212,8 +207,6 @@ class NetworkStatsActivity : BaseActivity() {
             rewardsStartDate.text = data.rewardsStartDate
             rewardsEndDate.text = data.rewardsEndDate
             updateContractsAndTxHash(data)
-
-            earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
             totals.text = data.totalStations
             claimed.text = data.claimedStations

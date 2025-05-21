@@ -237,79 +237,15 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/buyCard"
-                style="@style/Widget.WeatherXM.MaterialCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal_to_large"
                 android:layout_marginTop="@dimen/margin_small_to_normal"
-                app:cardBackgroundColor="@color/blueTint"
-                app:cardElevation="@dimen/elevation_small"
-                app:contentPadding="@dimen/padding_small_to_normal"
-                app:contentPaddingLeft="@dimen/padding_large"
-                app:layout_constraintTop_toBottomOf="@id/dataCard">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/buyStationBtn"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/earnWxm"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/earn_prompt"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/earnWxmPerMonth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/margin_small"
-                            android:text="@string/earn_wxm"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/earnWxm" />
-
-                        <ImageButton
-                            android:id="@+id/earnWxmInfoBtn"
-                            style="@style/Widget.WeatherXM.ImageButton"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:contentDescription="@string/read_more"
-                            android:src="@drawable/ic_learn_more_info"
-                            app:layout_constraintBottom_toBottomOf="@id/earnWxmPerMonth"
-                            app:layout_constraintStart_toEndOf="@id/earnWxmPerMonth"
-                            app:layout_constraintTop_toTopOf="@id/earnWxmPerMonth" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buyStationBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/padding_normal"
-                        android:paddingEnd="@dimen/padding_normal"
-                        android:text="@string/action_buy_station"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@id/dataCard"
+                tools:composableName="com.weatherxm.ui.components.compose.BuyStationPromptCardKt" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rewardsCard"
