@@ -67,7 +67,8 @@ interface AnalyticsService {
         REWARD_ANALYTICS("Reward Analytics"),
         STATION_PHOTOS_INSTRUCTIONS("Station Photos Instructions"),
         STATION_PHOTOS_INTRO("Station Photos Intro"),
-        STATION_PHOTOS_GALLERY("Station Photos Gallery")
+        STATION_PHOTOS_GALLERY("Station Photos Gallery"),
+        MAP_LAYER_PICKER("Map Layer Picker")
     }
 
     // Custom Event Names
@@ -217,6 +218,7 @@ interface AnalyticsService {
         INFO_POL("info_pol"),
         INFO_CELL_POSITION("info_cell_position"),
         INFO_CELL_CAPACITY("info_cell_capacity"),
+        INFO_CELL_DATA_QUALITY("info_cell_data_quality"),
         STATION_OFFLINE("station_offline"),
         STATION_DETAILS_CHIP("Station Details Chip"),
         OTA_UPDATE_ID("ota_update"),
@@ -276,7 +278,10 @@ interface AnalyticsService {
         GALLERY("gallery"),
         LOCAL("local"),
         REMOTE("remote"),
-        ANNOUNCEMENT_CTA("Announcement CTA")
+        ANNOUNCEMENT_CTA("Announcement CTA"),
+        SELECT_MAP_LAYER("Select Map Layer"),
+        DEFAULT("default"),
+        DATA_QUALITY("data_quality")
     }
 
     // Custom Param Names

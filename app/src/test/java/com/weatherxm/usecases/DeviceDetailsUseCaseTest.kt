@@ -53,6 +53,7 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         null
     )
     val ownedDevice = Device(

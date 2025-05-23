@@ -68,6 +68,7 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         true,
         "1.0.0",
         "1.1.0",

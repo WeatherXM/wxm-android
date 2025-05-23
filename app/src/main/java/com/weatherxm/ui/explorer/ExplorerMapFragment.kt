@@ -3,25 +3,37 @@ package com.weatherxm.ui.explorer
 import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
-import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ImageButton
+import android.widget.PopupWindow
 import androidx.activity.addCallback
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.search.SearchView.TransitionState
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.extension.style.layers.addLayerAbove
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.toCameraOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Resource
@@ -31,23 +43,29 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.POINT_LAYER
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.util.MapboxUtils
+import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class ExplorerMapFragment : BaseMapFragment() {
     companion object {
         const val CAMERA_ANIMATION_DURATION = 400L
+        const val STATION_COUNT_POINT_TEXT_SIZE = 16.0
     }
 
     /*
@@ -61,23 +79,21 @@ class ExplorerMapFragment : BaseMapFragment() {
     private var useSearchOnTextChangedListener = true
 
     override fun onMapReady(map: MapboxMap) {
-        binding.appBar.applyInsetter {
+        binding.topBar.applyInsetter {
             type(statusBars = true) {
                 margin(left = false, top = true, right = false, bottom = false)
             }
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.statusBarGradient) { view, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            view.layoutParams.height = statusBarHeight + binding.topBar.height
+            view.requestLayout()
+            insets
+        }
+
         adapter = NetworkSearchResultsListAdapter {
-            binding.searchView.hide()
-            model.onSearchOpenStatus(false)
-            searchModel.onSearchClicked(it)
-            it.center?.let { location ->
-                cameraFly(Point.fromLngLat(location.lon, location.lat))
-            }
-            if (it.stationId != null) {
-                navigator.showDeviceDetails(context, device = it.toUIDevice())
-            }
-            trackOnSearchResult(it.stationId != null)
+            onNetworkSearchResultClicked(it)
         }
         binding.resultsRecycler.adapter = adapter
 
@@ -93,6 +109,8 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
+        map.getLayer(POINT_LAYER)?.minZoom(SHOW_STATION_COUNT_ZOOM_LEVEL)
+
         map.addOnMapClickListener {
             model.onMapClick()
             true
@@ -102,20 +120,18 @@ class ExplorerMapFragment : BaseMapFragment() {
             model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
         }
 
-        getMapView().location.updateSettings {
-            enabled = true
-            pulsingEnabled = true
+        map.subscribeMapIdle {
+            with(map.coordinateBoundsForCamera(map.cameraState.toCameraOptions())) {
+                model.getStationsInViewPort(north(), south(), east(), west())
+            }
         }
+
+        getMapView().location.updateSettings { enabled = true }
 
         setSearchListeners()
 
-        activity?.onBackPressedDispatcher?.addCallback(this, false) {
-            if (model.onSearchOpenStatus().value == true) {
-                binding.searchView.hide()
-                model.onSearchOpenStatus(false)
-            } else {
-                activity?.finish()
-            }
+        activity?.onBackPressedDispatcher?.addCallback {
+            onBackPressed()
         }
 
         searchModel.onRecentSearches().observe(this) {
@@ -123,12 +139,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         model.onMyLocationClicked().observe(this) {
-            if (it == true) {
-                getLocationPermissions()
-                analytics.trackEventUserAction(
-                    actionName = AnalyticsService.ParamValue.MY_LOCATION.paramValue
-                )
-            }
+            onMyLocationClicked(it)
         }
 
         searchModel.onSearchResults().observe(this) {
@@ -144,7 +155,11 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         model.onNewPolygons().observe(this) {
-            onPolygonPointsUpdated(it)
+            onPolygonPointsUpdated(it, false)
+        }
+
+        model.onRedrawPolygons().observe(this) {
+            onPolygonPointsUpdated(it, true)
         }
 
         // Set camera to the last saved location the user was at
@@ -159,8 +174,29 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
+        model.onViewportStations().observe(this) {
+            binding.activeStations.text = formatNumber(it)
+        }
+
+        binding.menuBtn.setOnClickListener {
+            setupMenu()
+        }
+
         // Fetch data
         model.fetch()
+    }
+
+    private fun onBackPressed() {
+        if (model.onSearchOpenStatus().value == true) {
+            binding.searchView.hide()
+            model.onSearchOpenStatus(false)
+        } else {
+            if (model.isExplorerAfterLoggedIn()) {
+                findNavController().popBackStack()
+            } else {
+                activity?.finish()
+            }
+        }
     }
 
     private fun handleRecentSearches(searchResults: List<SearchResult>) {
@@ -177,6 +213,26 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
     }
 
+    private fun onMyLocationClicked(isClicked: Boolean?) {
+        if (isClicked == true) {
+            getLocationPermissions()
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
+        }
+    }
+
+    private fun onNetworkSearchResultClicked(networkSearchResult: SearchResult) {
+        binding.searchView.hide()
+        model.onSearchOpenStatus(false)
+        searchModel.onSearchClicked(networkSearchResult)
+        networkSearchResult.center?.let { location ->
+            cameraFly(Point.fromLngLat(location.lon, location.lat))
+        }
+        if (networkSearchResult.stationId != null) {
+            navigator.showDeviceDetails(context, device = networkSearchResult.toUIDevice())
+        }
+        trackOnSearchResult(networkSearchResult.stationId != null)
+    }
+
     private fun cameraFly(center: Point, zoomLevel: Double = ZOOMED_IN_ZOOM_LEVEL) {
         getMap().flyTo(
             CameraOptions.Builder().zoom(zoomLevel).center(center).build(),
@@ -185,6 +241,10 @@ class ExplorerMapFragment : BaseMapFragment() {
     }
 
     private fun setSearchListeners() {
+        binding.searchBtn.setOnClickListener {
+            binding.searchView.show()
+        }
+
         binding.searchView.addTransitionListener { _, _, newState ->
             if (newState == TransitionState.SHOWING) {
                 analytics.trackEventUserAction(
@@ -234,22 +294,6 @@ class ExplorerMapFragment : BaseMapFragment() {
                     searchModel.getRecentSearches()
                 }
             }
-        }
-
-        binding.searchBar.setOnMenuItemClickListener {
-            onSearchBarMenuItem(it)
-        }
-    }
-
-    private fun onSearchBarMenuItem(menuItem: MenuItem): Boolean {
-        return if (menuItem.itemId == R.id.settings) {
-            analytics.trackEventSelectContent(
-                contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
-            )
-            navigator.showPreferences(this)
-            true
-        } else {
-            false
         }
     }
 
@@ -331,12 +375,12 @@ class ExplorerMapFragment : BaseMapFragment() {
             mapStyle?.addSource(data.geoJsonSource)
             mapStyle?.addLayerAbove(model.heatmapLayer, "waterway-label")
         }
-        onPolygonPointsUpdated(data.polygonsToDraw)
+        onPolygonPointsUpdated(data.polygonsToDraw, false)
+        onPointsUpdated(data.pointsToDraw)
     }
 
     override fun onResume() {
         super.onResume()
-        binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
             analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
         } else {
@@ -364,13 +408,28 @@ class ExplorerMapFragment : BaseMapFragment() {
         )
     }
 
-    private fun onPolygonPointsUpdated(polygonsToDraw: List<PolygonAnnotationOptions>?) {
+    private fun onPolygonPointsUpdated(
+        polygonsToDraw: List<PolygonAnnotationOptions>?,
+        shouldDeleteAllFirst: Boolean
+    ) {
         if (polygonsToDraw.isNullOrEmpty()) {
             Timber.d("No new polygons found. Skipping map update.")
             return
         }
 
+        if (shouldDeleteAllFirst) {
+            polygonManager.deleteAll()
+        }
         polygonManager.create(polygonsToDraw)
+    }
+
+    private fun onPointsUpdated(pointsToDraw: List<PointAnnotationOptions>) {
+        if (pointsToDraw.isEmpty()) {
+            Timber.d("No new points found. Skipping map update.")
+            return
+        }
+
+        pointManager.create(pointsToDraw)
     }
 
     override fun getMapStyle(): String {
@@ -394,6 +453,60 @@ class ExplorerMapFragment : BaseMapFragment() {
                 } else {
                     cameraFly(Point.fromLngLat(it.lon, it.lat))
                 }
+            }
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun setupMenu() {
+        val popupView = layoutInflater.inflate(R.layout.view_map_menu, binding.root, false)
+        val popupWindow = PopupWindow(popupView, MATCH_PARENT, WRAP_CONTENT, true)
+
+        /**
+         * Create translucent background for popup window
+         */
+        View(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            context?.getColor(R.color.translucent_black_darker)?.let {
+                setBackgroundColor(it)
+            }
+        }.apply {
+            val rootLayout = activity?.window?.decorView as ViewGroup
+            rootLayout.addView(this)
+
+            popupWindow.setOnDismissListener {
+                rootLayout.removeView(this)
+            }
+        }
+
+        /**
+         * Show the popup aligned to the anchor (the 3-dots button)
+         */
+        popupWindow.showAsDropDown(
+            binding.menuBtn,
+            0,
+            context?.resources?.getDimension(R.dimen.margin_normal)?.toInt() ?: 16
+        )
+
+        popupView.findViewById<ImageButton>(R.id.closeBtn).setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+        popupView.findViewById<MaterialCardView>(R.id.networkStatsContainer).setOnClickListener {
+            navigator.showNetworkStats(context)
+            popupWindow.dismiss()
+        }
+
+        if (!model.isExplorerAfterLoggedIn()) {
+            popupView.findViewById<MaterialCardView>(R.id.settingsContainer).apply {
+                setOnClickListener {
+                    analytics.trackEventSelectContent(
+                        contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
+                    )
+                    navigator.showPreferences(this@ExplorerMapFragment)
+                    popupWindow.dismiss()
+                }
+                show()
             }
         }
     }

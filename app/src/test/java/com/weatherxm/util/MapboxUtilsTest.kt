@@ -12,6 +12,7 @@ import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
+import com.weatherxm.ui.explorer.MapLayer
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.util.MapboxUtils.getCustomData
@@ -59,6 +60,8 @@ class MapboxUtilsTest : BehaviorSpec({
     val publicHex = PublicHex(
         "cellIndex",
         0,
+        0,
+        null,
         Location(lat = 38.71742582818318, lon = 27.22897028978693),
         listOf(
             Location(lat = 38.72482636074315, lon = 27.214679947948405),
@@ -164,7 +167,8 @@ class MapboxUtilsTest : BehaviorSpec({
         given("A list of Public Hexes") {
             When("The list is empty") {
                 then("return an empty list") {
-                    listOf<PublicHex>().toPolygonAnnotationOptions() shouldBe emptyList()
+                    listOf<PublicHex>()
+                        .toPolygonAnnotationOptions(MapLayer.DEFAULT) shouldBe emptyList()
                 }
             }
             When("The list is not empty") {
@@ -178,7 +182,8 @@ class MapboxUtilsTest : BehaviorSpec({
                             .withPoints(polygonPointsToLatLng(publicHex.polygon))
                     )
 
-                    val returnedList = listOf(publicHex).toPolygonAnnotationOptions()
+                    val returnedList =
+                        listOf(publicHex).toPolygonAnnotationOptions(MapLayer.DEFAULT)
                     returnedList[0].fillColor shouldBe expectedResult[0].fillColor
                     returnedList[0].fillOpacity shouldBe expectedResult[0].fillOpacity
                     returnedList[0].fillOutlineColor shouldBe expectedResult[0].fillOutlineColor

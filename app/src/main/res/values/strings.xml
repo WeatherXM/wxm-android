@@ -62,6 +62,7 @@
     <string name="you_are_owner_of_station">You are the owner of this station!</string>
     <string name="preview_message_title">Title goes here…</string>
     <string name="preview_message_subtitle">Subtitle goes here…</string>
+    <string name="stations_in_area">Stations in this area</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -86,6 +87,7 @@
 
     <!-- Network Stats -->
     <string name="network_stats">Network Statistics</string>
+    <string name="network_stats_subtitle">View real-time network health, station activity, $WXM rewards and more.</string>
     <string name="claimed">Claimed</string>
     <string name="active">Active</string>
     <string name="data_days">Weather Station-Days</string>
@@ -613,6 +615,10 @@
     <string name="cell_capacity">Cell Capacity</string>
     <string name="cell_capacity_explanation">Cell capacity is a parameter that is used to define the maximum number of stations that are eligible for rewards in a specific cell. Every cell has a predefined capacity that depends on its geospatial characteristics*.\n\nEvery station is ranked in its cell daily, based on its reward score and its seniority. As long as the station’s ranking is above the capacity threshold, it will be rewarded, whereas getting below it will lead to zero rewards. For example, in a cell with a max capacity of 5 stations, if a station is ranked 3rd it will get rewarded, but if it is ranked 7th, it won’t receive any rewards.\n\nRead more about how our Cell Capacity algorithm works.\n\n* The cell capacity is currently set to the fixed value of 10 rewardable stations, for every cell.</string>
     <string name="no_active_stations">No active stations</string>
+    <string name="cell_data_quality">Cell Data Quality</string>
+    <string name="cell_data_quality_value">Cell Data Quality %d%%</string>
+    <string name="cell_data_quality_no_data">No Cell Data Quality</string>
+    <string name="cell_data_quality_explanation">Displays the average Data Quality score for all stations within this cell. Offline, no data and inactive stations are excluded.</string>
 
     <!-- Temperature Bars Explanation -->
     <string name="understanding_temperature_bars">Understanding the Temperature Bars</string>
@@ -740,4 +746,15 @@
     <string name="upload_notification_error_message">An error occurred</string>
     <string name="upload_notification_cancelled_title">Upload cancelled</string>
     <string name="max_photos_reached_message">You’ve reached the limit of 6 photos. Remove some photos to add new ones if needed.</string>
+
+    <!-- Map Layer Picker -->
+    <string name="map_layers">Map Layers</string>
+    <string name="map_layer_default">Default</string>
+    <string name="map_layer_default_subtitle">Concise view showing all stations that exist in each cell.</string>
+    <string name="map_layer_data_quality_score">Data quality score</string>
+    <string name="map_layer_data_quality_score_subtitle">Display a color-coded map indicating station data quality levels.</string>
+    <string name="map_layer_no_data">No data</string>
+    <string name="map_layer_error">0–19%</string>
+    <string name="map_layer_warning">20–79%</string>
+    <string name="map_layer_success">80–100%</string>
 </resources>

@@ -25,7 +25,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_normal_to_large">
+            android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+            android:paddingBottom="@dimen/padding_normal">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
@@ -41,12 +42,11 @@
                 tools:visibility="visible" />
 
             <LinearLayout
-                android:id="@+id/cellStatsContainer"
+                android:id="@+id/cellTotalsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:orientation="horizontal"
-                android:paddingBottom="@dimen/padding_normal"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 tools:visibility="visible">
@@ -77,6 +77,25 @@
 
             </LinearLayout>
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/dataQualityChip"
+                style="@style/Widget.WeatherXM.Chip.Status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
+                android:visibility="gone"
+                app:chipBackgroundColor="@color/blueTint"
+                app:closeIcon="@drawable/ic_learn_more_info"
+                app:closeIconEnabled="true"
+                app:closeIconSize="16dp"
+                app:closeIconTint="@color/colorOnSurface"
+                app:chipIcon="@drawable/ic_data_quality"
+                app:chipIconSize="@null"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cellTotalsContainer"
+                tools:text="Cell Data Quality 0%"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -7,6 +7,7 @@ import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.search.result.SearchSuggestion
@@ -15,8 +16,10 @@ import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
+import com.weatherxm.ui.explorer.MapLayer
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.explorer.UICellJsonAdapter
+import com.weatherxm.util.Rewards.getRewardScoreColor
 import okhttp3.HttpUrl
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -88,14 +91,31 @@ object MapboxUtils : KoinComponent {
         }
     }
 
-    fun List<PublicHex>.toPolygonAnnotationOptions(): List<PolygonAnnotationOptions> {
+    fun List<PublicHex>.toPolygonAnnotationOptions(
+        layer: MapLayer
+    ): List<PolygonAnnotationOptions> {
         return map {
+            val fillColor = when (layer) {
+                MapLayer.DEFAULT -> R.color.hex_fill_color
+                MapLayer.DATA_QUALITY -> getRewardScoreColor(it.avgDataQuality)
+            }
             PolygonAnnotationOptions()
-                .withFillColor(resources.getColor(R.color.hex_fill_color))
+                .withFillColor(resources.getColor(fillColor))
                 .withFillOpacity(FILL_OPACITY_HEXAGONS)
                 .withFillOutlineColor(resources.getColor(R.color.white))
                 .withData(gson.toJsonTree(UICell(it.index, it.center)))
                 .withPoints(polygonPointsToLatLng(it.polygon))
+        }
+    }
+
+    fun List<PublicHex>.toPointAnnotationOptions(): List<PointAnnotationOptions> {
+        return mapNotNull { hex ->
+            hex.deviceCount?.takeIf { it > 0 }?.let {
+                PointAnnotationOptions()
+                    .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
+                    .withTextField(it.toString())
+                    .withTextColor(resources.getColor(R.color.dark_text))
+            }
         }
     }
 

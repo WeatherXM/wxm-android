@@ -21,6 +21,7 @@ import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVE
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
+import com.weatherxm.util.MapboxUtils.toPointAnnotationOptions
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -39,6 +40,8 @@ class ExplorerViewModel(
         const val HEATMAP_LAYER_ID = "heatmap-layer"
         const val HEATMAP_LAYER_SOURCE = "heatmap"
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
+        const val SHOW_STATION_COUNT_ZOOM_LEVEL: Double = 10.0
+        const val POINT_LAYER: String = "point_layer"
     }
 
     // Explorer Data
@@ -49,6 +52,9 @@ class ExplorerViewModel(
 
     // New Polygons to be drawn
     private val onNewPolygons = SingleLiveEvent<List<PolygonAnnotationOptions>>()
+
+    // Polygons that need to be redraw
+    private val onRedrawPolygons = SingleLiveEvent<List<PolygonAnnotationOptions>>()
 
     /**
      * Needed for passing info to the fragment to handle when a prefilled location is used
@@ -67,6 +73,10 @@ class ExplorerViewModel(
 
     // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onSearchOpenStatus = MutableLiveData(false)
+
+    private val onViewportStations = MutableLiveData(0)
+
+    private val onMapLayer = MutableLiveData(MapLayer.DEFAULT)
 
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
@@ -187,7 +197,10 @@ class ExplorerViewModel(
     fun onSearchOpenStatus() = onSearchOpenStatus
     fun onStatus(): LiveData<Resource<Unit>> = onStatus
     fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
+    fun onRedrawPolygons(): LiveData<List<PolygonAnnotationOptions>> = onRedrawPolygons
     fun onExplorerData(): LiveData<ExplorerData> = onExplorerData
+    fun onViewportStations(): LiveData<Int> = onViewportStations
+    fun onMapLayer(): LiveData<MapLayer> = onMapLayer
 
     fun navigateToLocation(location: Location, isUserLocation: Boolean = false) {
         Timber.d("Got starting location [${location.lat}, ${location.lon}")
@@ -196,6 +209,19 @@ class ExplorerViewModel(
         } else if (!isUserLocation) {
             useUserLocation = false
             onNavigateToLocation.postValue(NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location))
+        }
+    }
+
+    fun setMapLayer(mapLayer: MapLayer) {
+        if (onMapLayer.value != mapLayer) {
+            onMapLayer.postValue(mapLayer)
+            viewModelScope.launch(dispatcher) {
+                with(onExplorerData.value) {
+                    this?.polygonsToDraw =
+                        this?.publicHexes?.toPolygonAnnotationOptions(mapLayer) ?: mutableListOf()
+                    onRedrawPolygons.postValue(this?.polygonsToDraw)
+                }
+            }
         }
     }
 
@@ -223,7 +249,10 @@ class ExplorerViewModel(
                     /**
                      * The explorer map is empty so send all the hexes to be drawn
                      */
-                    response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions()
+                    response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions(
+                        onMapLayer.value ?: MapLayer.DEFAULT
+                    )
+                    response.pointsToDraw = response.publicHexes.toPointAnnotationOptions()
                     onExplorerData.postValue(response)
                 } else {
                     val newHexes = mutableListOf<PublicHex>()
@@ -249,13 +278,17 @@ class ExplorerViewModel(
                      * screen and comes back in the explorer
                      */
                     onExplorerData.value?.polygonsToDraw =
-                        response.publicHexes.toPolygonAnnotationOptions()
+                        response.publicHexes.toPolygonAnnotationOptions(
+                            onMapLayer.value ?: MapLayer.DEFAULT
+                        )
 
                     /**
                      * Send only the new polygons in the response
                      * in order not to re-draw the whole explorer map but only the new hexes
                      */
-                    onNewPolygons.postValue(newHexes.toPolygonAnnotationOptions())
+                    onNewPolygons.postValue(
+                        newHexes.toPolygonAnnotationOptions(onMapLayer.value ?: MapLayer.DEFAULT)
+                    )
                 }
                 onStatus.postValue(Resource.success(Unit))
             }.onLeft {
@@ -287,6 +320,25 @@ class ExplorerViewModel(
     @SuppressLint("MissingPermission")
     fun getLocation(onLocation: (location: Location?) -> Unit) {
         locationHelper.getLocationAndThen(onLocation)
+    }
+
+    fun getStationsInViewPort(
+        northLat: Double,
+        southLat: Double,
+        eastLon: Double,
+        westLon: Double
+    ) {
+        viewModelScope.launch {
+            onViewportStations.postValue(
+                onExplorerData.value?.publicHexes?.sumOf {
+                    if (it.center.lat in southLat..northLat && it.center.lon in westLon..eastLon) {
+                        it.deviceCount ?: 0
+                    } else {
+                        0
+                    }
+                } ?: 0
+            )
+        }
     }
 
     init {
