@@ -87,7 +87,7 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.statusBarGradient) { view, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-            view.layoutParams.height = statusBarHeight
+            view.layoutParams.height = statusBarHeight + binding.topBar.height
             view.requestLayout()
             insets
         }
