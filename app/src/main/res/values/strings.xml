@@ -117,6 +117,7 @@
     <string name="manufacturer_prompt">Join the ecosystem</string>
     <string name="last_updated">Last Updated on %s</string>
     <string name="total">Total</string>
+    <string name="token_metrics">Token Metrics</string>
 
     <!-- Network Stats & Search -->
     <string name="search_station_name_address">Search station name or address</string>
