@@ -130,7 +130,7 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         setSearchListeners()
 
-        activity?.onBackPressedDispatcher?.addCallback(owner = this, enabled = false) {
+        activity?.onBackPressedDispatcher?.addCallback(owner = this) {
             onBackPressed()
         }
 
