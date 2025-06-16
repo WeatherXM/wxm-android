@@ -55,7 +55,7 @@ play-services-location = "21.3.0"
 play-services-barcode-scanner = "16.1.0"
 okhttp-bom = "4.12.0"
 retrofit = "3.0.0"
-retromock = "1.1.1"
+retromock = "1.2.0"
 timber = "5.0.1"
 upload-service = "4.9.4"
 
