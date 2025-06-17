@@ -169,13 +169,13 @@ class NetworkStatsActivity : BaseActivity() {
                 // TODO: Open Weather Stations Breakdown
             })
             .updateMainData(
-                mainValue = "100",
-                chartEntries = data.dataDaysEntries,
-                chartDateStart = data.dataDaysStartDate,
-                chartDateEnd = data.dataDaysEndDate
+                mainValue = data.netScaleUp,
+                chartEntries = data.growthEntries,
+                chartDateStart = data.growthStartDate,
+                chartDateEnd = data.growthEndDate
             )
-            .updateFirstSubCard("100")
-            .updateSecondSubCard("100")
+            .updateFirstSubCard(data.netSize)
+            .updateSecondSubCard(data.netAddedInLast30Days)
 
         binding.rewardsCard
             .updateHeader(
