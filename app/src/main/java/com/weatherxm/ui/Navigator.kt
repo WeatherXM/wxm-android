@@ -86,6 +86,7 @@ import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
+import com.weatherxm.ui.networkstats.growth.NetworkGrowthActivity
 import com.weatherxm.ui.networkstats.tokenmetrics.TokenMetricsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
@@ -547,6 +548,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showTokenMetrics(context: Context, networkStats: NetworkStats) {
         context.startActivity(
             Intent(context, TokenMetricsActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_NETWORK_STATS, networkStats)
+        )
+    }
+
+    fun showNetworkGrowth(context: Context, networkStats: NetworkStats) {
+        context.startActivity(
+            Intent(context, NetworkGrowthActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_NETWORK_STATS, networkStats)
         )

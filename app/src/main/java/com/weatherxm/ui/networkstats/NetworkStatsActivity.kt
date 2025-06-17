@@ -1,7 +1,6 @@
 package com.weatherxm.ui.networkstats
 
 import android.os.Bundle
-import androidx.annotation.StringRes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -19,10 +18,6 @@ class NetworkStatsActivity : BaseActivity() {
     private lateinit var binding: ActivityNetworkStatsBinding
     private val model: NetworkStatsViewModel by viewModel()
 
-    private lateinit var totalsAdapter: NetworkStationStatsAdapter
-    private lateinit var claimedAdapter: NetworkStationStatsAdapter
-    private lateinit var activeAdapter: NetworkStationStatsAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNetworkStatsBinding.inflate(layoutInflater)
@@ -31,21 +26,6 @@ class NetworkStatsActivity : BaseActivity() {
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
-
-        totalsAdapter = NetworkStationStatsAdapter {
-            openStationShop(it, AnalyticsService.ParamValue.TOTAL.paramValue)
-        }
-        binding.totalsRecycler.adapter = totalsAdapter
-
-        claimedAdapter = NetworkStationStatsAdapter {
-            openStationShop(it, AnalyticsService.ParamValue.CLAIMED.paramValue)
-        }
-        binding.claimedRecycler.adapter = claimedAdapter
-
-        activeAdapter = NetworkStationStatsAdapter {
-            openStationShop(it, AnalyticsService.ParamValue.ACTIVE.paramValue)
-        }
-        binding.activeRecycler.adapter = activeAdapter
 
         binding.buyCard.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
@@ -62,8 +42,6 @@ class NetworkStatsActivity : BaseActivity() {
             navigator.openWebsite(this, getString(R.string.website_contact))
             analytics.trackEventSelectContent(AnalyticsService.ParamValue.MANUFACTURER.paramValue)
         }
-
-        setInfoButtonListeners()
 
         model.onNetworkStats().observe(this) {
             when (it.status) {
@@ -107,57 +85,6 @@ class NetworkStatsActivity : BaseActivity() {
         model.getNetworkStats()
     }
 
-    private fun openStationShop(stationDetails: NetworkStationStats, categoryName: String) {
-        analytics.trackEventSelectContent(
-            AnalyticsService.ParamValue.OPEN_STATION_SHOP.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, categoryName),
-            Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, stationDetails.name)
-        )
-        navigator.openWebsite(this, stationDetails.url)
-    }
-
-    private fun setInfoButtonListeners() {
-        binding.totalInfoBtn.setOnClickListener {
-            openMessageDialog(
-                R.string.total_weather_stations,
-                R.string.total_weather_stations_explanation,
-                AnalyticsService.ParamValue.TOTAL_STATIONS.paramValue
-            )
-        }
-
-        binding.claimedInfoBtn.setOnClickListener {
-            openMessageDialog(
-                R.string.claimed_weather_stations,
-                R.string.claimed_weather_stations_explanation,
-                AnalyticsService.ParamValue.CLAIMED_STATIONS.paramValue
-            )
-        }
-
-        binding.activeInfoBtn.setOnClickListener {
-            openMessageDialog(
-                R.string.active_weather_stations,
-                R.string.active_weather_stations_explanation,
-                AnalyticsService.ParamValue.ACTIVE_STATIONS.paramValue
-            )
-        }
-    }
-
-    private fun openMessageDialog(
-        @StringRes titleResId: Int?,
-        @StringRes messageResId: Int,
-        messageSource: String
-    ) {
-        navigator.showMessageDialog(
-            supportFragmentManager,
-            title = titleResId?.let { getString(it) },
-            message = getString(messageResId)
-        )
-        analytics.trackEventSelectContent(
-            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, messageSource)
-        )
-    }
-
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(AnalyticsService.Screen.NETWORK_STATS, classSimpleName())
@@ -165,9 +92,7 @@ class NetworkStatsActivity : BaseActivity() {
 
     private fun updateUI(data: NetworkStats) {
         binding.growthCard
-            .updateHeader(onOpen = {
-                // TODO: Open Weather Stations Breakdown
-            })
+            .updateHeader(onOpen = { navigator.showNetworkGrowth(this, data) })
             .updateMainData(
                 mainValue = data.netScaleUp,
                 chartEntries = data.growthEntries,
@@ -192,7 +117,7 @@ class NetworkStatsActivity : BaseActivity() {
                     navigator.openWebsite(this, it)
                 },
                 onInfo = {
-                    openMessageDialog(
+                    openLearnMoreDialog(
                         R.string.wxm_rewards,
                         R.string.rewards_explanation,
                         AnalyticsService.ParamValue.ALLOCATED_REWARDS.paramValue
@@ -228,14 +153,6 @@ class NetworkStatsActivity : BaseActivity() {
                     }
                 }
             )
-
-        binding.totals.text = data.totalStations
-        binding.claimed.text = data.claimedStations
-        binding.active.text = data.activeStations
-
-        totalsAdapter.submitList(data.totalStationStats)
-        claimedAdapter.submitList(data.claimedStationStats)
-        activeAdapter.submitList(data.activeStationStats)
 
         binding.lastUpdated.text = getString(R.string.last_updated, data.lastUpdated)
     }

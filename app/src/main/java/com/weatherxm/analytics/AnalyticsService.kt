@@ -69,7 +69,8 @@ interface AnalyticsService {
         STATION_PHOTOS_INTRO("Station Photos Intro"),
         STATION_PHOTOS_GALLERY("Station Photos Gallery"),
         MAP_LAYER_PICKER("Map Layer Picker"),
-        TOKEN_METRICS("Token Metrics")
+        TOKEN_METRICS("Token Metrics"),
+        NETWORK_GROWTH("Network Growth")
     }
 
     // Custom Event Names
