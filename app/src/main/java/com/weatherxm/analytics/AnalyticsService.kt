@@ -172,7 +172,6 @@ interface AnalyticsService {
         CLAIMED("claimed"),
         ACTIVE("active"),
         LEARN_MORE("Learn More"),
-        DATA_DAYS("data_days"),
         ALLOCATED_REWARDS("allocated_rewards"),
         TOTAL_STATIONS("total_stations"),
         CLAIMED_STATIONS("claimed_stations"),
