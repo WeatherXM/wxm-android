@@ -1,5 +1,6 @@
 package com.weatherxm.ui.networkstats.tokenmetrics
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -38,6 +39,30 @@ class TokenMetricsActivity : BaseActivity() {
             finish()
         }
 
+        binding.totalWxmAllocatedInfoBtn.setOnClickListener {
+            openLearnMoreDialog(
+                R.string.total_wxm_allocated,
+                R.string.total_wxm_allocated_explanation,
+                AnalyticsService.ParamValue.TOTAL_WXM_ALLOCATED.paramValue
+            )
+        }
+
+        binding.baseRewardsBtn.setOnClickListener {
+            openLearnMoreDialog(
+                R.string.base_rewards,
+                R.string.base_rewards_explanation,
+                AnalyticsService.ParamValue.BASE_REWARDS.paramValue
+            )
+        }
+
+        binding.boostRewardsBtn.setOnClickListener {
+            openLearnMoreDialog(
+                R.string.boost_rewards,
+                R.string.boost_rewards_explanation,
+                AnalyticsService.ParamValue.BOOST_REWARDS.paramValue
+            )
+        }
+
         binding.totalSupplyBtn.setOnClickListener {
             openLearnMoreDialog(
                 R.string.total_supply,
@@ -62,7 +87,35 @@ class TokenMetricsActivity : BaseActivity() {
         analytics.trackScreen(AnalyticsService.Screen.TOKEN_METRICS, classSimpleName())
     }
 
+    @Suppress("MagicNumber")
+    @SuppressLint("SetTextI18n")
     private fun updateUI(data: NetworkStats) {
+        data.duneUrl?.let {
+            binding.viewDuneBtn.movementMethod =
+                BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, url ->
+                        navigator.openWebsite(this@TokenMetricsActivity, url)
+                        return@setOnLinkClickListener true
+                    }
+                }
+            binding.viewTokenContractBtn.setHtml(R.string.view_network_stats_dune, it)
+            binding.viewTokenContractBtn.removeLinksUnderline()
+            binding.viewTokenContractBtn.visible(true)
+        }
+
+        if (data.duneClaimed != null && data.duneTotal != null) {
+            val claimedPercentage = data.duneClaimed.toFloat() / data.duneTotal.toFloat()
+            binding.duneGauge.pointSize = (claimedPercentage * 180).toInt().coerceIn(0, 180)
+        }
+
+        binding.duneClaimed.text =
+            "${getString(R.string.claimed)}\n${compactNumber(data.duneClaimed)}"
+        binding.duneReserved.text =
+            "${getString(R.string.reserved)}\n${compactNumber(data.duneUnclaimed)}"
+        binding.duneTotal.text = "${getString(R.string.total)}\n${compactNumber(data.duneTotal)}"
+        binding.baseRewards.text = data.baseRewards
+        binding.boostRewards.text = data.boostRewards
+
         binding.totalSupply.text = compactNumber(data.totalSupply)
         binding.circSupply.text = compactNumber(data.circulatingSupply)
         if (data.totalSupply != null && data.circulatingSupply != null

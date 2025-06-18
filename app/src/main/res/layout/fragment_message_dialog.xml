@@ -35,6 +35,7 @@
                 android:layout_marginTop="@dimen/margin_large"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Message Title" />
 

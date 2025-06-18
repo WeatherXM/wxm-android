@@ -283,7 +283,10 @@ interface AnalyticsService {
         DEFAULT("default"),
         DATA_QUALITY("data_quality"),
         NETWORK_HEALTH("network_health"),
-        DATA_QUALITY_SCORE("data_quality_score")
+        DATA_QUALITY_SCORE("data_quality_score"),
+        TOTAL_WXM_ALLOCATED("total_wxm_allocated"),
+        BASE_REWARDS("base_rewards"),
+        BOOST_REWARDS("boost_rewards")
     }
 
     // Custom Param Names

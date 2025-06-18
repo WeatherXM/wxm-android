@@ -24,6 +24,7 @@ class StatsUseCaseImpl(
 
     override suspend fun getNetworkStats(): Either<Failure, NetworkStats> {
         return repository.getNetworkStats().map { stats ->
+            val totalAllocated = stats.rewards?.tokenMetrics?.totalAllocated
             return@map NetworkStats(
                 uptime = "${formatNumber(stats.health?.networkUptime)}%",
                 netDataQualityScore = "${formatNumber(stats.health?.networkAvgQod)}%",
@@ -51,6 +52,12 @@ class StatsUseCaseImpl(
                         }
                     } ?: String.empty()
                 },
+                duneUrl = totalAllocated?.dune?.duneUrl,
+                duneClaimed = totalAllocated?.dune?.claimed,
+                duneUnclaimed = totalAllocated?.dune?.unclaimed,
+                duneTotal = totalAllocated?.dune?.total,
+                baseRewards = compactNumber(totalAllocated?.baseRewards),
+                boostRewards = compactNumber(totalAllocated?.boostRewards),
                 totalSupply = stats.rewards?.tokenMetrics?.token?.totalSupply,
                 circulatingSupply = stats.rewards?.tokenMetrics?.token?.circulatingSupply,
                 lastTxHashUrl = stats.rewards?.lastTxHashUrl,

@@ -83,7 +83,7 @@
                 android:id="@+id/dataDaysMainData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:paddingVertical="@dimen/padding_small"
                 app:layout_constraintTop_toBottomOf="@id/subtitle">
 
@@ -154,7 +154,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:orientation="horizontal"
                 android:weightSum="2"
                 app:layout_constraintTop_toBottomOf="@id/dataDaysMainData">
@@ -163,7 +163,7 @@
                     style="@style/Widget.WeatherXM.MaterialCard"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="@dimen/margin_extra_small"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/layer1"
                     app:cardCornerRadius="@dimen/radius_medium"
@@ -218,7 +218,7 @@
                     style="@style/Widget.WeatherXM.MaterialCard"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="@dimen/margin_extra_small"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/layer1"
                     app:cardCornerRadius="@dimen/radius_medium"
