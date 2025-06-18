@@ -121,6 +121,11 @@
     <string name="weather_stations_breakdown">Weather stations breakdown</string>
     <string name="manufactured">Manufactured</string>
     <string name="deployed">Deployed</string>
+    <string name="network_health">Network health</string>
+    <string name="network_uptime">Network uptime</string>
+    <string name="active_stations">Active Stations</string>
+    <string name="data_quality_score_explanation">The network’s effectiveness relies on meaningful, usable data, measured by the Data Quality score. A station’s daily reward is tied to its Data Quality Score, calculated using an open-source algorithm that assesses data quality and provides a confidence level in the data received.</string>
+    <string name="network_health_explanation">Reflects the overall performance and reliability of the network. It consists of data quality, network uptime and number of healthy stations (calculated monthly) to indicate how well the network is functioning and how trustworthy the collected data is.</string>
 
     <!-- Network Stats & Search -->
     <string name="search_station_name_address">Search station name or address</string>

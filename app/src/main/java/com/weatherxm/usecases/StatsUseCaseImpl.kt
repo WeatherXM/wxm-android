@@ -25,7 +25,13 @@ class StatsUseCaseImpl(
     override suspend fun getNetworkStats(): Either<Failure, NetworkStats> {
         return repository.getNetworkStats().map { stats ->
             return@map NetworkStats(
-                netScaleUp = "${formatNumber(stats.growth?.networkScaleUp, 1)}%",
+                uptime = "${formatNumber(stats.health?.networkUptime)}%",
+                netDataQualityScore = "${formatNumber(stats.health?.networkAvgQod)}%",
+                healthActiveStations = formatNumber(stats.health?.activeStations),
+                uptimeEntries = getEntriesOfTimeseries(stats.health?.health30DaysGraph),
+                uptimeStartDate = stats.health?.health30DaysGraph?.first()?.ts.getFormattedDate(),
+                uptimeEndDate = stats.health?.health30DaysGraph?.last()?.ts.getFormattedDate(),
+                netScaleUp = "${formatNumber(stats.growth?.networkScaleUp)}%",
                 netSize = formatNumber(stats.growth?.networkSize),
                 netAddedInLast30Days = formatNumber(stats.growth?.last30Days),
                 growthEntries = getEntriesOfTimeseries(stats.growth?.last30DaysGraph),
