@@ -24,38 +24,30 @@ class StatsUseCaseImpl(
 
     override suspend fun getNetworkStats(): Either<Failure, NetworkStats> {
         return repository.getNetworkStats().map { stats ->
-            val dataDaysEntries = getEntriesOfTimeseries(stats.dataDays)
-            val rewardEntries = getEntriesOfTimeseries(stats.tokens?.allocatedPerDay)
             return@map NetworkStats(
-                totalDataDays = compactNumber(stats.dataDays?.last()?.value),
-                totalDataDays30D = compactNumber(
-                    (stats.dataDays?.last()?.value ?: 0.0) - (stats.dataDays?.first()?.value ?: 0.0)
-                ),
-                lastDataDays = getValidLastOfEntries(dataDaysEntries),
-                dataDaysEntries = dataDaysEntries,
-                dataDaysStartDate = stats.dataDays?.first()?.ts.getFormattedDate(),
-                dataDaysEndDate = stats.dataDays?.last()?.ts.getFormattedDate(),
-                totalRewards = compactNumber(stats.tokens?.totalAllocated),
-                totalRewards30D = compactNumber(
-                    (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
-                        - (stats.tokens?.allocatedPerDay?.first()?.value ?: 0.0)
-                ),
-                lastRewards = getValidLastOfEntries(rewardEntries),
-                rewardsEntries = rewardEntries,
-                rewardsStartDate = stats.tokens?.allocatedPerDay?.first()?.ts.getFormattedDate(),
+                netScaleUp = "${formatNumber(stats.growth?.networkScaleUp, 1)}%",
+                netSize = formatNumber(stats.growth?.networkSize),
+                netAddedInLast30Days = formatNumber(stats.growth?.last30Days),
+                growthEntries = getEntriesOfTimeseries(stats.growth?.last30DaysGraph),
+                growthStartDate = stats.growth?.last30DaysGraph?.first()?.ts.getFormattedDate(),
+                growthEndDate = stats.growth?.last30DaysGraph?.last()?.ts.getFormattedDate(),
+                totalRewards = compactNumber(stats.rewards?.total),
+                totalRewards30D = compactNumber(stats.rewards?.last30Days),
+                lastRewards = formatNumber(stats.rewards?.lastRun),
+                rewardsEntries = getEntriesOfTimeseries(stats.rewards?.last30DaysGraph),
+                rewardsStartDate = stats.rewards?.last30DaysGraph?.first()?.ts.getFormattedDate(),
                 rewardsEndDate = run {
-                    stats.tokens?.allocatedPerDay?.size?.let {
-                        if (it >= 2 && !isLastDayValid(stats.tokens.allocatedPerDay)) {
-                            stats.tokens.allocatedPerDay[it - 2].ts.getFormattedDate()
+                    stats.rewards?.last30DaysGraph?.size?.let {
+                        if (it >= 2 && !isLastDayValid(stats.rewards.last30DaysGraph)) {
+                            stats.rewards.last30DaysGraph[it - 2].ts.getFormattedDate()
                         } else {
-                            stats.tokens.allocatedPerDay.last().ts.getFormattedDate()
+                            stats.rewards.last30DaysGraph.last().ts.getFormattedDate()
                         }
                     } ?: String.empty()
                 },
-                rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
-                totalSupply = stats.tokens?.totalSupply,
-                circulatingSupply = stats.tokens?.circSupply,
-                lastTxHashUrl = stats.tokens?.lastTxHashUrl,
+                totalSupply = stats.rewards?.tokenMetrics?.token?.totalSupply,
+                circulatingSupply = stats.rewards?.tokenMetrics?.token?.circulatingSupply,
+                lastTxHashUrl = stats.rewards?.lastTxHashUrl,
                 tokenUrl = stats.contracts?.tokenUrl,
                 rewardsUrl = stats.contracts?.rewardsUrl,
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
@@ -87,14 +79,6 @@ class StatsUseCaseImpl(
             }
         } else {
             filteredData
-        }
-    }
-
-    private fun getValidLastOfEntries(data: List<Entry>): String {
-        return if (data.size >= 2) {
-            compactNumber(data.last().y - data[data.size - 2].y)
-        } else {
-            compactNumber(data.last().y)
         }
     }
 
