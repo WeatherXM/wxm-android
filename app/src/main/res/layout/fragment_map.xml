@@ -25,12 +25,12 @@
         android:padding="@dimen/padding_large">
 
         <ImageButton
-            android:id="@+id/menuBtn"
+            android:id="@+id/searchBtn"
             style="@style/Widget.WeatherXM.ImageButton"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:contentDescription="@string/action_close"
-            android:src="@drawable/ic_3_dots"
+            android:src="@drawable/ic_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,10 +40,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@id/menuBtn"
-            app:layout_constraintEnd_toStartOf="@id/searchBtn"
-            app:layout_constraintStart_toEndOf="@id/menuBtn"
-            app:layout_constraintTop_toTopOf="@id/menuBtn">
+            app:layout_constraintBottom_toBottomOf="@id/searchBtn"
+            app:layout_constraintEnd_toStartOf="@id/menuBtn"
+            app:layout_constraintStart_toEndOf="@id/searchBtn"
+            app:layout_constraintTop_toTopOf="@id/searchBtn">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/activeStations"
@@ -70,16 +70,17 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/searchBtn"
+            android:id="@+id/menuBtn"
             style="@style/Widget.WeatherXM.ImageButton"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:contentDescription="@string/action_close"
-            android:src="@drawable/ic_search"
+            android:src="@drawable/ic_3_dots"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/light_layer1" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.search.SearchView
