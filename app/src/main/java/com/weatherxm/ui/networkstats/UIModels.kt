@@ -10,6 +10,12 @@ import kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class NetworkStats(
+    val uptime: String,
+    val netDataQualityScore: String,
+    val healthActiveStations: String,
+    val uptimeEntries: List<Entry>,
+    val uptimeStartDate: String,
+    val uptimeEndDate: String,
     val netScaleUp: String,
     val netSize: String,
     val netAddedInLast30Days: String,

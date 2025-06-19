@@ -90,7 +90,46 @@ class NetworkStatsActivity : BaseActivity() {
         analytics.trackScreen(AnalyticsService.Screen.NETWORK_STATS, classSimpleName())
     }
 
+    @Suppress("LongMethod")
     private fun updateUI(data: NetworkStats) {
+        binding.healthCard
+            .updateHeader(
+                onInfo = {
+                    openLearnMoreDialog(
+                        R.string.network_health,
+                        R.string.network_health_explanation,
+                        AnalyticsService.ParamValue.NETWORK_HEALTH.paramValue
+                    )
+                }
+            )
+            .updateMainData(
+                mainValue = data.uptime,
+                chartEntries = data.uptimeEntries,
+                chartDateStart = data.uptimeStartDate,
+                chartDateEnd = data.uptimeEndDate
+            )
+            .updateFirstSubCard(
+                value = data.netDataQualityScore,
+                onIconClick = {
+                    openLearnMoreDialog(
+                        R.string.data_quality_score,
+                        R.string.data_quality_score_explanation,
+                        AnalyticsService.ParamValue.DATA_QUALITY_SCORE.paramValue
+                    )
+                }
+            )
+            .updateSecondSubCard(
+                value = data.healthActiveStations,
+                iconResId = R.drawable.ic_learn_more_info,
+                onIconClick = {
+                    openLearnMoreDialog(
+                        R.string.active_stations,
+                        R.string.active_weather_stations_explanation,
+                        AnalyticsService.ParamValue.ACTIVE_STATIONS.paramValue
+                    )
+                }
+            )
+
         binding.growthCard
             .updateHeader(onOpen = { navigator.showNetworkGrowth(this, data) })
             .updateMainData(
