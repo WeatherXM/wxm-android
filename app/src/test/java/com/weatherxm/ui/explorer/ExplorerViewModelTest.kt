@@ -193,13 +193,13 @@ class ExplorerViewModelTest : BehaviorSpec({
         coEvery { usecase.getUserCountryLocation() } returns startingLocation
         mockkObject(MapboxUtils)
         every {
-            explorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DEFAULT)
+            explorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DATA_QUALITY)
         } returns emptyList()
         every {
-            fullExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DEFAULT)
+            fullExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DATA_QUALITY)
         } returns emptyList()
         every {
-            newExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DEFAULT)
+            newExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DATA_QUALITY)
         } returns newPolygonAnnotationOptions
         every { explorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
         every { fullExplorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
