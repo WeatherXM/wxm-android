@@ -33,57 +33,6 @@
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/defaultCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
-            app:cardBackgroundColor="@color/layer1"
-            app:cardCornerRadius="@dimen/radius_small"
-            app:contentPadding="@dimen/padding_normal">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/defaultOption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:padding="@dimen/padding_extra_small"
-                    app:buttonTint="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/defaultTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/map_layer_default"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/defaultOption"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/defaultSubtitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/map_layer_data_quality_score_subtitle"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/defaultOption"
-                    app:layout_constraintTop_toBottomOf="@id/defaultTitle" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
             android:id="@+id/dataQualityCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -262,6 +211,57 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/densityCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:cardBackgroundColor="@color/layer1"
+            app:cardCornerRadius="@dimen/radius_small"
+            app:contentPadding="@dimen/padding_normal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/densityOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:padding="@dimen/padding_extra_small"
+                    app:buttonTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/densityTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/map_layer_density"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/densityOption"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/densitySubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/map_layer_data_quality_score_subtitle"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/densityOption"
+                    app:layout_constraintTop_toBottomOf="@id/densityTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
