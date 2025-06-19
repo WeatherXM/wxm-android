@@ -40,7 +40,7 @@ class StatsUseCaseImpl(
                 growthEndDate = stats.growth?.last30DaysGraph?.last()?.ts.getFormattedDate(),
                 totalRewards = compactNumber(stats.rewards?.total),
                 totalRewards30D = compactNumber(stats.rewards?.last30Days),
-                lastRewards = formatNumber(stats.rewards?.lastRun),
+                lastRewards = compactNumber(stats.rewards?.lastRun),
                 rewardsEntries = getEntriesOfTimeseries(stats.rewards?.last30DaysGraph),
                 rewardsStartDate = stats.rewards?.last30DaysGraph?.first()?.ts.getFormattedDate(),
                 rewardsEndDate = run {

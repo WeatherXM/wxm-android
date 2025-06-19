@@ -87,10 +87,8 @@
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold"
-                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/duneTitle"
-                        tools:visibility="visible" />
+                        app:layout_constraintTop_toBottomOf="@id/duneTitle" />
 
                     <com.imsalman.gaugelibrary.Gauge
                         android:id="@+id/duneGauge"
@@ -115,8 +113,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_large"
-                        android:layout_marginEnd="-20dp"
-                        android:gravity="center"
+                        android:layout_marginEnd="-15dp"
+                        android:gravity="end"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textSize="11sp"
                         app:layout_constraintEnd_toStartOf="@id/duneGauge"
@@ -128,9 +126,9 @@
                         android:id="@+id/duneReserved"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="-20dp"
+                        android:layout_marginStart="-15dp"
                         android:layout_marginTop="@dimen/margin_large"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textSize="11sp"
                         app:layout_constraintStart_toEndOf="@id/duneGauge"

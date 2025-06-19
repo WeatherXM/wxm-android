@@ -98,9 +98,8 @@ class TokenMetricsActivity : BaseActivity() {
                         return@setOnLinkClickListener true
                     }
                 }
-            binding.viewTokenContractBtn.setHtml(R.string.view_network_stats_dune, it)
-            binding.viewTokenContractBtn.removeLinksUnderline()
-            binding.viewTokenContractBtn.visible(true)
+            binding.viewDuneBtn.setHtml(R.string.view_network_stats_dune, it)
+            binding.viewDuneBtn.removeLinksUnderline()
         }
 
         if (data.duneClaimed != null && data.duneTotal != null) {
