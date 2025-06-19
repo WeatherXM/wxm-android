@@ -137,7 +137,6 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                         it.rewardsEntries[1].equalTo(Entry(1F, 100000F)) shouldBe true
                         it.rewardsStartDate shouldBe "Jun 26"
                         it.rewardsEndDate shouldBe "Jun 27"
-                        it.rewardsAvgMonthly shouldBe "500,135"
                         it.totalSupply shouldBe 100000000
                         it.circulatingSupply shouldBe 5000000
                         it.lastTxHashUrl shouldBe "testTxHash"

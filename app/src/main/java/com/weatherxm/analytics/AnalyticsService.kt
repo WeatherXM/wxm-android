@@ -69,7 +69,8 @@ interface AnalyticsService {
         STATION_PHOTOS_INTRO("Station Photos Intro"),
         STATION_PHOTOS_GALLERY("Station Photos Gallery"),
         MAP_LAYER_PICKER("Map Layer Picker"),
-        TOKEN_METRICS("Token Metrics")
+        TOKEN_METRICS("Token Metrics"),
+        NETWORK_GROWTH("Network Growth")
     }
 
     // Custom Event Names
@@ -172,7 +173,6 @@ interface AnalyticsService {
         CLAIMED("claimed"),
         ACTIVE("active"),
         LEARN_MORE("Learn More"),
-        DATA_DAYS("data_days"),
         ALLOCATED_REWARDS("allocated_rewards"),
         TOTAL_STATIONS("total_stations"),
         CLAIMED_STATIONS("claimed_stations"),
