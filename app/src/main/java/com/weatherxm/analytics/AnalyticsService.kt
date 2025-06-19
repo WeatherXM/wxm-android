@@ -233,7 +233,6 @@ interface AnalyticsService {
         DAILY_DETAILS("daily_details"),
         NETWORK_STATS("Network Stats"),
         TOKEN_CONTRACT("token_contract"),
-        REWARD_CONTRACT("reward_contract"),
         LAST_RUN_HASH("last_run_hash"),
         TOTAL_SUPPLY("total_supply"),
         CIRCULATING_SUPPLY("circulating_supply"),
@@ -286,7 +285,9 @@ interface AnalyticsService {
         DATA_QUALITY_SCORE("data_quality_score"),
         TOTAL_WXM_ALLOCATED("total_wxm_allocated"),
         BASE_REWARDS("base_rewards"),
-        BOOST_REWARDS("boost_rewards")
+        BOOST_REWARDS("boost_rewards"),
+        REWARD_MECHANISM("reward_mechanism"),
+        DUNE("dune")
     }
 
     // Custom Param Names
