@@ -281,7 +281,9 @@ interface AnalyticsService {
         ANNOUNCEMENT_CTA("Announcement CTA"),
         SELECT_MAP_LAYER("Select Map Layer"),
         DEFAULT("default"),
-        DATA_QUALITY("data_quality")
+        DATA_QUALITY("data_quality"),
+        NETWORK_HEALTH("network_health"),
+        DATA_QUALITY_SCORE("data_quality_score")
     }
 
     // Custom Param Names

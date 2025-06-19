@@ -35,13 +35,25 @@
             android:clipChildren="false">
 
             <com.weatherxm.ui.components.NetworkStatsCardView
-                android:id="@+id/growthCard"
+                android:id="@+id/healthCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal_to_large"
                 android:clipChildren="false"
-                app:first_sub_card_title="@string/network_size"
+                app:first_sub_card_title="@string/data_quality_score"
                 app:layout_constraintTop_toTopOf="parent"
+                app:main_value_title="@string/network_uptime"
+                app:second_sub_card_title="@string/active_stations"
+                app:title="@string/network_health" />
+
+            <com.weatherxm.ui.components.NetworkStatsCardView
+                android:id="@+id/growthCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:clipChildren="false"
+                app:first_sub_card_title="@string/network_size"
+                app:layout_constraintTop_toBottomOf="@id/healthCard"
                 app:main_value_title="@string/network_scale_up"
                 app:second_sub_card_title="@string/added_in_last_30_days"
                 app:title="@string/network_growth" />
@@ -51,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal_to_large"
-                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 app:layout_constraintTop_toBottomOf="@id/growthCard"
                 tools:composableName="com.weatherxm.ui.components.compose.BuyStationPromptCardKt" />
@@ -60,7 +72,7 @@
                 android:id="@+id/rewardsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 app:first_sub_card_title="@string/total"
                 app:layout_constraintTop_toBottomOf="@id/buyCard"
@@ -73,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal_to_large"
-                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 app:layout_constraintTop_toBottomOf="@id/rewardsCard"
                 tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
