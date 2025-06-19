@@ -287,7 +287,9 @@ class ExplorerViewModel(
                      * in order not to re-draw the whole explorer map but only the new hexes
                      */
                     onNewPolygons.postValue(
-                        newHexes.toPolygonAnnotationOptions(onMapLayer.value ?: MapLayer.DATA_QUALITY)
+                        newHexes.toPolygonAnnotationOptions(
+                            onMapLayer.value ?: MapLayer.DATA_QUALITY
+                        )
                     )
                 }
                 onStatus.postValue(Resource.success(Unit))
