@@ -8,9 +8,12 @@ import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.os.Build.VERSION_CODES.S
 import android.os.Build.VERSION_CODES.TIRAMISU
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
 import com.weatherxm.util.AndroidBuildInfo
@@ -74,5 +77,21 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
         if (!hasPermission(POST_NOTIFICATIONS) && AndroidBuildInfo.sdkInt >= TIRAMISU) {
             permissionsBuilder(permissions = arrayOf(POST_NOTIFICATIONS)).build().send()
         }
+    }
+
+    protected fun openLearnMoreDialog(
+        @StringRes titleResId: Int?,
+        @StringRes messageResId: Int,
+        messageSource: String
+    ) {
+        navigator.showMessageDialog(
+            supportFragmentManager,
+            title = titleResId?.let { getString(it) },
+            message = getString(messageResId)
+        )
+        analytics.trackEventSelectContent(
+            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, messageSource)
+        )
     }
 }
