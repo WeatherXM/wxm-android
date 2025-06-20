@@ -257,7 +257,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/map_layer_data_quality_score_subtitle"
+                    android:text="@string/map_layer_density_subtitle"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/densityOption"
