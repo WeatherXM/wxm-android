@@ -12,11 +12,17 @@ import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.models.Connectivity
 import com.weatherxm.data.models.NetworkStatsContracts
 import com.weatherxm.data.models.NetworkStatsCustomers
+import com.weatherxm.data.models.NetworkStatsDune
+import com.weatherxm.data.models.NetworkStatsGrowth
+import com.weatherxm.data.models.NetworkStatsHealth
 import com.weatherxm.data.models.NetworkStatsResponse
+import com.weatherxm.data.models.NetworkStatsRewards
 import com.weatherxm.data.models.NetworkStatsStation
 import com.weatherxm.data.models.NetworkStatsStationDetails
 import com.weatherxm.data.models.NetworkStatsTimeseries
-import com.weatherxm.data.models.NetworkStatsTokens
+import com.weatherxm.data.models.NetworkStatsToken
+import com.weatherxm.data.models.NetworkStatsTokenMetrics
+import com.weatherxm.data.models.NetworkStatsTotalAllocated
 import com.weatherxm.data.models.NetworkStatsWeatherStations
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.ui.networkstats.NetworkStationStats
@@ -45,6 +51,52 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val middleDate = ZonedDateTime.of(2024, 6, 26, 2, 0, 0, 0, ZoneId.of("UTC"))
     val lastDate = ZonedDateTime.of(2024, 6, 27, 2, 0, 0, 0, ZoneId.of("UTC"))
     val testNetworkStats = NetworkStatsResponse(
+        health = NetworkStatsHealth(
+            networkAvgQod = 80,
+            activeStations = 15000,
+            networkUptime = 98,
+            health30DaysGraph = listOf(
+                NetworkStatsTimeseries(firstDate, 0.0),
+                NetworkStatsTimeseries(middleDate, 1000.0),
+                NetworkStatsTimeseries(lastDate, 20000.0)
+            ),
+        ),
+        growth = NetworkStatsGrowth(
+            networkSize = 23000,
+            networkScaleUp = 13,
+            last30Days = 150,
+            last30DaysGraph = listOf(
+                NetworkStatsTimeseries(firstDate, 0.0),
+                NetworkStatsTimeseries(middleDate, 1000.0),
+                NetworkStatsTimeseries(lastDate, 20000.0)
+            ),
+        ),
+        rewards = NetworkStatsRewards(
+            total = 2500000,
+            lastRun = 35000,
+            last30Days = 150000,
+            last30DaysGraph = listOf(
+                NetworkStatsTimeseries(middleDate, 1000.0),
+                NetworkStatsTimeseries(lastDate, 100000.0)
+            ),
+            lastTxHashUrl = "testTxHash",
+            tokenMetrics = NetworkStatsTokenMetrics(
+                totalAllocated = NetworkStatsTotalAllocated(
+                    dune = NetworkStatsDune(
+                        total = 15000,
+                        claimed = 7500,
+                        unclaimed = 7500,
+                        duneUrl = "duneUrl"
+                    ),
+                    baseRewards = 100,
+                    boostRewards = 50
+                ),
+                token = NetworkStatsToken(
+                    totalSupply = 100000000,
+                    circulatingSupply = 50000000
+                )
+            )
+        ),
         weatherStations = NetworkStatsWeatherStations(
             NetworkStatsStation(
                 100,
@@ -67,22 +119,6 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 60, 0.6)
                 )
             )
-        ),
-        dataDays = listOf(
-            NetworkStatsTimeseries(firstDate, 0.0),
-            NetworkStatsTimeseries(middleDate, 1000.0),
-            NetworkStatsTimeseries(lastDate, 20000.0)
-        ),
-        tokens = NetworkStatsTokens(
-            100000000,
-            5000000,
-            listOf(
-                NetworkStatsTimeseries(middleDate, 1000.0),
-                NetworkStatsTimeseries(lastDate, 100000.0)
-            ),
-            500135.0,
-            5000000,
-            "testTxHash"
         ),
         contracts = NetworkStatsContracts("testTokenUrl", "testRewardsUrl"),
         customers = NetworkStatsCustomers(1000, 900),
@@ -122,14 +158,22 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                     val response = usecase.getNetworkStats()
                     response.isRight() shouldBe true
                     response.onRight {
-                        it.totalDataDays shouldBe "1"
-                        it.totalDataDays30D shouldBe "1"
-                        it.lastDataDays shouldBe "1"
-                        it.dataDaysEntries[0].equalTo(Entry(0F, 0F)) shouldBe true
-                        it.dataDaysEntries[1].equalTo(Entry(1F, 1000F)) shouldBe true
-                        it.dataDaysEntries[2].equalTo(Entry(2F, 20000F)) shouldBe true
-                        it.dataDaysStartDate shouldBe "Jun 25"
-                        it.dataDaysEndDate shouldBe "Jun 27"
+                        it.uptime shouldBe "98%"
+                        it.netDataQualityScore shouldBe "80%"
+                        it.healthActiveStations shouldBe "15,000"
+                        it.uptimeEntries[0].equalTo(Entry(0F, 0F)) shouldBe true
+                        it.uptimeEntries[1].equalTo(Entry(1F, 1000F)) shouldBe true
+                        it.uptimeEntries[2].equalTo(Entry(2F, 20000F)) shouldBe true
+                        it.uptimeStartDate shouldBe "Jun 25"
+                        it.uptimeEndDate shouldBe "Jun 27"
+                        it.netScaleUp shouldBe "13%"
+                        it.netSize shouldBe "23,000"
+                        it.netAddedInLast30Days shouldBe "150"
+                        it.growthEntries[0].equalTo(Entry(0F, 0F)) shouldBe true
+                        it.growthEntries[1].equalTo(Entry(1F, 1000F)) shouldBe true
+                        it.growthEntries[2].equalTo(Entry(2F, 20000F)) shouldBe true
+                        it.growthStartDate shouldBe "Jun 25"
+                        it.growthEndDate shouldBe "Jun 27"
                         it.totalRewards shouldBe "1"
                         it.totalRewards30D shouldBe "1"
                         it.lastRewards shouldBe "1"
@@ -137,8 +181,14 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                         it.rewardsEntries[1].equalTo(Entry(1F, 100000F)) shouldBe true
                         it.rewardsStartDate shouldBe "Jun 26"
                         it.rewardsEndDate shouldBe "Jun 27"
+                        it.duneUrl shouldBe "duneUrl"
+                        it.duneClaimed shouldBe 7500
+                        it.duneUnclaimed shouldBe 7500
+                        it.duneTotal shouldBe 15000
+                        it.baseRewards shouldBe "1"
+                        it.boostRewards shouldBe "1"
                         it.totalSupply shouldBe 100000000
-                        it.circulatingSupply shouldBe 5000000
+                        it.circulatingSupply shouldBe 50000000
                         it.lastTxHashUrl shouldBe "testTxHash"
                         it.tokenUrl shouldBe "testTokenUrl"
                         it.rewardsUrl shouldBe "testRewardsUrl"

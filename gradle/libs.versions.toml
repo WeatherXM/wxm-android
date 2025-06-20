@@ -32,6 +32,7 @@ coil = "3.2.0"
 desugar_jdk_libs = "2.1.5"
 dfu = "2.9.0"
 firebase-bom = "33.15.0"
+gauge = "0.0.1"
 input-mask-android = "7.2.6"
 insetter = "0.6.1"
 json = "20250517"
@@ -120,6 +121,7 @@ firebase-config = { module = "com.google.firebase:firebase-config" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
+gauge = { module = "com.github.codersalman:Gauge-Library-Android", version.ref = "gauge" }
 input-mask-android = { module = "com.redmadrobot:input-mask-android", version.ref = "input-mask-android" }
 insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "insetter" }
 json = { module = "org.json:json", version.ref = "json" }

@@ -527,7 +527,31 @@ data class NetworkStatsRewards(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class NetworkStatsTokenMetrics(
+    @Json(name = "total_allocated")
+    val totalAllocated: NetworkStatsTotalAllocated?,
     val token: NetworkStatsToken?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsTotalAllocated(
+    val dune: NetworkStatsDune?,
+    @Json(name = "base_rewards")
+    val baseRewards: Int?,
+    @Json(name = "boost_rewards")
+    val boostRewards: Int?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsDune(
+    val total: Int?,
+    val claimed: Int?,
+    val unclaimed: Int?,
+    @Json(name = "dune_public_url")
+    val duneUrl: String?
 ) : Parcelable
 
 @Keep

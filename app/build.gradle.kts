@@ -486,6 +486,7 @@ dependencies {
 
     // Charts
     implementation(libs.mpAndroidCharts)
+    implementation(libs.gauge)
 
     // Permissions
     implementation(libs.kpermissions)

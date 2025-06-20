@@ -126,6 +126,13 @@
     <string name="active_stations">Active Stations</string>
     <string name="data_quality_score_explanation">The network’s effectiveness relies on meaningful, usable data, measured by the Data Quality score. A station’s daily reward is tied to its Data Quality Score, calculated using an open-source algorithm that assesses data quality and provides a confidence level in the data received.</string>
     <string name="network_health_explanation">Reflects the overall performance and reliability of the network. It consists of data quality, network uptime and number of healthy stations (calculated monthly) to indicate how well the network is functioning and how trustworthy the collected data is.</string>
+    <string name="total_wxm_allocated">Total $WXM allocated</string>
+    <string name="view_network_stats_dune"><![CDATA[<a href="%1$s">View network stats on Dune</a>]]></string>
+    <string name="boost_rewards">Boost Rewards</string>
+    <string name="total_wxm_allocated_explanation">The total amount of $WXM tokens distributed within the network. This includes both claimed tokens (earned and withdrawn) and reserved tokens (earned but not yet withdrawn).</string>
+    <string name="base_rewards_explanation">The standard $WXM tokens that weather stations earn for consistently providing reliable data. These are regular rewards received by stations on a daily basis for their normal operation.</string>
+    <string name="boost_rewards_explanation">Boost Rewards are extra tokens awarded for special contributions or actions.</string>
+    <string name="reserved">Reserved</string>
 
     <!-- Network Stats & Search -->
     <string name="search_station_name_address">Search station name or address</string>
