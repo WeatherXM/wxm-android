@@ -168,7 +168,7 @@ class MapboxUtilsTest : BehaviorSpec({
             When("The list is empty") {
                 then("return an empty list") {
                     listOf<PublicHex>()
-                        .toPolygonAnnotationOptions(MapLayer.DEFAULT) shouldBe emptyList()
+                        .toPolygonAnnotationOptions(MapLayer.DATA_QUALITY) shouldBe emptyList()
                 }
             }
             When("The list is not empty") {
@@ -183,7 +183,7 @@ class MapboxUtilsTest : BehaviorSpec({
                     )
 
                     val returnedList =
-                        listOf(publicHex).toPolygonAnnotationOptions(MapLayer.DEFAULT)
+                        listOf(publicHex).toPolygonAnnotationOptions(MapLayer.DATA_QUALITY)
                     returnedList[0].fillColor shouldBe expectedResult[0].fillColor
                     returnedList[0].fillOpacity shouldBe expectedResult[0].fillOpacity
                     returnedList[0].fillOutlineColor shouldBe expectedResult[0].fillOutlineColor

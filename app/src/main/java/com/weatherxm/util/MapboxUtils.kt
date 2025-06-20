@@ -96,7 +96,7 @@ object MapboxUtils : KoinComponent {
     ): List<PolygonAnnotationOptions> {
         return map {
             val fillColor = when (layer) {
-                MapLayer.DEFAULT -> R.color.hex_fill_color
+                MapLayer.DENSITY -> R.color.hex_fill_color
                 MapLayer.DATA_QUALITY -> getRewardScoreColor(it.avgDataQuality)
             }
             PolygonAnnotationOptions()

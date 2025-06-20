@@ -749,8 +749,8 @@
 
     <!-- Map Layer Picker -->
     <string name="map_layers">Map Layers</string>
-    <string name="map_layer_default">Default</string>
-    <string name="map_layer_default_subtitle">Concise view showing all stations that exist in each cell.</string>
+    <string name="map_layer_density">Density</string>
+    <string name="map_layer_density_subtitle">Concise view showing all stations that exist in each cell.</string>
     <string name="map_layer_data_quality_score">Data quality score</string>
     <string name="map_layer_data_quality_score_subtitle">Display a color-coded map indicating station data quality levels.</string>
     <string name="map_layer_no_data">No data</string>

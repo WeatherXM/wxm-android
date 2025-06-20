@@ -103,6 +103,6 @@ data class SearchResult(
 }
 
 enum class MapLayer {
-    DEFAULT,
+    DENSITY,
     DATA_QUALITY
 }

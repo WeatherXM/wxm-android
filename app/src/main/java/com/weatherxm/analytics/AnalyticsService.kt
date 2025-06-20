@@ -280,7 +280,7 @@ interface AnalyticsService {
         REMOTE("remote"),
         ANNOUNCEMENT_CTA("Announcement CTA"),
         SELECT_MAP_LAYER("Select Map Layer"),
-        DEFAULT("default"),
+        DENSITY("density"),
         DATA_QUALITY("data_quality")
     }
 
