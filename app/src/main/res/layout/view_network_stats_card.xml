@@ -162,7 +162,7 @@
                 <com.google.android.material.card.MaterialCardView
                     style="@style/Widget.WeatherXM.MaterialCard"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/margin_extra_small"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/layer1"
@@ -177,11 +177,12 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/firstSubCardTitle"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAllCaps="true"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/firstSubCardInfoBtn"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="@string/total" />
 
@@ -217,7 +218,7 @@
                     android:id="@+id/secondSubCard"
                     style="@style/Widget.WeatherXM.MaterialCard"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_extra_small"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/layer1"
@@ -232,12 +233,13 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/secondSubCardTitle"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAllCaps="true"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/secondSubCardBtn"
                             tools:text="@string/last_run" />
 
                         <ImageButton

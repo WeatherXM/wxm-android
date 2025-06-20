@@ -94,6 +94,13 @@ class TokenMetricsActivity : BaseActivity() {
             binding.viewDuneBtn.movementMethod =
                 BetterLinkMovementMethod.newInstance().apply {
                     setOnLinkClickListener { _, url ->
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.DUNE.paramValue
+                            )
+                        )
                         navigator.openWebsite(this@TokenMetricsActivity, url)
                         return@setOnLinkClickListener true
                     }
@@ -134,7 +141,7 @@ class TokenMetricsActivity : BaseActivity() {
                             AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
                             Pair(
                                 FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.REWARD_CONTRACT.paramValue
+                                AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
                             )
                         )
                         navigator.openWebsite(this@TokenMetricsActivity, url)

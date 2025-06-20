@@ -150,7 +150,7 @@ class NetworkStatsActivity : BaseActivity() {
                         AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
                         Pair(
                             FirebaseAnalytics.Param.SOURCE,
-                            AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
+                            AnalyticsService.ParamValue.REWARD_MECHANISM.paramValue
                         )
                     )
                     navigator.openWebsite(this, it)
