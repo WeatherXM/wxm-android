@@ -61,7 +61,7 @@ class MapboxUtilsTest : BehaviorSpec({
         "cellIndex",
         0,
         0,
-        null,
+        0,
         Location(lat = 38.71742582818318, lon = 27.22897028978693),
         listOf(
             Location(lat = 38.72482636074315, lon = 27.214679947948405),
@@ -108,7 +108,7 @@ class MapboxUtilsTest : BehaviorSpec({
         every { searchSuggestion.address?.country } returns null
         every { searchSuggestion.address?.postcode } returns null
         every { resources.getString(R.string.mapbox_access_token) } returns "pk.TEST"
-        every { resources.getColor(R.color.hex_fill_color, null) } returns 0
+        every { resources.getColor(R.color.error, null) } returns 0
         every { resources.getColor(R.color.white, null) } returns 0
     }
 
@@ -175,7 +175,7 @@ class MapboxUtilsTest : BehaviorSpec({
                 then("return the respective PolygonAnnotation list") {
                     val expectedResult = listOf(
                         PolygonAnnotationOptions()
-                            .withFillColor(resources.getColor(R.color.hex_fill_color, null))
+                            .withFillColor(resources.getColor(R.color.error, null))
                             .withFillOpacity(FILL_OPACITY_HEXAGONS)
                             .withFillOutlineColor(resources.getColor(R.color.white, null))
                             .withData(gson.toJsonTree(UICell(publicHex.index, publicHex.center)))
