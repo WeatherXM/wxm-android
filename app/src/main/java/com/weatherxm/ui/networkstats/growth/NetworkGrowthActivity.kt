@@ -18,7 +18,6 @@ import timber.log.Timber
 class NetworkGrowthActivity : BaseActivity() {
     private lateinit var binding: ActivityNetworkGrowthBinding
 
-    private lateinit var manufacturedAdapter: NetworkStationStatsAdapter
     private lateinit var deployedAdapter: NetworkStationStatsAdapter
     private lateinit var activeAdapter: NetworkStationStatsAdapter
 
@@ -39,14 +38,6 @@ class NetworkGrowthActivity : BaseActivity() {
             finish()
         }
 
-        binding.manufacturedInfoBtn.setOnClickListener {
-            openLearnMoreDialog(
-                R.string.manufactured,
-                R.string.manufactured_weather_stations_explanation,
-                AnalyticsService.ParamValue.TOTAL_STATIONS.paramValue
-            )
-        }
-
         binding.deployedInfoBtn.setOnClickListener {
             openLearnMoreDialog(
                 R.string.deployed,
@@ -63,11 +54,6 @@ class NetworkGrowthActivity : BaseActivity() {
             )
         }
 
-        manufacturedAdapter = NetworkStationStatsAdapter {
-            openStationShop(it, AnalyticsService.ParamValue.TOTAL.paramValue)
-        }
-        binding.manufacturedRecycler.adapter = manufacturedAdapter
-
         deployedAdapter = NetworkStationStatsAdapter {
             openStationShop(it, AnalyticsService.ParamValue.CLAIMED.paramValue)
         }
@@ -78,24 +64,18 @@ class NetworkGrowthActivity : BaseActivity() {
         }
         binding.activeRecycler.adapter = activeAdapter
 
-        updateUI(networkStats)
+        binding.deployed.text = networkStats.claimedStations
+        binding.active.text = networkStats.activeStations
+
+        deployedAdapter.submitList(networkStats.claimedStationStats)
+        activeAdapter.submitList(networkStats.activeStationStats)
+
+        binding.lastUpdated.text = getString(R.string.last_updated, networkStats.lastUpdated)
     }
 
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(AnalyticsService.Screen.NETWORK_GROWTH, classSimpleName())
-    }
-
-    private fun updateUI(data: NetworkStats) {
-        binding.manufactured.text = data.totalStations
-        binding.deployed.text = data.claimedStations
-        binding.active.text = data.activeStations
-
-        manufacturedAdapter.submitList(data.totalStationStats)
-        deployedAdapter.submitList(data.claimedStationStats)
-        activeAdapter.submitList(data.activeStationStats)
-
-        binding.lastUpdated.text = getString(R.string.last_updated, data.lastUpdated)
     }
 
     private fun openStationShop(stationDetails: NetworkStationStats, categoryName: String) {

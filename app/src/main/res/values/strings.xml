@@ -93,7 +93,6 @@
     <string name="active">Active</string>
     <string name="wxm_rewards">$WXM Rewards</string>
     <string name="rewards_explanation">Station owners are rewarded in $WXM for providing data to the WeatherXM Network.</string>
-    <string name="manufactured_weather_stations_explanation">The number of weather stations produced.</string>
     <string name="deployed_weather_stations_explanation">The number of weather stations already deployed by users.</string>
     <string name="active_weather_stations_explanation">The number of weather stations that were active during the last day.</string>
     <string name="last_run">Last Run</string>
@@ -119,7 +118,6 @@
     <string name="network_size">Network Size</string>
     <string name="added_in_last_30_days">Added in last 30 days</string>
     <string name="weather_stations_breakdown">Weather stations breakdown</string>
-    <string name="manufactured">Manufactured</string>
     <string name="deployed">Deployed</string>
     <string name="network_health">Network health</string>
     <string name="network_uptime">Network uptime</string>

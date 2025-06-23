@@ -169,7 +169,6 @@ interface AnalyticsService {
         DOCUMENTATION_FREQUENCY("Frequency Documentation"),
         OPEN_SHOP("Open Shop"),
         OPEN_STATION_SHOP("Open Station Shop"),
-        TOTAL("total"),
         CLAIMED("claimed"),
         ACTIVE("active"),
         LEARN_MORE("Learn More"),
