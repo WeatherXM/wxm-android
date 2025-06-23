@@ -76,7 +76,7 @@ class ExplorerViewModel(
 
     private val onViewportStations = MutableLiveData(0)
 
-    private val onMapLayer = MutableLiveData(MapLayer.DEFAULT)
+    private val onMapLayer = MutableLiveData(MapLayer.DATA_QUALITY)
 
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
@@ -250,7 +250,7 @@ class ExplorerViewModel(
                      * The explorer map is empty so send all the hexes to be drawn
                      */
                     response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions(
-                        onMapLayer.value ?: MapLayer.DEFAULT
+                        onMapLayer.value ?: MapLayer.DATA_QUALITY
                     )
                     response.pointsToDraw = response.publicHexes.toPointAnnotationOptions()
                     onExplorerData.postValue(response)
@@ -279,7 +279,7 @@ class ExplorerViewModel(
                      */
                     onExplorerData.value?.polygonsToDraw =
                         response.publicHexes.toPolygonAnnotationOptions(
-                            onMapLayer.value ?: MapLayer.DEFAULT
+                            onMapLayer.value ?: MapLayer.DATA_QUALITY
                         )
 
                     /**
@@ -287,7 +287,9 @@ class ExplorerViewModel(
                      * in order not to re-draw the whole explorer map but only the new hexes
                      */
                     onNewPolygons.postValue(
-                        newHexes.toPolygonAnnotationOptions(onMapLayer.value ?: MapLayer.DEFAULT)
+                        newHexes.toPolygonAnnotationOptions(
+                            onMapLayer.value ?: MapLayer.DATA_QUALITY
+                        )
                     )
                 }
                 onStatus.postValue(Resource.success(Unit))

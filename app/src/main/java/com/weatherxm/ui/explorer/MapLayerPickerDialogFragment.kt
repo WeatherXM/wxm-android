@@ -39,27 +39,27 @@ class MapLayerPickerDialogFragment : BaseBottomSheetDialogFragment() {
 
         model.onMapLayer().observe(this) {
             when (it) {
-                MapLayer.DEFAULT -> {
-                    check(binding.defaultOption, binding.defaultCard)
+                MapLayer.DENSITY -> {
+                    check(binding.densityOption, binding.densityCard)
                     unCheck(binding.dataQualityOption, binding.dataQualityCard)
                 }
                 MapLayer.DATA_QUALITY -> {
                     check(binding.dataQualityOption, binding.dataQualityCard)
-                    unCheck(binding.defaultOption, binding.defaultCard)
+                    unCheck(binding.densityOption, binding.densityCard)
                 }
                 else -> throw IllegalArgumentException("Unknown map layer: $it")
             }
         }
 
-        binding.defaultCard.setOnClickListener {
+        binding.densityCard.setOnClickListener {
             analytics.trackEventSelectContent(
                 AnalyticsService.ParamValue.SELECT_MAP_LAYER.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
-                    AnalyticsService.ParamValue.DEFAULT.paramValue
+                    AnalyticsService.ParamValue.DENSITY.paramValue
                 )
             )
-            model.setMapLayer(MapLayer.DEFAULT)
+            model.setMapLayer(MapLayer.DENSITY)
             dismiss()
         }
 
