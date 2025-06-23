@@ -59,13 +59,23 @@
                 app:title="@string/network_growth" />
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/buyCard"
+                android:id="@+id/proPromotionCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal_to_large"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 app:layout_constraintTop_toBottomOf="@id/growthCard"
+                tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/buyCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@id/proPromotionCard"
                 tools:composableName="com.weatherxm.ui.components.compose.BuyStationPromptCardKt" />
 
             <com.weatherxm.ui.components.NetworkStatsCardView
@@ -80,16 +90,6 @@
                 app:second_sub_card_title="@string/last_run"
                 app:title="@string/wxm_rewards" />
 
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/proPromotionCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:clipChildren="false"
-                app:layout_constraintTop_toBottomOf="@id/rewardsCard"
-                tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/manufacturerCard"
                 style="@style/Widget.WeatherXM.MaterialCard"
@@ -101,7 +101,7 @@
                 app:cardElevation="@dimen/elevation_small"
                 app:contentPadding="@dimen/padding_small_to_normal"
                 app:contentPaddingLeft="@dimen/padding_large"
-                app:layout_constraintTop_toBottomOf="@id/proPromotionCard">
+                app:layout_constraintTop_toBottomOf="@id/rewardsCard">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
