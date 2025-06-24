@@ -68,7 +68,9 @@ interface AnalyticsService {
         STATION_PHOTOS_INSTRUCTIONS("Station Photos Instructions"),
         STATION_PHOTOS_INTRO("Station Photos Intro"),
         STATION_PHOTOS_GALLERY("Station Photos Gallery"),
-        MAP_LAYER_PICKER("Map Layer Picker")
+        MAP_LAYER_PICKER("Map Layer Picker"),
+        TOKEN_METRICS("Token Metrics"),
+        NETWORK_GROWTH("Network Growth")
     }
 
     // Custom Event Names
@@ -167,16 +169,13 @@ interface AnalyticsService {
         DOCUMENTATION_FREQUENCY("Frequency Documentation"),
         OPEN_SHOP("Open Shop"),
         OPEN_STATION_SHOP("Open Station Shop"),
-        TOTAL("total"),
         CLAIMED("claimed"),
         ACTIVE("active"),
         LEARN_MORE("Learn More"),
-        DATA_DAYS("data_days"),
         ALLOCATED_REWARDS("allocated_rewards"),
         TOTAL_STATIONS("total_stations"),
         CLAIMED_STATIONS("claimed_stations"),
         ACTIVE_STATIONS("active_stations"),
-        BUY_STATION("buy_station"),
         MANUFACTURER("Open Manufacturer Contact"),
         EXPLORER_SEARCH("Explorer Search"),
         EXPLORER_SETTINGS("Explorer Settings"),
@@ -233,7 +232,6 @@ interface AnalyticsService {
         DAILY_DETAILS("daily_details"),
         NETWORK_STATS("Network Stats"),
         TOKEN_CONTRACT("token_contract"),
-        REWARD_CONTRACT("reward_contract"),
         LAST_RUN_HASH("last_run_hash"),
         TOTAL_SUPPLY("total_supply"),
         CIRCULATING_SUPPLY("circulating_supply"),
@@ -281,7 +279,14 @@ interface AnalyticsService {
         ANNOUNCEMENT_CTA("Announcement CTA"),
         SELECT_MAP_LAYER("Select Map Layer"),
         DENSITY("density"),
-        DATA_QUALITY("data_quality")
+        DATA_QUALITY("data_quality"),
+        NETWORK_HEALTH("network_health"),
+        DATA_QUALITY_SCORE("data_quality_score"),
+        TOTAL_WXM_ALLOCATED("total_wxm_allocated"),
+        BASE_REWARDS("base_rewards"),
+        BOOST_REWARDS("boost_rewards"),
+        REWARD_MECHANISM("reward_mechanism"),
+        DUNE("dune")
     }
 
     // Custom Param Names

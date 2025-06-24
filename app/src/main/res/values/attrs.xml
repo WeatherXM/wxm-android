@@ -52,4 +52,10 @@
     <declare-styleable name="EmptyRewardsCardView">
         <attr name="show_pro_tip" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="NetworkStatsCardView">
+        <attr name="title" format="string" />
+        <attr name="main_value_title" format="string" />
+        <attr name="first_sub_card_title" format="string" />
+        <attr name="second_sub_card_title" format="string" />
+    </declare-styleable>
 </resources>

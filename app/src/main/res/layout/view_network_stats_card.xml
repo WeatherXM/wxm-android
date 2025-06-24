@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/dataCard"
+        style="@style/Widget.WeatherXM.MaterialCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+        app:cardElevation="@dimen/elevation_small"
+        app:contentPadding="@dimen/padding_small_to_normal"
+        app:contentPaddingTop="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small_to_normal"
+                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/network_growth" />
+
+            <ImageView
+                android:id="@+id/arrowRight"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="@dimen/margin_small"
+                android:contentDescription="@string/action_open"
+                android:src="@drawable/ic_arrow_right"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintStart_toEndOf="@id/title"
+                app:layout_constraintTop_toTopOf="@id/title"
+                app:tint="@color/colorOnSurface"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/dataInfoBtn"
+                style="@style/Widget.WeatherXM.ImageButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/read_more"
+                android:src="@drawable/ic_learn_more_info"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title"
+                tools:visibility="visible" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small_to_normal"
+                android:layout_marginTop="@dimen/margin_extra_extra_small"
+                android:autoLink="none"
+                android:drawableEnd="@drawable/ic_open_new"
+                android:drawablePadding="@dimen/padding_extra_small"
+                android:drawableTint="@color/colorPrimary"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="@string/view_reward_mechanism"
+                tools:visibility="visible" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dataDaysMainData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:paddingVertical="@dimen/padding_small"
+                app:layout_constraintTop_toBottomOf="@id/subtitle">
+
+                <LinearLayout
+                    android:id="@+id/dataInfoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/padding_small_to_normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/mainValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                        android:textStyle="bold"
+                        tools:text="90.2K" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/mainTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/darkGrey"
+                        tools:text="@string/last_30_days" />
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/dataChart"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    app:layout_constraintEnd_toEndOf="@id/dataEndMonth"
+                    app:layout_constraintStart_toStartOf="@id/dataStartMonth"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/dataStartMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:textColor="@color/darkGrey"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dataChart"
+                    tools:text="Jan 1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/dataEndMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:textColor="@color/darkGrey"
+                    app:layout_constraintEnd_toEndOf="@id/dataChart"
+                    app:layout_constraintEnd_toStartOf="@id/dataInfoContainer"
+                    app:layout_constraintTop_toBottomOf="@id/dataChart"
+                    tools:text="Feb 1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintTop_toBottomOf="@id/dataDaysMainData">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.WeatherXM.MaterialCard"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/margin_extra_small"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/layer1"
+                    app:cardCornerRadius="@dimen/radius_medium"
+                    app:contentPadding="@dimen/padding_normal"
+                    app:contentPaddingBottom="@dimen/padding_small_to_normal"
+                    app:contentPaddingTop="@dimen/padding_small_to_normal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/firstSubCardTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/firstSubCardInfoBtn"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="@string/total" />
+
+                        <ImageButton
+                            android:id="@+id/firstSubCardInfoBtn"
+                            style="@style/Widget.WeatherXM.ImageButton"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:contentDescription="@string/read_more"
+                            android:src="@drawable/ic_learn_more_info"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/firstSubCardTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/firstSubCardTitle"
+                            tools:visibility="visible" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/firstSubCardValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/firstSubCardTitle"
+                            tools:text="100M" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/secondSubCard"
+                    style="@style/Widget.WeatherXM.MaterialCard"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/layer1"
+                    app:cardCornerRadius="@dimen/radius_medium"
+                    app:contentPadding="@dimen/padding_normal"
+                    app:contentPaddingBottom="@dimen/padding_small_to_normal"
+                    app:contentPaddingTop="@dimen/padding_small_to_normal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/secondSubCardTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/secondSubCardBtn"
+                            tools:text="@string/last_run" />
+
+                        <ImageButton
+                            android:id="@+id/secondSubCardBtn"
+                            style="@style/Widget.WeatherXM.ImageButton"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:contentDescription="@string/read_more"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/secondSubCardTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/secondSubCardTitle"
+                            tools:src="@drawable/ic_learn_more_info"
+                            tools:visibility="visible" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/secondSubCardValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/secondSubCardTitle"
+                            tools:text="+3.1K"
+                            tools:textColor="@color/green" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

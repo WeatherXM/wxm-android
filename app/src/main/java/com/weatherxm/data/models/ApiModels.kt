@@ -437,11 +437,13 @@ data class WeatherStation(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class NetworkStatsResponse(
+    @Json(name = "net_health")
+    val health: NetworkStatsHealth?,
+    @Json(name = "net_growth")
+    val growth: NetworkStatsGrowth?,
+    val rewards: NetworkStatsRewards?,
     @Json(name = "weather_stations")
     val weatherStations: NetworkStatsWeatherStations,
-    @Json(name = "data_days")
-    val dataDays: List<NetworkStatsTimeseries>?,
-    val tokens: NetworkStatsTokens?,
     val contracts: NetworkStatsContracts?,
     val customers: NetworkStatsCustomers?,
     @Json(name = "last_updated")
@@ -479,19 +481,87 @@ data class NetworkStatsStationDetails(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class NetworkStatsTokens(
+data class NetworkStatsHealth(
+    @Json(name = "network_avg_qod")
+    val networkAvgQod: Int?,
+    @Json(name = "active_stations")
+    val activeStations: Int?,
+    @Json(name = "network_uptime")
+    val networkUptime: Int?,
+    @Json(name = "health_30days_graph")
+    val health30DaysGraph: List<NetworkStatsTimeseries>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsGrowth(
+    @Json(name = "network_size")
+    val networkSize: Int?,
+    @Json(name = "network_scale_up")
+    val networkScaleUp: Int?,
+    @Json(name = "last_30days")
+    val last30Days: Int?,
+    @Json(name = "last_30days_graph")
+    val last30DaysGraph: List<NetworkStatsTimeseries>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsRewards(
+    val total: Int?,
+    @Json(name = "last_run")
+    val lastRun: Int?,
+    @Json(name = "last_30days")
+    val last30Days: Int?,
+    @Json(name = "last_30days_graph")
+    val last30DaysGraph: List<NetworkStatsTimeseries>?,
+    @Json(name = "last_tx_hash_url")
+    val lastTxHashUrl: String?,
+    @Json(name = "token_metrics")
+    val tokenMetrics: NetworkStatsTokenMetrics?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsTokenMetrics(
+    @Json(name = "total_allocated")
+    val totalAllocated: NetworkStatsTotalAllocated?,
+    val token: NetworkStatsToken?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsTotalAllocated(
+    val dune: NetworkStatsDune?,
+    @Json(name = "base_rewards")
+    val baseRewards: Int?,
+    @Json(name = "boost_rewards")
+    val boostRewards: Int?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsDune(
+    val total: Int?,
+    val claimed: Int?,
+    val unclaimed: Int?,
+    @Json(name = "dune_public_url")
+    val duneUrl: String?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsToken(
     @Json(name = "total_supply")
     val totalSupply: Int?,
-    @Json(name = "total_allocated")
-    val totalAllocated: Int?,
-    @Json(name = "allocated_per_day")
-    val allocatedPerDay: List<NetworkStatsTimeseries>?,
-    @Json(name = "avg_monthly")
-    val avgMonthly: Double?,
     @Json(name = "circulating_supply")
-    val circSupply: Int?,
-    @Json(name = "last_tx_hash_url")
-    val lastTxHashUrl: String?
+    val circulatingSupply: Int?
 ) : Parcelable
 
 @Keep
