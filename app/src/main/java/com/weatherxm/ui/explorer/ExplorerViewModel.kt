@@ -41,7 +41,6 @@ class ExplorerViewModel(
         const val HEATMAP_LAYER_SOURCE = "heatmap"
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
         const val SHOW_STATION_COUNT_ZOOM_LEVEL: Double = 10.0
-        const val POINT_LAYER: String = "point_layer"
     }
 
     // Explorer Data
