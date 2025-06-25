@@ -57,8 +57,6 @@ jobs:
                     java-version: '17'
             -   name: Build Production
                 run: ./gradlew :app:assembleRemoteProdRelease -PSKIP_PRODUCTION_ENV
-            -   name: Build Local Mock
-                run: ./gradlew :app:assemblelocalMockDebug -PSKIP_PRODUCTION_ENV
     codeanalysis:
         needs: build
         environment: production
