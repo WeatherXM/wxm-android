@@ -19,6 +19,7 @@ class NetworkGrowthActivity : BaseActivity() {
     private lateinit var binding: ActivityNetworkGrowthBinding
 
     private lateinit var deployedAdapter: NetworkStationStatsAdapter
+    private lateinit var manufacturedAdapter: NetworkStationStatsAdapter
     private lateinit var activeAdapter: NetworkStationStatsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +39,14 @@ class NetworkGrowthActivity : BaseActivity() {
             finish()
         }
 
+        binding.manufacturedInfoBtn.setOnClickListener {
+            openLearnMoreDialog(
+                R.string.manufactured_and_provisioned,
+                R.string.manufactured_weather_stations_explanation,
+                AnalyticsService.ParamValue.TOTAL_STATIONS.paramValue
+            )
+        }
+
         binding.deployedInfoBtn.setOnClickListener {
             openLearnMoreDialog(
                 R.string.deployed,
@@ -54,6 +63,11 @@ class NetworkGrowthActivity : BaseActivity() {
             )
         }
 
+        manufacturedAdapter = NetworkStationStatsAdapter {
+            openStationShop(it, AnalyticsService.ParamValue.TOTAL.paramValue)
+        }
+        binding.manufacturedRecycler.adapter = manufacturedAdapter
+
         deployedAdapter = NetworkStationStatsAdapter {
             openStationShop(it, AnalyticsService.ParamValue.CLAIMED.paramValue)
         }
@@ -67,6 +81,7 @@ class NetworkGrowthActivity : BaseActivity() {
         binding.deployed.text = networkStats.claimedStations
         binding.active.text = networkStats.activeStations
 
+        manufacturedAdapter.submitList(networkStats.totalStationStats)
         deployedAdapter.submitList(networkStats.claimedStationStats)
         activeAdapter.submitList(networkStats.activeStationStats)
 
