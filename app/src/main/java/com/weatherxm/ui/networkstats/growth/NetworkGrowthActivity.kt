@@ -78,6 +78,7 @@ class NetworkGrowthActivity : BaseActivity() {
         }
         binding.activeRecycler.adapter = activeAdapter
 
+        binding.manufactured.text = networkStats.totalStations
         binding.deployed.text = networkStats.claimedStations
         binding.active.text = networkStats.activeStations
 
