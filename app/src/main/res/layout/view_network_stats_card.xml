@@ -171,47 +171,54 @@
                     app:contentPaddingBottom="@dimen/padding_small_to_normal"
                     app:contentPaddingTop="@dimen/padding_small_to_normal">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/firstSubCardTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textAllCaps="true"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/firstSubCardInfoBtn"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="@string/total" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <ImageButton
-                            android:id="@+id/firstSubCardInfoBtn"
-                            style="@style/Widget.WeatherXM.ImageButton"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="@dimen/margin_extra_small"
-                            android:contentDescription="@string/read_more"
-                            android:src="@drawable/ic_learn_more_info"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@id/firstSubCardTitle"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/firstSubCardTitle"
-                            tools:visibility="visible" />
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/firstSubCardTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                app:layout_constraintEnd_toStartOf="@id/firstSubCardInfoBtn"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="@string/total" />
+
+                            <ImageButton
+                                android:id="@+id/firstSubCardInfoBtn"
+                                style="@style/Widget.WeatherXM.ImageButton"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="@dimen/margin_extra_small"
+                                android:contentDescription="@string/read_more"
+                                android:src="@drawable/ic_learn_more_info"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="@id/firstSubCardTitle"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/firstSubCardTitle"
+                                tools:visibility="visible" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/firstSubCardValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/margin_small"
+                            android:gravity="bottom"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/firstSubCardTitle"
                             tools:text="100M" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
@@ -227,48 +234,54 @@
                     app:contentPaddingBottom="@dimen/padding_small_to_normal"
                     app:contentPaddingTop="@dimen/padding_small_to_normal">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/secondSubCardTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textAllCaps="true"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/secondSubCardBtn"
-                            tools:text="@string/last_run" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <ImageButton
-                            android:id="@+id/secondSubCardBtn"
-                            style="@style/Widget.WeatherXM.ImageButton"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="@dimen/margin_extra_small"
-                            android:contentDescription="@string/read_more"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@id/secondSubCardTitle"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/secondSubCardTitle"
-                            tools:src="@drawable/ic_learn_more_info"
-                            tools:visibility="visible" />
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/secondSubCardTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                app:layout_constraintEnd_toStartOf="@id/secondSubCardBtn"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="@string/last_run" />
+
+                            <ImageButton
+                                android:id="@+id/secondSubCardBtn"
+                                style="@style/Widget.WeatherXM.ImageButton"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="@dimen/margin_extra_small"
+                                android:contentDescription="@string/read_more"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="@id/secondSubCardTitle"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/secondSubCardTitle"
+                                tools:src="@drawable/ic_learn_more_info"
+                                tools:visibility="visible" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/secondSubCardValue"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/margin_small"
+                            android:gravity="bottom"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                             android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/secondSubCardTitle"
                             tools:text="+3.1K"
                             tools:textColor="@color/green" />
+                    </LinearLayout>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
