@@ -13,11 +13,11 @@ plugins {
 }
 
 /**
- * Load key-values from "production.env" properties file into extension properties (ext)
+ * Load key-values from "solana.env" properties file into extension properties (ext)
  */
 task("loadProductionEnv") {
     if (!project.hasProperty("SKIP_PRODUCTION_ENV")) {
-        val env = rootProject.file("production.env")
+        val env = rootProject.file("solana.env")
 
         if (env.exists()) {
             env.forEachLine {
@@ -28,9 +28,9 @@ task("loadProductionEnv") {
             }
         } else {
             throw GradleException(
-                "`production.env` not found. " +
+                "`solana.env` not found. " +
                     "Please follow the \"building\" section on the README or the CONTRIBUTING guide" +
-                    " and use the respective template to create `production.env`."
+                    " and use the respective template to create `solana.env`."
             )
         }
     }

@@ -175,9 +175,9 @@ android {
             }
         }
         create("prod") {
-            val apiURL = getFlavorProperty("API_URL", "production.env")
-            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
-            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "production.env")
+            val apiURL = getFlavorProperty("API_URL", "solana.env")
+            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "solana.env")
+            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "solana.env")
             dimension = "server"
             resValue("string", "app_name", "WeatherXM")
             manifestPlaceholders["auth_host"] = "app.weatherxm.com"
