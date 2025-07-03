@@ -47,7 +47,7 @@ class ProPromotionDialogFragment : BaseBottomSheetDialogFragment() {
                     AnalyticsService.ParamValue.PRO_PROMOTION.paramValue
                 )
             )
-            navigator.openWebsite(context, getString(R.string.pro_url))
+            navigator.openWebsiteExternally(context, getString(R.string.pro_url))
         }
     }
 

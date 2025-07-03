@@ -15,6 +15,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -646,7 +647,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 it.startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(context.getString(R.string.support_center_url))
+                        context.getString(R.string.support_center_url).toUri()
                     )
                 )
             } catch (e: ActivityNotFoundException) {
@@ -672,7 +673,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             try {
                 CustomTabsIntent.Builder()
                     .build()
-                    .launchUrl(it, Uri.parse(url))
+                    .launchUrl(it, url.toUri())
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not load url: $url")
                 it.toast(R.string.error_open_website_support_cannot_open_url, url)
@@ -680,10 +681,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
+    fun openWebsiteExternally(context: Context?, url: String) {
+        context?.let {
+            try {
+                it.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+            } catch (e: ActivityNotFoundException) {
+                Timber.d(e, "Could not open the external browser.")
+                openWebsite(it, url)
+            }
+        }
+    }
+
     fun openPlayStore(context: Context?, url: String) {
         context?.let {
             try {
-                it.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                it.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not open play store.")
                 it.toast(R.string.error_cannot_open_play_store)
