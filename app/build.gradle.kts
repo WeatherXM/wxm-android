@@ -1,3 +1,5 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
@@ -99,6 +101,13 @@ android {
             keyAlias = getStringProperty("RELEASE_KEY_ALIAS")
             keyPassword = getStringProperty("RELEASE_KEY_PASSWORD")
         }
+        create("releaseOnSolana") {
+            storeFile =
+                file("${rootDir.path}/${getFlavorProperty("SOLANA_KEYSTORE", "solana.env")}")
+            storePassword = getFlavorProperty("SOLANA_KEYSTORE_PASSWORD", "solana.env")
+            keyAlias = getFlavorProperty("SOLANA_KEY_ALIAS", "solana.env")
+            keyPassword = getFlavorProperty("SOLANA_KEY_PASSWORD", "solana.env")
+        }
         if (hasProperty("DEBUG_KEYSTORE")) {
             create("debug-config") {
                 storeFile = file("${rootDir.path}/${getStringProperty("DEBUG_KEYSTORE")}")
@@ -193,11 +202,40 @@ android {
                 groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
+        create("solana") {
+            val apiURL = getFlavorProperty("API_URL", "production.env")
+            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
+            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "production.env")
+            dimension = "server"
+            applicationIdSuffix = ".solana"
+            resValue("string", "app_name", "WeatherXM")
+            manifestPlaceholders["auth_host"] = "app.weatherxm.com"
+            manifestPlaceholders["explorer_host"] = "explorer.weatherxm.com"
+            buildConfigField("String", "API_URL", "\"$apiURL\"")
+            buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
+            buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"$mixpanelToken\"")
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Release notes for Solana version"
+                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
+            }
+        }
     }
 
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            manifestPlaceholders["crashlyticsEnabled"] = true
+        }
+        create("releaseOnSolana") {
+            signingConfig = signingConfigs.getByName("releaseOnSolana")
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -230,12 +268,22 @@ android {
     // Filter out specific build variants
     androidComponents {
         beforeVariants { variantBuilder ->
-            val name = variantBuilder.name.lowercase()
+            val name = variantBuilder.flavorName?.lowercase() ?: ""
             val buildType = variantBuilder.buildType
             if (name.contains("local") && !name.contains("mock")) {
                 variantBuilder.enable = false
             } else if (buildType != "debug" && name.contains("mock")) {
                 variantBuilder.enable = false
+            } else if (buildType == "releaseOnSolana") {
+                // For releaseOnSolana build type: ONLY allow with solana flavor
+                if (!name.contains("solana")) {
+                    variantBuilder.enable = false
+                }
+            } else if (name.contains("solana")) {
+                // For solana flavor: only allow debug and releaseOnSolana build types
+                if (buildType != "debug" && buildType != "releaseOnSolana") {
+                    variantBuilder.enable = false
+                }
             }
         }
     }
@@ -255,6 +303,8 @@ android {
             version = "$version-mock"
         } else if (flavor.contains("dev")) {
             version = "$version-development"
+        } else if(flavor.contains("solana")) {
+            version = "$version-solana"
         }
 
         // Add debug build type in version
@@ -540,6 +590,7 @@ dependencies {
     // Chucker - HTTP Inspector
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
+    add("releaseOnSolanaImplementation", libs.chucker.no.op)
 
     // Upload Service
     implementation(libs.upload.service)
