@@ -20,39 +20,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal_to_large"
-                    android:text="@string/photo_verification"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/layer2"
-                    app:cardCornerRadius="8dp"
-                    app:contentPadding="@dimen/padding_small"
-                    app:layout_constraintBottom_toBottomOf="@id/title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/title">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_new"
-                        app:tint="@color/colorPrimary" />
-
-                </com.google.android.material.card.MaterialCardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal_to_large"
+                android:text="@string/photo_verification"
+                android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/emptyText"
