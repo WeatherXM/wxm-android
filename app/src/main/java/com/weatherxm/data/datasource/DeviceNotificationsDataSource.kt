@@ -9,6 +9,8 @@ interface DeviceNotificationsDataSource {
     fun getDeviceNotificationsEnabled(deviceId: String): Boolean
     fun setDeviceNotificationTypesEnabled(deviceId: String, types: Set<String>)
     fun getDeviceNotificationTypesEnabled(deviceId: String): Set<String>
+    fun showDeviceNotificationsPrompt(): Boolean
+    fun checkDeviceNotificationsPrompt()
 }
 
 class DeviceNotificationsDataSourceImpl(
@@ -34,4 +36,7 @@ class DeviceNotificationsDataSourceImpl(
         val key = getDeviceNotificationTypesFormattedKey(deviceId)
         return cacheService.getDeviceNotificationTypesEnabled(key)
     }
+
+    override fun showDeviceNotificationsPrompt() = cacheService.getDeviceNotificationsPrompt()
+    override fun checkDeviceNotificationsPrompt() = cacheService.checkDeviceNotificationsPrompt()
 }

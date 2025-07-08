@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.warningChip
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.DeviceNotificationsPromptDialog
 import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
@@ -128,6 +129,17 @@ class DeviceDetailsActivity : BaseActivity() {
             TermsDialog(model.shouldShowTerms.value) {
                 model.setAcceptTerms()
             }
+        }
+
+        binding.dialogComposeView.setContent {
+            DeviceNotificationsPromptDialog(
+                shouldShow = model.showNotificationsPrompt.value,
+                onDismiss = { model.checkDeviceNotificationsPrompt() },
+                onTakeMeThere = {
+                    model.checkDeviceNotificationsPrompt()
+                    navigator.showStationNotifications(this, model.device)
+                }
+            )
         }
 
         val adapter = ViewPagerAdapter(this)

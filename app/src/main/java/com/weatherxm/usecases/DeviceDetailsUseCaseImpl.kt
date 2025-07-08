@@ -3,6 +3,7 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Rewards
+import com.weatherxm.data.repository.DeviceNotificationsRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
@@ -19,7 +20,8 @@ class DeviceDetailsUseCaseImpl(
     private val rewardsRepository: RewardsRepository,
     private val explorerRepository: ExplorerRepository,
     private val deviceOTARepo: DeviceOTARepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val notificationsRepo: DeviceNotificationsRepository
 ) : DeviceDetailsUseCase {
 
     override suspend fun getDevice(device: UIDevice): Either<Failure, UIDevice> {
@@ -51,4 +53,8 @@ class DeviceDetailsUseCaseImpl(
 
     override fun shouldShowTermsPrompt() = userPreferencesRepository.shouldShowTermsPrompt()
     override fun setAcceptTerms() = userPreferencesRepository.setAcceptTerms()
+    override fun showDeviceNotificationsPrompt() = notificationsRepo.showDeviceNotificationsPrompt()
+    override fun checkDeviceNotificationsPrompt() {
+        notificationsRepo.checkDeviceNotificationsPrompt()
+    }
 }

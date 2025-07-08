@@ -11,6 +11,9 @@ interface DeviceNotificationsRepository {
         deviceId: String,
         types: List<DeviceNotificationType>
     )
+
+    fun showDeviceNotificationsPrompt(): Boolean
+    fun checkDeviceNotificationsPrompt()
 }
 
 class DeviceNotificationsRepositoryImpl(
@@ -40,4 +43,7 @@ class DeviceNotificationsRepositoryImpl(
             DeviceNotificationType.valueOf(it)
         }
     }
+
+    override fun showDeviceNotificationsPrompt() = datasource.showDeviceNotificationsPrompt()
+    override fun checkDeviceNotificationsPrompt() = datasource.checkDeviceNotificationsPrompt()
 }

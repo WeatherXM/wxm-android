@@ -57,6 +57,7 @@ class CacheService(
         const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
         const val KEY_DEVICE_NOTIFICATIONS = "device_notifications"
         const val KEY_DEVICE_NOTIFICATION_TYPES = "device_notification_types"
+        const val KEY_DEVICE_NOTIFICATIONS_PROMPT = "device_notifications_prompt"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -458,6 +459,14 @@ class CacheService(
         return preferences.getStringSet(key, emptySet()) ?: emptySet()
     }
 
+    fun checkDeviceNotificationsPrompt() {
+        preferences.edit { putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, false) }
+    }
+
+    fun getDeviceNotificationsPrompt(): Boolean {
+        return preferences.getBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, true)
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -511,6 +520,7 @@ class CacheService(
             KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
         )
         val savedAcceptTermsTimestamp = preferences.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0L)
+        val savedDeviceNotificationsPrompt = getDeviceNotificationsPrompt()
         val widgetIds = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
         val devicesOfWidgets = mutableMapOf<String, String>()
         widgetIds?.forEach {
@@ -533,6 +543,7 @@ class CacheService(
                 .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
                 .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
+                .putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, savedDeviceNotificationsPrompt)
         }
 
         devicesOfWidgets.forEach {
