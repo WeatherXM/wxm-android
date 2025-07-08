@@ -187,6 +187,10 @@ class DeviceDetailsActivity : BaseActivity() {
                 navigator.showStationSettings(this, model.device)
                 true
             }
+            R.id.notifications -> {
+                navigator.showStationNotifications(this, model.device)
+                true
+            }
             else -> false
         }
     }
@@ -227,9 +231,12 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         with(binding.toolbar) {
+            if (!device.isOwned()) {
+                menu.removeItem(R.id.notifications)
+            }
             if (device.isFollowed()) {
                 if (menu.findItem(R.id.settings) == null) {
-                    menu.add(Menu.NONE, R.id.settings, 1, R.string.station_settings)
+                    menu.add(Menu.NONE, R.id.settings, 1, R.string.settings)
                 }
             } else if (device.isUnfollowed()) {
                 menu.removeItem(R.id.settings)

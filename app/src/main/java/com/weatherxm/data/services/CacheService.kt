@@ -55,6 +55,7 @@ class CacheService(
         const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
         const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
+        const val KEY_DEVICE_NOTIFICATIONS = "device_notifications"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -74,6 +75,10 @@ class CacheService(
 
         fun getUserDeviceOwnFormattedKey(deviceBundleName: String): String {
             return "${KEY_DEVICES_OWN}_${deviceBundleName}"
+        }
+
+        fun getDeviceNotificationsFormattedKey(deviceId: String): String {
+            return "${KEY_DEVICE_NOTIFICATIONS}_${deviceId}"
         }
     }
 
@@ -430,6 +435,14 @@ class CacheService(
 
     fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
         preferences.edit { putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow) }
+    }
+
+    fun setDeviceNotificationsEnabled(key: String, enabled: Boolean) {
+        preferences.edit { putBoolean(key, enabled) }
+    }
+
+    fun getDeviceNotificationsEnabled(key: String): Boolean {
+        return preferences.getBoolean(key, true)
     }
 
     fun getPreferredUnit(
