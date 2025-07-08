@@ -56,6 +56,7 @@ class CacheService(
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
         const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
         const val KEY_DEVICE_NOTIFICATIONS = "device_notifications"
+        const val KEY_DEVICE_NOTIFICATION_TYPES = "device_notification_types"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -79,6 +80,10 @@ class CacheService(
 
         fun getDeviceNotificationsFormattedKey(deviceId: String): String {
             return "${KEY_DEVICE_NOTIFICATIONS}_${deviceId}"
+        }
+
+        fun getDeviceNotificationTypesFormattedKey(deviceId: String): String {
+            return "${KEY_DEVICE_NOTIFICATION_TYPES}_${deviceId}"
         }
     }
 
@@ -443,6 +448,14 @@ class CacheService(
 
     fun getDeviceNotificationsEnabled(key: String): Boolean {
         return preferences.getBoolean(key, true)
+    }
+
+    fun setDeviceNotificationTypesEnabled(key: String, types: Set<String>) {
+        preferences.edit { putStringSet(key, types) }
+    }
+
+    fun getDeviceNotificationTypesEnabled(key: String): Set<String> {
+        return preferences.getStringSet(key, emptySet()) ?: emptySet()
     }
 
     fun getPreferredUnit(

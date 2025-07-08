@@ -15,6 +15,7 @@ import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.SwitchWithIcon
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
@@ -57,6 +58,7 @@ class DeviceNotificationsActivity : BaseActivity() {
         }
 
         handleMainSwitch()
+        handleNotificationCategories()
     }
 
     /**
@@ -65,21 +67,36 @@ class DeviceNotificationsActivity : BaseActivity() {
     @SuppressLint("InlinedApi")
     private fun handleMainSwitch() {
         model.getDeviceNotificationsEnabled(hasNotificationPermissions)
-        binding.mainSwitch.isChecked = model.areNotificationsEnabled.value
 
-        binding.mainSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                if (hasNotificationPermissions) {
-                    model.setDeviceNotificationsEnabled(true)
-                } else if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
-                    checkPermissionsAndThen(
-                        permissions = arrayOf(POST_NOTIFICATIONS),
-                        onGranted = { model.setDeviceNotificationsEnabled(true) },
-                        onDenied = { binding.mainSwitch.isChecked = false }
-                    )
+        binding.mainSwitch.setContent {
+            SwitchWithIcon(isChecked = model.notificationsEnabled.value) {
+                if (it) {
+                    if (hasNotificationPermissions) {
+                        model.setDeviceNotificationsEnabled(true)
+                    } else if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
+                        checkPermissionsAndThen(
+                            permissions = arrayOf(POST_NOTIFICATIONS),
+                            onGranted = { model.setDeviceNotificationsEnabled(true) },
+                            onDenied = { model.setDeviceNotificationsEnabled(false) }
+                        )
+                    }
+                } else {
+                    model.setDeviceNotificationsEnabled(false)
                 }
-            } else {
-                model.setDeviceNotificationsEnabled(false)
+            }
+        }
+    }
+
+    private fun handleNotificationCategories() {
+        model.getDeviceNotificationTypes()
+
+        binding.notificationTypes.setContent {
+            DeviceNotificationTypesView(
+                isMainEnabled = model.notificationsEnabled.value,
+                supportsFirmwareUpdate = model.device.isHelium(),
+                notificationTypesEnabled = model.notificationTypesEnabled
+            ) { type, enabled ->
+                model.setDeviceNotificationTypeEnabled(type, enabled)
             }
         }
     }
