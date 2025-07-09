@@ -4,6 +4,7 @@ import android.content.Context
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
+import com.weatherxm.service.workers.DevicesNotificationsWorker
 import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.startup.StartupState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,7 +45,10 @@ class StartupUseCaseImpl(
                 trySend(StartupState.ShowUpdate)
             } else {
                 val isLoggedIn = authRepository.isLoggedIn().apply {
-                    if (this) RefreshFcmApiWorker.initAndRefreshToken(context, null)
+                    if (this) {
+                        RefreshFcmApiWorker.initAndRefreshToken(context, null)
+                        DevicesNotificationsWorker.initAndStart(context)
+                    }
                 }
                 Timber.d("User logged in: $isLoggedIn")
                 if (isLoggedIn && userPreferencesRepository.shouldShowAnalyticsOptIn()) {

@@ -7,6 +7,12 @@ fun ZonedDateTime.isToday(): Boolean {
     return now.dayOfYear == this.dayOfYear
 }
 
+fun ZonedDateTime.isYesterday(): Boolean {
+    val today = ZonedDateTime.now(this.zone).toLocalDate()
+    val yesterdayDate = today.minusDays(1)
+    return this.toLocalDate() == yesterdayDate
+}
+
 fun ZonedDateTime.toISODate(): String = this.toLocalDate().toString()
 
 fun ZonedDateTime.isSameDayAndHour(targetTimestamp: ZonedDateTime): Boolean {
