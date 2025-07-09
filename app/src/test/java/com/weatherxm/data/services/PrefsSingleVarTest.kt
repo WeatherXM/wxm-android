@@ -5,6 +5,7 @@ import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCEPT_TERMS_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
+import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICE_NOTIFICATIONS_PROMPT
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_ANNOUNCEMENT_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BANNER_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
@@ -26,7 +27,10 @@ class PrefsSingleVarTest(
     private val surveyId = "surveyId"
     private val infoBannerId = "infoBannerId"
     private val announcementBannerId = "announcementBannerId"
+    private val deviceNotificationsKey = "deviceNotificationsKey"
+    private val deviceNotificationTypesKey = "deviceNotificationTypesKey"
     private val lastRemindedVersion = 0
+    private val notificationTypes = setOf("notificationType1", "notificationType2")
 
     @Suppress("LongParameterList")
     private fun BehaviorSpec.testGetSetSingleVar(
@@ -162,6 +166,38 @@ class PrefsSingleVarTest(
             { prefEditor.putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, false) },
             { cacheService.getClaimingBadgeShouldShow() },
             { cacheService.setClaimingBadgeShouldShow(false) }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "if the device notifications are enabled or not",
+            true,
+            { sharedPref.getBoolean(deviceNotificationsKey, true) },
+            { prefEditor.putBoolean(deviceNotificationsKey, true) },
+            { cacheService.getDeviceNotificationsEnabled(deviceNotificationsKey) },
+            { cacheService.setDeviceNotificationsEnabled(deviceNotificationsKey, true) }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "the device notification types enabled",
+            emptySet<String>(),
+            { sharedPref.getStringSet(deviceNotificationTypesKey, emptySet<String>()) },
+            { prefEditor.putStringSet(deviceNotificationTypesKey, notificationTypes) },
+            { cacheService.getDeviceNotificationTypesEnabled(deviceNotificationTypesKey) },
+            {
+                cacheService.setDeviceNotificationTypesEnabled(
+                    deviceNotificationTypesKey,
+                    notificationTypes
+                )
+            }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "if we should show the notifications prompt or not",
+            true,
+            { sharedPref.getBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, true) },
+            { prefEditor.putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, false) },
+            { cacheService.getDeviceNotificationsPrompt() },
+            { cacheService.checkDeviceNotificationsPrompt() }
         )
     }
 }

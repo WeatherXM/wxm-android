@@ -6,10 +6,10 @@ import com.weatherxm.data.models.DeviceNotificationType
 interface DeviceNotificationsRepository {
     fun setDeviceNotificationsEnabled(deviceId: String, enabled: Boolean)
     fun getDeviceNotificationsEnabled(deviceId: String): Boolean
-    fun getDeviceNotificationTypesEnabled(deviceId: String): List<DeviceNotificationType>
+    fun getDeviceNotificationTypesEnabled(deviceId: String): Set<DeviceNotificationType>
     fun setDeviceNotificationTypesEnabled(
         deviceId: String,
-        types: List<DeviceNotificationType>
+        types: Set<DeviceNotificationType>
     )
 
     fun showDeviceNotificationsPrompt(): Boolean
@@ -30,7 +30,7 @@ class DeviceNotificationsRepositoryImpl(
 
     override fun setDeviceNotificationTypesEnabled(
         deviceId: String,
-        types: List<DeviceNotificationType>
+        types: Set<DeviceNotificationType>
     ) {
         datasource.setDeviceNotificationTypesEnabled(
             deviceId = deviceId,
@@ -38,10 +38,10 @@ class DeviceNotificationsRepositoryImpl(
         )
     }
 
-    override fun getDeviceNotificationTypesEnabled(deviceId: String): List<DeviceNotificationType> {
+    override fun getDeviceNotificationTypesEnabled(deviceId: String): Set<DeviceNotificationType> {
         return datasource.getDeviceNotificationTypesEnabled(deviceId).map {
             DeviceNotificationType.valueOf(it)
-        }
+        }.toSet()
     }
 
     override fun showDeviceNotificationsPrompt() = datasource.showDeviceNotificationsPrompt()

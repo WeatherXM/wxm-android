@@ -35,6 +35,6 @@ class DeviceNotificationsViewModel(
         } else {
             notificationTypesEnabled.remove(type)
         }
-        useCase.setDeviceNotificationTypesEnabled(device.id, notificationTypesEnabled.toList())
+        useCase.setDeviceNotificationTypesEnabled(device.id, notificationTypesEnabled.toSet())
     }
 }
