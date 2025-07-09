@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityDeviceNotificationsBinding
+import com.weatherxm.service.workers.DevicesNotificationsWorker
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
@@ -72,11 +73,11 @@ class DeviceNotificationsActivity : BaseActivity() {
             SwitchWithIcon(isChecked = model.notificationsEnabled.value) {
                 if (it) {
                     if (hasNotificationPermissions) {
-                        model.setDeviceNotificationsEnabled(true)
+                        onNotificationsEnabled()
                     } else if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
                         checkPermissionsAndThen(
                             permissions = arrayOf(POST_NOTIFICATIONS),
-                            onGranted = { model.setDeviceNotificationsEnabled(true) },
+                            onGranted = { onNotificationsEnabled() },
                             onDenied = { model.setDeviceNotificationsEnabled(false) }
                         )
                     }
@@ -85,6 +86,11 @@ class DeviceNotificationsActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun onNotificationsEnabled() {
+        DevicesNotificationsWorker.initAndStart(this)
+        model.setDeviceNotificationsEnabled(true)
     }
 
     private fun handleNotificationCategories() {
