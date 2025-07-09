@@ -9,7 +9,7 @@ publisher:
 app:
   name: WeatherXM
   address: ''
-  android_package: com.weatherxm.app
+  android_package: com.weatherxm.app.solana
   urls:
     license_url: https://weatherxm.com/terms-conditions/
     copyright_url: https://weatherxm.com/terms-conditions/
