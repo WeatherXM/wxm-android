@@ -3,6 +3,7 @@ package com.weatherxm.analytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import io.kotest.core.spec.style.BehaviorSpec
+import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.spyk
@@ -99,10 +100,21 @@ class MixpanelAnalyticsServiceTest : KoinTest, BehaviorSpec({
     context("Enable or Disable Analytics") {
         given("a boolean flag indicating if analytics are enabled or not") {
             When("enabled") {
-                then("then call setAnalyticsCollectionEnabled with TRUE") {
-                    service.setAnalyticsEnabled(true)
-                    verify(exactly = 1) { mixpanelAPI.optInTracking() }
-                    verify(exactly = 0) { mixpanelAPI.optOutTracking() }
+                and("the user has already opted in") {
+                    every { mixpanelAPI.hasOptedOutTracking() } returns false
+                    then("do NOT call optInTracking, do nothing") {
+                        service.setAnalyticsEnabled(true)
+                        verify(exactly = 0) { mixpanelAPI.optInTracking() }
+                        verify(exactly = 0) { mixpanelAPI.optOutTracking() }
+                    }
+                }
+                and("the user has NOT already opted in") {
+                    every { mixpanelAPI.hasOptedOutTracking() } returns true
+                    then("call optInTracking") {
+                        service.setAnalyticsEnabled(true)
+                        verify(exactly = 1) { mixpanelAPI.optInTracking() }
+                        verify(exactly = 0) { mixpanelAPI.optOutTracking() }
+                    }
                 }
             }
             When("disabled") {
