@@ -44,7 +44,7 @@ release:
     en-US:
       name: WeatherXM
 
-      short_description: The world's first decentralized weather network.
+      short_description: Enter Weather 3.0
       
       long_description: |
         WeatherXM is the first decentralized weather network — think “Helium for weather” — powered by 9,000+ community-operated weather stations worldwide.
