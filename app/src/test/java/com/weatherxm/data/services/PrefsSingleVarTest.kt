@@ -2,6 +2,7 @@ package com.weatherxm.data.services
 
 import android.content.SharedPreferences
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.data.models.DeviceNotificationType
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCEPT_TERMS_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
@@ -31,6 +32,7 @@ class PrefsSingleVarTest(
     private val deviceNotificationTypesKey = "deviceNotificationTypesKey"
     private val lastRemindedVersion = 0
     private val notificationTypes = setOf("notificationType1", "notificationType2")
+    private val allNotificationTypes = DeviceNotificationType.entries.map { it.name }.toSet()
 
     @Suppress("LongParameterList")
     private fun BehaviorSpec.testGetSetSingleVar(
@@ -179,8 +181,8 @@ class PrefsSingleVarTest(
 
         behaviorSpec.testGetSetSingleVar(
             "the device notification types enabled",
-            emptySet<String>(),
-            { sharedPref.getStringSet(deviceNotificationTypesKey, emptySet<String>()) },
+            allNotificationTypes,
+            { sharedPref.getStringSet(deviceNotificationTypesKey, allNotificationTypes) },
             { prefEditor.putStringSet(deviceNotificationTypesKey, notificationTypes) },
             { cacheService.getDeviceNotificationTypesEnabled(deviceNotificationTypesKey) },
             {

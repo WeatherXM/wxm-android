@@ -13,6 +13,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Device
+import com.weatherxm.data.models.DeviceNotificationType
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBannerType
@@ -456,7 +457,11 @@ class CacheService(
     }
 
     fun getDeviceNotificationTypesEnabled(key: String): Set<String> {
-        return preferences.getStringSet(key, emptySet()) ?: emptySet()
+        /**
+         * By default have enabled all types when the user hasn't edited them.
+         */
+        val allTypes = DeviceNotificationType.entries.map { it.name }.toSet()
+        return preferences.getStringSet(key, allTypes) ?: allTypes
     }
 
     fun checkDeviceNotificationsPrompt() {
