@@ -262,6 +262,7 @@ class DevicesNotificationsWorker(
     ): PendingIntent? {
         val deviceDetailsActivity = Intent(context, DeviceDetailsActivity::class.java)
             .putExtra(Contracts.ARG_DEVICE, device)
+            .putExtra(Contracts.ARG_OPEN_STATION_FROM_NOTIFICATION, true)
 
         /**
          * A unique request code per Intent, to allow different notifications for the same device
