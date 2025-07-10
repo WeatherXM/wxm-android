@@ -96,6 +96,14 @@ class DeviceDetailsActivity : BaseActivity() {
             return
         }
 
+        intent.getBooleanExtra(Contracts.ARG_OPEN_STATION_FROM_NOTIFICATION, false).apply {
+            if (this) {
+                analytics.trackEventViewContent(
+                    AnalyticsService.ParamValue.OPEN_STATION_FROM_NOTIFICATION.paramValue
+                )
+            }
+        }
+
         onBackPressedDispatcher.addCallback {
             if (!model.openExplorerOnBack || model.isLoggedIn() == null) {
                 finish()

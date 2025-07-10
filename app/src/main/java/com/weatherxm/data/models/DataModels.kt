@@ -6,6 +6,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.otherFrequencies
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -106,11 +107,11 @@ enum class BluetoothOTAState {
     COMPLETED
 }
 
-enum class DeviceNotificationType {
-    ACTIVITY,
-    BATTERY,
-    FIRMWARE,
-    HEALTH
+enum class DeviceNotificationType(val analyticsParam: AnalyticsService.ParamValue) {
+    ACTIVITY(AnalyticsService.ParamValue.ACTIVITY),
+    BATTERY(AnalyticsService.ParamValue.LOW_BATTERY_ID),
+    FIRMWARE(AnalyticsService.ParamValue.OTA_UPDATE_ID),
+    HEALTH(AnalyticsService.ParamValue.STATION_HEALTH)
 }
 
 enum class RemoteMessageType(val id: String, val publicName: String, val desc: String) {
