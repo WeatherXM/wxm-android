@@ -3,7 +3,6 @@ package com.weatherxm.app
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import com.weatherxm.BuildConfig
 import com.weatherxm.service.GlobalUploadObserverService
 import net.gotev.uploadservice.UploadServiceConfig
@@ -28,7 +27,7 @@ class App : Application() {
             UPLOADING_NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
 
         UploadServiceConfig.initialize(

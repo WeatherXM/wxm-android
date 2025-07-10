@@ -597,6 +597,13 @@
     <string name="health_notification_subtitle">Get notified when there are issues affecting the station’s health.</string>
     <string name="station_notifications">Station Notifications</string>
     <string name="station_notifications_dialog_prompt">You’ll now receive notifications for critical issues like inactivity or low battery. This feature is enabled by default if you’ve already allowed app notifications.\n\nYou can manage these settings from the menu at the top right corner.</string>
+    <string name="station_inactive">Station Inactive</string>
+    <string name="station_inactive_notification_msg">Your station %s appears inactive. Please check its status.</string>
+    <string name="station_low_battery">Station Low Battery</string>
+    <string name="station_low_battery_notification_msg">To avoid data interruptions, please replace the batteries of %s.</string>
+    <string name="firmware_update_notification_msg">A new version is available for %s. Upgrade to enjoy the latest improvements.</string>
+    <string name="station_health_issues">Station Health Issues</string>
+    <string name="station_health_issues_notification_msg">Your station %s has some health issues. Tap to view its status.</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

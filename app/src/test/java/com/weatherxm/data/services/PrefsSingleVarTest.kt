@@ -6,6 +6,7 @@ import com.weatherxm.data.models.DeviceNotificationType
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCEPT_TERMS_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
+import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICE_NOTIFICATION
 import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICE_NOTIFICATIONS_PROMPT
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_ANNOUNCEMENT_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BANNER_ID
@@ -200,6 +201,15 @@ class PrefsSingleVarTest(
             { prefEditor.putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, false) },
             { cacheService.getDeviceNotificationsPrompt() },
             { cacheService.checkDeviceNotificationsPrompt() }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "Device Notification Type Timestamp",
+            timestamp,
+            { sharedPref.getLong(KEY_DEVICE_NOTIFICATION, 0) },
+            { prefEditor.putLong(KEY_DEVICE_NOTIFICATION, timestamp) },
+            { cacheService.getDeviceNotificationTypeTimestamp(KEY_DEVICE_NOTIFICATION) },
+            { cacheService.setDeviceNotificationTypeTimestamp(KEY_DEVICE_NOTIFICATION, timestamp) }
         )
     }
 }

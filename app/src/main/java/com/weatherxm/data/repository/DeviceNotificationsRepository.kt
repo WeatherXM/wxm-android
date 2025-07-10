@@ -14,6 +14,8 @@ interface DeviceNotificationsRepository {
 
     fun showDeviceNotificationsPrompt(): Boolean
     fun checkDeviceNotificationsPrompt()
+    fun setDeviceNotificationTypeTimestamp(deviceId: String, type: DeviceNotificationType)
+    fun getDeviceNotificationTypeTimestamp(deviceId: String, type: DeviceNotificationType): Long
 }
 
 class DeviceNotificationsRepositoryImpl(
@@ -46,4 +48,17 @@ class DeviceNotificationsRepositoryImpl(
 
     override fun showDeviceNotificationsPrompt() = datasource.showDeviceNotificationsPrompt()
     override fun checkDeviceNotificationsPrompt() = datasource.checkDeviceNotificationsPrompt()
+    override fun setDeviceNotificationTypeTimestamp(
+        deviceId: String,
+        type: DeviceNotificationType
+    ) {
+        datasource.setDeviceNotificationTypeTimestamp(deviceId, type)
+    }
+
+    override fun getDeviceNotificationTypeTimestamp(
+        deviceId: String,
+        type: DeviceNotificationType
+    ): Long {
+        return datasource.getDeviceNotificationTypeTimestamp(deviceId, type)
+    }
 }
