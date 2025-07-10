@@ -21,8 +21,8 @@ import timber.log.Timber
 @Suppress("LongParameterList")
 fun FragmentActivity.checkPermissionsAndThen(
     vararg permissions: String,
-    rationaleTitle: String,
-    rationaleMessage: String,
+    rationaleTitle: String = "",
+    rationaleMessage: String = "",
     onGranted: () -> Unit,
     onDenied: () -> Unit,
     showOnPermanentlyDenied: Boolean = true

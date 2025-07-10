@@ -76,6 +76,8 @@ import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceFrequencyDataSource
 import com.weatherxm.data.datasource.DeviceFrequencyDataSourceImpl
+import com.weatherxm.data.datasource.DeviceNotificationsDataSource
+import com.weatherxm.data.datasource.DeviceNotificationsDataSourceImpl
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.DevicePhotoDataSource
@@ -120,6 +122,8 @@ import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
+import com.weatherxm.data.repository.DeviceNotificationsRepository
+import com.weatherxm.data.repository.DeviceNotificationsRepositoryImpl
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceOTARepositoryImpl
 import com.weatherxm.data.repository.DevicePhotoRepository
@@ -182,6 +186,7 @@ import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
 import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryViewModel
+import com.weatherxm.ui.devicenotifications.DeviceNotificationsViewModel
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
@@ -229,6 +234,8 @@ import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.DeviceListUseCaseImpl
+import com.weatherxm.usecases.DeviceNotificationsUseCase
+import com.weatherxm.usecases.DeviceNotificationsUseCaseImpl
 import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.DevicePhotoUseCaseImpl
 import com.weatherxm.usecases.EditLocationUseCase
@@ -373,6 +380,7 @@ private val datasources = module {
     factoryOf(::DatabaseExplorerDataSource)
     factoryOf(::DatabaseWeatherHistoryDataSource)
     singleOf(::DeviceFrequencyDataSourceImpl) { bind<DeviceFrequencyDataSource>() }
+    singleOf(::DeviceNotificationsDataSourceImpl) { bind<DeviceNotificationsDataSource>() }
     singleOf(::DeviceOTADataSourceImpl) { bind<DeviceOTADataSource>() }
     singleOf(::DevicePhotoDataSourceImpl) { bind<DevicePhotoDataSource>() }
     singleOf(::LocationDataSourceImpl) { bind<LocationDataSource>() }
@@ -400,6 +408,7 @@ private val repositories = module {
     factoryOf(::BluetoothConnectionRepositoryImpl) { bind<BluetoothConnectionRepository>() }
     factoryOf(::BluetoothScannerRepositoryImpl) { bind<BluetoothScannerRepository>() }
     factoryOf(::BluetoothUpdaterRepositoryImpl) { bind<BluetoothUpdaterRepository>() }
+    singleOf(::DeviceNotificationsRepositoryImpl) { bind<DeviceNotificationsRepository>() }
     singleOf(::DeviceOTARepositoryImpl) { bind<DeviceOTARepository>() }
     singleOf(::DevicePhotoRepositoryImpl) { bind<DevicePhotoRepository>() }
     singleOf(::DeviceRepositoryImpl) { bind<DeviceRepository>() }
@@ -429,6 +438,7 @@ private val usecases = module {
     factoryOf(::DeleteAccountUseCaseImpl) { bind<DeleteAccountUseCase>() }
     singleOf(::DeviceDetailsUseCaseImpl) { bind<DeviceDetailsUseCase>() }
     singleOf(::DeviceListUseCaseImpl) { bind<DeviceListUseCase>() }
+    singleOf(::DeviceNotificationsUseCaseImpl) { bind<DeviceNotificationsUseCase>() }
     singleOf(::DevicePhotoUseCaseImpl) { bind<DevicePhotoUseCase>() }
     factoryOf(::EditLocationUseCaseImpl) { bind<EditLocationUseCase>() }
     singleOf(::ExplorerUseCaseImpl) { bind<ExplorerUseCase>() }
@@ -742,6 +752,7 @@ private val viewmodels = module {
     viewModelOf(::DeviceDetailsViewModel)
     viewModelOf(::DeviceEditLocationViewModel)
     viewModelOf(::DeviceHeliumOTAViewModel)
+    viewModelOf(::DeviceNotificationsViewModel)
     viewModelOf(::DeviceSettingsHeliumViewModel)
     viewModelOf(::DeviceSettingsWifiViewModel)
     viewModelOf(::DevicesRewardsViewModel)

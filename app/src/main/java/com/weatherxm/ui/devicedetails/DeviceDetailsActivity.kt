@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.warningChip
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.DeviceNotificationsPromptDialog
 import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
@@ -130,6 +131,17 @@ class DeviceDetailsActivity : BaseActivity() {
             }
         }
 
+        binding.dialogComposeView.setContent {
+            DeviceNotificationsPromptDialog(
+                shouldShow = model.showNotificationsPrompt.value,
+                onDismiss = { model.checkDeviceNotificationsPrompt() },
+                onTakeMeThere = {
+                    model.checkDeviceNotificationsPrompt()
+                    navigator.showStationNotifications(this, model.device)
+                }
+            )
+        }
+
         val adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
         binding.viewPager.offscreenPageLimit = adapter.itemCount - 1
@@ -187,6 +199,10 @@ class DeviceDetailsActivity : BaseActivity() {
                 navigator.showStationSettings(this, model.device)
                 true
             }
+            R.id.notifications -> {
+                navigator.showStationNotifications(this, model.device)
+                true
+            }
             else -> false
         }
     }
@@ -227,9 +243,12 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         with(binding.toolbar) {
+            if (!device.isOwned()) {
+                menu.removeItem(R.id.notifications)
+            }
             if (device.isFollowed()) {
                 if (menu.findItem(R.id.settings) == null) {
-                    menu.add(Menu.NONE, R.id.settings, 1, R.string.station_settings)
+                    menu.add(Menu.NONE, R.id.settings, 1, R.string.settings)
                 }
             } else if (device.isUnfollowed()) {
                 menu.removeItem(R.id.settings)

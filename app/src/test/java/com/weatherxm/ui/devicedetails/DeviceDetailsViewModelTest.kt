@@ -113,6 +113,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         every { resources.getString(R.string.error_max_followed) } returns maxFollowedMsg
         justRun { deviceDetailsUseCase.setAcceptTerms() }
         every { deviceDetailsUseCase.shouldShowTermsPrompt() } returns true
+        every { deviceDetailsUseCase.showDeviceNotificationsPrompt() } returns true
 
         viewModel = DeviceDetailsViewModel(
             emptyDevice,
@@ -135,6 +136,9 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                 }
                 then("get if we should show a failure or not") {
                     viewModel.shouldShowTerms.value shouldBe true
+                }
+                then("get if we should show the notifications prompt or not") {
+                    viewModel.showNotificationsPrompt.value shouldBe false
                 }
             }
         }
@@ -321,7 +325,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                         it.isError()
                         verify(exactly = 9) { analytics.trackEventFailure(any()) }
                     }
-                } catch (e: TimeoutCancellationException) {
+                } catch (_: TimeoutCancellationException) {
                     /**
                      * Do nothing.
                      * We use timeout to terminate the flow collection (and the test)
@@ -339,7 +343,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                                 viewModel.device shouldBe device
                                 viewModel.onDevicePolling().value shouldBe device
                             }
-                        } catch (e: TimeoutCancellationException) {
+                        } catch (_: TimeoutCancellationException) {
                             /**
                              * Do nothing.
                              * We use timeout to terminate the flow collection (and the test)
@@ -357,7 +361,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                                 viewModel.device shouldBe device
                                 viewModel.onDevicePolling().value shouldBe device
                             }
-                        } catch (e: TimeoutCancellationException) {
+                        } catch (_: TimeoutCancellationException) {
                             /**
                              * Do nothing.
                              * We use timeout to terminate the flow collection (and the test)

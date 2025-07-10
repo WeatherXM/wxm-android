@@ -11,4 +11,6 @@ interface DeviceDetailsUseCase {
     suspend fun getUserDevice(deviceId: String): Either<Failure, UIDevice>
     fun setAcceptTerms()
     fun shouldShowTermsPrompt(): Boolean
+    fun showDeviceNotificationsPrompt(): Boolean
+    fun checkDeviceNotificationsPrompt()
 }

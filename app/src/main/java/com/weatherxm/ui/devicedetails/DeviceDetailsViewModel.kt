@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 class DeviceDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
     var openExplorerOnBack: Boolean,
-    private val deviceDetailsUseCase: DeviceDetailsUseCase,
+    private val useCase: DeviceDetailsUseCase,
     private val authUseCase: AuthUseCase,
     private val followUseCase: FollowUseCase,
     private val resources: Resources,
@@ -51,6 +51,7 @@ class DeviceDetailsViewModel(
     private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
 
     val shouldShowTerms = mutableStateOf(false)
+    val showNotificationsPrompt = mutableStateOf(false)
 
     fun onDeviceFirstFetch(): LiveData<UIDevice> = onDeviceFirstFetch
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
@@ -60,7 +61,7 @@ class DeviceDetailsViewModel(
     fun isLoggedIn() = isLoggedIn
 
     suspend fun deviceAutoRefresh() = refreshHandler.flow().map {
-        deviceDetailsUseCase.getDevice(device).onRight {
+        useCase.getDevice(device).onRight {
             onDeviceAutoRefresh(it)
         }.onLeft {
             analytics.trackEventFailure(it.code)
@@ -134,14 +135,27 @@ class DeviceDetailsViewModel(
 
     fun setAcceptTerms() {
         shouldShowTerms.value = false
-        deviceDetailsUseCase.setAcceptTerms()
+        useCase.setAcceptTerms()
+    }
+
+    fun checkDeviceNotificationsPrompt() {
+        showNotificationsPrompt.value = false
+        useCase.checkDeviceNotificationsPrompt()
     }
 
     init {
         viewModelScope.launch(dispatcher) {
             isLoggedIn = authUseCase.isLoggedIn()
             if (isLoggedIn == true) {
-                shouldShowTerms.value = deviceDetailsUseCase.shouldShowTermsPrompt()
+                shouldShowTerms.value = useCase.shouldShowTermsPrompt().also {
+                    /**
+                     * If we don't need to show the terms dialog, then check if we should show
+                     * the notifications prompt on owned devices.
+                     */
+                    if (!it && device.isOwned()) {
+                        showNotificationsPrompt.value = useCase.showDeviceNotificationsPrompt()
+                    }
+                }
             }
         }
     }

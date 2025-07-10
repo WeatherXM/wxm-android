@@ -12,7 +12,14 @@
         android:id="@+id/settings"
         android:enabled="true"
         android:icon="@drawable/ic_settings"
-        android:title="@string/station_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/notifications"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/notifications"
         app:showAsAction="never" />
 
 </menu>
