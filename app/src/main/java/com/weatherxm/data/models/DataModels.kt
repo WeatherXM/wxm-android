@@ -79,7 +79,7 @@ data class RemoteBanner(
     val showCloseButton: Boolean
 ) : Parcelable
 
-enum class RemoteBannerType{
+enum class RemoteBannerType {
     INFO_BANNER,
     ANNOUNCEMENT
 }
@@ -104,6 +104,13 @@ enum class BluetoothOTAState {
     FAILED,
     ABORTED,
     COMPLETED
+}
+
+enum class DeviceNotificationType {
+    ACTIVITY,
+    BATTERY,
+    FIRMWARE,
+    HEALTH
 }
 
 enum class RemoteMessageType(val id: String, val publicName: String, val desc: String) {

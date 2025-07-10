@@ -44,6 +44,8 @@
     <string name="action_i_understand">I understand</string>
     <string name="action_learn_more">Learn more</string>
     <string name="action_get_pro">Get Pro</string>
+    <string name="action_maybe_later">Maybe later</string>
+    <string name="action_take_me_there">Take me there</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -581,6 +583,20 @@
     <string name="station_gateway_rssi">Signal between Station &amp; Gateway (RSSI)</string>
     <string name="station_signal_low">Station signal reception is low. This may result in Data Gaps and reduced Rewards.</string>
     <string name="station_signal_no_signal"><![CDATA[<b>No Weather Station signal.</b> Check that your station is working well. This will cause Data Gaps and may lead to reduced Rewards.]]></string>
+
+    <!-- Station Notifications -->
+    <string name="notifications">Notifications</string>
+    <string name="show_notifications">Show Notifications</string>
+    <string name="activity">Activity</string>
+    <string name="activity_notification_subtitle">Get notified when the station goes inactive.</string>
+    <string name="battery">Battery</string>
+    <string name="battery_notification_subtitle">Get notified when the outdoor unit has a low battery warning.</string>
+    <string name="firmware_update">Firmware Update</string>
+    <string name="firmware_update_notification_subtitle">Get notified when the station has a new firmware update.</string>
+    <string name="health">Health</string>
+    <string name="health_notification_subtitle">Get notified when there are issues affecting the station’s health.</string>
+    <string name="station_notifications">Station Notifications</string>
+    <string name="station_notifications_dialog_prompt">You’ll now receive notifications for critical issues like inactivity or low battery. This feature is enabled by default if you’ve already allowed app notifications.\n\nYou can manage these settings from the menu at the top right corner.</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

@@ -12,6 +12,7 @@ import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.Relation
 import com.weatherxm.data.models.Rewards
 import com.weatherxm.data.models.SeverityLevel
+import com.weatherxm.data.repository.DeviceNotificationsRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
@@ -33,13 +34,15 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
     val deviceOTARepo = mockk<DeviceOTARepository>()
     val rewardsRepo = mockk<RewardsRepository>()
     val explorerRepo = mockk<ExplorerRepository>()
+    val notificationsRepo = mockk<DeviceNotificationsRepository>()
     val userPreferencesRepository = mockk<UserPreferencesRepository>()
     val usecase = DeviceDetailsUseCaseImpl(
         deviceRepo,
         rewardsRepo,
         explorerRepo,
         deviceOTARepo,
-        userPreferencesRepository
+        userPreferencesRepository,
+        notificationsRepo
     )
 
     val publicDevice = PublicDevice(
@@ -87,6 +90,8 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         justRun { userPreferencesRepository.setAcceptTerms() }
         every { userPreferencesRepository.shouldShowTermsPrompt() } returns true
         every { deviceOTARepo.shouldNotifyOTA(any(), any()) } returns false
+        every { notificationsRepo.showDeviceNotificationsPrompt() } returns true
+        justRun { notificationsRepo.checkDeviceNotificationsPrompt() }
     }
 
     context("Get device") {
@@ -156,6 +161,23 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
             usecase.setAcceptTerms()
             then("make the respective call") {
                 verify(exactly = 1) { userPreferencesRepository.setAcceptTerms() }
+            }
+        }
+    }
+
+    context("Get if we should show the notifications prompt or not") {
+        given("The repository which returns the answer") {
+            then("return the answer") {
+                usecase.showDeviceNotificationsPrompt() shouldBe true
+            }
+        }
+    }
+
+    context("Check that we saw the notifications prompt") {
+        given("A repository providing the SET functionality") {
+            usecase.checkDeviceNotificationsPrompt()
+            then("make the respective call") {
+                verify(exactly = 1) { notificationsRepo.checkDeviceNotificationsPrompt() }
             }
         }
     }
