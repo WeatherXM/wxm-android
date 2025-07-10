@@ -34,11 +34,15 @@ import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.hasPermission
+import com.weatherxm.util.isToday
 import com.weatherxm.util.isYesterday
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import kotlin.time.Duration.Companion.minutes
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.toJavaDuration
 
 class DevicesNotificationsWorker(
@@ -46,12 +50,11 @@ class DevicesNotificationsWorker(
     workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
-        // STOPSHIP: TODO: change the below to 2 hours, currently testing.
-        private val UPDATE_INTERVAL = 20.minutes.toJavaDuration()
+        private val UPDATE_INTERVAL = 2.hours.toJavaDuration()
         private const val WORK_NAME = "DEVICES_NOTIFICATIONS_WORKER"
         private const val QOD_THRESHOLD = 80
 
-        fun stopWorkers(context: Context) {
+        fun stopWorker(context: Context) {
             Timber.d("[Devices BG Worker]: Stopping Work Manager for devices workers.")
             WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
         }
@@ -64,7 +67,7 @@ class DevicesNotificationsWorker(
                 .setInitialDelay(UPDATE_INTERVAL)
                 .build()
 
-            WorkManager.Companion.getInstance(context).enqueueUniquePeriodicWork(
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
@@ -85,7 +88,7 @@ class DevicesNotificationsWorker(
         }
         if (!hasPermission) {
             Timber.d("[Devices BG Worker]: No notifications permissions, stopping worker.")
-            stopWorkers(context)
+            stopWorker(context)
             return Result.failure()
         }
         Timber.d("[Devices BG Worker]: Starting work...")
@@ -103,12 +106,12 @@ class DevicesNotificationsWorker(
             when (failure) {
                 is UserActionError.UserNotLoggedInError -> {
                     Timber.w("[Devices BG Worker]: UserNotLoggedInError.")
-                    stopWorkers(context)
+                    stopWorker(context)
                     Result.success()
                 }
                 is ApiError.GenericError.JWTError.ForbiddenError -> {
                     Timber.w("[Devices BG Worker]: JWTError.ForbiddenError.")
-                    stopWorkers(context)
+                    stopWorker(context)
                     Result.success()
                 }
                 else -> {
@@ -127,7 +130,7 @@ class DevicesNotificationsWorker(
             it.isOwned() && notificationsRepo.getDeviceNotificationsEnabled(it.id)
         }.ifEmpty {
             Timber.d("[Devices BG Worker]: No owned devices with notifications enabled found.")
-            stopWorkers(context)
+            stopWorker(context)
             return
         }
 
@@ -136,57 +139,37 @@ class DevicesNotificationsWorker(
             val typesEnabled = notificationsRepo.getDeviceNotificationTypesEnabled(it.id)
 
             if (!it.isOnline() && typesEnabled.contains(DeviceNotificationType.ACTIVITY)) {
-                Timber.d("[Devices BG Worker]: Sending notification for offline device ${it.id}")
-                // TODO: Send notification ONLY if previous notification was before the latest activity or a day has passed
+                Timber.d("[Devices BG Worker]: Is offline ${it.id}")
                 sendNotification(
-                    context = context,
-                    title = context.getString(R.string.station_inactive),
-                    body = context.getString(
-                        R.string.station_inactive_notification_msg,
-                        it.getDefaultOrFriendlyName()
-                    ),
+                    titleResId = R.string.station_inactive,
+                    bodyResId = R.string.station_inactive_notification_msg,
                     device = it,
                     notificationType = DeviceNotificationType.ACTIVITY
                 )
             }
             if (it.hasLowBattery == true && typesEnabled.contains(DeviceNotificationType.BATTERY)) {
-                Timber.d("[Devices BG Worker]: Sending notification for low battery ${it.id}")
-                // TODO: Send notification ONLY if we haven't sent today
+                Timber.d("[Devices BG Worker]: Has low battery ${it.id}")
                 sendNotification(
-                    context = context,
-                    title = context.getString(R.string.station_low_battery),
-                    body = context.getString(
-                        R.string.station_low_battery_notification_msg,
-                        it.getDefaultOrFriendlyName()
-                    ),
+                    titleResId = R.string.station_low_battery,
+                    bodyResId = R.string.station_low_battery_notification_msg,
                     device = it,
                     notificationType = DeviceNotificationType.BATTERY
                 )
             }
             if (it.shouldPromptUpdate() && typesEnabled.contains(DeviceNotificationType.FIRMWARE)) {
-                Timber.d("[Devices BG Worker]: Sending notification for firmware update ${it.id}")
-                // TODO: Send notification ONLY if we haven't sent today
+                Timber.d("[Devices BG Worker]: Has firmware update ${it.id}")
                 sendNotification(
-                    context = context,
-                    title = context.getString(R.string.firmware_update),
-                    body = context.getString(
-                        R.string.firmware_update_notification_msg,
-                        it.getDefaultOrFriendlyName()
-                    ),
+                    titleResId = R.string.firmware_update,
+                    bodyResId = R.string.firmware_update_notification_msg,
                     device = it,
                     notificationType = DeviceNotificationType.FIRMWARE
                 )
             }
             if (it.notifyOfBadHealth() && typesEnabled.contains(DeviceNotificationType.HEALTH)) {
-                Timber.d("[Devices BG Worker]: Sending notification for health issues ${it.id}")
-                // TODO: Send notification ONLY if we haven't sent today
+                Timber.d("[Devices BG Worker]: Has health issues ${it.id}")
                 sendNotification(
-                    context = context,
-                    title = context.getString(R.string.station_health_issues),
-                    body = context.getString(
-                        R.string.station_health_issues_notification_msg,
-                        it.getDefaultOrFriendlyName()
-                    ),
+                    titleResId = R.string.station_health_issues,
+                    bodyResId = R.string.station_health_issues_notification_msg,
                     device = it,
                     notificationType = DeviceNotificationType.HEALTH
                 )
@@ -203,13 +186,46 @@ class DevicesNotificationsWorker(
         return areDataForPreviousDay && (qodBelowThreshold || hasPolIssue)
     }
 
+    /**
+     * In all types except Activity -> If we haven't sent already today a notification
+     *
+     * In Activity -> If `lastWeatherStationActivity` is after the last notification sent
+     * or a day has passed
+     */
+    private fun shouldSendNotification(device: UIDevice, type: DeviceNotificationType): Boolean {
+        val lastSentTimestamp =
+            notificationsRepo.getDeviceNotificationTypeTimestamp(device.id, type)
+
+        if (lastSentTimestamp == 0L) {
+            return true
+        }
+        val lastSentDate = ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(lastSentTimestamp),
+            ZoneId.systemDefault()
+        )
+        val lastStationActivity = device.lastWeatherStationActivity
+
+        return if (type == DeviceNotificationType.ACTIVITY && lastStationActivity != null) {
+            lastStationActivity.isAfter(lastSentDate) || !lastSentDate.isToday()
+        } else {
+            !lastSentDate.isToday()
+        }
+    }
+
     private fun sendNotification(
-        context: Context,
-        title: String,
-        body: String,
+        titleResId: Int,
+        bodyResId: Int,
         device: UIDevice,
         notificationType: DeviceNotificationType
     ) {
+        /**
+         * Requirements as specified in `shouldSendNotification` not met, returning.
+         */
+        if (!shouldSendNotification(device, notificationType)) {
+            Timber.d("[Devices BG Worker]: Ignoring -> ${notificationType.name}: ${device.id}")
+            return
+        }
+
         val type = RemoteMessageType.STATION
 
         val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -224,8 +240,8 @@ class DevicesNotificationsWorker(
                 setContentIntent(it)
             }
             setSmallIcon(R.drawable.ic_logo)
-            setContentTitle(title)
-            setContentText(body)
+            setContentTitle(context.getString(titleResId))
+            setContentText(context.getString(bodyResId, device.getDefaultOrFriendlyName()))
             setAutoCancel(true)
         }.build()
 
@@ -235,6 +251,8 @@ class DevicesNotificationsWorker(
          */
         val notificationId = notificationType.name.hashCode() + device.id.hashCode()
         manager.notify(null, notificationId, notification)
+
+        notificationsRepo.setDeviceNotificationTypeTimestamp(device.id, notificationType)
     }
 
     private fun createPendingIntent(
