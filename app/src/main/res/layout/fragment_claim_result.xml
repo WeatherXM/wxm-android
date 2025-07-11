@@ -16,7 +16,7 @@
         app:empty_animation="@raw/anim_loading"
         app:empty_subtitle="@string/success_claim_device"
         app:empty_title="@string/station_claimed"
-        app:layout_constraintBottom_toTopOf="@id/statusView"
+        app:layout_constraintBottom_toTopOf="@id/viewStationBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

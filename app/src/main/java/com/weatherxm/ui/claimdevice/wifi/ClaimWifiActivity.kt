@@ -9,10 +9,13 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryFragment
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.claimdevice.photosintro.ClaimPhotosIntroFragment
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_PHOTOS_GALLERY
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
 import com.weatherxm.ui.claimdevice.wifi.manualdetails.ClaimWifiManualDetailsFragment
@@ -39,6 +42,7 @@ class ClaimWifiActivity : BaseActivity() {
         parametersOf(intent.parcelable<DeviceType>(Contracts.ARG_DEVICE_TYPE))
     }
     private val locationModel: ClaimLocationViewModel by viewModel()
+    private val photosViewModel: ClaimPhotosGalleryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,9 +108,8 @@ class ClaimWifiActivity : BaseActivity() {
             pager.currentItem += incrementPage
             binding.progress.progress = pager.currentItem + 1
             when (pager.currentItem) {
-                PAGE_LOCATION -> {
-                    locationModel.requestUserLocation()
-                }
+                PAGE_LOCATION -> locationModel.requestUserLocation()
+                PAGE_PHOTOS_GALLERY -> photosViewModel.requestCameraPermission()
                 PAGE_RESULT -> {
                     binding.appBar.visible(false)
                     binding.progress.visible(false)
@@ -126,8 +129,9 @@ class ClaimWifiActivity : BaseActivity() {
             const val PAGE_MANUAL_DETAILS = 2
             const val PAGE_LOCATION = 3
             const val PAGE_PHOTOS_INTRO = 4
-            const val PAGE_RESULT = 5
-            const val PAGE_COUNT = 6
+            const val PAGE_PHOTOS_GALLERY = 5
+            const val PAGE_RESULT = 6
+            const val PAGE_COUNT = 7
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -140,6 +144,7 @@ class ClaimWifiActivity : BaseActivity() {
                 PAGE_MANUAL_DETAILS -> ClaimWifiManualDetailsFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
                 PAGE_PHOTOS_INTRO -> ClaimPhotosIntroFragment.newInstance(deviceType)
+                PAGE_PHOTOS_GALLERY -> ClaimPhotosGalleryFragment.newInstance(deviceType)
                 PAGE_RESULT -> ClaimResultFragment.newInstance(deviceType)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
