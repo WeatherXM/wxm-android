@@ -1,6 +1,7 @@
 package com.weatherxm.ui.components
 
 import android.Manifest
+import android.Manifest.permission.CAMERA
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -61,6 +62,21 @@ interface BaseInterface {
             rationaleMessage = activity.getString(R.string.permission_location_rationale),
             onGranted = { onGranted.invoke() },
             onDenied = { activity.toast(R.string.error_claim_gps_failed) }
+        )
+    }
+
+    fun requestCameraPermissions(
+        activity: FragmentActivity?,
+        onGranted: () -> Unit,
+        onDenied: () -> Unit
+    ) {
+        activity?.checkPermissionsAndThen(
+            permissions = arrayOf(CAMERA),
+            rationaleTitle = activity.getString(R.string.camera_permission_required_title),
+            rationaleMessage = activity.getString(R.string.camera_permission_required),
+            onGranted = onGranted,
+            onDenied = onDenied,
+            showOnPermanentlyDenied = false
         )
     }
 }

@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="@color/colorSurface"
+            app:navigationIcon="@drawable/ic_back"
             app:navigationIconTint="@color/colorOnSurface"
             app:title="@string/station_photos"
-            tools:navigationIcon="@drawable/ic_close"
             tools:subtitle="@string/add_1_more_to_upload">
 
             <com.google.android.material.button.MaterialButton
@@ -134,8 +134,8 @@
             android:id="@+id/photoActionsContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="@dimen/margin_extra_large"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -154,12 +154,12 @@
                 android:id="@+id/galleryBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_large"
                 android:background="@drawable/background_imagebutton_circular_layer1"
                 android:contentDescription="@string/phone_gallery"
                 android:padding="@dimen/padding_normal"
                 android:src="@drawable/ic_gallery"
-                android:layout_marginStart="@dimen/padding_large"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </LinearLayout>
 

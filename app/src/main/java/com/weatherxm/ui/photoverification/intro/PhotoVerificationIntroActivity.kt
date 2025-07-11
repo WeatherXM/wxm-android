@@ -36,12 +36,12 @@ class PhotoVerificationIntroActivity : BaseActivity() {
         stationPhotoUrls = intent.getStringArrayListExtra(Contracts.ARG_PHOTOS) ?: arrayListOf()
 
         /**
-         * User opened this screen from an empty state (either no photos in settings or in claiming
+         * User opened this screen from an empty state (i.e. no photos in settings)
          * but the user has already accepted the terms before, and it's not a "Show Instructions"
          * case so we just redirect to Photo Gallery.
          */
         if (viewModel.getAcceptedTerms() && !instructionsOnly) {
-            navigator.showPhotoGallery(null, this, device, stationPhotoUrls, true)
+            navigator.showPhotoGallery(null, this, device, stationPhotoUrls)
             finish()
         }
         if (instructionsOnly) {
@@ -93,8 +93,7 @@ class PhotoVerificationIntroActivity : BaseActivity() {
                             null,
                             this@PhotoVerificationIntroActivity,
                             device,
-                            stationPhotoUrls,
-                            true
+                            stationPhotoUrls
                         )
                         finish()
                     }

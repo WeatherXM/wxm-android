@@ -12,7 +12,6 @@ import com.weatherxm.data.models.BluetoothError
 import com.weatherxm.databinding.ActivityHeliumOtaBinding
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -20,8 +19,6 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -36,8 +33,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
     private val model: DeviceHeliumOTAViewModel by viewModel {
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE),
-            intent.getBooleanExtra(ARG_BLE_DEVICE_CONNECTED, false),
-            intent.getBooleanExtra(ARG_NEEDS_PHOTO_VERIFICATION, false)
+            intent.getBooleanExtra(ARG_BLE_DEVICE_CONNECTED, false)
         )
     }
 
@@ -99,22 +95,9 @@ class DeviceHeliumOTAActivity : BaseActivity() {
     }
 
     private fun setListeners() {
-        binding.photoVerificationBtn.setOnClickListener {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.SOURCE,
-                    AnalyticsService.ParamValue.CLAIMING_ID.paramValue
-                )
-            )
-            navigator.showPhotoVerificationIntro(this, model.device)
+        binding.viewStationBtn.setOnClickListener {
+            navigator.showDeviceDetails(this, device = model.device)
             finish()
-        }
-        binding.skipAndGoToStationBtn.setOnClickListener {
-            ActionDialogFragment.createSkipPhotoVerification(this) {
-                navigator.showDeviceDetails(this, device = model.device)
-                finish()
-            }.show(this)
         }
         binding.bleActionFlow.setListeners(onScanClicked = {
             analytics.trackEventSelectContent(AnalyticsService.ParamValue.BLE_SCAN_AGAIN.paramValue)
@@ -136,20 +119,11 @@ class DeviceHeliumOTAActivity : BaseActivity() {
     private fun onNewStatus(it: Resource<State>) {
         when (it.status) {
             Status.SUCCESS -> {
-                if (model.needsPhotoVerification) {
-                    binding.bleActionFlow.onSuccess(
-                        title = R.string.station_updated,
-                        message = getString(R.string.station_updated_subtitle),
-                        successActionText = null
-                    )
-                    binding.successWithPhotoVerificationContainer.visible(true)
-                } else {
-                    binding.bleActionFlow.onSuccess(
-                        title = R.string.station_updated,
-                        message = getString(R.string.station_updated_subtitle),
-                        successActionText = getString(R.string.action_view_station)
-                    )
-                }
+                binding.bleActionFlow.onSuccess(
+                    title = R.string.station_updated,
+                    message = getString(R.string.station_updated_subtitle),
+                    successActionText = getString(R.string.action_view_station)
+                )
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.OTA_RESULT.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
