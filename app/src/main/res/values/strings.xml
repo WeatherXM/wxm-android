@@ -693,6 +693,7 @@
     <string name="skip_photo_verification_message">Are you sure you want to skip the Photo Verification process?\n\nYou can always do it later from the station’s settings.</string>
     <string name="all_about">ALL ABOUT</string>
     <string name="photo_verification">Photo Verification</string>
+    <string name="photo_verification_subtitle">Photo verification ensures your station meets deployment guidelines and can start transmitting valid data.</string>
     <string name="boost_network_health_photos">Boost network health with a few photos of your setup!</string>
     <string name="how_to_take_photos">How to take the photos</string>
     <string name="photos_instruction_rotate">Rotate to landscape and use a wide-angle lens to include as much of the horizon as possible.</string>
