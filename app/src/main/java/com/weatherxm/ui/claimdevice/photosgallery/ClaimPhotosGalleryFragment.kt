@@ -172,6 +172,8 @@ class ClaimPhotosGalleryFragment : BaseFragment() {
                 getCameraPermissions()
             }
         }
+
+        prepopulateCapturedPhotosIfExist()
     }
 
     override fun onResume() {
@@ -289,6 +291,13 @@ class ClaimPhotosGalleryFragment : BaseFragment() {
             { navigator.openCamera(cameraLauncher, requireActivity(), createPhotoFile()) },
             { onCameraDenied() }
         )
+    }
+
+    fun prepopulateCapturedPhotosIfExist() {
+        val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        storageDir?.listFiles { it.name.startsWith(getPhotoPrefix()) }?.forEach {
+            model.addPhoto(it.absolutePath, PhotoSource.CAMERA)
+        }
     }
 
     fun createPhotoFile(): File {
