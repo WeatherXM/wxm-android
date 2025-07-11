@@ -101,7 +101,6 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
         viewModel = DeviceHeliumOTAViewModel(
             device = device,
             deviceIsBleConnected = true,
-            needsPhotoVerification = false,
             resources = resources,
             updaterUseCase = updaterUseCase,
             connectionUseCase = connectionUseCase,

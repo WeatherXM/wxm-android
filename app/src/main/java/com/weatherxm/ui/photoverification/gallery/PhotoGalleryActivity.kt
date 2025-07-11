@@ -33,7 +33,6 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPhotoGalleryBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.Status
@@ -68,8 +67,7 @@ class PhotoGalleryActivity : BaseActivity() {
         val stationPhotoUrls = intent.getStringArrayListExtra(Contracts.ARG_PHOTOS) ?: arrayListOf()
         parametersOf(
             intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
-            stationPhotoUrls.map { StationPhoto(it, null) },
-            intent.getBooleanExtra(ARG_NEW_PHOTO_VERIFICATION, false)
+            stationPhotoUrls.map { StationPhoto(it, null) }
         )
     }
 
@@ -145,12 +143,6 @@ class PhotoGalleryActivity : BaseActivity() {
             onPhotosNumber(it)
         }
 
-        if (model.fromClaiming) {
-            binding.toolbar.setNavigationIcon(R.drawable.ic_close)
-        } else {
-            binding.toolbar.setNavigationIcon(R.drawable.ic_back)
-        }
-
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -219,42 +211,25 @@ class PhotoGalleryActivity : BaseActivity() {
     }
 
     private fun onExit() {
-        if (model.fromClaiming) {
+        val remotePhotos = model.photos.filter { it.remotePath != null }.size
+        if (remotePhotos < 2) {
             ActionDialogFragment
                 .Builder(
                     title = getString(R.string.exit_photo_verification),
-                    message = getString(R.string.exit_photo_verification_message),
+                    message = getString(R.string.exit_photo_verification_start_over),
                     positive = getString(R.string.action_stay_and_verify)
                 )
                 .onNegativeClick(getString(R.string.action_exit_anyway)) {
                     analytics.trackEventUserAction(
                         AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
                     )
+                    setResult(true)
                     finish()
                 }
                 .build()
                 .show(this)
         } else {
-            val remotePhotos = model.photos.filter { it.remotePath != null }.size
-            if (remotePhotos < 2) {
-                ActionDialogFragment
-                    .Builder(
-                        title = getString(R.string.exit_photo_verification),
-                        message = getString(R.string.exit_photo_verification_start_over),
-                        positive = getString(R.string.action_stay_and_verify)
-                    )
-                    .onNegativeClick(getString(R.string.action_exit_anyway)) {
-                        analytics.trackEventUserAction(
-                            AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
-                        )
-                        setResult(true)
-                        finish()
-                    }
-                    .build()
-                    .show(this)
-            } else {
-                finish()
-            }
+            finish()
         }
     }
 

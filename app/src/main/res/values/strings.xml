@@ -391,7 +391,6 @@
     <string name="search_location">Search for location</string>
     <string name="confirm_and_proceed">Confirm and Proceed</string>
     <string name="action_view_station">View Station</string>
-    <string name="action_skip_for_now">Skip for now</string>
     <string name="action_continue_photo_verification">Continue to Photo Verification</string>
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="action_cancel_claiming">Cancel Claiming</string>
@@ -689,8 +688,6 @@
     <string name="take_weather_insights_next_level">Take your weather insights to the next level.</string>
 
     <!-- Photo Verification -->
-    <string name="skip_photo_verification">Skip Photo Verification</string>
-    <string name="skip_photo_verification_message">Are you sure you want to skip the Photo Verification process?\n\nYou can always do it later from the station’s settings.</string>
     <string name="all_about">ALL ABOUT</string>
     <string name="photo_verification">Photo Verification</string>
     <string name="photo_verification_subtitle">Photo verification ensures your station meets deployment guidelines and can start transmitting valid data.</string>
