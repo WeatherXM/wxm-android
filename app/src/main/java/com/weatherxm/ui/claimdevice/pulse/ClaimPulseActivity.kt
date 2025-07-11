@@ -9,9 +9,12 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryFragment
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.claimdevice.photosintro.ClaimPhotosIntroFragment
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_PHOTOS_GALLERY
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.pulse.claimingcode.ClaimPulseClaimingCodeFragment
 import com.weatherxm.ui.claimdevice.pulse.manualdetails.ClaimPulseManualDetailsFragment
@@ -35,6 +38,7 @@ class ClaimPulseActivity : BaseActivity() {
     private lateinit var binding: ActivityClaimDeviceBinding
     private val model: ClaimPulseViewModel by viewModel()
     private val locationModel: ClaimLocationViewModel by viewModel()
+    private val photosViewModel: ClaimPhotosGalleryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,9 +96,8 @@ class ClaimPulseActivity : BaseActivity() {
             pager.currentItem += incrementPage
             binding.progress.progress = pager.currentItem + 1
             when (pager.currentItem) {
-                PAGE_LOCATION -> {
-                    locationModel.requestUserLocation()
-                }
+                PAGE_LOCATION -> locationModel.requestUserLocation()
+                PAGE_PHOTOS_GALLERY -> photosViewModel.requestCameraPermission()
                 PAGE_RESULT -> {
                     binding.appBar.visible(false)
                     binding.progress.visible(false)
@@ -114,8 +117,9 @@ class ClaimPulseActivity : BaseActivity() {
             const val PAGE_CLAIMING_CODE = 3
             const val PAGE_LOCATION = 4
             const val PAGE_PHOTOS_INTRO = 5
-            const val PAGE_RESULT = 6
-            const val PAGE_COUNT = 7
+            const val PAGE_PHOTOS_GALLERY = 6
+            const val PAGE_RESULT = 7
+            const val PAGE_COUNT = 8
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -129,6 +133,7 @@ class ClaimPulseActivity : BaseActivity() {
                 PAGE_CLAIMING_CODE -> ClaimPulseClaimingCodeFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.PULSE_4G)
                 PAGE_PHOTOS_INTRO -> ClaimPhotosIntroFragment.newInstance(DeviceType.PULSE_4G)
+                PAGE_PHOTOS_GALLERY -> ClaimPhotosGalleryFragment.newInstance(DeviceType.PULSE_4G)
                 PAGE_RESULT -> ClaimResultFragment.newInstance(DeviceType.PULSE_4G)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

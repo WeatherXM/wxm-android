@@ -1,20 +1,17 @@
 package com.weatherxm.ui.claimdevice.photosgallery
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.StationPhoto
-import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.usecases.DevicePhotoUseCase
-import kotlinx.coroutines.CoroutineDispatcher
 import java.io.File
 
-class ClaimPhotoGalleryViewModel(
-    val device: UIDevice,
-    private val usecase: DevicePhotoUseCase,
-    val dispatcher: CoroutineDispatcher
-) : ViewModel() {
+class ClaimPhotosGalleryViewModel : ViewModel() {
+    private val _onRequestCameraPermission = MutableLiveData(false)
     private val _onPhotos = mutableStateListOf<StationPhoto>()
+
+    fun onRequestCameraPermission() = _onRequestCameraPermission
     val onPhotos: List<StationPhoto> = _onPhotos
 
     fun addPhoto(path: String, photoSource: PhotoSource) {
@@ -29,5 +26,9 @@ class ClaimPhotoGalleryViewModel(
             File(photoLocalPath).delete()
             _onPhotos.remove(photo)
         }
+    }
+
+    fun requestCameraPermission() {
+        _onRequestCameraPermission.postValue(true)
     }
 }

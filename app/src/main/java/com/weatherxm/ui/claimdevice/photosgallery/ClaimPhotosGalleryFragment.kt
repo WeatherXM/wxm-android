@@ -1,74 +1,65 @@
-package com.weatherxm.ui.photoverification.gallery
+package com.weatherxm.ui.claimdevice.photosgallery
 
 import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.os.Environment
-import androidx.activity.addCallback
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import coil3.load
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.databinding.ActivityPhotoGalleryBinding
-import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.databinding.FragmentClaimPhotosGalleryBinding
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.PhotoSource
 import com.weatherxm.ui.common.StationPhoto
-import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.disable
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.enable
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.components.ActionDialogFragment
-import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.photoverification.gallery.Thumbnail
 import com.weatherxm.util.hasPermission
 import kotlinx.io.files.FileNotFoundException
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
 import java.io.File
 
-class PhotoGalleryActivity : BaseActivity() {
+class ClaimPhotosGalleryFragment : BaseFragment() {
     companion object {
         const val MIN_PHOTOS = 2
         const val MAX_PHOTOS = 6
+
+        fun newInstance(deviceType: DeviceType) = ClaimPhotosGalleryFragment().apply {
+            arguments = Bundle().apply { putParcelable(ARG_DEVICE_TYPE, deviceType) }
+        }
     }
 
-    private lateinit var binding: ActivityPhotoGalleryBinding
-
-    private val model: PhotoGalleryViewModel by viewModel {
-        val stationPhotoUrls = intent.getStringArrayListExtra(Contracts.ARG_PHOTOS) ?: arrayListOf()
-        parametersOf(
-            intent.parcelable<UIDevice>(ARG_DEVICE) ?: UIDevice.empty(),
-            stationPhotoUrls.map { StationPhoto(it, null) }
-        )
-    }
+    private val model: ClaimPhotosGalleryViewModel by activityViewModel()
+    private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
+    private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
+    private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
+    private lateinit var binding: FragmentClaimPhotosGalleryBinding
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -113,71 +104,58 @@ class PhotoGalleryActivity : BaseActivity() {
 
                 val file = createPhotoFile()
                 try {
-                    contentResolver.openInputStream(it)?.use { inputStream ->
+                    context?.contentResolver?.openInputStream(it)?.use { inputStream ->
                         file.outputStream().use { outputStream ->
                             inputStream.copyTo(outputStream)
                         }
+                        // Save the file path to the model
+                        model.addPhoto(file.absolutePath, PhotoSource.GALLERY)
                     }
-                    // Save the file path to the model
-                    model.addPhoto(file.absolutePath, PhotoSource.GALLERY)
                 } catch (e: FileNotFoundException) {
                     Timber.d(e, "Could not copy file")
                 }
             }
         }
 
+    private var deviceType: DeviceType? = null
     private var wentToSettingsForPermissions = false
     private var latestPhotoTakenPath: String = String.empty()
     private var selectedPhoto: MutableState<StationPhoto?> = mutableStateOf(null)
 
-    @SuppressLint("MissingPermission")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPhotoGalleryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentClaimPhotosGalleryBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        deviceType = arguments?.parcelable<DeviceType>(ARG_DEVICE_TYPE)
+        if (context == null || deviceType == null) {
+            // No point executing if in the meanwhile the activity is dead
+            return
+        }
 
         binding.emptyPhotosText.setHtml(R.string.tap_plus_icon)
 
-        model.onPhotosNumber().observe(this) {
-            onPhotosNumber(it)
-        }
-
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        onBackPressedDispatcher.addCallback {
-            onExit()
-        }
-
-        binding.uploadBtn.setOnClickListener {
-            ActionDialogFragment
-                .Builder(
-                    title = getString(R.string.upload_your_photos),
-                    message = getString(R.string.upload_your_photos_dialog_message),
-                    negative = getString(R.string.action_back)
-                )
-                .onPositiveClick(getString(R.string.action_upload)) {
-                    analytics.trackEventUserAction(
-                        AnalyticsService.ParamValue.START_UPLOADING_PHOTOS.paramValue
-                    )
-                    navigator.showPhotoUpload(
-                        this,
-                        model.device,
-                        model.photos.filter { it.isLocal }
-                    )
-                    finish()
-                }
-                .build()
-                .show(this)
+        @Suppress("UseCheckOrError")
+        binding.uploadAndClaimBtn.setOnClickListener {
+            when (deviceType) {
+                DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
+                DeviceType.PULSE_4G -> pulseParentModel.next()
+                DeviceType.HELIUM -> heliumParentModel.next()
+                null -> throw IllegalStateException("Device type is null")
+            }
         }
 
         binding.instructionsBtn.setOnClickListener {
-            navigator.showPhotoVerificationIntro(this, model.device, instructionsOnly = true)
+            navigator.showPhotoVerificationIntro(context, UIDevice.empty(), instructionsOnly = true)
         }
 
         binding.openSettingsBtn.setOnClickListener {
-            navigator.openAppSettings(this)
+            navigator.openAppSettings(context)
             wentToSettingsForPermissions = true
         }
 
@@ -189,58 +167,27 @@ class PhotoGalleryActivity : BaseActivity() {
             Thumbnails()
         }
 
-        model.onDeletingPhotoStatus().observe(this) {
-            binding.loading.visible(it.status == Status.LOADING)
-            if (it.status == Status.ERROR && it.message != null) {
-                showSnackbarMessage(binding.root, it.message)
+        model.onRequestCameraPermission().observe(viewLifecycleOwner) {
+            if (it && model.onPhotos.isEmpty()) {
+                getCameraPermissions()
             }
         }
-
-        if (model.photos.isEmpty()) {
-            getCameraPermissions()
-        }
-        analytics.trackScreen(AnalyticsService.Screen.STATION_PHOTOS_GALLERY, classSimpleName())
     }
 
     override fun onResume() {
-        if (wentToSettingsForPermissions && hasPermission(CAMERA)) {
+        if (wentToSettingsForPermissions && context?.hasPermission(CAMERA) == true) {
             onPermissionsGivenFromSettings()
         }
         super.onResume()
     }
 
-    private fun onExit() {
-        val remotePhotos = model.photos.filter { it.remotePath != null }.size
-        if (remotePhotos < 2) {
-            ActionDialogFragment
-                .Builder(
-                    title = getString(R.string.exit_photo_verification),
-                    message = getString(R.string.exit_photo_verification_start_over),
-                    positive = getString(R.string.action_stay_and_verify)
-                )
-                .onNegativeClick(getString(R.string.action_exit_anyway)) {
-                    analytics.trackEventUserAction(
-                        AnalyticsService.ParamValue.EXIT_PHOTO_VERIFICATION.paramValue
-                    )
-                    setResult(true)
-                    finish()
-                }
-                .build()
-                .show(this)
-        } else {
-            finish()
-        }
-    }
-
-    private fun setResult(shouldDeleteAll: Boolean) {
-        val intent = Intent()
-            .putExtra(Contracts.ARG_DELETE_ALL_PHOTOS, shouldDeleteAll)
-            .putParcelableList(Contracts.ARG_PHOTOS, model.photos)
-        setResult(RESULT_OK, intent)
-    }
-
     private fun onPhotosNumber(photosNumber: Int) {
-        binding.uploadBtn.isEnabled = photosNumber >= MIN_PHOTOS && model.getLocalPhotosNumber() > 0
+        binding.uploadAndClaimBtn.isEnabled = photosNumber >= MIN_PHOTOS
+        if (photosNumber > 0) {
+            binding.deletePhotoBtn.enable()
+        } else {
+            binding.deletePhotoBtn.disable()
+        }
         if (photosNumber == MAX_PHOTOS) {
             binding.addPhotoBtn.setOnClickListener {
                 showSnackbarMessage(binding.root, getString(R.string.max_photos_reached_message))
@@ -286,62 +233,25 @@ class PhotoGalleryActivity : BaseActivity() {
                 navigator.openPhotoPicker(photoPickerLauncher)
             }
         }
-        when (photosNumber) {
-            0 -> {
-                binding.toolbar.subtitle = getString(R.string.add_2_more_to_upload)
-                binding.emptyPhotosText.visible(true)
-                binding.deletePhotoBtn.disable()
-            }
-            1 -> {
-                binding.toolbar.subtitle = getString(R.string.add_1_more_to_upload)
-                binding.deletePhotoBtn.enable()
-            }
-            else -> {
-                binding.toolbar.subtitle = null
-                binding.deletePhotoBtn.enable()
-            }
-        }
     }
 
     private fun onDeletePhoto() {
         selectedPhoto.value?.let {
-            val itemId = if (it.isLocal) {
-                AnalyticsService.ParamValue.LOCAL
-            } else {
-                AnalyticsService.ParamValue.REMOTE
-            }
-
             analytics.trackEventUserAction(
                 AnalyticsService.ParamValue.REMOVE_STATION_PHOTO.paramValue,
                 contentType = null,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
-                    itemId.paramValue
+                    AnalyticsService.ParamValue.LOCAL.paramValue
                 )
             )
-
-            if (it.remotePath != null) {
-                ActionDialogFragment
-                    .Builder(
-                        title = getString(R.string.delete_this_photo),
-                        message = getString(R.string.delete_this_photo_message),
-                        negative = getString(R.string.action_back)
-                    )
-                    .onPositiveClick(getString(R.string.action_delete)) {
-                        setResult(false)
-                        model.deletePhoto(it)
-                    }
-                    .build()
-                    .show(this)
-            } else {
-                model.deletePhoto(it)
-            }
+            model.deletePhoto(it)
         }
     }
 
     @Suppress("MagicNumber")
     private fun onCameraDenied() {
-        if (model.photos.isEmpty()) {
+        if (model.onPhotos.isEmpty()) {
             binding.deletePhotoBtn.disable()
             binding.instructionsBtn.alpha = 0.4F
             binding.instructionsBtn.isEnabled = false
@@ -356,7 +266,7 @@ class PhotoGalleryActivity : BaseActivity() {
         binding.instructionsBtn.isEnabled = true
         binding.addPhotoBtn.enable()
         binding.permissionsContainer.visible(false)
-        if (model.photos.isEmpty()) {
+        if (model.onPhotos.isEmpty()) {
             binding.emptyPhotosText.visible(true)
             binding.deletePhotoBtn.disable()
         }
@@ -375,16 +285,26 @@ class PhotoGalleryActivity : BaseActivity() {
          * to have them in EXIF Metadata.
          */
         requestCameraPermissions(
-            this,
-            { navigator.openCamera(cameraLauncher, this, createPhotoFile()) },
+            activity,
+            { navigator.openCamera(cameraLauncher, requireActivity(), createPhotoFile()) },
             { onCameraDenied() }
         )
     }
 
-    private fun createPhotoFile(): File {
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(model.device.id, ".jpg", storageDir).apply {
+    fun createPhotoFile(): File {
+        val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(getPhotoPrefix(), ".jpg", storageDir).apply {
             latestPhotoTakenPath = absolutePath
+        }
+    }
+
+    @Suppress("UseCheckOrError")
+    private fun getPhotoPrefix(): String {
+        return when (deviceType) {
+            DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.getSerialNumber()
+            DeviceType.PULSE_4G -> pulseParentModel.getSerialNumber()
+            DeviceType.HELIUM -> DeviceType.HELIUM.name
+            null -> throw IllegalStateException("Device type is null")
         }
     }
 
@@ -392,6 +312,8 @@ class PhotoGalleryActivity : BaseActivity() {
     @Composable
     fun Thumbnails() {
         val photos = remember { model.onPhotos }
+
+        onPhotosNumber(photos.size)
         binding.emptyPhotosText.visible(photos.isEmpty())
         binding.selectedPhoto.visible(photos.isNotEmpty())
         selectedPhoto.value = photos.lastOrNull()?.apply {
@@ -412,42 +334,6 @@ class PhotoGalleryActivity : BaseActivity() {
                     }
                 )
             }
-        }
-    }
-}
-
-@Suppress("FunctionNaming")
-@Composable
-fun Thumbnail(item: StationPhoto, isSelected: Boolean, onClick: () -> Unit) {
-    var width = 48.dp
-    var height = 70.dp
-    var border: BorderStroke? = null
-
-    if (isSelected) {
-        width = 62.dp
-        height = 88.dp
-        border = BorderStroke(2.dp, colorResource(R.color.colorPrimary))
-    }
-
-    Card(
-        Modifier
-            .size(width, height)
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(dimensionResource(R.dimen.radius_small)),
-        border = border
-    ) {
-        if (!item.remotePath.isNullOrEmpty()) {
-            AsyncImage(
-                model = item.remotePath,
-                contentDescription = item.remotePath,
-                contentScale = ContentScale.Crop
-            )
-        } else if (!item.localPath.isNullOrEmpty()) {
-            AsyncImage(
-                model = item.localPath,
-                contentDescription = item.localPath,
-                contentScale = ContentScale.Crop
-            )
         }
     }
 }

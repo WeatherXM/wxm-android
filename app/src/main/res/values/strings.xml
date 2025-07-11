@@ -408,6 +408,7 @@
     <string name="rebooting_station">Rebooting Station</string>
     <string name="claiming_station_step">Claiming Station</string>
     <string name="invalid_location">Invalid Location</string>
+    <string name="upload_and_claim">Upload and Claim</string>
 
     <!-- Claim - Connect to WiFi -->
     <string name="title_claim_d1_wifi">Claim D1 | WiFi</string>
