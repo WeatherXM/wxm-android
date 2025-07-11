@@ -9,6 +9,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosintro.ClaimPhotosIntroFragment
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
@@ -124,8 +125,9 @@ class ClaimWifiActivity : BaseActivity() {
             const val PAGE_PREPARE_GATEWAY = 1
             const val PAGE_MANUAL_DETAILS = 2
             const val PAGE_LOCATION = 3
-            const val PAGE_RESULT = 4
-            const val PAGE_COUNT = 5
+            const val PAGE_PHOTOS_INTRO = 4
+            const val PAGE_RESULT = 5
+            const val PAGE_COUNT = 6
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -137,6 +139,7 @@ class ClaimWifiActivity : BaseActivity() {
                 PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimWifiManualDetailsFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
+                PAGE_PHOTOS_INTRO -> ClaimPhotosIntroFragment.newInstance(deviceType)
                 PAGE_RESULT -> ClaimResultFragment.newInstance(deviceType)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

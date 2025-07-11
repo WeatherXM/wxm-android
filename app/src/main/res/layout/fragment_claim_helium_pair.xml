@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/alternativeBackground"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="false"
+    android:paddingHorizontal="@dimen/padding_normal">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/mainContainer"
@@ -140,11 +141,11 @@
                         android:layout_height="match_parent"
                         android:alpha="0.5"
                         android:indeterminate="false"
-                        app:trackCornerRadius="@dimen/radius_medium"
                         android:indeterminateOnly="false"
                         android:visibility="gone"
                         app:indicatorColor="@color/lightestBlue"
                         app:trackColor="@color/transparent"
+                        app:trackCornerRadius="@dimen/radius_medium"
                         app:trackThickness="54dp"
                         tools:visibility="visible" />
                 </FrameLayout>

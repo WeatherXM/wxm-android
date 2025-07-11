@@ -18,6 +18,7 @@ import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultFragment
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosintro.ClaimPhotosIntroFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
@@ -128,9 +129,10 @@ class ClaimHeliumActivity : BaseActivity() {
             const val PAGE_RESET = 0
             const val PAGE_VERIFY_OR_PAIR = 1
             const val PAGE_LOCATION = 2
-            const val PAGE_FREQUENCY = 3
-            const val PAGE_RESULT = 4
-            const val PAGE_COUNT = 5
+            const val PAGE_PHOTOS_INTRO = 3
+            const val PAGE_FREQUENCY = 4
+            const val PAGE_RESULT = 5
+            const val PAGE_COUNT = 6
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -141,6 +143,7 @@ class ClaimHeliumActivity : BaseActivity() {
                 PAGE_RESET -> ClaimHeliumResetFragment()
                 PAGE_VERIFY_OR_PAIR -> ClaimHeliumPairFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
+                PAGE_PHOTOS_INTRO -> ClaimPhotosIntroFragment.newInstance(DeviceType.HELIUM)
                 PAGE_FREQUENCY -> ClaimHeliumFrequencyFragment()
                 PAGE_RESULT -> ClaimHeliumResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
