@@ -94,7 +94,7 @@ abstract class BaseDeviceSettingsActivity : BaseActivity() {
         if (photos.isEmpty() || !hasAcceptedPhotosTerms) {
             navigator.showPhotoVerificationIntro(this, device, photos)
         } else {
-            navigator.showPhotoGallery(photoGalleryLauncher, this, device, photos, false)
+            navigator.showPhotoGallery(photoGalleryLauncher, this, device, photos)
         }
     }
 
