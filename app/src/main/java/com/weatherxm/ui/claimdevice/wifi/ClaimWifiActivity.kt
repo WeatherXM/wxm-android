@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryFragment
@@ -124,14 +125,15 @@ class ClaimWifiActivity : BaseActivity() {
         private val deviceType: DeviceType
     ) : FragmentStateAdapter(activity) {
         companion object {
-            const val PAGE_CONNECT_WIFI = 0
-            const val PAGE_PREPARE_GATEWAY = 1
-            const val PAGE_MANUAL_DETAILS = 2
-            const val PAGE_LOCATION = 3
-            const val PAGE_PHOTOS_INTRO = 4
-            const val PAGE_PHOTOS_GALLERY = 5
-            const val PAGE_RESULT = 6
-            const val PAGE_COUNT = 7
+            const val PAGE_BEFORE_CLAIMING = 0
+            const val PAGE_CONNECT_WIFI = 1
+            const val PAGE_PREPARE_GATEWAY = 2
+            const val PAGE_MANUAL_DETAILS = 3
+            const val PAGE_LOCATION = 4
+            const val PAGE_PHOTOS_INTRO = 5
+            const val PAGE_PHOTOS_GALLERY = 6
+            const val PAGE_RESULT = 7
+            const val PAGE_COUNT = 8
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -139,6 +141,7 @@ class ClaimWifiActivity : BaseActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
+                PAGE_BEFORE_CLAIMING -> ClaimBeforeYouClaimFragment.newInstance(deviceType)
                 PAGE_CONNECT_WIFI -> ClaimWifiConnectWifiFragment()
                 PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimWifiManualDetailsFragment()

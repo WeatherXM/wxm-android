@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryFragment
@@ -111,15 +112,16 @@ class ClaimPulseActivity : BaseActivity() {
         activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
         companion object {
-            const val PAGE_REBOOT = 0
-            const val PAGE_PREPARE_GATEWAY = 1
-            const val PAGE_MANUAL_DETAILS = 2
-            const val PAGE_CLAIMING_CODE = 3
-            const val PAGE_LOCATION = 4
-            const val PAGE_PHOTOS_INTRO = 5
-            const val PAGE_PHOTOS_GALLERY = 6
-            const val PAGE_RESULT = 7
-            const val PAGE_COUNT = 8
+            const val PAGE_BEFORE_CLAIMING = 0
+            const val PAGE_REBOOT = 1
+            const val PAGE_PREPARE_GATEWAY = 2
+            const val PAGE_MANUAL_DETAILS = 3
+            const val PAGE_CLAIMING_CODE = 4
+            const val PAGE_LOCATION = 5
+            const val PAGE_PHOTOS_INTRO = 6
+            const val PAGE_PHOTOS_GALLERY = 7
+            const val PAGE_RESULT = 8
+            const val PAGE_COUNT = 9
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -127,6 +129,7 @@ class ClaimPulseActivity : BaseActivity() {
         @Suppress("UseCheckOrError", "UseIfInsteadOfWhen")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
+                PAGE_BEFORE_CLAIMING -> ClaimBeforeYouClaimFragment.newInstance(DeviceType.PULSE_4G)
                 PAGE_REBOOT -> ClaimPulseRebootFragment()
                 PAGE_PREPARE_GATEWAY -> ClaimPulsePrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimPulseManualDetailsFragment()

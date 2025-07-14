@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_FREQUENCY
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
@@ -132,14 +133,15 @@ class ClaimHeliumActivity : BaseActivity() {
         activity: AppCompatActivity,
     ) : FragmentStateAdapter(activity) {
         companion object {
-            const val PAGE_RESET = 0
-            const val PAGE_VERIFY_OR_PAIR = 1
-            const val PAGE_LOCATION = 2
-            const val PAGE_PHOTOS_INTRO = 3
-            const val PAGE_PHOTOS_GALLERY = 4
-            const val PAGE_FREQUENCY = 5
-            const val PAGE_RESULT = 6
-            const val PAGE_COUNT = 7
+            const val PAGE_BEFORE_CLAIMING = 0
+            const val PAGE_RESET = 1
+            const val PAGE_VERIFY_OR_PAIR = 2
+            const val PAGE_LOCATION = 3
+            const val PAGE_PHOTOS_INTRO = 4
+            const val PAGE_PHOTOS_GALLERY = 5
+            const val PAGE_FREQUENCY = 6
+            const val PAGE_RESULT = 7
+            const val PAGE_COUNT = 8
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -147,6 +149,7 @@ class ClaimHeliumActivity : BaseActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
+                PAGE_BEFORE_CLAIMING -> ClaimBeforeYouClaimFragment.newInstance(DeviceType.HELIUM)
                 PAGE_RESET -> ClaimHeliumResetFragment()
                 PAGE_VERIFY_OR_PAIR -> ClaimHeliumPairFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
