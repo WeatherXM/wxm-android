@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_FREQUENCY
@@ -32,7 +33,9 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
 class ClaimHeliumActivity : BaseActivity() {
     companion object {
@@ -42,6 +45,7 @@ class ClaimHeliumActivity : BaseActivity() {
         const val CLAIMED_DEVICE = "claimed_device"
     }
 
+    private val uploadObserverService: GlobalUploadObserverService by inject()
     private val model: ClaimHeliumViewModel by viewModel()
     private val locationModel: ClaimLocationViewModel by viewModel()
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModel()
@@ -76,6 +80,20 @@ class ClaimHeliumActivity : BaseActivity() {
 
         model.onNext().observe(this) {
             if (it) onNextPressed()
+        }
+
+        model.onPhotosMetadata().observe(this) { (device, metadata) ->
+            val numberOfPhotosToUpload = List(photosViewModel.onPhotos.size) { index ->
+                metadata.getOrNull(index)
+            }.filterNotNull().size
+            uploadObserverService.setData(device, numberOfPhotosToUpload)
+
+            startWorkerForUploadingPhotos(
+                device,
+                photosViewModel.onPhotos.toList(),
+                metadata,
+                device.id
+            )
         }
 
         savedInstanceState?.let {

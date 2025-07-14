@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
@@ -28,6 +29,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -37,6 +39,8 @@ class ClaimWifiActivity : BaseActivity() {
         const val SERIAL_NUMBER = "serial_number"
         const val CLAIMING_KEY = "claiming_key"
     }
+
+    private val uploadObserverService: GlobalUploadObserverService by inject()
 
     private lateinit var binding: ActivityClaimDeviceBinding
     private val model: ClaimWifiViewModel by viewModel {
@@ -71,6 +75,20 @@ class ClaimWifiActivity : BaseActivity() {
         }
         binding.toolbar.setNavigationOnClickListener {
             finish()
+        }
+
+        model.onPhotosMetadata().observe(this) { (device, metadata) ->
+            val numberOfPhotosToUpload = List(photosViewModel.onPhotos.size) { index ->
+                metadata.getOrNull(index)
+            }.filterNotNull().size
+            uploadObserverService.setData(device, numberOfPhotosToUpload)
+
+            startWorkerForUploadingPhotos(
+                device,
+                photosViewModel.onPhotos.toList(),
+                metadata,
+                device.id
+            )
         }
 
         savedInstanceState?.let {
@@ -114,7 +132,10 @@ class ClaimWifiActivity : BaseActivity() {
                 PAGE_RESULT -> {
                     binding.appBar.visible(false)
                     binding.progress.visible(false)
-                    model.claimDevice(locationModel.getInstallationLocation())
+                    model.claimDevice(
+                        locationModel.getInstallationLocation(),
+                        photosViewModel.onPhotos
+                    )
                 }
             }
         }

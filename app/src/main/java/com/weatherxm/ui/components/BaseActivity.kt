@@ -6,6 +6,7 @@ import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.Manifest.permission.BLUETOOTH_SCAN
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.os.Build.VERSION_CODES.S
 import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.annotation.StringRes
@@ -15,12 +16,20 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.models.PhotoPresignedMetadata
+import com.weatherxm.service.workers.UploadPhotoWorker
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.StationPhoto
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.AndroidBuildInfo
+import com.weatherxm.util.ImageFileHelper.compressImageFile
+import com.weatherxm.util.ImageFileHelper.copyExifMetadata
+import com.weatherxm.util.ImageFileHelper.copyInputStreamToFile
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
 import com.weatherxm.util.permissionsBuilder
 import org.koin.android.ext.android.inject
+import java.io.File
 
 open class BaseActivity : AppCompatActivity(), BaseInterface {
     override val analytics: AnalyticsWrapper by inject()
@@ -93,5 +102,33 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
             AnalyticsService.ParamValue.LEARN_MORE.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, messageSource)
         )
+    }
+
+    fun startWorkerForUploadingPhotos(
+        device: UIDevice,
+        photos: List<StationPhoto>,
+        photosPresignedMetadata: List<PhotoPresignedMetadata>,
+        defaultPhotoPrefix: String,
+    ) {
+        photos.forEachIndexed { index, stationPhoto ->
+            photosPresignedMetadata.getOrNull(index)?.let { metadata ->
+                /**
+                 * Use the current photo name in cache otherwise default to "deviceId_img$index.jpg"
+                 */
+                val fileName = stationPhoto.localPath?.substringAfterLast('/')
+                    ?: "${defaultPhotoPrefix}_img$index.jpg"
+                val file = File(cacheDir, fileName)
+                val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
+                file.copyInputStreamToFile(compressImageFile(imageBitmap))
+                copyExifMetadata(
+                    stationPhoto.localPath,
+                    file.path,
+                    stationPhoto.source?.exifUserComment
+                )
+
+                // Start the work manager to upload the photo.
+                UploadPhotoWorker.initAndStart(this, metadata, file.path, device.id)
+            }
+        }
     }
 }

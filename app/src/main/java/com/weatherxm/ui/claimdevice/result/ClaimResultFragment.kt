@@ -11,6 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
@@ -29,6 +30,7 @@ class ClaimResultFragment : BaseFragment() {
     private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
+    private val photosModel: ClaimPhotosGalleryViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimResultBinding
     private lateinit var deviceType: DeviceType
 
@@ -89,9 +91,15 @@ class ClaimResultFragment : BaseFragment() {
                 )
             )
             if (deviceType == PULSE_4G) {
-                pulseParentModel.claimDevice(locationModel.getInstallationLocation())
+                pulseParentModel.claimDevice(
+                    locationModel.getInstallationLocation(),
+                    photosModel.onPhotos
+                )
             } else {
-                wifiParentModel.claimDevice(locationModel.getInstallationLocation())
+                wifiParentModel.claimDevice(
+                    locationModel.getInstallationLocation(),
+                    photosModel.onPhotos
+                )
             }
         }
 
