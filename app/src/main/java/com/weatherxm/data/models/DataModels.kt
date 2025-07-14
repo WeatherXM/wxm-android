@@ -122,7 +122,7 @@ enum class RemoteMessageType(val id: String, val publicName: String, val desc: S
     STATION(
         "station",
         "Station Notifications",
-        "These notifications are used for announcements regarding your station(s)."
+        "These notifications are used for announcements or alerts regarding your station(s)."
     ),
     DEFAULT("DEFAULT", "Default", "These are general purpose notifications.");
 

@@ -14,7 +14,8 @@ class DeviceNotificationsRepositoryTest : BehaviorSpec({
     val repository = DeviceNotificationsRepositoryImpl(dataSource)
 
     val deviceId = "deviceId"
-    val notificationTypes = setOf(DeviceNotificationType.ACTIVITY, DeviceNotificationType.HEALTH)
+    val healthType = DeviceNotificationType.HEALTH
+    val notificationTypes = setOf(DeviceNotificationType.ACTIVITY, healthType)
     val typesAsStringSet = notificationTypes.map { it.name }.toSet()
 
     beforeSpec {
@@ -24,6 +25,8 @@ class DeviceNotificationsRepositoryTest : BehaviorSpec({
         every { dataSource.getDeviceNotificationTypesEnabled(deviceId) } returns typesAsStringSet
         every { dataSource.showDeviceNotificationsPrompt() } returns true
         coJustRun { dataSource.checkDeviceNotificationsPrompt() }
+        every { dataSource.getDeviceNotificationTypeTimestamp(deviceId, healthType) } returns 0L
+        coJustRun { dataSource.setDeviceNotificationTypeTimestamp(deviceId, healthType) }
     }
 
     context("GET / SET if the device notifications are enabled") {
@@ -58,7 +61,6 @@ class DeviceNotificationsRepositoryTest : BehaviorSpec({
         }
     }
 
-
     context("GET / SET if the notifications prompt should be shown") {
         When("GET") {
             then("return if the prompt should be shown") {
@@ -69,6 +71,22 @@ class DeviceNotificationsRepositoryTest : BehaviorSpec({
             then("check that the prompt is set") {
                 repository.checkDeviceNotificationsPrompt()
                 verify(exactly = 1) { dataSource.checkDeviceNotificationsPrompt() }
+            }
+        }
+    }
+
+    context("GET / SET the timestamp of a specific device notification type") {
+        When("GET") {
+            then("return that timestamp") {
+                repository.getDeviceNotificationTypeTimestamp(deviceId, healthType) shouldBe 0L
+            }
+        }
+        When("SET") {
+            then("set that timestamp") {
+                repository.setDeviceNotificationTypeTimestamp(deviceId, healthType)
+                verify(exactly = 1) {
+                    dataSource.setDeviceNotificationTypeTimestamp(deviceId, healthType)
+                }
             }
         }
     }

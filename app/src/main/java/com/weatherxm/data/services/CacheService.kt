@@ -59,6 +59,7 @@ class CacheService(
         const val KEY_DEVICE_NOTIFICATIONS = "device_notifications"
         const val KEY_DEVICE_NOTIFICATION_TYPES = "device_notification_types"
         const val KEY_DEVICE_NOTIFICATIONS_PROMPT = "device_notifications_prompt"
+        const val KEY_DEVICE_NOTIFICATION = "device_notification"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -86,6 +87,13 @@ class CacheService(
 
         fun getDeviceNotificationTypesFormattedKey(deviceId: String): String {
             return "${KEY_DEVICE_NOTIFICATION_TYPES}_${deviceId}"
+        }
+
+        fun getDeviceNotificationFormattedKey(
+            deviceId: String,
+            deviceNotificationType: DeviceNotificationType
+        ): String {
+            return "${KEY_DEVICE_NOTIFICATION}_${deviceNotificationType}_${deviceId}"
         }
     }
 
@@ -470,6 +478,14 @@ class CacheService(
 
     fun getDeviceNotificationsPrompt(): Boolean {
         return preferences.getBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, true)
+    }
+
+    fun setDeviceNotificationTypeTimestamp(key: String, timestamp: Long) {
+        preferences.edit { putLong(key, timestamp) }
+    }
+
+    fun getDeviceNotificationTypeTimestamp(key: String): Long {
+        return preferences.getLong(key, 0L)
     }
 
     fun getPreferredUnit(
