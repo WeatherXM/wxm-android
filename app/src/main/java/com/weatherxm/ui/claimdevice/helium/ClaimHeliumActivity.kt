@@ -92,7 +92,7 @@ class ClaimHeliumActivity : BaseActivity() {
                 device,
                 photosViewModel.onPhotos.toList(),
                 metadata,
-                device.id
+                DeviceType.HELIUM.name
             )
         }
 

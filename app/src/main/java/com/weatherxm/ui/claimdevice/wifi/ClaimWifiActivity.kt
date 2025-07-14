@@ -87,7 +87,7 @@ class ClaimWifiActivity : BaseActivity() {
                 device,
                 photosViewModel.onPhotos.toList(),
                 metadata,
-                device.id
+                model.getSerialNumber()
             )
         }
 

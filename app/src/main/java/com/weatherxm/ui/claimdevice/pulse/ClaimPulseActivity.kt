@@ -79,7 +79,7 @@ class ClaimPulseActivity : BaseActivity() {
                 device,
                 photosViewModel.onPhotos.toList(),
                 metadata,
-                device.id
+                model.getSerialNumber()
             )
         }
 
