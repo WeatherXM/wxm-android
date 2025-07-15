@@ -18,7 +18,6 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
-import com.weatherxm.ui.explorer.ExplorerCamera
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
@@ -324,6 +323,7 @@ class ExplorerViewModel(
         locationHelper.getLocationAndThen(onLocation)
     }
 
+    @Suppress("MagicNumber")
     fun getStationsInViewPort(
         northLat: Double,
         southLat: Double,
@@ -333,7 +333,7 @@ class ExplorerViewModel(
         viewModelScope.launch {
             onViewportStations.postValue(
                 onExplorerData.value?.publicHexes?.sumOf {
-                    val containsLon = if (westLon < eastLon && (eastLon - westLon <= 180)) {
+                    val containsLon = if (westLon < eastLon && eastLon - westLon <= 180) {
                         it.center.lon in westLon..eastLon
                     } else {
                         it.center.lon <= westLon || it.center.lon >= eastLon
