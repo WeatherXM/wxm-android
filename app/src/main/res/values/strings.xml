@@ -386,6 +386,18 @@
     <string name="pulse_4g">Pulse | 4G</string>
 
     <!-- Claim device -->
+    <string name="before_you_claim">Before you claim your station…</string>
+    <string name="make_sure_completed_previous_steps">Make sure you’ve completed all previous steps:</string>
+    <string name="next_up_station_claiming_steps">Next up, Station Claiming steps:</string>
+    <string name="check_box_contents">Check the box contents.</string>
+    <string name="assemble_weather_station">Assemble your weather station.</string>
+    <string name="install_weather_station_following_guidelines">Install your weather station following our guidelines.</string>
+    <string name="connect_gateway_ready_for_claiming">Connect the gateway and get it ready for claiming.</string>
+    <string name="confirm_station_exact_deployment_location">Confirm the station’s exact deployment location.</string>
+    <string name="take_photos_station_deployment_guidelines">Take photos of your station to ensure it meets our deployment guidelines.</string>
+    <string name="all_done_enjoy_station_earn_rewards">All Done! You can now enjoy your station and start earning rewards.</string>
+    <string name="pair_station_via_bluetooth">Pair your station via Bluetooth.</string>
+    <string name="set_your_station_frequency">Set your station’s frequency.</string>
     <string name="confirm_station_location">Confirm station location</string>
     <string name="confirm_station_location_desc">You need to confirm the station’s exact deployment location.</string>
     <string name="search_location">Search for location</string>

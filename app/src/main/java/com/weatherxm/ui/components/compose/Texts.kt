@@ -1,14 +1,22 @@
 package com.weatherxm.ui.components.compose
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 
@@ -78,4 +86,27 @@ fun Title(
         color = colorResource(colorRes),
         style = MaterialTheme.typography.headlineSmall
     )
+}
+
+@Suppress("FunctionNaming")
+@Preview
+@Composable
+fun TextWithStartingIcon(
+    text: String = "",
+    textColorRes: Int = R.color.darkGrey,
+    iconRes: Int = R.drawable.ic_one_filled,
+    iconColorRes: Int = R.color.darkGrey
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))) {
+        Icon(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            tint = colorResource(iconColorRes)
+        )
+        MediumText(
+            text = text,
+            colorRes = textColorRes
+        )
+    }
 }

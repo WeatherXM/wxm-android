@@ -158,11 +158,11 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/connectButton"
+            android:id="@+id/proceedBtn"
             style="@style/Widget.WeatherXM.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/begin_station_claiming"
+            android:text="@string/proceed_next_step"
             app:layout_constraintBottom_toBottomOf="parent" />
     </FrameLayout>
 
