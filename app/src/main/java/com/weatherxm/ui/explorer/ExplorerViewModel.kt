@@ -323,6 +323,7 @@ class ExplorerViewModel(
         locationHelper.getLocationAndThen(onLocation)
     }
 
+    @Suppress("MagicNumber")
     fun getStationsInViewPort(
         northLat: Double,
         southLat: Double,
@@ -332,7 +333,12 @@ class ExplorerViewModel(
         viewModelScope.launch {
             onViewportStations.postValue(
                 onExplorerData.value?.publicHexes?.sumOf {
-                    if (it.center.lat in southLat..northLat && it.center.lon in westLon..eastLon) {
+                    val containsLon = if (westLon < eastLon && eastLon - westLon <= 180) {
+                        it.center.lon in westLon..eastLon
+                    } else {
+                        it.center.lon <= westLon || it.center.lon >= eastLon
+                    }
+                    if (it.center.lat in southLat..northLat && containsLon) {
                         it.deviceCount ?: 0
                     } else {
                         0
