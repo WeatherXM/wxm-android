@@ -13,11 +13,14 @@ import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
@@ -33,6 +36,7 @@ import org.koin.dsl.module
 
 class ClaimWifiViewModelTest : BehaviorSpec({
     val usecase = mockk<ClaimDeviceUseCase>()
+    val photoUseCase = mockk<DevicePhotoUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: ClaimWifiViewModel
 
@@ -47,6 +51,10 @@ class ClaimWifiViewModelTest : BehaviorSpec({
     val invalidLocation = "Invalid Location"
     val alreadyClaimed = "Already Claimed"
     val deviceClaimingError = "Device Claiming Error"
+    val stationPhotos = listOf(
+        StationPhoto("remotePath", "localPath")
+    )
+    val photoMetadata = listOf<PhotoPresignedMetadata>()
 
     val device = UIDevice.empty()
 
@@ -71,9 +79,20 @@ class ClaimWifiViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.error_claim_device_claiming_error)
         } returns deviceClaimingError
+        coMockEitherRight(
+            { photoUseCase.getPhotosMetadataForUpload(device.id, listOf("localPath")) },
+            photoMetadata
+        )
 
         viewModel =
-            ClaimWifiViewModel(DeviceType.D1_WIFI, usecase, resources, analytics, dispatcher)
+            ClaimWifiViewModel(
+                DeviceType.D1_WIFI,
+                usecase,
+                photoUseCase,
+                resources,
+                analytics,
+                dispatcher
+            )
     }
 
 
@@ -82,7 +101,7 @@ class ClaimWifiViewModelTest : BehaviorSpec({
         errorMsg: String
     ) {
         testHandleFailureViewModel(
-            { viewModel.claimDevice(location) },
+            { viewModel.claimDevice(location, stationPhotos) },
             analytics,
             viewModel.onClaimResult(),
             verifyNumberOfFailureEvents,
@@ -229,13 +248,15 @@ class ClaimWifiViewModelTest : BehaviorSpec({
                     { usecase.claimDevice(serial, location.lat, location.lon, claimingKey) },
                     device
                 )
-                runTest { viewModel.claimDevice(location) }
+                runTest { viewModel.claimDevice(location, stationPhotos) }
+                then("Get the photos metadata to upload") {
+                    viewModel.onPhotosMetadata().value shouldBe Pair(device, photoMetadata)
+                }
                 then("LiveData onClaimResult posts a success with the device") {
                     viewModel.onClaimResult().isSuccess(device)
                 }
             }
         }
-
     }
 
     afterSpec {

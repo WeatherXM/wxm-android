@@ -46,7 +46,7 @@ class ClaimWifiConnectWifiFragment : BaseFragment() {
         }
         binding.thirdStep.setHtml(R.string.connect_wifi_third_step)
 
-        binding.connectButton.setOnClickListener {
+        binding.proceedBtn.setOnClickListener {
             parentModel.next()
         }
 

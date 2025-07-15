@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
@@ -22,7 +22,6 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -31,6 +30,7 @@ class ClaimResultFragment : BaseFragment() {
     private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
+    private val photosModel: ClaimPhotosGalleryViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimResultBinding
     private lateinit var deviceType: DeviceType
 
@@ -91,9 +91,15 @@ class ClaimResultFragment : BaseFragment() {
                 )
             )
             if (deviceType == PULSE_4G) {
-                pulseParentModel.claimDevice(locationModel.getInstallationLocation())
+                pulseParentModel.claimDevice(
+                    locationModel.getInstallationLocation(),
+                    photosModel.onPhotos
+                )
             } else {
-                wifiParentModel.claimDevice(locationModel.getInstallationLocation())
+                wifiParentModel.claimDevice(
+                    locationModel.getInstallationLocation(),
+                    photosModel.onPhotos
+                )
             }
         }
 
@@ -121,35 +127,20 @@ class ClaimResultFragment : BaseFragment() {
                     )
                 val device = resource.data
                 if (device != null) {
-                    binding.skipAndGoToStationBtn.setOnClickListener {
-                        ActionDialogFragment.createSkipPhotoVerification(requireContext()) {
-                            analytics.trackEventUserAction(
-                                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
-                                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
-                                Pair(
-                                    AnalyticsService.CustomParam.ACTION.paramName,
-                                    AnalyticsService.ParamValue.VIEW_STATION.paramValue
-                                )
-                            )
-                            navigator.showDeviceDetails(activity, device = device)
-                            activity?.setResult(Activity.RESULT_OK)
-                            activity?.finish()
-                        }.show(this)
-                    }
-                    binding.photoVerificationBtn.setOnClickListener {
-                        analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
+                    binding.viewStationBtn.setOnClickListener {
+                        analytics.trackEventUserAction(
+                            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                             Pair(
-                                FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.CLAIMING_ID.paramValue
+                                AnalyticsService.CustomParam.ACTION.paramName,
+                                AnalyticsService.ParamValue.VIEW_STATION.paramValue
                             )
                         )
-                        navigator.showPhotoVerificationIntro(context, device)
+                        navigator.showDeviceDetails(activity, device = device)
                         activity?.setResult(Activity.RESULT_OK)
                         activity?.finish()
                     }
-                    binding.skipAndGoToStationBtn.visible(true)
-                    binding.photoVerificationBtn.visible(true)
+                    binding.viewStationBtn.visible(true)
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,

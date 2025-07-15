@@ -19,7 +19,6 @@ import java.io.File
 class PhotoGalleryViewModel(
     val device: UIDevice,
     val photos: MutableList<StationPhoto>,
-    val fromClaiming: Boolean,
     private val usecase: DevicePhotoUseCase,
     val dispatcher: CoroutineDispatcher
 ) : ViewModel() {

@@ -1,5 +1,6 @@
 package com.weatherxm.ui.claimdevice.wifi
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,12 +13,15 @@ import com.weatherxm.data.models.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.models.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
@@ -25,9 +29,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class ClaimWifiViewModel(
     val deviceType: DeviceType,
     private val claimDeviceUseCase: ClaimDeviceUseCase,
+    private val photoUseCase: DevicePhotoUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher,
@@ -38,10 +44,13 @@ class ClaimWifiViewModel(
     private val onClaimResult = MutableLiveData<Resource<UIDevice>>()
     private var currentSerialNumber: String = String.empty()
     private var currentClaimingKey: String? = null
+    private val onPhotosMetadata = MutableLiveData<Pair<UIDevice, List<PhotoPresignedMetadata>>>()
 
     fun onNext() = onNext
     fun onCancel() = onCancel
     fun onClaimResult() = onClaimResult
+    fun onPhotosMetadata(): LiveData<Pair<UIDevice, List<PhotoPresignedMetadata>>> =
+        onPhotosMetadata
 
     fun next(incrementPage: Int = 1) {
         onNext.postValue(incrementPage)
@@ -78,7 +87,7 @@ class ClaimWifiViewModel(
         return Validator.validateClaimingKey(key)
     }
 
-    fun claimDevice(location: Location) {
+    fun claimDevice(location: Location, photos: List<StationPhoto>) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             claimDeviceUseCase.claimDevice(
@@ -88,12 +97,20 @@ class ClaimWifiViewModel(
                 currentClaimingKey
             ).onRight {
                 Timber.d("Claimed device: $it")
+                prepareUpload(it, photos)
                 onClaimResult.postValue(Resource.success(it))
             }.onLeft {
                 analytics.trackEventFailure(it.code)
                 handleFailure(it)
             }
         }
+    }
+
+    suspend fun prepareUpload(device: UIDevice, photos: List<StationPhoto>) {
+        photoUseCase.getPhotosMetadataForUpload(device.id, photos.mapNotNull { it.localPath })
+            .onRight {
+                onPhotosMetadata.postValue(Pair(device, it))
+            }
     }
 
     private fun handleFailure(failure: Failure) {

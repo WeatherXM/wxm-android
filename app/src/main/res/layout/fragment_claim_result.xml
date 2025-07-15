@@ -5,7 +5,8 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/alternativeBackground">
+    android:background="@color/alternativeBackground"
+    android:paddingHorizontal="@dimen/padding_normal">
 
     <com.weatherxm.ui.components.EmptyView
         android:id="@+id/statusView"
@@ -15,29 +16,18 @@
         app:empty_animation="@raw/anim_loading"
         app:empty_subtitle="@string/success_claim_device"
         app:empty_title="@string/station_claimed"
-        app:layout_constraintBottom_toTopOf="@id/skipAndGoToStationBtn"
+        app:layout_constraintBottom_toTopOf="@id/viewStationBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/photoVerificationBtn"
+        android:id="@+id/viewStationBtn"
         style="@style/Widget.WeatherXM.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small_to_normal"
-        android:text="@string/action_continue_photo_verification"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/skipAndGoToStationBtn"
-        tools:visibility="visible" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/skipAndGoToStationBtn"
-        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:text="@string/action_skip_for_now"
+        android:text="@string/action_view_station"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:visibility="visible" />

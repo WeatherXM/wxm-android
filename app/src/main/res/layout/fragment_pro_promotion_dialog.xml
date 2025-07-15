@@ -142,8 +142,7 @@
             android:layout_marginTop="@dimen/margin_large"
             android:backgroundTint="@color/colorSurface"
             android:text="@string/action_learn_more"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@id/skipAndGoToStationBtn" />
+            android:textColor="@color/colorPrimary" />
 
     </LinearLayout>
 
