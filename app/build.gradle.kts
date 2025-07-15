@@ -57,20 +57,20 @@ fun getStringProperty(name: String): String {
 }
 
 fun getFlavorProperty(propertyName: String, flavorEnvFile: String): String {
-    // Default API URL
-    var apiURL = getStringProperty(propertyName)
+    // Default property
+    var property = getStringProperty(propertyName)
 
     val env = rootProject.file(flavorEnvFile)
     if (env.exists()) {
         env.forEachLine {
             val keyValuePair = it.split("=")
             if (keyValuePair.size > 1 && keyValuePair[0] == propertyName) {
-                apiURL = keyValuePair[1]
+                property = keyValuePair[1]
                 project.ext.set(keyValuePair[0], keyValuePair[1])
             }
         }
     }
-    return apiURL
+    return property
 }
 
 android {
@@ -103,10 +103,10 @@ android {
         }
         create("releaseOnSolana") {
             storeFile =
-                file("${rootDir.path}/${getFlavorProperty("SOLANA_KEYSTORE", "solana.env")}")
-            storePassword = getFlavorProperty("SOLANA_KEYSTORE_PASSWORD", "solana.env")
-            keyAlias = getFlavorProperty("SOLANA_KEY_ALIAS", "solana.env")
-            keyPassword = getFlavorProperty("SOLANA_KEY_PASSWORD", "solana.env")
+                file("${rootDir.path}/${getFlavorProperty("RELEASE_KEYSTORE", "solana.env")}")
+            storePassword = getFlavorProperty("RELEASE_KEYSTORE_PASSWORD", "solana.env")
+            keyAlias = getFlavorProperty("RELEASE_KEY_ALIAS", "solana.env")
+            keyPassword = getFlavorProperty("RELEASE_KEY_PASSWORD", "solana.env")
         }
         if (hasProperty("DEBUG_KEYSTORE")) {
             create("debug-config") {
@@ -307,7 +307,7 @@ android {
             version = "$version-mock"
         } else if (flavor.contains("dev")) {
             version = "$version-development"
-        } else if(flavor.contains("solana")) {
+        } else if (flavor.contains("solana")) {
             version = "$version-solana"
         }
 
