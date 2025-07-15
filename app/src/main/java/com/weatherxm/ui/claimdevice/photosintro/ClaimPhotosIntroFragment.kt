@@ -17,13 +17,16 @@ import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.photoverification.PhotoExampleAdapter
 import com.weatherxm.ui.photoverification.badExamples
 import com.weatherxm.ui.photoverification.goodExamples
+import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimPhotosIntroFragment : BaseFragment() {
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
     private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
+    private val model: PhotoVerificationIntroViewModel by viewModel()
     private lateinit var binding: FragmentClaimPhotosIntroBinding
 
     companion object {
@@ -74,11 +77,15 @@ class ClaimPhotosIntroFragment : BaseFragment() {
         }
 
         binding.takePhotoBtn.setOnClickListener {
+            model.setAcceptedTerms()
             when (deviceType) {
                 DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
                 DeviceType.PULSE_4G -> pulseParentModel.next()
                 DeviceType.HELIUM -> heliumParentModel.next()
             }
+        }
+        if (model.getAcceptedTerms()) {
+            binding.acceptableUsePolicyCheckbox.isChecked = true
         }
     }
 }
