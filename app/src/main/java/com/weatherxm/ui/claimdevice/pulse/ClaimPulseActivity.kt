@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
@@ -27,7 +28,9 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
 class ClaimPulseActivity : BaseActivity() {
     companion object {
@@ -37,6 +40,7 @@ class ClaimPulseActivity : BaseActivity() {
     }
 
     private lateinit var binding: ActivityClaimDeviceBinding
+    private val uploadObserverService: GlobalUploadObserverService by inject()
     private val model: ClaimPulseViewModel by viewModel()
     private val locationModel: ClaimLocationViewModel by viewModel()
     private val photosViewModel: ClaimPhotosGalleryViewModel by viewModel()
@@ -63,6 +67,20 @@ class ClaimPulseActivity : BaseActivity() {
         binding.toolbar.title = getString(R.string.title_claim_pulse_4g)
         binding.toolbar.setNavigationOnClickListener {
             finish()
+        }
+
+        model.onPhotosMetadata().observe(this) { (device, metadata) ->
+            val numberOfPhotosToUpload = List(photosViewModel.onPhotos.size) { index ->
+                metadata.getOrNull(index)
+            }.filterNotNull().size
+            uploadObserverService.setData(device, numberOfPhotosToUpload)
+
+            startWorkerForUploadingPhotos(
+                device,
+                photosViewModel.onPhotos.toList(),
+                metadata,
+                model.getSerialNumber()
+            )
         }
 
         savedInstanceState?.let {
@@ -102,7 +120,10 @@ class ClaimPulseActivity : BaseActivity() {
                 PAGE_RESULT -> {
                     binding.appBar.visible(false)
                     binding.progress.visible(false)
-                    model.claimDevice(locationModel.getInstallationLocation())
+                    model.claimDevice(
+                        locationModel.getInstallationLocation(),
+                        photosViewModel.onPhotos
+                    )
                 }
             }
         }

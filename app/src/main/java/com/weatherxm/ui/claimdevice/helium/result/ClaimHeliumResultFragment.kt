@@ -14,6 +14,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimHeliumResultBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -29,6 +30,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
     private val model: ClaimHeliumResultViewModel by activityViewModel()
+    private val photosModel: ClaimPhotosGalleryViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimHeliumResultBinding
 
     companion object {
@@ -79,7 +81,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
         model.onBLEClaimingKey().observe(viewLifecycleOwner) {
             parentModel.setDeviceKey(it)
-            parentModel.claimDevice(locationModel.getInstallationLocation())
+            parentModel.claimDevice(locationModel.getInstallationLocation(), photosModel.onPhotos)
         }
 
         model.onBLEError().observe(viewLifecycleOwner) { uiError ->
@@ -190,7 +192,10 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     )
                     onLoadingState()
                     onStep(STEP_CLAIM_STATION)
-                    parentModel.claimDevice(locationModel.getInstallationLocation())
+                    parentModel.claimDevice(
+                        locationModel.getInstallationLocation(),
+                        photosModel.onPhotos
+                    )
                 }
                 binding.failureButtonsContainer.visible(true)
                 binding.status.clear()
