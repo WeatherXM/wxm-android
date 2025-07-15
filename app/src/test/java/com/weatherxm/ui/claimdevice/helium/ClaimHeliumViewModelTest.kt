@@ -13,11 +13,14 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.ui.InstantExecutorListener
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
@@ -33,6 +36,7 @@ import org.koin.dsl.module
 
 class ClaimHeliumViewModelTest : BehaviorSpec({
     val usecase = mockk<ClaimDeviceUseCase>()
+    val photoUseCase = mockk<DevicePhotoUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: ClaimHeliumViewModel
 
@@ -50,6 +54,10 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
     val invalidLocation = "Invalid Location"
     val alreadyClaimed = "Already Claimed"
     val deviceClaimingError = "Device Claiming Error"
+    val stationPhotos = listOf(
+        StationPhoto("remotePath", "localPath")
+    )
+    val photoMetadata = listOf<PhotoPresignedMetadata>()
 
     val device = UIDevice.empty()
 
@@ -76,8 +84,12 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.error_claim_device_claiming_error)
         } returns deviceClaimingError
+        coMockEitherRight(
+            { photoUseCase.getPhotosMetadataForUpload(device.id, listOf("localPath")) },
+            photoMetadata
+        )
 
-        viewModel = ClaimHeliumViewModel(usecase, resources, analytics, dispatcher)
+        viewModel = ClaimHeliumViewModel(usecase, photoUseCase, resources, analytics, dispatcher)
     }
 
 
@@ -85,7 +97,7 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
         verifyNumberOfFailureEvents: Int,
         errorMsg: String
     ) {
-        runTest { viewModel.claimDevice(location) }
+        runTest { viewModel.claimDevice(location, stationPhotos) }
         then("Log that error as a failure event") {
             verify(exactly = verifyNumberOfFailureEvents) { analytics.trackEventFailure(any()) }
         }
@@ -162,7 +174,10 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
                     { usecase.claimDevice(devEUI, location.lat, location.lon, deviceKey) },
                     device
                 )
-                runTest { viewModel.claimDevice(location) }
+                runTest { viewModel.claimDevice(location, stationPhotos) }
+                then("Get the photos metadata to upload") {
+                    viewModel.onPhotosMetadata().value shouldBe Pair(device, photoMetadata)
+                }
                 then("LiveData onClaimResult posts a success with the device") {
                     viewModel.onClaimResult().isSuccess(device)
                 }

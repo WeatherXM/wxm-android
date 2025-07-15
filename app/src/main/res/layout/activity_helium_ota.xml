@@ -32,33 +32,18 @@
         app:ble_action_flow_third_step="@string/install_firmware_update"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/successWithPhotoVerificationContainer"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/viewStationBtn"
+        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/margin_normal"
-        android:visibility="gone">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/photoVerificationBtn"
-            style="@style/Widget.WeatherXM.Button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_small_to_normal"
-            android:text="@string/action_continue_photo_verification"
-            app:layout_constraintBottom_toTopOf="@id/skipAndGoToStationBtn" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/skipAndGoToStationBtn"
-            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawableStart="@drawable/ic_update"
-            android:drawableTint="@color/colorOnSurface"
-            android:text="@string/action_skip_for_now"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:drawableStart="@drawable/ic_update"
+        android:drawableTint="@color/colorOnSurface"
+        android:text="@string/action_view_station"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

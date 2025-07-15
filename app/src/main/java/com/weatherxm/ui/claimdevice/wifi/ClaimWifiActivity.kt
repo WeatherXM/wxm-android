@@ -7,11 +7,17 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.service.GlobalUploadObserverService
+import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryFragment
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
+import com.weatherxm.ui.claimdevice.photosintro.ClaimPhotosIntroFragment
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_PHOTOS_GALLERY
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
 import com.weatherxm.ui.claimdevice.wifi.manualdetails.ClaimWifiManualDetailsFragment
@@ -23,6 +29,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -33,11 +40,14 @@ class ClaimWifiActivity : BaseActivity() {
         const val CLAIMING_KEY = "claiming_key"
     }
 
+    private val uploadObserverService: GlobalUploadObserverService by inject()
+
     private lateinit var binding: ActivityClaimDeviceBinding
     private val model: ClaimWifiViewModel by viewModel {
         parametersOf(intent.parcelable<DeviceType>(Contracts.ARG_DEVICE_TYPE))
     }
     private val locationModel: ClaimLocationViewModel by viewModel()
+    private val photosViewModel: ClaimPhotosGalleryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +75,20 @@ class ClaimWifiActivity : BaseActivity() {
         }
         binding.toolbar.setNavigationOnClickListener {
             finish()
+        }
+
+        model.onPhotosMetadata().observe(this) { (device, metadata) ->
+            val numberOfPhotosToUpload = List(photosViewModel.onPhotos.size) { index ->
+                metadata.getOrNull(index)
+            }.filterNotNull().size
+            uploadObserverService.setData(device, numberOfPhotosToUpload)
+
+            startWorkerForUploadingPhotos(
+                device,
+                photosViewModel.onPhotos.toList(),
+                metadata,
+                model.getSerialNumber()
+            )
         }
 
         savedInstanceState?.let {
@@ -103,13 +127,15 @@ class ClaimWifiActivity : BaseActivity() {
             pager.currentItem += incrementPage
             binding.progress.progress = pager.currentItem + 1
             when (pager.currentItem) {
-                PAGE_LOCATION -> {
-                    locationModel.requestUserLocation()
-                }
+                PAGE_LOCATION -> locationModel.requestUserLocation()
+                PAGE_PHOTOS_GALLERY -> photosViewModel.requestCameraPermission()
                 PAGE_RESULT -> {
                     binding.appBar.visible(false)
                     binding.progress.visible(false)
-                    model.claimDevice(locationModel.getInstallationLocation())
+                    model.claimDevice(
+                        locationModel.getInstallationLocation(),
+                        photosViewModel.onPhotos
+                    )
                 }
             }
         }
@@ -120,12 +146,15 @@ class ClaimWifiActivity : BaseActivity() {
         private val deviceType: DeviceType
     ) : FragmentStateAdapter(activity) {
         companion object {
-            const val PAGE_CONNECT_WIFI = 0
-            const val PAGE_PREPARE_GATEWAY = 1
-            const val PAGE_MANUAL_DETAILS = 2
-            const val PAGE_LOCATION = 3
-            const val PAGE_RESULT = 4
-            const val PAGE_COUNT = 5
+            const val PAGE_BEFORE_CLAIMING = 0
+            const val PAGE_CONNECT_WIFI = 1
+            const val PAGE_PREPARE_GATEWAY = 2
+            const val PAGE_MANUAL_DETAILS = 3
+            const val PAGE_LOCATION = 4
+            const val PAGE_PHOTOS_INTRO = 5
+            const val PAGE_PHOTOS_GALLERY = 6
+            const val PAGE_RESULT = 7
+            const val PAGE_COUNT = 8
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -133,10 +162,13 @@ class ClaimWifiActivity : BaseActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
+                PAGE_BEFORE_CLAIMING -> ClaimBeforeYouClaimFragment.newInstance(deviceType)
                 PAGE_CONNECT_WIFI -> ClaimWifiConnectWifiFragment()
                 PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimWifiManualDetailsFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
+                PAGE_PHOTOS_INTRO -> ClaimPhotosIntroFragment.newInstance(deviceType)
+                PAGE_PHOTOS_GALLERY -> ClaimPhotosGalleryFragment.newInstance(deviceType)
                 PAGE_RESULT -> ClaimResultFragment.newInstance(deviceType)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

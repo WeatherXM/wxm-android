@@ -26,7 +26,7 @@ class PhotoGalleryViewModelTest : BehaviorSpec({
     val device = UIDevice.empty()
     val emptyPhotos = mutableListOf<StationPhoto>()
     val usecase = mockk<DevicePhotoUseCase>()
-    val viewModel = PhotoGalleryViewModel(device, mutableListOf(), false, usecase, dispatcher)
+    val viewModel = PhotoGalleryViewModel(device, mutableListOf(), usecase, dispatcher)
 
     val localPath = "localPath"
     val localPhoto = StationPhoto(null, localPath, PhotoSource.GALLERY)

@@ -45,9 +45,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
-import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
-import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -381,15 +379,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showDeviceHeliumOTA(
         context: Context?,
         device: UIDevice?,
-        deviceIsBleConnected: Boolean = false,
-        needsPhotoVerification: Boolean = false
+        deviceIsBleConnected: Boolean = false
     ) {
         context?.startActivity(
             Intent(context, DeviceHeliumOTAActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
                 .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
-                .putExtra(ARG_NEEDS_PHOTO_VERIFICATION, needsPhotoVerification)
         )
     }
 
@@ -516,14 +512,12 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         activityResultLauncher: ActivityResultLauncher<Intent>?,
         context: Context,
         device: UIDevice,
-        photos: ArrayList<String>,
-        newPhotoVerification: Boolean
+        photos: ArrayList<String>
     ) {
         val intent = Intent(context, PhotoGalleryActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .putExtra(ARG_DEVICE, device)
             .putStringArrayListExtra(ARG_PHOTOS, photos)
-            .putExtra(ARG_NEW_PHOTO_VERIFICATION, newPhotoVerification)
         if (activityResultLauncher == null) {
             context.startActivity(intent)
         } else {
