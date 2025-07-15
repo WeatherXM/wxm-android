@@ -241,6 +241,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // ABI filtering for Solana phones (ARM-based Snapdragon processors)
+            ndk {
+                abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
+            }
             manifestPlaceholders["crashlyticsEnabled"] = true
         }
         getByName("debug") {
