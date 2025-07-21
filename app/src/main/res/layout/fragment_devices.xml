@@ -95,6 +95,19 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/ownDeployEarn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_small"
+                            android:text="@string/own_deploy_earn"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/openRewards"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <ImageView
                             android:id="@+id/openRewards"
                             android:layout_width="wrap_content"
@@ -103,7 +116,8 @@
                             android:src="@drawable/ic_arrow_right"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/darkGrey" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

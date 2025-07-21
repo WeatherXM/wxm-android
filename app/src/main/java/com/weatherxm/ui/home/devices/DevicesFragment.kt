@@ -323,8 +323,9 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             navigator.showDevicesRewards(this, rewards)
         }
         binding.stationRewards.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
-        binding.totalEarnedContainer.visible(rewards.devices.isEmpty() || rewards.total > 0F)
+        binding.totalEarnedContainer.visible(rewards.total > 0F)
         binding.noRewardsYet.visible(rewards.devices.isNotEmpty() && rewards.total == 0F)
+        binding.ownDeployEarn.visible(rewards.devices.isEmpty() && rewards.total == 0F)
     }
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {

@@ -83,7 +83,6 @@
 
     <!-- Bottom Navigation Menu -->
     <string name="title_explorer">Explorer</string>
-    <string name="title_devices">Devices</string>
     <string name="title_profile">Profile</string>
 
     <!-- Network Stats -->
@@ -163,6 +162,7 @@
     <string name="losing_rewards">You are losing rewards!</string>
     <string name="losing_rewards_desc">Connect your wallet to participate in our daily reward scheme.</string>
     <string name="no_rewards_yet">No rewards yet!</string>
+    <string name="own_deploy_earn">Own. Deploy. Earn.</string>
 
     <!-- Weather Station(s) -->
     <string name="latest_weather">Latest Weather</string>

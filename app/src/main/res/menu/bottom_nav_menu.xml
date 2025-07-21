@@ -3,8 +3,8 @@
 
     <item
         android:id="@+id/navigation_devices"
-        android:icon="@drawable/ic_nav_home"
-        android:title="@string/title_devices" />
+        android:icon="@drawable/ic_nav_stations"
+        android:title="@string/my_stations" />
 
     <item
         android:id="@+id/navigation_explorer"
