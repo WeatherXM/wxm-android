@@ -47,15 +47,12 @@ class StartupUseCaseImpl(
                     if (this) RefreshFcmApiWorker.initAndRefreshToken(context, null)
                 }
                 Timber.d("User logged in: $isLoggedIn")
-                if (isLoggedIn && userPreferencesRepository.shouldShowAnalyticsOptIn()) {
+                if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                     Timber.d("Show the Analytics Opt-In screen.")
                     trySend(StartupState.ShowAnalyticsOptIn)
-                } else if (isLoggedIn) {
+                } else {
                     Timber.d("Show the Home screen.")
                     trySend(StartupState.ShowHome)
-                } else {
-                    Timber.d("Show the Explorer.")
-                    trySend(StartupState.ShowExplorer)
                 }
             }
             awaitClose { /* Do nothing */ }

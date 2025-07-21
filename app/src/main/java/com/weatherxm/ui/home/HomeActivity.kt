@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.mapbox.geojson.Point
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Location
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.common.Contracts
@@ -17,9 +18,11 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
+import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
 import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.explorer.MapLayerPickerDialogFragment
@@ -89,7 +92,18 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.myLocationBtn.setOnClickListener {
-            explorerModel.onMyLocation()
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
+            requestLocationPermissions(this) {
+                // Get last location
+                explorerModel.getLocation {
+                    Timber.d("Got user location: $it")
+                    if (it == null) {
+                        toast(R.string.error_claim_gps_failed)
+                    } else {
+                        explorerModel.navigateToLocation(it, ZOOMED_IN_ZOOM_LEVEL)
+                    }
+                }
+            }
         }
 
         binding.addDevice.setOnClickListener {
@@ -116,7 +130,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 NavigationUI.onNavDestinationSelected(
                     binding.navView.menu.findItem(R.id.navigation_explorer), navController
                 )
-                explorerModel.navigateToLocation(it)
+                explorerModel.navigateToLocation(it, ZOOMED_IN_ZOOM_LEVEL)
             }
         }
 
@@ -163,7 +177,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private fun onDevices(resource: Resource<List<UIDevice>>) {
         val currentDestination = navController.currentDestination?.id
         if (resource.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
-            model.getRemoteBanners()
             checkForNoDevices()
         } else {
             binding.emptyContainer.visible(false)
@@ -183,8 +196,13 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private fun onNavigationChanged(destination: NavDestination) {
         if (snackbar?.isShown == true) snackbar?.dismiss()
         when (destination.id) {
-            R.id.navigation_devices -> {
+            R.id.navigation_home -> {
                 model.getRemoteBanners()
+                binding.emptyContainer.visible(false)
+                binding.claimRedDot.visible(false)
+                binding.addDevice.hide()
+            }
+            R.id.navigation_devices -> {
                 checkForNoDevices()
                 binding.addDevice.show()
             }

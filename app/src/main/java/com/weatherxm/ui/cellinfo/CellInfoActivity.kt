@@ -61,11 +61,8 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
                 finish()
                 return@addCallback
             }
-            if (model.isLoggedIn() == true) {
-                navigator.showHome(this@CellInfoActivity, model.cell.center)
-            } else {
-                navigator.showExplorer(this@CellInfoActivity, model.cell.center)
-            }
+
+            navigator.showHome(this@CellInfoActivity, model.cell.center)
             finish()
         }
 

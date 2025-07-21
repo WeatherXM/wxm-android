@@ -226,7 +226,7 @@ class ExplorerViewModelTest : BehaviorSpec({
                 }
             }
             When("it's not a user location but a custom one") {
-                viewModel.navigateToLocation(location)
+                viewModel.navigateToLocation(location, ZOOMED_IN_ZOOM_LEVEL)
                 then("LiveData onNavigateToLocation posts the correct NavigationLocation") {
                     viewModel.onNavigateToLocation().value shouldBe navigationLocation
                 }
@@ -244,15 +244,6 @@ class ExplorerViewModelTest : BehaviorSpec({
             viewModel.setExplorerAfterLoggedIn(true)
             then("GET it to ensure it has been set") {
                 viewModel.isExplorerAfterLoggedIn() shouldBe true
-            }
-        }
-    }
-
-    context("Flow to run when the GPS button of user's location has been clicked") {
-        given("the function's call") {
-            viewModel.onMyLocation()
-            then("LiveData `onMyLocation` should post the value true") {
-                viewModel.onMyLocationClicked().value shouldBe true
             }
         }
     }
@@ -327,23 +318,6 @@ class ExplorerViewModelTest : BehaviorSpec({
                             viewModel.onViewportStations().value shouldBe 0
                         }
                     }
-                }
-            }
-        }
-    }
-
-    context("Flow to run when the map has been clicked and we need to show/hide overlay views") {
-        given("if the overlay views are currently visible") {
-            When("they are visible") {
-                viewModel.onMapClick()
-                then("LiveData `showMapOverlayViews` should post the value false") {
-                    viewModel.showMapOverlayViews().value shouldBe false
-                }
-            }
-            When("they are hidden") {
-                viewModel.onMapClick()
-                then("LiveData `showMapOverlayViews` should post the value true") {
-                    viewModel.showMapOverlayViews().value shouldBe true
                 }
             }
         }

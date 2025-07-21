@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_nav_home"
+        android:title="@string/title_home" />
+
+    <item
         android:id="@+id/navigation_devices"
         android:icon="@drawable/ic_nav_stations"
         android:title="@string/my_stations" />

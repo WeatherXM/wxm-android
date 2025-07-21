@@ -81,7 +81,6 @@ import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyAct
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity
 import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
-import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
@@ -110,15 +109,6 @@ import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: AnalyticsWrapper) {
-
-    fun showExplorer(context: Context, cellCenter: Location? = null) {
-        context.startActivity(
-            Intent(context, ExplorerActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                .putExtra(ARG_CELL_CENTER, cellCenter)
-        )
-    }
-
     fun showLogin(
         context: Context,
         newTask: Boolean = false,

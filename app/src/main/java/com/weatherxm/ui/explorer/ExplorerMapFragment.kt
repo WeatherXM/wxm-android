@@ -30,7 +30,6 @@ import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.toCameraOptions
 import com.weatherxm.R
@@ -106,11 +105,6 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
-        map.addOnMapClickListener {
-            model.onMapClick()
-            true
-        }
-
         map.subscribeCameraChanged {
             model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
         }
@@ -131,10 +125,6 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         searchModel.onRecentSearches().observe(this) {
             handleRecentSearches(it)
-        }
-
-        model.onMyLocationClicked().observe(this) {
-            onMyLocationClicked(it)
         }
 
         searchModel.onSearchResults().observe(this) {
@@ -205,13 +195,6 @@ class ExplorerMapFragment : BaseMapFragment() {
             binding.resultsRecycler.visible(true)
             binding.searchEmptyResultsContainer.visible(false)
             adapter.updateData(String.empty(), searchResults)
-        }
-    }
-
-    private fun onMyLocationClicked(isClicked: Boolean?) {
-        if (isClicked == true) {
-            getLocationPermissions()
-            analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
         }
     }
 
@@ -434,21 +417,6 @@ class ExplorerMapFragment : BaseMapFragment() {
          */
         return getString(R.string.mapbox_style).ifEmpty {
             super.getMapStyle()
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getLocationPermissions() {
-        requestLocationPermissions(activity) {
-            // Get last location
-            model.getLocation {
-                Timber.d("Got user location: $it")
-                if (it == null) {
-                    context.toast(R.string.error_claim_gps_failed)
-                } else {
-                    cameraFly(Point.fromLngLat(it.lon, it.lat))
-                }
-            }
         }
     }
 

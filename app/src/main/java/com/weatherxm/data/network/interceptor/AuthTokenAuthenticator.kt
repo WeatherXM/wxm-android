@@ -6,7 +6,6 @@ import androidx.work.WorkManager
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
-import com.weatherxm.R
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.mapResponse
 import com.weatherxm.data.models.Failure
@@ -48,11 +47,8 @@ class AuthTokenAuthenticator(
                          * Init and invoke the work manager
                          * to delete FCM token from the server
                          */
-                        val updateTokenWork = OneTimeWorkRequestBuilder<ForceLogoutWorker>().build()
-                        WorkManager.getInstance(context).enqueue(updateTokenWork)
-                        navigator.showLogin(
-                            context, true, context.getString(R.string.session_expired)
-                        )
+                        val forceLogoutWork = OneTimeWorkRequestBuilder<ForceLogoutWorker>().build()
+                        WorkManager.getInstance(context).enqueue(forceLogoutWork)
                         return@getOrElse null
                     }
                 }
