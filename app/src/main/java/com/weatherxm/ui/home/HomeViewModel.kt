@@ -9,7 +9,6 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.RemoteBanner
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.Survey
-import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
@@ -35,7 +34,6 @@ class HomeViewModel(
     private val onSurvey = SingleLiveEvent<Survey>()
     private val onInfoBanner = SingleLiveEvent<RemoteBanner?>()
     private val onAnnouncementBanner = SingleLiveEvent<RemoteBanner?>()
-    private val onDevicesRewards = MutableLiveData<DevicesRewards>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
@@ -46,7 +44,6 @@ class HomeViewModel(
     fun onInfoBanner(): LiveData<RemoteBanner?> = onInfoBanner
     fun onAnnouncementBanner(): LiveData<RemoteBanner?> = onAnnouncementBanner
     fun showOverlayViews() = showOverlayViews
-    fun onDevicesRewards(): LiveData<DevicesRewards> = onDevicesRewards
 
     fun hasDevices() = hasDevices
 

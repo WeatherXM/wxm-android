@@ -10,6 +10,7 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.User
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIWalletRewards
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,20 +19,24 @@ import timber.log.Timber
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
+    private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private var currentWalletRewards: UIWalletRewards? = null
-
     private val onUser = MutableLiveData<Resource<User>>()
     private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>()
+    private var currentWalletRewards: UIWalletRewards? = null
 
     fun onUser(): LiveData<Resource<User>> = onUser
     fun onWalletRewards(): LiveData<Resource<UIWalletRewards>> = onWalletRewards
+    fun isLoggedIn(): Boolean = authUseCase.isLoggedIn()
 
     fun fetchUser(forceRefresh: Boolean = false) {
-        onUser.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
+            if (!isLoggedIn()) {
+                return@launch
+            }
+            onUser.postValue(Resource.loading())
             useCase.getUser(forceRefresh).onRight {
                 onUser.postValue(Resource.success(it))
                 fetchWalletRewards(it.wallet?.address)

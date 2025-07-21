@@ -17,6 +17,7 @@ import com.weatherxm.ui.common.DevicesSortOrder
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -28,6 +29,7 @@ import timber.log.Timber
 class DevicesViewModel(
     private val deviceListUseCase: DeviceListUseCase,
     private val followUseCase: FollowUseCase,
+    private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
     private val resources: Resources,
     private val dispatcher: CoroutineDispatcher
@@ -45,7 +47,19 @@ class DevicesViewModel(
     fun hasNoDevices() =
         devices.value?.status == Status.SUCCESS && devices.value?.data.isNullOrEmpty()
 
+    fun isLoggedIn() = authUseCase.isLoggedIn()
+
     fun fetch() {
+        /**
+         * If the user isn't logged in, send an "empty" state to the UI to properly update it and
+         * do not proceed with any API call.
+         */
+        if (!authUseCase.isLoggedIn()) {
+            devices.postValue(Resource.success(emptyList()))
+            onDevicesRewards.postValue(DevicesRewards(0F, 0F, emptyList()))
+            return
+        }
+
         this@DevicesViewModel.devices.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             deviceListUseCase.getUserDevices().onRight { devices ->

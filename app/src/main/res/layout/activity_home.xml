@@ -27,6 +27,7 @@
         android:id="@+id/mapLayerPickerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_normal"
         android:layout_marginBottom="@dimen/margin_normal_to_large"
         android:contentDescription="@string/go_to_your_location"
         android:elevation="@dimen/elevation_normal"
@@ -34,7 +35,7 @@
         app:backgroundTint="@color/colorPrimary"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:layout_constraintBottom_toTopOf="@id/myLocationBtn"
-        app:layout_constraintStart_toEndOf="@id/nav_view"
+        app:layout_constraintEnd_toEndOf="@id/nav_view"
         app:tint="@color/colorOnPrimary" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -42,14 +43,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
-        android:layout_marginBottom="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginBottom="@dimen/margin_extra_extra_large"
         android:contentDescription="@string/go_to_your_location"
         android:elevation="@dimen/elevation_normal"
         android:src="@drawable/ic_my_location"
         app:backgroundTint="@color/colorSurface"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintStart_toEndOf="@id/nav_view"
+        app:layout_constraintEnd_toEndOf="@id/nav_view"
         app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
         app:tint="@color/colorOnSurface" />
 
@@ -138,13 +140,14 @@
         android:id="@+id/add_device"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginBottom="@dimen/margin_extra_extra_large"
         android:contentDescription="@string/add_weather_station"
         android:src="@drawable/ic_add"
         app:elevation="@dimen/elevation_normal"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintStart_toEndOf="@id/nav_view"
+        app:layout_constraintEnd_toEndOf="@id/nav_view"
         app:tint="@color/colorOnPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

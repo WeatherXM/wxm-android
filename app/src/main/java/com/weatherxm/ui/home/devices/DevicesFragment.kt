@@ -275,8 +275,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
                 parentModel.setHasDevices(devices.data)
-                parentModel.getWalletWarnings()
                 if (!devices.data.isNullOrEmpty()) {
+                    parentModel.getWalletWarnings()
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()
                     binding.statusView.visible(false)

@@ -200,22 +200,27 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 model.getRemoteBanners()
                 binding.emptyContainer.visible(false)
                 binding.claimRedDot.visible(false)
-                binding.addDevice.hide()
+                binding.addDevice.visible(false)
             }
             R.id.navigation_devices -> {
-                checkForNoDevices()
-                binding.addDevice.show()
+                if (devicesViewModel.isLoggedIn()) {
+                    checkForNoDevices()
+                    binding.addDevice.visible(true)
+                } else {
+                    binding.addDevice.visible(false)
+                    binding.emptyContainer.visible(true)
+                }
             }
             R.id.navigation_explorer -> {
                 explorerModel.setExplorerAfterLoggedIn(true)
                 binding.emptyContainer.visible(false)
                 binding.claimRedDot.visible(false)
-                binding.addDevice.hide()
+                binding.addDevice.visible(false)
             }
             else -> {
                 binding.emptyContainer.visible(false)
                 binding.claimRedDot.visible(false)
-                binding.addDevice.hide()
+                binding.addDevice.visible(false)
             }
         }
         binding.mapLayerPickerBtn.visible(destination.id == R.id.navigation_explorer)
