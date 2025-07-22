@@ -63,7 +63,6 @@ class LoginViewModelTest : BehaviorSpec({
         justRun { analytics.trackEventFailure(any()) }
         justRun { analytics.setUserId(user.id) }
         every { usecase.isLoggedIn() } returns true
-        every { userUseCase.shouldShowAnalyticsOptIn() } returns true
         every {
             resources.getString(R.string.error_login_invalid_username)
         } returns invalidUsername
@@ -84,14 +83,6 @@ class LoginViewModelTest : BehaviorSpec({
                     runTest { viewModel.isLoggedIn() }
                     viewModel.isLoggedIn() shouldBe true
                 }
-            }
-        }
-    }
-
-    context("Get if we should show the analytics opt-in screen or not") {
-        given("A use case returning the result") {
-            then("return that result") {
-                viewModel.shouldShowAnalyticsOptIn() shouldBe true
             }
         }
     }

@@ -15,7 +15,6 @@ import com.weatherxm.data.network.RefreshBody
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
 import com.weatherxm.service.workers.ForceLogoutWorker
-import com.weatherxm.ui.Navigator
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -28,7 +27,6 @@ import timber.log.Timber
 class AuthTokenAuthenticator(
     private val authService: AuthService,
     private val cacheAuthDataSource: CacheAuthDataSource,
-    private val navigator: Navigator,
     private val context: Context,
 ) : Authenticator {
     private lateinit var refreshJob: Deferred<AuthToken?>

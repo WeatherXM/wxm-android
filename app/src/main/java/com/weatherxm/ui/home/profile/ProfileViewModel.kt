@@ -10,32 +10,39 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.User
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
-    private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val onUser = MutableLiveData<Resource<User>>()
     private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>()
     private var currentWalletRewards: UIWalletRewards? = null
+    private val onLoggedOutUser = MutableLiveData<Boolean>()
+    private var profileJob: Job? = null
 
     fun onUser(): LiveData<Resource<User>> = onUser
     fun onWalletRewards(): LiveData<Resource<UIWalletRewards>> = onWalletRewards
-    fun isLoggedIn(): Boolean = authUseCase.isLoggedIn()
+    fun onLoggedOutUser(): LiveData<Boolean> = onLoggedOutUser
 
-    fun fetchUser(forceRefresh: Boolean = false) {
-        viewModelScope.launch(dispatcher) {
-            if (!isLoggedIn()) {
-                return@launch
-            }
+    fun fetchUser(isLoggedIn: Boolean, forceRefresh: Boolean = false) {
+        if (!isLoggedIn) {
+            Timber.d("User is not logged in. Posting onLoggedOutUser event.")
+            onLoggedOutUser.postValue(true)
+            profileJob?.cancel()
+            return
+        } else if (profileJob?.isActive == true) {
+            return
+        }
+
+        profileJob = viewModelScope.launch(dispatcher) {
             onUser.postValue(Resource.loading())
             useCase.getUser(forceRefresh).onRight {
                 onUser.postValue(Resource.success(it))

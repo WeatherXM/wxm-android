@@ -53,7 +53,6 @@ import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
-import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
@@ -109,11 +108,7 @@ import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: AnalyticsWrapper) {
-    fun showLogin(
-        context: Context,
-        newTask: Boolean = false,
-        userMessage: String? = null
-    ) {
+    fun showLogin(context: Context, newTask: Boolean = false) {
         val intentFlags = if (newTask) {
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         } else {
@@ -121,7 +116,6 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
         context.startActivity(
             Intent(context, LoginActivity::class.java).addFlags(intentFlags)
-                .putExtra(ARG_USER_MESSAGE, userMessage)
         )
     }
 

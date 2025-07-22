@@ -1,23 +1,18 @@
 package com.weatherxm.ui.preferences
 
-import android.appwidget.AppWidgetManager
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPreferencesBinding
-import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PreferenceActivity : BaseActivity() {
     private lateinit var binding: ActivityPreferencesBinding
     private val model: PreferenceViewModel by viewModel()
-    private val widgetHelper: WidgetHelper by inject()
     private val sharedPreferences: SharedPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,23 +22,6 @@ class PreferenceActivity : BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
-
-        model.onLogout().observe(this) { hasLoggedOut ->
-            if (hasLoggedOut) {
-                analytics.trackEventSelectContent(AnalyticsService.ParamValue.LOGOUT.paramValue)
-                widgetHelper.getWidgetIds().onRight {
-                    val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-                    val ids = it.map { id ->
-                        id.toInt()
-                    }
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids.toIntArray())
-                    intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-                    intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
-                    this.sendBroadcast(intent)
-                }
-                navigator.showStartup(this)
-            }
         }
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(model.onPreferencesChanged)

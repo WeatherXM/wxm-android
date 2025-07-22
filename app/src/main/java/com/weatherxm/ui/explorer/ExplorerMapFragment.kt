@@ -1,6 +1,5 @@
 package com.weatherxm.ui.explorer
 
-import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
@@ -41,7 +40,6 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
-import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
@@ -176,11 +174,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             binding.searchView.hide()
             model.onSearchOpenStatus(false)
         } else {
-            if (model.isExplorerAfterLoggedIn()) {
-                findNavController().popBackStack()
-            } else {
-                activity?.finish()
-            }
+            findNavController().popBackStack()
         }
     }
 
@@ -359,11 +353,7 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (model.isExplorerAfterLoggedIn()) {
-            analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
-        } else {
-            analytics.trackScreen(AnalyticsService.Screen.EXPLORER_LANDING, classSimpleName())
-        }
+        analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
     }
 
     private fun trackOnSearchResult(isStationResult: Boolean) {
@@ -458,19 +448,6 @@ class ExplorerMapFragment : BaseMapFragment() {
         popupView.findViewById<MaterialCardView>(R.id.networkStatsContainer).setOnClickListener {
             navigator.showNetworkStats(context)
             popupWindow.dismiss()
-        }
-
-        if (!model.isExplorerAfterLoggedIn()) {
-            popupView.findViewById<MaterialCardView>(R.id.settingsContainer).apply {
-                setOnClickListener {
-                    analytics.trackEventSelectContent(
-                        contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
-                    )
-                    navigator.showPreferences(this@ExplorerMapFragment)
-                    popupWindow.dismiss()
-                }
-                show()
-            }
         }
     }
 }

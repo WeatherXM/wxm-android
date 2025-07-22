@@ -73,9 +73,6 @@ class ExplorerViewModel(
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
 
-    // Save the current status of where the explorer is located (before/after login)
-    private var explorerAfterLoggedIn = false
-
     @Suppress("MagicNumber")
     val heatmapLayer: HeatmapLayer by lazy {
         heatmapLayer(
@@ -205,14 +202,6 @@ class ExplorerViewModel(
                 }
             }
         }
-    }
-
-    fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
-        explorerAfterLoggedIn = isAfterLoggedIn
-    }
-
-    fun isExplorerAfterLoggedIn(): Boolean {
-        return explorerAfterLoggedIn
     }
 
     fun fetch() {

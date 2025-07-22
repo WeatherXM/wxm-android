@@ -88,7 +88,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
         binding.swiperefresh.setOnRefreshListener {
             parentModel.getRemoteBanners()
-            model.fetch()
+            model.fetch(parentModel.isLoggedIn())
         }
 
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -297,7 +297,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     .title(getString(R.string.error_generic_message))
                     .subtitle(devices.message)
                     .action(getString(R.string.action_retry))
-                    .listener { model.fetch() }
+                    .listener { model.fetch(parentModel.isLoggedIn()) }
                     .visible(true)
                 binding.recycler.visible(false)
                 binding.contentContainerCard.visible(true)

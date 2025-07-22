@@ -27,6 +27,7 @@ import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.ui.home.profile.ProfileViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -35,6 +36,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val model: HomeViewModel by viewModel()
     private val explorerModel: ExplorerViewModel by viewModel()
     private val devicesViewModel: DevicesViewModel by viewModel()
+    private val profileViewModel: ProfileViewModel by viewModel()
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
@@ -79,6 +81,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             onDevices(it)
         }
 
+        setupAuthActions()
+
         /**
          * Show/hide FAB and devices count label
          * based on selected navigation item and dismiss snackbar if shown
@@ -92,18 +96,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.myLocationBtn.setOnClickListener {
-            analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
-            requestLocationPermissions(this) {
-                // Get last location
-                explorerModel.getLocation {
-                    Timber.d("Got user location: $it")
-                    if (it == null) {
-                        toast(R.string.error_claim_gps_failed)
-                    } else {
-                        explorerModel.navigateToLocation(it, ZOOMED_IN_ZOOM_LEVEL)
-                    }
-                }
-            }
+            onMyLocation()
         }
 
         binding.addDevice.setOnClickListener {
@@ -144,8 +137,14 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     override fun onResume() {
         super.onResume()
 
+        // Check if we are logged in or not and set the respective variable to be used in tabs
+        model.checkIfIsLoggedIn()
+
+        // Fetch user's profile
+        profileViewModel.fetchUser(model.isLoggedIn())
+
         // Fetch user's devices
-        devicesViewModel.fetch()
+        devicesViewModel.fetch(model.isLoggedIn())
 
         /**
          * Changing the theme from Profile -> Settings and going back to profile
@@ -174,6 +173,38 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
     }
 
+    private fun setupAuthActions() {
+        binding.loginBtn.setOnClickListener {
+            navigator.showLogin(this)
+        }
+        binding.signupBtn.setOnClickListener {
+            navigator.showSignup(this)
+        }
+        profileViewModel.onUser().observe(this) {
+            binding.authCard.visible(it == null)
+        }
+        profileViewModel.onLoggedOutUser().observe(this) {
+            if (it && navController.currentDestination?.id == R.id.navigation_profile) {
+                binding.authCard.visible(true)
+            }
+        }
+    }
+
+    private fun onMyLocation() {
+        analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
+        requestLocationPermissions(this) {
+            // Get last location
+            explorerModel.getLocation {
+                Timber.d("Got user location: $it")
+                if (it == null) {
+                    toast(R.string.error_claim_gps_failed)
+                } else {
+                    explorerModel.navigateToLocation(it, ZOOMED_IN_ZOOM_LEVEL)
+                }
+            }
+        }
+    }
+
     private fun onDevices(resource: Resource<List<UIDevice>>) {
         val currentDestination = navController.currentDestination?.id
         if (resource.status == Status.SUCCESS && currentDestination == R.id.navigation_devices) {
@@ -197,13 +228,15 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         if (snackbar?.isShown == true) snackbar?.dismiss()
         when (destination.id) {
             R.id.navigation_home -> {
+                binding.authCard.visible(false)
                 model.getRemoteBanners()
                 binding.emptyContainer.visible(false)
                 binding.claimRedDot.visible(false)
                 binding.addDevice.visible(false)
             }
             R.id.navigation_devices -> {
-                if (devicesViewModel.isLoggedIn()) {
+                binding.authCard.visible(false)
+                if (model.isLoggedIn()) {
                     checkForNoDevices()
                     binding.addDevice.visible(true)
                 } else {
@@ -212,7 +245,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 }
             }
             R.id.navigation_explorer -> {
-                explorerModel.setExplorerAfterLoggedIn(true)
+                binding.authCard.visible(false)
                 binding.emptyContainer.visible(false)
                 binding.claimRedDot.visible(false)
                 binding.addDevice.visible(false)

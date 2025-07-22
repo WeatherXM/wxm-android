@@ -234,20 +234,6 @@ class ExplorerViewModelTest : BehaviorSpec({
         }
     }
 
-    context("GET / SET the variable showing if we are in a state in the logged-in explorer") {
-        When("GET the state if we are in the logged-in explorer or not") {
-            then("return the default false value") {
-                viewModel.isExplorerAfterLoggedIn() shouldBe false
-            }
-        }
-        When("SET a new state") {
-            viewModel.setExplorerAfterLoggedIn(true)
-            then("GET it to ensure it has been set") {
-                viewModel.isExplorerAfterLoggedIn() shouldBe true
-            }
-        }
-    }
-
     context("Fetch Explorer Data") {
         given("a usecase returning the ExplorerData") {
             When("it's a failure") {
