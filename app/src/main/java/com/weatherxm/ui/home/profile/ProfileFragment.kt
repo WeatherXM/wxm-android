@@ -223,6 +223,8 @@ class ProfileFragment : BaseFragment() {
         binding.rewardsContainerCard.visible(false)
         binding.walletContainerCard.visible(false)
         binding.proPromotionCard.visible(false)
+        binding.progress.invisible()
+        binding.swiperefresh.isRefreshing = false
     }
 
     private fun onNotAvailableRewards() {

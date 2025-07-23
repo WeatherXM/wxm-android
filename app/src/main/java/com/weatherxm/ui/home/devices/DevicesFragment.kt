@@ -195,7 +195,11 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     adapter.notifyDataSetChanged()
                     binding.statusView.visible(false)
                     binding.recycler.visible(true)
+                    binding.myStationsTitle.visible(true)
+                    binding.sortFilterBtn.visible(true)
                 } else {
+                    binding.myStationsTitle.visible(false)
+                    binding.sortFilterBtn.visible(false)
                     binding.statusView.visible(false)
                     adapter.submitList(mutableListOf())
                     binding.recycler.visible(false)
