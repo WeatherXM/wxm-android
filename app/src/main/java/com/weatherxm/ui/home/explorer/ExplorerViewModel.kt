@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData

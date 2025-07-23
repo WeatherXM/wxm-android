@@ -13,7 +13,6 @@ import com.weatherxm.data.models.RemoteBanner
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.databinding.FragmentLocationsHomeBinding
 import com.weatherxm.ui.common.DevicesRewards
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.setCardRadius
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
@@ -23,6 +22,7 @@ import com.weatherxm.ui.components.compose.InfoBannerView
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.NumberUtils.formatTokens
+import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class LocationsFragment : BaseFragment() {
@@ -37,7 +37,11 @@ class LocationsFragment : BaseFragment() {
     ): View {
         binding = FragmentLocationsHomeBinding.inflate(inflater, container, false)
 
-        binding.root.applyInsets()
+        binding.root.applyInsetter {
+            type(statusBars = true) {
+                padding(left = false, top = true, right = false, bottom = false)
+            }
+        }
 
         binding.swiperefresh.setOnRefreshListener {
             parentModel.getRemoteBanners()

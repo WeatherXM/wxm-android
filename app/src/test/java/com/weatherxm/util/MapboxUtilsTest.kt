@@ -11,10 +11,10 @@ import com.weatherxm.R
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.PublicHex
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
-import com.weatherxm.ui.explorer.MapLayer
-import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.ui.explorer.UICellJsonAdapter
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
+import com.weatherxm.ui.home.explorer.MapLayer
+import com.weatherxm.ui.home.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICellJsonAdapter
 import com.weatherxm.util.MapboxUtils.getCustomData
 import com.weatherxm.util.MapboxUtils.parseSearchSuggestion
 import com.weatherxm.util.MapboxUtils.polygonPointsToLatLng

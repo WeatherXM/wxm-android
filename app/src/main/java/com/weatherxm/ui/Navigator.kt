@@ -80,7 +80,7 @@ import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyAct
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity
 import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStats

@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_explorer"
-        android:name="com.weatherxm.ui.explorer.ExplorerMapFragment"
+        android:name="com.weatherxm.ui.home.explorer.ExplorerMapFragment"
         android:label="ExplorerMapFragment"
         tools:layout="@layout/fragment_map" />
 

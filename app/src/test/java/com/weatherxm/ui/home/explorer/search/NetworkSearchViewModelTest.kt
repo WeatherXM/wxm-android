@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer.search
+package com.weatherxm.ui.home.explorer.search
 
 import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.dispatcher
@@ -11,7 +11,7 @@ import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -51,7 +51,11 @@ class NetworkSearchViewModelTest : BehaviorSpec({
         coJustRun { usecase.setRecentSearch(searchResult) }
         coEvery { usecase.getRecentSearches() } returns searchResults
 
-        viewModel = NetworkSearchViewModel(usecase, analytics, dispatcher)
+        viewModel = NetworkSearchViewModel(
+            usecase,
+            analytics,
+            dispatcher
+        )
     }
 
     context("GET / SET the query") {

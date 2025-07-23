@@ -24,8 +24,8 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
 import com.weatherxm.ui.components.compose.TermsDialog
-import com.weatherxm.ui.explorer.ExplorerViewModel
-import com.weatherxm.ui.explorer.MapLayerPickerDialogFragment
+import com.weatherxm.ui.home.explorer.ExplorerViewModel
+import com.weatherxm.ui.home.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import kotlinx.coroutines.launch

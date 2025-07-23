@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer.search
+package com.weatherxm.ui.home.explorer.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CancellationException

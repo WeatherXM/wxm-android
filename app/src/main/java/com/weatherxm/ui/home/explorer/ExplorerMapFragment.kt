@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
@@ -43,9 +43,9 @@ import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
-import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.home.explorer.search.NetworkSearchResultsListAdapter
+import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.NumberUtils.formatNumber

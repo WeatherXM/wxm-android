@@ -17,7 +17,7 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.FollowUseCase

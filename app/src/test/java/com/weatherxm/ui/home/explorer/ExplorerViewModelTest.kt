@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
@@ -21,10 +21,10 @@ import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_ID
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_SOURCE
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_WEIGHT_KEY
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_ID
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_SOURCE
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_WEIGHT_KEY
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
@@ -52,11 +52,19 @@ class ExplorerViewModelTest : BehaviorSpec({
 
     val startingLocation = Location(1.0, 1.0)
     val location = Location(0.0, 0.0)
-    val startingNavigationLocation = NavigationLocation(DEFAULT_ZOOM_LEVEL, startingLocation)
-    val navigationLocation = NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location)
+    val startingNavigationLocation =
+        _root_ide_package_.com.weatherxm.ui.home.explorer.NavigationLocation(
+            DEFAULT_ZOOM_LEVEL,
+            startingLocation
+        )
+    val navigationLocation = _root_ide_package_.com.weatherxm.ui.home.explorer.NavigationLocation(
+        ZOOMED_IN_ZOOM_LEVEL,
+        location
+    )
     val cameraZoom = 10.0
     val cameraCenter = mockk<Point>()
-    val explorerCamera = ExplorerCamera(cameraZoom, cameraCenter)
+    val explorerCamera =
+        _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerCamera(cameraZoom, cameraCenter)
     val locationSlot = slot<(location: Location?) -> Unit>()
 
     /**
@@ -71,10 +79,22 @@ class ExplorerViewModelTest : BehaviorSpec({
     val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
     val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
-    val explorerData = ExplorerData(geoJsonSource, listOf(publicHex), listOf())
+    val explorerData = _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+        geoJsonSource,
+        listOf(publicHex),
+        listOf()
+    )
     val newExplorerData =
-        ExplorerData(geoJsonSource, listOf(publicHex2), newPolygonAnnotationOptions)
-    val fullExplorerData = ExplorerData(geoJsonSource, listOf(publicHex, publicHex2), listOf())
+        _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+            geoJsonSource,
+            listOf(publicHex2),
+            newPolygonAnnotationOptions
+        )
+    val fullExplorerData = _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+        geoJsonSource,
+        listOf(publicHex, publicHex2),
+        listOf()
+    )
     val heatmapLayer: HeatmapLayer by lazy {
         heatmapLayer(
             HEATMAP_LAYER_ID,
@@ -207,7 +227,12 @@ class ExplorerViewModelTest : BehaviorSpec({
             newExplorerData.publicHexes.toPointAnnotationOptions()
         } returns newPointAnnotationOptions
 
-        viewModel = ExplorerViewModel(usecase, analytics, locationHelper, dispatcher)
+        viewModel = ExplorerViewModel(
+            usecase,
+            analytics,
+            locationHelper,
+            dispatcher
+        )
     }
 
     context("Ensure that the heatmap is defined correctly") {
