@@ -782,4 +782,5 @@
     <string name="search_cities_places_of_interest">Search cities and places of interest</string>
     <string name="nothing_saved_yet">Nothing saved, yet!</string>
     <string name="add_places_you_care">Add the places you care about and see their weather at a glance!</string>
+    <string name="locations">Locations</string>
 </resources>

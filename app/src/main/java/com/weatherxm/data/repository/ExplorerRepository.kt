@@ -30,6 +30,7 @@ class ExplorerRepositoryImpl(
     companion object {
         const val RECENTS_MAX_ENTRIES = 10
         const val EXCLUDE_PLACES = "places"
+        const val EXCLUDE_STATIONS = "stations"
     }
 
     override suspend fun getCells(): Either<Failure, List<PublicHex>> {
