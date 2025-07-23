@@ -50,7 +50,7 @@ class NetworkSearchViewModel(
         }
     }
 
-    fun networkSearch(runImmediately: Boolean = false) {
+    fun networkSearch(runImmediately: Boolean = false, exclude: String? = null) {
         if (query.trim() == lastSearchedQuery.trim()) {
             return
         }
@@ -69,7 +69,7 @@ class NetworkSearchViewModel(
                 delay(NETWORK_SEARCH_REQUEST_THRESHOLD)
             }
             lastSearchedQuery = query
-            explorerUseCase.networkSearch(query).onRight {
+            explorerUseCase.networkSearch(query, exclude = exclude).onRight {
                 onSearchResults.postValue(Resource.success(it))
             }.onLeft {
                 analytics.trackEventFailure(it.code)
