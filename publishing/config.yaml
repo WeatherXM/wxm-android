@@ -43,9 +43,7 @@ release:
   catalog:
     en-US:
       name: WeatherXM
-
       short_description: Enter Weather 3.0
-      
       long_description: |
         WeatherXM is the first decentralized weather network — think “Helium for weather” — powered by 9,000+ community-operated weather stations worldwide.
 
@@ -56,12 +54,10 @@ release:
         - Discover new locations, deployment initiatives, and community rollouts
 
         As we expand into Solana, expect more integrations to come. Whether you’re a weather enthusiast, a DePIN builder, or a Solana Seeker user — WeatherXM puts the power of the sky in your hands.
-
       new_in_version: |
         - Optimized for Solana Mobile (Seeker) compatibility
         - Updated visuals and UX for crypto-native users
         - Bug fixes and performance improvements
-
       saga_features: |
         - Optimized dApp experience for Seeker hardware
         - Seamless onboarding with Solana-native UI flows
@@ -72,6 +68,3 @@ solana_mobile_dapp_publisher_portal:
     2. Launch app and allow any requested permissions.
     3. Verify explorer map, station details, and station reward screens load correctly.
     4. Optional: Login with your WeatherXM credentials and walkthrough the entire app.
-  alpha_testers:
-    - address: 8TfXbhZYiKRpGFSRnPPsxZtghDf53fBi127aJF3piYN5
-      comment: Primary dev test account

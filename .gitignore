@@ -22,3 +22,8 @@ publishing/node_modules
 *.apk
 *.aab
 app/ota*.zip
+
+# Folder for keeping publishing secret files
+publishing/secrets/
+.asset-manifest*.json
+*.bak
