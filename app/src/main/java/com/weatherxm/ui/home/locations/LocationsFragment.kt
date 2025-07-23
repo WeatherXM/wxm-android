@@ -83,6 +83,8 @@ class LocationsFragment : BaseFragment() {
             requestLocationPermissions(activity) {
                 binding.askForLocationCard.visible(false)
                 // TODO: Fetch the weather for current location
+                binding.currentLocationWeather.setData()
+                binding.currentLocationWeather.visible(true)
             }
         }
 
@@ -115,6 +117,8 @@ class LocationsFragment : BaseFragment() {
         if (locationHelper.hasLocationPermissions()) {
             binding.askForLocationCard.visible(false)
             // TODO: Fetch the weather for current location
+            binding.currentLocationWeather.setData()
+            binding.currentLocationWeather.visible(true)
         } else {
             binding.askForLocationCard.visible(true)
         }
