@@ -807,4 +807,13 @@
     <string name="map_layer_error">0–19%</string>
     <string name="map_layer_warning">20–79%</string>
     <string name="map_layer_success">80–100%</string>
+
+    <!-- Locations -->
+    <string name="current_location">Current location</string>
+    <string name="saved_locations">Saved locations</string>
+    <string name="allow_location_permission">Allow location permission to show your current location forecast.</string>
+    <string name="search_save_favorite_locations">Search and save your favorite locations!</string>
+    <string name="search_cities_places_of_interest">Search cities and places of interest</string>
+    <string name="nothing_saved_yet">Nothing saved, yet!</string>
+    <string name="add_places_you_care">Add the places you care about and see their weather at a glance!</string>
 </resources>

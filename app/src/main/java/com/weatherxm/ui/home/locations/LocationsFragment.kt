@@ -18,17 +18,21 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.AnnouncementBannerView
+import com.weatherxm.ui.components.compose.EmptySavedLocationsView
 import com.weatherxm.ui.components.compose.InfoBannerView
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.NumberUtils.formatTokens
-import dev.chrisbanes.insetter.applyInsetter
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class LocationsFragment : BaseFragment() {
     private val parentModel: HomeViewModel by activityViewModel()
     private val devicesModel: DevicesViewModel by activityViewModel()
     private lateinit var binding: FragmentLocationsHomeBinding
+
+    private val locationHelper: LocationHelper by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +67,31 @@ class LocationsFragment : BaseFragment() {
             onAnnouncementBanner(it)
         }
 
+        binding.askForLocationCard.setOnClickListener {
+            requestLocationPermissions(activity) {
+                binding.askForLocationCard.visible(false)
+                // TODO: Fetch the weather for current location
+            }
+        }
+
+        binding.emptySavedLocationsCard.setContent {
+            EmptySavedLocationsView()
+        }
+        // TODO: Show the below only if saved locations are empty
+        binding.emptySavedLocationsCard.visible(true)
+
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (locationHelper.hasLocationPermissions()) {
+            binding.askForLocationCard.visible(false)
+            // TODO: Fetch the weather for current location
+        } else {
+            binding.askForLocationCard.visible(true)
+        }
     }
 
     private fun onInfoBanner(infoBanner: RemoteBanner?) {
