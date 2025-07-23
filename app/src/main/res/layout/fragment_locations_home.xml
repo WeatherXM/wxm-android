@@ -244,6 +244,15 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
+                        <com.weatherxm.ui.components.WeatherLocationCardView
+                            android:id="@+id/currentLocationWeather"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/askForLocationCard"
                             android:layout_width="match_parent"
