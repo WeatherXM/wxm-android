@@ -24,7 +24,6 @@ import com.weatherxm.ui.components.compose.TermsDialog
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.devices.DevicesViewModel
-import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -61,11 +60,9 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
 
         explorerModel.onSearchOpenStatus().observe(this) { isOpened ->
             if (isOpened) {
-                binding.navView.hide()
                 binding.mapLayerPickerBtn.hide()
                 binding.myLocationBtn.hide()
             } else {
-                binding.navView.show()
                 binding.mapLayerPickerBtn.show()
                 binding.myLocationBtn.show()
             }
@@ -114,15 +111,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             handleBadge(it.showMissingBadge)
         }
 
-        // Disable BottomNavigationView bottom padding, added by default, and add margin
-        // https://github.com/material-components/material-components-android/commit/276bec8385ec877548fc84994c0a016de2428567
-        binding.navView.applyInsetter {
-            type(navigationBars = true) {
-                padding(horizontal = false, vertical = false)
-                margin(bottom = true)
-            }
-        }
-
         with(intent.parcelable<Location>(Contracts.ARG_CELL_CENTER)) {
             this?.let {
                 NavigationUI.onNavDestinationSelected(
@@ -167,10 +155,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             if (navController.currentDestination?.id == R.id.navigation_devices) {
                 binding.addDevice.show()
             }
-            binding.navView.show()
         } else {
             binding.addDevice.hide()
-            binding.navView.hide()
         }
     }
 
@@ -214,7 +200,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 binding.addDevice.hide()
             }
         }
-        binding.navView.show()
         binding.mapLayerPickerBtn.visible(destination.id == R.id.navigation_explorer)
         binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
     }

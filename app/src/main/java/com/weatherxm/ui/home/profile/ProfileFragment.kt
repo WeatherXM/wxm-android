@@ -21,7 +21,6 @@ import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setCardStroke
@@ -36,6 +35,7 @@ import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.weiToETH
+import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -80,7 +80,11 @@ class ProfileFragment : BaseFragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        binding.root.applyInsets()
+        binding.root.applyInsetter {
+            type(statusBars = true) {
+                padding(left = false, top = true, right = false, bottom = false)
+            }
+        }
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetchUser()

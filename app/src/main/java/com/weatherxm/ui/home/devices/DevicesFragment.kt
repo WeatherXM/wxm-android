@@ -31,7 +31,6 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setCardRadius
@@ -47,6 +46,7 @@ import com.weatherxm.ui.components.compose.PhotoUploadState
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.ImageFileHelper.deleteAllStationPhotos
 import com.weatherxm.util.NumberUtils.formatTokens
+import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -77,7 +77,11 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     ): View {
         binding = FragmentDevicesBinding.inflate(inflater, container, false)
 
-        binding.root.applyInsets()
+        binding.root.applyInsetter {
+            type(statusBars = true) {
+                padding(left = false, top = true, right = false, bottom = false)
+            }
+        }
 
         adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
