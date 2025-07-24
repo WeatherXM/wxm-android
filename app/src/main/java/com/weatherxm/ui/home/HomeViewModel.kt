@@ -12,6 +12,7 @@ import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
@@ -23,11 +24,13 @@ class HomeViewModel(
     private val userUseCase: UserUseCase,
     private val remoteBannersUseCase: RemoteBannersUseCase,
     private val photoUseCase: DevicePhotoUseCase,
+    private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var hasDevices: Boolean? = null
+    private var isLoggedIn: Boolean? = null
 
     // Needed for passing info to show the wallet missing warning card and badges
     private val onWalletWarnings = MutableLiveData<WalletWarnings>()
@@ -37,7 +40,7 @@ class HomeViewModel(
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
-    val shouldShowTerms = mutableStateOf(userUseCase.shouldShowTermsPrompt())
+    val shouldShowTerms = mutableStateOf(false)
 
     fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onSurvey(): LiveData<Survey> = onSurvey
@@ -46,6 +49,16 @@ class HomeViewModel(
     fun showOverlayViews() = showOverlayViews
 
     fun hasDevices() = hasDevices
+    fun isLoggedIn() = isLoggedIn ?: false
+
+    fun checkIfIsLoggedIn() {
+        isLoggedIn = authUseCase.isLoggedIn()
+        viewModelScope.launch(dispatcher) {
+            if (isLoggedIn == true) {
+                shouldShowTerms.value = userUseCase.shouldShowTermsPrompt()
+            }
+        }
+    }
 
     fun setHasDevices(devices: List<UIDevice>?) {
         hasDevices = devices?.firstOrNull { it.isOwned() } != null

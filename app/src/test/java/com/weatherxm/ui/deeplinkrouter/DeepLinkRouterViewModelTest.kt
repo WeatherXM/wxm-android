@@ -21,8 +21,8 @@ import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.deeplinkrouter.DeepLinkRouterViewModel.Companion.CELLS_PATH_SEGMENT
 import com.weatherxm.ui.deeplinkrouter.DeepLinkRouterViewModel.Companion.STATIONS_PATH_SEGMENT
-import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.AndroidBuildInfo

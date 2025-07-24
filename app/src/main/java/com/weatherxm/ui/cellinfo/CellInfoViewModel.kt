@@ -11,7 +11,7 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.FollowUseCase

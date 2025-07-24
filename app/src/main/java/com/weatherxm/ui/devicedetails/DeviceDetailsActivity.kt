@@ -100,11 +100,8 @@ class DeviceDetailsActivity : BaseActivity() {
                 finish()
                 return@addCallback
             }
-            if (model.isLoggedIn() == true) {
-                navigator.showHome(this@DeviceDetailsActivity, model.device.cellCenter)
-            } else {
-                navigator.showExplorer(this@DeviceDetailsActivity, model.device.cellCenter)
-            }
+
+            navigator.showHome(this@DeviceDetailsActivity, model.device.cellCenter)
             finish()
         }
 

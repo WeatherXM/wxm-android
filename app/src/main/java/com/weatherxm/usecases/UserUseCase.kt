@@ -19,7 +19,6 @@ interface UserUseCase {
     fun setWalletWarningDismissTimestamp()
     suspend fun getWalletRewards(walletAddress: String?): Either<Failure, UIWalletRewards>
     fun getUserId(): String
-    fun shouldShowAnalyticsOptIn(): Boolean
     fun setAcceptTerms()
     fun shouldShowTermsPrompt(): Boolean
     fun getClaimingBadgeShouldShow(): Boolean
@@ -78,10 +77,6 @@ class UserUseCaseImpl(
 
     override fun getUserId(): String {
         return userRepository.getUserId()
-    }
-
-    override fun shouldShowAnalyticsOptIn(): Boolean {
-        return userPreferencesRepository.shouldShowAnalyticsOptIn()
     }
 
     override fun shouldShowTermsPrompt() = userPreferencesRepository.shouldShowTermsPrompt()

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
@@ -17,7 +17,6 @@ import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
-import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
@@ -64,12 +63,6 @@ class ExplorerViewModel(
      */
     private val onNavigateToLocation = SingleLiveEvent<NavigationLocation>()
 
-    // Needed for passing info to the fragment to handle when my location button is clicked
-    private val onMyLocationClicked = SingleLiveEvent<Boolean>()
-
-    // Needed for passing info to the activity to show/hide elements when onMapClick
-    private val showMapOverlayViews = MutableLiveData(true)
-
     // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onSearchOpenStatus = MutableLiveData(false)
 
@@ -79,9 +72,6 @@ class ExplorerViewModel(
 
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
-
-    // Save the current status of where the explorer is located (before/after login)
-    private var explorerAfterLoggedIn = false
 
     @Suppress("MagicNumber")
     val heatmapLayer: HeatmapLayer by lazy {
@@ -185,14 +175,10 @@ class ExplorerViewModel(
         }
     }
 
-    private var useUserLocation: Boolean = true
-
     // Save currently shown hexes by their indexes in order to send to the UI only the added/removed
     private var hexesIndexes = listOf<String>()
 
-    fun onMyLocationClicked() = onMyLocationClicked
     fun onNavigateToLocation() = onNavigateToLocation
-    fun showMapOverlayViews() = showMapOverlayViews
     fun onSearchOpenStatus() = onSearchOpenStatus
     fun onStatus(): LiveData<Resource<Unit>> = onStatus
     fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
@@ -201,14 +187,9 @@ class ExplorerViewModel(
     fun onViewportStations(): LiveData<Int> = onViewportStations
     fun onMapLayer(): LiveData<MapLayer> = onMapLayer
 
-    fun navigateToLocation(location: Location, isUserLocation: Boolean = false) {
+    fun navigateToLocation(location: Location, zoomLevel: Double) {
         Timber.d("Got starting location [${location.lat}, ${location.lon}")
-        if (isUserLocation && useUserLocation) {
-            onNavigateToLocation.postValue(NavigationLocation(DEFAULT_ZOOM_LEVEL, location))
-        } else if (!isUserLocation) {
-            useUserLocation = false
-            onNavigateToLocation.postValue(NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location))
-        }
+        onNavigateToLocation.postValue(NavigationLocation(zoomLevel, location))
     }
 
     fun setMapLayer(mapLayer: MapLayer) {
@@ -216,24 +197,11 @@ class ExplorerViewModel(
             onMapLayer.postValue(mapLayer)
             viewModelScope.launch(dispatcher) {
                 with(onExplorerData.value) {
-                    this?.polygonsToDraw =
-                        this?.publicHexes?.toPolygonAnnotationOptions(mapLayer) ?: mutableListOf()
+                    this?.polygonsToDraw = publicHexes.toPolygonAnnotationOptions(mapLayer)
                     onRedrawPolygons.postValue(this?.polygonsToDraw)
                 }
             }
         }
-    }
-
-    fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
-        explorerAfterLoggedIn = isAfterLoggedIn
-    }
-
-    fun isExplorerAfterLoggedIn(): Boolean {
-        return explorerAfterLoggedIn
-    }
-
-    fun onMyLocation() {
-        onMyLocationClicked.postValue(true)
     }
 
     fun fetch() {
@@ -301,11 +269,6 @@ class ExplorerViewModel(
         }
     }
 
-    fun onMapClick() {
-        val current = showMapOverlayViews.value == true
-        showMapOverlayViews.postValue(!current)
-    }
-
     fun onSearchOpenStatus(isOpen: Boolean) {
         onSearchOpenStatus.postValue(isOpen)
     }
@@ -352,13 +315,13 @@ class ExplorerViewModel(
         if (locationHelper.hasLocationPermissions()) {
             getLocation { location ->
                 location?.let {
-                    navigateToLocation(it, true)
+                    navigateToLocation(it, DEFAULT_ZOOM_LEVEL)
                 }
             }
         } else {
             viewModelScope.launch(dispatcher) {
                 explorerUseCase.getUserCountryLocation()?.let {
-                    navigateToLocation(it, true)
+                    navigateToLocation(it, DEFAULT_ZOOM_LEVEL)
                 }
             }
         }

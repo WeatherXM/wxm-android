@@ -17,6 +17,7 @@ import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.justRun
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -53,56 +54,64 @@ class ProfileViewModelTest : BehaviorSpec({
     }
 
     context("Get the User") {
-        given("a usecase returning the User") {
-            When("it's a failure") {
-                coMockEitherLeft({ userUseCase.getUser(false) }, failure)
-                testHandleFailureViewModel(
-                    { viewModel.fetchUser() },
-                    analytics,
-                    viewModel.onUser(),
-                    1,
-                    REACH_OUT_MSG
-                )
+        When("the user is logged out") {
+            runTest { viewModel.fetchUser(false) }
+            then("LiveData onWalletRewards should post the an empty rewards object") {
+                viewModel.onLoggedOutUser().value shouldBe true
             }
-            When("it's a success") {
-                coMockEitherRight({ userUseCase.getUser(true) }, user)
-                and("fetching wallet rewards is a failure") {
-                    and("it's a WalletAddressNotFound failure") {
-                        coMockEitherLeft(
-                            { userUseCase.getWalletRewards(walletAddress) },
-                            walletAddressNotFoundFailure
-                        )
-                        runTest { viewModel.fetchUser(true) }
-                        then("LiveData onWalletRewards should post the an empty rewards object") {
-                            viewModel.onWalletRewards().isSuccess(UIWalletRewards.empty())
+        }
+        When("the user is logged in") {
+            and("a usecase returning the User") {
+                When("it's a failure") {
+                    coMockEitherLeft({ userUseCase.getUser(false) }, failure)
+                    testHandleFailureViewModel(
+                        { viewModel.fetchUser(true) },
+                        analytics,
+                        viewModel.onUser(),
+                        1,
+                        REACH_OUT_MSG
+                    )
+                }
+                When("it's a success") {
+                    coMockEitherRight({ userUseCase.getUser(true) }, user)
+                    and("fetching wallet rewards is a failure") {
+                        and("it's a WalletAddressNotFound failure") {
+                            coMockEitherLeft(
+                                { userUseCase.getWalletRewards(walletAddress) },
+                                walletAddressNotFoundFailure
+                            )
+                            runTest { viewModel.fetchUser(isLoggedIn = true, forceRefresh = true) }
+                            then("LiveData onWalletRewards should post the an empty object") {
+                                viewModel.onWalletRewards().isSuccess(UIWalletRewards.empty())
+                            }
+                        }
+                        and("it's any other failure") {
+                            coMockEitherLeft(
+                                { userUseCase.getWalletRewards(walletAddress) },
+                                failure
+                            )
+                            testHandleFailureViewModel(
+                                { viewModel.fetchUser(isLoggedIn = true, forceRefresh = true) },
+                                analytics,
+                                viewModel.onWalletRewards(),
+                                3,
+                                REACH_OUT_MSG
+                            )
                         }
                     }
-                    and("it's any other failure") {
-                        coMockEitherLeft(
+                    and("fetching wallet rewards is a success") {
+                        coMockEitherRight(
                             { userUseCase.getWalletRewards(walletAddress) },
-                            failure
+                            walletRewards
                         )
-                        testHandleFailureViewModel(
-                            { viewModel.fetchUser(true) },
-                            analytics,
-                            viewModel.onWalletRewards(),
-                            3,
-                            REACH_OUT_MSG
-                        )
+                        runTest { viewModel.fetchUser(isLoggedIn = true, forceRefresh = true) }
+                        then("LiveData onWalletRewards should post the latest rewards") {
+                            viewModel.onWalletRewards().isSuccess(walletRewards)
+                        }
                     }
-                }
-                and("fetching wallet rewards is a success") {
-                    coMockEitherRight(
-                        { userUseCase.getWalletRewards(walletAddress) },
-                        walletRewards
-                    )
-                    runTest { viewModel.fetchUser(true) }
-                    then("LiveData onWalletRewards should post the latest rewards") {
-                        viewModel.onWalletRewards().isSuccess(walletRewards)
+                    then("LiveData onUser should post the User value") {
+                        viewModel.onUser().isSuccess(user)
                     }
-                }
-                then("LiveData onUser should post the User value") {
-                    viewModel.onUser().isSuccess(user)
                 }
             }
         }

@@ -4,9 +4,9 @@ import arrow.core.Either
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.explorer.ExplorerData
-import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.ExplorerData
+import com.weatherxm.ui.home.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.UICell
 
 interface ExplorerUseCase {
     companion object {

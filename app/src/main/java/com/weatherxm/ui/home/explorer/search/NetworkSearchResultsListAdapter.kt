@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer.search
+package com.weatherxm.ui.home.explorer.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.weatherxm.databinding.ListItemNetworkSearchResultBinding
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.highlightText
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 
 class NetworkSearchResultsListAdapter(
     private val listener: (SearchResult) -> Unit

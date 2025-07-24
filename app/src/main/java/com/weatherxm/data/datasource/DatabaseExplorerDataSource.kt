@@ -16,7 +16,7 @@ import com.weatherxm.data.database.dao.NetworkSearchRecentDao
 import com.weatherxm.data.database.entities.NetworkSearchRecent
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.RECENTS_MAX_ENTRIES
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 
 class DatabaseExplorerDataSource(
     private val dao: NetworkSearchRecentDao

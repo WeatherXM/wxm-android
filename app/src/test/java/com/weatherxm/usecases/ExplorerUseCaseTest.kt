@@ -18,9 +18,9 @@ import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PL
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.explorer.ExplorerData
-import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.ExplorerData
+import com.weatherxm.ui.home.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.UICell
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
