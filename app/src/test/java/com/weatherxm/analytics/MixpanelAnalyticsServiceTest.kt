@@ -1,7 +1,7 @@
 package com.weatherxm.analytics
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
+import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.justRun

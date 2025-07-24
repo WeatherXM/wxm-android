@@ -10,4 +10,6 @@ interface ForecastUseCase {
         device: UIDevice,
         forceRefresh: Boolean = false
     ): Either<Failure, UIForecast>
+
+    suspend fun getLocationForecast(lat: Double, lon: Double): Either<Failure, UIForecast>
 }

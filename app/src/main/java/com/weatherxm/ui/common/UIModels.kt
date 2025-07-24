@@ -248,11 +248,12 @@ enum class DeviceAlertType : Parcelable {
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class UIForecast(
+    val address: String?,
     val next24Hours: List<HourlyWeather>?,
     val forecastDays: List<UIForecastDay>
 ) : Parcelable {
     companion object {
-        fun empty() = UIForecast(mutableListOf(), mutableListOf())
+        fun empty() = UIForecast(String.empty(), mutableListOf(), mutableListOf())
     }
 
     fun isEmpty(): Boolean = next24Hours.isNullOrEmpty() && forecastDays.isEmpty()
@@ -280,6 +281,7 @@ data class UIForecastDay(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class LocationWeather(
+    val coordinates: Location,
     val address: String?,
     val icon: String?,
     var currentWeatherSummaryResId: Int?,
@@ -287,6 +289,21 @@ data class LocationWeather(
     var dailyMinTemp: Float?,
     var dailyMaxTemp: Float?
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UILocation(
+    val coordinates: Location,
+    val isCurrentLocation: Boolean,
+    var isSaved: Boolean,
+) : Parcelable {
+    companion object {
+        fun empty() = UILocation(Location(0.0, 0.0), isCurrentLocation = false, isSaved = false)
+    }
+
+    fun isEmpty() = this == empty()
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

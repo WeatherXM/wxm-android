@@ -20,7 +20,9 @@ class LocationsViewModel(
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val _onLoading = MutableLiveData<Boolean>()
+    private val _onLoading = MutableLiveData<Boolean>().apply {
+        value = true
+    }
     private val _onError = MutableLiveData<UIError?>()
     private val _onLocationWeather = MutableLiveData<LocationWeather>()
 

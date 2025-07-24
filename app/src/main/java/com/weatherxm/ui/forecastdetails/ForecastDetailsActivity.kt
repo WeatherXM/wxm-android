@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deviceforecast
+package com.weatherxm.ui.forecastdetails
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -7,11 +7,14 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.UILocation
+import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.parcelable
@@ -47,7 +50,10 @@ class ForecastDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityForecastDetailsBinding
 
     private val model: ForecastDetailsViewModel by viewModel {
-        parametersOf(intent.parcelable<UIDevice>(Contracts.ARG_DEVICE))
+        parametersOf(
+            intent.parcelable<UIDevice>(Contracts.ARG_DEVICE),
+            intent.parcelable<UILocation>(Contracts.ARG_LOCATION)
+        )
     }
 
     private lateinit var dailyAdapter: DailyTileForecastAdapter
@@ -58,7 +64,7 @@ class ForecastDetailsActivity : BaseActivity() {
         binding = ActivityForecastDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (model.device.isEmpty()) {
+        if (model.device.isEmpty() && model.location.isEmpty()) {
             Timber.d("Could not start ForecastDetailsActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
@@ -67,19 +73,24 @@ class ForecastDetailsActivity : BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-        binding.header.setContent {
-            val defaultOrFriendlyName = model.device.getDefaultOrFriendlyName()
-            val subtitle = if (defaultOrFriendlyName == model.device.name) {
-                null
-            } else {
-                model.device.name
+        if (!model.device.isEmpty()) {
+            binding.header.setContent {
+                val defaultOrFriendlyName = model.device.getDefaultOrFriendlyName()
+                val subtitle = if (defaultOrFriendlyName == model.device.name) {
+                    null
+                } else {
+                    model.device.name
+                }
+                HeaderView(defaultOrFriendlyName, subtitle, null)
             }
-            HeaderView(defaultOrFriendlyName, subtitle, null)
+
+            handleOwnershipIcon()
+
+            binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
+        } else {
+            handleSavedLocationIcon()
+            binding.displayTimeNotice.visible(false)
         }
-
-        handleOwnershipIcon()
-
-        binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
         setupChartsAndListeners()
 
         model.onForecastLoaded().observe(this) {
@@ -122,10 +133,31 @@ class ForecastDetailsActivity : BaseActivity() {
             }
         }
 
-        model.fetchForecast()
+        if (!model.device.isEmpty()) {
+            model.fetchDeviceForecast()
+        } else if (!model.location.isEmpty()) {
+            model.fetchLocationForecast()
+        }
     }
 
     private fun updateUI(forecast: UIForecastDay) {
+        // Update the header now that model.address has valid data
+        binding.header.setContent {
+            if (model.location.isCurrentLocation) {
+                HeaderView(
+                    title = getString(R.string.current_location).capitalizeWords(),
+                    subtitle = model.address(),
+                    onInfoButton = null
+                )
+            } else {
+                HeaderView(
+                    title = model.address() ?: EMPTY_VALUE,
+                    subtitle = null,
+                    onInfoButton = null
+                )
+            }
+        }
+
         // Update Daily Weather
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
         binding.dailyIcon.setWeatherAnimation(forecast.icon)
@@ -237,13 +269,27 @@ class ForecastDetailsActivity : BaseActivity() {
                 DeviceRelation.OWNED -> {
                     setImageResource(R.drawable.ic_home)
                     setColor(R.color.colorOnSurface)
+                    visible(true)
                 }
                 DeviceRelation.FOLLOWED -> {
                     setImageResource(R.drawable.ic_favorite)
                     setColor(R.color.follow_heart_color)
+                    visible(true)
                 }
                 else -> visible(false)
             }
+        }
+    }
+
+    private fun handleSavedLocationIcon() {
+        with(binding.locationStatusIcon) {
+            if (model.location.isSaved) {
+                setImageResource(R.drawable.ic_star_filled)
+            } else {
+                setImageResource(R.drawable.ic_star_outlined)
+            }
+            setColor(R.color.warning)
+            visible(true)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deviceforecast
+package com.weatherxm.ui.forecastdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.UILocation
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -25,6 +26,7 @@ import java.time.LocalDate
 
 class ForecastDetailsViewModel(
     val device: UIDevice,
+    val location: UILocation,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val chartsUseCase: ChartsUseCase,
@@ -38,7 +40,9 @@ class ForecastDetailsViewModel(
 
     fun forecast() = forecast
 
-    fun fetchForecast() {
+    fun address() = forecast.address
+
+    fun fetchDeviceForecast() {
         onForecastLoaded.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             forecastUseCase.getDeviceForecast(device).onRight {
@@ -56,6 +60,29 @@ class ForecastDetailsViewModel(
                 analytics.trackEventFailure(it.code)
                 handleForecastFailure(it)
             }
+        }
+    }
+
+    fun fetchLocationForecast() {
+        onForecastLoaded.postValue(Resource.loading())
+        viewModelScope.launch(dispatcher) {
+            forecastUseCase.getLocationForecast(location.coordinates.lat, location.coordinates.lon)
+                .onRight {
+                    Timber.d("Got forecast")
+                    forecast = it
+                    if (it.isEmpty()) {
+                        onForecastLoaded.postValue(
+                            Resource.error(resources.getString(R.string.forecast_empty))
+                        )
+                    } else {
+                        onForecastLoaded.postValue(Resource.success(Unit))
+                    }
+                }
+                .onLeft {
+                    forecast = UIForecast.empty()
+                    analytics.trackEventFailure(it.code)
+                    handleForecastFailure(it)
+                }
         }
     }
 

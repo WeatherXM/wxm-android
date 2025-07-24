@@ -30,6 +30,7 @@ class ForecastUseCaseTest : BehaviorSpec({
     val tomorrowInUtc = ZonedDateTime.now(ZoneId.of(utc)).plusDays(1)
     val weatherData = listOf(
         WeatherData(
+            device.address,
             tomorrowInUtc.toLocalDate(),
             utc,
             listOf(
@@ -90,6 +91,7 @@ class ForecastUseCaseTest : BehaviorSpec({
         solarIrradiance = 400F
     )
     val uiForecast = UIForecast(
+        address = device.address,
         next24Hours = listOf(hourlyWeather),
         forecastDays = listOf(
             UIForecastDay(
