@@ -28,6 +28,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
 import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.HeaderView
+import com.weatherxm.ui.components.compose.JoinNetworkPromoCard
 import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
@@ -120,23 +121,35 @@ class ForecastDetailsActivity : BaseActivity() {
             }
         }
 
-        binding.proPromotionCard.setContent {
-            ProPromotionCard(R.string.want_more_accurate_forecasts) {
-                analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
-                    Pair(
-                        FirebaseAnalytics.Param.SOURCE,
-                        AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
-                    )
-                )
-                ProPromotionDialogFragment().show(this)
-            }
-        }
+        observeOnLoggedIn()
 
         if (!model.device.isEmpty()) {
             model.fetchDeviceForecast()
         } else if (!model.location.isEmpty()) {
             model.fetchLocationForecast()
+        }
+    }
+
+    private fun observeOnLoggedIn() {
+        model.onLoggedIn().observe(this) {
+            binding.promoCard.setContent {
+                if (it) {
+                    ProPromotionCard(R.string.want_more_accurate_forecasts) {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
+                            )
+                        )
+                        ProPromotionDialogFragment().show(this)
+                    }
+                } else {
+                    JoinNetworkPromoCard {
+                        navigator.openWebsite(this, getString(R.string.shop_url))
+                    }
+                }
+            }
         }
     }
 
