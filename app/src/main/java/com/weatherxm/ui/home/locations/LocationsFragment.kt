@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home.locations
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
@@ -22,7 +23,6 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UILocation
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setCardRadius
@@ -57,6 +57,10 @@ class LocationsFragment : BaseFragment() {
 
     private lateinit var searchAdapter: NetworkSearchResultsListAdapter
 
+    /**
+     * Suppress MissingPermission as we will try to get the location after perms are granted
+     */
+    @SuppressLint("MissingPermission")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,29 +80,20 @@ class LocationsFragment : BaseFragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             parentModel.getRemoteBanners()
+            model.clearLocationForecastFromCache()
             locationHelper.getLocationAndThen {
-                model.fetch(it)
+                model.fetch(it, parentModel.isLoggedIn())
             }
-        }
-
-        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-            parentModel.onScroll(scrollY - oldScrollY)
         }
 
         binding.askForLocationCard.setOnClickListener {
             requestLocationPermissions(activity) {
                 binding.askForLocationCard.visible(false)
                 locationHelper.getLocationAndThen {
-                    model.fetch(it)
+                    model.fetch(it, parentModel.isLoggedIn())
                 }
             }
         }
-
-        binding.emptySavedLocationsCard.setContent {
-            EmptySavedLocationsView()
-        }
-        // STOPSHIP: TODO: Show the below only if saved locations are empty
-        binding.emptySavedLocationsCard.visible(true)
 
         initSearchComponents()
 
@@ -112,14 +107,32 @@ class LocationsFragment : BaseFragment() {
 
         model.onLocationWeather().observe(viewLifecycleOwner) { result ->
             binding.currentLocationWeather.setData(result) {
-                // TODO: STOPSHIP: Functionality for isSaved to be used here.
                 navigator.showForecastDetails(
                     context = context,
                     device = UIDevice.empty(),
-                    location = UILocation(it.coordinates, true, isSaved = false)
+                    location = UILocation(
+                        coordinates = it.coordinates,
+                        isCurrentLocation = true,
+                        isSaved = model.isLocationSaved(it.coordinates)
+                    )
                 )
             }
             binding.currentLocationWeather.visible(true)
+        }
+
+        /**
+         * Suppress MissingPermission as we will try to get the location after perms are granted
+         */
+        @SuppressLint("MissingPermission")
+        if (!locationHelper.hasLocationPermissions()) {
+            model.onNoLocationPermission()
+            binding.currentLocationWeather.visible(false)
+            binding.askForLocationCard.visible(true)
+        } else {
+            binding.askForLocationCard.visible(false)
+            locationHelper.getLocationAndThen {
+                model.fetch(it, parentModel.isLoggedIn())
+            }
         }
 
         return binding.root
@@ -127,15 +140,13 @@ class LocationsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if (!locationHelper.hasLocationPermissions()) {
-            binding.askForLocationCard.visible(true)
-            binding.currentLocationWeather.visible(false)
-        } else if (model.onLocationWeather().value == null) {
-            binding.askForLocationCard.visible(false)
-            locationHelper.getLocationAndThen {
-                model.fetch(it)
+        if (model.getSavedLocations().isEmpty()) {
+            binding.emptySavedLocationsCard.setContent {
+                EmptySavedLocationsView()
             }
+            binding.emptySavedLocationsCard.visible(true)
+        } else {
+            // TODO: STOPSHIP: Fetch the weather for saved locations with the same call as with current location
         }
     }
 
@@ -364,14 +375,16 @@ class LocationsFragment : BaseFragment() {
 
     private fun onNetworkSearchResultClicked(result: SearchResult) {
         binding.searchView.hide()
-        searchModel.setQuery(String.empty())
 
         result.center?.let {
-            // TODO: STOPSHIP: Functionality for isSaved to be used here.
             navigator.showForecastDetails(
                 context = context,
                 device = UIDevice.empty(),
-                location = UILocation(it, false, isSaved = false)
+                location = UILocation(
+                    coordinates = it,
+                    isCurrentLocation = false,
+                    isSaved = model.isLocationSaved(it)
+                )
             )
         }
     }

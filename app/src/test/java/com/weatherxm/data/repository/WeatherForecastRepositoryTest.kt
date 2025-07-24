@@ -31,7 +31,8 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
             networkSource = mockk<NetworkWeatherForecastDataSource>()
             cacheSource = mockk<CacheWeatherForecastDataSource>()
             repo = WeatherForecastRepositoryImpl(networkSource, cacheSource)
-            coJustRun { cacheSource.clear() }
+            coJustRun { cacheSource.clearDeviceForecast() }
+            coJustRun { cacheSource.clearLocationForecast() }
             coJustRun { cacheSource.setDeviceForecast(deviceId, forecastData) }
             coMockEitherRight(
                 { networkSource.getDeviceForecast(deviceId, fromDate, now) },
@@ -48,13 +49,13 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
             When("force refresh = FALSE") {
                 then("clear cache should NOT be called") {
                     repo.getDeviceForecast(deviceId, fromDate, now, false)
-                    coVerify(exactly = 0) { cacheSource.clear() }
+                    coVerify(exactly = 0) { cacheSource.clearDeviceForecast() }
                 }
             }
             When("force refresh = TRUE") {
                 then("clear cache should be called") {
                     repo.getDeviceForecast(deviceId, fromDate, now, true)
-                    coVerify(exactly = 1) { cacheSource.clear() }
+                    coVerify(exactly = 1) { cacheSource.clearDeviceForecast() }
                 }
             }
         }
@@ -121,10 +122,10 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
         }
     }
 
-    given("requesting to clear forecast cache") {
+    given("requesting to clear location cache") {
         Then("cache should be cleared") {
-            repo.clearCache()
-            coVerify(exactly = 1) { cacheSource.clear() }
+            repo.clearLocationForecastFromCache()
+            coVerify(exactly = 1) { cacheSource.clearLocationForecast() }
         }
     }
 

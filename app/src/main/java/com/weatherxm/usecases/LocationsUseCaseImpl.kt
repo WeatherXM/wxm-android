@@ -3,6 +3,7 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.repository.LocationsRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.LocationWeather
 import com.weatherxm.util.Weather
@@ -11,16 +12,14 @@ import java.time.ZonedDateTime
 import kotlin.math.abs
 
 @Suppress("LongParameterList")
-class LocationWeatherUseCaseImpl(
-    private val weatherForecastRepository: WeatherForecastRepository
-) : LocationWeatherUseCase {
+class LocationsUseCaseImpl(
+    private val locationsRepo: LocationsRepository,
+    private val forecastRepo: WeatherForecastRepository
+) : LocationsUseCase {
 
     @Suppress("MagicNumber")
-    override suspend fun getLocationWeather(
-        lat: Double,
-        lon: Double
-    ): Either<Failure, LocationWeather> {
-        return weatherForecastRepository.getLocationForecast(lat, lon).map { result ->
+    override suspend fun getLocationWeather(location: Location): Either<Failure, LocationWeather> {
+        return forecastRepo.getLocationForecast(location).map { result ->
             val timezone = result.first().tz
             val nowInTimezone = ZonedDateTime.now(ZoneId.of(timezone))
             val todayHourlies = result.first().hourly
@@ -43,7 +42,7 @@ class LocationWeatherUseCaseImpl(
             }
 
             LocationWeather(
-                coordinates = Location(lat, lon),
+                coordinates = location,
                 address = result[0].address,
                 icon = closestHourly?.icon,
                 currentWeatherSummaryResId = Weather.getWeatherSummaryDesc(closestHourly?.icon),
@@ -53,4 +52,10 @@ class LocationWeatherUseCaseImpl(
             )
         }
     }
+
+    override fun getSavedLocations(): List<Location> = locationsRepo.getSavedLocations()
+    override fun clearLocationForecastFromCache() = forecastRepo.clearLocationForecastFromCache()
+    override fun addSavedLocation(location: Location) = locationsRepo.addSavedLocation(location)
+    override fun removeSavedLocation(location: Location) =
+        locationsRepo.removeSavedLocation(location)
 }

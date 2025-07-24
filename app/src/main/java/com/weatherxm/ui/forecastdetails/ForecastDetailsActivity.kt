@@ -121,35 +121,10 @@ class ForecastDetailsActivity : BaseActivity() {
             }
         }
 
-        observeOnLoggedIn()
-
         if (!model.device.isEmpty()) {
             model.fetchDeviceForecast()
         } else if (!model.location.isEmpty()) {
             model.fetchLocationForecast()
-        }
-    }
-
-    private fun observeOnLoggedIn() {
-        model.onLoggedIn().observe(this) {
-            binding.promoCard.setContent {
-                if (it) {
-                    ProPromotionCard(R.string.want_more_accurate_forecasts) {
-                        analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
-                            Pair(
-                                FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
-                            )
-                        )
-                        ProPromotionDialogFragment().show(this)
-                    }
-                } else {
-                    JoinNetworkPromoCard {
-                        navigator.openWebsite(this, getString(R.string.shop_url))
-                    }
-                }
-            }
         }
     }
 
@@ -295,10 +270,28 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun handleSavedLocationIcon() {
-        with(binding.locationStatusIcon) {
+        with(binding.locationStatusBtn) {
             if (model.location.isSaved) {
+                setOnClickListener {
+                    model.removeSavedLocation()
+                    setImageResource(R.drawable.ic_star_outlined)
+                }
                 setImageResource(R.drawable.ic_star_filled)
             } else {
+                setOnClickListener {
+                    if (model.canSaveMoreLocations()) {
+                        model.addSavedLocation()
+                        setImageResource(R.drawable.ic_star_filled)
+                    } else if (model.isLoggedIn()) {
+                        toast(R.string.maxed_out_saved_locations)
+                    } else {
+                        navigator.showLoginDialog(
+                            fragmentActivity = this@ForecastDetailsActivity,
+                            title = getString(R.string.looking_to_save_more_spots),
+                            message = getString(R.string.maxed_out_saved_locations_sign_in)
+                        )
+                    }
+                }
                 setImageResource(R.drawable.ic_star_outlined)
             }
             setColor(R.color.warning)
@@ -309,5 +302,26 @@ class ForecastDetailsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST_DETAILS, classSimpleName())
+
+        model.isLoggedIn().also {
+            binding.promoCard.setContent {
+                if (it) {
+                    ProPromotionCard(R.string.want_more_accurate_forecasts) {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
+                            )
+                        )
+                        ProPromotionDialogFragment().show(this)
+                    }
+                } else {
+                    JoinNetworkPromoCard {
+                        navigator.openWebsite(this, getString(R.string.shop_url))
+                    }
+                }
+            }
+        }
     }
 }

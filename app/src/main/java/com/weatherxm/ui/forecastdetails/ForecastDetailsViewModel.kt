@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.datasource.LocationsDataSource.Companion.MAX_AUTH_LOCATIONS
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.HourlyWeather
@@ -18,6 +19,7 @@ import com.weatherxm.ui.common.UILocation
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.usecases.LocationsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
@@ -34,13 +36,12 @@ class ForecastDetailsViewModel(
     private val authUseCase: AuthUseCase,
     private val chartsUseCase: ChartsUseCase,
     private val forecastUseCase: ForecastUseCase,
+    private val locationsUseCase: LocationsUseCase,
     private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onForecastLoaded = MutableLiveData<Resource<Unit>>()
-    private val onLoggedIn = MutableLiveData<Boolean>()
 
     fun onForecastLoaded(): LiveData<Resource<Unit>> = onForecastLoaded
-    fun onLoggedIn(): LiveData<Boolean> = onLoggedIn
 
     private var forecast: UIForecast = UIForecast.empty()
 
@@ -52,7 +53,7 @@ class ForecastDetailsViewModel(
         onForecastLoaded.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             forecastUseCase.getDeviceForecast(device).onRight {
-                Timber.d("Got forecast")
+                Timber.d("Got forecast details for device forecast")
                 forecast = it
                 if (it.isEmpty()) {
                     onForecastLoaded.postValue(
@@ -72,9 +73,9 @@ class ForecastDetailsViewModel(
     fun fetchLocationForecast() {
         onForecastLoaded.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
-            forecastUseCase.getLocationForecast(location.coordinates.lat, location.coordinates.lon)
+            forecastUseCase.getLocationForecast(location.coordinates)
                 .onRight {
-                    Timber.d("Got forecast")
+                    Timber.d("Got forecast details for location forecast")
                     forecast = it
                     if (it.isEmpty()) {
                         onForecastLoaded.postValue(
@@ -150,9 +151,22 @@ class ForecastDetailsViewModel(
         )
     }
 
-    init {
-        viewModelScope.launch(dispatcher) {
-            onLoggedIn.postValue(authUseCase.isLoggedIn())
-        }
+    fun canSaveMoreLocations(): Boolean {
+        val isLoggedIn = authUseCase.isLoggedIn()
+        val savedLocations = locationsUseCase.getSavedLocations()
+        return (isLoggedIn && savedLocations.size < MAX_AUTH_LOCATIONS) ||
+            (!isLoggedIn && savedLocations.isEmpty())
+    }
+
+    fun isLoggedIn() = authUseCase.isLoggedIn()
+
+    fun addSavedLocation() {
+        location.isSaved = true
+        locationsUseCase.addSavedLocation(location.coordinates)
+    }
+
+    fun removeSavedLocation() {
+        location.isSaved = false
+        locationsUseCase.removeSavedLocation(location.coordinates)
     }
 }

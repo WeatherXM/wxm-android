@@ -2,6 +2,7 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 
@@ -11,5 +12,5 @@ interface ForecastUseCase {
         forceRefresh: Boolean = false
     ): Either<Failure, UIForecast>
 
-    suspend fun getLocationForecast(lat: Double, lon: Double): Either<Failure, UIForecast>
+    suspend fun getLocationForecast(location: Location): Either<Failure, UIForecast>
 }

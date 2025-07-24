@@ -31,8 +31,8 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
     )
 
     beforeSpec {
-        coJustRun { cacheService.setForecast(deviceId, forecastData) }
-        coJustRun { cacheService.clearForecast() }
+        coJustRun { cacheService.setDeviceForecast(deviceId, forecastData) }
+        coJustRun { cacheService.clearDeviceForecast() }
     }
 
     context("Get forecast") {
@@ -52,7 +52,7 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                 testGetFromCache(
                     "forecast",
                     forecastData,
-                    mockFunction = { cacheService.getForecast(deviceId) },
+                    mockFunction = { cacheService.getDeviceForecast(deviceId) },
                     runFunction = { cacheSource.getDeviceForecast(deviceId, fromDate, toDate) }
                 )
             }
@@ -67,7 +67,7 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
             When("Using the Cache Source") {
                 then("save the forecast in cacheService") {
                     cacheSource.setDeviceForecast(deviceId, forecastData)
-                    verify(exactly = 1) { cacheService.setForecast(deviceId, forecastData) }
+                    verify(exactly = 1) { cacheService.setDeviceForecast(deviceId, forecastData) }
                 }
             }
         }
@@ -76,12 +76,12 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
     context("Clear forecast saved data") {
         given("A Network and a Cache Source providing the CLEAR mechanism") {
             When("Using the Network Source") {
-                testThrowNotImplemented { networkSource.clear() }
+                testThrowNotImplemented { networkSource.clearDeviceForecast() }
             }
             When("Using the Cache Source") {
                 then("clear the forecast in cacheService") {
-                    cacheSource.clear()
-                    verify(exactly = 1) { cacheService.clearForecast() }
+                    cacheSource.clearDeviceForecast()
+                    verify(exactly = 1) { cacheService.clearDeviceForecast() }
                 }
             }
         }

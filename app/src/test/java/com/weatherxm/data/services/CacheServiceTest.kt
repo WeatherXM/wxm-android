@@ -191,19 +191,19 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     context("GET / SET the device's forecast") {
         given("a forecast for a device") {
             then("set it as an in-memory variable") {
-                cacheService.setForecast(deviceId, weatherData)
+                cacheService.setDeviceForecast(deviceId, weatherData)
             }
             and("GET this forecast") {
                 and("the forecast is valid and NOT expired") {
                     then("return the forecast") {
-                        cacheService.getForecast(deviceId).isSuccess(weatherData)
+                        cacheService.getDeviceForecast(deviceId).isSuccess(weatherData)
                     }
                 }
             }
             and("clear the forecast") {
-                cacheService.clearForecast()
+                cacheService.clearDeviceForecast()
                 then("return CacheMissError") {
-                    cacheService.getForecast(deviceId).leftOrNull()
+                    cacheService.getDeviceForecast(deviceId).leftOrNull()
                         .shouldBeTypeOf<DataError.CacheMissError>()
                 }
             }

@@ -66,19 +66,18 @@
                     android:importantForAccessibility="no"
                     android:visibility="gone"
                     tools:src="@drawable/ic_home"
-                    tools:tint="@color/textColor"
-                    tools:visibility="visible" />
+                    tools:tint="@color/textColor" />
 
-                <ImageView
-                    android:id="@+id/locationStatusIcon"
+                <ImageButton
+                    android:id="@+id/locationStatusBtn"
+                    style="@style/Widget.WeatherXM.ImageButton"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:importantForAccessibility="no"
-                    android:visibility="gone"
-                    tools:src="@drawable/ic_home"
-                    tools:tint="@color/textColor"
-                    tools:visibility="visible" />
+                    android:scaleType="fitCenter"
+                    app:tint="@color/warning"
+                    tools:src="@drawable/ic_star_filled" />
 
             </FrameLayout>
 

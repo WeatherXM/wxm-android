@@ -33,6 +33,7 @@ import com.weatherxm.data.models.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.models.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.models.ApiError.UserError.WalletError.WalletAddressNotFound
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.models.NetworkError.NoConnectionError
 import com.weatherxm.data.models.NetworkError.ParseJsonError
@@ -160,3 +161,12 @@ fun JWT.details(): String {
 fun Constraints.Companion.requireNetwork(): Constraints = Constraints.Builder()
     .setRequiredNetworkType(NetworkType.CONNECTED)
     .build()
+
+fun Location.locationToText(): String {
+    return "${lat}_$lon"
+}
+
+fun String.textToLocation(): Location {
+    val split = split("_")
+    return Location(split[0].toDouble(), split[1].toDouble())
+}
