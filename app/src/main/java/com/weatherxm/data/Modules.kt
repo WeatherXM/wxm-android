@@ -179,7 +179,7 @@ import com.weatherxm.ui.devicedetails.current.CurrentViewModel
 import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
-import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
+import com.weatherxm.ui.forecastdetails.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryViewModel
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel

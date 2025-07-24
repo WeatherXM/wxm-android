@@ -45,6 +45,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
+import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_NEW_PHOTO_VERIFICATION
@@ -58,6 +59,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.toast
@@ -72,7 +74,7 @@ import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
-import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
+import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumActivity
@@ -459,12 +461,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showForecastDetails(
         context: Context?,
         device: UIDevice,
+        location: UILocation,
         forecastSelectedISODate: String? = null
     ) {
         context?.startActivity(
             Intent(context, ForecastDetailsActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
+                .putExtra(ARG_LOCATION, location)
                 .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
         )
     }

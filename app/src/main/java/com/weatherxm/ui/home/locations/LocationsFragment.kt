@@ -20,6 +20,8 @@ import com.weatherxm.databinding.FragmentLocationsHomeBinding
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
@@ -141,8 +143,15 @@ class LocationsFragment : BaseFragment() {
             }
         }
 
-        model.onLocationWeather().observe(viewLifecycleOwner) {
-            binding.currentLocationWeather.setData(it)
+        model.onLocationWeather().observe(viewLifecycleOwner) { result ->
+            binding.currentLocationWeather.setData(result) {
+                // TODO: STOPSHIP: Functionality for isSaved to be used here.
+                navigator.showForecastDetails(
+                    context = context,
+                    device = UIDevice.empty(),
+                    location = UILocation(it.coordinates, true, isSaved = false)
+                )
+            }
             binding.currentLocationWeather.visible(true)
         }
 
@@ -343,9 +352,17 @@ class LocationsFragment : BaseFragment() {
         }
     }
 
-    private fun onNetworkSearchResultClicked(networkSearchResult: SearchResult) {
+    private fun onNetworkSearchResultClicked(result: SearchResult) {
         binding.searchView.hide()
         searchModel.setQuery(String.empty())
-        // STOPSHIP: TODO: Open forecast details for this search result
+
+        result.center?.let {
+            // TODO: STOPSHIP: Functionality for isSaved to be used here.
+            navigator.showForecastDetails(
+                context = context,
+                device = UIDevice.empty(),
+                location = UILocation(it, false, isSaved = false)
+            )
+        }
     }
 }

@@ -45,22 +45,42 @@
 
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_small"
-                app:layout_constraintEnd_toStartOf="@id/ownershipIcon"
+                app:layout_constraintEnd_toStartOf="@id/statusIcon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:composableName="com.weatherxm.ui.components.compose.HeaderViewKt.PreviewHeaderView" />
 
-            <ImageView
-                android:id="@+id/ownershipIcon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:importantForAccessibility="no"
+            <FrameLayout
+                android:id="@+id/statusIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@id/header"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/header"
-                tools:src="@drawable/ic_home"
-                tools:tint="@color/textColor" />
+                app:layout_constraintTop_toTopOf="@id/header">
+
+                <ImageView
+                    android:id="@+id/ownershipIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:importantForAccessibility="no"
+                    android:visibility="gone"
+                    tools:src="@drawable/ic_home"
+                    tools:tint="@color/textColor"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/locationStatusIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:importantForAccessibility="no"
+                    android:visibility="gone"
+                    tools:src="@drawable/ic_home"
+                    tools:tint="@color/textColor"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dailyTilesRecycler"

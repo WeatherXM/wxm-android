@@ -37,7 +37,8 @@ class WeatherLocationCardView : LinearLayout {
         gravity = Gravity.CENTER
     }
 
-    fun setData(weather: LocationWeather) {
+    fun setData(weather: LocationWeather, listener: (LocationWeather) -> Unit) {
+        binding.root.setOnClickListener { listener(weather) }
         binding.icon.setWeatherAnimation(weather.icon)
         binding.locationName.text = weather.address
         weather.currentWeatherSummaryResId?.let {

@@ -2,6 +2,7 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.LocationWeather
 import com.weatherxm.util.Weather
@@ -42,6 +43,7 @@ class LocationWeatherUseCaseImpl(
             }
 
             LocationWeather(
+                coordinates = Location(lat, lon),
                 address = result[0].address,
                 icon = closestHourly?.icon,
                 currentWeatherSummaryResId = Weather.getWeatherSummaryDesc(closestHourly?.icon),

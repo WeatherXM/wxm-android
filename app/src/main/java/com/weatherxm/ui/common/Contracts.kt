@@ -39,4 +39,5 @@ object Contracts {
     const val FILE_PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.fileprovider"
     const val ARG_DELETE_ALL_PHOTOS = "delete_all_photos"
     const val ARG_NETWORK_STATS = "network_stats"
+    const val ARG_LOCATION = "location"
 }

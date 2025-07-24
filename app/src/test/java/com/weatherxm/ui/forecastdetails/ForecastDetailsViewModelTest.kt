@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deviceforecast
+package com.weatherxm.ui.forecastdetails
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
@@ -109,7 +109,8 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         null
     )
     val emptyForecast: UIForecast = UIForecast.empty()
-    val forecast = UIForecast(listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
+    val forecast =
+        UIForecast(device.address, listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
     val charts = mockk<Charts>()
 
     val invalidFromDate = ApiError.UserError.InvalidFromDate("")
@@ -165,7 +166,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         invalidFromDate
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         1,
@@ -178,7 +179,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         invalidToDate
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         2,
@@ -191,7 +192,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         invalidTimezone
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         3,
@@ -204,7 +205,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         failure
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         4,
@@ -221,7 +222,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         { forecastUseCase.getDeviceForecast(device) },
                         emptyForecast
                     )
-                    runTest { viewModel.fetchForecast() }
+                    runTest { viewModel.fetchDeviceForecast() }
                     then("LiveData onForecastLoaded should post the error for the empty forecast") {
                         viewModel.onForecastLoaded().isError(emptyForecastMsg)
                     }
@@ -234,7 +235,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         { forecastUseCase.getDeviceForecast(device) },
                         forecast
                     )
-                    runTest { viewModel.fetchForecast() }
+                    runTest { viewModel.fetchDeviceForecast() }
                     then("LiveData onForecastLoaded should post Unit as a success value") {
                         viewModel.onForecastLoaded().isSuccess(Unit)
                     }

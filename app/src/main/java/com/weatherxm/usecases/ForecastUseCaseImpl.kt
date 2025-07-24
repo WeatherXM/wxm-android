@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.UIDevice
@@ -15,7 +16,7 @@ import java.time.ZonedDateTime
 
 @Suppress("LongParameterList")
 class ForecastUseCaseImpl(
-    private val weatherForecastRepository: WeatherForecastRepository
+    private val repo: WeatherForecastRepository
 ) : ForecastUseCase {
 
     @Suppress("MagicNumber")
@@ -28,39 +29,61 @@ class ForecastUseCaseImpl(
         }
         val nowDeviceTz = ZonedDateTime.now(ZoneId.of(device.timezone))
         val dateEndInDeviceTz = nowDeviceTz.plusDays(7).toLocalDate()
-        return weatherForecastRepository.getDeviceForecast(
+        return repo.getDeviceForecast(
             device.id,
             nowDeviceTz.toLocalDate(),
             dateEndInDeviceTz,
             forceRefresh
-        ).map { result ->
-            val nextHourlyWeatherForecast = mutableListOf<HourlyWeather>()
-            val forecastDays = result.map { weatherData ->
-                weatherData.hourly?.filter {
-                    val isCurrentHour = it.timestamp.isSameDayAndHour(nowDeviceTz)
-                    val isFutureHour = it.timestamp.isAfter(nowDeviceTz)
-                    isCurrentHour || (isFutureHour && it.timestamp < nowDeviceTz.plusHours(24))
-                }?.apply {
-                    nextHourlyWeatherForecast.addAll(this)
-                }
+        ).map {
+            getUIForecastFromWeatherData(nowDeviceTz, it)
+        }
+    }
 
-                UIForecastDay(
-                    weatherData.date,
-                    icon = weatherData.daily?.icon,
-                    maxTemp = weatherData.daily?.temperatureMax,
-                    minTemp = weatherData.daily?.temperatureMin,
-                    precipProbability = weatherData.daily?.precipProbability,
-                    precip = weatherData.daily?.precipIntensity,
-                    windSpeed = weatherData.daily?.windSpeed,
-                    windDirection = weatherData.daily?.windDirection,
-                    humidity = weatherData.daily?.humidity,
-                    pressure = weatherData.daily?.pressure,
-                    uv = weatherData.daily?.uvIndex,
-                    hourlyWeather = weatherData.hourly
-                )
+    override suspend fun getLocationForecast(
+        lat: Double,
+        lon: Double
+    ): Either<Failure, UIForecast> {
+        return repo.getLocationForecast(lat, lon).map {
+            val timezone = it.first().tz
+            val nowInTimezone = ZonedDateTime.now(ZoneId.of(timezone))
+            getUIForecastFromWeatherData(nowInTimezone, it)
+        }
+    }
+
+    private fun getUIForecastFromWeatherData(
+        nowInTimezone: ZonedDateTime,
+        data: List<WeatherData>
+    ): UIForecast {
+        val nextHourlyWeatherForecast = mutableListOf<HourlyWeather>()
+        val forecastDays = data.map { weatherData ->
+            weatherData.hourly?.filter {
+                val isCurrentHour = it.timestamp.isSameDayAndHour(nowInTimezone)
+                val isFutureHour = it.timestamp.isAfter(nowInTimezone)
+                isCurrentHour || (isFutureHour && it.timestamp < nowInTimezone.plusHours(24))
+            }?.apply {
+                nextHourlyWeatherForecast.addAll(this)
             }
 
-            UIForecast(nextHourlyWeatherForecast, forecastDays)
+            UIForecastDay(
+                date = weatherData.date,
+                icon = weatherData.daily?.icon,
+                maxTemp = weatherData.daily?.temperatureMax,
+                minTemp = weatherData.daily?.temperatureMin,
+                precipProbability = weatherData.daily?.precipProbability,
+                precip = weatherData.daily?.precipIntensity,
+                windSpeed = weatherData.daily?.windSpeed,
+                windDirection = weatherData.daily?.windDirection,
+                humidity = weatherData.daily?.humidity,
+                pressure = weatherData.daily?.pressure,
+                uv = weatherData.daily?.uvIndex,
+                hourlyWeather = weatherData.hourly
+            )
         }
+
+        return UIForecast(
+            address = data[0].address,
+            next24Hours = nextHourlyWeatherForecast,
+            forecastDays = forecastDays
+        )
     }
 }
