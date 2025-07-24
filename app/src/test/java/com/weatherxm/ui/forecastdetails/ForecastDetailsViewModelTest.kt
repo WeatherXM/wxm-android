@@ -18,6 +18,8 @@ import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.UILocation
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.Resources
@@ -38,7 +40,9 @@ import java.time.ZonedDateTime
 class ForecastDetailsViewModelTest : BehaviorSpec({
     val forecastUseCase = mockk<ForecastUseCase>()
     val chartsUseCase = mockk<ChartsUseCase>()
+    val authUseCase = mockk<AuthUseCase>()
     val device = UIDevice.empty()
+    val location = UILocation.empty()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: ForecastDetailsViewModel
 
@@ -149,8 +153,10 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
 
         viewModel = ForecastDetailsViewModel(
             device,
+            location,
             resources,
             analytics,
+            authUseCase,
             chartsUseCase,
             forecastUseCase,
             dispatcher

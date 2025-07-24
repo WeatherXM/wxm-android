@@ -23,9 +23,9 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Search address network cache data source.
  */
-class NetworkAddressSearchDataSource(
+class NetworkMapboxSearchDataSource(
     private val mapBoxSearchEngine: SearchEngine
-) : AddressSearchDataSource {
+) : MapboxSearchDataSource {
 
     companion object {
         /**

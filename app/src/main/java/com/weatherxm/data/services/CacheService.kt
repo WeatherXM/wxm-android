@@ -60,6 +60,7 @@ class CacheService(
         const val KEY_DEVICE_NOTIFICATION_TYPES = "device_notification_types"
         const val KEY_DEVICE_NOTIFICATIONS_PROMPT = "device_notifications_prompt"
         const val KEY_DEVICE_NOTIFICATION = "device_notification"
+        const val KEY_SAVED_LOCATIONS = "saved_locations"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -488,6 +489,14 @@ class CacheService(
         return preferences.getLong(key, 0L)
     }
 
+    fun getSavedLocations(): Set<String> {
+        return preferences.getStringSet(KEY_SAVED_LOCATIONS, setOf()) ?: setOf()
+    }
+
+    fun setSavedLocations(locations: Set<String>) {
+        preferences.edit { putStringSet(KEY_SAVED_LOCATIONS, locations) }
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -555,8 +564,7 @@ class CacheService(
         val lastDismissedInfoBanner = preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
         val lastDismissedAnnouncementBanner =
             preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
-
-        // STOPSHIP: TODO: Do not clear user saved locations. Keep them here.
+        val savedLocations = getSavedLocations()
 
         preferences.edit {
             clear()
@@ -571,6 +579,7 @@ class CacheService(
                 .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
                 .putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, savedDeviceNotificationsPrompt)
+                .putStringSet(KEY_SAVED_LOCATIONS, savedLocations)
         }
 
         installationId?.let { setInstallationId(it) }

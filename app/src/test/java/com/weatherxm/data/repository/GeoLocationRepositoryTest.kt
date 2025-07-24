@@ -10,34 +10,32 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.datasource.AddressDataSourceImpl
-import com.weatherxm.data.datasource.CacheAddressSearchDataSource
-import com.weatherxm.data.datasource.LocationDataSource
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
+import com.weatherxm.data.datasource.CacheMapboxSearchDataSource
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource
+import com.weatherxm.data.datasource.ReverseGeocodingDataSourceImpl
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
-import com.weatherxm.data.repository.AddressRepositoryImpl.Companion.MAX_GEOCODING_DISTANCE_METERS
+import com.weatherxm.data.repository.GeoLocationRepositoryImpl.Companion.MAX_GEOCODING_DISTANCE_METERS
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
+import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 
-class AddressRepositoryTest : BehaviorSpec({
-    val networkSource = mockk<AddressDataSourceImpl>()
-    val networkAddressSearchSource = mockk<NetworkAddressSearchDataSource>()
-    val cacheSearchSource = mockk<CacheAddressSearchDataSource>()
-    val locationSource = mockk<LocationDataSource>()
-    val repo = AddressRepositoryImpl(
+class GeoLocationRepositoryTest : BehaviorSpec({
+    val networkSource = mockk<ReverseGeocodingDataSourceImpl>()
+    val networkAddressSearchSource = mockk<NetworkMapboxSearchDataSource>()
+    val cacheSearchSource = mockk<CacheMapboxSearchDataSource>()
+    val repo = GeoLocationRepositoryImpl(
         networkSource,
         networkAddressSearchSource,
-        cacheSearchSource,
-        locationSource
+        cacheSearchSource
     )
 
     val query = "query"
@@ -55,7 +53,7 @@ class AddressRepositoryTest : BehaviorSpec({
         coJustRun { cacheSearchSource.setSuggestionLocation(searchSuggestion, location) }
         coJustRun { cacheSearchSource.setSearchSuggestions(query, searchSuggestions) }
         coJustRun { cacheSearchSource.setSearchSuggestions(query, searchSuggestionsGlobal) }
-        every { locationSource.getUserCountry() } returns country
+        every { networkSource.getUserCountry() } returns country
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testGetAddressFromAccuratePoint() {
@@ -271,5 +269,20 @@ class AddressRepositoryTest : BehaviorSpec({
         }
     }
 
-
+    context("Get a user's country's location") {
+        given("that location") {
+            When("it's null") {
+                coEvery { networkSource.getUserCountryLocation() } returns null
+                then("return null") {
+                    repo.getUserCountryLocation() shouldBe null
+                }
+            }
+            When("It's not null") {
+                coEvery { networkSource.getUserCountryLocation() } returns location
+                then("return the location") {
+                    repo.getUserCountryLocation() shouldBe location
+                }
+            }
+        }
+    }
 })

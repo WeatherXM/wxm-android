@@ -5,7 +5,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 
-interface AddressSearchDataSource {
+interface MapboxSearchDataSource {
 
     suspend fun getSearchSuggestions(
         query: String,
