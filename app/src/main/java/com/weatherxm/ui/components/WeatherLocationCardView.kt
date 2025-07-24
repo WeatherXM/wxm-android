@@ -6,7 +6,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.databinding.ViewWeatherLocationBinding
+import com.weatherxm.ui.common.LocationWeather
 import com.weatherxm.ui.common.setWeatherAnimation
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Weather.getFormattedTemperature
 
 class WeatherLocationCardView : LinearLayout {
@@ -35,12 +37,17 @@ class WeatherLocationCardView : LinearLayout {
         gravity = Gravity.CENTER
     }
 
-    fun setData() {
-        binding.icon.setWeatherAnimation("partly-cloudy-day")
-        binding.locationName.text = "Thessaloniki, GR"
-        binding.locationCondition.text = "Partly Cloudy"
-        binding.currentTemperature.text = getFormattedTemperature(context, 15F, fullUnit = false)
-        binding.dailyMinTemp.text = getFormattedTemperature(context, 10F, fullUnit = false)
-        binding.dailyMaxTemp.text = getFormattedTemperature(context, 20F, fullUnit = false)
+    fun setData(weather: LocationWeather) {
+        binding.icon.setWeatherAnimation(weather.icon)
+        binding.locationName.text = weather.address
+        weather.currentWeatherSummaryResId?.let {
+            binding.locationSummaryCondition.text = context.getString(it)
+        } ?: binding.locationSummaryCondition.visible(false)
+        binding.currentTemperature.text =
+            getFormattedTemperature(context, weather.currentTemp, fullUnit = false)
+        binding.dailyMinTemp.text =
+            getFormattedTemperature(context, weather.dailyMinTemp, fullUnit = false)
+        binding.dailyMaxTemp.text =
+            getFormattedTemperature(context, weather.dailyMaxTemp, fullUnit = false)
     }
 }

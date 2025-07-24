@@ -161,7 +161,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             When("it's a failure") {
                 and("it's an InvalidFromDate failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         invalidFromDate
                     )
                     testHandleFailureViewModel(
@@ -174,7 +174,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidToDate failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         invalidToDate
                     )
                     testHandleFailureViewModel(
@@ -187,7 +187,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidTimezone failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         invalidTimezone
                     )
                     testHandleFailureViewModel(
@@ -200,7 +200,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("it's any other failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         failure
                     )
                     testHandleFailureViewModel(
@@ -218,7 +218,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             When("it's a success") {
                 and("an empty forecast returned") {
                     coMockEitherRight(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         emptyForecast
                     )
                     runTest { viewModel.fetchForecast() }
@@ -231,7 +231,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("a valid non-empty forecast is returned") {
                     coMockEitherRight(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         forecast
                     )
                     runTest { viewModel.fetchForecast() }

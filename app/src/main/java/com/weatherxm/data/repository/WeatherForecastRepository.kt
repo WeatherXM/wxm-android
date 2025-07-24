@@ -1,10 +1,10 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.models.Failure
-import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.WeatherData
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -18,6 +18,10 @@ interface WeatherForecastRepository {
     ): Either<Failure, List<WeatherData>>
 
     suspend fun clearCache()
+    suspend fun getLocationForecast(
+        lat: Double,
+        lon: Double
+    ): Either<Failure, List<WeatherData>>
 }
 
 class WeatherForecastRepositoryImpl(
@@ -45,19 +49,27 @@ class WeatherForecastRepositoryImpl(
             toDate
         }
 
-        return cacheSource.getForecast(deviceId, fromDate, to)
+        return cacheSource.getDeviceForecast(deviceId, fromDate, to)
             .onRight {
                 Timber.d("Got forecast from cache [$fromDate to $to].")
             }
             .mapLeft {
-                return networkSource.getForecast(deviceId, fromDate, to).onRight {
+                return networkSource.getDeviceForecast(deviceId, fromDate, to).onRight {
                     Timber.d("Got forecast from network [$fromDate to $to].")
-                    cacheSource.setForecast(deviceId, it)
+                    cacheSource.setDeviceForecast(deviceId, it)
                 }
             }
     }
 
     override suspend fun clearCache() {
         cacheSource.clear()
+    }
+
+    override suspend fun getLocationForecast(
+        lat: Double,
+        lon: Double
+    ): Either<Failure, List<WeatherData>> {
+        // TODO: STOPSHIP: Use cache as an optimization like above 
+        return networkSource.getLocationForecast(lat, lon)
     }
 }

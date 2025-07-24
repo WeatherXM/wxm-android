@@ -48,6 +48,7 @@ class LocationsFragment : BaseFragment() {
     private val parentModel: HomeViewModel by activityViewModel()
     private val devicesModel: DevicesViewModel by activityViewModel()
     private val searchModel: NetworkSearchViewModel by viewModel()
+    private val model: LocationsViewModel by viewModel()
     private lateinit var binding: FragmentLocationsHomeBinding
 
     private val locationHelper: LocationHelper by inject()
@@ -73,6 +74,9 @@ class LocationsFragment : BaseFragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             parentModel.getRemoteBanners()
+            locationHelper.getLocationAndThen {
+                model.fetch(it)
+            }
         }
 
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -82,16 +86,16 @@ class LocationsFragment : BaseFragment() {
         binding.askForLocationCard.setOnClickListener {
             requestLocationPermissions(activity) {
                 binding.askForLocationCard.visible(false)
-                // TODO: Fetch the weather for current location
-                binding.currentLocationWeather.setData()
-                binding.currentLocationWeather.visible(true)
+                locationHelper.getLocationAndThen {
+                    model.fetch(it)
+                }
             }
         }
 
         binding.emptySavedLocationsCard.setContent {
             EmptySavedLocationsView()
         }
-        // TODO: Show the below only if saved locations are empty
+        // STOPSHIP: TODO: Show the below only if saved locations are empty
         binding.emptySavedLocationsCard.visible(true)
 
         initSearchComponents()
@@ -108,19 +112,54 @@ class LocationsFragment : BaseFragment() {
             onAnnouncementBanner(it)
         }
 
+        model.onLoading().observe(viewLifecycleOwner) {
+            if (it && binding.swiperefresh.isRefreshing) {
+                binding.statusView.visible(false)
+            } else if (it) {
+                binding.nestedScrollView.visible(false)
+                binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
+            } else {
+                binding.swiperefresh.isRefreshing = false
+                if (model.onError().value == null) {
+                    binding.statusView.visible(false)
+                    binding.nestedScrollView.visible(true)
+                }
+            }
+        }
+
+        model.onError().observe(viewLifecycleOwner) { error ->
+            if (error == null) {
+                binding.nestedScrollView.visible(true)
+            } else {
+                binding.nestedScrollView.visible(false)
+                binding.statusView.animation(R.raw.anim_error, false)
+                    .title(R.string.error_generic_message)
+                    .action(getString(R.string.action_try_again))
+                    .subtitle(error.errorMessage)
+                    .listener { error.retryFunction }
+                    .visible(true)
+            }
+        }
+
+        model.onLocationWeather().observe(viewLifecycleOwner) {
+            binding.currentLocationWeather.setData(it)
+            binding.currentLocationWeather.visible(true)
+        }
+
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (locationHelper.hasLocationPermissions()) {
-            binding.askForLocationCard.visible(false)
-            // TODO: Fetch the weather for current location
-            binding.currentLocationWeather.setData()
-            binding.currentLocationWeather.visible(true)
-        } else {
+        if (!locationHelper.hasLocationPermissions()) {
             binding.askForLocationCard.visible(true)
+            binding.currentLocationWeather.visible(false)
+        } else if (model.onLocationWeather().value == null) {
+            binding.askForLocationCard.visible(false)
+            locationHelper.getLocationAndThen {
+                model.fetch(it)
+            }
         }
     }
 
@@ -307,6 +346,6 @@ class LocationsFragment : BaseFragment() {
     private fun onNetworkSearchResultClicked(networkSearchResult: SearchResult) {
         binding.searchView.hide()
         searchModel.setQuery(String.empty())
-        // TODO: Open forecast details for this search result
+        // STOPSHIP: TODO: Open forecast details for this search result
     }
 }

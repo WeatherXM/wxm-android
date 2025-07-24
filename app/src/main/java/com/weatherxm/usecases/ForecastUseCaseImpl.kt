@@ -19,7 +19,7 @@ class ForecastUseCaseImpl(
 ) : ForecastUseCase {
 
     @Suppress("MagicNumber")
-    override suspend fun getForecast(
+    override suspend fun getDeviceForecast(
         device: UIDevice,
         forceRefresh: Boolean
     ): Either<Failure, UIForecast> {

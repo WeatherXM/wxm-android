@@ -556,7 +556,7 @@ class CacheService(
         val lastDismissedAnnouncementBanner =
             preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
 
-        // TODO: Do not clear user saved locations. Keep them here.
+        // STOPSHIP: TODO: Do not clear user saved locations. Keep them here.
 
         preferences.edit {
             clear()
