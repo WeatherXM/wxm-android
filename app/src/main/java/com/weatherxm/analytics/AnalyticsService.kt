@@ -18,7 +18,6 @@ interface AnalyticsService {
     // Screen Names
     @Parcelize
     enum class Screen(val screenName: String) : Parcelable {
-        EXPLORER_LANDING("Explorer (Landing)"),
         EXPLORER("Explorer"),
         CLAIM_M5("Claim M5"),
         CLAIM_PULSE("Claim Pulse"),
@@ -180,7 +179,6 @@ interface AnalyticsService {
         ACTIVE_STATIONS("active_stations"),
         MANUFACTURER("Open Manufacturer Contact"),
         EXPLORER_SEARCH("Explorer Search"),
-        EXPLORER_SETTINGS("Explorer Settings"),
         NETWORK_SEARCH("Network Search"),
         RECENT("recent"),
         SEARCH("search"),

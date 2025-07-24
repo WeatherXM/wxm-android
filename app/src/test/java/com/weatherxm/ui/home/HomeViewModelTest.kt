@@ -11,6 +11,7 @@ import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
@@ -26,6 +27,7 @@ class HomeViewModelTest : BehaviorSpec({
     val userUseCase = mockk<UserUseCase>()
     val remoteBannersUseCase = mockk<RemoteBannersUseCase>()
     val photosUseCase = mockk<DevicePhotoUseCase>()
+    val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: HomeViewModel
 
@@ -65,7 +67,41 @@ class HomeViewModelTest : BehaviorSpec({
         justRun { photosUseCase.retryUpload(deviceId) }
 
         viewModel =
-            HomeViewModel(userUseCase, remoteBannersUseCase, photosUseCase, analytics, dispatcher)
+            HomeViewModel(
+                userUseCase,
+                remoteBannersUseCase,
+                photosUseCase,
+                authUseCase,
+                analytics,
+                dispatcher
+            )
+    }
+
+    context("GET if the user is logged in") {
+        When("the check hasn't been performed yet") {
+            then("the user is not logged in") {
+                viewModel.isLoggedIn() shouldBe false
+            }
+        }
+        When("we perform the check") {
+            and("the user is logged in") {
+                every { authUseCase.isLoggedIn() } returns true
+                runTest { viewModel.checkIfIsLoggedIn() }
+                then("set the property to true") {
+                    viewModel.isLoggedIn() shouldBe true
+                }
+                then("return if we should show the terms prompt or not") {
+                    viewModel.shouldShowTerms.value shouldBe true
+                }
+            }
+            and("the user is not logged in") {
+                every { authUseCase.isLoggedIn() } returns false
+                runTest { viewModel.checkIfIsLoggedIn() }
+                then("set the property to false") {
+                    viewModel.isLoggedIn() shouldBe false
+                }
+            }
+        }
     }
 
     context("GET and SET the hasDevices property") {
@@ -196,14 +232,6 @@ class HomeViewModelTest : BehaviorSpec({
                         )
                     }
                 }
-            }
-        }
-    }
-
-    context("Get if we should show the terms prompt or not") {
-        given("A use case returning the result") {
-            then("return that result") {
-                viewModel.shouldShowTerms.value shouldBe true
             }
         }
     }

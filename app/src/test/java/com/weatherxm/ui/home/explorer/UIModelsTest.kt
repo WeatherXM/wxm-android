@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
 import com.weatherxm.data.models.Bundle
 import com.weatherxm.data.models.Location
@@ -9,7 +9,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
 class UIModelsTest : BehaviorSpec({
-    val searchResult = SearchResult(
+    val searchResult = _root_ide_package_.com.weatherxm.ui.home.explorer.SearchResult(
         name = "name",
         Location(0.0, 0.0),
         "address",
@@ -18,7 +18,8 @@ class UIModelsTest : BehaviorSpec({
         "stationId",
         DeviceRelation.OWNED
     )
-    val nullSearchResult = SearchResult(null, null)
+    val nullSearchResult =
+        _root_ide_package_.com.weatherxm.ui.home.explorer.SearchResult(null, null)
 
     val deviceOfSearchResult = UIDevice(
         id = "stationId",

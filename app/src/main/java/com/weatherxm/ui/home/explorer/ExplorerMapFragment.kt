@@ -1,6 +1,5 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
-import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
@@ -30,7 +29,6 @@ import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.toCameraOptions
 import com.weatherxm.R
@@ -42,13 +40,12 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
-import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
-import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.home.explorer.search.NetworkSearchResultsListAdapter
+import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.NumberUtils.formatNumber
@@ -106,11 +103,6 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
-        map.addOnMapClickListener {
-            model.onMapClick()
-            true
-        }
-
         map.subscribeCameraChanged {
             model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
         }
@@ -131,10 +123,6 @@ class ExplorerMapFragment : BaseMapFragment() {
 
         searchModel.onRecentSearches().observe(this) {
             handleRecentSearches(it)
-        }
-
-        model.onMyLocationClicked().observe(this) {
-            onMyLocationClicked(it)
         }
 
         searchModel.onSearchResults().observe(this) {
@@ -186,11 +174,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             binding.searchView.hide()
             model.onSearchOpenStatus(false)
         } else {
-            if (model.isExplorerAfterLoggedIn()) {
-                findNavController().popBackStack()
-            } else {
-                activity?.finish()
-            }
+            findNavController().popBackStack()
         }
     }
 
@@ -205,13 +189,6 @@ class ExplorerMapFragment : BaseMapFragment() {
             binding.resultsRecycler.visible(true)
             binding.searchEmptyResultsContainer.visible(false)
             adapter.updateData(String.empty(), searchResults)
-        }
-    }
-
-    private fun onMyLocationClicked(isClicked: Boolean?) {
-        if (isClicked == true) {
-            getLocationPermissions()
-            analytics.trackEventUserAction(AnalyticsService.ParamValue.MY_LOCATION.paramValue)
         }
     }
 
@@ -376,11 +353,7 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (model.isExplorerAfterLoggedIn()) {
-            analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
-        } else {
-            analytics.trackScreen(AnalyticsService.Screen.EXPLORER_LANDING, classSimpleName())
-        }
+        analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
     }
 
     private fun trackOnSearchResult(isStationResult: Boolean) {
@@ -437,21 +410,6 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun getLocationPermissions() {
-        requestLocationPermissions(activity) {
-            // Get last location
-            model.getLocation {
-                Timber.d("Got user location: $it")
-                if (it == null) {
-                    context.toast(R.string.error_claim_gps_failed)
-                } else {
-                    cameraFly(Point.fromLngLat(it.lon, it.lat))
-                }
-            }
-        }
-    }
-
     @Suppress("MagicNumber")
     private fun setupMenu() {
         val popupView = layoutInflater.inflate(R.layout.view_map_menu, binding.root, false)
@@ -490,19 +448,6 @@ class ExplorerMapFragment : BaseMapFragment() {
         popupView.findViewById<MaterialCardView>(R.id.networkStatsContainer).setOnClickListener {
             navigator.showNetworkStats(context)
             popupWindow.dismiss()
-        }
-
-        if (!model.isExplorerAfterLoggedIn()) {
-            popupView.findViewById<MaterialCardView>(R.id.settingsContainer).apply {
-                setOnClickListener {
-                    analytics.trackEventSelectContent(
-                        contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
-                    )
-                    navigator.showPreferences(this@ExplorerMapFragment)
-                    popupWindow.dismiss()
-                }
-                show()
-            }
         }
     }
 }

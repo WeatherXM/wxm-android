@@ -5,7 +5,7 @@ import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkSearchResults
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 
 interface ExplorerDataSource {
     suspend fun getCells(): Either<Failure, List<PublicHex>>

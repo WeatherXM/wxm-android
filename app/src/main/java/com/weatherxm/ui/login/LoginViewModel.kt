@@ -85,8 +85,4 @@ class LoginViewModel(
     private fun handleUserFailure(failure: Failure) {
         user.postValue(Resource.error(failure.getDefaultMessage()))
     }
-
-    fun shouldShowAnalyticsOptIn(): Boolean {
-        return userUseCase.shouldShowAnalyticsOptIn()
-    }
 }

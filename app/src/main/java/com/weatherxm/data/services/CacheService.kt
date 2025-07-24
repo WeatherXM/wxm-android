@@ -551,6 +551,12 @@ class CacheService(
                 devicesOfWidgets[key] = deviceOfWidget
             }
         }
+        val installationId = getInstallationId().getOrNull()
+        val lastDismissedInfoBanner = preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
+        val lastDismissedAnnouncementBanner =
+            preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
+
+        // TODO: Do not clear user saved locations. Keep them here.
 
         preferences.edit {
             clear()
@@ -565,6 +571,14 @@ class CacheService(
                 .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
                 .putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, savedDeviceNotificationsPrompt)
+        }
+
+        installationId?.let { setInstallationId(it) }
+        lastDismissedInfoBanner?.let {
+            setLastDismissedRemoteBannerId(RemoteBannerType.INFO_BANNER, it)
+        }
+        lastDismissedAnnouncementBanner?.let {
+            setLastDismissedRemoteBannerId(RemoteBannerType.ANNOUNCEMENT, it)
         }
 
         devicesOfWidgets.forEach {

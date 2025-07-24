@@ -17,10 +17,10 @@ import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.explorer.ExplorerData
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.ExplorerData
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.home.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.UICell
 
 @Suppress("LongParameterList")
 class ExplorerUseCaseImpl(

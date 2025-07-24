@@ -1,4 +1,4 @@
-package com.weatherxm.ui.explorer
+package com.weatherxm.ui.home.explorer
 
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
@@ -21,10 +21,10 @@ import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_ID
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_SOURCE
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_WEIGHT_KEY
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_ID
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_LAYER_SOURCE
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_WEIGHT_KEY
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
@@ -52,11 +52,19 @@ class ExplorerViewModelTest : BehaviorSpec({
 
     val startingLocation = Location(1.0, 1.0)
     val location = Location(0.0, 0.0)
-    val startingNavigationLocation = NavigationLocation(DEFAULT_ZOOM_LEVEL, startingLocation)
-    val navigationLocation = NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location)
+    val startingNavigationLocation =
+        _root_ide_package_.com.weatherxm.ui.home.explorer.NavigationLocation(
+            DEFAULT_ZOOM_LEVEL,
+            startingLocation
+        )
+    val navigationLocation = _root_ide_package_.com.weatherxm.ui.home.explorer.NavigationLocation(
+        ZOOMED_IN_ZOOM_LEVEL,
+        location
+    )
     val cameraZoom = 10.0
     val cameraCenter = mockk<Point>()
-    val explorerCamera = ExplorerCamera(cameraZoom, cameraCenter)
+    val explorerCamera =
+        _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerCamera(cameraZoom, cameraCenter)
     val locationSlot = slot<(location: Location?) -> Unit>()
 
     /**
@@ -71,10 +79,22 @@ class ExplorerViewModelTest : BehaviorSpec({
     val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
     val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
-    val explorerData = ExplorerData(geoJsonSource, listOf(publicHex), listOf())
+    val explorerData = _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+        geoJsonSource,
+        listOf(publicHex),
+        listOf()
+    )
     val newExplorerData =
-        ExplorerData(geoJsonSource, listOf(publicHex2), newPolygonAnnotationOptions)
-    val fullExplorerData = ExplorerData(geoJsonSource, listOf(publicHex, publicHex2), listOf())
+        _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+            geoJsonSource,
+            listOf(publicHex2),
+            newPolygonAnnotationOptions
+        )
+    val fullExplorerData = _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+        geoJsonSource,
+        listOf(publicHex, publicHex2),
+        listOf()
+    )
     val heatmapLayer: HeatmapLayer by lazy {
         heatmapLayer(
             HEATMAP_LAYER_ID,
@@ -207,7 +227,12 @@ class ExplorerViewModelTest : BehaviorSpec({
             newExplorerData.publicHexes.toPointAnnotationOptions()
         } returns newPointAnnotationOptions
 
-        viewModel = ExplorerViewModel(usecase, analytics, locationHelper, dispatcher)
+        viewModel = ExplorerViewModel(
+            usecase,
+            analytics,
+            locationHelper,
+            dispatcher
+        )
     }
 
     context("Ensure that the heatmap is defined correctly") {
@@ -226,33 +251,10 @@ class ExplorerViewModelTest : BehaviorSpec({
                 }
             }
             When("it's not a user location but a custom one") {
-                viewModel.navigateToLocation(location)
+                viewModel.navigateToLocation(location, ZOOMED_IN_ZOOM_LEVEL)
                 then("LiveData onNavigateToLocation posts the correct NavigationLocation") {
                     viewModel.onNavigateToLocation().value shouldBe navigationLocation
                 }
-            }
-        }
-    }
-
-    context("GET / SET the variable showing if we are in a state in the logged-in explorer") {
-        When("GET the state if we are in the logged-in explorer or not") {
-            then("return the default false value") {
-                viewModel.isExplorerAfterLoggedIn() shouldBe false
-            }
-        }
-        When("SET a new state") {
-            viewModel.setExplorerAfterLoggedIn(true)
-            then("GET it to ensure it has been set") {
-                viewModel.isExplorerAfterLoggedIn() shouldBe true
-            }
-        }
-    }
-
-    context("Flow to run when the GPS button of user's location has been clicked") {
-        given("the function's call") {
-            viewModel.onMyLocation()
-            then("LiveData `onMyLocation` should post the value true") {
-                viewModel.onMyLocationClicked().value shouldBe true
             }
         }
     }
@@ -327,23 +329,6 @@ class ExplorerViewModelTest : BehaviorSpec({
                             viewModel.onViewportStations().value shouldBe 0
                         }
                     }
-                }
-            }
-        }
-    }
-
-    context("Flow to run when the map has been clicked and we need to show/hide overlay views") {
-        given("if the overlay views are currently visible") {
-            When("they are visible") {
-                viewModel.onMapClick()
-                then("LiveData `showMapOverlayViews` should post the value false") {
-                    viewModel.showMapOverlayViews().value shouldBe false
-                }
-            }
-            When("they are hidden") {
-                viewModel.onMapClick()
-                then("LiveData `showMapOverlayViews` should post the value true") {
-                    viewModel.showMapOverlayViews().value shouldBe true
                 }
             }
         }

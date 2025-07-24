@@ -193,11 +193,11 @@ import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyVie
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiViewModel
 import com.weatherxm.ui.devicesrewards.DevicesRewardsViewModel
-import com.weatherxm.ui.explorer.ExplorerViewModel
-import com.weatherxm.ui.explorer.UICellJsonAdapter
-import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.ui.home.explorer.ExplorerViewModel
+import com.weatherxm.ui.home.explorer.UICellJsonAdapter
+import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
@@ -574,7 +574,7 @@ val firebase = module {
                 }
 
                 override fun onError(error: FirebaseRemoteConfigException) {
-                    Timber.e("Config update error with code: " + error.code, error)
+                    Timber.e(error, "Config update error with code: ${error.code}")
                 }
             })
 

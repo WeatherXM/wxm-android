@@ -7,7 +7,7 @@ import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
 import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 
 class NetworkExplorerDataSource(private val apiService: ApiService) : ExplorerDataSource {
     override suspend fun getCells(): Either<Failure, List<PublicHex>> {
