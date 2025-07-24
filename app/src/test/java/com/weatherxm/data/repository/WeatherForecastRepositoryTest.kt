@@ -4,9 +4,9 @@ import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
+import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl.Companion.PREFETCH_DAYS
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.isRootTest
@@ -33,8 +33,13 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
             repo = WeatherForecastRepositoryImpl(networkSource, cacheSource)
             coJustRun { cacheSource.clear() }
             coJustRun { cacheSource.setDeviceForecast(deviceId, forecastData) }
-            coMockEitherRight({ networkSource.getDeviceForecast(deviceId, fromDate, now) }, forecastData)
-            coMockEitherRight({ cacheSource.getDeviceForecast(deviceId, fromDate, now) }, forecastData)
+            coMockEitherRight(
+                { networkSource.getDeviceForecast(deviceId, fromDate, now) },
+                forecastData
+            )
+            coMockEitherRight(
+                { cacheSource.getDeviceForecast(deviceId, fromDate, now) }, forecastData
+            )
         }
     }
 
@@ -81,16 +86,33 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
         given("if forecast data is in cache or not") {
             When("forecast data is in cache") {
                 then("forecast should be fetched from cache") {
-                    repo.getDeviceForecast(deviceId, fromDate, now, false).isSuccess(forecastData)
+                    repo.getDeviceForecast(
+                        deviceId, fromDate, now, false
+                    ).isSuccess(forecastData)
                     coVerify(exactly = 1) { cacheSource.getDeviceForecast(deviceId, fromDate, now) }
-                    coVerify(exactly = 0) { networkSource.getDeviceForecast(deviceId, fromDate, now) }
+                    coVerify(exactly = 0) {
+                        networkSource.getDeviceForecast(
+                            deviceId,
+                            fromDate,
+                            now
+                        )
+                    }
                 }
             }
             When("forecast data is NOT in cache") {
-                coMockEitherLeft({ cacheSource.getDeviceForecast(deviceId, fromDate, now) }, failure)
+                coMockEitherLeft(
+                    { cacheSource.getDeviceForecast(deviceId, fromDate, now) },
+                    failure
+                )
                 then("forecast should be fetched from network") {
                     repo.getDeviceForecast(deviceId, fromDate, now, false).isSuccess(forecastData)
-                    coVerify(exactly = 1) { networkSource.getDeviceForecast(deviceId, fromDate, now) }
+                    coVerify(exactly = 1) {
+                        networkSource.getDeviceForecast(
+                            deviceId,
+                            fromDate,
+                            now
+                        )
+                    }
                 }
                 then("forecast should be saved in cache") {
                     coVerify(exactly = 1) { cacheSource.setDeviceForecast(deviceId, forecastData) }

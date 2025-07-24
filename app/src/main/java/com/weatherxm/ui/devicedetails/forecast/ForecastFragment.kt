@@ -126,6 +126,16 @@ class ForecastFragment : BaseFragment() {
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
+        initProPromotionCard()
+        fetchOrHideContent()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
+    }
+
+    private fun initProPromotionCard() {
         binding.proPromotionCard.setContent {
             ProPromotionCard(R.string.fine_tune_forecast) {
                 analytics.trackEventSelectContent(
@@ -138,13 +148,6 @@ class ForecastFragment : BaseFragment() {
                 ProPromotionDialogFragment().show(this)
             }
         }
-
-        fetchOrHideContent()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
     private fun onLoading(isLoading: Boolean) {

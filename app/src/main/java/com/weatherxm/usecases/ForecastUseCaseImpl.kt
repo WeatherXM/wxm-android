@@ -50,6 +50,7 @@ class ForecastUseCaseImpl(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun getUIForecastFromWeatherData(
         nowInTimezone: ZonedDateTime,
         data: List<WeatherData>

@@ -113,7 +113,10 @@ class ForecastViewModelTest : BehaviorSpec({
             }
             When("usecase returns a failure") {
                 and("it's a NoConnectionError failure") {
-                    coMockEitherLeft({ usecase.getDeviceForecast(device, false) }, noConnectionFailure)
+                    coMockEitherLeft(
+                        { usecase.getDeviceForecast(device, false) },
+                        noConnectionFailure
+                    )
                     runTest { viewModel.fetchForecast() }
                     then("track the event's failure in the analytics") {
                         verify(exactly = 1) { analytics.trackEventFailure(any()) }
