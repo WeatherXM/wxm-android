@@ -81,6 +81,8 @@ object Weather {
         }
     }
 
+    @Suppress("ComplexMethod")
+    @RawRes
     fun getWeatherSummaryDesc(icon: String?): Int? {
         return when (icon) {
             "clear-day" -> R.string.clear

@@ -106,42 +106,9 @@ class LocationsFragment : BaseFragment() {
             onDevicesRewards(it)
         }
 
-        parentModel.onInfoBanner().observe(viewLifecycleOwner) {
-            onInfoBanner(it)
-        }
-
-        parentModel.onAnnouncementBanner().observe(viewLifecycleOwner) {
-            onAnnouncementBanner(it)
-        }
-
-        model.onLoading().observe(viewLifecycleOwner) {
-            if (it && binding.swiperefresh.isRefreshing) {
-                binding.statusView.visible(false)
-            } else if (it) {
-                binding.nestedScrollView.visible(false)
-                binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
-            } else {
-                binding.swiperefresh.isRefreshing = false
-                if (model.onError().value == null) {
-                    binding.statusView.visible(false)
-                    binding.nestedScrollView.visible(true)
-                }
-            }
-        }
-
-        model.onError().observe(viewLifecycleOwner) { error ->
-            if (error == null) {
-                binding.nestedScrollView.visible(true)
-            } else {
-                binding.nestedScrollView.visible(false)
-                binding.statusView.animation(R.raw.anim_error, false)
-                    .title(R.string.error_generic_message)
-                    .action(getString(R.string.action_try_again))
-                    .subtitle(error.errorMessage)
-                    .listener { error.retryFunction }
-                    .visible(true)
-            }
-        }
+        observeBanners()
+        observeOnLoading()
+        observeOnError()
 
         model.onLocationWeather().observe(viewLifecycleOwner) { result ->
             binding.currentLocationWeather.setData(result) {
@@ -177,6 +144,49 @@ class LocationsFragment : BaseFragment() {
             binding.searchView.hide()
         } else {
             activity?.finish()
+        }
+    }
+
+    private fun observeBanners() {
+        parentModel.onInfoBanner().observe(viewLifecycleOwner) {
+            onInfoBanner(it)
+        }
+
+        parentModel.onAnnouncementBanner().observe(viewLifecycleOwner) {
+            onAnnouncementBanner(it)
+        }
+    }
+
+    private fun observeOnLoading() {
+        model.onLoading().observe(viewLifecycleOwner) {
+            if (it && binding.swiperefresh.isRefreshing) {
+                binding.statusView.visible(false)
+            } else if (it) {
+                binding.nestedScrollView.visible(false)
+                binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
+            } else {
+                binding.swiperefresh.isRefreshing = false
+                if (model.onError().value == null) {
+                    binding.statusView.visible(false)
+                    binding.nestedScrollView.visible(true)
+                }
+            }
+        }
+    }
+
+    private fun observeOnError() {
+        model.onError().observe(viewLifecycleOwner) { error ->
+            if (error == null) {
+                binding.nestedScrollView.visible(true)
+            } else {
+                binding.nestedScrollView.visible(false)
+                binding.statusView.animation(R.raw.anim_error, false)
+                    .title(R.string.error_generic_message)
+                    .action(getString(R.string.action_try_again))
+                    .subtitle(error.errorMessage)
+                    .listener { error.retryFunction }
+                    .visible(true)
+            }
         }
     }
 
