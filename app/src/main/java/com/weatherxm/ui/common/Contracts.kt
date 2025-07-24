@@ -11,7 +11,6 @@ object Contracts {
     const val ARG_DEVICE_TYPE = "device_type"
     const val ARG_BLE_DEVICE_CONNECTED = "ble_device_connected"
     const val ARG_NEEDS_PHOTO_VERIFICATION = "needs_photo_verification"
-    const val ARG_USER_MESSAGE = "user_message"
     const val ARG_IS_CUSTOM_APPWIDGET_UPDATE = "is_custom_appwidget_update"
     const val ARG_WIDGET_TYPE = "widget_type"
     const val ARG_WIDGET_ID = "widget_id"

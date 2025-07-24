@@ -21,7 +21,6 @@ import com.weatherxm.ui.common.DataForMessageView
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.SubtitleForMessageView
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setCardStroke
@@ -36,13 +35,13 @@ import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.weiToETH
+import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class ProfileFragment : BaseFragment() {
     private lateinit var binding: FragmentProfileBinding
-    private val model: ProfileViewModel by viewModel()
+    private val model: ProfileViewModel by activityViewModel()
     private val parentModel: HomeViewModel by activityViewModel()
 
     // Register the launcher for the connect wallet activity and wait for a possible result
@@ -80,10 +79,14 @@ class ProfileFragment : BaseFragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        binding.root.applyInsets()
+        binding.root.applyInsetter {
+            type(statusBars = true) {
+                padding(left = false, top = true, right = false, bottom = false)
+            }
+        }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchUser()
+            model.fetchUser(parentModel.isLoggedIn())
             parentModel.getSurvey()
         }
 
@@ -121,7 +124,6 @@ class ProfileFragment : BaseFragment() {
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
-                    //    parentModel.fetchWalletRewards(resource.data?.wallet?.address)
                     updateUserUI(resource.data)
                     toggleLoading(false)
                 }
@@ -172,13 +174,17 @@ class ProfileFragment : BaseFragment() {
                 .visible(true)
         }
 
+        model.onLoggedOutUser().observe(viewLifecycleOwner) {
+            onLoggedOutUser()
+        }
+
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             parentModel.onScroll(scrollY - oldScrollY)
         }
 
         initProPromotionCard()
 
-        model.fetchUser()
+        model.fetchUser(parentModel.isLoggedIn())
         parentModel.getSurvey()
     }
 
@@ -209,6 +215,16 @@ class ProfileFragment : BaseFragment() {
             binding.swiperefresh.isRefreshing = false
             binding.progress.invisible()
         }
+    }
+
+    private fun onLoggedOutUser() {
+        binding.toolbar.subtitle = getString(R.string.login_to_see_rewards)
+        binding.totalsRewardsContainer.visible(false)
+        binding.rewardsContainerCard.visible(false)
+        binding.walletContainerCard.visible(false)
+        binding.proPromotionCard.visible(false)
+        binding.progress.invisible()
+        binding.swiperefresh.isRefreshing = false
     }
 
     private fun onNotAvailableRewards() {
@@ -275,6 +291,8 @@ class ProfileFragment : BaseFragment() {
                     navigator.showRewardsClaiming(rewardsClaimLauncher, requireContext(), data)
                 }
         }
+        binding.totalsRewardsContainer.visible(true)
+        binding.rewardsContainerCard.visible(true)
     }
 
     private fun updateUserUI(user: User?) {
@@ -304,6 +322,8 @@ class ProfileFragment : BaseFragment() {
                 binding.walletContainerCard.setCardStroke(R.color.error, 2)
             }
         }
+        binding.walletContainerCard.visible(true)
+        binding.proPromotionCard.visible(true)
     }
 
     private fun trackClaimingResult(isSuccess: Boolean) {

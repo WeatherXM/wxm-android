@@ -21,7 +21,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.ProPromotionCard
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -61,11 +61,8 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
                 finish()
                 return@addCallback
             }
-            if (model.isLoggedIn() == true) {
-                navigator.showHome(this@CellInfoActivity, model.cell.center)
-            } else {
-                navigator.showExplorer(this@CellInfoActivity, model.cell.center)
-            }
+
+            navigator.showHome(this@CellInfoActivity, model.cell.center)
             finish()
         }
 

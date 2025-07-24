@@ -60,7 +60,7 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
                 binding.filterButtons.checkedRadioButtonId,
                 binding.groupButtons.checkedRadioButtonId
             )
-            model.fetch()
+            model.fetch(true)
             analytics.trackEventUserAction(
                 AnalyticsService.ParamValue.FILTERS_SAVE.paramValue,
                 customParams = arrayOf(
