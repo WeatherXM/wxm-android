@@ -1,7 +1,9 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
+import com.weatherxm.data.locationToText
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.services.CacheService
 import java.time.LocalDate
@@ -16,22 +18,26 @@ class CacheWeatherForecastDataSource(
         toDate: LocalDate,
         exclude: String?
     ): Either<Failure, List<WeatherData>> {
-        return cacheService.getForecast(deviceId)
+        return cacheService.getDeviceForecast(deviceId)
     }
 
     override suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>) {
-        cacheService.setForecast(deviceId, forecast)
+        cacheService.setDeviceForecast(deviceId, forecast)
     }
 
-    override suspend fun clear() {
-        cacheService.clearForecast()
+    override suspend fun clearDeviceForecast() {
+        cacheService.clearDeviceForecast()
     }
 
-    override suspend fun getLocationForecast(
-        lat: Double,
-        lon: Double
-    ): Either<Failure, List<WeatherData>> {
-        // TODO: STOPSHIP: Use cache as an optimization like above
-        throw NotImplementedError("Won't be implemented. Ignore this.")
+    override suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>> {
+        return cacheService.getLocationForecast(location.locationToText())
+    }
+
+    override suspend fun setLocationForecast(location: Location, forecast: List<WeatherData>) {
+        cacheService.setLocationForecast(location.locationToText(), forecast)
+    }
+
+    override fun clearLocationForecast() {
+        cacheService.clearLocationForecast()
     }
 }

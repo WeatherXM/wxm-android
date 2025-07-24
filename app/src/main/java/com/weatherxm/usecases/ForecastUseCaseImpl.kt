@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.WeatherForecastRepository
@@ -39,11 +40,8 @@ class ForecastUseCaseImpl(
         }
     }
 
-    override suspend fun getLocationForecast(
-        lat: Double,
-        lon: Double
-    ): Either<Failure, UIForecast> {
-        return repo.getLocationForecast(lat, lon).map {
+    override suspend fun getLocationForecast(location: Location): Either<Failure, UIForecast> {
+        return repo.getLocationForecast(location).map {
             val timezone = it.first().tz
             val nowInTimezone = ZonedDateTime.now(ZoneId.of(timezone))
             getUIForecastFromWeatherData(nowInTimezone, it)

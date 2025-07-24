@@ -9,14 +9,14 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.LocationWeather
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.usecases.LocationWeatherUseCase
+import com.weatherxm.usecases.LocationsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class LocationsViewModel(
-    private val usecase: LocationWeatherUseCase,
+    private val usecase: LocationsUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -25,18 +25,26 @@ class LocationsViewModel(
     }
     private val _onError = MutableLiveData<UIError?>()
     private val _onLocationWeather = MutableLiveData<LocationWeather>()
+    private var savedLocations = emptyList<Location>()
 
     fun onLoading(): LiveData<Boolean> = _onLoading
     fun onError(): LiveData<UIError?> = _onError
     fun onLocationWeather(): LiveData<LocationWeather> = _onLocationWeather
 
-    fun fetch(currentLocation: Location?) {
+    fun getSavedLocations(): List<Location> {
+        savedLocations = usecase.getSavedLocations()
+        return savedLocations
+    }
+
+    fun isLocationSaved(location: Location): Boolean = savedLocations.contains(location)
+
+    fun fetch(currentLocation: Location?, isLoggedIn: Boolean) {
         _onError.postValue(null)
         viewModelScope.launch(dispatcher) {
+            _onLoading.postValue(true)
             val currentLocationJob = launch {
                 currentLocation?.let { location ->
-                    _onLoading.postValue(true)
-                    usecase.getLocationWeather(location.lat, location.lon).onRight {
+                    usecase.getLocationWeather(location).onRight {
                         Timber.d("Got weather for current location")
                         _onLocationWeather.postValue(it)
                     }.onLeft {
@@ -46,7 +54,7 @@ class LocationsViewModel(
                                 it.getDefaultMessage(R.string.error_reach_out),
                                 errorCode = null,
                             ) {
-                                fetch(currentLocation)
+                                fetch(currentLocation, isLoggedIn)
                             }
                         )
                         return@launch
@@ -55,9 +63,12 @@ class LocationsViewModel(
             }
 
             // TODO: STOPSHIP: Fetch for saved locations the weather here and use `join` at the end.
+            // TODO: STOPSHIP: If user is logged out fetch max 1 saved location otherwise max 10.
             currentLocationJob.join()
             _onLoading.postValue(false)
         }
     }
 
+    fun clearLocationForecastFromCache() = usecase.clearLocationForecastFromCache()
+    fun onNoLocationPermission() = _onLoading.postValue(false)
 }

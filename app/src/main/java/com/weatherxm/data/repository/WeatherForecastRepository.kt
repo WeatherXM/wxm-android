@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import timber.log.Timber
 import java.time.LocalDate
@@ -17,11 +18,8 @@ interface WeatherForecastRepository {
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>>
 
-    suspend fun clearCache()
-    suspend fun getLocationForecast(
-        lat: Double,
-        lon: Double
-    ): Either<Failure, List<WeatherData>>
+    fun clearLocationForecastFromCache()
+    suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>>
 }
 
 class WeatherForecastRepositoryImpl(
@@ -40,7 +38,7 @@ class WeatherForecastRepositoryImpl(
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>> {
         if (forceRefresh) {
-            clearCache()
+            clearDeviceForecastFromCache()
         }
 
         val to = if (ChronoUnit.DAYS.between(fromDate, toDate) < PREFETCH_DAYS) {
@@ -61,15 +59,24 @@ class WeatherForecastRepositoryImpl(
             }
     }
 
-    override suspend fun clearCache() {
-        cacheSource.clear()
+    override fun clearLocationForecastFromCache() {
+        cacheSource.clearLocationForecast()
+    }
+
+    private suspend fun clearDeviceForecastFromCache() {
+        cacheSource.clearDeviceForecast()
     }
 
     override suspend fun getLocationForecast(
-        lat: Double,
-        lon: Double
+        location: Location
     ): Either<Failure, List<WeatherData>> {
-        // TODO: STOPSHIP: Use cache as an optimization like above 
-        return networkSource.getLocationForecast(lat, lon)
+        return cacheSource.getLocationForecast(location).onRight {
+            Timber.d("Got forecast from cache for location [$location].")
+        }.mapLeft {
+            return networkSource.getLocationForecast(location).onRight {
+                Timber.d("Got forecast from network for location [$location].")
+                cacheSource.setLocationForecast(location, it)
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import androidx.annotation.StringDef
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import java.time.LocalDate
 
@@ -26,7 +27,9 @@ interface WeatherForecastDataSource {
     ): Either<Failure, List<WeatherData>>
 
     suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>)
-    suspend fun clear()
+    suspend fun clearDeviceForecast()
 
-    suspend fun getLocationForecast(lat: Double, lon: Double): Either<Failure, List<WeatherData>>
+    suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>>
+    suspend fun setLocationForecast(location: Location, forecast: List<WeatherData>)
+    fun clearLocationForecast()
 }
