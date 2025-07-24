@@ -5,12 +5,15 @@ import android.annotation.SuppressLint
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceNotificationsBinding
 import com.weatherxm.service.workers.DevicesNotificationsWorker
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.toast
@@ -62,6 +65,11 @@ class DeviceNotificationsActivity : BaseActivity() {
         handleNotificationCategories()
     }
 
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.STATION_NOTIFICATIONS, classSimpleName())
+    }
+
     /**
      * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
      */
@@ -82,6 +90,14 @@ class DeviceNotificationsActivity : BaseActivity() {
                         )
                     }
                 } else {
+                    analytics.trackEventUserAction(
+                        AnalyticsService.ParamValue.TOGGLE_STATION_NOTIFICATIONS.paramValue,
+                        null,
+                        Pair(
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.DISABLE.paramValue
+                        )
+                    )
                     model.setDeviceNotificationsEnabled(false)
                 }
             }
@@ -89,6 +105,14 @@ class DeviceNotificationsActivity : BaseActivity() {
     }
 
     private fun onNotificationsEnabled() {
+        analytics.trackEventUserAction(
+            actionName = AnalyticsService.ParamValue.TOGGLE_STATION_NOTIFICATIONS.paramValue,
+            contentType = null,
+            Pair(
+                AnalyticsService.CustomParam.ACTION.paramName,
+                AnalyticsService.ParamValue.ENABLE.paramValue
+            )
+        )
         DevicesNotificationsWorker.initAndStart(this)
         model.setDeviceNotificationsEnabled(true)
     }
@@ -102,6 +126,23 @@ class DeviceNotificationsActivity : BaseActivity() {
                 supportsFirmwareUpdate = model.device.isHelium(),
                 notificationTypesEnabled = model.notificationTypesEnabled
             ) { type, enabled ->
+                val actionParam = if (enabled) {
+                    AnalyticsService.ParamValue.ENABLE.paramValue
+                } else {
+                    AnalyticsService.ParamValue.DISABLE.paramValue
+                }
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.TOGGLE_STATION_NOTIFICATION_TYPE.paramValue,
+                    null,
+                    Pair(
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        actionParam
+                    ),
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        type.analyticsParam.paramValue
+                    )
+                )
                 model.setDeviceNotificationTypeEnabled(type, enabled)
             }
         }
