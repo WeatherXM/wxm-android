@@ -10,7 +10,7 @@ import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.Relation
-import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -19,7 +19,7 @@ import io.mockk.mockk
 
 class ClaimDeviceUseCaseTest : BehaviorSpec({
     val deviceRepo = mockk<DeviceRepository>()
-    val addressRepo = mockk<AddressRepository>()
+    val addressRepo = mockk<GeoLocationRepository>()
     val usecase = ClaimDeviceUseCaseImpl(deviceRepo, addressRepo)
 
     val serialNumber = "serialNumber"

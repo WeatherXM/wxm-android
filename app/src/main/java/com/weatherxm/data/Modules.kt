@@ -61,11 +61,9 @@ import com.weatherxm.data.database.AppDatabase
 import com.weatherxm.data.database.DatabaseConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.database.dao.NetworkSearchRecentDao
-import com.weatherxm.data.datasource.AddressDataSource
-import com.weatherxm.data.datasource.AddressDataSourceImpl
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl
-import com.weatherxm.data.datasource.CacheAddressSearchDataSource
+import com.weatherxm.data.datasource.CacheMapboxSearchDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheDeviceDataSource
 import com.weatherxm.data.datasource.CacheFollowDataSource
@@ -80,9 +78,7 @@ import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.DevicePhotoDataSource
 import com.weatherxm.data.datasource.DevicePhotoDataSourceImpl
-import com.weatherxm.data.datasource.LocationDataSource
-import com.weatherxm.data.datasource.LocationDataSourceImpl
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import com.weatherxm.data.datasource.NetworkExplorerDataSource
@@ -95,6 +91,8 @@ import com.weatherxm.data.datasource.NotificationsDataSource
 import com.weatherxm.data.datasource.NotificationsDataSourceImpl
 import com.weatherxm.data.datasource.RemoteBannersDataSource
 import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl
+import com.weatherxm.data.datasource.ReverseGeocodingDataSource
+import com.weatherxm.data.datasource.ReverseGeocodingDataSourceImpl
 import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.datasource.RewardsDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
@@ -114,8 +112,6 @@ import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
 import com.weatherxm.data.network.interceptor.ClientIdentificationRequestInterceptor
-import com.weatherxm.data.repository.AddressRepository
-import com.weatherxm.data.repository.AddressRepositoryImpl
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
@@ -130,8 +126,8 @@ import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
-import com.weatherxm.data.repository.LocationRepository
-import com.weatherxm.data.repository.LocationRepositoryImpl
+import com.weatherxm.data.repository.GeoLocationRepository
+import com.weatherxm.data.repository.GeoLocationRepositoryImpl
 import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.data.repository.NotificationsRepositoryImpl
 import com.weatherxm.data.repository.RemoteBannersRepository
@@ -179,7 +175,6 @@ import com.weatherxm.ui.devicedetails.current.CurrentViewModel
 import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
-import com.weatherxm.ui.forecastdetails.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryViewModel
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
@@ -187,6 +182,7 @@ import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyVie
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiViewModel
 import com.weatherxm.ui.devicesrewards.DevicesRewardsViewModel
+import com.weatherxm.ui.forecastdetails.ForecastDetailsViewModel
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.explorer.ExplorerViewModel
@@ -361,12 +357,12 @@ private val preferences = module {
 }
 
 private val datasources = module {
-    singleOf(::AddressDataSourceImpl) { bind<AddressDataSource>() }
+    singleOf(::ReverseGeocodingDataSourceImpl) { bind<ReverseGeocodingDataSource>() }
     singleOf(::AppConfigDataSourceImpl) { bind<AppConfigDataSource>() }
     factoryOf(::BluetoothConnectionDataSourceImpl) { bind<BluetoothConnectionDataSource>() }
     factoryOf(::BluetoothScannerDataSourceImpl) { bind<BluetoothScannerDataSource>() }
     factoryOf(::BluetoothUpdaterDataSourceImpl) { bind<BluetoothUpdaterDataSource>() }
-    singleOf(::CacheAddressSearchDataSource)
+    singleOf(::CacheMapboxSearchDataSource)
     singleOf(::CacheAuthDataSource)
     singleOf(::CacheDeviceDataSource)
     singleOf(::CacheFollowDataSource)
@@ -378,8 +374,7 @@ private val datasources = module {
     singleOf(::DeviceFrequencyDataSourceImpl) { bind<DeviceFrequencyDataSource>() }
     singleOf(::DeviceOTADataSourceImpl) { bind<DeviceOTADataSource>() }
     singleOf(::DevicePhotoDataSourceImpl) { bind<DevicePhotoDataSource>() }
-    singleOf(::LocationDataSourceImpl) { bind<LocationDataSource>() }
-    singleOf(::NetworkAddressSearchDataSource)
+    singleOf(::NetworkMapboxSearchDataSource)
     singleOf(::NetworkAuthDataSource)
     singleOf(::NetworkDeviceDataSource)
     singleOf(::NetworkExplorerDataSource)
@@ -397,7 +392,7 @@ private val datasources = module {
 }
 
 private val repositories = module {
-    factoryOf(::AddressRepositoryImpl) { bind<AddressRepository>() }
+    factoryOf(::GeoLocationRepositoryImpl) { bind<GeoLocationRepository>() }
     singleOf(::AppConfigRepositoryImpl) { bind<AppConfigRepository>() }
     singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
     factoryOf(::BluetoothConnectionRepositoryImpl) { bind<BluetoothConnectionRepository>() }
@@ -408,7 +403,6 @@ private val repositories = module {
     singleOf(::DeviceRepositoryImpl) { bind<DeviceRepository>() }
     singleOf(::ExplorerRepositoryImpl) { bind<ExplorerRepository>() }
     singleOf(::FollowRepositoryImpl) { bind<FollowRepository>() }
-    singleOf(::LocationRepositoryImpl) { bind<LocationRepository>() }
     singleOf(::NotificationsRepositoryImpl) { bind<NotificationsRepository>() }
     singleOf(::RemoteBannersRepositoryImpl) { bind<RemoteBannersRepository>() }
     singleOf(::RewardsRepositoryImpl) { bind<RewardsRepository>() }

@@ -5,7 +5,7 @@ import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
-import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.common.UIDevice
@@ -13,7 +13,7 @@ import com.weatherxm.ui.common.UIDevice
 class StationSettingsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val deviceOTARepository: DeviceOTARepository,
-    private val addressRepository: AddressRepository
+    private val geoLocationRepository: GeoLocationRepository
 ) : StationSettingsUseCase {
 
     override suspend fun setFriendlyName(
@@ -41,7 +41,7 @@ class StationSettingsUseCaseImpl(
         if (lat == null || lon == null) {
             return CountryAndFrequencies.default()
         }
-        return addressRepository.getCountryAndFrequencies(Location(lat, lon))
+        return geoLocationRepository.getCountryAndFrequencies(Location(lat, lon))
     }
 
     override suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo> {

@@ -14,10 +14,10 @@ import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testThrowNotImplemented
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource.Companion.SEARCH_DEBOUNCE_MILLIS
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource.Companion.SEARCH_LANGUAGES
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource.Companion.SEARCH_LIMIT
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource.Companion.SEARCH_TYPES
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource.Companion.SEARCH_DEBOUNCE_MILLIS
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource.Companion.SEARCH_LANGUAGES
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource.Companion.SEARCH_LIMIT
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource.Companion.SEARCH_TYPES
 import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError
@@ -30,10 +30,10 @@ import io.mockk.slot
 import io.mockk.verify
 import org.koin.test.KoinTest
 
-class AddressSearchDataSourceTest : KoinTest, BehaviorSpec({
+class MapboxSearchDataSourceTest : KoinTest, BehaviorSpec({
     val searchEngine = mockk<SearchEngine>()
-    val cacheSource = CacheAddressSearchDataSource(cacheService)
-    val networkSource = NetworkAddressSearchDataSource(searchEngine)
+    val cacheSource = CacheMapboxSearchDataSource(cacheService)
+    val networkSource = NetworkMapboxSearchDataSource(searchEngine)
 
     val query = "query"
     val countryCode = "GR"

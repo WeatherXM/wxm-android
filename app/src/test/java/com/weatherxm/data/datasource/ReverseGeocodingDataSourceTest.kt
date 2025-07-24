@@ -1,8 +1,10 @@
 package com.weatherxm.data.datasource
 
+import android.content.Context.TELEPHONY_SERVICE
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
+import android.telephony.TelephonyManager
 import com.mapbox.geojson.Point
 import com.mapbox.search.ReverseGeoOptions
 import com.mapbox.search.SearchCallback
@@ -11,21 +13,26 @@ import com.mapbox.search.common.AsyncOperationTask
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.squareup.moshi.Moshi
+import com.weatherxm.TestConfig.cacheService
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.geocoder
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.datasource.AddressDataSourceImpl.Companion.SEARCH_LIMIT
-import com.weatherxm.data.datasource.AddressDataSourceImpl.Companion.SEARCH_TYPES
+import com.weatherxm.data.datasource.ReverseGeocodingDataSourceImpl.Companion.SEARCH_LIMIT
+import com.weatherxm.data.datasource.ReverseGeocodingDataSourceImpl.Companion.SEARCH_TYPES
 import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.CountryAndFrequencies
+import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError
+import com.weatherxm.ui.common.empty
 import com.weatherxm.util.AndroidBuildInfo
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -37,12 +44,13 @@ import org.koin.java.KoinJavaComponent.inject
 import org.koin.test.KoinTest
 import java.io.InputStream
 
-class AddressDataSourceTest : KoinTest, BehaviorSpec({
+class ReverseGeocodingDataSourceTest : KoinTest, BehaviorSpec({
     val searchEngine = mockk<SearchEngine>()
     val moshi: Moshi by inject(Moshi::class.java)
-    lateinit var dataSource: AddressDataSourceImpl
+    lateinit var dataSource: ReverseGeocodingDataSourceImpl
 
     val location = Location(0.0, 0.0)
+    val countryLocation = Location(39.074208, 21.824312)
     val countryName = "Greece"
     val countryCode = "GR"
     val mockedAddress = mockk<Address>().apply {
@@ -85,6 +93,14 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
         javaClass.classLoader?.getResourceAsStream("countries_information.json")
     val countriesInformationSecondStream =
         javaClass.classLoader?.getResourceAsStream("countries_information.json")
+    val countriesInformationThirdStream =
+        javaClass.classLoader?.getResourceAsStream("countries_information.json")
+
+    val telephonyManager = mockk<TelephonyManager>()
+    val country = "GR"
+    val validCountriesInfo = listOf(CountryInfo("GR", "EU868", countryLocation))
+    val otherCountriesInfo = listOf(CountryInfo("US", null, countryLocation))
+    val invalidCountriesInfo = listOf(CountryInfo("GR", null, null))
 
     startKoin {
         modules(
@@ -103,10 +119,14 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
     beforeSpec {
         mockkStatic(Geocoder::class)
         every { AndroidBuildInfo.sdkInt } returns Build.VERSION_CODES.TIRAMISU - 1
-        dataSource = AddressDataSourceImpl(context, searchEngine, moshi)
+        dataSource = ReverseGeocodingDataSourceImpl(context, searchEngine, moshi, cacheService)
         every {
             geocoder.getFromLocation(any<Double>(), any<Double>(), 1)
         } returns listOf(mockedAddress)
+        every { context.getSystemService(TELEPHONY_SERVICE) } returns telephonyManager
+        every { telephonyManager.simCountryIso } returns String.empty()
+        every { telephonyManager.networkCountryIso } returns String.empty()
+        coJustRun { cacheService.setCountriesInfo(any()) }
     }
 
     context("Get the address of a Point") {
@@ -195,6 +215,71 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                         dataSource.getCountryAndFrequencies(location).leftOrNull()
                             .shouldBeTypeOf<Failure.CountryNotFound>()
                     }
+                }
+            }
+        }
+    }
+
+    context("Get user country") {
+        When("sim country and network country are empty") {
+            then("return null") {
+                dataSource.getUserCountry() shouldBe null
+            }
+        }
+        When("sim country is empty and network country is NOT empty") {
+            every { telephonyManager.networkCountryIso } returns country
+            then("return the country") {
+                dataSource.getUserCountry() shouldBe country
+            }
+        }
+        When("sim country is NOT empty and network country is empty") {
+            every { telephonyManager.simCountryIso } returns country
+            every { telephonyManager.networkCountryIso } returns ""
+            then("return the country") {
+                dataSource.getUserCountry() shouldBe country
+            }
+        }
+    }
+
+    context("Get user's country location") {
+        When("user's country is null") {
+            every { telephonyManager.simCountryIso } returns ""
+            every { telephonyManager.networkCountryIso } returns ""
+            then("return null") {
+                dataSource.getUserCountryLocation() shouldBe null
+            }
+        }
+        When("user's country is NOT null") {
+            every { telephonyManager.simCountryIso } returns country
+            and("cache is empty") {
+                every { cacheService.getCountriesInfo() } returns emptyList()
+                every {
+                    context.assets.open("countries_information.json")
+                } returns countriesInformationThirdStream as InputStream
+                and("we use the countries_information.json") {
+                    then("return the country's map center as found") {
+                        dataSource.getUserCountryLocation() shouldBe countryLocation
+                    }
+                }
+            }
+            and("cache is not empty and contains the user's country") {
+                and("has the map center") {
+                    every { cacheService.getCountriesInfo() } returns validCountriesInfo
+                    then("returns the location (country's map center)") {
+                        dataSource.getUserCountryLocation() shouldBe countryLocation
+                    }
+                }
+                and("does NOT have the map center") {
+                    every { cacheService.getCountriesInfo() } returns invalidCountriesInfo
+                    then("returns null") {
+                        dataSource.getUserCountryLocation() shouldBe null
+                    }
+                }
+            }
+            and("cache is not empty and does not contain the user's country") {
+                every { cacheService.getCountriesInfo() } returns otherCountriesInfo
+                then("returns null") {
+                    dataSource.getUserCountryLocation() shouldBe null
                 }
             }
         }

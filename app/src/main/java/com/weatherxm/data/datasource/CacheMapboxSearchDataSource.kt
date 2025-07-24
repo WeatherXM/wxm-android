@@ -6,9 +6,9 @@ import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.services.CacheService
 
-class CacheAddressSearchDataSource(
+class CacheMapboxSearchDataSource(
     private val cacheService: CacheService
-) : AddressSearchDataSource {
+) : MapboxSearchDataSource {
 
     override suspend fun getSearchSuggestions(
         query: String,

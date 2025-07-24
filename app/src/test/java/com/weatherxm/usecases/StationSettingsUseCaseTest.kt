@@ -9,7 +9,7 @@ import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
-import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.common.UIDevice
@@ -21,9 +21,9 @@ import io.mockk.mockk
 class StationSettingsUseCaseTest : BehaviorSpec({
     val deviceRepository = mockk<DeviceRepository>()
     val deviceOTARepository = mockk<DeviceOTARepository>()
-    val addressRepository = mockk<AddressRepository>()
+    val geoLocationRepository = mockk<GeoLocationRepository>()
     val usecase =
-        StationSettingsUseCaseImpl(deviceRepository, deviceOTARepository, addressRepository)
+        StationSettingsUseCaseImpl(deviceRepository, deviceOTARepository, geoLocationRepository)
 
     val deviceId = "deviceId"
     val friendlyName = "This is a friendly name!"
@@ -119,7 +119,7 @@ class StationSettingsUseCaseTest : BehaviorSpec({
             When("lat and lon are valid and non-null") {
                 then("return the answer") {
                     coEvery {
-                        addressRepository.getCountryAndFrequencies(Location(lat, lon))
+                        geoLocationRepository.getCountryAndFrequencies(Location(lat, lon))
                     } returns countryAndFrequencies
                     usecase.getCountryAndFrequencies(lat, lon) shouldBe countryAndFrequencies
                 }

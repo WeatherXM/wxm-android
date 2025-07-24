@@ -55,6 +55,7 @@ class CacheService(
         const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
         const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
+        const val KEY_SAVED_LOCATIONS = "saved_locations"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -432,6 +433,14 @@ class CacheService(
         preferences.edit { putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow) }
     }
 
+    fun getSavedLocations(): Set<String> {
+        return preferences.getStringSet(KEY_SAVED_LOCATIONS, setOf()) ?: setOf()
+    }
+
+    fun setSavedLocations(locations: Set<String>) {
+        preferences.edit { putStringSet(KEY_SAVED_LOCATIONS, locations) }
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -498,8 +507,7 @@ class CacheService(
         val lastDismissedInfoBanner = preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
         val lastDismissedAnnouncementBanner =
             preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
-
-        // STOPSHIP: TODO: Do not clear user saved locations. Keep them here.
+        val savedLocations = getSavedLocations()
 
         preferences.edit {
             clear()
@@ -513,6 +521,7 @@ class CacheService(
                 .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
                 .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
+                .putStringSet(KEY_SAVED_LOCATIONS, savedLocations)
         }
 
         installationId?.let { setInstallationId(it) }

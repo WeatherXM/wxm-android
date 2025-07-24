@@ -10,29 +10,28 @@ import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.data.datasource.AddressDataSource
-import com.weatherxm.data.datasource.CacheAddressSearchDataSource
-import com.weatherxm.data.datasource.LocationDataSource
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
+import com.weatherxm.data.datasource.CacheMapboxSearchDataSource
+import com.weatherxm.data.datasource.NetworkMapboxSearchDataSource
+import com.weatherxm.data.datasource.ReverseGeocodingDataSource
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
 import timber.log.Timber
 
-interface AddressRepository {
+interface GeoLocationRepository {
     suspend fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>>
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress>
     suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies
+    suspend fun getUserCountryLocation(): Location?
 }
 
-class AddressRepositoryImpl(
-    private val addressDataSource: AddressDataSource,
-    private val networkSearch: NetworkAddressSearchDataSource,
-    private val cacheSearch: CacheAddressSearchDataSource,
-    private val locationDataSource: LocationDataSource
-) : AddressRepository {
+class GeoLocationRepositoryImpl(
+    private val reverseGeocodingDataSource: ReverseGeocodingDataSource,
+    private val networkSearch: NetworkMapboxSearchDataSource,
+    private val cacheSearch: CacheMapboxSearchDataSource
+) : GeoLocationRepository {
     companion object {
         /**
          * This should stay at 100-200m because under 100m a lot of places are not being considered
@@ -49,7 +48,7 @@ class AddressRepositoryImpl(
                 Timber.d("Found suggestions in cache [query=$query]")
             }
             .handleErrorWith {
-                val countryCode = locationDataSource.getUserCountry()
+                val countryCode = reverseGeocodingDataSource.getUserCountry()
                 networkSearch.getSearchSuggestions(query, countryCode).flatMap { countryResults ->
                     // If no results, search again globally without country limitations
                     if (countryResults.isEmpty()) {
@@ -86,7 +85,7 @@ class AddressRepositoryImpl(
     }
 
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress> {
-        return addressDataSource.getAddressFromPoint(point)
+        return reverseGeocodingDataSource.getAddressFromPoint(point)
             .flatMap {
                 if (!it.isAccurate()) {
                     Either.Left(ReverseGeocodingError.SearchResultNotAccurateError())
@@ -99,8 +98,12 @@ class AddressRepositoryImpl(
     }
 
     override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
-        return addressDataSource.getCountryAndFrequencies(location)
+        return reverseGeocodingDataSource.getCountryAndFrequencies(location)
             .fold({ CountryAndFrequencies.default() }, { it })
+    }
+
+    override suspend fun getUserCountryLocation(): Location? {
+        return reverseGeocodingDataSource.getUserCountryLocation()
     }
 
     /**
