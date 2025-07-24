@@ -10,7 +10,7 @@ class CacheWeatherForecastDataSource(
     private val cacheService: CacheService
 ) : WeatherForecastDataSource {
 
-    override suspend fun getForecast(
+    override suspend fun getDeviceForecast(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
@@ -19,11 +19,19 @@ class CacheWeatherForecastDataSource(
         return cacheService.getForecast(deviceId)
     }
 
-    override suspend fun setForecast(deviceId: String, forecast: List<WeatherData>) {
+    override suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>) {
         cacheService.setForecast(deviceId, forecast)
     }
 
     override suspend fun clear() {
         cacheService.clearForecast()
+    }
+
+    override suspend fun getLocationForecast(
+        lat: Double,
+        lon: Double
+    ): Either<Failure, List<WeatherData>> {
+        // TODO: STOPSHIP: Use cache as an optimization like above
+        throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 }

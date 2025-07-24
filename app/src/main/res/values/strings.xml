@@ -783,4 +783,25 @@
     <string name="nothing_saved_yet">Nothing saved, yet!</string>
     <string name="add_places_you_care">Add the places you care about and see their weather at a glance!</string>
     <string name="locations">Locations</string>
+
+    <!-- Weather Conditions Summary -->
+    <string name="clear">Clear</string>
+    <string name="clear_few_low_clouds">Clear with few low clouds</string>
+    <string name="partly_cloudy">Partly cloudy</string>
+    <string name="clear_but_hazy">Clear but hazy</string>
+    <string name="foggy">Foggy</string>
+    <string name="mostly_cloudy">Mostly cloudy</string>
+    <string name="overcast">Overcast</string>
+    <string name="overcast_rain">Overcast with rain</string>
+    <string name="overcast_snow">Overcast with snow</string>
+    <string name="overcast_heavy_rain">Overcast with heavy rain</string>
+    <string name="overcast_heavy_snow">Overcast with heavy snow</string>
+    <string name="rain_thunderstorms_likely">Rain, thunderstorms likely</string>
+    <string name="light_rain_thunderstorms_likely">Light rain, thunderstorms likely</string>
+    <string name="heavy_rain_thunderstorms_likely">Heavy rain, thunderstorms likely</string>
+    <string name="mixed_with_showers">Mixed with showers</string>
+    <string name="mixed_with_snow_showers">Mixed with snow showers</string>
+    <string name="overcast_light_rain">Overcast with light rain</string>
+    <string name="overcast_light_snow">Overcast with light snow</string>
+    <string name="overcast_mixture_snow_rain">Overcast with mixture of snow and rain</string>
 </resources>

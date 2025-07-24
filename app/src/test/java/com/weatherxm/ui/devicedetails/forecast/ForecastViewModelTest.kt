@@ -113,7 +113,7 @@ class ForecastViewModelTest : BehaviorSpec({
             }
             When("usecase returns a failure") {
                 and("it's a NoConnectionError failure") {
-                    coMockEitherLeft({ usecase.getForecast(device, false) }, noConnectionFailure)
+                    coMockEitherLeft({ usecase.getDeviceForecast(device, false) }, noConnectionFailure)
                     runTest { viewModel.fetchForecast() }
                     then("track the event's failure in the analytics") {
                         verify(exactly = 1) { analytics.trackEventFailure(any()) }
@@ -125,7 +125,7 @@ class ForecastViewModelTest : BehaviorSpec({
                 }
                 and("it's a ConnectionTimeoutError failure") {
                     coMockEitherLeft(
-                        { usecase.getForecast(device, false) },
+                        { usecase.getDeviceForecast(device, false) },
                         connectionTimeoutFailure
                     )
                     runTest { viewModel.fetchForecast() }
@@ -139,7 +139,7 @@ class ForecastViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidFromDate failure") {
                     coMockEitherLeft(
-                        { usecase.getForecast(device, false) },
+                        { usecase.getDeviceForecast(device, false) },
                         invalidFromDate
                     )
                     runTest { viewModel.fetchForecast() }
@@ -153,7 +153,7 @@ class ForecastViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidToDate failure") {
                     coMockEitherLeft(
-                        { usecase.getForecast(device, false) },
+                        { usecase.getDeviceForecast(device, false) },
                         invalidToDate
                     )
                     runTest { viewModel.fetchForecast() }
@@ -167,7 +167,7 @@ class ForecastViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidTimezone failure") {
                     coMockEitherLeft(
-                        { usecase.getForecast(device, false) },
+                        { usecase.getDeviceForecast(device, false) },
                         invalidTimezone
                     )
                     runTest { viewModel.fetchForecast() }
@@ -180,7 +180,7 @@ class ForecastViewModelTest : BehaviorSpec({
                     }
                 }
                 and("it's any other failure") {
-                    coMockEitherLeft({ usecase.getForecast(device, true) }, failure)
+                    coMockEitherLeft({ usecase.getDeviceForecast(device, true) }, failure)
                     runTest { viewModel.fetchForecast(true) }
                     then("track the event's failure in the analytics") {
                         verify(exactly = 6) { analytics.trackEventFailure(any()) }
@@ -192,7 +192,7 @@ class ForecastViewModelTest : BehaviorSpec({
                 }
             }
             When("usecase returns a success") {
-                coMockEitherRight({ usecase.getForecast(device, false) }, forecast)
+                coMockEitherRight({ usecase.getDeviceForecast(device, false) }, forecast)
                 and("the forecast is empty") {
                     every { forecast.isEmpty() } returns true
                     runTest { viewModel.fetchForecast() }

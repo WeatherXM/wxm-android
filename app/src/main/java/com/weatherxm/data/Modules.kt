@@ -192,6 +192,7 @@ import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.explorer.UICellJsonAdapter
 import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
+import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
@@ -241,6 +242,8 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.LocationWeatherUseCase
+import com.weatherxm.usecases.LocationWeatherUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.RemoteBannersUseCase
@@ -435,6 +438,7 @@ private val usecases = module {
     singleOf(::FollowUseCaseImpl) { bind<FollowUseCase>() }
     singleOf(::ForecastUseCaseImpl) { bind<ForecastUseCase>() }
     factoryOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
+    factoryOf(::LocationWeatherUseCaseImpl) { bind<LocationWeatherUseCase>() }
     factoryOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
     singleOf(::RemoteBannersUseCaseImpl) { bind<RemoteBannersUseCase>() }
     singleOf(::RewardsUseCaseImpl) { bind<RewardsUseCase>() }
@@ -751,6 +755,7 @@ private val viewmodels = module {
     viewModelOf(::ForecastViewModel)
     viewModelOf(::HistoryViewModel)
     viewModelOf(::HomeViewModel)
+    viewModelOf(::LocationsViewModel)
     viewModelOf(::LoginViewModel)
     viewModelOf(::NetworkSearchViewModel)
     viewModelOf(::NetworkStatsViewModel)

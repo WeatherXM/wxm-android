@@ -41,7 +41,7 @@ class ForecastDetailsViewModel(
     fun fetchForecast() {
         onForecastLoaded.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
-            forecastUseCase.getForecast(device).onRight {
+            forecastUseCase.getDeviceForecast(device).onRight {
                 Timber.d("Got forecast")
                 forecast = it
                 if (it.isEmpty()) {

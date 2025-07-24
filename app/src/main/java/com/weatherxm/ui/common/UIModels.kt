@@ -278,6 +278,18 @@ data class UIForecastDay(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
+data class LocationWeather(
+    val address: String?,
+    val icon: String?,
+    var currentWeatherSummaryResId: Int?,
+    var currentTemp: Float?,
+    var dailyMinTemp: Float?,
+    var dailyMaxTemp: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
 data class DevicesSortFilterOptions(
     var sortOrder: DevicesSortOrder = DevicesSortOrder.DATE_ADDED,
     var filterType: DevicesFilterType = DevicesFilterType.ALL,

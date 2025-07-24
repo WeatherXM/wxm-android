@@ -45,7 +45,7 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     mockFunction = {
                         apiService.getForecast(deviceId, fromDate.toString(), toDate.toString())
                     },
-                    runFunction = { networkSource.getForecast(deviceId, fromDate, toDate) }
+                    runFunction = { networkSource.getDeviceForecast(deviceId, fromDate, toDate) }
                 )
             }
             When("Using the Cache Source") {
@@ -53,7 +53,7 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     "forecast",
                     forecastData,
                     mockFunction = { cacheService.getForecast(deviceId) },
-                    runFunction = { cacheSource.getForecast(deviceId, fromDate, toDate) }
+                    runFunction = { cacheSource.getDeviceForecast(deviceId, fromDate, toDate) }
                 )
             }
         }
@@ -62,11 +62,11 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
     context("Set forecast") {
         given("A Network and a Cache Source providing the SET mechanism") {
             When("Using the Network Source") {
-                testThrowNotImplemented { networkSource.setForecast(deviceId, forecastData) }
+                testThrowNotImplemented { networkSource.setDeviceForecast(deviceId, forecastData) }
             }
             When("Using the Cache Source") {
                 then("save the forecast in cacheService") {
-                    cacheSource.setForecast(deviceId, forecastData)
+                    cacheSource.setDeviceForecast(deviceId, forecastData)
                     verify(exactly = 1) { cacheService.setForecast(deviceId, forecastData) }
                 }
             }
