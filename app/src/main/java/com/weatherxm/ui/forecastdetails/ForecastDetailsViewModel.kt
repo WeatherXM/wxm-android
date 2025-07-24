@@ -15,6 +15,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UILocation
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -24,17 +25,22 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 
+@Suppress("LongParameterList")
 class ForecastDetailsViewModel(
     val device: UIDevice,
     val location: UILocation,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
+    private val authUseCase: AuthUseCase,
     private val chartsUseCase: ChartsUseCase,
     private val forecastUseCase: ForecastUseCase,
     private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val onForecastLoaded = MutableLiveData<Resource<Unit>>()
+    private val onLoggedIn = MutableLiveData<Boolean>()
+
     fun onForecastLoaded(): LiveData<Resource<Unit>> = onForecastLoaded
+    fun onLoggedIn(): LiveData<Boolean> = onLoggedIn
 
     private var forecast: UIForecast = UIForecast.empty()
 
@@ -142,5 +148,11 @@ class ForecastDetailsViewModel(
         return chartsUseCase.createHourlyCharts(
             forecastDay.date, forecastDay.hourlyWeather ?: mutableListOf()
         )
+    }
+
+    init {
+        viewModelScope.launch(dispatcher) {
+            onLoggedIn.postValue(authUseCase.isLoggedIn())
+        }
     }
 }

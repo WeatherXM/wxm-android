@@ -273,7 +273,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/proPromotionCard"
+                android:id="@+id/promoCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
@@ -292,7 +292,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/proPromotionCard" />
+                app:layout_constraintTop_toBottomOf="@id/promoCard" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hourlyForecastRecycler"
