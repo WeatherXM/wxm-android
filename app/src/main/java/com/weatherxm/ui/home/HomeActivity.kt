@@ -12,6 +12,7 @@ import com.mapbox.geojson.Point
 import com.weatherxm.R
 import com.weatherxm.data.models.Location
 import com.weatherxm.databinding.ActivityHomeBinding
+import com.weatherxm.service.workers.DevicesNotificationsWorker
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
@@ -182,6 +183,9 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         } else {
             binding.emptyContainer.visible(false)
             binding.claimRedDot.visible(false)
+        }
+        if (resource.data?.any { it.isOwned() } ?: false) {
+            DevicesNotificationsWorker.initAndStart(this)
         }
     }
 

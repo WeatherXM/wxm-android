@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 class ZonedDateTimeTest : BehaviorSpec({
     val today = ZonedDateTime.now()
     val tomorrow = today.plusDays(1)
+    val yesterday = today.minusDays(1)
 
     given("A ZonedDateTime") {
         When("is today") {
@@ -29,6 +30,11 @@ class ZonedDateTimeTest : BehaviorSpec({
             }
             and("Compare with different ZonedDateTime if they are same day & hour") {
                 today.isSameDayAndHour(tomorrow) shouldBe false
+            }
+        }
+        When("is yesterday") {
+            then("return true") {
+                yesterday.isYesterday() shouldBe true
             }
         }
     }

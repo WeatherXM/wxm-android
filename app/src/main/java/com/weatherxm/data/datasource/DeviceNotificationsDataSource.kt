@@ -1,6 +1,8 @@
 package com.weatherxm.data.datasource
 
+import com.weatherxm.data.models.DeviceNotificationType
 import com.weatherxm.data.services.CacheService
+import com.weatherxm.data.services.CacheService.Companion.getDeviceNotificationFormattedKey
 import com.weatherxm.data.services.CacheService.Companion.getDeviceNotificationTypesFormattedKey
 import com.weatherxm.data.services.CacheService.Companion.getDeviceNotificationsFormattedKey
 
@@ -11,6 +13,8 @@ interface DeviceNotificationsDataSource {
     fun getDeviceNotificationTypesEnabled(deviceId: String): Set<String>
     fun showDeviceNotificationsPrompt(): Boolean
     fun checkDeviceNotificationsPrompt()
+    fun setDeviceNotificationTypeTimestamp(deviceId: String, type: DeviceNotificationType)
+    fun getDeviceNotificationTypeTimestamp(deviceId: String, type: DeviceNotificationType): Long
 }
 
 class DeviceNotificationsDataSourceImpl(
@@ -35,6 +39,22 @@ class DeviceNotificationsDataSourceImpl(
     override fun getDeviceNotificationTypesEnabled(deviceId: String): Set<String> {
         val key = getDeviceNotificationTypesFormattedKey(deviceId)
         return cacheService.getDeviceNotificationTypesEnabled(key)
+    }
+
+    override fun setDeviceNotificationTypeTimestamp(
+        deviceId: String,
+        type: DeviceNotificationType
+    ) {
+        val key = getDeviceNotificationFormattedKey(deviceId, type)
+        cacheService.setDeviceNotificationTypeTimestamp(key, System.currentTimeMillis())
+    }
+
+    override fun getDeviceNotificationTypeTimestamp(
+        deviceId: String,
+        type: DeviceNotificationType
+    ): Long {
+        val key = getDeviceNotificationFormattedKey(deviceId, type)
+        return cacheService.getDeviceNotificationTypeTimestamp(key)
     }
 
     override fun showDeviceNotificationsPrompt() = cacheService.getDeviceNotificationsPrompt()

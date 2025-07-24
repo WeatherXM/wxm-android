@@ -146,7 +146,7 @@ data class UIDevice(
     }
 
     fun isEmpty() = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
-    fun isOnline() = isActive != null && isActive == true
+    fun isOnline() = isActive != null && isActive
 
     fun hasErrors(): Boolean {
         return alerts.firstOrNull {
