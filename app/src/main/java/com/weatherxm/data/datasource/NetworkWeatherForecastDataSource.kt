@@ -26,7 +26,9 @@ class NetworkWeatherForecastDataSource(
         ).mapResponse()
     }
 
-    override suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>> {
+    override suspend fun getLocationForecast(
+        location: Location
+    ): Either<Failure, List<WeatherData>> {
         return apiService.getLocationForecast(location.lat, location.lon).mapResponse()
     }
 

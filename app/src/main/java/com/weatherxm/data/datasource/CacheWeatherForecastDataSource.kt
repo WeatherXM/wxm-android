@@ -29,7 +29,9 @@ class CacheWeatherForecastDataSource(
         cacheService.clearDeviceForecast()
     }
 
-    override suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>> {
+    override suspend fun getLocationForecast(
+        location: Location
+    ): Either<Failure, List<WeatherData>> {
         return cacheService.getLocationForecast(location.locationToText())
     }
 

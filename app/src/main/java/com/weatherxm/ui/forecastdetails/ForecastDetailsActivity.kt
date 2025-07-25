@@ -273,6 +273,7 @@ class ForecastDetailsActivity : BaseActivity() {
         with(binding.locationStatusBtn) {
             if (model.location.isSaved) {
                 setOnClickListener {
+                    setResult(RESULT_OK)
                     model.removeSavedLocation()
                     setImageResource(R.drawable.ic_star_outlined)
                 }
@@ -280,6 +281,7 @@ class ForecastDetailsActivity : BaseActivity() {
             } else {
                 setOnClickListener {
                     if (model.canSaveMoreLocations()) {
+                        setResult(RESULT_OK)
                         model.addSavedLocation()
                         setImageResource(R.drawable.ic_star_filled)
                     } else if (model.isLoggedIn()) {
