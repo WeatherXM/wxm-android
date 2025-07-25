@@ -325,6 +325,21 @@
                             tools:composableName="com.weatherxm.ui.components.compose.EmptySavedLocationsViewKt"
                             tools:visibility="visible" />
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/savedLocations"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="vertical"
+                            android:visibility="gone"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/list_item_location_weather"
+                            tools:visibility="visible" />
+
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>

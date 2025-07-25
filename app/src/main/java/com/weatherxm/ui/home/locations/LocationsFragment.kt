@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl.Companion.ANNOUNCEMENT_LOCAL_PRO_ACTION_URL
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBanner
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_STATIONS
@@ -59,6 +60,7 @@ class LocationsFragment : BaseFragment() {
     private val locationHelper: LocationHelper by inject()
 
     private lateinit var searchAdapter: NetworkSearchResultsListAdapter
+    private lateinit var savedLocationsAdapter: LocationsAdapter
 
     /**
      * Register the launcher for opening the forecast details to
@@ -106,6 +108,11 @@ class LocationsFragment : BaseFragment() {
                 }
             }
         }
+
+        savedLocationsAdapter = LocationsAdapter {
+            openForecastDetails(it.coordinates, false)
+        }
+        binding.savedLocations.adapter = savedLocationsAdapter
 
         initSearchComponents()
 
@@ -182,19 +189,15 @@ class LocationsFragment : BaseFragment() {
             Status.SUCCESS -> {
                 response.data?.current?.let {
                     binding.currentLocationWeather.setData(it) {
-                        navigator.showForecastDetails(
-                            activityResultLauncher = forecastDetailsLauncher,
-                            context = context,
-                            device = UIDevice.empty(),
-                            location = UILocation(
-                                coordinates = it.coordinates,
-                                isCurrentLocation = true,
-                                isSaved = model.isLocationSaved(it.coordinates)
-                            )
-                        )
+                        openForecastDetails(it.coordinates, true)
                     }
+                    binding.currentLocationWeather.visible(true)
                 }
-                binding.currentLocationWeather.visible(true)
+                if (!response.data?.saved.isNullOrEmpty()) {
+                    savedLocationsAdapter.submitList(response.data.saved)
+                    binding.savedLocations.visible(true)
+                    binding.emptySavedLocationsCard.visible(false)
+                }
                 binding.swiperefresh.isRefreshing = false
                 binding.statusView.visible(false)
                 binding.nestedScrollView.visible(true)
@@ -396,16 +399,20 @@ class LocationsFragment : BaseFragment() {
         binding.searchView.hide()
 
         result.center?.let {
-            navigator.showForecastDetails(
-                activityResultLauncher = forecastDetailsLauncher,
-                context = context,
-                device = UIDevice.empty(),
-                location = UILocation(
-                    coordinates = it,
-                    isCurrentLocation = false,
-                    isSaved = model.isLocationSaved(it)
-                )
-            )
+            openForecastDetails(it, false)
         }
+    }
+
+    private fun openForecastDetails(coordinates: Location, isCurrentLocation: Boolean) {
+        navigator.showForecastDetails(
+            activityResultLauncher = forecastDetailsLauncher,
+            context = context,
+            device = UIDevice.empty(),
+            location = UILocation(
+                coordinates = coordinates,
+                isCurrentLocation = isCurrentLocation,
+                isSaved = model.isLocationSaved(coordinates)
+            )
+        )
     }
 }
