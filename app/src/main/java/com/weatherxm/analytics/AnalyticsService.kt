@@ -69,7 +69,9 @@ interface AnalyticsService {
         STATION_PHOTOS_GALLERY("Station Photos Gallery"),
         MAP_LAYER_PICKER("Map Layer Picker"),
         TOKEN_METRICS("Token Metrics"),
-        NETWORK_GROWTH("Network Growth")
+        NETWORK_GROWTH("Network Growth"),
+        LOCATIONS_HOME("Locations in Home"),
+        LOCATION_FORECAST_DETAILS("Location Forecast Details")
     }
 
     // Custom Event Names
@@ -285,7 +287,12 @@ interface AnalyticsService {
         BASE_REWARDS("base_rewards"),
         BOOST_REWARDS("boost_rewards"),
         REWARD_MECHANISM("reward_mechanism"),
-        DUNE("dune")
+        DUNE("dune"),
+        SAVED_LOCATION("saved_location"),
+        UNSAVED_LOCATION("unsaved_location"),
+        SAVED_A_LOCATION("Saved a location"),
+        AUTHENTICATED("authenticated"),
+        UNAUTHENTICATED("unauthenticated"),
     }
 
     // Custom Param Names
@@ -315,6 +322,7 @@ interface AnalyticsService {
         STATIONS_OWN("STATIONS_OWN"),
         HAS_WALLET("HAS_WALLET"),
         STATIONS_FAVORITE("STATIONS_FAVORITE"),
+        SAVED_LOCATIONS("SAVED_LOCATIONS"),
     }
 
     fun setUserId(userId: String)

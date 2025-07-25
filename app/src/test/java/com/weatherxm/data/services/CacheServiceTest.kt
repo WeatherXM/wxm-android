@@ -262,8 +262,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     context("GET / SET User Devices Of Bundle") {
         When("We want to GET all the user devices of each bundle") {
             then("return the respective map of elements") {
-                val k = cacheService.getUserDevicesOfBundles()
-                k shouldBe mapOf(bundleKey to 1)
+                cacheService.getUserDevicesOfBundles() shouldBe mapOf(bundleKey to 1)
             }
         }
         When("We have a bundle and its size") {

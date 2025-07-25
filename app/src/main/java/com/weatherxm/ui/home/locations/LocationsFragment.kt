@@ -27,6 +27,7 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UILocation
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setCardRadius
@@ -140,6 +141,7 @@ class LocationsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.LOCATIONS_HOME, classSimpleName())
 
         if (locationHelper.hasLocationPermissions()) {
             binding.askForLocationCard.visible(false)

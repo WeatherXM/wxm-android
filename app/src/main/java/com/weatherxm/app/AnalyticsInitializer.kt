@@ -26,6 +26,7 @@ class AnalyticsInitializer : Initializer<Unit>, KoinComponent {
         }
         analyticsWrapper.setDevicesFavorite(cacheService.getDevicesFavorite())
         analyticsWrapper.setHasWallet(cacheService.hasWallet())
+        analyticsWrapper.setSavedLocations(cacheService.getSavedLocations().size)
         analyticsWrapper.setUserProperties()
         return
     }
