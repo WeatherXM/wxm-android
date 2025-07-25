@@ -55,6 +55,7 @@ class ForecastFragment : BaseFragment() {
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
             navigator.showForecastDetails(
+                activityResultLauncher = null,
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
@@ -70,6 +71,7 @@ class ForecastFragment : BaseFragment() {
                 )
             )
             navigator.showForecastDetails(
+                activityResultLauncher = null,
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),

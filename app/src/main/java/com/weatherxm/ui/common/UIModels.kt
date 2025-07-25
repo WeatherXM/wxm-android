@@ -280,6 +280,14 @@ data class UIForecastDay(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class LocationsWeather(
+    val current: LocationWeather?,
+    val saved: List<LocationWeather>
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class LocationWeather(
     val coordinates: Location,
     val address: String?,

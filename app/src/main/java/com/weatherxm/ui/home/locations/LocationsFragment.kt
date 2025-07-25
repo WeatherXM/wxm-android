@@ -1,6 +1,7 @@
 package com.weatherxm.ui.home.locations
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import com.google.android.material.search.SearchView.TransitionState
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -19,6 +21,7 @@ import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_STATIONS
 import com.weatherxm.databinding.FragmentLocationsHomeBinding
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.LocationsWeather
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -58,6 +61,17 @@ class LocationsFragment : BaseFragment() {
     private lateinit var searchAdapter: NetworkSearchResultsListAdapter
 
     /**
+     * Register the launcher for opening the forecast details to
+     * refetch the data if a save/unsave takes place
+     */
+    private val forecastDetailsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                fetchLocationsWeather()
+            }
+        }
+
+    /**
      * Suppress MissingPermission as we will try to get the location after perms are granted
      */
     @SuppressLint("MissingPermission")
@@ -81,9 +95,7 @@ class LocationsFragment : BaseFragment() {
         binding.swiperefresh.setOnRefreshListener {
             parentModel.getRemoteBanners()
             model.clearLocationForecastFromCache()
-            locationHelper.getLocationAndThen {
-                model.fetch(it, parentModel.isLoggedIn())
-            }
+            fetchLocationsWeather()
         }
 
         binding.askForLocationCard.setOnClickListener {
@@ -102,51 +114,48 @@ class LocationsFragment : BaseFragment() {
         }
 
         observeBanners()
-        observeOnLoading()
-        observeOnError()
 
-        model.onLocationWeather().observe(viewLifecycleOwner) { result ->
-            binding.currentLocationWeather.setData(result) {
-                navigator.showForecastDetails(
-                    context = context,
-                    device = UIDevice.empty(),
-                    location = UILocation(
-                        coordinates = it.coordinates,
-                        isCurrentLocation = true,
-                        isSaved = model.isLocationSaved(it.coordinates)
-                    )
-                )
-            }
-            binding.currentLocationWeather.visible(true)
+        model.onLocationsWeather().observe(viewLifecycleOwner) {
+            updateUI(it)
         }
-
-        /**
-         * Suppress MissingPermission as we will try to get the location after perms are granted
-         */
-        @SuppressLint("MissingPermission")
-        if (!locationHelper.hasLocationPermissions()) {
-            model.onNoLocationPermission()
-            binding.currentLocationWeather.visible(false)
-            binding.askForLocationCard.visible(true)
-        } else {
-            binding.askForLocationCard.visible(false)
-            locationHelper.getLocationAndThen {
-                model.fetch(it, parentModel.isLoggedIn())
-            }
-        }
+        fetchLocationsWeather()
 
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        if (model.getSavedLocations().isEmpty()) {
+
+        if (locationHelper.hasLocationPermissions()) {
+            binding.askForLocationCard.visible(false)
+        } else {
+            binding.currentLocationWeather.visible(false)
+            binding.askForLocationCard.visible(true)
+        }
+
+        if (!model.getSavedLocations().isNotEmpty()) {
             binding.emptySavedLocationsCard.setContent {
                 EmptySavedLocationsView()
             }
             binding.emptySavedLocationsCard.visible(true)
+        }
+    }
+
+    private fun fetchLocationsWeather() {
+        val hasLocationPermissions = locationHelper.hasLocationPermissions()
+        val hasSavedLocations = model.getSavedLocations().isNotEmpty()
+        /**
+         * Suppress MissingPermission as we will try to get the location after perms are granted
+         */
+        @SuppressLint("MissingPermission")
+        if (hasLocationPermissions) {
+            locationHelper.getLocationAndThen {
+                model.fetch(it, parentModel.isLoggedIn())
+            }
+        } else if (hasSavedLocations) {
+            model.fetch(null, parentModel.isLoggedIn())
         } else {
-            // TODO: STOPSHIP: Fetch the weather for saved locations with the same call as with current location
+            binding.swiperefresh.isRefreshing = false
         }
     }
 
@@ -168,35 +177,45 @@ class LocationsFragment : BaseFragment() {
         }
     }
 
-    private fun observeOnLoading() {
-        model.onLoading().observe(viewLifecycleOwner) {
-            if (it && binding.swiperefresh.isRefreshing) {
-                binding.statusView.visible(false)
-            } else if (it) {
-                binding.nestedScrollView.visible(false)
-                binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
-            } else {
-                binding.swiperefresh.isRefreshing = false
-                if (model.onError().value == null) {
-                    binding.statusView.visible(false)
-                    binding.nestedScrollView.visible(true)
+    private fun updateUI(response: Resource<LocationsWeather>) {
+        when (response.status) {
+            Status.SUCCESS -> {
+                response.data?.current?.let {
+                    binding.currentLocationWeather.setData(it) {
+                        navigator.showForecastDetails(
+                            activityResultLauncher = forecastDetailsLauncher,
+                            context = context,
+                            device = UIDevice.empty(),
+                            location = UILocation(
+                                coordinates = it.coordinates,
+                                isCurrentLocation = true,
+                                isSaved = model.isLocationSaved(it.coordinates)
+                            )
+                        )
+                    }
                 }
-            }
-        }
-    }
-
-    private fun observeOnError() {
-        model.onError().observe(viewLifecycleOwner) { error ->
-            if (error == null) {
+                binding.currentLocationWeather.visible(true)
+                binding.swiperefresh.isRefreshing = false
+                binding.statusView.visible(false)
                 binding.nestedScrollView.visible(true)
-            } else {
+            }
+            Status.ERROR -> {
+                binding.swiperefresh.isRefreshing = false
                 binding.nestedScrollView.visible(false)
                 binding.statusView.animation(R.raw.anim_error, false)
                     .title(R.string.error_generic_message)
                     .action(getString(R.string.action_try_again))
-                    .subtitle(error.errorMessage)
-                    .listener { error.retryFunction }
+                    .subtitle(response.message)
+                    .listener { fetchLocationsWeather() }
                     .visible(true)
+            }
+            Status.LOADING -> {
+                if (binding.swiperefresh.isRefreshing) {
+                    binding.statusView.visible(false)
+                } else {
+                    binding.nestedScrollView.visible(false)
+                    binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
+                }
             }
         }
     }
@@ -378,6 +397,7 @@ class LocationsFragment : BaseFragment() {
 
         result.center?.let {
             navigator.showForecastDetails(
+                activityResultLauncher = forecastDetailsLauncher,
                 context = context,
                 device = UIDevice.empty(),
                 location = UILocation(
