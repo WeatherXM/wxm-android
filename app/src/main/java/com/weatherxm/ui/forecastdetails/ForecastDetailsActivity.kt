@@ -89,7 +89,7 @@ class ForecastDetailsActivity : BaseActivity() {
 
             binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
         } else {
-            handleSavedLocationIcon()
+            initSavedLocationIcon()
             binding.displayTimeNotice.visible(false)
         }
         setupChartsAndListeners()
@@ -269,36 +269,39 @@ class ForecastDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun handleSavedLocationIcon() {
-        with(binding.locationStatusBtn) {
-            if (model.location.isSaved) {
-                setOnClickListener {
-                    setResult(RESULT_OK)
-                    model.removeSavedLocation()
-                    setImageResource(R.drawable.ic_star_outlined)
-                }
-                setImageResource(R.drawable.ic_star_filled)
-            } else {
-                setOnClickListener {
-                    if (model.canSaveMoreLocations()) {
-                        setResult(RESULT_OK)
-                        model.addSavedLocation()
-                        setImageResource(R.drawable.ic_star_filled)
-                    } else if (model.isLoggedIn()) {
-                        toast(R.string.maxed_out_saved_locations)
-                    } else {
-                        navigator.showLoginDialog(
-                            fragmentActivity = this@ForecastDetailsActivity,
-                            title = getString(R.string.looking_to_save_more_spots),
-                            message = getString(R.string.maxed_out_saved_locations_sign_in)
-                        )
-                    }
-                }
-                setImageResource(R.drawable.ic_star_outlined)
+    private fun initSavedLocationIcon() {
+        if (model.location.isSaved) {
+            binding.locationStatusBtn.setOnClickListener {
+                setResult(RESULT_OK)
+                model.removeSavedLocation()
+                initSavedLocationIcon()
             }
-            setColor(R.color.warning)
-            visible(true)
+            binding.locationStatusBtn.setImageResource(R.drawable.ic_star_filled)
+        } else {
+            binding.locationStatusBtn.setOnClickListener {
+                if (model.canSaveMoreLocations()) {
+                    /**
+                     * Set result to OK so that the previous screen (locations in home) gets
+                     * triggered for an update
+                     */
+                    setResult(RESULT_OK)
+
+                    model.addSavedLocation()
+                    initSavedLocationIcon()
+                } else if (model.isLoggedIn()) {
+                    toast(R.string.maxed_out_saved_locations)
+                } else {
+                    navigator.showLoginDialog(
+                        fragmentActivity = this@ForecastDetailsActivity,
+                        title = getString(R.string.looking_to_save_more_spots),
+                        message = getString(R.string.maxed_out_saved_locations_sign_in)
+                    )
+                }
+            }
+            binding.locationStatusBtn.setImageResource(R.drawable.ic_star_outlined)
         }
+        binding.locationStatusBtn.setColor(R.color.warning)
+        binding.locationStatusBtn.visible(true)
     }
 
     override fun onResume() {

@@ -125,6 +125,14 @@ class LocationsFragment : BaseFragment() {
         model.onLocationsWeather().observe(viewLifecycleOwner) {
             updateUI(it)
         }
+        binding.emptySavedLocationsCard.setContent {
+            EmptySavedLocationsView()
+        }
+
+        if (!model.getSavedLocations().isNotEmpty()) {
+            binding.emptySavedLocationsCard.visible(true)
+        }
+
         fetchLocationsWeather()
 
         return binding.root
@@ -138,13 +146,6 @@ class LocationsFragment : BaseFragment() {
         } else {
             binding.currentLocationWeather.visible(false)
             binding.askForLocationCard.visible(true)
-        }
-
-        if (!model.getSavedLocations().isNotEmpty()) {
-            binding.emptySavedLocationsCard.setContent {
-                EmptySavedLocationsView()
-            }
-            binding.emptySavedLocationsCard.visible(true)
         }
     }
 
@@ -195,9 +196,11 @@ class LocationsFragment : BaseFragment() {
                 }
                 if (!response.data?.saved.isNullOrEmpty()) {
                     savedLocationsAdapter.submitList(response.data.saved)
-                    binding.savedLocations.visible(true)
-                    binding.emptySavedLocationsCard.visible(false)
+                } else {
+                    savedLocationsAdapter.submitList(mutableListOf())
                 }
+                binding.savedLocations.visible(!response.data?.saved.isNullOrEmpty())
+                binding.emptySavedLocationsCard.visible(response.data?.saved.isNullOrEmpty())
                 binding.swiperefresh.isRefreshing = false
                 binding.statusView.visible(false)
                 binding.nestedScrollView.visible(true)
@@ -213,8 +216,14 @@ class LocationsFragment : BaseFragment() {
                     .visible(true)
             }
             Status.LOADING -> {
+                val hasDataVisible = savedLocationsAdapter.currentList.isNotEmpty() ||
+                    binding.currentLocationWeather.isVisible
+
                 if (binding.swiperefresh.isRefreshing) {
-                    binding.statusView.visible(false)
+                    binding.statusView.clear().visible(false)
+                } else if (hasDataVisible) {
+                    binding.statusView.clear().visible(false)
+                    binding.swiperefresh.isRefreshing = true
                 } else {
                     binding.nestedScrollView.visible(false)
                     binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
