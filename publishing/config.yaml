@@ -1,0 +1,70 @@
+publisher:
+  name: WeatherXM
+  address: ''
+  website: https://weatherxm.com
+  email: hello@weatherxm.com
+  media:
+    - purpose: icon
+      uri: ./media/publisher.png
+app:
+  name: WeatherXM
+  address: ''
+  android_package: com.weatherxm.app.solana
+  urls:
+    license_url: https://weatherxm.com/terms-conditions/
+    copyright_url: https://weatherxm.com/terms-conditions/
+    privacy_policy_url: https://weatherxm.com/privacy-policy/
+    website: https://weatherxm.com
+  media:
+    - purpose: icon
+      uri: ./media/app_icon.png
+release:
+  address: ''
+  media:
+    - purpose: icon
+      uri: ./media/app_icon.png
+    - purpose: banner
+      uri: ./media/banner.png
+    - purpose: featureGraphic
+      uri: ./media/feature.png
+    - purpose: screenshot
+      uri: ./media/screen1.png
+    - purpose: screenshot
+      uri: ./media/screen2.png
+    - purpose: screenshot
+      uri: ./media/screen3.png
+    - purpose: screenshot
+      uri: ./media/screen4.png
+    - purpose: screenshot
+      uri: ./media/screen5.png
+  files:
+    - purpose: install
+      uri: ./files/app-release-solana.apk
+  catalog:
+    en-US:
+      name: WeatherXM
+      short_description: Enter Weather 3.0
+      long_description: |
+        WeatherXM is the first decentralized weather network — think “Helium for weather” — powered by 9,000+ community-operated weather stations worldwide.
+
+        Get access to hyperlocal real-time and forecast data, personalized station dashboards, and $WXM rewards for maintaining weather stations. The app lets you:
+        - View current and historical conditions from real-world stations
+        - Access forecast insights powered by our FACT and Mosaic models
+        - Manage station health, rewards, and performance
+        - Discover new locations, deployment initiatives, and community rollouts
+
+        As we expand into Solana, expect more integrations to come. Whether you’re a weather enthusiast, a DePIN builder, or a Solana Seeker user — WeatherXM puts the power of the sky in your hands.
+      new_in_version: |
+        - Optimized for Solana Mobile (Seeker) compatibility
+        - Updated visuals and UX for crypto-native users
+        - Bug fixes and performance improvements
+      saga_features: |
+        - Optimized dApp experience for Seeker hardware
+        - Seamless onboarding with Solana-native UI flows
+solana_mobile_dapp_publisher_portal:
+  google_store_package: com.weatherxm.app
+  testing_instructions: |
+    1. Install APK via Solana Mobile dApp Store on your Seeker or Saga phone.
+    2. Launch app and allow any requested permissions.
+    3. Verify explorer map, station details, and station reward screens load correctly.
+    4. Optional: Login with your WeatherXM credentials and walkthrough the entire app.
