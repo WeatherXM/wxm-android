@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/colorSurface"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/notifications" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal_to_large"
+        android:paddingBottom="@dimen/padding_normal"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/deviceStatusCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal_to_large"
+            app:cardBackgroundColor="@color/layer1"
+            app:cardCornerRadius="@dimen/radius_medium"
+            app:contentPadding="@dimen/padding_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ownershipIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:importantForAccessibility="no"
+                tools:src="@drawable/ic_home"
+                tools:tint="@color/textColor" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/deviceName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small_to_normal"
+            android:layout_marginEnd="@dimen/margin_normal_to_large"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            android:textSize="20.sp"
+            app:layout_constraintBottom_toBottomOf="@id/deviceStatusCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/deviceStatusCard"
+            app:layout_constraintTop_toTopOf="@id/deviceStatusCard"
+            tools:text="Sunrise Avenue Apartments 1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal_to_large"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:text="@string/show_notifications"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            android:textSize="20.sp"
+            app:layout_constraintBottom_toBottomOf="@id/mainSwitch"
+            app:layout_constraintEnd_toStartOf="@id/mainSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mainSwitch" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/mainSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal_to_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceStatusCard"
+            tools:composableName="com.weatherxm.ui.components.compose.SwitchWithIconKt" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:dividerColor="@color/layer1"
+            app:layout_constraintTop_toBottomOf="@id/mainSwitch" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/notificationTypes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+            android:layout_marginTop="@dimen/margin_normal_to_large"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:composableName="com.weatherxm.ui.devicenotifications.DeviceNotificationTypesViewKt" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -74,6 +74,7 @@ import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
 import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
+import com.weatherxm.ui.devicenotifications.DeviceNotificationsActivity
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumActivity
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyActivity
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
@@ -237,6 +238,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
         context?.startActivity(
             intent
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+        )
+    }
+
+    fun showStationNotifications(context: Context?, device: UIDevice) {
+        context?.startActivity(
+            Intent(context, DeviceNotificationsActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
         )

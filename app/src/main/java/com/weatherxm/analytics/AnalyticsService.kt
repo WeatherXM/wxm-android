@@ -70,7 +70,8 @@ interface AnalyticsService {
         STATION_PHOTOS_GALLERY("Station Photos Gallery"),
         MAP_LAYER_PICKER("Map Layer Picker"),
         TOKEN_METRICS("Token Metrics"),
-        NETWORK_GROWTH("Network Growth")
+        NETWORK_GROWTH("Network Growth"),
+        STATION_NOTIFICATIONS("Station Notifications")
     }
 
     // Custom Event Names
@@ -287,7 +288,14 @@ interface AnalyticsService {
         BASE_REWARDS("base_rewards"),
         BOOST_REWARDS("boost_rewards"),
         REWARD_MECHANISM("reward_mechanism"),
-        DUNE("dune")
+        DUNE("dune"),
+        TOGGLE_STATION_NOTIFICATIONS("Toggle Station Notifications"),
+        TOGGLE_STATION_NOTIFICATION_TYPE("Toggle Station Notification Type"),
+        ENABLE("enable"),
+        DISABLE("disable"),
+        STATION_HEALTH("station_health"),
+        ACTIVITY("activity"),
+        OPEN_STATION_FROM_NOTIFICATION("Open Station from Notification")
     }
 
     // Custom Param Names

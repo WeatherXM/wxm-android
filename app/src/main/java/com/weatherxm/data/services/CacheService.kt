@@ -13,6 +13,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Device
+import com.weatherxm.data.models.DeviceNotificationType
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBannerType
@@ -55,6 +56,10 @@ class CacheService(
         const val KEY_ACCEPT_TERMS_TIMESTAMP = "accept_terms_timestamp"
         const val KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS = "photo_verification_accepted_terms"
         const val KEY_SHOULD_SHOW_CLAIMING_BADGE = "should_show_claiming_badge"
+        const val KEY_DEVICE_NOTIFICATIONS = "device_notifications"
+        const val KEY_DEVICE_NOTIFICATION_TYPES = "device_notification_types"
+        const val KEY_DEVICE_NOTIFICATIONS_PROMPT = "device_notifications_prompt"
+        const val KEY_DEVICE_NOTIFICATION = "device_notification"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -74,6 +79,21 @@ class CacheService(
 
         fun getUserDeviceOwnFormattedKey(deviceBundleName: String): String {
             return "${KEY_DEVICES_OWN}_${deviceBundleName}"
+        }
+
+        fun getDeviceNotificationsFormattedKey(deviceId: String): String {
+            return "${KEY_DEVICE_NOTIFICATIONS}_${deviceId}"
+        }
+
+        fun getDeviceNotificationTypesFormattedKey(deviceId: String): String {
+            return "${KEY_DEVICE_NOTIFICATION_TYPES}_${deviceId}"
+        }
+
+        fun getDeviceNotificationFormattedKey(
+            deviceId: String,
+            deviceNotificationType: DeviceNotificationType
+        ): String {
+            return "${KEY_DEVICE_NOTIFICATION}_${deviceNotificationType}_${deviceId}"
         }
     }
 
@@ -432,6 +452,42 @@ class CacheService(
         preferences.edit { putBoolean(KEY_SHOULD_SHOW_CLAIMING_BADGE, shouldShow) }
     }
 
+    fun setDeviceNotificationsEnabled(key: String, enabled: Boolean) {
+        preferences.edit { putBoolean(key, enabled) }
+    }
+
+    fun getDeviceNotificationsEnabled(key: String): Boolean {
+        return preferences.getBoolean(key, true)
+    }
+
+    fun setDeviceNotificationTypesEnabled(key: String, types: Set<String>) {
+        preferences.edit { putStringSet(key, types) }
+    }
+
+    fun getDeviceNotificationTypesEnabled(key: String): Set<String> {
+        /**
+         * By default have enabled all types when the user hasn't edited them.
+         */
+        val allTypes = DeviceNotificationType.entries.map { it.name }.toSet()
+        return preferences.getStringSet(key, allTypes) ?: allTypes
+    }
+
+    fun checkDeviceNotificationsPrompt() {
+        preferences.edit { putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, false) }
+    }
+
+    fun getDeviceNotificationsPrompt(): Boolean {
+        return preferences.getBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, true)
+    }
+
+    fun setDeviceNotificationTypeTimestamp(key: String, timestamp: Long) {
+        preferences.edit { putLong(key, timestamp) }
+    }
+
+    fun getDeviceNotificationTypeTimestamp(key: String): Long {
+        return preferences.getLong(key, 0L)
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -485,6 +541,7 @@ class CacheService(
             KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
         )
         val savedAcceptTermsTimestamp = preferences.getLong(KEY_ACCEPT_TERMS_TIMESTAMP, 0L)
+        val savedDeviceNotificationsPrompt = getDeviceNotificationsPrompt()
         val widgetIds = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
         val devicesOfWidgets = mutableMapOf<String, String>()
         widgetIds?.forEach {
@@ -507,6 +564,7 @@ class CacheService(
                 .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
                 .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
+                .putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, savedDeviceNotificationsPrompt)
         }
 
         devicesOfWidgets.forEach {

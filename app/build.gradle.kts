@@ -423,6 +423,7 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/ui/components/HidingBottomNavigationView*.*",
         "**/ui/components/DateNavigator*.class",
         "**/ui/components/DatePicker.class",
+        "**/ui/devicenotifications/DeviceNotificationTypesView*.*",
         "**/ui/devicesettings/DevicePhotosView*.*",
         "**/ui/widgets/RemoteViews*.*",
         "**/ui/widgets/currentweather/*.*",
