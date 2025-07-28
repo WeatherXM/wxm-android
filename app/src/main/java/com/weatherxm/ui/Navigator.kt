@@ -46,7 +46,6 @@ import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_LOCATION
-import com.weatherxm.ui.common.Contracts.ARG_NEEDS_PHOTO_VERIFICATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_PHOTOS

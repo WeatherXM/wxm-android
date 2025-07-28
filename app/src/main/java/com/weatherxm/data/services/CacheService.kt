@@ -514,6 +514,7 @@ class CacheService(
 
     fun setSavedLocations(locations: List<String>) {
         preferences.edit { putStringSet(KEY_SAVED_LOCATIONS, locations.toSet()) }
+        onUserPropertiesChangeListener?.invoke(KEY_SAVED_LOCATIONS, locations.size)
     }
 
     fun getPreferredUnit(

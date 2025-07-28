@@ -287,6 +287,20 @@ class ForecastDetailsActivity : BaseActivity() {
                     setResult(RESULT_OK)
 
                     model.addSavedLocation()
+                    val stateParam = if (model.isLoggedIn()) {
+                        AnalyticsService.ParamValue.AUTHENTICATED.paramValue
+                    } else {
+                        AnalyticsService.ParamValue.UNAUTHENTICATED.paramValue
+                    }
+                    analytics.trackEventUserAction(
+                        actionName = AnalyticsService.ParamValue.SAVED_A_LOCATION.paramValue,
+                        contentType = null,
+                        Pair(
+                            AnalyticsService.CustomParam.STATE.paramName,
+                            stateParam
+                        )
+                    )
+
                     initSavedLocationIcon()
                 } else if (model.isLoggedIn()) {
                     toast(R.string.maxed_out_saved_locations)
@@ -306,7 +320,22 @@ class ForecastDetailsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST_DETAILS, classSimpleName())
+        if (!model.device.isEmpty()) {
+            analytics.trackScreen(
+                AnalyticsService.Screen.DEVICE_FORECAST_DETAILS,
+                classSimpleName()
+            )
+        } else {
+            analytics.trackScreen(
+                screen = AnalyticsService.Screen.LOCATION_FORECAST_DETAILS,
+                screenClass = classSimpleName(),
+                itemId = if (model.location.isSaved) {
+                    AnalyticsService.ParamValue.SAVED_LOCATION.paramValue
+                } else {
+                    AnalyticsService.ParamValue.UNSAVED_LOCATION.paramValue
+                }
+            )
+        }
 
         model.isLoggedIn().also {
             binding.promoCard.setContent {
