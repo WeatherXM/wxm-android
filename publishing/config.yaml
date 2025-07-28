@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./media/app_icon.png
 release:
-  address: ''
+  address: 9X8sB1uYWkQotbAV53Ku15xymQ6R7iZ3vdv9vxnLzoqB
   media:
     - purpose: icon
       uri: ./media/app_icon.png
@@ -76,3 +76,7 @@ solana_mobile_dapp_publisher_portal:
     2. Launch app and allow any requested permissions.
     3. Verify explorer map, station details, and station reward screens load correctly.
     4. Optional: Login with your WeatherXM credentials and walkthrough the entire app.
+lastSubmittedVersionOnChain:
+  address: 9X8sB1uYWkQotbAV53Ku15xymQ6R7iZ3vdv9vxnLzoqB
+  version_code: 111
+  apk_hash: aDeum/4534ttewfVTHh9wp7JYjOTfr0rkda1ovRu+fI=
