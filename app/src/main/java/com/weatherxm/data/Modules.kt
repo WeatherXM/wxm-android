@@ -168,6 +168,7 @@ import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewMod
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
@@ -732,6 +733,7 @@ private val viewmodels = module {
     viewModelOf(::ClaimHeliumResultViewModel)
     viewModelOf(::ClaimHeliumViewModel)
     viewModelOf(::ClaimLocationViewModel)
+    viewModelOf(::ClaimPhotosGalleryViewModel)
     viewModelOf(::ClaimPulseViewModel)
     viewModelOf(::ClaimWifiViewModel)
     viewModelOf(::ConnectWalletViewModel)

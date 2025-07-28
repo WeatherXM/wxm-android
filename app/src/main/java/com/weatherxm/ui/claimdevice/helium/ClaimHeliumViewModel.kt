@@ -1,5 +1,6 @@
 package com.weatherxm.ui.claimdevice.helium
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,10 +13,13 @@ import com.weatherxm.data.models.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.models.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PhotoPresignedMetadata
 import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,6 +30,7 @@ import timber.log.Timber
 @Suppress("TooManyFunctions")
 class ClaimHeliumViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
+    private val photoUseCase: DevicePhotoUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher,
@@ -33,10 +38,13 @@ class ClaimHeliumViewModel(
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<UIDevice>>()
+    private val onPhotosMetadata = MutableLiveData<Pair<UIDevice, List<PhotoPresignedMetadata>>>()
 
     fun onCancel() = onCancel
     fun onNext() = onNext
     fun onClaimResult() = onClaimResult
+    fun onPhotosMetadata(): LiveData<Pair<UIDevice, List<PhotoPresignedMetadata>>> =
+        onPhotosMetadata
 
     private var devEUI: String = String.empty()
     private var deviceKey: String = String.empty()
@@ -74,11 +82,12 @@ class ClaimHeliumViewModel(
         onNext.postValue(true)
     }
 
-    fun claimDevice(location: Location) {
+    fun claimDevice(location: Location, photos: List<StationPhoto>) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             claimDeviceUseCase.claimDevice(devEUI, location.lat, location.lon, deviceKey).onRight {
                 Timber.d("Claimed device: $it")
+                prepareUpload(it, photos)
                 onClaimResult.postValue(Resource.success(it))
             }.onLeft {
                 analytics.trackEventFailure(it.code)
@@ -98,6 +107,13 @@ class ClaimHeliumViewModel(
                 )
             }
         }
+    }
+
+    suspend fun prepareUpload(device: UIDevice, photos: List<StationPhoto>) {
+        photoUseCase.getPhotosMetadataForUpload(device.id, photos.mapNotNull { it.localPath })
+            .onRight {
+                onPhotosMetadata.postValue(Pair(device, it))
+            }
     }
 
     fun setClaimedDevice(device: UIDevice?) {

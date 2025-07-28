@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 class DeviceHeliumOTAViewModel(
     val device: UIDevice,
     private val deviceIsBleConnected: Boolean,
-    val needsPhotoVerification: Boolean,
     private val resources: Resources,
     private val updaterUseCase: BluetoothUpdaterUseCase,
     connectionUseCase: BluetoothConnectionUseCase,

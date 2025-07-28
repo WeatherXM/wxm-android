@@ -9,12 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimHeliumResultBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -30,6 +30,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
     private val model: ClaimHeliumResultViewModel by activityViewModel()
+    private val photosModel: ClaimPhotosGalleryViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimHeliumResultBinding
 
     companion object {
@@ -80,7 +81,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
         model.onBLEClaimingKey().observe(viewLifecycleOwner) {
             parentModel.setDeviceKey(it)
-            parentModel.claimDevice(locationModel.getInstallationLocation())
+            parentModel.claimDevice(locationModel.getInstallationLocation(), photosModel.onPhotos)
         }
 
         model.onBLEError().observe(viewLifecycleOwner) { uiError ->
@@ -156,18 +157,14 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     binding.updateBtn.setOnClickListener {
                         onUpdate(device)
                     }
-                    initPhotoVerificationBtn(device)
-                    binding.skipAndGoToStationBtn.setOnClickListener {
+                    binding.viewStationBtn.setOnClickListener {
                         showConfirmBypassOTADialog(device)
                     }
                     binding.infoMessage.setHtml(R.string.update_prompt_on_claiming_flow)
                     binding.informationCard.visible(true)
                 } else if (device != null) {
-                    initPhotoVerificationBtn(device)
-                    binding.skipAndGoToStationBtn.setOnClickListener {
-                        ActionDialogFragment.createSkipPhotoVerification(requireContext()) {
-                            onViewDevice(device)
-                        }.show(this)
+                    binding.viewStationBtn.setOnClickListener {
+                        onViewDevice(device)
                     }
                 }
                 binding.steps.visible(false)
@@ -175,7 +172,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     .animation(R.raw.anim_success, false)
                     .title(R.string.station_claimed)
                     .htmlSubtitle(getString(R.string.success_claim_device, device?.name))
-                binding.successButtonsContainer.visible(true)
+                binding.viewStationBtn.visible(true)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     success = 1L
@@ -195,7 +192,10 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     )
                     onLoadingState()
                     onStep(STEP_CLAIM_STATION)
-                    parentModel.claimDevice(locationModel.getInstallationLocation())
+                    parentModel.claimDevice(
+                        locationModel.getInstallationLocation(),
+                        photosModel.onPhotos
+                    )
                 }
                 binding.failureButtonsContainer.visible(true)
                 binding.status.clear()
@@ -252,12 +252,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 AnalyticsService.ParamValue.UPDATE_STATION.paramValue
             )
         )
-        navigator.showDeviceHeliumOTA(
-            context,
-            device,
-            deviceIsBleConnected = true,
-            needsPhotoVerification = true
-        )
+        navigator.showDeviceHeliumOTA(context, device, true)
         activity?.finish()
     }
 
@@ -279,21 +274,6 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
     private fun hideButtons() {
         binding.failureButtonsContainer.invisible()
-        binding.successButtonsContainer.invisible()
-    }
-
-    private fun initPhotoVerificationBtn(device: UIDevice) {
-        binding.photoVerificationBtn.setOnClickListener {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.GO_TO_PHOTO_VERIFICATION.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.SOURCE,
-                    AnalyticsService.ParamValue.CLAIMING_ID.paramValue
-                )
-            )
-            navigator.showPhotoVerificationIntro(context, device)
-            activity?.setResult(Activity.RESULT_OK)
-            activity?.finish()
-        }
+        binding.viewStationBtn.invisible()
     }
 }

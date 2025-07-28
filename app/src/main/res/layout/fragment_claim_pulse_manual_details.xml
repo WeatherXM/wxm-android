@@ -5,7 +5,8 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/alternativeBackground">
+    android:background="@color/alternativeBackground"
+    android:paddingHorizontal="@dimen/padding_normal">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -70,11 +71,11 @@
                 app:boxBackgroundColor="@color/alternativeBackground"
                 app:counterEnabled="true"
                 app:counterMaxLength="16"
-                app:hintEnabled="false"
-                app:placeholderText="P"
-                app:prefixTextAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 app:expandedHintEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/serialNumberTitle">
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/serialNumberTitle"
+                app:placeholderText="P"
+                app:prefixTextAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/serialNumber"

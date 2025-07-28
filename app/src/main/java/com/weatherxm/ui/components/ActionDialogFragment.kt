@@ -1,7 +1,6 @@
 package com.weatherxm.ui.components
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -11,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.weatherxm.R
 import com.weatherxm.databinding.ViewActionDialogBinding
 import com.weatherxm.ui.common.setHtml
 import timber.log.Timber
@@ -80,19 +78,6 @@ class ActionDialogFragment : DialogFragment() {
         private const val ARG_HTML_MESSAGE = "html_message"
         private const val ARG_POSITIVE = "positive"
         private const val ARG_NEGATIVE = "negative"
-
-        fun createSkipPhotoVerification(
-            context: Context,
-            onSkip: () -> Unit
-        ): ActionDialogFragment {
-            return Builder(
-                title = context.getString(R.string.skip_photo_verification),
-                message = context.getString(R.string.skip_photo_verification_message),
-                negative = context.getString(R.string.action_back)
-            )
-                .onPositiveClick(context.getString(R.string.action_skip)) { onSkip() }
-                .build()
-        }
     }
 
     private var onPositiveClickListener: OnDialogActionClickListener? = null

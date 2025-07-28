@@ -7,10 +7,16 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.service.GlobalUploadObserverService
+import com.weatherxm.ui.claimdevice.beforeyouclaim.ClaimBeforeYouClaimFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryFragment
+import com.weatherxm.ui.claimdevice.photosgallery.ClaimPhotosGalleryViewModel
+import com.weatherxm.ui.claimdevice.photosintro.ClaimPhotosIntroFragment
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_PHOTOS_GALLERY
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.pulse.claimingcode.ClaimPulseClaimingCodeFragment
 import com.weatherxm.ui.claimdevice.pulse.manualdetails.ClaimPulseManualDetailsFragment
@@ -22,7 +28,9 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
 class ClaimPulseActivity : BaseActivity() {
     companion object {
@@ -32,8 +40,10 @@ class ClaimPulseActivity : BaseActivity() {
     }
 
     private lateinit var binding: ActivityClaimDeviceBinding
+    private val uploadObserverService: GlobalUploadObserverService by inject()
     private val model: ClaimPulseViewModel by viewModel()
     private val locationModel: ClaimLocationViewModel by viewModel()
+    private val photosViewModel: ClaimPhotosGalleryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +67,20 @@ class ClaimPulseActivity : BaseActivity() {
         binding.toolbar.title = getString(R.string.title_claim_pulse_4g)
         binding.toolbar.setNavigationOnClickListener {
             finish()
+        }
+
+        model.onPhotosMetadata().observe(this) { (device, metadata) ->
+            val numberOfPhotosToUpload = List(photosViewModel.onPhotos.size) { index ->
+                metadata.getOrNull(index)
+            }.filterNotNull().size
+            uploadObserverService.setData(device, numberOfPhotosToUpload)
+
+            startWorkerForUploadingPhotos(
+                device,
+                photosViewModel.onPhotos.toList(),
+                metadata,
+                model.getSerialNumber()
+            )
         }
 
         savedInstanceState?.let {
@@ -91,13 +115,15 @@ class ClaimPulseActivity : BaseActivity() {
             pager.currentItem += incrementPage
             binding.progress.progress = pager.currentItem + 1
             when (pager.currentItem) {
-                PAGE_LOCATION -> {
-                    locationModel.requestUserLocation()
-                }
+                PAGE_LOCATION -> locationModel.requestUserLocation()
+                PAGE_PHOTOS_GALLERY -> photosViewModel.requestCameraPermission()
                 PAGE_RESULT -> {
                     binding.appBar.visible(false)
                     binding.progress.visible(false)
-                    model.claimDevice(locationModel.getInstallationLocation())
+                    model.claimDevice(
+                        locationModel.getInstallationLocation(),
+                        photosViewModel.onPhotos
+                    )
                 }
             }
         }
@@ -107,13 +133,16 @@ class ClaimPulseActivity : BaseActivity() {
         activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
         companion object {
-            const val PAGE_REBOOT = 0
-            const val PAGE_PREPARE_GATEWAY = 1
-            const val PAGE_MANUAL_DETAILS = 2
-            const val PAGE_CLAIMING_CODE = 3
-            const val PAGE_LOCATION = 4
-            const val PAGE_RESULT = 5
-            const val PAGE_COUNT = 6
+            const val PAGE_BEFORE_CLAIMING = 0
+            const val PAGE_REBOOT = 1
+            const val PAGE_PREPARE_GATEWAY = 2
+            const val PAGE_MANUAL_DETAILS = 3
+            const val PAGE_CLAIMING_CODE = 4
+            const val PAGE_LOCATION = 5
+            const val PAGE_PHOTOS_INTRO = 6
+            const val PAGE_PHOTOS_GALLERY = 7
+            const val PAGE_RESULT = 8
+            const val PAGE_COUNT = 9
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -121,11 +150,14 @@ class ClaimPulseActivity : BaseActivity() {
         @Suppress("UseCheckOrError", "UseIfInsteadOfWhen")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
+                PAGE_BEFORE_CLAIMING -> ClaimBeforeYouClaimFragment.newInstance(DeviceType.PULSE_4G)
                 PAGE_REBOOT -> ClaimPulseRebootFragment()
                 PAGE_PREPARE_GATEWAY -> ClaimPulsePrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimPulseManualDetailsFragment()
                 PAGE_CLAIMING_CODE -> ClaimPulseClaimingCodeFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.PULSE_4G)
+                PAGE_PHOTOS_INTRO -> ClaimPhotosIntroFragment.newInstance(DeviceType.PULSE_4G)
+                PAGE_PHOTOS_GALLERY -> ClaimPhotosGalleryFragment.newInstance(DeviceType.PULSE_4G)
                 PAGE_RESULT -> ClaimResultFragment.newInstance(DeviceType.PULSE_4G)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
