@@ -8,7 +8,7 @@ publisher:
       uri: ./media/publisher.png
 app:
   name: WeatherXM
-  address: ''
+  address: q7eX2s17hwnrZM3SxyFKceUkxzgf7zutDUMMGHTPHUh
   android_package: com.weatherxm.app.solana
   urls:
     license_url: https://weatherxm.com/terms-conditions/
