@@ -46,6 +46,7 @@ import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Validator
+import com.weatherxm.util.Validator.validateNetworkSearchQuery
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -235,6 +236,11 @@ class LocationsFragment : BaseFragment() {
     }
 
     private fun initSearchComponents() {
+        searchAdapter = NetworkSearchResultsListAdapter {
+            onNetworkSearchResultClicked(it)
+        }
+        binding.resultsRecycler.adapter = searchAdapter
+
         binding.searchCard.setOnClickListener {
             binding.searchView.show()
         }
@@ -251,11 +257,13 @@ class LocationsFragment : BaseFragment() {
         binding.searchView.editText.onTextChanged {
             if (binding.searchView.currentTransitionState == TransitionState.SHOWN) {
                 searchModel.setQuery(it)
-                if (Validator.validateNetworkSearchQuery(it)) {
+                if (validateNetworkSearchQuery(it)) {
                     searchModel.networkSearch(exclude = EXCLUDE_STATIONS)
                     return@onTextChanged
+                } else if (it.isEmpty()) {
+                    searchAdapter.updateData(it)
                 }
-                searchModel.cancelNetworkSearchJob()
+                searchModel.cancelNetworkSearchJob(false)
                 binding.searchProgress.invisible()
             }
         }
@@ -263,11 +271,6 @@ class LocationsFragment : BaseFragment() {
         searchModel.onSearchResults().observe(viewLifecycleOwner) {
             onSearchResults(it)
         }
-
-        searchAdapter = NetworkSearchResultsListAdapter {
-            onNetworkSearchResultClicked(it)
-        }
-        binding.resultsRecycler.adapter = searchAdapter
     }
 
     private fun onInfoBanner(infoBanner: RemoteBanner?) {
@@ -373,9 +376,6 @@ class LocationsFragment : BaseFragment() {
                 if (resource.data.isNullOrEmpty()) {
                     binding.resultsRecycler.visible(false)
                     binding.searchEmptyResultsContainer.visible(true)
-                    binding.searchEmptyResultsTitle.text = getString(R.string.search_no_results)
-                    binding.searchEmptyResultsDesc.text =
-                        getString(R.string.search_no_results_message)
                 } else {
                     binding.searchEmptyResultsContainer.visible(false)
                     binding.resultsRecycler.visible(true)

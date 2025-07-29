@@ -43,10 +43,12 @@ class NetworkSearchViewModel(
         this.query = query
     }
 
-    fun cancelNetworkSearchJob() {
+    fun cancelNetworkSearchJob(postLatestData: Boolean) {
         networkSearchJob?.cancel("Cancelling running network search job.")
-        onSearchResults.value?.data?.let {
-            onSearchResults.postValue(Resource.success(it))
+        if (postLatestData) {
+            onSearchResults.value?.data?.let {
+                onSearchResults.postValue(Resource.success(it))
+            }
         }
     }
 
