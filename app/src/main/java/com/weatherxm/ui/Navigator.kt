@@ -684,13 +684,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun openPlayStore(context: Context?, url: String) {
+    fun openStore(context: Context?, url: String) {
         context?.let {
             try {
                 it.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
             } catch (e: ActivityNotFoundException) {
-                Timber.d(e, "Could not open play store.")
-                it.toast(R.string.error_cannot_open_play_store)
+                Timber.d(e, "Could not open the store.")
+                it.toast(R.string.error_cannot_open_store)
             }
         }
     }

@@ -10,7 +10,7 @@
     <string name="troubleshooting_helium_url">https://docs.weatherxm.com/wxm-devices/helium/troubleshooting</string>
     <string name="user_panel_url">https://docs.google.com/forms/d/e/1FAIpQLSc35pJdxM0tosVh-az0goKEjE1xzBs_OVo5V23coC8z1ayD6g/viewform</string>
     <string name="delete_account_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSdWPLpyUx2fNIiohQ-XaskbkZuoUSqYhwIkGGjupJ7IDEX_aA/viewform?usp=pp_url</string>
-    <string name="market_url">market://details?id=%s</string>
+    <string name="market_url">market://details?id=com.weatherxm.app</string>
     <string name="m5_connect_wifi_instructional_video">https://www.youtube.com/watch?v=sUJEwuFq1CE</string>
     <string name="d1_connect_wifi_instructional_video">https://www.youtube.com/watch?v=D3rz1Y01Qhg</string>
     <string name="helium_frequencies_mapping_url">https://docs.helium.com/iot/lorawan-region-plans/</string>

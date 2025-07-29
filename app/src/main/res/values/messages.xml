@@ -37,7 +37,7 @@
     <string name="error_cell_devices_no_data">Failed to get the cell devices.</string>
     <string name="error_rewards_no_data">Oops! $WXM rewards could not be fetched.</string>
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
-    <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
+    <string name="error_cannot_open_store">Oops! Could not open the Store.</string>
     <string name="error_cannot_open_app_settings">Oops! Could not open App Settings.</string>
     <string name="error_cannot_open_support_center">Oops! Could not open browser.</string>
     <string name="error_cannot_open_wallet">Oops! Could not open that wallet.</string>
