@@ -28,6 +28,7 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setCardRadius
@@ -45,7 +46,6 @@ import com.weatherxm.ui.home.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.NumberUtils.formatTokens
-import com.weatherxm.util.Validator
 import com.weatherxm.util.Validator.validateNetworkSearchQuery
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
@@ -245,6 +245,15 @@ class LocationsFragment : BaseFragment() {
             binding.searchView.show()
         }
 
+        binding.searchView.addTransitionListener { _, _, newState ->
+            if (newState == TransitionState.SHOWING) {
+                analytics.trackScreen(
+                    AnalyticsService.Screen.LOCATION_SEARCH,
+                    LocationsFragment::class.simpleName ?: String.empty()
+                )
+            }
+        }
+
         // This runs only when enter is clicked
         binding.searchView.editText.setOnEditorActionListener { _, _, keyEvent ->
             // When clicking enter on keyboard ignore ACTION_UP event (as we handled ACTION_DOWN)
@@ -360,7 +369,7 @@ class LocationsFragment : BaseFragment() {
     // Returns if validation was a success and search API call has been processed
     private fun validateAndSearch(): Boolean {
         val query = binding.searchView.text.toString()
-        return if (Validator.validateNetworkSearchQuery(query)) {
+        return if (validateNetworkSearchQuery(query)) {
             searchModel.networkSearch(true)
             true
         } else {
@@ -408,6 +417,10 @@ class LocationsFragment : BaseFragment() {
 
     private fun onNetworkSearchResultClicked(result: SearchResult) {
         binding.searchView.hide()
+
+        analytics.trackEventSelectContent(
+            AnalyticsService.ParamValue.CLICK_ON_LOCATION_SEARCH.paramValue
+        )
 
         result.center?.let {
             openForecastDetails(it, false)

@@ -72,7 +72,8 @@ interface AnalyticsService {
         NETWORK_GROWTH("Network Growth"),
         STATION_NOTIFICATIONS("Station Notifications"),
         LOCATIONS_HOME("Locations in Home"),
-        LOCATION_FORECAST_DETAILS("Location Forecast Details")
+        LOCATION_FORECAST_DETAILS("Location Forecast Details"),
+        LOCATION_SEARCH("Location Search")
     }
 
     // Custom Event Names
@@ -261,7 +262,6 @@ interface AnalyticsService {
         START_UPLOADING_PHOTOS("Start Uploading Photos"),
         UPLOADING_PHOTOS_SUCCESS("Uploading Photos Success"),
         GO_TO_PHOTO_VERIFICATION("Go To Photo Verification"),
-        CLAIMING_ID("claiming"),
         INFO_BANNER_BUTTON("Info Banner Button"),
         STARTED("started"),
         COMPLETED("completed"),
@@ -301,6 +301,8 @@ interface AnalyticsService {
         SAVED_A_LOCATION("Saved a location"),
         AUTHENTICATED("authenticated"),
         UNAUTHENTICATED("unauthenticated"),
+        CLICK_ON_LOCATION_SEARCH("Click on Location Search"),
+        MAX_LOCATIONS_SAVED_ERROR("Max Locations Saved Error"),
     }
 
     // Custom Param Names
