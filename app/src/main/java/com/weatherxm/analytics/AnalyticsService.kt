@@ -70,7 +70,9 @@ interface AnalyticsService {
         MAP_LAYER_PICKER("Map Layer Picker"),
         TOKEN_METRICS("Token Metrics"),
         NETWORK_GROWTH("Network Growth"),
-        STATION_NOTIFICATIONS("Station Notifications")
+        STATION_NOTIFICATIONS("Station Notifications"),
+        LOCATIONS_HOME("Locations in Home"),
+        LOCATION_FORECAST_DETAILS("Location Forecast Details")
     }
 
     // Custom Event Names
@@ -293,7 +295,12 @@ interface AnalyticsService {
         DISABLE("disable"),
         STATION_HEALTH("station_health"),
         ACTIVITY("activity"),
-        OPEN_STATION_FROM_NOTIFICATION("Open Station from Notification")
+        OPEN_STATION_FROM_NOTIFICATION("Open Station from Notification"),
+        SAVED_LOCATION("saved_location"),
+        UNSAVED_LOCATION("unsaved_location"),
+        SAVED_A_LOCATION("Saved a location"),
+        AUTHENTICATED("authenticated"),
+        UNAUTHENTICATED("unauthenticated"),
     }
 
     // Custom Param Names
@@ -323,6 +330,7 @@ interface AnalyticsService {
         STATIONS_OWN("STATIONS_OWN"),
         HAS_WALLET("HAS_WALLET"),
         STATIONS_FAVORITE("STATIONS_FAVORITE"),
+        SAVED_LOCATIONS("SAVED_LOCATIONS"),
     }
 
     fun setUserId(userId: String)

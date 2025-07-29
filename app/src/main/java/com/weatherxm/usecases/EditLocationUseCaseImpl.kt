@@ -12,18 +12,18 @@ import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
-import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.common.UIDevice
 
 class EditLocationUseCaseImpl(
-    private val addressRepository: AddressRepository,
+    private val geoLocationRepository: GeoLocationRepository,
     private val deviceRepository: DeviceRepository
 ) : EditLocationUseCase {
     override suspend fun getSearchSuggestions(
         query: String
     ): Either<Failure, List<SearchSuggestion>> {
-        return addressRepository.getSearchSuggestions(query)
+        return geoLocationRepository.getSearchSuggestions(query)
             .handleErrorWith {
                 if(it is CancellationError) {
                     Either.Right(emptyList())
@@ -36,11 +36,11 @@ class EditLocationUseCaseImpl(
     override suspend fun getSuggestionLocation(
         suggestion: SearchSuggestion
     ): Either<Failure, Location> {
-        return addressRepository.getSuggestionLocation(suggestion)
+        return geoLocationRepository.getSuggestionLocation(suggestion)
     }
 
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, String> {
-        return addressRepository.getAddressFromPoint(point)
+        return geoLocationRepository.getAddressFromPoint(point)
             .flatMap {
                 it.formattedAddress(SearchAddress.FormatStyle.Medium)?.right()
                     ?: ReverseGeocodingError.SearchResultAddressFormatError().left()

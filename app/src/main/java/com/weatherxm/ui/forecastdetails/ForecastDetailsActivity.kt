@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deviceforecast
+package com.weatherxm.ui.forecastdetails
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -7,11 +7,14 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.UILocation
+import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.parcelable
@@ -25,6 +28,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
 import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.HeaderView
+import com.weatherxm.ui.components.compose.JoinNetworkPromoCard
 import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
@@ -47,7 +51,10 @@ class ForecastDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityForecastDetailsBinding
 
     private val model: ForecastDetailsViewModel by viewModel {
-        parametersOf(intent.parcelable<UIDevice>(Contracts.ARG_DEVICE))
+        parametersOf(
+            intent.parcelable<UIDevice>(Contracts.ARG_DEVICE),
+            intent.parcelable<UILocation>(Contracts.ARG_LOCATION)
+        )
     }
 
     private lateinit var dailyAdapter: DailyTileForecastAdapter
@@ -58,7 +65,7 @@ class ForecastDetailsActivity : BaseActivity() {
         binding = ActivityForecastDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (model.device.isEmpty()) {
+        if (model.device.isEmpty() && model.location.isEmpty()) {
             Timber.d("Could not start ForecastDetailsActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
@@ -67,19 +74,24 @@ class ForecastDetailsActivity : BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-        binding.header.setContent {
-            val defaultOrFriendlyName = model.device.getDefaultOrFriendlyName()
-            val subtitle = if (defaultOrFriendlyName == model.device.name) {
-                null
-            } else {
-                model.device.name
+        if (!model.device.isEmpty()) {
+            binding.header.setContent {
+                val defaultOrFriendlyName = model.device.getDefaultOrFriendlyName()
+                val subtitle = if (defaultOrFriendlyName == model.device.name) {
+                    null
+                } else {
+                    model.device.name
+                }
+                HeaderView(defaultOrFriendlyName, subtitle, null)
             }
-            HeaderView(defaultOrFriendlyName, subtitle, null)
+
+            handleOwnershipIcon()
+
+            binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
+        } else {
+            initSavedLocationIcon()
+            binding.displayTimeNotice.visible(false)
         }
-
-        handleOwnershipIcon()
-
-        binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
         setupChartsAndListeners()
 
         model.onForecastLoaded().observe(this) {
@@ -109,23 +121,31 @@ class ForecastDetailsActivity : BaseActivity() {
             }
         }
 
-        binding.proPromotionCard.setContent {
-            ProPromotionCard(R.string.want_more_accurate_forecasts) {
-                analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
-                    Pair(
-                        FirebaseAnalytics.Param.SOURCE,
-                        AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
-                    )
-                )
-                ProPromotionDialogFragment().show(this)
-            }
+        if (!model.device.isEmpty()) {
+            model.fetchDeviceForecast()
+        } else if (!model.location.isEmpty()) {
+            model.fetchLocationForecast()
         }
-
-        model.fetchForecast()
     }
 
     private fun updateUI(forecast: UIForecastDay) {
+        // Update the header now that model.address has valid data
+        binding.header.setContent {
+            if (model.location.isCurrentLocation) {
+                HeaderView(
+                    title = getString(R.string.current_location).capitalizeWords(),
+                    subtitle = model.address(),
+                    onInfoButton = null
+                )
+            } else {
+                HeaderView(
+                    title = model.address() ?: EMPTY_VALUE,
+                    subtitle = null,
+                    onInfoButton = null
+                )
+            }
+        }
+
         // Update Daily Weather
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
         binding.dailyIcon.setWeatherAnimation(forecast.icon)
@@ -237,18 +257,105 @@ class ForecastDetailsActivity : BaseActivity() {
                 DeviceRelation.OWNED -> {
                     setImageResource(R.drawable.ic_home)
                     setColor(R.color.colorOnSurface)
+                    visible(true)
                 }
                 DeviceRelation.FOLLOWED -> {
                     setImageResource(R.drawable.ic_favorite)
                     setColor(R.color.follow_heart_color)
+                    visible(true)
                 }
                 else -> visible(false)
             }
         }
     }
 
+    private fun initSavedLocationIcon() {
+        if (model.location.isSaved) {
+            binding.locationStatusBtn.setOnClickListener {
+                setResult(RESULT_OK)
+                model.removeSavedLocation()
+                initSavedLocationIcon()
+            }
+            binding.locationStatusBtn.setImageResource(R.drawable.ic_star_filled)
+        } else {
+            binding.locationStatusBtn.setOnClickListener {
+                if (model.canSaveMoreLocations()) {
+                    /**
+                     * Set result to OK so that the previous screen (locations in home) gets
+                     * triggered for an update
+                     */
+                    setResult(RESULT_OK)
+
+                    model.addSavedLocation()
+                    val stateParam = if (model.isLoggedIn()) {
+                        AnalyticsService.ParamValue.AUTHENTICATED.paramValue
+                    } else {
+                        AnalyticsService.ParamValue.UNAUTHENTICATED.paramValue
+                    }
+                    analytics.trackEventUserAction(
+                        actionName = AnalyticsService.ParamValue.SAVED_A_LOCATION.paramValue,
+                        contentType = null,
+                        Pair(
+                            AnalyticsService.CustomParam.STATE.paramName,
+                            stateParam
+                        )
+                    )
+
+                    initSavedLocationIcon()
+                } else if (model.isLoggedIn()) {
+                    toast(R.string.maxed_out_saved_locations)
+                } else {
+                    navigator.showLoginDialog(
+                        fragmentActivity = this@ForecastDetailsActivity,
+                        title = getString(R.string.looking_to_save_more_spots),
+                        message = getString(R.string.maxed_out_saved_locations_sign_in)
+                    )
+                }
+            }
+            binding.locationStatusBtn.setImageResource(R.drawable.ic_star_outlined)
+        }
+        binding.locationStatusBtn.setColor(R.color.warning)
+        binding.locationStatusBtn.visible(true)
+    }
+
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST_DETAILS, classSimpleName())
+        if (!model.device.isEmpty()) {
+            analytics.trackScreen(
+                AnalyticsService.Screen.DEVICE_FORECAST_DETAILS,
+                classSimpleName()
+            )
+        } else {
+            analytics.trackScreen(
+                screen = AnalyticsService.Screen.LOCATION_FORECAST_DETAILS,
+                screenClass = classSimpleName(),
+                itemId = if (model.location.isSaved) {
+                    AnalyticsService.ParamValue.SAVED_LOCATION.paramValue
+                } else {
+                    AnalyticsService.ParamValue.UNSAVED_LOCATION.paramValue
+                }
+            )
+        }
+
+        model.isLoggedIn().also {
+            binding.promoCard.setContent {
+                if (it) {
+                    ProPromotionCard(R.string.want_more_accurate_forecasts) {
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
+                            )
+                        )
+                        ProPromotionDialogFragment().show(this)
+                    }
+                } else {
+                    JoinNetworkPromoCard {
+                        navigator.openWebsite(this, getString(R.string.shop_url))
+                    }
+                }
+            }
+        }
     }
 }

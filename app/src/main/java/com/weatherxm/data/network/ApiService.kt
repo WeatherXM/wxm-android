@@ -317,4 +317,14 @@ interface ApiService {
         @Path("deviceId") deviceId: String,
         @Body names: PhotoNamesBody
     ): NetworkResponse<List<PhotoPresignedMetadata>, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_location_weather_forecast.json")
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @GET("/api/v1/cells/forecast")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getLocationForecast(
+        @Path("lat") lat: Double,
+        @Path("lon") lon: Double,
+    ): NetworkResponse<List<WeatherData>, ErrorResponse>
 }

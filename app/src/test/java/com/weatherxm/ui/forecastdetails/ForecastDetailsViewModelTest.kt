@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deviceforecast
+package com.weatherxm.ui.forecastdetails
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
@@ -18,8 +18,11 @@ import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.UILocation
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.usecases.LocationsUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -38,7 +41,10 @@ import java.time.ZonedDateTime
 class ForecastDetailsViewModelTest : BehaviorSpec({
     val forecastUseCase = mockk<ForecastUseCase>()
     val chartsUseCase = mockk<ChartsUseCase>()
+    val authUseCase = mockk<AuthUseCase>()
+    val locationsUseCase = mockk<LocationsUseCase>()
     val device = UIDevice.empty()
+    val location = UILocation.empty()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: ForecastDetailsViewModel
 
@@ -109,7 +115,8 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         null
     )
     val emptyForecast: UIForecast = UIForecast.empty()
-    val forecast = UIForecast(listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
+    val forecast =
+        UIForecast(device.address, listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
     val charts = mockk<Charts>()
 
     val invalidFromDate = ApiError.UserError.InvalidFromDate("")
@@ -148,10 +155,13 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
 
         viewModel = ForecastDetailsViewModel(
             device,
+            location,
             resources,
             analytics,
+            authUseCase,
             chartsUseCase,
             forecastUseCase,
+            locationsUseCase,
             dispatcher
         )
     }
@@ -161,11 +171,11 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             When("it's a failure") {
                 and("it's an InvalidFromDate failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         invalidFromDate
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         1,
@@ -174,11 +184,11 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidToDate failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         invalidToDate
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         2,
@@ -187,11 +197,11 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("it's an InvalidTimezone failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         invalidTimezone
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         3,
@@ -200,11 +210,11 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("it's any other failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         failure
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchForecast() },
+                        { viewModel.fetchDeviceForecast() },
                         analytics,
                         viewModel.onForecastLoaded(),
                         4,
@@ -218,10 +228,10 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             When("it's a success") {
                 and("an empty forecast returned") {
                     coMockEitherRight(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         emptyForecast
                     )
-                    runTest { viewModel.fetchForecast() }
+                    runTest { viewModel.fetchDeviceForecast() }
                     then("LiveData onForecastLoaded should post the error for the empty forecast") {
                         viewModel.onForecastLoaded().isError(emptyForecastMsg)
                     }
@@ -231,10 +241,10 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                 }
                 and("a valid non-empty forecast is returned") {
                     coMockEitherRight(
-                        { forecastUseCase.getForecast(device) },
+                        { forecastUseCase.getDeviceForecast(device) },
                         forecast
                     )
-                    runTest { viewModel.fetchForecast() }
+                    runTest { viewModel.fetchDeviceForecast() }
                     then("LiveData onForecastLoaded should post Unit as a success value") {
                         viewModel.onForecastLoaded().isSuccess(Unit)
                     }

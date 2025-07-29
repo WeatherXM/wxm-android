@@ -43,14 +43,16 @@ class NetworkSearchViewModel(
         this.query = query
     }
 
-    fun cancelNetworkSearchJob() {
+    fun cancelNetworkSearchJob(postLatestData: Boolean) {
         networkSearchJob?.cancel("Cancelling running network search job.")
-        onSearchResults.value?.data?.let {
-            onSearchResults.postValue(Resource.success(it))
+        if (postLatestData) {
+            onSearchResults.value?.data?.let {
+                onSearchResults.postValue(Resource.success(it))
+            }
         }
     }
 
-    fun networkSearch(runImmediately: Boolean = false) {
+    fun networkSearch(runImmediately: Boolean = false, exclude: String? = null) {
         if (query.trim() == lastSearchedQuery.trim()) {
             return
         }
@@ -69,7 +71,7 @@ class NetworkSearchViewModel(
                 delay(NETWORK_SEARCH_REQUEST_THRESHOLD)
             }
             lastSearchedQuery = query
-            explorerUseCase.networkSearch(query).onRight {
+            explorerUseCase.networkSearch(query, exclude = exclude).onRight {
                 onSearchResults.postValue(Resource.success(it))
             }.onLeft {
                 analytics.trackEventFailure(it.code)

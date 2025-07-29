@@ -60,6 +60,7 @@ class CacheService(
         const val KEY_DEVICE_NOTIFICATION_TYPES = "device_notification_types"
         const val KEY_DEVICE_NOTIFICATIONS_PROMPT = "device_notifications_prompt"
         const val KEY_DEVICE_NOTIFICATION = "device_notification"
+        const val KEY_SAVED_LOCATIONS = "saved_locations"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -99,7 +100,8 @@ class CacheService(
 
     private var user: User? = null
     private var walletAddress: String? = null
-    private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
+    private var deviceForecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
+    private var locationForecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
     private var devicePhotoUploadIds: ArrayMap<String, MutableList<String>> = ArrayMap()
@@ -219,8 +221,8 @@ class CacheService(
         return preferences.getString(KEY_USER_ID, null) ?: String.empty()
     }
 
-    fun getForecast(deviceId: String): Either<Failure, List<WeatherData>> {
-        return (forecasts[deviceId]?.right() ?: DataError.CacheMissError.left()).flatMap {
+    fun getDeviceForecast(deviceId: String): Either<Failure, List<WeatherData>> {
+        return (deviceForecasts[deviceId]?.right() ?: DataError.CacheMissError.left()).flatMap {
             if (it.isExpired()) {
                 Either.Left(DataError.CacheExpiredError)
             } else {
@@ -229,12 +231,30 @@ class CacheService(
         }
     }
 
-    fun setForecast(deviceId: String, forecast: List<WeatherData>) {
-        this.forecasts[deviceId] = TimedForecastData(forecast)
+    fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>) {
+        this.deviceForecasts[deviceId] = TimedForecastData(forecast)
     }
 
-    fun clearForecast() {
-        this.forecasts.clear()
+    fun clearDeviceForecast() {
+        this.deviceForecasts.clear()
+    }
+
+    fun getLocationForecast(key: String): Either<Failure, List<WeatherData>> {
+        return (locationForecasts[key]?.right() ?: DataError.CacheMissError.left()).flatMap {
+            if (it.isExpired()) {
+                Either.Left(DataError.CacheExpiredError)
+            } else {
+                Either.Right(it.value)
+            }
+        }
+    }
+
+    fun setLocationForecast(key: String, forecast: List<WeatherData>) {
+        this.locationForecasts[key] = TimedForecastData(forecast)
+    }
+
+    fun clearLocationForecast() {
+        this.locationForecasts.clear()
     }
 
     fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>> {
@@ -488,6 +508,15 @@ class CacheService(
         return preferences.getLong(key, 0L)
     }
 
+    fun getSavedLocations(): Set<String> {
+        return preferences.getStringSet(KEY_SAVED_LOCATIONS, setOf()) ?: setOf()
+    }
+
+    fun setSavedLocations(locations: List<String>) {
+        preferences.edit { putStringSet(KEY_SAVED_LOCATIONS, locations.toSet()) }
+        onUserPropertiesChangeListener?.invoke(KEY_SAVED_LOCATIONS, locations.size)
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -500,7 +529,8 @@ class CacheService(
     fun clearAll() {
         walletAddress = null
         user = null
-        forecasts.clear()
+        deviceForecasts.clear()
+        locationForecasts.clear()
         suggestions.clear()
         devicePhotoUploadIds.clear()
         uploadIdRequest.clear()
@@ -514,10 +544,10 @@ class CacheService(
     }
 
     fun isCacheEmpty(): Boolean {
-        return walletAddress == null && user == null && forecasts.isEmpty()
+        return walletAddress == null && user == null && deviceForecasts.isEmpty()
             && suggestions.isEmpty() && locations.isEmpty() && followedStationsIds.isEmpty()
             && userDevices.isEmpty() && devicePhotoUploadIds.isEmpty()
-            && uploadIdRequest.isEmpty()
+            && uploadIdRequest.isEmpty() && locationForecasts.isEmpty()
     }
 
     /**
@@ -555,8 +585,7 @@ class CacheService(
         val lastDismissedInfoBanner = preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
         val lastDismissedAnnouncementBanner =
             preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
-
-        // TODO: Do not clear user saved locations. Keep them here.
+        val savedLocations = getSavedLocations()
 
         preferences.edit {
             clear()
@@ -571,6 +600,7 @@ class CacheService(
                 .putLong(KEY_ACCEPT_TERMS_TIMESTAMP, savedAcceptTermsTimestamp)
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
                 .putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, savedDeviceNotificationsPrompt)
+                .putStringSet(KEY_SAVED_LOCATIONS, savedLocations.toSet())
         }
 
         installationId?.let { setInstallationId(it) }

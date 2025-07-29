@@ -93,7 +93,7 @@ class NetworkSearchViewModelTest : BehaviorSpec({
             }
             When("we want to cancel the current network search query") {
                 then("LiveData posts its latest value saved from the network search") {
-                    runTest { viewModel.cancelNetworkSearchJob() }
+                    runTest { viewModel.cancelNetworkSearchJob(true) }
                     viewModel.onSearchResults().isSuccess(searchResults)
                 }
             }

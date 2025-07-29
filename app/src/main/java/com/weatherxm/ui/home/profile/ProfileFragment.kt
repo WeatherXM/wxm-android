@@ -178,10 +178,6 @@ class ProfileFragment : BaseFragment() {
             onLoggedOutUser()
         }
 
-        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-            parentModel.onScroll(scrollY - oldScrollY)
-        }
-
         initProPromotionCard()
 
         model.fetchUser(parentModel.isLoggedIn())

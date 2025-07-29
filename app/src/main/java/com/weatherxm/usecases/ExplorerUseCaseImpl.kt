@@ -11,10 +11,10 @@ import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.FollowRepository
-import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.home.explorer.ExplorerData
@@ -27,7 +27,7 @@ class ExplorerUseCaseImpl(
     private val explorerRepository: ExplorerRepository,
     private val followRepository: FollowRepository,
     private val deviceRepository: DeviceRepository,
-    private val locationRepository: LocationRepository
+    private val geoLocationRepository: GeoLocationRepository
 ) : ExplorerUseCase {
     // Points and heatmap to paint
     private var heatmap: GeoJsonSource = geoJsonSource(HEATMAP_SOURCE_ID)
@@ -44,7 +44,8 @@ class ExplorerUseCaseImpl(
 
     override suspend fun getCells(): Either<Failure, ExplorerData> {
         return explorerRepository.getCells().map {
-            val geoJsonSource = heatmap.featureCollection(FeatureCollection.fromFeatures(
+            val geoJsonSource = heatmap.featureCollection(
+                FeatureCollection.fromFeatures(
                 it.map { hex ->
                     Feature.fromGeometry(Point.fromLngLat(hex.center.lon, hex.center.lat)).apply {
                         this.addNumberProperty(
@@ -125,7 +126,7 @@ class ExplorerUseCaseImpl(
     }
 
     override suspend fun getUserCountryLocation(): Location? {
-        return locationRepository.getUserCountryLocation()
+        return geoLocationRepository.getUserCountryLocation()
     }
 
     private suspend fun getRelation(deviceId: String?): DeviceRelation {

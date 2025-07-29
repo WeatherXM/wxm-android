@@ -56,6 +56,7 @@ class WeatherHistoryDataSourceTest : BehaviorSpec({
         listOf(DeviceHourlyHistory.fromHourlyWeather(deviceId, hourlyWeather[0]))
     val weatherData = listOf(
         WeatherData(
+            address = "",
             date = toDate,
             tz = "Europe/Athens",
             hourly = hourlyWeather,

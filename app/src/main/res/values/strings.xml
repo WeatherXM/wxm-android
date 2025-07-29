@@ -46,6 +46,7 @@
     <string name="action_get_pro">Get Pro</string>
     <string name="action_maybe_later">Maybe later</string>
     <string name="action_take_me_there">Take me there</string>
+    <string name="action_shop_now">Shop now</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -66,6 +67,7 @@
     <string name="preview_message_title">Title goes here…</string>
     <string name="preview_message_subtitle">Subtitle goes here…</string>
     <string name="stations_in_area">Stations in this area</string>
+    <string name="join_network_promo_subtitle">Get a station and contribute real data to WeatherXM while earning rewards.</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -807,4 +809,38 @@
     <string name="map_layer_error">0–19%</string>
     <string name="map_layer_warning">20–79%</string>
     <string name="map_layer_success">80–100%</string>
+
+    <!-- Locations -->
+    <string name="current_location">Current location</string>
+    <string name="saved_locations">Saved locations</string>
+    <string name="allow_location_permission">Allow location permission to show your current location forecast.</string>
+    <string name="search_save_favorite_locations">Search and save your favorite locations!</string>
+    <string name="search_cities_places_of_interest">Search cities and places of interest</string>
+    <string name="nothing_saved_yet">Nothing saved, yet!</string>
+    <string name="add_places_you_care">Add the places you care about and see their weather at a glance!</string>
+    <string name="locations">Locations</string>
+    <string name="looking_to_save_more_spots">Looking to save more spots?</string>
+    <string name="maxed_out_saved_locations">You’ve maxed out the saved locations allowed.</string>
+    <string name="maxed_out_saved_locations_sign_in">You’ve maxed out the saved locations allowed without logging in. Sign in to save more.</string>
+
+    <!-- Weather Conditions Summary -->
+    <string name="clear">Clear</string>
+    <string name="clear_few_low_clouds">Clear with few low clouds</string>
+    <string name="partly_cloudy">Partly cloudy</string>
+    <string name="clear_but_hazy">Clear but hazy</string>
+    <string name="foggy">Foggy</string>
+    <string name="mostly_cloudy">Mostly cloudy</string>
+    <string name="overcast">Overcast</string>
+    <string name="overcast_rain">Overcast with rain</string>
+    <string name="overcast_snow">Overcast with snow</string>
+    <string name="overcast_heavy_rain">Overcast with heavy rain</string>
+    <string name="overcast_heavy_snow">Overcast with heavy snow</string>
+    <string name="rain_thunderstorms_likely">Rain, thunderstorms likely</string>
+    <string name="light_rain_thunderstorms_likely">Light rain, thunderstorms likely</string>
+    <string name="heavy_rain_thunderstorms_likely">Heavy rain, thunderstorms likely</string>
+    <string name="mixed_with_showers">Mixed with showers</string>
+    <string name="mixed_with_snow_showers">Mixed with snow showers</string>
+    <string name="overcast_light_rain">Overcast with light rain</string>
+    <string name="overcast_light_snow">Overcast with light snow</string>
+    <string name="overcast_mixture_snow_rain">Overcast with mixture of snow and rain</string>
 </resources>

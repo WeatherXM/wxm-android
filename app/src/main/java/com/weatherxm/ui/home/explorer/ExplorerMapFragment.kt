@@ -259,7 +259,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                     searchModel.networkSearch()
                     return@onTextChanged
                 }
-                searchModel.cancelNetworkSearchJob()
+                searchModel.cancelNetworkSearchJob(true)
                 binding.searchProgress.invisible()
                 if (it.isEmpty()) {
                     binding.recent.visible(true)

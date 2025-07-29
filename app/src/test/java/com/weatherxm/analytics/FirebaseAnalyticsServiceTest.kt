@@ -3,7 +3,7 @@ package com.weatherxm.analytics
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ParametersBuilder
-import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
+import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.justRun
 import io.mockk.mockk
