@@ -86,7 +86,7 @@ class LocationsFragment : BaseFragment() {
     ): View {
         binding = FragmentLocationsHomeBinding.inflate(inflater, container, false)
 
-        binding.root.applyInsetter {
+        binding.appBar.applyInsetter {
             type(statusBars = true) {
                 padding(left = false, top = true, right = false, bottom = false)
             }

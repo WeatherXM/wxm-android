@@ -24,6 +24,11 @@
         <item name="android:textColor">@color/colorOnSurface</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Default.BodyExtraSmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.Default.PrimaryColor" parent="TextAppearance.WeatherXM.Default.BodyMedium">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">14sp</item>

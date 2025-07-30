@@ -819,7 +819,7 @@
     <string name="nothing_saved_yet">Nothing saved, yet!</string>
     <string name="add_places_you_care">Add the places you care about and see their weather at a glance!</string>
     <string name="locations">Locations</string>
-    <string name="looking_to_save_more_spots">Looking to save more spots?</string>
+    <string name="save_more_locations">Save more locations?</string>
     <string name="maxed_out_saved_locations">You’ve maxed out the saved locations allowed.</string>
     <string name="maxed_out_saved_locations_sign_in">You’ve maxed out the saved locations allowed without logging in. Sign in to save more.</string>
 

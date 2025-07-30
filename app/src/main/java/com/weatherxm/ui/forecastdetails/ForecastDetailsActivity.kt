@@ -321,7 +321,7 @@ class ForecastDetailsActivity : BaseActivity() {
                     )
                     navigator.showLoginDialog(
                         fragmentActivity = this@ForecastDetailsActivity,
-                        title = getString(R.string.looking_to_save_more_spots),
+                        title = getString(R.string.save_more_locations),
                         message = getString(R.string.maxed_out_saved_locations_sign_in)
                     )
                 }

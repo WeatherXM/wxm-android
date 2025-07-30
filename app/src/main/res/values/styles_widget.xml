@@ -131,7 +131,11 @@
         <item name="android:minHeight">70dp</item>
         <item name="labelVisibilityMode">labeled</item>
         <item name="itemIconSize">22dp</item>
-        <item name="itemTextAppearance">@style/TextAppearance.WeatherXM.Default.BodySmall</item>
+        <item name="itemTextAppearanceInactive">
+            @style/TextAppearance.WeatherXM.Default.BodyExtraSmall
+        </item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.WeatherXM.Default.BodyExtraSmall
+        </item>
         <item name="itemTextColor">@color/bottom_navigation_view_item_color</item>
         <item name="itemIconTint">@color/bottom_navigation_view_item_color</item>
         <item name="itemActiveIndicatorStyle">

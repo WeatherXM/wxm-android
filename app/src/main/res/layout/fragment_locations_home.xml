@@ -187,10 +187,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_normal"
                             android:layout_marginTop="@dimen/margin_normal"
-                            app:contentPaddingBottom="@dimen/padding_small"
-                            app:contentPaddingLeft="@dimen/padding_small_to_normal"
-                            app:contentPaddingRight="@dimen/padding_small_to_normal"
-                            app:contentPaddingTop="@dimen/padding_small"
+                            app:contentPadding="@dimen/padding_small_to_normal"
                             app:strokeColor="@color/darkGrey"
                             app:strokeWidth="1dp">
 

@@ -87,7 +87,9 @@ class ProfileFragment : BaseFragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetchUser(parentModel.isLoggedIn())
-            parentModel.getSurvey()
+            if (parentModel.isLoggedIn()) {
+                parentModel.getSurvey()
+            }
         }
 
         binding.walletContainerCard.setOnClickListener {
@@ -181,7 +183,9 @@ class ProfileFragment : BaseFragment() {
         initProPromotionCard()
 
         model.fetchUser(parentModel.isLoggedIn())
-        parentModel.getSurvey()
+        if (parentModel.isLoggedIn()) {
+            parentModel.getSurvey()
+        }
     }
 
     private fun initProPromotionCard() {
