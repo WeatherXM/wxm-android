@@ -301,7 +301,7 @@ interface AnalyticsService {
         SAVED_A_LOCATION("Saved a location"),
         AUTHENTICATED("authenticated"),
         UNAUTHENTICATED("unauthenticated"),
-        CLICK_ON_LOCATION_SEARCH("Click on Location Search"),
+        CLICK_ON_LOCATION_SEARCH_RESULT("Click on Location Search Result"),
         MAX_LOCATIONS_SAVED_ERROR("Max Locations Saved Error"),
     }
 

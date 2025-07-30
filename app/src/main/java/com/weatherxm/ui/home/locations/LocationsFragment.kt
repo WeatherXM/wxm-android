@@ -419,7 +419,7 @@ class LocationsFragment : BaseFragment() {
         binding.searchView.hide()
 
         analytics.trackEventSelectContent(
-            AnalyticsService.ParamValue.CLICK_ON_LOCATION_SEARCH.paramValue
+            AnalyticsService.ParamValue.CLICK_ON_LOCATION_SEARCH_RESULT.paramValue
         )
 
         result.center?.let {
