@@ -324,7 +324,7 @@ interface ApiService {
     @GET("/api/v1/cells/forecast")
     @Headers(NO_AUTH_HEADER)
     suspend fun getLocationForecast(
-        @Path("lat") lat: Double,
-        @Path("lon") lon: Double,
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
 }

@@ -11,7 +11,7 @@ interface LocationsDataSource {
     fun removeSavedLocation(location: Location)
 
     companion object {
-        const val MAX_AUTH_LOCATIONS = 10
+        const val MAX_AUTH_LOCATIONS = 9
     }
 }
 
