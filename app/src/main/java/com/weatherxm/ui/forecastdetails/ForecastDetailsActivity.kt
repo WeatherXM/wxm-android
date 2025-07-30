@@ -304,7 +304,21 @@ class ForecastDetailsActivity : BaseActivity() {
                     initSavedLocationIcon()
                 } else if (model.isLoggedIn()) {
                     toast(R.string.maxed_out_saved_locations)
+                    analytics.trackEventViewContent(
+                        AnalyticsService.ParamValue.MAX_LOCATIONS_SAVED_ERROR.paramValue,
+                        Pair(
+                            AnalyticsService.CustomParam.STATE.paramName,
+                            AnalyticsService.ParamValue.AUTHENTICATED.paramValue
+                        )
+                    )
                 } else {
+                    analytics.trackEventViewContent(
+                        AnalyticsService.ParamValue.MAX_LOCATIONS_SAVED_ERROR.paramValue,
+                        Pair(
+                            AnalyticsService.CustomParam.STATE.paramName,
+                            AnalyticsService.ParamValue.UNAUTHENTICATED.paramValue
+                        )
+                    )
                     navigator.showLoginDialog(
                         fragmentActivity = this@ForecastDetailsActivity,
                         title = getString(R.string.looking_to_save_more_spots),
