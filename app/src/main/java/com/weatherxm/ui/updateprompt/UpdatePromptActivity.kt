@@ -55,7 +55,6 @@ class UpdatePromptActivity : BaseActivity() {
                     AnalyticsService.ParamValue.UPDATE.paramValue
                 )
             )
-            // STOPSHIP: Until we have the URL of the Solana. 
             navigator.openStore(this, getString(R.string.market_url))
         }
 

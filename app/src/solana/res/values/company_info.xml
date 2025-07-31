@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="market_url">https://weatherxm.com</string>
+    <string name="market_url">solanadappstore://details?id=com.weatherxm.app.solana</string>
 </resources>
