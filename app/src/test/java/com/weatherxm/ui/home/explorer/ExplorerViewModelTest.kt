@@ -51,20 +51,12 @@ class ExplorerViewModelTest : BehaviorSpec({
     lateinit var viewModel: ExplorerViewModel
 
     val startingLocation = Location(1.0, 1.0)
-    val location = Location(0.0, 0.0)
-    val startingNavigationLocation =
-        _root_ide_package_.com.weatherxm.ui.home.explorer.NavigationLocation(
-            DEFAULT_ZOOM_LEVEL,
-            startingLocation
-        )
-    val navigationLocation = _root_ide_package_.com.weatherxm.ui.home.explorer.NavigationLocation(
-        ZOOMED_IN_ZOOM_LEVEL,
-        location
-    )
+    val location = Location.empty()
+    val startingNavigationLocation = NavigationLocation(DEFAULT_ZOOM_LEVEL, startingLocation)
+    val navigationLocation = NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location)
     val cameraZoom = 10.0
     val cameraCenter = mockk<Point>()
-    val explorerCamera =
-        _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerCamera(cameraZoom, cameraCenter)
+    val explorerCamera = ExplorerCamera(cameraZoom, cameraCenter)
     val locationSlot = slot<(location: Location?) -> Unit>()
 
     /**
@@ -79,18 +71,18 @@ class ExplorerViewModelTest : BehaviorSpec({
     val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
     val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
-    val explorerData = _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+    val explorerData = ExplorerData(
         geoJsonSource,
         listOf(publicHex),
         listOf()
     )
     val newExplorerData =
-        _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+        ExplorerData(
             geoJsonSource,
             listOf(publicHex2),
             newPolygonAnnotationOptions
         )
-    val fullExplorerData = _root_ide_package_.com.weatherxm.ui.home.explorer.ExplorerData(
+    val fullExplorerData = ExplorerData(
         geoJsonSource,
         listOf(publicHex, publicHex2),
         listOf()
@@ -329,6 +321,12 @@ class ExplorerViewModelTest : BehaviorSpec({
                             viewModel.onViewportStations().value shouldBe 0
                         }
                     }
+                    When("the viewport is in the antimeridian") {
+                        runTest { viewModel.getStationsInViewPort(50.0, 60.0, 170.0, -170.0) }
+                        then("it should return 0") {
+                            viewModel.onViewportStations().value shouldBe 0
+                        }
+                    }
                 }
             }
         }
@@ -375,6 +373,30 @@ class ExplorerViewModelTest : BehaviorSpec({
                 }
                 viewModel.getLocation {
                     it shouldBe location
+                }
+            }
+        }
+    }
+
+    context("Set map's layer") {
+        given("a map layer") {
+            When("that map layer is already selected") {
+                viewModel.onMapLayer().value shouldBe MapLayer.DATA_QUALITY
+                then("do nothing") {
+                    viewModel.setMapLayer(MapLayer.DATA_QUALITY)
+                    viewModel.onMapLayer().value shouldBe MapLayer.DATA_QUALITY
+                }
+            }
+            When("a new map layer is selected") {
+                every {
+                    explorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DENSITY)
+                } returns emptyList()
+                then("set the new map layer") {
+                    viewModel.setMapLayer(MapLayer.DENSITY)
+                    viewModel.onMapLayer().value shouldBe MapLayer.DENSITY
+                }
+                then("LiveData onRedrawPolygons should post the value of the new polygons") {
+                    viewModel.onRedrawPolygons().value shouldBe emptyList()
                 }
             }
         }

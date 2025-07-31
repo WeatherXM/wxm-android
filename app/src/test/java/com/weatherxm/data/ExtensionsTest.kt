@@ -13,6 +13,7 @@ import com.weatherxm.data.models.ApiError.GenericError.UnknownError
 import com.weatherxm.data.models.ApiError.GenericError.UnsupportedAppVersion
 import com.weatherxm.data.models.ApiError.GenericError.ValidationError
 import com.weatherxm.data.models.ApiError.UserError.WalletError.WalletAddressNotFound
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.NetworkError
 import com.weatherxm.data.network.ErrorResponse
 import io.kotest.core.spec.style.BehaviorSpec
@@ -253,6 +254,18 @@ class ExtensionsTest : BehaviorSpec({
                         errorToFailure("").shouldBeTypeOf<UnknownError>()
                     }
                 }
+            }
+        }
+    }
+
+    context("Manage Location to Text and Text to Location") {
+        given("a location") {
+            val location = Location.empty()
+            then("Use it to create the respective formatted text") {
+                location.locationToText() shouldBe "${location.lat}_${location.lon}"
+            }
+            then("parse a text to that location") {
+                "${location.lat}_${location.lon}".textToLocation() shouldBe location
             }
         }
     }

@@ -8,6 +8,7 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.DailyData
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.UIDevice
@@ -24,6 +25,7 @@ class ForecastUseCaseTest : BehaviorSpec({
     val repo = mockk<WeatherForecastRepository>()
     val usecase = ForecastUseCaseImpl(repo)
 
+    val location = Location.empty()
     val device = UIDevice.empty()
     val forceRefresh = false
     val utc = "UTC"
@@ -145,6 +147,23 @@ class ForecastUseCaseTest : BehaviorSpec({
                     then("return the respective UIForecast") {
                         usecase.getDeviceForecast(device, forceRefresh).isSuccess(uiForecast)
                     }
+                }
+            }
+        }
+    }
+
+    context("Get Location Forecast") {
+        given("A repository providing the forecast data") {
+            When("repository returns a failure") {
+                coMockEitherLeft({ repo.getLocationForecast(location) }, failure)
+                then("return that failure") {
+                    usecase.getLocationForecast(location).isError()
+                }
+            }
+            When("repository returns success along with the data") {
+                coMockEitherRight({ repo.getLocationForecast(location) }, weatherData)
+                then("return the respective UIForecast") {
+                    usecase.getLocationForecast(location).isSuccess(uiForecast)
                 }
             }
         }

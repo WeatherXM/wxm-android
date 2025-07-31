@@ -88,7 +88,7 @@ class ExplorerDataSourceTest : BehaviorSpec({
     val noCenterSearchResult = SearchResult("", null, null, null, null, null)
     val validSearchResult = SearchResult(
         "name",
-        Location(0.0, 0.0),
+        Location.empty(),
         "place",
         Bundle(null, null, null, null, null, null),
         null,

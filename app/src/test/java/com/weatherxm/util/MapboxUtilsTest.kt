@@ -39,7 +39,7 @@ class MapboxUtilsTest : BehaviorSpec({
     val country = "Country"
     val postcode = "Postcode"
     val minimapWidth = 500
-    val userLocation = Location(0.0, 0.0)
+    val userLocation = Location.empty()
     val userHex = Hex(
         "cellIndex",
         arrayOf(
@@ -98,7 +98,7 @@ class MapboxUtilsTest : BehaviorSpec({
             .create()
         every {
             polygonAnnotation.getJsonObjectCopy().getAsJsonObject("custom_data")
-        } returns gson.toJsonTree(UICell("cellIndex", Location(0.0, 0.0))).asJsonObject
+        } returns gson.toJsonTree(UICell("cellIndex", Location.empty())).asJsonObject
 
         every { searchSuggestion.name } returns address
         every { searchSuggestion.address } returns mockk()
@@ -115,7 +115,7 @@ class MapboxUtilsTest : BehaviorSpec({
     context("Parse PolygonAnnotation to UICell UI Model") {
         given("A PolygonAnnotation") {
             then("return the UICell UI Model") {
-                getCustomData(polygonAnnotation) shouldBe UICell("cellIndex", Location(0.0, 0.0))
+                getCustomData(polygonAnnotation) shouldBe UICell("cellIndex", Location.empty())
             }
         }
     }

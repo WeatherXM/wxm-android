@@ -43,7 +43,7 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
     val devEUI = "devEUI"
     val deviceKey = "deviceKey"
     val frequency = Frequency.EU868
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
 
     val invalidClaimIdFailure = ApiError.UserError.ClaimError.InvalidClaimId("")
     val invalidClaimLocationFailure = ApiError.UserError.ClaimError.InvalidClaimLocation("")

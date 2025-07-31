@@ -47,8 +47,6 @@ class ForecastDetailsViewModel(
 
     fun forecast() = forecast
 
-    fun address() = forecast.address
-
     fun fetchDeviceForecast() {
         onForecastLoaded.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {

@@ -9,23 +9,22 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
 class UIModelsTest : BehaviorSpec({
-    val searchResult = _root_ide_package_.com.weatherxm.ui.home.explorer.SearchResult(
+    val searchResult = SearchResult(
         name = "name",
-        Location(0.0, 0.0),
+        Location.empty(),
         "address",
         Bundle("d1", "D1", "wifi", "WS1001", "WG1200", "hwClass"),
         "cellIndex",
         "stationId",
         DeviceRelation.OWNED
     )
-    val nullSearchResult =
-        _root_ide_package_.com.weatherxm.ui.home.explorer.SearchResult(null, null)
+    val nullSearchResult = SearchResult(null, null)
 
     val deviceOfSearchResult = UIDevice(
         id = "stationId",
         name = "name",
         cellIndex = "cellIndex",
-        cellCenter = Location(0.0, 0.0),
+        cellCenter = Location.empty(),
         relation = DeviceRelation.OWNED,
         bundleName = BundleName.d1,
         bundleTitle = "D1",

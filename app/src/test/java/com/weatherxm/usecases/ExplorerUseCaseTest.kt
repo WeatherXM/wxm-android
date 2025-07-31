@@ -42,7 +42,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
     val searchResult = SearchResult(null, null)
     val index = "index"
     val address = "address"
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
     val publicHexes = mutableListOf(PublicHex(index, 0, 0, null, location, emptyList()))
     val cell = UICell(index, location)
 

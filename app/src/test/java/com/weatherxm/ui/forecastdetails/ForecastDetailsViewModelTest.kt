@@ -11,8 +11,10 @@ import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.datasource.LocationsDataSource.Companion.MAX_AUTH_LOCATIONS
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.models.Location
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
@@ -29,6 +31,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -118,6 +121,16 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
     val forecast =
         UIForecast(device.address, listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
     val charts = mockk<Charts>()
+    val savedLocationsLessThanMax = mutableListOf<Location>().apply {
+        repeat(MAX_AUTH_LOCATIONS - 1) {
+            add(Location.empty())
+        }
+    }
+    val savedLocationsMax = mutableListOf<Location>().apply {
+        repeat(MAX_AUTH_LOCATIONS) {
+            add(Location.empty())
+        }
+    }
 
     val invalidFromDate = ApiError.UserError.InvalidFromDate("")
     val invalidToDate = ApiError.UserError.InvalidToDate("")
@@ -140,6 +153,8 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             )
         }
         justRun { analytics.trackEventFailure(any()) }
+        justRun { locationsUseCase.addSavedLocation(Location.empty()) }
+        justRun { locationsUseCase.removeSavedLocation(Location.empty()) }
         every { charts.date } returns today
         every {
             resources.getString(R.string.forecast_empty)
@@ -152,6 +167,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         } returns invalidTimezoneMsg
         every { chartsUseCase.createHourlyCharts(today, any()) } returns charts
         every { chartsUseCase.createHourlyCharts(tomorrow, any()) } returns charts
+        every { authUseCase.isLoggedIn() } returns true
 
         viewModel = ForecastDetailsViewModel(
             device,
@@ -297,6 +313,161 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             then("return the charts") {
                 viewModel.getCharts(forecastDay) shouldBe charts
                 viewModel.getCharts(forecastDayTomorrow) shouldBe charts
+            }
+        }
+    }
+
+    context("Get weather forecast of this location") {
+        given("a usecase returning the forecast") {
+            When("it's a failure") {
+                and("it's an InvalidFromDate failure") {
+                    coMockEitherLeft(
+                        { forecastUseCase.getLocationForecast(location.coordinates) },
+                        invalidFromDate
+                    )
+                    testHandleFailureViewModel(
+                        { viewModel.fetchLocationForecast() },
+                        analytics,
+                        viewModel.onForecastLoaded(),
+                        5,
+                        forecastGenericErrorMsg
+                    )
+                }
+                and("it's an InvalidToDate failure") {
+                    coMockEitherLeft(
+                        { forecastUseCase.getLocationForecast(location.coordinates) },
+                        invalidToDate
+                    )
+                    testHandleFailureViewModel(
+                        { viewModel.fetchLocationForecast() },
+                        analytics,
+                        viewModel.onForecastLoaded(),
+                        6,
+                        forecastGenericErrorMsg
+                    )
+                }
+                and("it's an InvalidTimezone failure") {
+                    coMockEitherLeft(
+                        { forecastUseCase.getLocationForecast(location.coordinates) },
+                        invalidTimezone
+                    )
+                    testHandleFailureViewModel(
+                        { viewModel.fetchLocationForecast() },
+                        analytics,
+                        viewModel.onForecastLoaded(),
+                        7,
+                        invalidTimezoneMsg
+                    )
+                }
+                and("it's any other failure") {
+                    coMockEitherLeft(
+                        { forecastUseCase.getLocationForecast(location.coordinates) },
+                        failure
+                    )
+                    testHandleFailureViewModel(
+                        { viewModel.fetchLocationForecast() },
+                        analytics,
+                        viewModel.onForecastLoaded(),
+                        8,
+                        REACH_OUT_MSG
+                    )
+                }
+                then("forecast should be set to empty") {
+                    viewModel.forecast().isEmpty() shouldBe true
+                }
+            }
+            When("it's a success") {
+                and("an empty forecast returned") {
+                    coMockEitherRight(
+                        { forecastUseCase.getLocationForecast(location.coordinates) },
+                        emptyForecast
+                    )
+                    runTest { viewModel.fetchLocationForecast() }
+                    then("LiveData onForecastLoaded should post the error for the empty forecast") {
+                        viewModel.onForecastLoaded().isError(emptyForecastMsg)
+                    }
+                    then("forecast should be set to empty") {
+                        viewModel.forecast().isEmpty() shouldBe true
+                    }
+                }
+                and("a valid non-empty forecast is returned") {
+                    coMockEitherRight(
+                        { forecastUseCase.getLocationForecast(location.coordinates) },
+                        forecast
+                    )
+                    runTest { viewModel.fetchLocationForecast() }
+                    then("LiveData onForecastLoaded should post Unit as a success value") {
+                        viewModel.onForecastLoaded().isSuccess(Unit)
+                    }
+                    then("forecast should be set to the returned value") {
+                        viewModel.forecast() shouldBe forecast
+                    }
+                }
+            }
+        }
+    }
+
+    context("Get if the user is logged in") {
+        given("the usecase returning the response") {
+            then("return the response") {
+                viewModel.isLoggedIn() shouldBe true
+            }
+        }
+    }
+
+    context("Get if we can save more locations") {
+        given("if the user is logged in") {
+            When("is logged in") {
+                and("has saved == the max allowed") {
+                    every { locationsUseCase.getSavedLocations() } returns savedLocationsMax
+                    then("return false") {
+                        viewModel.canSaveMoreLocations() shouldBe false
+                    }
+                }
+                and("has saved less than the max allowed") {
+                    every { locationsUseCase.getSavedLocations() } returns savedLocationsLessThanMax
+                    then("return true") {
+                        viewModel.canSaveMoreLocations() shouldBe true
+                    }
+                }
+            }
+            When("is NOT logged in") {
+                every { authUseCase.isLoggedIn() } returns false
+                and("has saved at least one location") {
+                    every { locationsUseCase.getSavedLocations() } returns listOf(Location.empty())
+                    then("return false") {
+                        viewModel.canSaveMoreLocations() shouldBe false
+                    }
+                }
+                and("has not saved any location") {
+                    every { locationsUseCase.getSavedLocations() } returns emptyList()
+                    then("return true") {
+                        viewModel.canSaveMoreLocations() shouldBe true
+                    }
+                }
+            }
+        }
+    }
+
+    context("ADD / REMOVE the location from the saved ones") {
+        When("ADD") {
+            viewModel.location.isSaved shouldBe false
+            viewModel.addSavedLocation()
+            then("call the respective function in the usecase") {
+                verify(exactly = 1) { locationsUseCase.addSavedLocation(location.coordinates) }
+            }
+            then("update the respective model") {
+                viewModel.location.isSaved shouldBe true
+            }
+        }
+        When("REMOVE") {
+            viewModel.location.isSaved shouldBe true
+            viewModel.removeSavedLocation()
+            then("call the respective function in the usecase") {
+                verify(exactly = 1) { locationsUseCase.removeSavedLocation(location.coordinates) }
+            }
+            then("update the respective model") {
+                viewModel.location.isSaved shouldBe false
             }
         }
     }

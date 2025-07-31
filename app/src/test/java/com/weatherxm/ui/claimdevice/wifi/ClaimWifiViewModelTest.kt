@@ -45,7 +45,7 @@ class ClaimWifiViewModelTest : BehaviorSpec({
     val claimingKey = "claimingKey"
     val validSerialNumberD1 = "01:23:45:67:89:AB:CD:EF:00:00"
     val validClaimingKeyD1 = "012345"
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
 
     val invalidSerial = "Invalid Serial"
     val invalidLocation = "Invalid Location"

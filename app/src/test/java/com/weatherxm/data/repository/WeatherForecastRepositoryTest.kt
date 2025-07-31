@@ -6,6 +6,7 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl.Companion.PREFETCH_DAYS
 import io.kotest.core.spec.style.BehaviorSpec
@@ -20,6 +21,7 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
     lateinit var cacheSource: CacheWeatherForecastDataSource
     lateinit var repo: WeatherForecastRepositoryImpl
 
+    val location = Location.empty()
     val deviceId = "deviceId"
     val now = ZonedDateTime.now().toLocalDate()
     val fromDate = now.minusDays(PREFETCH_DAYS)
@@ -34,13 +36,17 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
             coJustRun { cacheSource.clearDeviceForecast() }
             coJustRun { cacheSource.clearLocationForecast() }
             coJustRun { cacheSource.setDeviceForecast(deviceId, forecastData) }
+            coJustRun { cacheSource.setLocationForecast(location, forecastData) }
             coMockEitherRight(
                 { networkSource.getDeviceForecast(deviceId, fromDate, now) },
                 forecastData
             )
             coMockEitherRight(
-                { cacheSource.getDeviceForecast(deviceId, fromDate, now) }, forecastData
+                { cacheSource.getDeviceForecast(deviceId, fromDate, now) },
+                forecastData
             )
+            coMockEitherRight({ networkSource.getLocationForecast(location) }, forecastData)
+            coMockEitherRight({ cacheSource.getLocationForecast(location) }, forecastData)
         }
     }
 
@@ -83,7 +89,7 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
         }
     }
 
-    context("Handle cache in fetching forecast") {
+    context("Handle cache in fetching device forecast") {
         given("if forecast data is in cache or not") {
             When("forecast data is in cache") {
                 then("forecast should be fetched from cache") {
@@ -126,6 +132,30 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
         Then("cache should be cleared") {
             repo.clearLocationForecastFromCache()
             coVerify(exactly = 1) { cacheSource.clearLocationForecast() }
+        }
+    }
+
+    context("Handle cache in fetching location forecast") {
+        given("if forecast data is in cache or not") {
+            When("forecast data is in cache") {
+                then("forecast should be fetched from cache") {
+                    repo.getLocationForecast(location).isSuccess(forecastData)
+                    coVerify(exactly = 1) { cacheSource.getLocationForecast(location) }
+                    coVerify(exactly = 0) { networkSource.getLocationForecast(location) }
+                }
+            }
+            When("forecast data is NOT in cache") {
+                coMockEitherLeft({ cacheSource.getLocationForecast(location) }, failure)
+                then("forecast should be fetched from network") {
+                    repo.getLocationForecast(location).isSuccess(forecastData)
+                    coVerify(exactly = 1) { networkSource.getLocationForecast(location) }
+                }
+                then("forecast should be saved in cache") {
+                    coVerify(exactly = 1) {
+                        cacheSource.setLocationForecast(location, forecastData)
+                    }
+                }
+            }
         }
     }
 

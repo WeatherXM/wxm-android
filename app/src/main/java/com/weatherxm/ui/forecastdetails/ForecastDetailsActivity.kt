@@ -134,12 +134,12 @@ class ForecastDetailsActivity : BaseActivity() {
             if (model.location.isCurrentLocation) {
                 HeaderView(
                     title = getString(R.string.current_location).capitalizeWords(),
-                    subtitle = model.address(),
+                    subtitle = model.forecast().address,
                     onInfoButton = null
                 )
             } else {
                 HeaderView(
-                    title = model.address() ?: EMPTY_VALUE,
+                    title = model.forecast().address ?: EMPTY_VALUE,
                     subtitle = null,
                     onInfoButton = null
                 )

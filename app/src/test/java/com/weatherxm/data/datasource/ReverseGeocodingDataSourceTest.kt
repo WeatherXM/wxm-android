@@ -49,7 +49,7 @@ class ReverseGeocodingDataSourceTest : KoinTest, BehaviorSpec({
     val moshi: Moshi by inject(Moshi::class.java)
     lateinit var dataSource: ReverseGeocodingDataSourceImpl
 
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
     val countryLocation = Location(39.074208, 21.824312)
     val countryName = "Greece"
     val countryCode = "GR"

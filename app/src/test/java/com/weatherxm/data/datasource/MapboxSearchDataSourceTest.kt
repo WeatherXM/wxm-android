@@ -37,7 +37,7 @@ class MapboxSearchDataSourceTest : KoinTest, BehaviorSpec({
 
     val query = "query"
     val countryCode = "GR"
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
     val searchSuggestion = mockk<SearchSuggestion>()
     val searchSuggestions = listOf(searchSuggestion)
     val searchOptions = SearchOptions.Builder()

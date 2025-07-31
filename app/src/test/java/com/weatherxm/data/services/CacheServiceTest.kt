@@ -6,7 +6,9 @@ import com.weatherxm.R
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.locationToText
 import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCESS
@@ -42,6 +44,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     val celsiusUnit = "°C"
     val bundleKey = "bundleKey"
     val weatherData = listOf<WeatherData>(mockk())
+    val location = Location.empty()
 
     beforeSpec {
         every { encryptedPref.edit() } returns prefEditor
@@ -210,6 +213,29 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
         }
     }
 
+    context("GET / SET the locations's forecast") {
+        given("a forecast for a location") {
+            then("set it as an in-memory variable") {
+                cacheService.setLocationForecast(location.locationToText(), weatherData)
+            }
+            and("GET this forecast") {
+                and("the forecast is valid and NOT expired") {
+                    then("return the forecast") {
+                        cacheService.getLocationForecast(location.locationToText())
+                            .isSuccess(weatherData)
+                    }
+                }
+            }
+            and("clear the forecast") {
+                cacheService.clearLocationForecast()
+                then("return CacheMissError") {
+                    cacheService.getLocationForecast(location.locationToText()).leftOrNull()
+                        .shouldBeTypeOf<DataError.CacheMissError>()
+                }
+            }
+        }
+    }
+
     context("Get a preferred unit") {
         given("the key for the preferred unit and the default fallback") {
             and("there is no such key in the Shared Preferences") {
@@ -253,6 +279,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     context("Clear the cache") {
         When("we want to clear everything") {
             then("call the respective clearAll function") {
+                cacheService.isCacheEmpty() shouldBe false
                 cacheService.clearAll()
                 cacheService.isCacheEmpty() shouldBe true
             }
