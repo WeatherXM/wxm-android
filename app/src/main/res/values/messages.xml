@@ -10,7 +10,7 @@
     <string name="error_reward_details_title">Reward Details could not be fetched for %s</string>
     <string name="error_boost_reward_title">Reward Boost could not be fetched</string>
     <string name="error_history_generic_message">Fetching history failed</string>
-    <string name="error_history_no_data_chart_found">No historical weather data could be found for this day.</string>
+    <string name="error_no_data_chart_found">No weather data could be found for this day.</string>
     <string name="error_login_invalid_username">Login failed: Invalid email</string>
     <string name="error_login_invalid_password">Login failed: Invalid password</string>
     <string name="error_login_invalid_credentials">Login failed: Invalid email or password</string>

@@ -36,7 +36,7 @@ class DeviceDataSourceTest : BehaviorSpec({
     val serialNumber = "serialNumber"
     val invalidSerialNumber = "invalidSerialNumber"
     val secret = "secret"
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
     val friendlyName = "friendlyName"
 
     val device = Device(

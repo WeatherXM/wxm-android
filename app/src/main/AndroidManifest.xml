@@ -160,10 +160,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.weatherxm.ui.explorer.ExplorerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Explorer" />
-        <activity
             android:name="com.weatherxm.ui.login.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -189,6 +185,7 @@
             android:name="com.weatherxm.ui.home.HomeActivity"
             android:label="@string/title_home"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.preferences.PreferenceActivity"
@@ -304,7 +301,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.deviceforecast.ForecastDetailsActivity"
+            android:name="com.weatherxm.ui.forecastdetails.ForecastDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity

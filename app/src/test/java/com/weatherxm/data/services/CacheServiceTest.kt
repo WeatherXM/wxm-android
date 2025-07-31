@@ -6,7 +6,9 @@ import com.weatherxm.R
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.locationToText
 import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCESS
@@ -42,6 +44,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     val celsiusUnit = "°C"
     val bundleKey = "bundleKey"
     val weatherData = listOf<WeatherData>(mockk())
+    val location = Location.empty()
 
     beforeSpec {
         every { encryptedPref.edit() } returns prefEditor
@@ -191,19 +194,42 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     context("GET / SET the device's forecast") {
         given("a forecast for a device") {
             then("set it as an in-memory variable") {
-                cacheService.setForecast(deviceId, weatherData)
+                cacheService.setDeviceForecast(deviceId, weatherData)
             }
             and("GET this forecast") {
                 and("the forecast is valid and NOT expired") {
                     then("return the forecast") {
-                        cacheService.getForecast(deviceId).isSuccess(weatherData)
+                        cacheService.getDeviceForecast(deviceId).isSuccess(weatherData)
                     }
                 }
             }
             and("clear the forecast") {
-                cacheService.clearForecast()
+                cacheService.clearDeviceForecast()
                 then("return CacheMissError") {
-                    cacheService.getForecast(deviceId).leftOrNull()
+                    cacheService.getDeviceForecast(deviceId).leftOrNull()
+                        .shouldBeTypeOf<DataError.CacheMissError>()
+                }
+            }
+        }
+    }
+
+    context("GET / SET the locations's forecast") {
+        given("a forecast for a location") {
+            then("set it as an in-memory variable") {
+                cacheService.setLocationForecast(location.locationToText(), weatherData)
+            }
+            and("GET this forecast") {
+                and("the forecast is valid and NOT expired") {
+                    then("return the forecast") {
+                        cacheService.getLocationForecast(location.locationToText())
+                            .isSuccess(weatherData)
+                    }
+                }
+            }
+            and("clear the forecast") {
+                cacheService.clearLocationForecast()
+                then("return CacheMissError") {
+                    cacheService.getLocationForecast(location.locationToText()).leftOrNull()
                         .shouldBeTypeOf<DataError.CacheMissError>()
                 }
             }
@@ -253,6 +279,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     context("Clear the cache") {
         When("we want to clear everything") {
             then("call the respective clearAll function") {
+                cacheService.isCacheEmpty() shouldBe false
                 cacheService.clearAll()
                 cacheService.isCacheEmpty() shouldBe true
             }
@@ -262,8 +289,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     context("GET / SET User Devices Of Bundle") {
         When("We want to GET all the user devices of each bundle") {
             then("return the respective map of elements") {
-                val k = cacheService.getUserDevicesOfBundles()
-                k shouldBe mapOf(bundleKey to 1)
+                cacheService.getUserDevicesOfBundles() shouldBe mapOf(bundleKey to 1)
             }
         }
         When("We have a bundle and its size") {

@@ -280,6 +280,7 @@ data class RewardsTimeline(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class WeatherData(
+    val address: String?,
     var date: LocalDate,
     val tz: String?,
     val hourly: List<HourlyWeather>?,

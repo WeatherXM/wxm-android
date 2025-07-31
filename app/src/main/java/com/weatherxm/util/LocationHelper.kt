@@ -35,7 +35,8 @@ class LocationHelper(
                 null
             }
         }
-        priority?.let {
+
+        priority?.apply {
             locationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location == null) {
@@ -46,7 +47,7 @@ class LocationHelper(
                                 .setIntervalMillis(TimeUnit.SECONDS.toMillis(2))
                                 .setMinUpdateIntervalMillis(0)
                                 .setMaxUpdateDelayMillis(TimeUnit.SECONDS.toMillis(3))
-                                .setPriority(it)
+                                .setPriority(this)
                                 .build(),
                             object : LocationCallback() {
                                 override fun onLocationResult(result: LocationResult) {

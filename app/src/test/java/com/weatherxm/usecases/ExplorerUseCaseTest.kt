@@ -12,15 +12,15 @@ import com.weatherxm.data.models.NetworkSearchDeviceResult
 import com.weatherxm.data.models.NetworkSearchResults
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.data.repository.FollowRepository
-import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.explorer.ExplorerData
-import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.ExplorerData
+import com.weatherxm.ui.home.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.UICell
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
@@ -34,15 +34,15 @@ class ExplorerUseCaseTest : BehaviorSpec({
     val explorerRepo = mockk<ExplorerRepository>()
     val followRepo = mockk<FollowRepository>()
     val deviceRepo = mockk<DeviceRepository>()
-    val locationRepo = mockk<LocationRepository>()
+    val addressRepo = mockk<GeoLocationRepository>()
     val usecase = ExplorerUseCaseImpl(
-        explorerRepo, followRepo, deviceRepo, locationRepo
+        explorerRepo, followRepo, deviceRepo, addressRepo
     )
 
     val searchResult = SearchResult(null, null)
     val index = "index"
     val address = "address"
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
     val publicHexes = mutableListOf(PublicHex(index, 0, 0, null, location, emptyList()))
     val cell = UICell(index, location)
 
@@ -269,7 +269,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
 
     context("Get user country's location") {
         given("A repository providing the location") {
-            coEvery { locationRepo.getUserCountryLocation() } returns location
+            coEvery { addressRepo.getUserCountryLocation() } returns location
             then("return the location") {
                 usecase.getUserCountryLocation() shouldBe location
             }

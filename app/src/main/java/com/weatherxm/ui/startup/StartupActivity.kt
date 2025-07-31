@@ -20,7 +20,6 @@ class StartupActivity : BaseActivity() {
 
         model.onStartupState().observe(this) { state ->
             when (state) {
-                StartupState.ShowExplorer -> navigator.showExplorer(this)
                 StartupState.ShowHome -> navigator.showHome(this)
                 StartupState.ShowAnalyticsOptIn -> navigator.showAnalyticsOptIn(this)
                 StartupState.ShowUpdate -> navigator.showUpdatePrompt(this)

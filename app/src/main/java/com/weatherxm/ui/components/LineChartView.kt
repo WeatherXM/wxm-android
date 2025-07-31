@@ -117,7 +117,7 @@ class LineChartView : LinearLayout {
     }
 
     fun showNoDataText() {
-        binding.chart.setNoDataText(resources.getString(R.string.error_history_no_data_chart_found))
+        binding.chart.setNoDataText(resources.getString(R.string.error_no_data_chart_found))
         binding.chart.setNoDataTextColor(context.getColor(R.color.colorOnSurface))
         binding.chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }

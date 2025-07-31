@@ -8,6 +8,7 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.DailyData
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.UIDevice
@@ -24,12 +25,14 @@ class ForecastUseCaseTest : BehaviorSpec({
     val repo = mockk<WeatherForecastRepository>()
     val usecase = ForecastUseCaseImpl(repo)
 
+    val location = Location.empty()
     val device = UIDevice.empty()
     val forceRefresh = false
     val utc = "UTC"
     val tomorrowInUtc = ZonedDateTime.now(ZoneId.of(utc)).plusDays(1)
     val weatherData = listOf(
         WeatherData(
+            device.address,
             tomorrowInUtc.toLocalDate(),
             utc,
             listOf(
@@ -90,6 +93,7 @@ class ForecastUseCaseTest : BehaviorSpec({
         solarIrradiance = 400F
     )
     val uiForecast = UIForecast(
+        address = device.address,
         next24Hours = listOf(hourlyWeather),
         forecastDays = listOf(
             UIForecastDay(
@@ -113,14 +117,14 @@ class ForecastUseCaseTest : BehaviorSpec({
         given("A repository providing the forecast data") {
             When("Device has a null timezone property") {
                 then("return INVALID_TIMEZONE failure") {
-                    usecase.getForecast(device, forceRefresh).leftOrNull()
+                    usecase.getDeviceForecast(device, forceRefresh).leftOrNull()
                         .shouldBeTypeOf<ApiError.UserError.InvalidTimezone>()
                 }
             }
             When("Device does has an empty timezone property") {
                 device.timezone = String.empty()
                 then("return INVALID_TIMEZONE failure") {
-                    usecase.getForecast(device, forceRefresh).leftOrNull()
+                    usecase.getDeviceForecast(device, forceRefresh).leftOrNull()
                         .shouldBeTypeOf<ApiError.UserError.InvalidTimezone>()
                 }
             }
@@ -133,7 +137,7 @@ class ForecastUseCaseTest : BehaviorSpec({
                         repo.getDeviceForecast(device.id, fromDate, toDate, forceRefresh)
                     }, failure)
                     then("return that failure") {
-                        usecase.getForecast(device, forceRefresh).isError()
+                        usecase.getDeviceForecast(device, forceRefresh).isError()
                     }
                 }
                 When("repository returns success along with the data") {
@@ -141,8 +145,25 @@ class ForecastUseCaseTest : BehaviorSpec({
                         repo.getDeviceForecast(device.id, fromDate, toDate, forceRefresh)
                     }, weatherData)
                     then("return the respective UIForecast") {
-                        usecase.getForecast(device, forceRefresh).isSuccess(uiForecast)
+                        usecase.getDeviceForecast(device, forceRefresh).isSuccess(uiForecast)
                     }
+                }
+            }
+        }
+    }
+
+    context("Get Location Forecast") {
+        given("A repository providing the forecast data") {
+            When("repository returns a failure") {
+                coMockEitherLeft({ repo.getLocationForecast(location) }, failure)
+                then("return that failure") {
+                    usecase.getLocationForecast(location).isError()
+                }
+            }
+            When("repository returns success along with the data") {
+                coMockEitherRight({ repo.getLocationForecast(location) }, weatherData)
+                then("return the respective UIForecast") {
+                    usecase.getLocationForecast(location).isSuccess(uiForecast)
                 }
             }
         }

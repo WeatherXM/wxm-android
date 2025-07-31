@@ -18,8 +18,8 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.weatherxm.databinding.FragmentMapBinding
-import com.weatherxm.ui.explorer.ExplorerMapFragment.Companion.STATION_COUNT_POINT_TEXT_SIZE
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
+import com.weatherxm.ui.home.explorer.ExplorerMapFragment.Companion.STATION_COUNT_POINT_TEXT_SIZE
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.util.DisplayModeHelper
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject

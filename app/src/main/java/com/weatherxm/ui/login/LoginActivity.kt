@@ -10,7 +10,6 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
@@ -38,10 +37,6 @@ class LoginActivity : BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
-
-        intent?.extras?.getString(ARG_USER_MESSAGE)?.let {
-            showSnackbarMessage(binding.root, it)
         }
 
         // Listen for login state change
@@ -158,11 +153,6 @@ class LoginActivity : BaseActivity() {
                 binding.loading.invisible()
                 val user = result.data
                 Timber.d("User: $user")
-                if (model.shouldShowAnalyticsOptIn()) {
-                    navigator.showAnalyticsOptIn(this)
-                } else {
-                    navigator.showHome(this)
-                }
 
                 /*
                 * We track successful login here because we chain `login`->`getUser` calls

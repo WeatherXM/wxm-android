@@ -14,6 +14,7 @@ import com.weatherxm.util.Weather.getFormattedUV
 import com.weatherxm.util.Weather.getFormattedWind
 import com.weatherxm.util.Weather.getWeatherAnimation
 import com.weatherxm.util.Weather.getWeatherStaticIcon
+import com.weatherxm.util.Weather.getWeatherSummaryDesc
 import io.kotest.core.spec.style.scopes.BehaviorSpecContextContainerScope
 import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
@@ -68,6 +69,17 @@ suspend fun BehaviorSpecGivenContainerScope.testWeatherIcon(
         }
         then("Get the static icon") {
             getWeatherStaticIcon(icon) shouldBe expectedStaticIcon
+        }
+    }
+}
+
+suspend fun BehaviorSpecGivenContainerScope.testWeatherSummary(
+    icon: String?,
+    expectedSummaryResId: Int?
+) {
+    When("$icon") {
+        then("Get the summary's Res ID") {
+            getWeatherSummaryDesc(icon) shouldBe expectedSummaryResId
         }
     }
 }
