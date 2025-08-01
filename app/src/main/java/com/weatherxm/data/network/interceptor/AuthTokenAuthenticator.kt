@@ -17,12 +17,14 @@ import com.weatherxm.data.path
 import com.weatherxm.service.workers.ForceLogoutWorker
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 class AuthTokenAuthenticator(
     private val authService: AuthService,
@@ -30,6 +32,7 @@ class AuthTokenAuthenticator(
     private val context: Context,
 ) : Authenticator {
     private lateinit var refreshJob: Deferred<AuthToken?>
+    private var refreshRetries = 0
 
     override fun authenticate(route: Route?, response: Response): Request? {
         // The original request
@@ -76,16 +79,36 @@ class AuthTokenAuthenticator(
             }
             .flatMap { authToken ->
                 Timber.d("[${request.path()}] Trying to refresh token.")
-                runBlocking {
-                    authService.refresh(RefreshBody(authToken.refresh)).mapResponse()
-                        .onLeft {
-                            Timber.d("[${request.path()}] Token refresh failed.")
-                        }
-                        .onRight {
-                            Timber.d("[${request.path()}] Token refresh success.")
-                        }
-                }
+                networkRefresh(request, authToken.refresh)
             }
+    }
+
+    private fun networkRefresh(request: Request, refreshToken: String): Either<Failure, AuthToken> {
+        return runBlocking {
+            authService.refresh(RefreshBody(refreshToken)).mapResponse()
+                .onLeft {
+                    refreshRetries++
+                    when (refreshRetries) {
+                        1 -> {
+                            delay(2.seconds)
+                            return@runBlocking networkRefresh(request, refreshToken)
+                        }
+                        2 -> {
+                            delay(5.seconds)
+                            return@runBlocking networkRefresh(request, refreshToken)
+                        }
+                        else -> {
+                            Timber.d("[${request.path()}] Token refresh failed after 3 retries.")
+                            // Exceeded retries; stop retrying and propagate error
+                            return@runBlocking Either.Left(it)
+                        }
+                    }
+                }
+                .onRight {
+                    refreshRetries = 0
+                    Timber.d("[${request.path()}] Token refresh success.")
+                }
+        }
     }
 
     private fun retryWithAccessToken(request: Request, accessToken: String): Request {
