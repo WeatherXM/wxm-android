@@ -21,19 +21,20 @@ class ForceLogoutWorker(
 
     override suspend fun doWork(): Result {
         Timber.d("Starting Work Manager for forced logout.")
-        authRepository.logout()
-        widgetHelper.getWidgetIds().onRight {
-            val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-            val ids = it.map { id ->
-                id.toInt()
+        authRepository.logout().onRight {
+            widgetHelper.getWidgetIds().onRight {
+                val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                val ids = it.map { id ->
+                    id.toInt()
+                }
+                intent.putExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_IDS,
+                    ids.toIntArray()
+                )
+                intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
+                context.sendBroadcast(intent)
             }
-            intent.putExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_IDS,
-                ids.toIntArray()
-            )
-            intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-            intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
-            context.sendBroadcast(intent)
         }
         return Result.success()
     }
