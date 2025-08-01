@@ -138,9 +138,6 @@ class LoginViewModelTest : BehaviorSpec({
                 coMockEitherRight({ usecase.login(username, password) }, authToken)
                 coMockEitherLeft({ userUseCase.getUser() }, failure)
                 runTest { viewModel.login(username, password) }
-                then("LiveData of login posts a success") {
-                    viewModel.onLogin().isSuccess(Unit)
-                }
                 then("Log that error as a failure event") {
                     verify(exactly = 5) { analytics.trackEventFailure(any()) }
                 }
@@ -152,9 +149,6 @@ class LoginViewModelTest : BehaviorSpec({
                 coMockEitherRight({ usecase.login(username, password) }, authToken)
                 coMockEitherRight({ userUseCase.getUser() }, user)
                 runTest { viewModel.login(username, password) }
-                then("LiveData of login posts a success") {
-                    viewModel.onLogin().isSuccess(Unit)
-                }
                 then("Set the user id in analytics") {
                     verify(exactly = 1) { analytics.setUserId(user.id) }
                 }

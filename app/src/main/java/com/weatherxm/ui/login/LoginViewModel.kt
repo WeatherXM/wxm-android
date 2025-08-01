@@ -52,7 +52,7 @@ class LoginViewModel(
                     return@launch
                 }
                 .flatMap {
-                    onLogin.postValue(Resource.success(Unit))
+                    Timber.d("Login success. Get user to check if he has a wallet")
                     userUseCase.getUser()
                 }
                 .mapLeft {
