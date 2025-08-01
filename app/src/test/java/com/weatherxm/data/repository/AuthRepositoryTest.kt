@@ -54,7 +54,6 @@ class AuthRepositoryTest : BehaviorSpec({
         every { appConfigDataSource.getInstallationId() } returns installationId
         coJustRun { cacheUserDataSource.setUserUsername(email) }
         coJustRun { databaseExplorerDataSource.deleteAll() }
-        coJustRun { networkAuthDataSource.logout(authToken.access, installationId) }
         justRun { cacheService.clearAll() }
         justRun { cacheService.setAcceptTermsTimestamp(any()) }
         coMockEitherRight({ cacheUserDataSource.getUserUsername() }, email)
@@ -82,29 +81,39 @@ class AuthRepositoryTest : BehaviorSpec({
         }
         given("A Logout action") {
             and("auth token is in cache") {
-                coMockEitherRight({ cacheService.getAuthToken() }, authToken)
-                authRepository.logout()
-                then("logout using the network") {
-                    coVerify(exactly = 1) {
-                        networkAuthDataSource.logout(authToken.access, installationId)
+                When("logout is successful") {
+                    coMockEitherRight({ cacheService.getAuthToken() }, authToken)
+                    coMockEitherRight(
+                        { networkAuthDataSource.logout(authToken.access, installationId) },
+                        Unit
+                    )
+                    then("return the success") {
+                        authRepository.logout().isSuccess(Unit)
+                        coVerify(exactly = 1) {
+                            networkAuthDataSource.logout(authToken.access, installationId)
+                        }
+                    }
+                    then("clear the cache and the database") {
+                        coVerify(exactly = 1) { databaseExplorerDataSource.deleteAll() }
+                        coVerify(exactly = 1) { cacheService.clearAll() }
                     }
                 }
-                then("clear the cache and the database") {
-                    coVerify(exactly = 1) { databaseExplorerDataSource.deleteAll() }
-                    coVerify(exactly = 1) { cacheService.clearAll() }
+                When("logout failed") {
+                    coMockEitherRight({ cacheService.getAuthToken() }, authToken)
+                    coMockEitherLeft(
+                        { networkAuthDataSource.logout(authToken.access, installationId) },
+                        failure
+                    )
+                    then("return the failure") {
+                        authRepository.logout().isError()
+                    }
                 }
             }
             and("auth token is not in cache") {
                 coMockEitherLeft({ cacheService.getAuthToken() }, failure)
                 authRepository.logout()
-                then("do NOT logout using the network") {
-                    coVerify(exactly = 0) {
-                        networkAuthDataSource.logout(authToken.access, installationId)
-                    }
-                }
-                then("clear the cache and the database") {
-                    coVerify(exactly = 1) { databaseExplorerDataSource.deleteAll() }
-                    coVerify(exactly = 2) { cacheService.clearAll() }
+                then("return the failure") {
+                    authRepository.logout().isError()
                 }
             }
         }

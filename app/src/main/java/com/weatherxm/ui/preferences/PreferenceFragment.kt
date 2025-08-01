@@ -17,6 +17,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DisplayModeHelper
@@ -108,8 +109,8 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             onLoggedOut(logoutBtn, resetPassBtn, deleteAccountButton, analyticsPreference)
         }
 
-        model.onLogout().observe(this) { hasLoggedOut ->
-            if (hasLoggedOut) {
+        model.onLogout().observe(this) { logoutResponse ->
+            if (logoutResponse.status == Status.SUCCESS) {
                 analytics.trackEventSelectContent(AnalyticsService.ParamValue.LOGOUT.paramValue)
                 widgetHelper.getWidgetIds().onRight {
                     val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)

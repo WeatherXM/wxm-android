@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.PreferencesUseCase
+import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
@@ -22,16 +24,20 @@ class PreferenceViewModel(
     }
 
     // Needed for passing info to the activity to when logging out
-    private val onLogout = MutableLiveData(false)
+    private val onLogout = MutableLiveData<Resource<Unit>>()
 
-    fun onLogout(): LiveData<Boolean> = onLogout
+    fun onLogout(): LiveData<Resource<Unit>> = onLogout
     fun isLoggedIn(): Boolean = authUseCase.isLoggedIn()
 
     fun logout() {
         viewModelScope.launch(dispatcher) {
-            analytics.onLogout()
-            authUseCase.logout()
-            onLogout.postValue(true)
+            onLogout.postValue(Resource.loading())
+            authUseCase.logout().onRight {
+                analytics.onLogout()
+                onLogout.postValue(Resource.success(Unit))
+            }.onLeft {
+                onLogout.postValue(Resource.error(it.getDefaultMessage()))
+            }
         }
     }
 
