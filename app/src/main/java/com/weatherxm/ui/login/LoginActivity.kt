@@ -123,7 +123,6 @@ class LoginActivity : BaseActivity() {
     private fun onLoginResult(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
-                Timber.d("Login success. Get user to check if he has a wallet")
                 setInputEnabled(false)
                 binding.loading.invisible()
             }
