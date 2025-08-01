@@ -9,8 +9,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_bottom_rounded_corners"
-        android:paddingBottom="@dimen/padding_normal_to_large">
+        android:background="@color/colorSurface">
 
         <!-- Progress -->
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -37,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:orientation="horizontal"
-            android:weightSum="2"
-            tools:visibility="visible">
+            android:paddingBottom="@dimen/padding_normal_to_large"
+            android:weightSum="2">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
@@ -141,7 +140,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
@@ -210,7 +208,7 @@
                     android:id="@+id/walletContainerCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
+                    android:layout_marginVertical="@dimen/margin_normal"
                     app:cardElevation="@dimen/elevation_small"
                     app:contentPadding="0dp"
                     tools:strokeColor="@color/error"
@@ -247,7 +245,6 @@
                     android:id="@+id/settingsContainerCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
                     app:cardElevation="@dimen/elevation_small"
                     app:contentPadding="0dp">
 

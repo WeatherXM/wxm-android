@@ -127,10 +127,17 @@
         Bottom Navigation View
     -->
     <style name="Widget.WeatherXM.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@drawable/bottom_navigation_shape</item>
-        <item name="android:minHeight">56dp</item>
-        <item name="labelVisibilityMode">unlabeled</item>
-        <item name="itemIconTint">@color/bottom_navigation_view_item_icon_color</item>
+        <item name="android:background">@color/colorSurface</item>
+        <item name="android:minHeight">70dp</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemIconSize">22dp</item>
+        <item name="itemTextAppearanceInactive">
+            @style/TextAppearance.WeatherXM.Default.BodyExtraSmall
+        </item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.WeatherXM.Default.BodyExtraSmall
+        </item>
+        <item name="itemTextColor">@color/bottom_navigation_view_item_color</item>
+        <item name="itemIconTint">@color/bottom_navigation_view_item_color</item>
         <item name="itemActiveIndicatorStyle">
             @style/Widget.WeatherXM.BottomNavigationView.ActiveIndicator
         </item>

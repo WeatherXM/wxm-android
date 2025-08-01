@@ -4,7 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
-import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.common.UIDevice
 
@@ -21,7 +21,7 @@ interface ClaimDeviceUseCase {
 
 class ClaimDeviceUseCaseImpl(
     private val deviceRepository: DeviceRepository,
-    private val addressRepository: AddressRepository
+    private val geoLocationRepository: GeoLocationRepository
 ) : ClaimDeviceUseCase {
 
     override suspend fun claimDevice(
@@ -36,6 +36,6 @@ class ClaimDeviceUseCaseImpl(
     }
 
     override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
-        return addressRepository.getCountryAndFrequencies(location)
+        return geoLocationRepository.getCountryAndFrequencies(location)
     }
 }

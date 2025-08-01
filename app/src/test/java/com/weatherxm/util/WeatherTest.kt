@@ -42,7 +42,7 @@ class WeatherTest : KoinTest, BehaviorSpec({
         defaultMockUnitSelector()
     }
 
-    given("A Weather icon") {
+    given("A Weather icon to get the animation & static icon returned") {
         testWeatherIcon("not-available", R.raw.anim_not_available, null)
         testWeatherIcon("clear-day", R.raw.anim_weather_clear_day, R.drawable.ic_weather_clear_day)
         testWeatherIcon(
@@ -223,6 +223,37 @@ class WeatherTest : KoinTest, BehaviorSpec({
         testWeatherIcon("fog", R.raw.anim_weather_fog, R.drawable.ic_weather_fog)
         testWeatherIcon("cloudy", R.raw.anim_weather_cloudy, R.drawable.ic_weather_cloudy)
         testWeatherIcon(null, R.raw.anim_not_available, null)
+    }
+
+    given("A Weather icon to get the weather summary") {
+        testWeatherSummary("not-available", null)
+        testWeatherSummary("clear-day", R.string.clear)
+        testWeatherSummary("clear-night", R.string.clear)
+        testWeatherSummary("partly-cloudy-day", R.string.clear_few_low_clouds)
+        testWeatherSummary("partly-cloudy-night", R.string.clear_few_low_clouds)
+        testWeatherSummary("partly-cloudy-day-drizzle", R.string.mixed_with_showers)
+        testWeatherSummary("partly-cloudy-night-drizzle", R.string.mixed_with_showers)
+        testWeatherSummary("partly-cloudy-day-snow", R.string.mixed_with_snow_showers)
+        testWeatherSummary("partly-cloudy-night-snow", R.string.mixed_with_snow_showers)
+        testWeatherSummary("overcast-day", R.string.partly_cloudy)
+        testWeatherSummary("overcast-night", R.string.partly_cloudy)
+        testWeatherSummary("overcast", R.string.overcast)
+        testWeatherSummary("overcast-rain", R.string.overcast_rain)
+        testWeatherSummary("overcast-snow", R.string.overcast_snow)
+        testWeatherSummary("overcast-drizzle", R.string.overcast_light_rain)
+        testWeatherSummary("overcast-light-snow", R.string.overcast_light_snow)
+        testWeatherSummary("overcast-sleet", R.string.overcast_mixture_snow_rain)
+        testWeatherSummary("thunderstorms-overcast-rain", R.string.rain_thunderstorms_likely)
+        testWeatherSummary("thunderstorms-light-rain", R.string.light_rain_thunderstorms_likely)
+        testWeatherSummary("thunderstorms-extreme-rain", R.string.heavy_rain_thunderstorms_likely)
+        testWeatherSummary("haze-day", R.string.clear_but_hazy)
+        testWeatherSummary("haze-night", R.string.clear_but_hazy)
+        testWeatherSummary("extreme-day", R.string.mostly_cloudy)
+        testWeatherSummary("extreme-night", R.string.mostly_cloudy)
+        testWeatherSummary("extreme-rain", R.string.overcast_heavy_rain)
+        testWeatherSummary("extreme-snow", R.string.overcast_heavy_snow)
+        testWeatherSummary("fog", R.string.foggy)
+        testWeatherSummary(null, null)
     }
 
     context("Format UV") {

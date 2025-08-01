@@ -20,7 +20,7 @@ class ClaimHeliumFrequencyViewModelTest : BehaviorSpec({
     val usecase = mockk<ClaimDeviceUseCase>()
     lateinit var viewModel: ClaimHeliumFrequencyViewModel
 
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
     val countryAndFrequencies = CountryAndFrequencies(
         "GR",
         Frequency.EU868,

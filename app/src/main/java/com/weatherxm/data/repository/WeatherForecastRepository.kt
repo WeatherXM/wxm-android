@@ -1,10 +1,11 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.models.Failure
-import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.WeatherData
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -17,7 +18,8 @@ interface WeatherForecastRepository {
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>>
 
-    suspend fun clearCache()
+    fun clearLocationForecastFromCache()
+    suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>>
 }
 
 class WeatherForecastRepositoryImpl(
@@ -36,7 +38,7 @@ class WeatherForecastRepositoryImpl(
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>> {
         if (forceRefresh) {
-            clearCache()
+            clearDeviceForecastFromCache()
         }
 
         val to = if (ChronoUnit.DAYS.between(fromDate, toDate) < PREFETCH_DAYS) {
@@ -45,19 +47,36 @@ class WeatherForecastRepositoryImpl(
             toDate
         }
 
-        return cacheSource.getForecast(deviceId, fromDate, to)
+        return cacheSource.getDeviceForecast(deviceId, fromDate, to)
             .onRight {
                 Timber.d("Got forecast from cache [$fromDate to $to].")
             }
             .mapLeft {
-                return networkSource.getForecast(deviceId, fromDate, to).onRight {
+                return networkSource.getDeviceForecast(deviceId, fromDate, to).onRight {
                     Timber.d("Got forecast from network [$fromDate to $to].")
-                    cacheSource.setForecast(deviceId, it)
+                    cacheSource.setDeviceForecast(deviceId, it)
                 }
             }
     }
 
-    override suspend fun clearCache() {
-        cacheSource.clear()
+    override fun clearLocationForecastFromCache() {
+        cacheSource.clearLocationForecast()
+    }
+
+    private suspend fun clearDeviceForecastFromCache() {
+        cacheSource.clearDeviceForecast()
+    }
+
+    override suspend fun getLocationForecast(
+        location: Location
+    ): Either<Failure, List<WeatherData>> {
+        return cacheSource.getLocationForecast(location).onRight {
+            Timber.d("Got forecast from cache for location [$location].")
+        }.mapLeft {
+            return networkSource.getLocationForecast(location).onRight {
+                Timber.d("Got forecast from network for location [$location].")
+                cacheSource.setLocationForecast(location, it)
+            }
+        }
     }
 }

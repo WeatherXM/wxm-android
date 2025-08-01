@@ -26,7 +26,6 @@ import android.text.style.URLSpan
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -70,7 +69,6 @@ import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Rewards.metricsErrorType
 import com.weatherxm.util.Weather.getWeatherAnimation
-import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
 import kotlin.math.abs
 
@@ -359,17 +357,6 @@ fun Chip.setStatusChip(device: UIDevice) {
 
 fun ImageView.setColor(@ColorRes color: Int) {
     this.setColorFilter(ResourcesCompat.getColor(resources, color, null))
-}
-
-fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
-    this.applyInsetter {
-        type(statusBars = top) {
-            padding(left = false, top = true, right = false, bottom = false)
-        }
-        type(navigationBars = bottom) {
-            padding(left = false, top = false, right = false, bottom = true)
-        }
-    }
 }
 
 fun TextView.highlightText(

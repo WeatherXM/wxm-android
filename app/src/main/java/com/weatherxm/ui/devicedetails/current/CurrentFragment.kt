@@ -19,7 +19,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.StationHealthExplanationDialogFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

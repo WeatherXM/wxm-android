@@ -110,46 +110,57 @@ class DevicesViewModelTest : BehaviorSpec({
     }
 
     context("Fetch devices") {
-        given("a usecase returning the list of the devices") {
-            When("it's failure") {
-                coMockEitherLeft(
-                    { deviceListUseCase.getUserDevices() },
-                    failure
-                )
-                testHandleFailureViewModel(
-                    { viewModel.fetch() },
-                    analytics,
-                    viewModel.devices(),
-                    1,
-                    REACH_OUT_MSG
-                )
-                then("The function `hasNoDevices` should return false") {
-                    viewModel.hasNoDevices() shouldBe false
+        given("If the user is logged in or not") {
+            When("is logged in") {
+                and("a usecase returning the list of the devices") {
+                    When("it's failure") {
+                        coMockEitherLeft(
+                            { deviceListUseCase.getUserDevices() },
+                            failure
+                        )
+                        testHandleFailureViewModel(
+                            { viewModel.fetch(true) },
+                            analytics,
+                            viewModel.devices(),
+                            1,
+                            REACH_OUT_MSG
+                        )
+                        then("The function `hasNoDevices` should return false") {
+                            viewModel.hasNoDevices() shouldBe false
+                        }
+                    }
+                    When("it's a success") {
+                        coMockEitherRight({ deviceListUseCase.getUserDevices() }, devices)
+                        runTest { viewModel.fetch(true) }
+                        then("LiveData should post the updated devices value") {
+                            viewModel.devices().isSuccess(devices)
+                        }
+                        then("The function `hasNoDevices` should return false") {
+                            viewModel.hasNoDevices() shouldBe false
+                        }
+                        and("calculate the rewards from the devices") {
+                            then("LiveData onDevicesRewards should post the respective object") {
+                                viewModel.onDevicesRewards().value shouldBe devicesRewards
+                            }
+                        }
+                        When("the user has no devices") {
+                            coMockEitherRight(
+                                { deviceListUseCase.getUserDevices() },
+                                mutableListOf<UIDevice>()
+                            )
+                            runTest { viewModel.fetch(true) }
+                            then("The function `hasNoDevices` should return true") {
+                                viewModel.hasNoDevices() shouldBe true
+                            }
+                        }
+                    }
                 }
             }
-            When("it's a success") {
-                coMockEitherRight({ deviceListUseCase.getUserDevices() }, devices)
-                runTest { viewModel.fetch() }
-                then("LiveData should post the updated devices value") {
-                    viewModel.devices().isSuccess(devices)
-                }
-                then("The function `hasNoDevices` should return false") {
-                    viewModel.hasNoDevices() shouldBe false
-                }
-                and("calculate the rewards from the devices") {
-                    then("LiveData onDevicesRewards should post the respective DevicesRewards") {
-                        viewModel.onDevicesRewards().value shouldBe devicesRewards
-                    }
-                }
-                When("the user has no devices") {
-                    coMockEitherRight(
-                        { deviceListUseCase.getUserDevices() },
-                        mutableListOf<UIDevice>()
-                    )
-                    runTest { viewModel.fetch() }
-                    then("The function `hasNoDevices` should return true") {
-                        viewModel.hasNoDevices() shouldBe true
-                    }
+            When("is not logged in") {
+                runTest { viewModel.fetch(false) }
+                then("LiveData should post the empty states") {
+                    viewModel.devices().isSuccess(emptyList())
+                    viewModel.onDevicesRewards().value shouldBe DevicesRewards(0F, 0F, emptyList())
                 }
             }
         }

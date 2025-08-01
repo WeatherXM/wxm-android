@@ -12,16 +12,16 @@ import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
-import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.mockk
 
 class EditLocationUseCaseTest : BehaviorSpec({
-    val addressRepository = mockk<AddressRepository>()
+    val geoLocationRepository = mockk<GeoLocationRepository>()
     val deviceRepository = mockk<DeviceRepository>()
-    val usecase = EditLocationUseCaseImpl(addressRepository, deviceRepository)
+    val usecase = EditLocationUseCaseImpl(geoLocationRepository, deviceRepository)
 
     val query = "query"
     val deviceId = "deviceId"
@@ -48,7 +48,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
             When("it's a success") {
                 then("return the search suggestions") {
                     coMockEitherRight(
-                        { addressRepository.getSearchSuggestions(query) },
+                        { geoLocationRepository.getSearchSuggestions(query) },
                         listOf(suggestion)
                     )
                     usecase.getSearchSuggestions(query).isSuccess(listOf(suggestion))
@@ -57,7 +57,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
             When("it's a failure") {
                 and("it's a cancellation error") {
                     coMockEitherLeft(
-                        { addressRepository.getSearchSuggestions(query) },
+                        { geoLocationRepository.getSearchSuggestions(query) },
                         CancellationError
                     )
                     then("return success with an empty list") {
@@ -65,7 +65,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
                     }
                 }
                 and("it's not a cancellation error") {
-                    coMockEitherLeft({ addressRepository.getSearchSuggestions(query) }, failure)
+                    coMockEitherLeft({ geoLocationRepository.getSearchSuggestions(query) }, failure)
                     then("return the failure") {
                         usecase.getSearchSuggestions(query).isError()
                     }
@@ -79,7 +79,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
             When("it's a success") {
                 then("return the location") {
                     coMockEitherRight(
-                        { addressRepository.getSuggestionLocation(suggestion) },
+                        { geoLocationRepository.getSuggestionLocation(suggestion) },
                         Location(lat, lon)
                     )
                     usecase.getSuggestionLocation(suggestion).isSuccess(Location(lat, lon))
@@ -88,7 +88,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
             When("it's a failure") {
                 then("return the failure") {
                     coMockEitherLeft(
-                        { addressRepository.getSuggestionLocation(suggestion) },
+                        { geoLocationRepository.getSuggestionLocation(suggestion) },
                         failure
                     )
                     usecase.getSuggestionLocation(suggestion).isError()
@@ -103,7 +103,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
                 and("the address format is invalid") {
                     then("return a SearchResultAddressFormatError") {
                         coMockEitherRight(
-                            { addressRepository.getAddressFromPoint(point) },
+                            { geoLocationRepository.getAddressFromPoint(point) },
                             emptySearchAddress
                         )
                         usecase.getAddressFromPoint(point).leftOrNull()
@@ -113,7 +113,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
                 and("the address format is valid") {
                     then("return the address") {
                         coMockEitherRight(
-                            { addressRepository.getAddressFromPoint(point) },
+                            { geoLocationRepository.getAddressFromPoint(point) },
                             searchAddress
                         )
                         usecase.getAddressFromPoint(point)
@@ -123,7 +123,7 @@ class EditLocationUseCaseTest : BehaviorSpec({
             }
             When("it's a failure") {
                 then("return the failure") {
-                    coMockEitherLeft({ addressRepository.getAddressFromPoint(point) }, failure)
+                    coMockEitherLeft({ geoLocationRepository.getAddressFromPoint(point) }, failure)
                     usecase.getAddressFromPoint(point).isError()
                 }
             }

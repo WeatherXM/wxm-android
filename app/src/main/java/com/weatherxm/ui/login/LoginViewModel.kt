@@ -52,7 +52,7 @@ class LoginViewModel(
                     return@launch
                 }
                 .flatMap {
-                    onLogin.postValue(Resource.success(Unit))
+                    Timber.d("Login success. Get user to check if he has a wallet")
                     userUseCase.getUser()
                 }
                 .mapLeft {
@@ -84,9 +84,5 @@ class LoginViewModel(
 
     private fun handleUserFailure(failure: Failure) {
         user.postValue(Resource.error(failure.getDefaultMessage()))
-    }
-
-    fun shouldShowAnalyticsOptIn(): Boolean {
-        return userUseCase.shouldShowAnalyticsOptIn()
     }
 }

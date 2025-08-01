@@ -10,7 +10,7 @@ object Contracts {
     const val ARG_DEVICE = "device"
     const val ARG_DEVICE_TYPE = "device_type"
     const val ARG_BLE_DEVICE_CONNECTED = "ble_device_connected"
-    const val ARG_USER_MESSAGE = "user_message"
+    const val ARG_NEEDS_PHOTO_VERIFICATION = "needs_photo_verification"
     const val ARG_IS_CUSTOM_APPWIDGET_UPDATE = "is_custom_appwidget_update"
     const val ARG_WIDGET_TYPE = "widget_type"
     const val ARG_WIDGET_ID = "widget_id"
@@ -39,4 +39,5 @@ object Contracts {
     const val ARG_DELETE_ALL_PHOTOS = "delete_all_photos"
     const val ARG_NETWORK_STATS = "network_stats"
     const val ARG_OPEN_STATION_FROM_NOTIFICATION = "open_station_from_notification"
+    const val ARG_LOCATION = "location"
 }

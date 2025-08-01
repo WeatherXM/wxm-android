@@ -42,7 +42,7 @@ class ClaimPulseViewModelTest : BehaviorSpec({
     val claimingKey = "claimingKey"
     val validSerialNumber = "0123456789ABCDEF"
     val validClaimingKey = "012345"
-    val location = Location(0.0, 0.0)
+    val location = Location.empty()
 
     val invalidSerial = "Invalid Serial"
     val invalidLocation = "Invalid Location"

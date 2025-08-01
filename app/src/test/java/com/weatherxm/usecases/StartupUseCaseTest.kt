@@ -27,6 +27,7 @@ class StartupUseCaseTest : BehaviorSpec({
     beforeSpec {
         coJustRun { appConfigRepo.setLastRemindedVersion() }
         mockkObject(RefreshFcmApiWorker)
+        every { authRepo.isLoggedIn() } returns true
         justRun { RefreshFcmApiWorker.initAndRefreshToken(context, null) }
     }
 
@@ -45,30 +46,21 @@ class StartupUseCaseTest : BehaviorSpec({
             }
             When("app should not be updated") {
                 every { appConfigRepo.shouldUpdate() } returns false
-                and("user is logged in") {
-                    every { authRepo.isLoggedIn() } returns true
-                    and("we should show the opt-in analytics screen") {
-                        every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns true
-                        then("return ShowAnalyticsOptIn") {
-                            getStartupType().shouldBeTypeOf<StartupState.ShowAnalyticsOptIn>()
-                        }
-                    }
-                    and("we should show home") {
-                        every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns false
-                        then("return ShowHome") {
-                            getStartupType().shouldBeTypeOf<StartupState.ShowHome>()
-                        }
-                    }
-                    then("refresh the FCM token (exactly = 2 because we have 2 `and` conditions") {
-                        coVerify(exactly = 2) {
-                            RefreshFcmApiWorker.initAndRefreshToken(context, null)
-                        }
+                and("we should show the opt-in analytics screen") {
+                    every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns true
+                    then("return ShowAnalyticsOptIn") {
+                        getStartupType().shouldBeTypeOf<StartupState.ShowAnalyticsOptIn>()
                     }
                 }
-                and("User is logged out") {
-                    every { authRepo.isLoggedIn() } returns false
-                    then("return ShowExplorer") {
-                        getStartupType().shouldBeTypeOf<StartupState.ShowExplorer>()
+                and("we should show home") {
+                    every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns false
+                    then("return ShowHome") {
+                        getStartupType().shouldBeTypeOf<StartupState.ShowHome>()
+                    }
+                }
+                then("refresh the FCM token (exactly = 2 because we have 2 `and` conditions") {
+                    coVerify(exactly = 2) {
+                        RefreshFcmApiWorker.initAndRefreshToken(context, null)
                     }
                 }
             }

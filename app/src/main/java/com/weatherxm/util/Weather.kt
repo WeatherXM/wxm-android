@@ -81,6 +81,40 @@ object Weather {
         }
     }
 
+    @Suppress("ComplexMethod")
+    @RawRes
+    fun getWeatherSummaryDesc(icon: String?): Int? {
+        return when (icon) {
+            "clear-day" -> R.string.clear
+            "clear-night" -> R.string.clear
+            "partly-cloudy-day" -> R.string.clear_few_low_clouds
+            "partly-cloudy-night" -> R.string.clear_few_low_clouds
+            "overcast-day" -> R.string.partly_cloudy
+            "overcast-night" -> R.string.partly_cloudy
+            "haze-day" -> R.string.clear_but_hazy
+            "haze-night" -> R.string.clear_but_hazy
+            "fog" -> R.string.foggy
+            "extreme-day" -> R.string.mostly_cloudy
+            "extreme-night" -> R.string.mostly_cloudy
+            "overcast" -> R.string.overcast
+            "overcast-rain" -> R.string.overcast_rain
+            "overcast-snow" -> R.string.overcast_snow
+            "extreme-rain" -> R.string.overcast_heavy_rain
+            "extreme-snow" -> R.string.overcast_heavy_snow
+            "thunderstorms-overcast-rain" -> R.string.rain_thunderstorms_likely
+            "thunderstorms-light-rain" -> R.string.light_rain_thunderstorms_likely
+            "thunderstorms-extreme-rain" -> R.string.heavy_rain_thunderstorms_likely
+            "partly-cloudy-day-drizzle" -> R.string.mixed_with_showers
+            "partly-cloudy-night-drizzle" -> R.string.mixed_with_showers
+            "partly-cloudy-day-snow" -> R.string.mixed_with_snow_showers
+            "partly-cloudy-night-snow" -> R.string.mixed_with_snow_showers
+            "overcast-drizzle" -> R.string.overcast_light_rain
+            "overcast-light-snow" -> R.string.overcast_light_snow
+            "overcast-sleet" -> R.string.overcast_mixture_snow_rain
+            else -> null
+        }
+    }
+
     /**
      * Suppress ComplexMethod because it is just a bunch of "when statements"
      */

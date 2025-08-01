@@ -18,13 +18,17 @@ jacoco {
     toolVersion = "0.8.12"
 }
 
-fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
+fun getVersionGitTags(isSolana: Boolean, printForDebugging: Boolean = false): List<String> {
     if (printForDebugging) {
-        println("Filter and print ordered release tags")
+        println("Filter and print ordered release tags - [Includes Solana: $isSolana]")
     }
-    val versionTagsWithOptionalRCRegex = Regex("[RC-]*[0-9]*_*[0-9]+[.][0-9]+[.][0-9]+")
+    val versionTagsRegex = if (isSolana) {
+        Regex("Solana_[0-9]*_*[0-9]+[.][0-9]+[.][0-9]+")
+    } else {
+        Regex("[RC-]*[0-9]*_*[0-9]+[.][0-9]+[.][0-9]+")
+    }
     return grgit.tag.list().filter {
-        it.name.matches(versionTagsWithOptionalRCRegex)
+        it.name.matches(versionTagsRegex)
     }.sortedBy {
         it.dateTime
     }.map {
@@ -35,9 +39,9 @@ fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
     }
 }
 
-fun getLastVersionGitTag(printForDebugging: Boolean = true): String {
-    var lastVersionTag = getVersionGitTags(printForDebugging).last()
-    if (lastVersionTag.startsWith("RC")) {
+fun getLastVersionGitTag(isSolana: Boolean, printForDebugging: Boolean = true): String {
+    var lastVersionTag = getVersionGitTags(isSolana, printForDebugging).last()
+    if (isSolana || lastVersionTag.startsWith("RC")) {
         lastVersionTag = lastVersionTag.substringAfterLast("_")
     }
     println("Last Version Tag: $lastVersionTag")
@@ -78,13 +82,14 @@ android {
     compileSdk = 36
     buildToolsVersion = "36.0.0"
 
+    val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")
+
     defaultConfig {
         applicationId = "com.weatherxm.app"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10 + getVersionGitTags().size
-        val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")
-        versionName = getLastVersionGitTag(skipTagsLogging)
+        versionCode = 10 + getVersionGitTags(isSolana = false).size
+        versionName = getLastVersionGitTag(false, skipTagsLogging)
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
@@ -203,6 +208,13 @@ android {
             }
         }
         create("solana") {
+            /**
+             * We need different version codes and version names for Solana to use them for checking
+             * if a user should be prompted to update.
+             * That's why we have introduced a different handling here.
+             */
+            versionCode = 110 + getVersionGitTags(isSolana = true).size
+            versionName = getLastVersionGitTag(true, skipTagsLogging)
             val apiURL = getFlavorProperty("API_URL", "production.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
             val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "production.env")

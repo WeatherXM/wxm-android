@@ -45,18 +45,19 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
+import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
-import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.putParcelableList
 import com.weatherxm.ui.common.toast
@@ -71,7 +72,6 @@ import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
-import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicenotifications.DeviceNotificationsActivity
@@ -80,9 +80,9 @@ import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyAct
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity
 import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
-import com.weatherxm.ui.explorer.ExplorerActivity
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.home.HomeActivity
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
@@ -109,20 +109,7 @@ import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: AnalyticsWrapper) {
-
-    fun showExplorer(context: Context, cellCenter: Location? = null) {
-        context.startActivity(
-            Intent(context, ExplorerActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                .putExtra(ARG_CELL_CENTER, cellCenter)
-        )
-    }
-
-    fun showLogin(
-        context: Context,
-        newTask: Boolean = false,
-        userMessage: String? = null
-    ) {
+    fun showLogin(context: Context, newTask: Boolean = false) {
         val intentFlags = if (newTask) {
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         } else {
@@ -130,7 +117,6 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
         context.startActivity(
             Intent(context, LoginActivity::class.java).addFlags(intentFlags)
-                .putExtra(ARG_USER_MESSAGE, userMessage)
         )
     }
 
@@ -478,16 +464,19 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     }
 
     fun showForecastDetails(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
         context: Context?,
         device: UIDevice,
+        location: UILocation,
         forecastSelectedISODate: String? = null
     ) {
-        context?.startActivity(
-            Intent(context, ForecastDetailsActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ARG_DEVICE, device)
-                .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
-        )
+        val intent = Intent(context, ForecastDetailsActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_DEVICE, device)
+            .putExtra(ARG_LOCATION, location)
+            .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
+
+        activityResultLauncher?.launch(intent) ?: context?.startActivity(intent)
     }
 
     fun showDevicesRewards(fragment: Fragment, devicesRewards: DevicesRewards) {
@@ -695,13 +684,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun openPlayStore(context: Context?, url: String) {
+    fun openStore(context: Context?, url: String) {
         context?.let {
             try {
                 it.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
             } catch (e: ActivityNotFoundException) {
-                Timber.d(e, "Could not open play store.")
-                it.toast(R.string.error_cannot_open_play_store)
+                Timber.d(e, "Could not open the store.")
+                it.toast(R.string.error_cannot_open_store)
             }
         }
     }
