@@ -49,6 +49,9 @@ The 5 different app flavors are:
    on `app.weatherxm.com`. Powered by `production.env`.
    The `API_URL` on that environment file should
    be [https://api.weatherxm.com](https://api.weatherxm.com)
+6. **Solana:** This flavor communicates with our **production API**, found
+   on `app.weatherxm.com`. Powered by `solana.env` and `production.env`. Used for publishing
+   releases to Solana phones.
 
 One thing that needs to be mentioned is that for every flavor a different build type can be used,
 either a `Debug` or a `Release` build type.
@@ -73,8 +76,9 @@ optimizations. Our config file for Detekt can be found in `detekt.yml`.
 
 We have 4 different [GitHub Actions](https://github.com/features/actions):
 
-1. **Code Analysis:** An action that runs on **every Pull Request**, building the app and
-   running `./gradlew :app:detekt` in order to find potential code optimizations.
+1. **Build & Code Analysis & Unit Tests & Coverage:** An action that runs on **every Pull Request**,
+   building the app and running `./gradlew :app:detekt` in order to find potential code
+   optimizations. Also runs the unit tests and creates a coverage report.
 2. **Build Development and Distribute on Firebase:** An action that runs on **every push on
    ** `main`, building the app, and running
    `./gradlew :app:assembleDevDebugRelease :app:appDistributionUploadDevDebugRelease`
@@ -101,7 +105,7 @@ commit message.
 
 # Firebase Releases
 
-For releases to the tech team or to the QA team we are utilizing Firebase and more
+For releases to the tech team, the QA team or the product team we are utilizing Firebase and more
 specifically [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) (can be
 found under the *Release & Monitor* tab in Firebase Console). All different `Remote` flavors are
 supported.
@@ -118,9 +122,10 @@ In order to upload a version up for testing, two different ways can be used:
 In order to create a new public beta release (**called Open Testing release on Play Console**) some
 mandatory steps should be followed that we will explain below:
 
-1. Create and push a new **tag** in `main` which will be the version we want to release.
+1. Create and push a new **tag** in `main` which will be the version we want to release. The tag
+   uses the format `RC-Y_X.X.X` where `Y` is the RC number and `X.X.X` is the version name.
 2. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
-   with the title being the version name (`X.X.X`). The same applies for the tag (use the tag
+   with the title being the version name (`X.X.X-RC-Y`). The same applies for the tag (use the tag
    you created in the previous step). On the description click `Auto-generate release notes` and
    format the text
    accordingly to remove authors and commit urls, and have just a human-readable list of release
@@ -141,7 +146,7 @@ mandatory steps should be followed that we will explain below:
 Testing → Open Testing on Play
 Console (using console’s “Promote Release” @ Internal Testing → Releases → Find your release →
 Promote
-Release) and we execute the steps 1-2 at the below guide “Public Beta Releases (How To)”.**
+Release) and we execute the step at the below guide “Public Beta Releases (How To)”.**
 
 # Public Beta Releases (How To)
 
@@ -150,14 +155,10 @@ mandatory steps should be followed after we have promoted our release from inter
 
 1. Send the new release for review by Google (we
    use [Google Play Managed Publishing](https://play.google.com/console/about/publishingoverview/)).
-2. After the release passes Google’s review and you publish the app to the
-   public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
-   and after filling the correct date, app version and release notes, publish it on Discord's
-   #announcements channel or have a community manager publish it.
 
 **Usually, after some days, we move this beta release from Open Testing → Production on Play
 Console (using console’s “Promote Release” @ Open Testing → Releases → Find your release → Promote
-Release) and we execute the steps 1-3 at the below guide “Production Releases (How To)”.**
+Release) and we execute the steps 1-5 at the below guide “Production Releases (How To)”.**
 
 # Production Releases (How To)
 
@@ -170,8 +171,28 @@ should be followed after we have promoted our release from open testing:
    public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
    and after filling the correct date, app version and release notes, publish it on Discord's
    #announcements channel or have a community manager publish it.
-3. At Firebase's Console, go
+3. Create and push a new **tag** in `main` which will be the version we want to release. The tag
+   uses the format `X.X.X` where `X.X.X` is the version name.
+4. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
+   with the title being the version name (`X.X.X`). The same applies for the tag (use the tag you
+   created in the previous step). On the description click `Auto-generate release notes` and format
+   the text accordingly to remove authors and commit urls, and have just a human-readable list of
+   release notes.
+5. At Firebase's Console, go
    to [remote config](https://console.firebase.google.com/u/0/project/weatherxm-321811/config) and
    edit the `android_app_changelog`, `android_app_minimum_code` , `android_app_version_code` as
    needed.
 
+# Solana Releases (How To)
+
+Releases on Solana require manual handling. The following steps should be completed:
+
+1. Create and push a new **tag** in `main` which will be the version we want to release. The tag
+   uses the format `Solana_X.X.X` where `X.X.X` is the version name. **It is required to use the**
+   `**Solana_**` **prefix**.
+2. Create a new APK locally - that uses the above tag we created to get the correct version code and
+   version name - via Android Studio:
+    1. Build
+    2. Generate Signed App Bundle or Apk
+    3. Select “APK” and using the Solana’s keystore create a `remoteSolanaReleaseOnSolana` APK.
+3. Manually publish that newly created APK via Solana’s CLI tool.

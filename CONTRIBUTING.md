@@ -46,10 +46,12 @@ respectable.
 ## Building & Environment
 
 ### Android Studio Code Style Settings
-All contributors must import our code style settings for Android Studio: 
+
+All contributors must import our code style settings for Android Studio:
 [android-studio-settings.zip](https://github.com/WeatherXM/wxm-android/blob/main/android-studio-settings.zip)
 
 Steps to import them:
+
 1. File
 2. Manage IDE Settings
 3. Import Settings
@@ -96,7 +98,8 @@ We have two different variables for MapBox:
   and create the respective tokens in the [Tokens](https://account.mapbox.com/access-tokens/)
   section. The `MAPBOX_DOWNLOADS_TOKEN` has secret scopes.
 - `MAPBOX_STYLE`
-  Optional param which can be left empty. Used for injecting a custom style to be used in the explorer.
+  Optional param which can be left empty. Used for injecting a custom style to be used in the
+  explorer.
 
 You can view Mapbox guide on Access
 Token [here](https://docs.mapbox.com/help/getting-started/access-tokens/).
@@ -122,6 +125,9 @@ The 5 different app flavors are:
    on `app.weatherxm.com`. Powered by `production.env`.
    The `API_URL` on that environment file should
    be [https://api.weatherxm.com](https://api.weatherxm.com)
+6. **Solana:** This flavor communicates with our **production API**, found
+   on `app.weatherxm.com`. Powered by `solana.env` and `production.env`. Used for publishing
+   releases to Solana phones.
 
 One thing that needs to be mentioned is that for every flavor a different build type can be used,
 either a `Debug` or a `Release` build type.
@@ -141,6 +147,7 @@ you want to use:
 - **Remote Dev**: `com.weatherxm.app.dev`
 - **Remote Staging:** `com.weatherxm.app.staging`
 - **Remote Prod:** `com.weatherxm.app`
+- **Solana:** `com.weatherxm.app.solana`
 
 ## How to ask a question, report a bug or suggest a potential new feature/improvement?
 
@@ -152,7 +159,8 @@ you want to use:
 
 * If you're unable to find a response to your
   question , [open a new issue](https://github.com/WeatherXM/wxm-android/issues/new/choose) by using
-  the [**Ask a question** template](https://github.com/WeatherXM/wxm-android/blob/main/.github/ISSUE_TEMPLATE/ask_a_question.md).
+  the [**Ask a question
+  ** template](https://github.com/WeatherXM/wxm-android/blob/main/.github/ISSUE_TEMPLATE/ask_a_question.md).
   Using this template is mandatory. Make sure to have a **clear title** and include as many details
   as possible as that information helps to answer your question as soon as possible.
 
@@ -164,7 +172,8 @@ you want to use:
 
 * If you're unable to find an open issue addressing the
   problem, [open a new issue](https://github.com/WeatherXM/wxm-android/issues/new/choose) by using
-  the [**Bug Report** template](https://github.com/WeatherXM/wxm-android/blob/main/.github/ISSUE_TEMPLATE/bug_report.md).
+  the [**Bug Report
+  ** template](https://github.com/WeatherXM/wxm-android/blob/main/.github/ISSUE_TEMPLATE/bug_report.md).
   Using this template is mandatory. Make sure to have a **clear title** and include as many details
   as possible as that information helps to resolve issues faster.
 
@@ -176,7 +185,8 @@ you want to use:
 
 * If you're unable to find that
   suggestion, [create a new issue](https://github.com/WeatherXM/beta-issue-tracker/issues/new/choose)
-  by using the [**Feature Request** template](https://github.com/WeatherXM/beta-issue-tracker/blob/main/.github/ISSUE_TEMPLATE/feature_request.md).
+  by using the [**Feature Request
+  ** template](https://github.com/WeatherXM/beta-issue-tracker/blob/main/.github/ISSUE_TEMPLATE/feature_request.md).
   Using this template is mandatory. Make sure to have a **clear title** and include as many details
   as possible.
 
@@ -228,6 +238,7 @@ We use **[Github Flow](https://githubflow.github.io/)** as our branching model a
 Architecture*.
 
 ### Android Studio Code Style Settings
+
 We use these code style settings on Android Studio:
 [android-studio-settings.zip](https://github.com/WeatherXM/wxm-android/blob/main/android-studio-settings.zip)
 
