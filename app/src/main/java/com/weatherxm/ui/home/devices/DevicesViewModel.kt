@@ -45,7 +45,17 @@ class DevicesViewModel(
     fun hasNoDevices() =
         devices.value?.status == Status.SUCCESS && devices.value?.data.isNullOrEmpty()
 
-    fun fetch() {
+    fun fetch(isLoggedIn: Boolean) {
+        /**
+         * If the user isn't logged in, send an "empty" state to the UI to properly update it and
+         * do not proceed with any API call.
+         */
+        if (!isLoggedIn) {
+            devices.postValue(Resource.success(emptyList()))
+            onDevicesRewards.postValue(DevicesRewards(0F, 0F, emptyList()))
+            return
+        }
+
         this@DevicesViewModel.devices.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             deviceListUseCase.getUserDevices().onRight { devices ->
@@ -86,7 +96,10 @@ class DevicesViewModel(
             followUseCase.unfollowStation(deviceId).onRight {
                 Timber.d("[Unfollow Device] Success")
                 onUnFollowStatus.postValue(Resource.success(Unit))
-                fetch()
+                /**
+                 * We cannot do an unfollow if we are not logged in already.
+                 */
+                fetch(true)
             }.onLeft {
                 Timber.e("[Unfollow Device] Error $it")
                 analytics.trackEventFailure(it.code)

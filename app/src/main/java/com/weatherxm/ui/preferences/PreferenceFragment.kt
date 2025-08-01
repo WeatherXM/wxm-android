@@ -2,6 +2,8 @@ package com.weatherxm.ui.preferences
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
+import android.appwidget.AppWidgetManager
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
@@ -14,9 +16,11 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DisplayModeHelper
+import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -27,6 +31,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     private val navigator: Navigator by inject()
     private val displayModeHelper: DisplayModeHelper by inject()
     private val analytics: AnalyticsWrapper by inject()
+    private val widgetHelper: WidgetHelper by inject()
 
     companion object {
         const val TAG = "PreferenceFragment"
@@ -101,6 +106,23 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         } else {
             Timber.d("Not logged in. Hide account preferences.")
             onLoggedOut(logoutBtn, resetPassBtn, deleteAccountButton, analyticsPreference)
+        }
+
+        model.onLogout().observe(this) { hasLoggedOut ->
+            if (hasLoggedOut) {
+                analytics.trackEventSelectContent(AnalyticsService.ParamValue.LOGOUT.paramValue)
+                widgetHelper.getWidgetIds().onRight {
+                    val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                    val ids = it.map { id ->
+                        id.toInt()
+                    }
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids.toIntArray())
+                    intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                    intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
+                    activity?.sendBroadcast(intent)
+                }
+                onLoggedOut(logoutBtn, resetPassBtn, deleteAccountButton, analyticsPreference)
+            }
         }
     }
 
@@ -179,7 +201,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             }
 
         notificationsPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val notificationsStatus = if (notificationsPreference?.isChecked == true) {
+            val notificationsStatus = if (notificationsPreference.isChecked) {
                 AnalyticsService.ParamValue.ON
             } else {
                 AnalyticsService.ParamValue.OFF

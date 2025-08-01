@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import androidx.annotation.StringDef
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import java.time.LocalDate
 
@@ -18,13 +19,17 @@ interface WeatherForecastDataSource {
     @Retention(AnnotationRetention.SOURCE)
     private annotation class Exclude
 
-    suspend fun getForecast(
+    suspend fun getDeviceForecast(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
         exclude: @Exclude String? = null
     ): Either<Failure, List<WeatherData>>
 
-    suspend fun setForecast(deviceId: String, forecast: List<WeatherData>)
-    suspend fun clear()
+    suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>)
+    suspend fun clearDeviceForecast()
+
+    suspend fun getLocationForecast(location: Location): Either<Failure, List<WeatherData>>
+    suspend fun setLocationForecast(location: Location, forecast: List<WeatherData>)
+    fun clearLocationForecast()
 }

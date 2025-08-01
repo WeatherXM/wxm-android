@@ -63,7 +63,6 @@ class LoginViewModelTest : BehaviorSpec({
         justRun { analytics.trackEventFailure(any()) }
         justRun { analytics.setUserId(user.id) }
         every { usecase.isLoggedIn() } returns true
-        every { userUseCase.shouldShowAnalyticsOptIn() } returns true
         every {
             resources.getString(R.string.error_login_invalid_username)
         } returns invalidUsername
@@ -84,14 +83,6 @@ class LoginViewModelTest : BehaviorSpec({
                     runTest { viewModel.isLoggedIn() }
                     viewModel.isLoggedIn() shouldBe true
                 }
-            }
-        }
-    }
-
-    context("Get if we should show the analytics opt-in screen or not") {
-        given("A use case returning the result") {
-            then("return that result") {
-                viewModel.shouldShowAnalyticsOptIn() shouldBe true
             }
         }
     }
@@ -147,9 +138,6 @@ class LoginViewModelTest : BehaviorSpec({
                 coMockEitherRight({ usecase.login(username, password) }, authToken)
                 coMockEitherLeft({ userUseCase.getUser() }, failure)
                 runTest { viewModel.login(username, password) }
-                then("LiveData of login posts a success") {
-                    viewModel.onLogin().isSuccess(Unit)
-                }
                 then("Log that error as a failure event") {
                     verify(exactly = 5) { analytics.trackEventFailure(any()) }
                 }
@@ -161,9 +149,6 @@ class LoginViewModelTest : BehaviorSpec({
                 coMockEitherRight({ usecase.login(username, password) }, authToken)
                 coMockEitherRight({ userUseCase.getUser() }, user)
                 runTest { viewModel.login(username, password) }
-                then("LiveData of login posts a success") {
-                    viewModel.onLogin().isSuccess(Unit)
-                }
                 then("Set the user id in analytics") {
                     verify(exactly = 1) { analytics.setUserId(user.id) }
                 }

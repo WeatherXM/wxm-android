@@ -17,7 +17,7 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.FollowUseCase
@@ -38,7 +38,7 @@ class CellInfoViewModelTest : BehaviorSpec({
     val followUseCase = mockk<FollowUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    val cell = UICell("", Location(0.0, 0.0))
+    val cell = UICell("", Location.empty())
     lateinit var viewModel: CellInfoViewModel
 
     val cellDevicesNoData = "No Data for this cell"

@@ -17,7 +17,7 @@ import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.RECENTS_MAX_ENTRIES
-import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.ui.home.explorer.SearchResult
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.coJustRun
@@ -88,7 +88,7 @@ class ExplorerDataSourceTest : BehaviorSpec({
     val noCenterSearchResult = SearchResult("", null, null, null, null, null)
     val validSearchResult = SearchResult(
         "name",
-        Location(0.0, 0.0),
+        Location.empty(),
         "place",
         Bundle(null, null, null, null, null, null),
         null,

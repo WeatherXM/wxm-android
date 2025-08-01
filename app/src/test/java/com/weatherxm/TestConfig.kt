@@ -13,6 +13,7 @@ import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_SAVED_LOCATIONS
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_THEME
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
@@ -146,6 +147,9 @@ object TestConfig : AbstractProjectConfig() {
             every { resources.getString(R.string.system_value) } returns "system_value"
             every { resources.getString(KEY_THEME) } returns "theme"
             every { sharedPref.getString("theme", "system_value") } returns "system_value"
+            every {
+                sharedPref.getStringSet(KEY_SAVED_LOCATIONS, setOf())
+            } returns setOf()
         }
 
         override suspend fun afterProject() {

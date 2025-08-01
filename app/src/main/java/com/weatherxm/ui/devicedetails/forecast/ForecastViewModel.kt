@@ -52,8 +52,8 @@ class ForecastViewModel(
         }
         onLoading.postValue(true)
         viewModelScope.launch(dispatcher) {
-            forecastUseCase.getForecast(device, forceRefresh).onRight {
-                Timber.d("Got forecast")
+            forecastUseCase.getDeviceForecast(device, forceRefresh).onRight {
+                Timber.d("Got forecast for device")
                 if (it.isEmpty()) {
                     onError.postValue(UIError(resources.getString(R.string.forecast_empty)))
                 }

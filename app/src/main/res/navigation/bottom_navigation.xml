@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/navigation_devices">
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.weatherxm.ui.home.locations.LocationsFragment"
+        android:label="fragment_locations_home"
+        tools:layout="@layout/fragment_locations_home" />
 
     <fragment
         android:id="@+id/navigation_devices"
@@ -13,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_explorer"
-        android:name="com.weatherxm.ui.explorer.ExplorerMapFragment"
+        android:name="com.weatherxm.ui.home.explorer.ExplorerMapFragment"
         android:label="ExplorerMapFragment"
         tools:layout="@layout/fragment_map" />
 

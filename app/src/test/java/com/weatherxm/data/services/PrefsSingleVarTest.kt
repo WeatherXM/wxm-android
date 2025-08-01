@@ -2,7 +2,9 @@ package com.weatherxm.data.services
 
 import android.content.SharedPreferences
 import com.weatherxm.TestConfig.sharedPref
+import com.weatherxm.data.locationToText
 import com.weatherxm.data.models.DeviceNotificationType
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCEPT_TERMS_TIMESTAMP
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
@@ -13,6 +15,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BAN
 import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_LAST_REMINDED_VERSION
 import com.weatherxm.data.services.CacheService.Companion.KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS
+import com.weatherxm.data.services.CacheService.Companion.KEY_SAVED_LOCATIONS
 import com.weatherxm.data.services.CacheService.Companion.KEY_SHOULD_SHOW_CLAIMING_BADGE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WALLET_WARNING_DISMISSED_TIMESTAMP
 import io.kotest.core.spec.style.BehaviorSpec
@@ -34,6 +37,7 @@ class PrefsSingleVarTest(
     private val lastRemindedVersion = 0
     private val notificationTypes = setOf("notificationType1", "notificationType2")
     private val allNotificationTypes = DeviceNotificationType.entries.map { it.name }.toSet()
+    private val savedLocations = setOf(Location.empty().locationToText())
 
     @Suppress("LongParameterList")
     private fun BehaviorSpec.testGetSetSingleVar(
@@ -210,6 +214,15 @@ class PrefsSingleVarTest(
             { prefEditor.putLong(KEY_DEVICE_NOTIFICATION, timestamp) },
             { cacheService.getDeviceNotificationTypeTimestamp(KEY_DEVICE_NOTIFICATION) },
             { cacheService.setDeviceNotificationTypeTimestamp(KEY_DEVICE_NOTIFICATION, timestamp) }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "the saved locations",
+            savedLocations,
+            { sharedPref.getStringSet(KEY_SAVED_LOCATIONS, setOf()) },
+            { prefEditor.putStringSet(KEY_SAVED_LOCATIONS, savedLocations) },
+            { cacheService.getSavedLocations() },
+            { cacheService.setSavedLocations(savedLocations.toList()) }
         )
     }
 }

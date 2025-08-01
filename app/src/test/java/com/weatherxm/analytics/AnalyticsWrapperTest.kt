@@ -26,6 +26,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     val testDevicesOwn = 6
     val testDevicesFavorite = 5
     val testDevicesOfBundle = 2
+    val testSavedLocations = 2
     val testHasWallet = true
     val bundleKey = "KEY"
 
@@ -68,6 +69,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 analyticsWrapper.setUserId(testUserID)
                 analyticsWrapper.setDevicesOwn(testDevicesOwn)
                 analyticsWrapper.setDevicesFavorite(testDevicesFavorite)
+                analyticsWrapper.setSavedLocations(testSavedLocations)
                 analyticsWrapper.setDeviceBundlesOwn(bundleKey, testDevicesOfBundle)
                 analyticsWrapper.setHasWallet(testHasWallet)
                 analyticsWrapper.setDisplayMode(testDisplayMode)
@@ -76,7 +78,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 )
 
                 with(analyticsWrapper.setUserProperties()) {
-                    size shouldBe 13
+                    size shouldBe 14
                     this[0] shouldBe ("theme" to testDisplayMode)
                     this[1] shouldBe ("UNIT_TEMPERATURE" to "c")
                     this[2] shouldBe ("UNIT_WIND" to "mps")
@@ -90,6 +92,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     this[10] shouldBe ("STATIONS_OWN_KEY" to "$testDevicesOfBundle")
                     this[11] shouldBe ("STATIONS_FAVORITE" to "$testDevicesFavorite")
                     this[12] shouldBe ("HAS_WALLET" to "$testHasWallet")
+                    this[13] shouldBe ("SAVED_LOCATIONS" to "$testSavedLocations")
                 }
                 verifier.verifyUserIdSet(testUserID)
                 verifier.verifyUserPropertiesSet()

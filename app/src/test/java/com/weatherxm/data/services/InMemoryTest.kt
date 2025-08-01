@@ -28,7 +28,7 @@ class InMemoryTest(private val cacheService: CacheService) {
         every { id } returns "searchSuggestionId"
     }
     private val searchSuggestions = listOf(searchSuggestion)
-    private val location = Location(0.0, 0.0)
+    private val location = Location.empty()
     private val query = "query"
     private val deviceId = "deviceId"
     private val uploadId = "uploadId"

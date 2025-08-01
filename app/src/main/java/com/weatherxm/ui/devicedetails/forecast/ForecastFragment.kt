@@ -11,6 +11,7 @@ import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
@@ -53,7 +54,13 @@ class ForecastFragment : BaseFragment() {
 
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
-            navigator.showForecastDetails(context, model.device, it.date.toString())
+            navigator.showForecastDetails(
+                activityResultLauncher = null,
+                context = context,
+                device = model.device,
+                location = UILocation.empty(),
+                forecastSelectedISODate = it.date.toString()
+            )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
             analytics.trackEventSelectContent(
@@ -64,8 +71,10 @@ class ForecastFragment : BaseFragment() {
                 )
             )
             navigator.showForecastDetails(
-                context,
-                model.device,
+                activityResultLauncher = null,
+                context = context,
+                device = model.device,
+                location = UILocation.empty(),
                 forecastSelectedISODate = it.timestamp.toISODate()
             )
         }
@@ -119,6 +128,16 @@ class ForecastFragment : BaseFragment() {
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
+        initProPromotionCard()
+        fetchOrHideContent()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
+    }
+
+    private fun initProPromotionCard() {
         binding.proPromotionCard.setContent {
             ProPromotionCard(R.string.fine_tune_forecast) {
                 analytics.trackEventSelectContent(
@@ -131,13 +150,6 @@ class ForecastFragment : BaseFragment() {
                 ProPromotionDialogFragment().show(this)
             }
         }
-
-        fetchOrHideContent()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
     private fun onLoading(isLoading: Boolean) {

@@ -18,7 +18,6 @@ interface AnalyticsService {
     // Screen Names
     @Parcelize
     enum class Screen(val screenName: String) : Parcelable {
-        EXPLORER_LANDING("Explorer (Landing)"),
         EXPLORER("Explorer"),
         CLAIM_M5("Claim M5"),
         CLAIM_PULSE("Claim Pulse"),
@@ -71,7 +70,10 @@ interface AnalyticsService {
         MAP_LAYER_PICKER("Map Layer Picker"),
         TOKEN_METRICS("Token Metrics"),
         NETWORK_GROWTH("Network Growth"),
-        STATION_NOTIFICATIONS("Station Notifications")
+        STATION_NOTIFICATIONS("Station Notifications"),
+        LOCATIONS_HOME("Locations in Home"),
+        LOCATION_FORECAST_DETAILS("Location Forecast Details"),
+        LOCATION_SEARCH("Location Search")
     }
 
     // Custom Event Names
@@ -180,7 +182,6 @@ interface AnalyticsService {
         ACTIVE_STATIONS("active_stations"),
         MANUFACTURER("Open Manufacturer Contact"),
         EXPLORER_SEARCH("Explorer Search"),
-        EXPLORER_SETTINGS("Explorer Settings"),
         NETWORK_SEARCH("Network Search"),
         RECENT("recent"),
         SEARCH("search"),
@@ -261,7 +262,6 @@ interface AnalyticsService {
         START_UPLOADING_PHOTOS("Start Uploading Photos"),
         UPLOADING_PHOTOS_SUCCESS("Uploading Photos Success"),
         GO_TO_PHOTO_VERIFICATION("Go To Photo Verification"),
-        CLAIMING_ID("claiming"),
         INFO_BANNER_BUTTON("Info Banner Button"),
         STARTED("started"),
         COMPLETED("completed"),
@@ -295,7 +295,14 @@ interface AnalyticsService {
         DISABLE("disable"),
         STATION_HEALTH("station_health"),
         ACTIVITY("activity"),
-        OPEN_STATION_FROM_NOTIFICATION("Open Station from Notification")
+        OPEN_STATION_FROM_NOTIFICATION("Open Station from Notification"),
+        SAVED_LOCATION("saved_location"),
+        UNSAVED_LOCATION("unsaved_location"),
+        SAVED_A_LOCATION("Saved a location"),
+        AUTHENTICATED("authenticated"),
+        UNAUTHENTICATED("unauthenticated"),
+        CLICK_ON_LOCATION_SEARCH_RESULT("Click on Location Search Result"),
+        MAX_LOCATIONS_SAVED_ERROR("Max Locations Saved Error"),
     }
 
     // Custom Param Names
@@ -325,6 +332,7 @@ interface AnalyticsService {
         STATIONS_OWN("STATIONS_OWN"),
         HAS_WALLET("HAS_WALLET"),
         STATIONS_FAVORITE("STATIONS_FAVORITE"),
+        SAVED_LOCATIONS("SAVED_LOCATIONS"),
     }
 
     fun setUserId(userId: String)

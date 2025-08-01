@@ -75,7 +75,7 @@ class ClaimLocationViewModelTest : BehaviorSpec({
     context("SET an installation location and then GET it") {
         given("a claiming key") {
             then("ensure that the current one is the default one") {
-                viewModel.getInstallationLocation() shouldBe Location(0.0, 0.0)
+                viewModel.getInstallationLocation() shouldBe Location.empty()
             }
             then("VALIDATE the new location to ensure it's correct") {
                 viewModel.validateLocation(lat, lon) shouldBe true

@@ -1,6 +1,5 @@
 package com.weatherxm.ui.connectwallet
 
-import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -273,7 +272,7 @@ class ConnectWalletActivity : BaseActivity() {
                     showSnackbarMessage(binding.root, it)
                 }
                 binding.loading.visible(false)
-                setResult(Activity.RESULT_OK)
+                setResult(RESULT_OK)
             }
             Status.ERROR -> {
                 result.message?.let {
