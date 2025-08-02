@@ -8,7 +8,7 @@ publisher:
       uri: ./media/publisher.png
 app:
   name: WeatherXM
-  address: ''
+  address: q7eX2s17hwnrZM3SxyFKceUkxzgf7zutDUMMGHTPHUh
   android_package: com.weatherxm.app.solana
   urls:
     license_url: https://weatherxm.com/terms-conditions/
@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./media/app_icon.png
 release:
-  address: ''
+  address: 4qqWkUwHjCEN5iugpncLXxrSvnps6Hu2V9vFZ5p5jduQ
   media:
     - purpose: icon
       uri: ./media/app_icon.png
@@ -43,17 +43,25 @@ release:
   catalog:
     en-US:
       name: WeatherXM
-      short_description: Enter Weather 3.0
+      short_description: Community-Powered Weather
       long_description: |
-        WeatherXM is the first decentralized weather network — think “Helium for weather” — powered by 9,000+ community-operated weather stations worldwide.
+        WeatherXM is a community-powered project building a more accurate and equitable global weather network. 
+        Every forecast you see is the result of collaboration between thousands of contributors around the world.
 
-        Get access to hyperlocal real-time and forecast data, personalized station dashboards, and $WXM rewards for maintaining weather stations. The app lets you:
-        - View current and historical conditions from real-world stations
-        - Access forecast insights powered by our FACT and Mosaic models
-        - Manage station health, rewards, and performance
-        - Discover new locations, deployment initiatives, and community rollouts
+        This app connects you to that network — and to the mission. It's built for the Solana community, 
+        by a community that believes in real-world utility and decentralized infrastructure.
 
-        As we expand into Solana, expect more integrations to come. Whether you’re a weather enthusiast, a DePIN builder, or a Solana Seeker user — WeatherXM puts the power of the sky in your hands.
+        What You Can Do:
+        • View Your Community-Powered Forecast — get reliable, ad-free weather reports sourced from your neighbors and local stations worldwide.
+        • See the Network — explore the live map of stations that power the WeatherXM network.
+
+        Are You a Contributor?
+        • Manage Your Station — monitor your device’s health, performance, and configuration.
+        • Track Your Rewards — see your contribution and how it translates into $WXM token rewards.
+
+        This is your field guide to decentralized weather — and your invitation to help build it.
+
+        Download now and be part of building weather, together.
       new_in_version: |
         - Optimized for Solana Mobile (Seeker) compatibility
         - Updated visuals and UX for crypto-native users
@@ -68,3 +76,9 @@ solana_mobile_dapp_publisher_portal:
     2. Launch app and allow any requested permissions.
     3. Verify explorer map, station details, and station reward screens load correctly.
     4. Optional: Login with your WeatherXM credentials and walkthrough the entire app.
+lastSubmittedVersionOnChain:
+  address: 4qqWkUwHjCEN5iugpncLXxrSvnps6Hu2V9vFZ5p5jduQ
+  version_code: 112
+  apk_hash: bDXlwE/OK2fABOESpCWP2ZNhUY5SwOGozOtLVQJKfh0=
+lastUpdatedVersionOnStore:
+  address: 4qqWkUwHjCEN5iugpncLXxrSvnps6Hu2V9vFZ5p5jduQ

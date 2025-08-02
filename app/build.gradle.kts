@@ -213,7 +213,7 @@ android {
              * if a user should be prompted to update.
              * That's why we have introduced a different handling here.
              */
-            versionCode = 10 + getVersionGitTags(isSolana = true).size
+            versionCode = 110 + getVersionGitTags(isSolana = true).size
             versionName = getLastVersionGitTag(true, skipTagsLogging)
             val apiURL = getFlavorProperty("API_URL", "production.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
