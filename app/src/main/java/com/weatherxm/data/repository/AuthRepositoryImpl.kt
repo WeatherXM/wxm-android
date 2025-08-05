@@ -30,12 +30,14 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun logout() {
-        cacheService.getAuthToken().onRight {
+    override suspend fun logout(): Either<Failure, Unit> {
+        return cacheService.getAuthToken().flatMap {
             networkAuthDataSource.logout(it.access, appConfigDataSource.getInstallationId())
+                .onRight {
+                    databaseExplorerDataSource.deleteAll()
+                    cacheService.clearAll()
+                }
         }
-        databaseExplorerDataSource.deleteAll()
-        cacheService.clearAll()
     }
 
     override fun isLoggedIn(): Boolean {

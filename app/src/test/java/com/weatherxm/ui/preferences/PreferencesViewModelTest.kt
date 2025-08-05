@@ -1,19 +1,28 @@
 package com.weatherxm.ui.preferences
 
+import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.dispatcher
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestConfig.resources
+import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.PreferencesUseCase
+import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coJustRun
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 class PreferencesViewModelTest : BehaviorSpec({
     val usecase = mockk<PreferencesUseCase>()
@@ -26,11 +35,19 @@ class PreferencesViewModelTest : BehaviorSpec({
     listener(InstantExecutorListener())
 
     beforeSpec {
+        startKoin {
+            modules(
+                module {
+                    single<Resources> {
+                        resources
+                    }
+                }
+            )
+        }
         every { analytics.setUserProperties() } returns mutableListOf()
         justRun { analytics.setAnalyticsEnabled(any()) }
         justRun { analytics.onLogout() }
         justRun { usecase.setAnalyticsEnabled(any()) }
-        coJustRun { authUseCase.logout() }
         every { authUseCase.isLoggedIn() } returns true
         every { usecase.getInstallationId() } returns installationId
 
@@ -58,16 +75,23 @@ class PreferencesViewModelTest : BehaviorSpec({
     }
 
     context("Perform a Logout") {
-        given("Some actions to perform") {
-            runTest { viewModel.logout() }
-            then("call the logout function in analytics") {
-                verify(exactly = 1) { analytics.onLogout() }
+        given("the usecase which returns the response of the logout request") {
+            When("it's a success") {
+                coMockEitherRight({ authUseCase.logout() }, Unit)
+                runTest { viewModel.logout() }
+                then("the LiveData posts a success") {
+                    viewModel.onLogout().isSuccess(Unit)
+                }
+                then("call the logout function in analytics") {
+                    verify(exactly = 1) { analytics.onLogout() }
+                }
             }
-            then("call the logout function in the usecase") {
-                coVerify(exactly = 1) { authUseCase.logout() }
-            }
-            then("LiveData onLogout gets invoked with `true` param") {
-                viewModel.onLogout().value shouldBe true
+            When("it's a failure") {
+                coMockEitherLeft({ authUseCase.logout() }, failure)
+                runTest { viewModel.logout() }
+                then("the LiveData posts an error") {
+                    viewModel.onLogout().isError(REACH_OUT_MSG)
+                }
             }
         }
     }
@@ -97,5 +121,9 @@ class PreferencesViewModelTest : BehaviorSpec({
                 viewModel.getInstallationId() shouldBe installationId
             }
         }
+    }
+
+    afterSpec {
+        stopKoin()
     }
 })

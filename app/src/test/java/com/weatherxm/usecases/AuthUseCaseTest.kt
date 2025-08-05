@@ -28,7 +28,6 @@ class AuthUseCaseTest : BehaviorSpec({
 
     beforeSpec {
         coJustRun { notificationsRepository.setFcmToken() }
-        coJustRun { authRepository.logout() }
     }
 
     context("Get if a user is logged in or not") {
@@ -122,13 +121,22 @@ class AuthUseCaseTest : BehaviorSpec({
         }
     }
 
+
+
     context("Logout a user") {
         given("A repository providing LOGOUT mechanism") {
-            then("logout the user") {
-                usecase.logout()
-                coVerify(exactly = 1) { authRepository.logout() }
+            When("the response is a failure") {
+                coMockEitherLeft({ authRepository.logout() }, failure)
+                then("return that failure") {
+                    usecase.logout().isError()
+                }
             }
-
+            When("the response is a success") {
+                coMockEitherRight({ authRepository.logout() }, Unit)
+                then("return the username") {
+                    usecase.logout().isSuccess(Unit)
+                }
+            }
         }
     }
 })
