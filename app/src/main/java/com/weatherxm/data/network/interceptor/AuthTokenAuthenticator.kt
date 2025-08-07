@@ -32,7 +32,6 @@ class AuthTokenAuthenticator(
     private val context: Context,
 ) : Authenticator {
     private lateinit var refreshJob: Deferred<AuthToken?>
-    private var refreshRetries = 0
 
     override fun authenticate(route: Route?, response: Response): Request? {
         // The original request
@@ -79,23 +78,28 @@ class AuthTokenAuthenticator(
             }
             .flatMap { authToken ->
                 Timber.d("[${request.path()}] Trying to refresh token.")
-                networkRefresh(request, authToken.refresh)
+                networkRefresh(request, authToken.refresh, 0)
             }
     }
 
-    private fun networkRefresh(request: Request, refreshToken: String): Either<Failure, AuthToken> {
+    private fun networkRefresh(
+        request: Request,
+        refreshToken: String,
+        currentRetries: Int
+    ): Either<Failure, AuthToken> {
         return runBlocking {
             authService.refresh(RefreshBody(refreshToken)).mapResponse()
                 .onLeft {
-                    refreshRetries++
-                    when (refreshRetries) {
+                    var retries = currentRetries
+                    retries++
+                    when (retries) {
                         1 -> {
                             delay(2.seconds)
-                            return@runBlocking networkRefresh(request, refreshToken)
+                            return@runBlocking networkRefresh(request, refreshToken, retries)
                         }
                         2 -> {
                             delay(5.seconds)
-                            return@runBlocking networkRefresh(request, refreshToken)
+                            return@runBlocking networkRefresh(request, refreshToken, retries)
                         }
                         else -> {
                             Timber.d("[${request.path()}] Token refresh failed after 3 retries.")
@@ -105,7 +109,6 @@ class AuthTokenAuthenticator(
                     }
                 }
                 .onRight {
-                    refreshRetries = 0
                     Timber.d("[${request.path()}] Token refresh success.")
                 }
         }
