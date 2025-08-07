@@ -17,12 +17,14 @@ import com.weatherxm.data.path
 import com.weatherxm.service.workers.ForceLogoutWorker
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 class AuthTokenAuthenticator(
     private val authService: AuthService,
@@ -76,16 +78,40 @@ class AuthTokenAuthenticator(
             }
             .flatMap { authToken ->
                 Timber.d("[${request.path()}] Trying to refresh token.")
-                runBlocking {
-                    authService.refresh(RefreshBody(authToken.refresh)).mapResponse()
-                        .onLeft {
-                            Timber.d("[${request.path()}] Token refresh failed.")
-                        }
-                        .onRight {
-                            Timber.d("[${request.path()}] Token refresh success.")
-                        }
-                }
+                networkRefresh(request, authToken.refresh, 0)
             }
+    }
+
+    private fun networkRefresh(
+        request: Request,
+        refreshToken: String,
+        currentRetries: Int
+    ): Either<Failure, AuthToken> {
+        return runBlocking {
+            authService.refresh(RefreshBody(refreshToken)).mapResponse()
+                .onLeft {
+                    var retries = currentRetries
+                    retries++
+                    when (retries) {
+                        1 -> {
+                            delay(2.seconds)
+                            return@runBlocking networkRefresh(request, refreshToken, retries)
+                        }
+                        2 -> {
+                            delay(5.seconds)
+                            return@runBlocking networkRefresh(request, refreshToken, retries)
+                        }
+                        else -> {
+                            Timber.d("[${request.path()}] Token refresh failed after 3 retries.")
+                            // Exceeded retries; stop retrying and propagate error
+                            return@runBlocking Either.Left(it)
+                        }
+                    }
+                }
+                .onRight {
+                    Timber.d("[${request.path()}] Token refresh success.")
+                }
+        }
     }
 
     private fun retryWithAccessToken(request: Request, accessToken: String): Request {
