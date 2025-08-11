@@ -10,6 +10,7 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.LocationWeather
 import com.weatherxm.ui.common.LocationsWeather
 import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.usecases.LocationsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,10 +24,14 @@ class LocationsViewModel(
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _onLocationsWeather = MutableLiveData<Resource<LocationsWeather>>()
+    private val _onSearchClicked = SingleLiveEvent<Unit>()
     private var savedLocations = emptyList<Location>()
+    // Needed for passing info to the activity to show/hide elements when search view is opened
+    private val onSearchOpenStatus = MutableLiveData(false)
 
-    fun onLocationsWeather(): LiveData<Resource<LocationsWeather>> =
-        _onLocationsWeather
+    fun onLocationsWeather(): LiveData<Resource<LocationsWeather>> = _onLocationsWeather
+    fun onSearchClicked() = _onSearchClicked
+    fun onSearchOpenStatus() = onSearchOpenStatus
 
     fun getSavedLocations(): List<Location> {
         savedLocations = usecase.getSavedLocations()
@@ -116,4 +121,10 @@ class LocationsViewModel(
     }
 
     fun clearLocationForecastFromCache() = usecase.clearLocationForecastFromCache()
+
+    fun searchBtnClicked() = _onSearchClicked.postValue(Unit)
+
+    fun onSearchOpenStatus(isOpen: Boolean) {
+        onSearchOpenStatus.postValue(isOpen)
+    }
 }

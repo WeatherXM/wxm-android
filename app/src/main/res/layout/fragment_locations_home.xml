@@ -181,46 +181,12 @@
                             tools:composableName="com.weatherxm.ui.components.compose.AnnouncementBannerViewKt.PreviewAnnouncementBanner"
                             tools:visibility="visible" />
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/searchCard"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/margin_normal"
-                            android:layout_marginTop="@dimen/margin_normal"
-                            app:contentPadding="@dimen/padding_small_to_normal"
-                            app:strokeColor="@color/darkGrey"
-                            app:strokeWidth="1dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_search"
-                                    app:tint="@color/darkGrey"
-                                    tools:ignore="ContentDescription" />
-
-                                <com.google.android.material.textview.MaterialTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/margin_extra_small"
-                                    android:text="@string/search_cities_places_of_interest"
-                                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                                    android:textColor="@color/darkGrey" />
-                            </LinearLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
                         <LinearLayout
                             android:id="@+id/currentLocationTitleContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_normal"
-                            android:layout_marginTop="@dimen/margin_large"
+                            android:layout_marginTop="@dimen/margin_normal"
                             android:gravity="center"
                             android:orientation="horizontal">
 

@@ -25,9 +25,10 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
 import com.weatherxm.ui.components.compose.TermsDialog
+import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.explorer.MapLayerPickerDialogFragment
-import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,6 +39,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val explorerModel: ExplorerViewModel by viewModel()
     private val devicesViewModel: DevicesViewModel by viewModel()
     private val profileViewModel: ProfileViewModel by viewModel()
+    private val locationsViewModel: LocationsViewModel by viewModel()
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
@@ -74,6 +76,14 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             }
         }
 
+        locationsViewModel.onSearchOpenStatus().observe(this) { isOpened ->
+            if (isOpened) {
+                binding.searchLocationBtn.hide()
+            } else {
+                binding.searchLocationBtn.show()
+            }
+        }
+
         model.showOverlayViews().observe(this) {
             onScroll(it)
         }
@@ -98,6 +108,10 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
 
         binding.myLocationBtn.setOnClickListener {
             onMyLocation()
+        }
+
+        binding.searchLocationBtn.setOnClickListener {
+            locationsViewModel.searchBtnClicked()
         }
 
         binding.addDevice.setOnClickListener {
@@ -154,6 +168,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         val navDestination = navController.currentDestination?.id
         binding.mapLayerPickerBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
+        binding.searchLocationBtn.visible(navDestination == R.id.navigation_home)
         /**
          * Don't use the visible function for the addButton
          * because of a specific case hiding it in the devices list.
@@ -260,6 +275,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 binding.addDevice.visible(false)
             }
         }
+        binding.searchLocationBtn.visible(destination.id == R.id.navigation_home)
         binding.mapLayerPickerBtn.visible(destination.id == R.id.navigation_explorer)
         binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
     }

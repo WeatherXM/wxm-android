@@ -160,6 +160,32 @@ class LocationsViewModelTest : BehaviorSpec({
         }
     }
 
+    context("Flow to run when the fragment invokes the onSearchOpenStatus function") {
+        given("the status if the search is open or not") {
+            When("it's open") {
+                viewModel.onSearchOpenStatus(true)
+                then("LiveData `onSearchOpenStatus` should post the value true") {
+                    viewModel.onSearchOpenStatus().value shouldBe true
+                }
+            }
+            When("it's closed") {
+                viewModel.onSearchOpenStatus(false)
+                then("LiveData `onSearchOpenStatus` should post the value false") {
+                    viewModel.onSearchOpenStatus().value shouldBe false
+                }
+            }
+        }
+    }
+
+    context("Flow to run when the function searchBtnClicked is triggered") {
+        given("the function call") {
+            then("The SingleLiveEvent `onSearchClicked` should post a Unit value") {
+                runTest { viewModel.searchBtnClicked() }
+                viewModel.onSearchClicked().value shouldBe Unit
+            }
+        }
+    }
+
     afterSpec {
         stopKoin()
     }
