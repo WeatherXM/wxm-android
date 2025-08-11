@@ -144,6 +144,21 @@
         android:layout_marginBottom="@dimen/margin_extra_extra_large"
         android:contentDescription="@string/add_weather_station"
         android:src="@drawable/ic_add"
+        android:visibility="gone"
+        app:elevation="@dimen/elevation_normal"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintEnd_toEndOf="@id/nav_view"
+        app:tint="@color/colorOnPrimary" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/searchLocationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:contentDescription="@string/search_cities_places_of_interest"
+        android:src="@drawable/ic_search_alt"
         app:elevation="@dimen/elevation_normal"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:layout_constraintBottom_toTopOf="@id/nav_view"

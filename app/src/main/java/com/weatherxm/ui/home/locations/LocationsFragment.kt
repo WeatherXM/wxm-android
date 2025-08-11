@@ -56,7 +56,7 @@ class LocationsFragment : BaseFragment() {
     private val parentModel: HomeViewModel by activityViewModel()
     private val devicesModel: DevicesViewModel by activityViewModel()
     private val searchModel: NetworkSearchViewModel by viewModel()
-    private val model: LocationsViewModel by viewModel()
+    private val model: LocationsViewModel by activityViewModel()
     private lateinit var binding: FragmentLocationsHomeBinding
 
     private val locationHelper: LocationHelper by inject()
@@ -173,6 +173,7 @@ class LocationsFragment : BaseFragment() {
     private fun onBackPressed() {
         if (binding.searchView.isShowing) {
             binding.searchView.hide()
+            model.onSearchOpenStatus(false)
         } else {
             activity?.finish()
         }
@@ -241,16 +242,19 @@ class LocationsFragment : BaseFragment() {
         }
         binding.resultsRecycler.adapter = searchAdapter
 
-        binding.searchCard.setOnClickListener {
+        model.onSearchClicked().observe(viewLifecycleOwner) {
             binding.searchView.show()
         }
 
         binding.searchView.addTransitionListener { _, _, newState ->
             if (newState == TransitionState.SHOWING) {
+                model.onSearchOpenStatus(true)
                 analytics.trackScreen(
                     AnalyticsService.Screen.LOCATION_SEARCH,
                     LocationsFragment::class.simpleName ?: String.empty()
                 )
+            } else if (newState == TransitionState.HIDING) {
+                model.onSearchOpenStatus(false)
             }
         }
 
@@ -417,6 +421,7 @@ class LocationsFragment : BaseFragment() {
 
     private fun onNetworkSearchResultClicked(result: SearchResult) {
         binding.searchView.hide()
+        model.onSearchOpenStatus(false)
 
         analytics.trackEventSelectContent(
             AnalyticsService.ParamValue.CLICK_ON_LOCATION_SEARCH_RESULT.paramValue
