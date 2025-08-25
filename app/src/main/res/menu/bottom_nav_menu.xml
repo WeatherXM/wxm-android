@@ -17,6 +17,11 @@
         android:title="@string/title_explorer" />
 
     <item
+        android:id="@+id/navigation_quests"
+        android:icon="@drawable/ic_nav_quests"
+        android:title="@string/quests" />
+
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_nav_profile"
         android:title="@string/title_profile" />

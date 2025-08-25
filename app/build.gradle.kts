@@ -581,6 +581,8 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.installations)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
 
     // Mixpanel Analytics
     implementation(libs.mixpanel)

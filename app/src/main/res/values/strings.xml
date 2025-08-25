@@ -843,4 +843,7 @@
     <string name="overcast_light_rain">Overcast with light rain</string>
     <string name="overcast_light_snow">Overcast with light snow</string>
     <string name="overcast_mixture_snow_rain">Overcast with mixture of snow and rain</string>
+
+    <!-- Quests -->
+    <string name="quests">Quests</string>
 </resources>
