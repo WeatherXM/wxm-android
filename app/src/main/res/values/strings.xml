@@ -846,4 +846,6 @@
 
     <!-- Quests -->
     <string name="quests">Quests</string>
+    <string name="daily_quest">Daily Quest</string>
+    <string name="coming_soon">Coming soon!</string>
 </resources>

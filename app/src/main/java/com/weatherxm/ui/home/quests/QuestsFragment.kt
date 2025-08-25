@@ -13,6 +13,7 @@ import com.weatherxm.databinding.FragmentQuestsBinding
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.compose.DailyQuestCard
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.NumberUtils.formatTokens
 import dev.chrisbanes.insetter.applyInsetter
@@ -48,6 +49,8 @@ class QuestsFragment : BaseFragment() {
         binding.swiperefresh.setOnRefreshListener {
             getFirebaseUserAndFetchData()
         }
+
+        binding.dailyQuestCard.setContent { DailyQuestCard() }
 
         getFirebaseUserAndFetchData()
 

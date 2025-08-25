@@ -158,6 +158,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/dailyQuestCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_normal"
+                    app:layout_constraintTop_toBottomOf="@id/questsTitle"
+                    tools:composableName="com.weatherxm.ui.components.compose.DailyQuestCardKt" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
