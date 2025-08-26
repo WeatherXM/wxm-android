@@ -722,6 +722,31 @@ data class ActionForMessageView(
     val onClickListener: () -> Unit
 )
 
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestOnboardingData(
+    val stepsCompleted: Int,
+    val totalWXM: Int,
+    val locationStep: QuestStep,
+    val notificationStep: QuestStep,
+    val sensorsStep: QuestStep,
+    val walletStep: QuestStep,
+    val followStep: QuestStep,
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestStep(
+    val id: String,
+    val title: String,
+    val description: String,
+    val tokens: Int,
+    val isOptional: Boolean,
+    val isCompleted: Boolean,
+    val isSkipped: Boolean,
+    val type: String
+)
+
 enum class RewardTimelineType {
     DATA,
     END_OF_LIST

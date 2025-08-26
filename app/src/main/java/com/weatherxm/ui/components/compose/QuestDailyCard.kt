@@ -31,7 +31,10 @@ fun QuestDailyCard() {
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large)),
         elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation_small))
     ) {
-        Row(modifier = Modifier.padding(dimensionResource(R.dimen.padding_normal))) {
+        Row(
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_normal)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     painter = painterResource(R.drawable.ic_polygon),

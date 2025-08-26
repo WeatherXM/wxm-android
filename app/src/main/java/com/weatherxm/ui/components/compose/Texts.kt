@@ -110,3 +110,16 @@ fun TextWithStartingIcon(
         )
     }
 }
+
+@Suppress
+@Composable
+fun TextQuestWXMAllocated(amount: Int) {
+    LargeText(amount.toString(), FontWeight.Bold, 18.sp)
+    Text(
+        text = "\$WXM",
+        color = colorResource(R.color.darkGrey),
+        style = MaterialTheme.typography.bodySmall,
+        fontSize = 11.sp,
+        modifier = Modifier.padding(top = 3.dp)
+    )
+}
