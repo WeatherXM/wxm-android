@@ -34,7 +34,7 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.QuestOnboardingData
 import com.weatherxm.ui.common.QuestStep
 
-@Suppress("FunctionNaming")
+@Suppress("FunctionNaming", "LongMethod", "MagicNumber")
 @Composable
 fun QuestOnboardingCard(
     data: QuestOnboardingData,
@@ -48,10 +48,16 @@ fun QuestOnboardingCard(
         Column(verticalArrangement = spacedBy((-16).dp)) {
             Card(
                 modifier = Modifier.zIndex(1F),
-                colors = CardDefaults.cardColors(containerColor = colorResource(R.color.colorSurface)),
+                colors = CardDefaults.cardColors(
+                    containerColor = colorResource(R.color.colorSurface)
+                ),
                 onClick = onClick
             ) {
-                Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_normal))) {
+                Column(
+                    modifier = Modifier.padding(
+                        dimensionResource(R.dimen.padding_normal)
+                    )
+                ) {
                     Row {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
@@ -67,7 +73,9 @@ fun QuestOnboardingCard(
                             )
                         }
                         Column(
-                            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_normal))
+                            modifier = Modifier.padding(
+                                start = dimensionResource(R.dimen.padding_normal)
+                            )
                         ) {
                             Title(
                                 text = data.title,
@@ -80,7 +88,9 @@ fun QuestOnboardingCard(
                                     data.description
                                 },
                                 colorRes = R.color.darkGrey,
-                                paddingValues = PaddingValues(top = dimensionResource(R.dimen.padding_small))
+                                paddingValues = PaddingValues(
+                                    top = dimensionResource(R.dimen.padding_small)
+                                )
                             )
                         }
                     }
@@ -93,7 +103,7 @@ fun QuestOnboardingCard(
                     ) {
                         TextQuestWXMAllocated(data.totalWXM, 18.sp)
                         LinearProgressIndicator(
-                            progress = { data.stepsCompleted.toFloat() / 5 },
+                            progress = { data.stepsDone.toFloat() / 5 },
                             modifier = Modifier
                                 .padding(
                                     start = dimensionResource(R.dimen.padding_normal),
@@ -106,28 +116,24 @@ fun QuestOnboardingCard(
                             color = colorResource(R.color.colorPrimary),
                             trackColor = colorResource(R.color.colorBackground)
                         )
-                        SmallText(data.stepsCompleted.toString(), colorRes = R.color.colorPrimary)
+                        SmallText(data.stepsDone.toString(), colorRes = R.color.colorPrimary)
                         SmallText("/5", colorRes = R.color.darkGrey)
                     }
                 }
             }
-            if (!data.isCompleted) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.padding_normal)),
-                    onClick = onClick,
-                    colors = CardDefaults.cardColors(containerColor = colorResource(R.color.layer1))
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_normal)),
+                onClick = onClick,
+                colors = CardDefaults.cardColors(containerColor = colorResource(R.color.layer1))
+            ) {
+                Column(
+                    modifier = Modifier.padding(top = 16.dp),
+                    verticalArrangement = spacedBy(dimensionResource(R.dimen.padding_normal))
                 ) {
-                    Column(
-                        modifier = Modifier.padding(top = 16.dp),
-                        verticalArrangement = spacedBy(dimensionResource(R.dimen.padding_normal))
-                    ) {
-                        QuestStepCompact(data.locationStep)
-                        QuestStepCompact(data.notificationsStep)
-                        QuestStepCompact(data.sensorsStep)
-                        QuestStepCompact(data.walletStep)
-                        QuestStepCompact(data.followStep)
+                    if (!data.isCompleted) {
+                        data.steps.forEach { QuestStepCompact(it) }
                         Button(
                             onClick = onClick,
                             colors = ButtonDefaults.buttonColors(
@@ -138,11 +144,17 @@ fun QuestOnboardingCard(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             MediumText(
-                                text = stringResource(R.string.complete_tasks),
+                                text = if (data.stepsDone == data.steps.size) {
+                                    stringResource(R.string.all_set)
+                                } else {
+                                    stringResource(R.string.complete_tasks)
+                                },
                                 fontWeight = FontWeight.Bold,
                                 colorRes = R.color.colorOnPrimary
                             )
                         }
+                    } else {
+                        MediumText(stringResource(R.string.your_rewards_are_on_the_way))
                     }
                 }
             }
@@ -161,7 +173,7 @@ private fun QuestStepCompact(data: QuestStep) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 painter = painterResource(
-                    if (data.isCompleted) {
+                    if (data.isCompleted || data.isSkipped) {
                         R.drawable.ic_checkmark_only
                     } else {
                         R.drawable.ic_dot
@@ -169,7 +181,7 @@ private fun QuestStepCompact(data: QuestStep) {
                 ),
                 contentDescription = null,
                 tint = colorResource(
-                    if (data.isCompleted) {
+                    if (data.isCompleted || data.isSkipped) {
                         R.color.colorPrimary
                     } else {
                         R.color.darkGrey
@@ -177,8 +189,10 @@ private fun QuestStepCompact(data: QuestStep) {
                 )
             )
             MediumText(
-                data.title,
-                paddingValues = PaddingValues(start = dimensionResource(R.dimen.padding_small_to_normal))
+                text = data.title,
+                paddingValues = PaddingValues(
+                    start = dimensionResource(R.dimen.padding_small_to_normal)
+                )
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -196,57 +210,59 @@ fun QuestOnboardingCardPreview() {
             title = "Onboarding Quest",
             description = "Complete onboarding to earn rewards!",
             isCompleted = false,
-            stepsCompleted = 2,
+            stepsDone = 2,
             totalWXM = 40,
-            locationStep = QuestStep(
-                id = "step_1",
-                title = "Enable Location",
-                description = "Enable location to get hyper-local forecasts.",
-                tokens = 10,
-                isOptional = false,
-                isCompleted = true,
-                isSkipped = false,
-                type = "enable_location_permission"
-            ),
-            notificationsStep = QuestStep(
-                id = "step_2",
-                title = "Enable Notifications",
-                description = "Turn on notifications for quest tips.",
-                tokens = 5,
-                isOptional = true,
-                isCompleted = false,
-                isSkipped = true,
-                type = "enable_notifications"
-            ),
-            sensorsStep = QuestStep(
-                id = "step_3",
-                title = "Enable Environment Sensors",
-                description = "Let your phone’s sensors help us improve weather validation.",
-                tokens = 5,
-                isOptional = false,
-                isCompleted = true,
-                isSkipped = false,
-                type = "enable_environment_sensors"
-            ),
-            walletStep = QuestStep(
-                id = "step_4",
-                title = "Connect Wallet",
-                description = "Connect your Solana wallet to receive rewards in the next airdrop.",
-                tokens = 15,
-                isOptional = false,
-                isCompleted = false,
-                isSkipped = false,
-                type = "connect_wallet"
-            ),
-            followStep = QuestStep(
-                id = "step_5",
-                title = "Follow us on X",
-                description = "Stay updated with our latest news and announcements.",
-                tokens = 5,
-                isOptional = true,
-                isCompleted = false,
-                isSkipped = false,
-                type = "social_follow_x"
+            steps = listOf(
+                QuestStep(
+                    id = "step1",
+                    title = "Enable Location",
+                    description = "Enable location to get hyper-local forecasts.",
+                    tokens = 10,
+                    isOptional = false,
+                    isCompleted = true,
+                    isSkipped = false,
+                    type = "enable_location_permission"
+                ),
+                QuestStep(
+                    id = "step2",
+                    title = "Enable Notifications",
+                    description = "Turn on notifications for quest tips.",
+                    tokens = 5,
+                    isOptional = true,
+                    isCompleted = false,
+                    isSkipped = true,
+                    type = "enable_notifications"
+                ),
+                QuestStep(
+                    id = "step3",
+                    title = "Enable Environment Sensors",
+                    description = "Let your phone’s sensors help us improve weather validation.",
+                    tokens = 5,
+                    isOptional = false,
+                    isCompleted = true,
+                    isSkipped = false,
+                    type = "enable_environment_sensors"
+                ),
+                QuestStep(
+                    id = "step4",
+                    title = "Connect Wallet",
+                    description = "Connect your wallet to receive rewards in the next airdrop.",
+                    tokens = 15,
+                    isOptional = false,
+                    isCompleted = false,
+                    isSkipped = false,
+                    type = "connect_wallet"
+                ),
+                QuestStep(
+                    id = "step5",
+                    title = "Follow us on X",
+                    description = "Stay updated with our latest news and announcements.",
+                    tokens = 5,
+                    isOptional = true,
+                    isCompleted = false,
+                    isSkipped = false,
+                    type = "social_follow_x"
+                )
             )
         )
     ) { }

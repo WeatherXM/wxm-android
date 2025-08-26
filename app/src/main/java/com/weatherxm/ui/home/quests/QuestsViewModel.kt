@@ -1,9 +1,77 @@
 package com.weatherxm.ui.home.quests
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.weatherxm.data.models.QuestUser
+import com.weatherxm.data.models.QuestUserProgress
+import com.weatherxm.ui.common.QuestOnboardingData
+import com.weatherxm.ui.common.SingleLiveEvent
+import com.weatherxm.usecases.QuestsUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
-class QuestsViewModel() : ViewModel() {
+class QuestsViewModel(
+    private val usecase: QuestsUseCase,
+    private val dispatcher: CoroutineDispatcher
+) : ViewModel() {
+    private val _onError = SingleLiveEvent<Throwable>()
+    private val _onDataLoaded = SingleLiveEvent<Unit>()
+
+    fun onError() = _onError
+    fun onDataLoaded() = _onDataLoaded
+
     var user: FirebaseUser? = null
+    var questUser: QuestUser? = null
+    var onboardingProgress: QuestUserProgress? = null
+    var onboardingQuestData: QuestOnboardingData? = null
+
+    fun getData() {
+        viewModelScope.launch(dispatcher) {
+            val userId = user?.uid ?: run {
+                Timber.e("[Firestore]: No user ID: null")
+                _onError.postValue(Exception("No user ID: null"))
+                return@launch
+            }
+
+            usecase.fetchUser(userId).onLeft {
+                Timber.e(it, "[Firestore]: Error when fetching user")
+                _onError.postValue(it)
+                return@launch
+            }.onRight {
+                questUser = it
+            }
+
+            /**
+             * Fetch onboarding progress and quests in parallel
+             */
+            val onboardingProgressDeferred = async { usecase.fetchOnboardingProgress(userId) }
+            val onboardingQuestDeferred = async { usecase.fetchOnboardingQuest() }
+
+            val onboardingProgressResult = onboardingProgressDeferred.await()
+            val onboardingQuestResult = onboardingQuestDeferred.await()
+
+            /**
+             * Handle both results, if any fails, return an error.
+             */
+            onboardingProgressResult.onRight {
+                onboardingProgress = it
+            }.onLeft {
+                Timber.e(it, "[Firestore]: Error when fetching user's onboarding progress")
+                _onError.postValue(it)
+                return@launch
+            }
+            onboardingQuestResult.onRight {
+                onboardingQuestData = QuestOnboardingData(it, onboardingProgress)
+            }.onLeft {
+                Timber.e(it, "[Firestore]: Error when fetching the onboarding quest")
+                _onError.postValue(it)
+                return@launch
+            }
+
+            _onDataLoaded.postValue(Unit)
+        }
+    }
 }

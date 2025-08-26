@@ -14,6 +14,8 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.QuestUserProgress
+import com.weatherxm.data.models.QuestWithStepsFirestore
 import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
@@ -728,14 +730,34 @@ data class QuestOnboardingData(
     val title: String,
     val description: String,
     val isCompleted: Boolean,
-    val stepsCompleted: Int,
+    val stepsDone: Int,
     val totalWXM: Int,
-    val locationStep: QuestStep,
-    val notificationsStep: QuestStep,
-    val sensorsStep: QuestStep,
-    val walletStep: QuestStep,
-    val followStep: QuestStep,
-)
+    val steps: List<QuestStep>
+) {
+    constructor(
+        questDataFirestore: QuestWithStepsFirestore,
+        userProgress: QuestUserProgress?
+    ) : this(
+        title = questDataFirestore.questData.title ?: String.empty(),
+        description = questDataFirestore.questData.description ?: String.empty(),
+        isCompleted = userProgress?.isCompleted ?: false,
+        stepsDone = (userProgress?.completedSteps?.size ?: 0) +
+            (userProgress?.skippedSteps?.size ?: 0),
+        totalWXM = questDataFirestore.steps.sumOf { step -> step.tokens ?: 0 },
+        steps = questDataFirestore.steps.map {
+            QuestStep(
+                id = it.stepId ?: "",
+                title = it.title ?: String.empty(),
+                description = it.description ?: String.empty(),
+                tokens = it.tokens ?: 0,
+                isOptional = it.isOptional ?: false,
+                isCompleted = userProgress?.completedSteps?.contains(it.stepId) == true,
+                isSkipped = userProgress?.skippedSteps?.contains(it.stepId) == true,
+                type = it.type ?: ""
+            )
+        }
+    )
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

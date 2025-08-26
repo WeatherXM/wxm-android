@@ -111,7 +111,7 @@ fun TextWithStartingIcon(
     }
 }
 
-@Suppress
+@Suppress("FunctionNaming")
 @Composable
 fun TextQuestWXMAllocated(amount: Int, amountFontSize: TextUnit) {
     LargeText(amount.toString(), FontWeight.Bold, amountFontSize)

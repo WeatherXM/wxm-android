@@ -146,6 +146,14 @@
                 android:layout_height="match_parent"
                 android:clipChildren="false">
 
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/questsTitle"
                     android:layout_width="match_parent"
@@ -159,11 +167,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/dailyQuestCard"
+                    android:id="@+id/onboardingQuest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
                     app:layout_constraintTop_toBottomOf="@id/questsTitle"
+                    tools:composableName="com.weatherxm.ui.components.compose.QuestOnboardingCardPreviewKt" />
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/dailyQuestCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_normal"
+                    app:layout_constraintTop_toBottomOf="@id/onboardingQuest"
                     tools:composableName="com.weatherxm.ui.components.compose.QuestDailyCardKt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

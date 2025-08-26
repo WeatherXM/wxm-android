@@ -850,4 +850,6 @@
     <string name="coming_soon">Coming soon!</string>
     <string name="complete_tasks">Complete tasks</string>
     <string name="quest_completed">Quest completed!</string>
+    <string name="your_rewards_are_on_the_way">Your rewards are on the way!</string>
+    <string name="all_set">All set!</string>
 </resources>

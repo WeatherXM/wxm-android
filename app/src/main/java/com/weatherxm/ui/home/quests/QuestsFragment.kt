@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentQuestsBinding
@@ -15,19 +13,20 @@ import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.compose.QuestDailyCard
+import com.weatherxm.ui.components.compose.QuestOnboardingCard
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.NumberUtils.formatTokens
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class QuestsFragment : BaseFragment() {
 
     private val devicesModel: DevicesViewModel by activityViewModel()
-    private val model: QuestsViewModel by viewModels()
+    private val model: QuestsViewModel by viewModel()
     private val firebaseAuth: FirebaseAuth by inject()
-    private val firebaseFirestore: FirebaseFirestore by inject()
     private lateinit var binding: FragmentQuestsBinding
 
     @SuppressLint("NotifyDataSetChanged")
@@ -48,71 +47,72 @@ class QuestsFragment : BaseFragment() {
             onDevicesRewards(it)
         }
 
+        model.onError().observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.loading.visible(false)
+                showSnackbarMessage(
+                    binding.root,
+                    it.message ?: getString(R.string.error_generic_message),
+                    { model.getData() },
+                    R.string.action_retry,
+                    null
+                )
+            }
+        }
+
+        model.onDataLoaded().observe(viewLifecycleOwner) {
+            binding.loading.visible(false)
+            model.onboardingQuestData?.let {
+                binding.onboardingQuest.setContent {
+                    QuestOnboardingCard(it) {
+                        // TODO: Handle this click
+                    }
+                }
+            } ?: binding.onboardingQuest.visible(false)
+        }
+
         binding.swiperefresh.setOnRefreshListener {
             getFirebaseUserAndFetchData()
         }
 
         binding.dailyQuestCard.setContent { QuestDailyCard() }
 
-        getFirebaseUserAndFetchData()
-
         return binding.root
     }
 
     private fun getFirebaseUserAndFetchData() {
+        binding.loading.visible(true)
         if (model.user != null) {
             Timber.d("We already have the user data: ${model.user?.uid}")
-            getUserData()
+            model.getData()
         } else if (firebaseAuth.currentUser != null) {
             Timber.d("User data exists on firebase: ${firebaseAuth.currentUser?.uid}")
             model.user = firebaseAuth.currentUser
-            getUserData()
+            model.getData()
         } else {
             Timber.d("Starting Firebase Anonymous Authentication...")
             firebaseAuth.signInAnonymously().addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result.user != null) {
                     Timber.d("Success on anonymous login via Firebase: ${task.result.user?.uid}")
                     model.user = task.result.user
-                    getUserData()
+                    model.getData()
                 } else {
                     Timber.w(task.exception, "Error on anonymous login via Firebase")
-                    // TODO: Show a snackbar with the retry function.
+                    showSnackbarMessage(
+                        binding.root,
+                        task.exception?.message ?: getString(R.string.error_generic_message),
+                        { getFirebaseUserAndFetchData() },
+                        R.string.action_retry,
+                        null
+                    )
                 }
             }
         }
     }
 
-    private fun getUserData() {
-        model.user?.uid?.let { userId ->
-            firebaseFirestore
-                .collection("quests")
-                .document("onboarding")
-                .get()
-                .addOnSuccessListener { userDocument ->
-                    Timber.d("Retrieved user data: ${userDocument.id} => ${userDocument.data}")
-
-                    if (userDocument.data == null) {
-                        val userData = hashMapOf(
-                            "uid" to userId
-                        )
-
-                        firebaseFirestore
-                            .collection("users")
-                            .document(userId)
-                            .set(userData)
-                            .addOnSuccessListener { documentReference ->
-                                Timber.d("DocumentSnapshot added with ID: ${documentReference}")
-                            }
-                            .addOnFailureListener { e ->
-                                Timber.e(e, "Error adding user document")
-                            }
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Timber.e(exception, "Error getting user document for user $userId.")
-                    // TODO: Show a snackbar with the retry function.
-                }
-        }
+    override fun onResume() {
+        super.onResume()
+        getFirebaseUserAndFetchData()
     }
 
     private fun onDevicesRewards(rewards: DevicesRewards) {
