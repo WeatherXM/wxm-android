@@ -725,10 +725,13 @@ data class ActionForMessageView(
 @Keep
 @JsonClass(generateAdapter = true)
 data class QuestOnboardingData(
+    val title: String,
+    val description: String,
+    val isCompleted: Boolean,
     val stepsCompleted: Int,
     val totalWXM: Int,
     val locationStep: QuestStep,
-    val notificationStep: QuestStep,
+    val notificationsStep: QuestStep,
     val sensorsStep: QuestStep,
     val walletStep: QuestStep,
     val followStep: QuestStep,

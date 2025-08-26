@@ -848,12 +848,6 @@
     <string name="quests">Quests</string>
     <string name="daily_quest">Daily Quest</string>
     <string name="coming_soon">Coming soon!</string>
-    <string name="onboarding_quest">Onboarding Quest</string>
-    <string name="onboarding_quest_subtitle">Complete onboarding to earn rewards!</string>
-    <string name="enable_location">Enable Location</string>
-    <string name="enable_notifications">Enable Notifications</string>
-    <string name="enable_environment_sensors">Enable Environment Sensors</string>
-    <string name="connect_wallet">Connect Wallet</string>
-    <string name="follow_us_on_x">Follow us on X</string>
     <string name="complete_tasks">Complete tasks</string>
+    <string name="quest_completed">Quest completed!</string>
 </resources>
