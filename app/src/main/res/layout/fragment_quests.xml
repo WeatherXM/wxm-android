@@ -6,9 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".ui.home.quests.QuestsFragment">
 
-    <!-- Header -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -171,8 +172,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/questsTitle"
-                    tools:composableName="com.weatherxm.ui.components.compose.QuestOnboardingCardPreviewKt" />
+                    tools:composableName="com.weatherxm.ui.components.compose.QuestOnboardingCardKt"
+                    tools:visibility="visible" />
 
                 <androidx.compose.ui.platform.ComposeView
                     android:id="@+id/dailyQuestCard"
@@ -187,5 +190,13 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/questsPageSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="@dimen/margin_extra_extra_large"
+        tools:composableName="com.weatherxm.ui.components.compose.QuestsPageSelectorKt" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

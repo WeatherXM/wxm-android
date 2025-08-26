@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.compose.QuestDailyCard
 import com.weatherxm.ui.components.compose.QuestOnboardingCard
+import com.weatherxm.ui.components.compose.QuestsPageSelector
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.NumberUtils.formatTokens
 import dev.chrisbanes.insetter.applyInsetter
@@ -23,7 +24,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class QuestsFragment : BaseFragment() {
-
     private val devicesModel: DevicesViewModel by activityViewModel()
     private val model: QuestsViewModel by viewModel()
     private val firebaseAuth: FirebaseAuth by inject()
@@ -62,13 +62,14 @@ class QuestsFragment : BaseFragment() {
 
         model.onDataLoaded().observe(viewLifecycleOwner) {
             binding.loading.visible(false)
+            toggleOnboardingVisibility(model.onQuestToggleOption.value)
             model.onboardingQuestData?.let {
                 binding.onboardingQuest.setContent {
                     QuestOnboardingCard(it) {
                         // TODO: Handle this click
                     }
                 }
-            } ?: binding.onboardingQuest.visible(false)
+            }
         }
 
         binding.swiperefresh.setOnRefreshListener {
@@ -76,6 +77,19 @@ class QuestsFragment : BaseFragment() {
         }
 
         binding.dailyQuestCard.setContent { QuestDailyCard() }
+
+        binding.questsPageSelector.setContent {
+            QuestsPageSelector(model.onQuestToggleOption) {
+                model.onQuestToggleOption.value = it
+                binding.dailyQuestCard.visible(it == 0)
+                toggleOnboardingVisibility(it)
+                binding.questsTitle.text = if (it == 0) {
+                    getString(R.string.quests)
+                } else {
+                    getString(R.string.completed_quests)
+                }
+            }
+        }
 
         return binding.root
     }
@@ -127,5 +141,12 @@ class QuestsFragment : BaseFragment() {
         binding.totalEarnedContainer.visible(rewards.total > 0F)
         binding.noRewardsYet.visible(rewards.devices.isNotEmpty() && rewards.total == 0F)
         binding.ownDeployEarn.visible(rewards.devices.isEmpty() && rewards.total == 0F)
+    }
+
+    private fun toggleOnboardingVisibility(currentQuestPage: Int) {
+        binding.onboardingQuest.visible(
+            (currentQuestPage == 0 && model.onboardingQuestData?.isCompleted == false) ||
+                    (currentQuestPage == 1 && model.onboardingQuestData?.isCompleted == true)
+        )
     }
 }

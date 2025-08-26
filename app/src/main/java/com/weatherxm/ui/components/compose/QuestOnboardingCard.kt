@@ -36,10 +36,7 @@ import com.weatherxm.ui.common.QuestStep
 
 @Suppress("FunctionNaming", "LongMethod", "MagicNumber")
 @Composable
-fun QuestOnboardingCard(
-    data: QuestOnboardingData,
-    onClick: () -> Unit
-) {
+fun QuestOnboardingCard(data: QuestOnboardingData, onClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(containerColor = colorResource(R.color.layer1)),
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large)),
