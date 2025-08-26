@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentQuestsBinding
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.ui.components.compose.DailyQuestCard
+import com.weatherxm.ui.components.compose.QuestDailyCard
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.NumberUtils.formatTokens
 import dev.chrisbanes.insetter.applyInsetter
@@ -26,6 +27,7 @@ class QuestsFragment : BaseFragment() {
     private val devicesModel: DevicesViewModel by activityViewModel()
     private val model: QuestsViewModel by viewModels()
     private val firebaseAuth: FirebaseAuth by inject()
+    private val firebaseFirestore: FirebaseFirestore by inject()
     private lateinit var binding: FragmentQuestsBinding
 
     @SuppressLint("NotifyDataSetChanged")
@@ -50,7 +52,7 @@ class QuestsFragment : BaseFragment() {
             getFirebaseUserAndFetchData()
         }
 
-        binding.dailyQuestCard.setContent { DailyQuestCard() }
+        binding.dailyQuestCard.setContent { QuestDailyCard() }
 
         getFirebaseUserAndFetchData()
 
@@ -60,23 +62,56 @@ class QuestsFragment : BaseFragment() {
     private fun getFirebaseUserAndFetchData() {
         if (model.user != null) {
             Timber.d("We already have the user data: ${model.user?.uid}")
-            // TODO: Fetch user's progress as we have the user already
+            getUserData()
         } else if (firebaseAuth.currentUser != null) {
             Timber.d("User data exists on firebase: ${firebaseAuth.currentUser?.uid}")
             model.user = firebaseAuth.currentUser
-            // TODO: Fetch user's progress as we have the user already
+            getUserData()
         } else {
             Timber.d("Starting Firebase Anonymous Authentication...")
             firebaseAuth.signInAnonymously().addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result.user != null) {
                     Timber.d("Success on anonymous login via Firebase: ${task.result.user?.uid}")
                     model.user = task.result.user
-                    // TODO: Fetch user's progress now that we have the user
+                    getUserData()
                 } else {
                     Timber.w(task.exception, "Error on anonymous login via Firebase")
                     // TODO: Show a snackbar with the retry function.
                 }
             }
+        }
+    }
+
+    private fun getUserData() {
+        model.user?.uid?.let { userId ->
+            firebaseFirestore
+                .collection("quests")
+                .document("onboarding")
+                .get()
+                .addOnSuccessListener { userDocument ->
+                    Timber.d("Retrieved user data: ${userDocument.id} => ${userDocument.data}")
+
+                    if (userDocument.data == null) {
+                        val userData = hashMapOf(
+                            "uid" to userId
+                        )
+
+                        firebaseFirestore
+                            .collection("users")
+                            .document(userId)
+                            .set(userData)
+                            .addOnSuccessListener { documentReference ->
+                                Timber.d("DocumentSnapshot added with ID: ${documentReference}")
+                            }
+                            .addOnFailureListener { e ->
+                                Timber.e(e, "Error adding user document")
+                            }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Timber.e(exception, "Error getting user document for user $userId.")
+                    // TODO: Show a snackbar with the retry function.
+                }
         }
     }
 

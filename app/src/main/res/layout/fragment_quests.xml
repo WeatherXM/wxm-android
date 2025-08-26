@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
                     app:layout_constraintTop_toBottomOf="@id/questsTitle"
-                    tools:composableName="com.weatherxm.ui.components.compose.DailyQuestCardKt" />
+                    tools:composableName="com.weatherxm.ui.components.compose.QuestDailyCardKt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

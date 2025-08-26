@@ -25,7 +25,7 @@ import com.weatherxm.R
 @Suppress("FunctionNaming")
 @Composable
 @Preview
-fun DailyQuestCard() {
+fun QuestDailyCard() {
     Card(
         colors = CardDefaults.cardColors(containerColor = colorResource(R.color.layer2)),
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large)),
@@ -36,7 +36,7 @@ fun DailyQuestCard() {
                 Icon(
                     painter = painterResource(R.drawable.ic_polygon),
                     contentDescription = null,
-                    tint = colorResource(R.color.colorBackground)
+                    tint = colorResource(R.color.midGrey)
                 )
                 Icon(
                     modifier = Modifier.size(33.dp),

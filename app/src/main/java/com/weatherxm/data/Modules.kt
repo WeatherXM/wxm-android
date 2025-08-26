@@ -27,6 +27,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -566,6 +568,10 @@ val firebase = module {
 
     single<FirebaseAuth>(createdAtStart = true) {
         Firebase.auth
+    }
+
+    single<FirebaseFirestore>(createdAtStart = true) {
+        Firebase.firestore("mobile-quests")
     }
 
     single<FirebaseRemoteConfig> {
