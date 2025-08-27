@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 
-@Suppress("FunctionNaming")
+@Suppress("FunctionNaming", "MagicNumber")
 @Composable
 fun QuestsPageSelector(selectedPage: State<Int>, onSelectPage: (Int) -> Unit) {
     Card(
