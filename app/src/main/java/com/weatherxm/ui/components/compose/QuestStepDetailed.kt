@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.ui.common.QuestStep
 
-@Suppress("FunctionNaming")
+@Suppress("FunctionNaming", "LongMethod")
 @Composable
 fun QuestStepDetailed(data: QuestStep, onClick: () -> Unit) {
     val tokensCardColor = if (data.isSkipped) {

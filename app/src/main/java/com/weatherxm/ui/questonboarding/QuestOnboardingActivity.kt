@@ -3,6 +3,9 @@ package com.weatherxm.ui.questonboarding
 import android.os.Bundle
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityQuestOnboardingBinding
@@ -27,6 +30,10 @@ class QuestOnboardingActivity : BaseActivity() {
 
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        }
+
+        binding.actionBtn.setOnClickListener {
+            // TODO: Complete the quest and open the respective screen 
         }
 
         binding.header.setContent {
@@ -62,6 +69,7 @@ class QuestOnboardingActivity : BaseActivity() {
                 }
                 binding.steps.setContent {
                     Column(
+                        modifier = Modifier.verticalScroll(rememberScrollState()),
                         verticalArrangement = spacedBy(dimensionResource(R.dimen.padding_large))
                     ) {
                         data.steps.forEach {
@@ -72,6 +80,11 @@ class QuestOnboardingActivity : BaseActivity() {
                             }
                         }
                     }
+                }
+                binding.actionBtn.visible(data.stepsDone == data.steps.size)
+                if (data.isCompleted) {
+                    binding.actionBtn.isEnabled = false
+                    binding.actionBtn.text = getString(R.string.quest_completed)
                 }
             }
         }

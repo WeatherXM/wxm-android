@@ -19,51 +19,55 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIconTint="@color/colorOnSurface"
-            app:navigationIcon="@drawable/ic_back" />
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/colorOnSurface" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/mainContainer"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:clipToPadding="false">
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/loading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:paddingHorizontal="@dimen/padding_normal"
+            android:paddingBottom="@dimen/padding_normal"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:composableName="com.weatherxm.ui.components.compose.HeaderViewKt.PreviewHeaderView" />
 
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_normal"
-                android:layout_marginTop="@dimen/margin_small"
-                android:paddingBottom="@dimen/padding_normal"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:composableName="com.weatherxm.ui.components.compose.HeaderViewKt.PreviewHeaderView" />
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/steps"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginVertical="@dimen/margin_normal_to_large"
+            app:layout_constraintBottom_toTopOf="@id/actionBtn"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            tools:composableName="com.weatherxm.ui.components.compose.QuestStepDetailedKt.QuestStepDetailedPreview" />
 
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/steps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal_to_large"
-                app:layout_constraintTop_toBottomOf="@id/header"
-                tools:composableName="com.weatherxm.ui.components.compose.QuestStepDetailedKt.QuestStepDetailedPreview" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/actionBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+            android:layout_marginBottom="@dimen/margin_normal_to_large"
+            android:text="@string/all_set"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
