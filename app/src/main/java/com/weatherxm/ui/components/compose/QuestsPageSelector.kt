@@ -39,9 +39,9 @@ fun QuestsPageSelector(selectedPage: State<Int>, onSelectPage: (Int) -> Unit) {
             FilterChip(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1F),
+                    .weight(if(selectedPage.value == 0) 1.1F else 1F),
                 selected = selectedPage.value == 0,
-                shape = RoundedCornerShape(bottomEnd = 0.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = colorResource(R.color.layer2),
                     labelColor = colorResource(R.color.darkGrey),
@@ -66,10 +66,10 @@ fun QuestsPageSelector(selectedPage: State<Int>, onSelectPage: (Int) -> Unit) {
             FilterChip(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1F),
+                    .weight(if(selectedPage.value == 1) 1.1F else 1F),
                 selected = selectedPage.value == 1,
                 onClick = { onSelectPage(1) },
-                shape = RoundedCornerShape(bottomEnd = 0.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = colorResource(R.color.layer2),
                     labelColor = colorResource(R.color.darkGrey),
