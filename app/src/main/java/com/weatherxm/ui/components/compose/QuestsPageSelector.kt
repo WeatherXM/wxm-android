@@ -32,6 +32,7 @@ fun QuestsPageSelector(selectedPage: State<Int>, onSelectPage: (Int) -> Unit) {
         modifier = Modifier
             .width(140.dp)
             .height(50.dp),
+        colors = CardDefaults.cardColors(containerColor = colorResource(R.color.layer2)),
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_extra_extra_large)),
         elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation_normal))
     ) {
