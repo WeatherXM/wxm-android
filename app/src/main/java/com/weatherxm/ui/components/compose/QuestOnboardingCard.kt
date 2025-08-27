@@ -20,6 +20,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -100,15 +101,16 @@ fun QuestOnboardingCard(data: QuestOnboardingData, onClick: () -> Unit) {
                     ) {
                         TextQuestWXMAllocated(data.totalWXM, 18.sp)
                         LinearProgressIndicator(
-                            progress = { data.stepsDone.toFloat() / 5 },
+                            progress = { data.stepsDone.toFloat() / data.steps.size },
                             modifier = Modifier
                                 .padding(
                                     start = dimensionResource(R.dimen.padding_normal),
                                     end = dimensionResource(R.dimen.padding_small)
                                 )
+                                .clip(RoundedCornerShape(dimensionResource(R.dimen.radius_large)))
                                 .height(12.dp)
                                 .weight(1F),
-                            strokeCap = StrokeCap.Round,
+                            strokeCap = StrokeCap.Butt,
                             gapSize = 0.dp,
                             color = colorResource(R.color.colorPrimary),
                             trackColor = colorResource(R.color.colorBackground)

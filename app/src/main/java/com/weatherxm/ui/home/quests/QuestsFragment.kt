@@ -50,6 +50,7 @@ class QuestsFragment : BaseFragment() {
         model.onError().observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.loading.visible(false)
+                binding.swiperefresh.isRefreshing = false
                 showSnackbarMessage(
                     binding.root,
                     it.message ?: getString(R.string.error_generic_message),
@@ -62,6 +63,7 @@ class QuestsFragment : BaseFragment() {
 
         model.onDataLoaded().observe(viewLifecycleOwner) {
             binding.loading.visible(false)
+            binding.swiperefresh.isRefreshing = false
             toggleOnboardingVisibility(model.onQuestToggleOption.value)
             model.onboardingQuestData?.let {
                 binding.onboardingQuest.setContent {
@@ -95,7 +97,9 @@ class QuestsFragment : BaseFragment() {
     }
 
     private fun getFirebaseUserAndFetchData() {
-        binding.loading.visible(true)
+        if(!binding.swiperefresh.isRefreshing) {
+            binding.loading.visible(true)
+        }
         if (model.user != null) {
             Timber.d("We already have the user data: ${model.user?.uid}")
             model.getData()
