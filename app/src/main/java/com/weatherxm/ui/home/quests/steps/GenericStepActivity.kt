@@ -1,23 +1,16 @@
 package com.weatherxm.ui.home.quests.steps
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.weatherxm.ui.components.BaseActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +19,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,10 +27,19 @@ import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityGenericStepBinding
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.weatherxm.R
+import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
+import com.weatherxm.ui.common.QuestStep
+import com.weatherxm.ui.common.QuestStepType
+import com.weatherxm.ui.common.parcelable
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
 class GenericStepActivity: BaseActivity() {
+    private val model: GenericStepViewModel by viewModel() {
+        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP))
+    }
 
     private lateinit var binding: ActivityGenericStepBinding
 
@@ -52,14 +53,13 @@ class GenericStepActivity: BaseActivity() {
         }
 
         binding.composeView.setContent {
-            Content()
+            Content(model.questStep)
         }
     }
 }
 
-@Preview
 @Composable
-private fun Content() {
+private fun Content(step: QuestStep) {
     Box(
         modifier = Modifier.fillMaxSize()
             .padding(horizontal = dimensionResource(R.dimen.margin_large))
@@ -108,10 +108,10 @@ private fun Content() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Title(
-                            "Generic Step Activity",
+                            step.title,
                             colorRes = R.color.textColor
                         )
-                        MediumText("Generic Step Activity")
+                        MediumText(step.description)
                     }
                 }
             }
@@ -138,4 +138,20 @@ private fun CtaButton() {
             colorRes = R.color.colorBackground
         )
     }
+}
+
+
+@Preview
+@Composable
+private  fun PreviewContent() {
+    Content(
+        QuestStep("stepId",
+            "Step Title",
+            "Step Description",
+            0,
+            false,
+            false,
+            false,
+            QuestStepType.ENABLE_NOTIFICATIONS)
+    )
 }

@@ -764,6 +764,7 @@ data class QuestOnboardingData(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class QuestStep(
     val id: String,
     val title: String,
@@ -773,7 +774,7 @@ data class QuestStep(
     val isCompleted: Boolean,
     val isSkipped: Boolean,
     val type: QuestStepType
-)
+) : Parcelable
 
 @Parcelize
 enum class QuestStepType: Parcelable {
