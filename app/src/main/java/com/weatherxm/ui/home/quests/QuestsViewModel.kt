@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.weatherxm.data.models.QuestUser
 import com.weatherxm.data.models.QuestUserProgress
 import com.weatherxm.ui.common.QuestOnboardingData
 import com.weatherxm.ui.common.SingleLiveEvent
@@ -26,8 +25,6 @@ class QuestsViewModel(
     val onQuestToggleOption = mutableIntStateOf(0)
 
     var user: FirebaseUser? = null
-    var questUser: QuestUser? = null
-    var onboardingProgress: QuestUserProgress? = null
     var onboardingQuestData: QuestOnboardingData? = null
 
     fun getData() {
@@ -42,8 +39,6 @@ class QuestsViewModel(
                 Timber.e(it, "[Firestore]: Error when fetching user")
                 _onError.postValue(it)
                 return@launch
-            }.onRight {
-                questUser = it
             }
 
             /**
@@ -56,8 +51,9 @@ class QuestsViewModel(
             val onboardingQuestResult = onboardingQuestDeferred.await()
 
             /**
-             * Handle both results, if any fails, return an error.
+             * Handle both results, if any fails, show an error.
              */
+            var onboardingProgress: QuestUserProgress? = null
             onboardingProgressResult.onRight {
                 onboardingProgress = it
             }.onLeft {
