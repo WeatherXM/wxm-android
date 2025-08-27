@@ -40,4 +40,5 @@ object Contracts {
     const val ARG_OPEN_STATION_FROM_NOTIFICATION = "open_station_from_notification"
     const val ARG_LOCATION = "location"
     const val ARG_USER_ID = "user_id"
+    const val ARG_QUEST_TITLE = "quest_title"
 }

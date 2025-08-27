@@ -757,6 +757,8 @@ data class QuestOnboardingData(
             )
         }
     )
+
+    fun areAllStepsDone() = stepsDone == steps.size && stepsDone > 0
 }
 
 @Keep

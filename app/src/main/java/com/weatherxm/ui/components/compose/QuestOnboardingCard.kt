@@ -143,7 +143,7 @@ fun QuestOnboardingCard(data: QuestOnboardingData, onClick: () -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             MediumText(
-                                text = if (data.stepsDone == data.steps.size) {
+                                text = if (data.areAllStepsDone()) {
                                     stringResource(R.string.all_set)
                                 } else {
                                     stringResource(R.string.complete_tasks)

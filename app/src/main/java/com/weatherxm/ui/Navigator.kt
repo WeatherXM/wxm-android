@@ -49,6 +49,7 @@ import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
+import com.weatherxm.ui.common.Contracts.ARG_QUEST_TITLE
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
@@ -94,6 +95,7 @@ import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
 import com.weatherxm.ui.photoverification.upload.PhotoUploadActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
+import com.weatherxm.ui.questcompletion.QuestCompletionActivity
 import com.weatherxm.ui.questonboarding.QuestOnboardingActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewardboosts.RewardBoostActivity
@@ -561,6 +563,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             Intent(context, QuestOnboardingActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_USER_ID, userId)
+        )
+    }
+
+    fun showQuestCompletion(context: Context?, questTitle: String) {
+        context?.startActivity(
+            Intent(context, QuestCompletionActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_QUEST_TITLE, questTitle)
         )
     }
 

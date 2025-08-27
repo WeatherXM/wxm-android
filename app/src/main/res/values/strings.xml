@@ -855,4 +855,7 @@
     <string name="completed_quests">Completed Quests</string>
     <string name="onboarding_quest">Onboarding Quest</string>
     <string name="onboarding_quest_subtitle">Complete onboarding to earn rewards!</string>
+    <string name="quest_completed_message">Congrats! You’ve completed the %s.\nYour $WXM rewards coming in the next airdrop.</string>
+    <string name="share_it_world">Share it with the world!</string>
+    <string name="quest_completed_share">Just unlocked rewards by completing my quest on WeatherXM! Get the app and start your first quest now.</string>
 </resources>

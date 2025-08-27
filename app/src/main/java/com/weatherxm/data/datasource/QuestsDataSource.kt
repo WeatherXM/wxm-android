@@ -22,27 +22,31 @@ interface QuestsDataSource {
     fun fetchUser(userId: String): Either<Throwable, QuestUser>
     fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
+    suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
 }
 
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
+    companion object {
+        const val ONBOARDING_ID = "onboarding"
+    }
+
     private val firebaseFirestore: FirebaseFirestore by inject()
 
     private fun userDocument(userId: String) =
         firebaseFirestore.collection("users").document(userId)
 
-    private fun onboardingQuestDocument() =
-        firebaseFirestore.collection("quests").document("onboarding")
+    private fun questDocument(questId: String) =
+        firebaseFirestore.collection("quests").document(questId)
 
-    private fun onboardingProgressDocument(userId: String) = firebaseFirestore.collection("users")
-        .document(userId)
+    private fun questProgressDocument(userId: String, questId: String) = userDocument(userId)
         .collection("progress")
-        .document("onboarding")
+        .document(questId)
 
     override fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress> {
         /**
          * Fetch user's onboarding progress document
          */
-        return onboardingProgressDocument(userId).get().safeAwait().flatMap { document ->
+        return questProgressDocument(userId, ONBOARDING_ID).get().safeAwait().flatMap { document ->
             /**
              * If progress exists, use it; else create
              */
@@ -51,7 +55,8 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                 Either.Right(it)
             } ?: run {
                 val emptyProgress = QuestUserProgress.empty()
-                val setResult = onboardingProgressDocument(userId).set(emptyProgress).safeAwait()
+                val setResult =
+                    questProgressDocument(userId, ONBOARDING_ID).set(emptyProgress).safeAwait()
 
                 setResult.map {
                     Timber.d("[Firestore] Empty User's Progress on Onboarding Quest created")
@@ -84,7 +89,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
 
     @Suppress("ReturnCount")
     override suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore> {
-        val onboardingResult = onboardingQuestDocument().get().safeAwait()
+        val onboardingResult = questDocument(ONBOARDING_ID).get().safeAwait()
 
         /**
          * Get the value otherwise terminate and return the Throwable.
@@ -103,7 +108,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         val stepIds = listOf("step1", "step2", "step3", "step4", "step5")
         val deferredSteps = stepIds.map { stepId ->
             coroutineScope {
-                async { fetchQuestStep(stepId) }
+                async { fetchQuestStep(stepId, ONBOARDING_ID) }
             }
         }
 
@@ -127,8 +132,17 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         return Either.Right(onboardingQuestWithSteps)
     }
 
-    private fun fetchQuestStep(stepId: String): Either<Throwable, QuestFirestoreStep> {
-        val stepResult = onboardingQuestDocument()
+    override suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit> {
+        return questProgressDocument(userId, questId).update("isCompleted", true)
+            .safeAwait()
+            .map {}
+    }
+
+    private fun fetchQuestStep(
+        stepId: String,
+        questId: String
+    ): Either<Throwable, QuestFirestoreStep> {
+        val stepResult = questDocument(questId)
             .collection("steps")
             .document(stepId)
             .get()
