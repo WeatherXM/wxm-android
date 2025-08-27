@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home.quests.steps
 
+import android.content.Context
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
+import com.weatherxm.ui.common.ctaButtonTitle
 import com.weatherxm.ui.common.parcelable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -115,14 +117,14 @@ private fun Content(step: QuestStep) {
                     }
                 }
             }
-            CtaButton()
+            CtaButton(step)
 
         }
     }
 }
 
 @Composable
-private fun CtaButton() {
+private fun CtaButton(step: QuestStep) {
     Button(
         onClick = { },
         modifier = Modifier.fillMaxWidth(),
@@ -133,7 +135,7 @@ private fun CtaButton() {
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
     ) {
         MediumText(
-            stringResource(R.string.action_buy_station),
+            stringResource(step.type.ctaButtonTitle()),
             fontWeight = FontWeight.Bold,
             colorRes = R.color.colorBackground
         )
@@ -152,6 +154,6 @@ private  fun PreviewContent() {
             false,
             false,
             false,
-            QuestStepType.ENABLE_NOTIFICATIONS)
+            QuestStepType.CONNECT_WALLET)
     )
 }
