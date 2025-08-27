@@ -216,6 +216,7 @@ import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
 import com.weatherxm.ui.photoverification.upload.PhotoUploadViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
+import com.weatherxm.ui.questonboarding.QuestOnboardingViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
 import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
 import com.weatherxm.ui.rewarddetails.RewardDetailsViewModel
@@ -801,6 +802,7 @@ private val viewmodels = module {
     viewModelOf(::PreferenceViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::QuestsViewModel)
+    viewModelOf(::QuestOnboardingViewModel)
     viewModelOf(::RebootViewModel)
     viewModelOf(::ResetPasswordViewModel)
     viewModelOf(::RewardBoostViewModel)

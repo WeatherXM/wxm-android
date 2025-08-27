@@ -195,8 +195,8 @@
             android:name="com.weatherxm.ui.home.HomeActivity"
             android:label="@string/title_home"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/Theme.WeatherXM" />
+            android:theme="@style/Theme.WeatherXM"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name="com.weatherxm.ui.preferences.PreferenceActivity"
             android:label="@string/settings"
@@ -348,6 +348,10 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.devicenotifications.DeviceNotificationsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.questonboarding.QuestOnboardingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
