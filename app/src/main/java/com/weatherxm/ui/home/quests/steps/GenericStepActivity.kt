@@ -35,6 +35,7 @@ import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
 import com.weatherxm.ui.common.ctaButtonTitle
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.stepIcon
 import com.weatherxm.ui.components.compose.LargeText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -97,7 +98,7 @@ private fun Content(step: QuestStep) {
                     ) {
                         Icon(
                             modifier = Modifier.size(48.dp),
-                            painter = painterResource(R.drawable.ic_calendar_solid),
+                            painter = painterResource(step.type.stepIcon()),
                             contentDescription = null,
                             tint = colorResource(R.color.colorPrimary)
                         )

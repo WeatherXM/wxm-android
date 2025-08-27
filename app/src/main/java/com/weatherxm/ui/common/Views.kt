@@ -361,7 +361,18 @@ fun QuestStepType.ctaButtonTitle() : Int {
         QuestStepType.ENABLE_NOTIFICATIONS ->  R.string.enable_button_title
         QuestStepType.ENABLE_ENVIRONMENT_SENSORS ->  R.string.enable_button_title
         QuestStepType.CONNECT_WALLET ->  R.string.connect_wallet_button_title
-        QuestStepType.SOCIAL_FOLLOW_X ->  R.string.enable_button_title
+        QuestStepType.SOCIAL_FOLLOW_X ->  R.string.follow_us_on_x
+        QuestStepType.UNKNOWN -> -1
+    }
+}
+
+fun QuestStepType.stepIcon() : Int {
+    return when (this) {
+        QuestStepType.ENABLE_LOCATION_PERMISSION -> R.drawable.ic_quest_step_location
+        QuestStepType.ENABLE_NOTIFICATIONS ->  R.drawable.ic_quest_step_notifications
+        QuestStepType.ENABLE_ENVIRONMENT_SENSORS ->  R.drawable.ic_quest_step_sensors
+        QuestStepType.CONNECT_WALLET ->  R.drawable.ic_quest_step_wallet
+        QuestStepType.SOCIAL_FOLLOW_X ->  R.drawable.ic_quest_step_social
         QuestStepType.UNKNOWN -> -1
     }
 }
