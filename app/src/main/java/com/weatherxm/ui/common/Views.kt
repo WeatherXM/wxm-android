@@ -355,6 +355,17 @@ fun Chip.setStatusChip(device: UIDevice) {
     }
 }
 
+fun QuestStepType.ctaButtonTitle() : Int {
+    return when (this) {
+        QuestStepType.ENABLE_LOCATION_PERMISSION -> R.string.enable_button_title
+        QuestStepType.ENABLE_NOTIFICATIONS ->  R.string.enable_button_title
+        QuestStepType.ENABLE_ENVIRONMENT_SENSORS ->  R.string.enable_button_title
+        QuestStepType.CONNECT_WALLET ->  R.string.connect_wallet_button_title
+        QuestStepType.SOCIAL_FOLLOW_X ->  R.string.enable_button_title
+        QuestStepType.UNKNOWN -> -1
+    }
+}
+
 fun ImageView.setColor(@ColorRes color: Int) {
     this.setColorFilter(ResourcesCompat.getColor(resources, color, null))
 }

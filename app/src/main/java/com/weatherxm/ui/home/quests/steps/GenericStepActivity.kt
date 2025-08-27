@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.weatherxm.ui.components.BaseActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
 import com.weatherxm.ui.common.ctaButtonTitle
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.components.compose.LargeText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
@@ -115,30 +117,69 @@ private fun Content(step: QuestStep) {
                         )
                         MediumText(step.description)
                     }
+
+                    if (step.isOptional) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = colorResource(R.color.colorSurface),
+                                    shape = androidx.compose.foundation.shape.CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            MediumText(
+                                stringResource(R.string.optional_step_description),
+                                paddingValues = PaddingValues(
+                                    start = dimensionResource(R.dimen.padding_normal_to_large),
+                                    end = dimensionResource(R.dimen.padding_normal_to_large),
+                                    top = dimensionResource(R.dimen.padding_small),
+                                    bottom = dimensionResource(
+                                        R.dimen.padding_small
+                                    )
+                                )
+                            )
+                        }
+                    }
                 }
             }
             CtaButton(step)
-
         }
     }
 }
 
 @Composable
 private fun CtaButton(step: QuestStep) {
-    Button(
-        onClick = { },
-        modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.colorPrimary),
-            contentColor = colorResource(R.color.colorBackground)
-        ),
-        shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
-    ) {
-        MediumText(
-            stringResource(step.type.ctaButtonTitle()),
-            fontWeight = FontWeight.Bold,
-            colorRes = R.color.colorBackground
-        )
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            onClick = { },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.colorPrimary),
+                contentColor = colorResource(R.color.colorBackground)
+            ),
+            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
+        ) {
+            MediumText(
+                stringResource(step.type.ctaButtonTitle()),
+                fontWeight = FontWeight.Bold,
+                colorRes = R.color.colorBackground
+            )
+        }
+
+        if (step.isOptional) {
+            Button(
+                onClick = { },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = androidx.compose.ui.graphics.Color.Transparent
+                )
+            ) {
+                MediumText(
+                    stringResource(R.string.skip_and_mark_as_done_button_title),
+                    fontWeight = FontWeight.Bold,
+                    colorRes = R.color.colorPrimary
+                )
+            }
+        }
     }
 }
 
