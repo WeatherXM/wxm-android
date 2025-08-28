@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.ui.common.QuestStep
+import com.weatherxm.ui.common.QuestStepType
 
 @Suppress("FunctionNaming", "LongMethod")
 @Composable
@@ -129,7 +130,7 @@ fun QuestStepDetailedPreview() {
             isOptional = false,
             isCompleted = true,
             isSkipped = false,
-            type = "enable_location_permission"
+            type = QuestStepType.ENABLE_LOCATION_PERMISSION
         )
     ) {}
 }
