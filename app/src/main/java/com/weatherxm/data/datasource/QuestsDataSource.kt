@@ -162,19 +162,27 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
 
     override fun markOnboardingStepAsCompleted(userId: String, stepId: String) {
         removeOnboardingStepFromSkipped(userId, stepId)
-        questProgressDocument(userId, ONBOARDING_ID).update("completedSteps", com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
+        questProgressDocument(userId, ONBOARDING_ID)
+            .update("completedSteps",
+                com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
     }
 
     override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
         removeOnboardingStepFromCompleted(userId, stepId)
-        questProgressDocument(userId, ONBOARDING_ID).update("skippedSteps", com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
+        questProgressDocument(userId, ONBOARDING_ID)
+            .update("skippedSteps",
+                com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
     }
 
     override fun removeOnboardingStepFromCompleted(userId: String, stepId: String) {
-       questProgressDocument(userId, ONBOARDING_ID).update("completedSteps", com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
+       questProgressDocument(userId, ONBOARDING_ID)
+           .update("completedSteps",
+               com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
     }
 
     override fun removeOnboardingStepFromSkipped(userId: String, stepId: String) {
-        questProgressDocument(userId, ONBOARDING_ID).update("skippedSteps", com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
+        questProgressDocument(userId, ONBOARDING_ID)
+            .update("skippedSteps",
+                com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
     }
 }
