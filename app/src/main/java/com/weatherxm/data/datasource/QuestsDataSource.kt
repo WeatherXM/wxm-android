@@ -176,6 +176,5 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
 
     override fun removeOnboardingStepFromSkipped(userId: String, stepId: String) {
         questProgressDocument(userId, ONBOARDING_ID).update("skippedSteps", com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
-
     }
 }
