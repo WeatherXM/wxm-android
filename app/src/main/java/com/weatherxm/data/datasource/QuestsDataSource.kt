@@ -23,6 +23,10 @@ interface QuestsDataSource {
     fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
+    fun markOnboardingStepAsCompleted(userId: String, stepId: String)
+    fun markOnboardingStepAsSkipped(userId: String, stepId: String)
+    fun removeOnboardingStepFromCompleted(userId: String, stepId: String)
+    fun removeOnboardingStepFromSkipped(userId: String, stepId: String)
 }
 
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
@@ -154,5 +158,24 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                 Either.Right(it)
             } ?: Either.Left(Throwable("No step found: $stepId"))
         }
+    }
+
+    override fun markOnboardingStepAsCompleted(userId: String, stepId: String) {
+        removeOnboardingStepFromSkipped(userId, stepId)
+        questProgressDocument(userId, ONBOARDING_ID).update("completedSteps", com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
+    }
+
+    override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
+        removeOnboardingStepFromCompleted(userId, stepId)
+        questProgressDocument(userId, ONBOARDING_ID).update("skippedSteps", com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
+    }
+
+    override fun removeOnboardingStepFromCompleted(userId: String, stepId: String) {
+       questProgressDocument(userId, ONBOARDING_ID).update("completedSteps", com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
+    }
+
+    override fun removeOnboardingStepFromSkipped(userId: String, stepId: String) {
+        questProgressDocument(userId, ONBOARDING_ID).update("skippedSteps", com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
+
     }
 }

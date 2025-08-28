@@ -1,6 +1,6 @@
 package com.weatherxm.ui.home.quests.steps
 
-import android.content.Context
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,14 +29,17 @@ import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityGenericStepBinding
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseAuth
 import com.weatherxm.R
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
 import com.weatherxm.ui.common.ctaButtonTitle
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.stepIcon
-import com.weatherxm.ui.components.compose.LargeText
+import com.weatherxm.util.hasPermission
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
@@ -45,6 +48,7 @@ class GenericStepActivity: BaseActivity() {
     private val model: GenericStepViewModel by viewModel() {
         parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP))
     }
+    private val firebaseAuth: FirebaseAuth by inject()
 
     private lateinit var binding: ActivityGenericStepBinding
 
@@ -58,15 +62,86 @@ class GenericStepActivity: BaseActivity() {
         }
 
         binding.composeView.setContent {
-            Content(model.questStep)
+            Content(
+                model.questStep,
+                onCtaClick = { handleCtaClick() },
+                onSkipClick = { handleSkipClick() }
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateStepState()
+    }
+
+    private fun handleCtaClick() {
+        when (model.questStep.type) {
+            QuestStepType.CONNECT_WALLET -> {
+                // Navigate to wallet connection screen
+            }
+            QuestStepType.ENABLE_LOCATION_PERMISSION -> {
+                // Request location permission
+            }
+            QuestStepType.ENABLE_NOTIFICATIONS -> {
+                // Request notification permission
+                if (!hasPermission(POST_NOTIFICATIONS)) {
+                    navigator.openAppSettings(this)
+                } else {
+                    requestNotificationsPermissions()
+                }
+            }
+            QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
+
+            }
+            QuestStepType.SOCIAL_FOLLOW_X -> {
+                // Open social media profile
+            }
+            QuestStepType.UNKNOWN -> {
+                // No action
+            }
+        }
+    }
+
+    private fun handleSkipClick() {
+        model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return)
+    }
+
+    private fun updateStepState() {
+        when (model.questStep.type) {
+            QuestStepType.CONNECT_WALLET -> {
+                // Check wallet
+            }
+            QuestStepType.ENABLE_LOCATION_PERMISSION -> {
+                // Check location permission
+            }
+            QuestStepType.ENABLE_NOTIFICATIONS -> {
+                if (hasPermission(POST_NOTIFICATIONS)) {
+                    model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return)
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+            QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
+
+            }
+            QuestStepType.SOCIAL_FOLLOW_X -> {
+            }
+            QuestStepType.UNKNOWN -> {
+                // No action
+            }
         }
     }
 }
 
 @Composable
-private fun Content(step: QuestStep) {
+private fun Content(
+    step: QuestStep,
+    onCtaClick: () -> Unit,
+    onSkipClick: () -> Unit
+) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(horizontal = dimensionResource(R.dimen.margin_large))
             .padding(bottom = dimensionResource(R.dimen.margin_large))
     ) {
@@ -143,16 +218,20 @@ private fun Content(step: QuestStep) {
                     }
                 }
             }
-            CtaButton(step)
+            CtaButton(step, onCtaClick, onSkipClick)
         }
     }
 }
 
 @Composable
-private fun CtaButton(step: QuestStep) {
+private fun CtaButton(
+    step: QuestStep,
+    onCtaClick: () -> Unit,
+    onSkipClick: () -> Unit
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Button(
-            onClick = { },
+            onClick = onCtaClick,
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.colorPrimary),
@@ -169,7 +248,7 @@ private fun CtaButton(step: QuestStep) {
 
         if (step.isOptional) {
             Button(
-                onClick = { },
+                onClick = onSkipClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = androidx.compose.ui.graphics.Color.Transparent
                 )
@@ -196,6 +275,8 @@ private  fun PreviewContent() {
             false,
             false,
             false,
-            QuestStepType.CONNECT_WALLET)
+            QuestStepType.CONNECT_WALLET),
+        onCtaClick = {},
+        onSkipClick = {}
     )
 }
