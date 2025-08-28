@@ -843,4 +843,14 @@
     <string name="overcast_light_rain">Overcast with light rain</string>
     <string name="overcast_light_snow">Overcast with light snow</string>
     <string name="overcast_mixture_snow_rain">Overcast with mixture of snow and rain</string>
+
+    <!-- Quests -->
+    <string name="quests">Quests</string>
+    <string name="daily_quest">Daily Quest</string>
+    <string name="coming_soon">Coming soon!</string>
+    <string name="complete_tasks">Complete tasks</string>
+    <string name="quest_completed">Quest completed!</string>
+    <string name="your_rewards_are_on_the_way">Your rewards are on the way!</string>
+    <string name="all_set">All set!</string>
+    <string name="completed_quests">Completed Quests</string>
 </resources>

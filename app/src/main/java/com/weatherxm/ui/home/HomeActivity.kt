@@ -269,6 +269,12 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 binding.claimRedDot.visible(false)
                 binding.addDevice.visible(false)
             }
+            R.id.navigation_quests -> {
+                binding.authCard.visible(false)
+                binding.emptyContainer.visible(false)
+                binding.claimRedDot.visible(false)
+                binding.addDevice.visible(false)
+            }
             else -> {
                 binding.emptyContainer.visible(false)
                 binding.claimRedDot.visible(false)

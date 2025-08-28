@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_map" />
 
     <fragment
+        android:id="@+id/navigation_quests"
+        android:name="com.weatherxm.ui.home.quests.QuestsFragment"
+        android:label="QuestsFragment"
+        tools:layout="@layout/fragment_quests" />
+
+    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.weatherxm.ui.home.profile.ProfileFragment"
         android:label="ProfileMapFragment"
