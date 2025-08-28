@@ -4,6 +4,7 @@ package com.weatherxm.data.models
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.google.firebase.firestore.PropertyName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.analytics.AnalyticsService
@@ -79,6 +80,59 @@ data class RemoteBanner(
     val showActionButton: Boolean,
     val showCloseButton: Boolean
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestWithStepsFirestore(
+    val questData: QuestFirestore,
+    val steps: List<QuestFirestoreStep>
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestFirestore(
+    val title: String? = null,
+    val description: String? = null,
+    @get:PropertyName("isActive") // https://medium.com/@eeddeellee/boolean-fields-that-start-with-is-in-firebase-firestore-49afb65e3639
+    val isActive: Boolean? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestFirestoreStep(
+    var stepId: String? = null,
+    val title: String? = null,
+    val description: String? = null,
+    val tokens: Int? = null,
+    @get:PropertyName("isOptional") // https://medium.com/@eeddeellee/boolean-fields-that-start-with-is-in-firebase-firestore-49afb65e3639
+    val isOptional: Boolean? = null,
+    val type: String? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestUser(
+    val uid: String? = null,
+    val earnedTokens: Int? = null,
+    val paidTokens: Int? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestUserProgress(
+    @get:PropertyName("isCompleted") // https://medium.com/@eeddeellee/boolean-fields-that-start-with-is-in-firebase-firestore-49afb65e3639
+    val isCompleted: Boolean? = null,
+    val completedSteps: List<String>? = null,
+    val skippedSteps: List<String>? = null
+) {
+    companion object {
+        fun empty() = QuestUserProgress(
+            isCompleted = false,
+            completedSteps = emptyList(),
+            skippedSteps = emptyList()
+        )
+    }
+}
 
 enum class RemoteBannerType {
     INFO_BANNER,

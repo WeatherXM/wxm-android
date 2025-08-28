@@ -1,0 +1,27 @@
+package com.weatherxm.data.repository
+
+import arrow.core.Either
+import com.weatherxm.data.datasource.QuestsDataSource
+import com.weatherxm.data.models.QuestUser
+import com.weatherxm.data.models.QuestUserProgress
+import com.weatherxm.data.models.QuestWithStepsFirestore
+
+interface QuestsRepository {
+    fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress>
+    fun fetchUser(userId: String): Either<Throwable, QuestUser>
+    suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
+}
+
+class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository {
+    override fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress> {
+        return datasource.fetchOnboardingProgress(userId)
+    }
+
+    override fun fetchUser(userId: String): Either<Throwable, QuestUser> {
+        return datasource.fetchUser(userId)
+    }
+
+    override suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore> {
+        return datasource.fetchOnboardingQuest()
+    }
+}
