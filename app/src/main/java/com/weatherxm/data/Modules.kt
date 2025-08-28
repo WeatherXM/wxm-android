@@ -25,6 +25,10 @@ import com.google.android.gms.location.SettingsClient
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -93,6 +97,8 @@ import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.data.datasource.NotificationsDataSource
 import com.weatherxm.data.datasource.NotificationsDataSourceImpl
+import com.weatherxm.data.datasource.QuestsDataSource
+import com.weatherxm.data.datasource.QuestsDataSourceImpl
 import com.weatherxm.data.datasource.RemoteBannersDataSource
 import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl
 import com.weatherxm.data.datasource.ReverseGeocodingDataSource
@@ -138,6 +144,8 @@ import com.weatherxm.data.repository.LocationsRepository
 import com.weatherxm.data.repository.LocationsRepositoryImpl
 import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.data.repository.NotificationsRepositoryImpl
+import com.weatherxm.data.repository.QuestsRepository
+import com.weatherxm.data.repository.QuestsRepositoryImpl
 import com.weatherxm.data.repository.RemoteBannersRepository
 import com.weatherxm.data.repository.RemoteBannersRepositoryImpl
 import com.weatherxm.data.repository.RewardsRepository
@@ -201,6 +209,7 @@ import com.weatherxm.ui.home.explorer.UICellJsonAdapter
 import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
+import com.weatherxm.ui.home.quests.QuestsViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.onboarding.OnboardingViewModel
@@ -256,6 +265,8 @@ import com.weatherxm.usecases.LocationsUseCase
 import com.weatherxm.usecases.LocationsUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
+import com.weatherxm.usecases.QuestsUseCase
+import com.weatherxm.usecases.QuestsUseCaseImpl
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.RemoteBannersUseCaseImpl
 import com.weatherxm.usecases.RewardsUseCase
@@ -399,6 +410,7 @@ private val datasources = module {
     factoryOf(::NetworkWeatherHistoryDataSource)
     singleOf(::NetworkWeatherForecastDataSource)
     singleOf(::NotificationsDataSourceImpl) { bind<NotificationsDataSource>() }
+    singleOf(::QuestsDataSourceImpl) { bind<QuestsDataSource>() }
     singleOf(::RemoteBannersDataSourceImpl) { bind<RemoteBannersDataSource>() }
     singleOf(::ReverseGeocodingDataSourceImpl) { bind<ReverseGeocodingDataSource>() }
     singleOf(::RewardsDataSourceImpl) { bind<RewardsDataSource>() }
@@ -422,6 +434,7 @@ private val repositories = module {
     singleOf(::FollowRepositoryImpl) { bind<FollowRepository>() }
     singleOf(::LocationsRepositoryImpl) { bind<LocationsRepository>() }
     singleOf(::NotificationsRepositoryImpl) { bind<NotificationsRepository>() }
+    singleOf(::QuestsRepositoryImpl) { bind<QuestsRepository>() }
     singleOf(::RemoteBannersRepositoryImpl) { bind<RemoteBannersRepository>() }
     singleOf(::RewardsRepositoryImpl) { bind<RewardsRepository>() }
     singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
@@ -453,6 +466,7 @@ private val usecases = module {
     factoryOf(::HistoryUseCaseImpl) { bind<HistoryUseCase>() }
     factoryOf(::LocationsUseCaseImpl) { bind<LocationsUseCase>() }
     factoryOf(::PreferencesUseCaseImpl) { bind<PreferencesUseCase>() }
+    singleOf(::QuestsUseCaseImpl) { bind<QuestsUseCase>() }
     singleOf(::RemoteBannersUseCaseImpl) { bind<RemoteBannersUseCase>() }
     singleOf(::RewardsUseCaseImpl) { bind<RewardsUseCase>() }
     factoryOf(::StartupUseCaseImpl) { bind<StartupUseCase>() }
@@ -561,6 +575,14 @@ val firebase = module {
                     }
             }
         }
+    }
+
+    single<FirebaseAuth>(createdAtStart = true) {
+        Firebase.auth
+    }
+
+    single<FirebaseFirestore>(createdAtStart = true) {
+        Firebase.firestore("mobile-quests")
     }
 
     single<FirebaseRemoteConfig> {
@@ -782,6 +804,7 @@ private val viewmodels = module {
     viewModelOf(::PhotoVerificationIntroViewModel)
     viewModelOf(::PreferenceViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModelOf(::QuestsViewModel)
     viewModelOf(::RebootViewModel)
     viewModelOf(::ResetPasswordViewModel)
     viewModelOf(::RewardBoostViewModel)
