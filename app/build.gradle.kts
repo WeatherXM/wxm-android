@@ -471,7 +471,6 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
 }
 
 dependencies {
-    implementation(libs.androidx.ui)
     // Testing
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.rules)

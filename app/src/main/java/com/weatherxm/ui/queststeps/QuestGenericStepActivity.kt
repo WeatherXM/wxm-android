@@ -1,4 +1,4 @@
-package com.weatherxm.ui.home.quests.steps
+package com.weatherxm.ui.queststeps
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.os.Bundle
@@ -15,23 +15,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
-import com.weatherxm.databinding.ActivityGenericStepBinding
+import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.weatherxm.R
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
@@ -45,16 +46,16 @@ import org.koin.core.parameter.parametersOf
 import kotlin.getValue
 
 class GenericStepActivity: BaseActivity() {
-    private val model: GenericStepViewModel by viewModel() {
+    private val model: QuestGenericStepViewModel by viewModel() {
         parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP))
     }
     private val firebaseAuth: FirebaseAuth by inject()
 
-    private lateinit var binding: ActivityGenericStepBinding
+    private lateinit var binding: ActivityQuestGenericStepBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGenericStepBinding.inflate(layoutInflater)
+        binding = ActivityQuestGenericStepBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.toolbar.setNavigationOnClickListener {
@@ -167,7 +168,7 @@ private fun Content(
                             .size(126.dp)
                             .background(
                                 color = colorResource(R.color.colorSurface),
-                                shape = androidx.compose.foundation.shape.CircleShape
+                                shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -199,7 +200,7 @@ private fun Content(
                             modifier = Modifier
                                 .background(
                                     color = colorResource(R.color.colorSurface),
-                                    shape = androidx.compose.foundation.shape.CircleShape
+                                    shape = CircleShape
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -250,7 +251,7 @@ private fun CtaButton(
             Button(
                 onClick = onSkipClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = androidx.compose.ui.graphics.Color.Transparent
+                    containerColor = Color.Transparent
                 )
             ) {
                 MediumText(

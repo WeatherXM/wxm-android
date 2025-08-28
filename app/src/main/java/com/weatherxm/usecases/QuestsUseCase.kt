@@ -13,8 +13,6 @@ interface QuestsUseCase {
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
     fun markOnboardingStepAsCompleted(userId: String, stepId: String)
     fun markOnboardingStepAsSkipped(userId: String, stepId: String)
-    fun removeOnboardingStepFromCompleted(userId: String, stepId: String)
-    fun removeOnboardingStepFromSkipped(userId: String, stepId: String)
 }
 
 class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
@@ -40,13 +38,5 @@ class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
 
     override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
         repository.markOnboardingStepAsSkipped(userId, stepId)
-    }
-
-    override fun removeOnboardingStepFromCompleted(userId: String, stepId: String) {
-        repository.removeOnboardingStepFromCompleted(userId, stepId)
-    }
-
-    override fun removeOnboardingStepFromSkipped(userId: String, stepId: String) {
-        repository.removeOnboardingStepFromSkipped(userId, stepId)
     }
 }

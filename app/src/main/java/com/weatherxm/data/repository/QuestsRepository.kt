@@ -13,8 +13,6 @@ interface QuestsRepository {
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
     fun markOnboardingStepAsCompleted(userId: String, stepId: String)
     fun markOnboardingStepAsSkipped(userId: String, stepId: String)
-    fun removeOnboardingStepFromCompleted(userId: String, stepId: String)
-    fun removeOnboardingStepFromSkipped(userId: String, stepId: String)
 }
 
 class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository {
@@ -40,13 +38,5 @@ class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository 
 
     override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
         datasource.markOnboardingStepAsSkipped(userId, stepId)
-    }
-
-    override fun removeOnboardingStepFromCompleted(userId: String, stepId: String) {
-        datasource.removeOnboardingStepFromCompleted(userId, stepId)
-    }
-
-    override fun removeOnboardingStepFromSkipped(userId: String, stepId: String) {
-        datasource.removeOnboardingStepFromSkipped(userId, stepId)
     }
 }

@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.weatherxm.data.models.QuestFirestore
@@ -25,8 +26,6 @@ interface QuestsDataSource {
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
     fun markOnboardingStepAsCompleted(userId: String, stepId: String)
     fun markOnboardingStepAsSkipped(userId: String, stepId: String)
-    fun removeOnboardingStepFromCompleted(userId: String, stepId: String)
-    fun removeOnboardingStepFromSkipped(userId: String, stepId: String)
 }
 
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
@@ -161,28 +160,14 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     }
 
     override fun markOnboardingStepAsCompleted(userId: String, stepId: String) {
-        removeOnboardingStepFromSkipped(userId, stepId)
         questProgressDocument(userId, ONBOARDING_ID)
             .update("completedSteps",
-                com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
+                FieldValue.arrayUnion(stepId))
     }
 
     override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
-        removeOnboardingStepFromCompleted(userId, stepId)
         questProgressDocument(userId, ONBOARDING_ID)
             .update("skippedSteps",
-                com.google.firebase.firestore.FieldValue.arrayUnion(stepId))
-    }
-
-    override fun removeOnboardingStepFromCompleted(userId: String, stepId: String) {
-       questProgressDocument(userId, ONBOARDING_ID)
-           .update("completedSteps",
-               com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
-    }
-
-    override fun removeOnboardingStepFromSkipped(userId: String, stepId: String) {
-        questProgressDocument(userId, ONBOARDING_ID)
-            .update("skippedSteps",
-                com.google.firebase.firestore.FieldValue.arrayRemove(stepId))
+                FieldValue.arrayUnion(stepId))
     }
 }

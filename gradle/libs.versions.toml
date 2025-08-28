@@ -70,7 +70,6 @@ google-services-plugin = "4.4.3"
 grgit = "5.3.2"
 kotlin = "2.2.10"
 ksp-plugin = "2.2.10-2.0.2"
-ui = "1.9.0"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
@@ -160,7 +159,6 @@ retromock = { module = "co.infinum:retromock", version.ref = "retromock" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 upload-service = { module = "net.gotev:uploadservice", version.ref = "upload-service" }
 upload-service-okhttp = { module = "net.gotev:uploadservice-okhttp", version.ref = "upload-service" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
