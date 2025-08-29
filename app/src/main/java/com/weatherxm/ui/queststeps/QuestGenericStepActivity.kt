@@ -40,6 +40,7 @@ import com.weatherxm.ui.common.QuestStepType
 import com.weatherxm.ui.common.ctaButtonTitle
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.stepIcon
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,6 +54,7 @@ class GenericStepActivity: BaseActivity() {
     private val firebaseAuth: FirebaseAuth by inject()
 
     private lateinit var binding: ActivityQuestGenericStepBinding
+    private var ctaButtonTapped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,9 +77,11 @@ class GenericStepActivity: BaseActivity() {
     override fun onResume() {
         super.onResume()
         updateStepState()
+        binding.loading.visible(true)
     }
 
     private fun handleCtaClick() {
+        ctaButtonTapped = true
         when (model.questStep.type) {
             QuestStepType.CONNECT_WALLET -> {
                 // Navigate to wallet connection screen
@@ -90,7 +94,7 @@ class GenericStepActivity: BaseActivity() {
                 if (!hasPermission(POST_NOTIFICATIONS)) {
                     navigator.openAppSettings(this)
                 } else {
-                    requestNotificationsPermissions()
+                    updateStepState()
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
@@ -107,6 +111,7 @@ class GenericStepActivity: BaseActivity() {
 
     private fun handleSkipClick() {
         model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return)
+        onBackPressedDispatcher.onBackPressed()
     }
 
     private fun updateStepState() {
@@ -118,7 +123,8 @@ class GenericStepActivity: BaseActivity() {
                 // Check location permission
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
-                if (hasPermission(POST_NOTIFICATIONS)) {
+                if (hasPermission(POST_NOTIFICATIONS) &&
+                    ctaButtonTapped) {
                     model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return)
                     onBackPressedDispatcher.onBackPressed()
                 }
