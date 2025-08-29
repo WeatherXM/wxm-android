@@ -28,30 +28,34 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.FirebaseAuth
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
+import com.weatherxm.ui.common.Contracts.ARG_USER_ID
 import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
 import com.weatherxm.ui.common.ctaButtonTitle
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.stepIcon
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.hasPermission
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
 
 class GenericStepActivity: BaseActivity() {
     private val model: QuestGenericStepViewModel by viewModel() {
-        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP))
+        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP),
+            intent.getStringExtra(ARG_USER_ID) ?: String.empty()
+        )
     }
-    private val firebaseAuth: FirebaseAuth by inject()
 
     private lateinit var binding: ActivityQuestGenericStepBinding
     private var ctaButtonTapped = false
@@ -97,7 +101,7 @@ class GenericStepActivity: BaseActivity() {
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
-
+                updateStepState()
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
                 // Open social media profile
@@ -110,24 +114,18 @@ class GenericStepActivity: BaseActivity() {
 
     private fun handleSkipClick() {
         binding.loading.visible(true)
-        model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return) {
+        model.markStepAsSkipped {
             binding.loading.visible(false)
-
-            if (it == null) {
-                onBackPressedDispatcher.onBackPressed()
-            } else {
-                showSnackbarMessage(
-                    binding.root,
-                    it.message ?: getString(R.string.error_generic_message),
-                    { handleSkipClick() },
-                    R.string.action_retry,
-                    null
-                )
+            handleStepRequestCompletion(it) {
+                handleSkipClick()
             }
         }
     }
 
     private fun updateStepState() {
+        if (!ctaButtonTapped) {
+            return
+        }
         when (model.questStep.type) {
             QuestStepType.CONNECT_WALLET -> {
                 // Check wallet
@@ -136,28 +134,18 @@ class GenericStepActivity: BaseActivity() {
                 // Check location permission
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
-                if (hasPermission(POST_NOTIFICATIONS) &&
-                    ctaButtonTapped) {
+                if (hasPermission(POST_NOTIFICATIONS)) {
                     binding.loading.visible(true)
-                    model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
+                    model.markStepAsCompleted {
                         binding.loading.visible(false)
-
-                        if (it == null) {
-                            onBackPressedDispatcher.onBackPressed()
-                        } else {
-                            showSnackbarMessage(
-                                binding.root,
-                                it.message ?: getString(R.string.error_generic_message),
-                                { updateStepState() },
-                                R.string.action_retry,
-                                null
-                            )
+                        handleStepRequestCompletion(it) {
+                            handleCtaClick()
                         }
                     }
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
-
+                showSensorsDialog()
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
             }
@@ -165,6 +153,41 @@ class GenericStepActivity: BaseActivity() {
                 // No action
             }
         }
+    }
+
+    private fun handleStepRequestCompletion(error: Throwable?, callback: () -> Unit) {
+        if (error == null) {
+            onBackPressedDispatcher.onBackPressed()
+        } else {
+            showSnackbarMessage(
+                binding.root,
+                error.message ?: getString(R.string.error_generic_message),
+                callback,
+                R.string.action_retry,
+                null
+            )
+        }
+
+        ctaButtonTapped = false
+    }
+
+    private fun showSensorsDialog() {
+        ActionDialogFragment
+            .Builder(
+                message = getString(R.string.allow_sensors_dialog_message),
+                negative = getString(R.string.do_not_allow_button_message)
+            )
+            .onPositiveClick(getString(R.string.allow_button_message)) {
+                binding.loading.visible(true)
+                model.markStepAsCompleted {
+                    binding.loading.visible(false)
+                    handleStepRequestCompletion(it) {
+                        handleCtaClick()
+                    }
+                }
+            }
+            .build()
+            .show(this)
     }
 }
 
@@ -206,11 +229,17 @@ private fun Content(
             Column(
                 modifier = Modifier.padding(
                     vertical = dimensionResource(R.dimen.padding_normal_to_large)
-                )
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Title(text = step.title)
+                Title(
+                    text = step.title,
+                    textAlign = TextAlign.Center
+                )
+
                 MediumText(
                     text = step.description,
+                    textAlign = TextAlign.Center,
                     colorRes = R.color.darkGrey,
                     paddingValues = PaddingValues(
                         top = dimensionResource(R.dimen.padding_small_to_normal)
@@ -283,8 +312,8 @@ private fun CtaButtons(
 private  fun PreviewContent() {
     Content(
         QuestStep("stepId",
-            "Step Title",
-            "Step Description",
+            "Enable Environment Sensors",
+            "Step Description Step Description Step Description Step Description",
             0,
             false,
             false,

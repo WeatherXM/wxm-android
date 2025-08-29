@@ -166,8 +166,10 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
             .update("skippedSteps", FieldValue.arrayRemove(stepId))
             .safeAwait()
             .onLeft {
-                Timber.e(it, "[Firestore] Error removing $stepId from skippedSteps for quest $questId, user $userId.")
-                it
+                Timber.e(
+                    it,
+                    "[Firestore] Error removing $stepId from skippedSteps for quest $questId, user $userId."
+                )
             }
             .flatMap { // If the above was successful (Either.Right), proceed to mark as completed
                 questProgressDocument(userId, questId)
@@ -184,8 +186,10 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
             .update("completedSteps", FieldValue.arrayRemove(stepId))
             .safeAwait()
             .onLeft {
-                Timber.e(it, "[Firestore] Error removing $stepId from completedSteps for quest $questId, user $userId.")
-                it
+                Timber.e(
+                    it,
+                    "[Firestore] Error removing $stepId from completedSteps for quest $questId, user $userId."
+                )
             }
             .flatMap {
                 questProgressDocument(userId, questId)
