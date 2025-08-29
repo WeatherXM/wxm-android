@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -49,12 +50,14 @@ fun SmallText(
 @Composable
 fun MediumText(
     text: String,
+    textAlign: TextAlign = TextAlign.Start,
     fontWeight: FontWeight = FontWeight.Normal,
     colorRes: Int = R.color.colorOnSurface,
     paddingValues: PaddingValues = PaddingValues()
 ) {
     Text(
         text = text,
+        textAlign = textAlign,
         fontWeight = fontWeight,
         color = colorResource(colorRes),
         style = MaterialTheme.typography.bodyMedium,
@@ -83,11 +86,13 @@ fun LargeText(
 @Composable
 fun Title(
     text: String,
+    textAlign: TextAlign = TextAlign.Start,
     fontSize: TextUnit = 24.sp,
     colorRes: Int = R.color.colorOnSurface
 ) {
     Text(
         text = text,
+        textAlign = textAlign,
         fontSize = fontSize,
         fontWeight = FontWeight.SemiBold,
         color = colorResource(colorRes),
