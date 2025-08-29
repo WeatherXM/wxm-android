@@ -11,8 +11,12 @@ interface QuestsUseCase {
     fun fetchUser(userId: String): Either<Throwable, QuestUser>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
-    fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String)
-    fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String)
+    suspend fun markQuestStepAsCompleted(userId: String,
+                                         questId: String,
+                                         stepId: String): Either<Throwable, Unit>
+    suspend fun markQuestStepAsSkipped(userId: String,
+                                       questId: String,
+                                       stepId: String): Either<Throwable, Unit>
 }
 
 class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
@@ -32,11 +36,15 @@ class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
         return repository.completeQuest(userId, questId)
     }
     
-    override fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String) {
-        repository.markQuestStepAsCompleted(userId, questId, stepId)
+    override suspend fun markQuestStepAsCompleted(userId: String,
+                                                  questId: String,
+                                                  stepId: String): Either<Throwable, Unit> {
+        return repository.markQuestStepAsCompleted(userId, questId, stepId)
     }
 
-    override fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String) {
-        repository.markQuestStepAsSkipped(userId, questId, stepId)
+    override suspend fun markQuestStepAsSkipped(userId: String,
+                                                questId: String,
+                                                stepId: String): Either<Throwable, Unit> {
+        return repository.markQuestStepAsSkipped(userId, questId, stepId)
     }
 }

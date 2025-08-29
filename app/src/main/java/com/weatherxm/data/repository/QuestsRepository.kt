@@ -11,8 +11,12 @@ interface QuestsRepository {
     fun fetchUser(userId: String): Either<Throwable, QuestUser>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
-    fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String)
-    fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String)
+    suspend fun markQuestStepAsCompleted(userId: String,
+                                         questId: String,
+                                         stepId: String): Either<Throwable, Unit>
+    suspend fun markQuestStepAsSkipped(userId: String,
+                                       questId: String,
+                                       stepId: String): Either<Throwable, Unit>
 }
 
 class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository {
@@ -32,11 +36,15 @@ class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository 
         return datasource.completeQuest(userId, questId)
     }
     
-    override fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String) {
-        datasource.markQuestStepAsCompleted(userId, questId, stepId)
+    override suspend fun markQuestStepAsCompleted(userId: String,
+                                                  questId: String,
+                                                  stepId: String): Either<Throwable, Unit> {
+        return datasource.markQuestStepAsCompleted(userId, questId, stepId)
     }
 
-    override fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String) {
-        datasource.markQuestStepAsSkipped(userId, questId, stepId)
+    override suspend fun markQuestStepAsSkipped(userId: String,
+                                                questId: String,
+                                                stepId: String): Either<Throwable, Unit> {
+        return datasource.markQuestStepAsSkipped(userId, questId, stepId)
     }
 }

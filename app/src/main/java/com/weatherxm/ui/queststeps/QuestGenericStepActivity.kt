@@ -77,7 +77,6 @@ class GenericStepActivity: BaseActivity() {
     override fun onResume() {
         super.onResume()
         updateStepState()
-        binding.loading.visible(true)
     }
 
     private fun handleCtaClick() {
@@ -110,8 +109,22 @@ class GenericStepActivity: BaseActivity() {
     }
 
     private fun handleSkipClick() {
-        model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return)
-        onBackPressedDispatcher.onBackPressed()
+        binding.loading.visible(true)
+        model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return) {
+            binding.loading.visible(false)
+
+            if (it == null) {
+                onBackPressedDispatcher.onBackPressed()
+            } else {
+                showSnackbarMessage(
+                    binding.root,
+                    it.message ?: getString(R.string.error_generic_message),
+                    { handleSkipClick() },
+                    R.string.action_retry,
+                    null
+                )
+            }
+        }
     }
 
     private fun updateStepState() {
@@ -125,8 +138,22 @@ class GenericStepActivity: BaseActivity() {
             QuestStepType.ENABLE_NOTIFICATIONS -> {
                 if (hasPermission(POST_NOTIFICATIONS) &&
                     ctaButtonTapped) {
-                    model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return)
-                    onBackPressedDispatcher.onBackPressed()
+                    binding.loading.visible(true)
+                    model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
+                        binding.loading.visible(false)
+
+                        if (it == null) {
+                            onBackPressedDispatcher.onBackPressed()
+                        } else {
+                            showSnackbarMessage(
+                                binding.root,
+                                it.message ?: getString(R.string.error_generic_message),
+                                { updateStepState() },
+                                R.string.action_retry,
+                                null
+                            )
+                        }
+                    }
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
