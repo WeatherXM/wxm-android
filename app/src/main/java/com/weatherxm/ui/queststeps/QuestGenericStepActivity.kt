@@ -98,7 +98,7 @@ class GenericStepActivity: BaseActivity() {
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
-
+                updateStepState()
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
                 // Open social media profile
@@ -113,17 +113,8 @@ class GenericStepActivity: BaseActivity() {
         binding.loading.visible(true)
         model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return) {
             binding.loading.visible(false)
-
-            if (it == null) {
-                onBackPressedDispatcher.onBackPressed()
-            } else {
-                showSnackbarMessage(
-                    binding.root,
-                    it.message ?: getString(R.string.error_generic_message),
-                    { handleSkipClick() },
-                    R.string.action_retry,
-                    null
-                )
+            handleStepRequestCompletion(it) {
+                handleSkipClick()
             }
         }
     }
@@ -142,29 +133,41 @@ class GenericStepActivity: BaseActivity() {
                     binding.loading.visible(true)
                     model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
                         binding.loading.visible(false)
-
-                        if (it == null) {
-                            onBackPressedDispatcher.onBackPressed()
-                        } else {
-                            showSnackbarMessage(
-                                binding.root,
-                                it.message ?: getString(R.string.error_generic_message),
-                                { updateStepState() },
-                                R.string.action_retry,
-                                null
-                            )
+                        handleStepRequestCompletion(it) {
+                            updateStepState()
                         }
                     }
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
-
+                binding.loading.visible(true)
+                model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
+                    binding.loading.visible(false)
+                    handleStepRequestCompletion(it) {
+                        updateStepState()
+                    }
+                }
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
             }
             QuestStepType.UNKNOWN -> {
                 // No action
             }
+        }
+    }
+
+    private fun handleStepRequestCompletion(error: Throwable?,
+                                            callback: () -> Unit) {
+        if (error == null) {
+            onBackPressedDispatcher.onBackPressed()
+        } else {
+            showSnackbarMessage(
+                binding.root,
+                error.message ?: getString(R.string.error_generic_message),
+                callback,
+                R.string.action_retry,
+                null
+            )
         }
     }
 }
