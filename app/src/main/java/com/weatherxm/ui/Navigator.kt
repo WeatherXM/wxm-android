@@ -49,12 +49,16 @@ import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_PHOTOS
+import com.weatherxm.ui.common.Contracts.ARG_QUEST_TITLE
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
+import com.weatherxm.ui.common.Contracts.ARG_USER_ID
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
+import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UILocation
@@ -83,6 +87,7 @@ import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
 import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.explorer.UICell
+import com.weatherxm.ui.queststeps.GenericStepActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
@@ -93,6 +98,8 @@ import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
 import com.weatherxm.ui.photoverification.upload.PhotoUploadActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
+import com.weatherxm.ui.questcompletion.QuestCompletionActivity
+import com.weatherxm.ui.questonboarding.QuestOnboardingActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewardboosts.RewardBoostActivity
 import com.weatherxm.ui.rewarddetails.RewardDetailsActivity
@@ -197,6 +204,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(ARG_DEVICE, device)
                     .putExtra(ARG_OPEN_EXPLORER_ON_BACK, openExplorerOnBack)
+            )
+        }
+    }
+
+    fun showQuestStep(context: Context?, step: QuestStep) {
+        context?.let {
+            it.startActivity(
+                Intent(it, GenericStepActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_QUEST_STEP, step)
             )
         }
     }
@@ -551,6 +568,22 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             Intent(context, NetworkGrowthActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_NETWORK_STATS, networkStats)
+        )
+    }
+
+    fun showQuestOnboarding(context: Context?, userId: String) {
+        context?.startActivity(
+            Intent(context, QuestOnboardingActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_USER_ID, userId)
+        )
+    }
+
+    fun showQuestCompletion(context: Context?, questTitle: String) {
+        context?.startActivity(
+            Intent(context, QuestCompletionActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_QUEST_TITLE, questTitle)
         )
     }
 
