@@ -24,8 +24,8 @@ interface QuestsDataSource {
     fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
-    fun markOnboardingStepAsCompleted(userId: String, stepId: String)
-    fun markOnboardingStepAsSkipped(userId: String, stepId: String)
+    fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String)
+    fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String)
 }
 
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
@@ -159,14 +159,14 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         }
     }
 
-    override fun markOnboardingStepAsCompleted(userId: String, stepId: String) {
-        questProgressDocument(userId, ONBOARDING_ID)
+    override fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String) {
+        questProgressDocument(userId, questId)
             .update("completedSteps",
                 FieldValue.arrayUnion(stepId))
     }
 
-    override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
-        questProgressDocument(userId, ONBOARDING_ID)
+    override fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String) {
+        questProgressDocument(userId, questId)
             .update("skippedSteps",
                 FieldValue.arrayUnion(stepId))
     }

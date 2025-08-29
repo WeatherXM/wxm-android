@@ -11,8 +11,8 @@ interface QuestsRepository {
     fun fetchUser(userId: String): Either<Throwable, QuestUser>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
-    fun markOnboardingStepAsCompleted(userId: String, stepId: String)
-    fun markOnboardingStepAsSkipped(userId: String, stepId: String)
+    fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String)
+    fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String)
 }
 
 class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository {
@@ -32,11 +32,11 @@ class QuestsRepositoryImpl(val datasource: QuestsDataSource) : QuestsRepository 
         return datasource.completeQuest(userId, questId)
     }
     
-    override fun markOnboardingStepAsCompleted(userId: String, stepId: String) {
-        datasource.markOnboardingStepAsCompleted(userId, stepId)
+    override fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String) {
+        datasource.markQuestStepAsCompleted(userId, questId, stepId)
     }
 
-    override fun markOnboardingStepAsSkipped(userId: String, stepId: String) {
-        datasource.markOnboardingStepAsSkipped(userId, stepId)
+    override fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String) {
+        datasource.markQuestStepAsSkipped(userId, questId, stepId)
     }
 }
