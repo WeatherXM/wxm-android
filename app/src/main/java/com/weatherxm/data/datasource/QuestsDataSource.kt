@@ -163,15 +163,36 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                                                   questId: String,
                                                   stepId: String): Either<Throwable, Unit> {
         return questProgressDocument(userId, questId)
-            .update("completedSteps",
-                FieldValue.arrayUnion(stepId)).safeAwait().map {  }
+            .update("skippedSteps", FieldValue.arrayRemove(stepId))
+            .safeAwait()
+            .onLeft {
+                Timber.e(it, "[Firestore] Error removing $stepId from skippedSteps for quest $questId, user $userId.")
+                it
+            }
+            .flatMap { // If the above was successful (Either.Right), proceed to mark as completed
+                questProgressDocument(userId, questId)
+                    .update("completedSteps", FieldValue.arrayUnion(stepId))
+                    .safeAwait()
+                    .map { }
+            }
     }
 
     override suspend fun markQuestStepAsSkipped(userId: String,
                                                 questId: String,
                                                 stepId: String): Either<Throwable, Unit> {
         return questProgressDocument(userId, questId)
-            .update("skippedSteps",
-                FieldValue.arrayUnion(stepId)).safeAwait().map {  }
+            .update("completedSteps", FieldValue.arrayRemove(stepId))
+            .safeAwait()
+            .onLeft {
+                Timber.e(it, "[Firestore] Error removing $stepId from completedSteps for quest $questId, user $userId.")
+                it
+            }
+            .flatMap {
+                questProgressDocument(userId, questId)
+                    .update(
+                        "skippedSteps",
+                        FieldValue.arrayUnion(stepId)
+                    ).safeAwait().map { }
+            }
     }
 }
