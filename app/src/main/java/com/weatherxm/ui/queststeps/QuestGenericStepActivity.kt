@@ -2,6 +2,7 @@ package com.weatherxm.ui.queststeps
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.os.Bundle
+import androidx.activity.result.launch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
@@ -46,8 +48,10 @@ import com.weatherxm.ui.common.stepIcon
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.hasPermission
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import kotlin.getValue
 
 class GenericStepActivity: BaseActivity() {
@@ -90,7 +94,16 @@ class GenericStepActivity: BaseActivity() {
                 // Navigate to wallet connection screen
             }
             QuestStepType.ENABLE_LOCATION_PERMISSION -> {
-                // Request location permission
+                requestLocationPermissions(this) {
+                    binding.loading.visible(true)
+                    model.markStepAsCompleted {
+                        binding.loading.visible(false)
+
+                        handleStepRequestCompletion(it) {
+                            handleCtaClick()
+                        }
+                    }
+                }
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
                 // Request notification permission
@@ -115,9 +128,11 @@ class GenericStepActivity: BaseActivity() {
     private fun handleSkipClick() {
         binding.loading.visible(true)
         model.markStepAsSkipped {
-            binding.loading.visible(false)
-            handleStepRequestCompletion(it) {
-                handleSkipClick()
+            lifecycleScope.launch {
+                binding.loading.visible(false)
+                handleStepRequestCompletion(it) {
+                    handleSkipClick()
+                }
             }
         }
     }
@@ -131,15 +146,17 @@ class GenericStepActivity: BaseActivity() {
                 // Check wallet
             }
             QuestStepType.ENABLE_LOCATION_PERMISSION -> {
-                // Check location permission
+                ctaButtonTapped = false
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
                 if (hasPermission(POST_NOTIFICATIONS)) {
                     binding.loading.visible(true)
                     model.markStepAsCompleted {
-                        binding.loading.visible(false)
-                        handleStepRequestCompletion(it) {
-                            handleCtaClick()
+                        lifecycleScope.launch {
+                            binding.loading.visible(false)
+                            handleStepRequestCompletion(it) {
+                                handleCtaClick()
+                            }
                         }
                     }
                 }
@@ -180,9 +197,11 @@ class GenericStepActivity: BaseActivity() {
             .onPositiveClick(getString(R.string.allow_button_message)) {
                 binding.loading.visible(true)
                 model.markStepAsCompleted {
-                    binding.loading.visible(false)
-                    handleStepRequestCompletion(it) {
-                        handleCtaClick()
+                    lifecycleScope.launch {
+                        binding.loading.visible(false)
+                        handleStepRequestCompletion(it) {
+                            handleCtaClick()
+                        }
                     }
                 }
             }
