@@ -34,15 +34,16 @@
             android:id="@+id/compose_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:composableName="com.weatherxm.ui.queststeps.QuestGenericStepActivityKt.PreviewContent" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
