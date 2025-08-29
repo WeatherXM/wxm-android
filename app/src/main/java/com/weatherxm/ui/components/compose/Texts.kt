@@ -171,6 +171,12 @@ fun TextQuestWXMAllocated(amount: Int, amountFontSize: TextUnit) {
         color = colorResource(R.color.darkGrey),
         style = MaterialTheme.typography.bodySmall,
         fontSize = 11.sp,
-        modifier = Modifier.padding(top = if (amountFontSize == 14.sp) 1.dp else 4.dp)
+        modifier = Modifier.padding(
+            top = when (amountFontSize) {
+                14.sp -> 1.dp
+                16.sp -> 2.dp
+                else -> 4.dp
+            }
+        )
     )
 }

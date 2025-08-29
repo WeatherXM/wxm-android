@@ -1,0 +1,296 @@
+package com.weatherxm.ui.queststeps
+
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Bundle
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.weatherxm.ui.components.BaseActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import com.weatherxm.ui.components.compose.MediumText
+import com.weatherxm.ui.components.compose.Title
+import com.weatherxm.databinding.ActivityQuestGenericStepBinding
+import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseAuth
+import com.weatherxm.R
+import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
+import com.weatherxm.ui.common.QuestStep
+import com.weatherxm.ui.common.QuestStepType
+import com.weatherxm.ui.common.ctaButtonTitle
+import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.stepIcon
+import com.weatherxm.ui.common.visible
+import com.weatherxm.util.hasPermission
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import kotlin.getValue
+
+class GenericStepActivity: BaseActivity() {
+    private val model: QuestGenericStepViewModel by viewModel() {
+        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP))
+    }
+    private val firebaseAuth: FirebaseAuth by inject()
+
+    private lateinit var binding: ActivityQuestGenericStepBinding
+    private var ctaButtonTapped = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityQuestGenericStepBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.composeView.setContent {
+            Content(
+                model.questStep,
+                onCtaClick = { handleCtaClick() },
+                onSkipClick = { handleSkipClick() }
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateStepState()
+    }
+
+    private fun handleCtaClick() {
+        ctaButtonTapped = true
+        when (model.questStep.type) {
+            QuestStepType.CONNECT_WALLET -> {
+                // Navigate to wallet connection screen
+            }
+            QuestStepType.ENABLE_LOCATION_PERMISSION -> {
+                // Request location permission
+            }
+            QuestStepType.ENABLE_NOTIFICATIONS -> {
+                // Request notification permission
+                if (!hasPermission(POST_NOTIFICATIONS)) {
+                    navigator.openAppSettings(this)
+                } else {
+                    updateStepState()
+                }
+            }
+            QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
+
+            }
+            QuestStepType.SOCIAL_FOLLOW_X -> {
+                // Open social media profile
+            }
+            QuestStepType.UNKNOWN -> {
+                // No action
+            }
+        }
+    }
+
+    private fun handleSkipClick() {
+        binding.loading.visible(true)
+        model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return) {
+            binding.loading.visible(false)
+
+            if (it == null) {
+                onBackPressedDispatcher.onBackPressed()
+            } else {
+                showSnackbarMessage(
+                    binding.root,
+                    it.message ?: getString(R.string.error_generic_message),
+                    { handleSkipClick() },
+                    R.string.action_retry,
+                    null
+                )
+            }
+        }
+    }
+
+    private fun updateStepState() {
+        when (model.questStep.type) {
+            QuestStepType.CONNECT_WALLET -> {
+                // Check wallet
+            }
+            QuestStepType.ENABLE_LOCATION_PERMISSION -> {
+                // Check location permission
+            }
+            QuestStepType.ENABLE_NOTIFICATIONS -> {
+                if (hasPermission(POST_NOTIFICATIONS) &&
+                    ctaButtonTapped) {
+                    binding.loading.visible(true)
+                    model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
+                        binding.loading.visible(false)
+
+                        if (it == null) {
+                            onBackPressedDispatcher.onBackPressed()
+                        } else {
+                            showSnackbarMessage(
+                                binding.root,
+                                it.message ?: getString(R.string.error_generic_message),
+                                { updateStepState() },
+                                R.string.action_retry,
+                                null
+                            )
+                        }
+                    }
+                }
+            }
+            QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
+
+            }
+            QuestStepType.SOCIAL_FOLLOW_X -> {
+            }
+            QuestStepType.UNKNOWN -> {
+                // No action
+            }
+        }
+    }
+}
+
+@Composable
+private fun Content(
+    step: QuestStep,
+    onCtaClick: () -> Unit,
+    onSkipClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .background(color = colorResource(R.color.light_background))
+            .padding(dimensionResource(R.dimen.padding_normal_to_large)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(126.dp)
+                    .background(
+                        color = colorResource(R.color.colorSurface),
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.size(48.dp),
+                    painter = painterResource(step.type.stepIcon()),
+                    contentDescription = null,
+                    tint = colorResource(R.color.colorPrimary)
+                )
+            }
+
+            Column(
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.padding_normal_to_large)
+                )
+            ) {
+                Title(text = step.title)
+                MediumText(
+                    text = step.description,
+                    colorRes = R.color.darkGrey,
+                    paddingValues = PaddingValues(
+                        top = dimensionResource(R.dimen.padding_small_to_normal)
+                    )
+                )
+            }
+
+            if (step.isOptional) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = colorResource(R.color.colorSurface),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    MediumText(
+                        text = stringResource(R.string.optional_step_description),
+                        paddingValues = PaddingValues(
+                            start = dimensionResource(R.dimen.padding_normal_to_large),
+                            end = dimensionResource(R.dimen.padding_normal_to_large),
+                            top = dimensionResource(R.dimen.padding_small_to_normal),
+                            bottom = dimensionResource(R.dimen.padding_small_to_normal)
+                        )
+                    )
+                }
+            }
+        }
+        CtaButtons(step, onCtaClick, onSkipClick)
+    }
+}
+
+@Composable
+private fun CtaButtons(
+    step: QuestStep,
+    onCtaClick: () -> Unit,
+    onSkipClick: () -> Unit
+) {
+    Button(
+        onClick = onCtaClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.colorPrimary),
+            contentColor = colorResource(R.color.colorBackground)
+        ),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
+    ) {
+        MediumText(
+            stringResource(step.type.ctaButtonTitle()),
+            fontWeight = FontWeight.Bold,
+            colorRes = R.color.colorOnPrimary
+        )
+    }
+
+    if (step.isOptional) {
+        TextButton(
+            onClick = onSkipClick
+        ) {
+            MediumText(
+                stringResource(R.string.skip_and_mark_as_done_button_title),
+                fontWeight = FontWeight.Bold,
+                colorRes = R.color.colorPrimary
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private  fun PreviewContent() {
+    Content(
+        QuestStep("stepId",
+            "Step Title",
+            "Step Description",
+            0,
+            false,
+            false,
+            false,
+            QuestStepType.CONNECT_WALLET),
+        onCtaClick = {},
+        onSkipClick = {}
+    )
+}
