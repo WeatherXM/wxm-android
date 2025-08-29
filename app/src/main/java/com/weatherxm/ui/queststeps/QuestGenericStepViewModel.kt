@@ -13,11 +13,12 @@ import timber.log.Timber
 
 class QuestGenericStepViewModel(
     val questStep: QuestStep,
+    val userId: String,
     private val useCase: QuestsUseCase,
     private val dispatcher: CoroutineDispatcher
 ): ViewModel() {
 
-    fun markStepAsCompleted(userId: String, completion: (Throwable?) -> Unit) {
+    fun markStepAsCompleted(completion: (Throwable?) -> Unit) {
         viewModelScope.launch(dispatcher) {
             useCase.markQuestStepAsCompleted(
                 userId,
@@ -33,7 +34,7 @@ class QuestGenericStepViewModel(
         }
     }
 
-    fun markStepAsSkipped(userId: String, completion: (Throwable?) -> Unit) {
+    fun markStepAsSkipped(completion: (Throwable?) -> Unit) {
         viewModelScope.launch(dispatcher) {
             useCase.markQuestStepAsSkipped(userId, ONBOARDING_ID, questStep.id)
                 .onRight {
