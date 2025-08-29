@@ -21,6 +21,7 @@ import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -765,14 +766,17 @@ data class QuestOnboardingData(
                 isOptional = it.isOptional ?: false,
                 isCompleted = userProgress?.completedSteps?.contains(it.stepId) == true,
                 isSkipped = userProgress?.skippedSteps?.contains(it.stepId) == true,
-                type = it.type ?: ""
+                type = QuestStepType.parse(it.type)
             )
         }
     )
+
+    fun areAllStepsDone() = stepsDone == steps.size && stepsDone > 0
 }
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class QuestStep(
     val id: String,
     val title: String,
@@ -781,8 +785,31 @@ data class QuestStep(
     val isOptional: Boolean,
     val isCompleted: Boolean,
     val isSkipped: Boolean,
-    val type: String
-)
+    val type: QuestStepType
+) : Parcelable
+
+@Parcelize
+enum class QuestStepType: Parcelable {
+    ENABLE_LOCATION_PERMISSION,
+    ENABLE_NOTIFICATIONS,
+    ENABLE_ENVIRONMENT_SENSORS,
+    CONNECT_WALLET,
+    SOCIAL_FOLLOW_X,
+    UNKNOWN;
+
+    companion object {
+        fun parse(typeString: String?): QuestStepType {
+            return try {
+                QuestStepType.entries.firstOrNull {
+                    it.name.equals(typeString, true)
+                } ?: UNKNOWN
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e)
+                UNKNOWN
+            }
+        }
+    }
+}
 
 enum class RewardTimelineType {
     DATA,
