@@ -34,6 +34,7 @@ import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import androidx.compose.ui.unit.dp
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.Contracts.ARG_USER_ID
 import com.weatherxm.ui.common.QuestStep
@@ -43,6 +44,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.stepIcon
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.hasPermission
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -137,19 +139,13 @@ class GenericStepActivity: BaseActivity() {
                     model.markStepAsCompleted {
                         binding.loading.visible(false)
                         handleStepRequestCompletion(it) {
-                            updateStepState()
+                            handleCtaClick()
                         }
                     }
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
-                binding.loading.visible(true)
-                model.markStepAsCompleted {
-                    binding.loading.visible(false)
-                    handleStepRequestCompletion(it) {
-                        updateStepState()
-                    }
-                }
+                showSensorsDialog()
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
             }
@@ -159,8 +155,7 @@ class GenericStepActivity: BaseActivity() {
         }
     }
 
-    private fun handleStepRequestCompletion(error: Throwable?,
-                                            callback: () -> Unit) {
+    private fun handleStepRequestCompletion(error: Throwable?, callback: () -> Unit) {
         if (error == null) {
             onBackPressedDispatcher.onBackPressed()
         } else {
@@ -174,6 +169,25 @@ class GenericStepActivity: BaseActivity() {
         }
 
         ctaButtonTapped = false
+    }
+
+    private fun showSensorsDialog() {
+        ActionDialogFragment
+            .Builder(
+                message = getString(R.string.allow_sensors_dialog_message),
+                negative = getString(R.string.do_not_allow_button_message)
+            )
+            .onPositiveClick(getString(R.string.allow_button_message)) {
+                binding.loading.visible(true)
+                model.markStepAsCompleted {
+                    binding.loading.visible(false)
+                    handleStepRequestCompletion(it) {
+                        handleCtaClick()
+                    }
+                }
+            }
+            .build()
+            .show(this)
     }
 }
 
