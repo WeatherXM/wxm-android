@@ -172,6 +172,8 @@ class GenericStepActivity: BaseActivity() {
                 null
             )
         }
+
+        ctaButtonTapped = false
     }
 }
 
