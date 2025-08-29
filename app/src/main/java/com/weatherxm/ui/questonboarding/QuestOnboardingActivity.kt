@@ -79,7 +79,9 @@ class QuestOnboardingActivity : BaseActivity() {
                         data.steps.forEach {
                             QuestStepDetailed(it) {
                                 if (!data.isCompleted && !it.isCompleted) {
-                                    navigator.showQuestStep(this@QuestOnboardingActivity, it)
+                                    navigator.showQuestStep(this@QuestOnboardingActivity,
+                                        it,
+                                        model.userId)
                                 }
                             }
                         }
