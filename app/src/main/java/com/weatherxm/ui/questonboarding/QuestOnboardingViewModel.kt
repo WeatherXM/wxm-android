@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class QuestOnboardingViewModel(
-    private val userId: String,
+    val userId: String,
     private val usecase: QuestsUseCase,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
