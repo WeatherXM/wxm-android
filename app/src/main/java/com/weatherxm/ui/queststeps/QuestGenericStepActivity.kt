@@ -267,10 +267,7 @@ private fun CtaButtons(
 
     if (step.isOptional) {
         TextButton(
-            onClick = onSkipClick,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent
-            )
+            onClick = onSkipClick
         ) {
             MediumText(
                 stringResource(R.string.skip_and_mark_as_done_button_title),
