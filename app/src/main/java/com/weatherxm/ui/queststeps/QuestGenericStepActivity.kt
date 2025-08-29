@@ -141,87 +141,72 @@ private fun Content(
     onCtaClick: () -> Unit,
     onSkipClick: () -> Unit
 ) {
-    Box(
+    Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = dimensionResource(R.dimen.margin_large))
-            .padding(bottom = dimensionResource(R.dimen.margin_large))
+            .background(color = colorResource(R.color.light_background))
+            .padding(dimensionResource(R.dimen.padding_normal_to_large)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            Box(
+                modifier = Modifier
+                    .size(126.dp)
+                    .background(
+                        color = colorResource(R.color.colorSurface),
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(
-                        dimensionResource(
-                            R.dimen.margin_normal
+                Icon(
+                    modifier = Modifier.size(48.dp),
+                    painter = painterResource(step.type.stepIcon()),
+                    contentDescription = null,
+                    tint = colorResource(R.color.colorPrimary)
+                )
+            }
+
+            Column(
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.padding_normal_to_large)
+                )
+            ) {
+                Title(text = step.title)
+                MediumText(
+                    text = step.description,
+                    colorRes = R.color.darkGrey,
+                    paddingValues = PaddingValues(
+                        top = dimensionResource(R.dimen.padding_small_to_normal)
+                    )
+                )
+            }
+
+            if (step.isOptional) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = colorResource(R.color.colorSurface),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    MediumText(
+                        text = stringResource(R.string.optional_step_description),
+                        paddingValues = PaddingValues(
+                            start = dimensionResource(R.dimen.padding_normal_to_large),
+                            end = dimensionResource(R.dimen.padding_normal_to_large),
+                            top = dimensionResource(R.dimen.padding_small_to_normal),
+                            bottom = dimensionResource(R.dimen.padding_small_to_normal)
                         )
                     )
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(126.dp)
-                            .background(
-                                color = colorResource(R.color.colorSurface),
-                                shape = CircleShape
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(48.dp),
-                            painter = painterResource(step.type.stepIcon()),
-                            contentDescription = null,
-                            tint = colorResource(R.color.colorPrimary)
-                        )
-                    }
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(
-                            dimensionResource(
-                                R.dimen.margin_extra_small
-                            )
-                        ),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Title(
-                            step.title,
-                            colorRes = R.color.textColor
-                        )
-                        MediumText(step.description)
-                    }
-
-                    if (step.isOptional) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = colorResource(R.color.colorSurface),
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            MediumText(
-                                stringResource(R.string.optional_step_description),
-                                paddingValues = PaddingValues(
-                                    start = dimensionResource(R.dimen.padding_normal_to_large),
-                                    end = dimensionResource(R.dimen.padding_normal_to_large),
-                                    top = dimensionResource(R.dimen.padding_small),
-                                    bottom = dimensionResource(
-                                        R.dimen.padding_small
-                                    )
-                                )
-                            )
-                        }
-                    }
                 }
             }
-            CtaButtons(step, onCtaClick, onSkipClick)
         }
+        CtaButtons(step, onCtaClick, onSkipClick)
     }
 }
 
