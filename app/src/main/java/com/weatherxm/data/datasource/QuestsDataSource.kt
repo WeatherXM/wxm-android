@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.weatherxm.data.models.QuestFirestore
@@ -23,6 +24,8 @@ interface QuestsDataSource {
     fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
+    suspend fun markQuestStepAsCompleted(userId: String, questId: String, stepId: String): Either<Throwable, Unit>
+    suspend fun markQuestStepAsSkipped(userId: String, questId: String, stepId: String): Either<Throwable, Unit>
 }
 
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
@@ -154,5 +157,42 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                 Either.Right(it)
             } ?: Either.Left(Throwable("No step found: $stepId"))
         }
+    }
+
+    override suspend fun markQuestStepAsCompleted(userId: String,
+                                                  questId: String,
+                                                  stepId: String): Either<Throwable, Unit> {
+        return questProgressDocument(userId, questId)
+            .update("skippedSteps", FieldValue.arrayRemove(stepId))
+            .safeAwait()
+            .onLeft {
+                Timber.e(it, "[Firestore] Error removing $stepId from skippedSteps for quest $questId, user $userId.")
+                it
+            }
+            .flatMap { // If the above was successful (Either.Right), proceed to mark as completed
+                questProgressDocument(userId, questId)
+                    .update("completedSteps", FieldValue.arrayUnion(stepId))
+                    .safeAwait()
+                    .map { }
+            }
+    }
+
+    override suspend fun markQuestStepAsSkipped(userId: String,
+                                                questId: String,
+                                                stepId: String): Either<Throwable, Unit> {
+        return questProgressDocument(userId, questId)
+            .update("completedSteps", FieldValue.arrayRemove(stepId))
+            .safeAwait()
+            .onLeft {
+                Timber.e(it, "[Firestore] Error removing $stepId from completedSteps for quest $questId, user $userId.")
+                it
+            }
+            .flatMap {
+                questProgressDocument(userId, questId)
+                    .update(
+                        "skippedSteps",
+                        FieldValue.arrayUnion(stepId)
+                    ).safeAwait().map { }
+            }
     }
 }

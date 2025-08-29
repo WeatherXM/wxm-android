@@ -858,4 +858,11 @@
     <string name="quest_completed_message">Congrats! You’ve completed the %s.\nYour $WXM rewards coming in the next airdrop.</string>
     <string name="share_it_world">Share it with the world!</string>
     <string name="quest_completed_share">Just unlocked rewards by completing my quest on WeatherXM! Get the app and start your first quest now.</string>
+
+    <!-- Quest Steps -->
+    <string name="enable_button_title">Enable</string>
+    <string name="connect_wallet_button_title">Connect Wallet</string>
+    <string name="skip_and_mark_as_done_button_title">Skip and mark as done</string>
+    <string name="optional_step_description">This is optional. You can skip it and still complete the quest but you’ll lose this task’s rewards.</string>
+    <string name="follow_us_on_x">Follow us on X</string>
 </resources>

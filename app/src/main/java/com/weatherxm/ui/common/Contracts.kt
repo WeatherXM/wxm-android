@@ -41,4 +41,5 @@ object Contracts {
     const val ARG_LOCATION = "location"
     const val ARG_USER_ID = "user_id"
     const val ARG_QUEST_TITLE = "quest_title"
+    const val ARG_QUEST_STEP = "quest_step"
 }

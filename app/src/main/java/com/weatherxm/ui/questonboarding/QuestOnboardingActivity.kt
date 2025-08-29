@@ -79,7 +79,7 @@ class QuestOnboardingActivity : BaseActivity() {
                         data.steps.forEach {
                             QuestStepDetailed(it) {
                                 if (!data.isCompleted && !it.isCompleted) {
-                                    // TODO: Handle this click for each step
+                                    navigator.showQuestStep(this@QuestOnboardingActivity, it)
                                 }
                             }
                         }

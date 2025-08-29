@@ -55,8 +55,10 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_ID
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
+import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UILocation
@@ -85,6 +87,7 @@ import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
 import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.explorer.UICell
+import com.weatherxm.ui.queststeps.GenericStepActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
@@ -201,6 +204,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(ARG_DEVICE, device)
                     .putExtra(ARG_OPEN_EXPLORER_ON_BACK, openExplorerOnBack)
+            )
+        }
+    }
+
+    fun showQuestStep(context: Context?, step: QuestStep) {
+        context?.let {
+            it.startActivity(
+                Intent(it, GenericStepActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_QUEST_STEP, step)
             )
         }
     }
