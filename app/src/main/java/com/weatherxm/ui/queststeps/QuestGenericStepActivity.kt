@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -219,51 +220,48 @@ private fun Content(
                     }
                 }
             }
-            CtaButton(step, onCtaClick, onSkipClick)
+            CtaButtons(step, onCtaClick, onSkipClick)
         }
     }
 }
 
 @Composable
-private fun CtaButton(
+private fun CtaButtons(
     step: QuestStep,
     onCtaClick: () -> Unit,
     onSkipClick: () -> Unit
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(
-            onClick = onCtaClick,
-            modifier = Modifier.fillMaxWidth(),
+    Button(
+        onClick = onCtaClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.colorPrimary),
+            contentColor = colorResource(R.color.colorBackground)
+        ),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
+    ) {
+        MediumText(
+            stringResource(step.type.ctaButtonTitle()),
+            fontWeight = FontWeight.Bold,
+            colorRes = R.color.colorOnPrimary
+        )
+    }
+
+    if (step.isOptional) {
+        TextButton(
+            onClick = onSkipClick,
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.colorPrimary),
-                contentColor = colorResource(R.color.colorBackground)
-            ),
-            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
+                containerColor = Color.Transparent
+            )
         ) {
             MediumText(
-                stringResource(step.type.ctaButtonTitle()),
+                stringResource(R.string.skip_and_mark_as_done_button_title),
                 fontWeight = FontWeight.Bold,
-                colorRes = R.color.colorBackground
+                colorRes = R.color.colorPrimary
             )
-        }
-
-        if (step.isOptional) {
-            Button(
-                onClick = onSkipClick,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                )
-            ) {
-                MediumText(
-                    stringResource(R.string.skip_and_mark_as_done_button_title),
-                    fontWeight = FontWeight.Bold,
-                    colorRes = R.color.colorPrimary
-                )
-            }
         }
     }
 }
-
 
 @Preview
 @Composable
