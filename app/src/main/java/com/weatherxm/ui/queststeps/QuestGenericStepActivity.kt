@@ -33,26 +33,27 @@ import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.FirebaseAuth
 import com.weatherxm.R
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
+import com.weatherxm.ui.common.Contracts.ARG_USER_ID
 import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.QuestStepType
 import com.weatherxm.ui.common.ctaButtonTitle
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.stepIcon
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.hasPermission
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
 
 class GenericStepActivity: BaseActivity() {
     private val model: QuestGenericStepViewModel by viewModel() {
-        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP))
+        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP),
+            intent.getStringExtra(ARG_USER_ID) ?: String.empty()
+        )
     }
-    private val firebaseAuth: FirebaseAuth by inject()
 
     private lateinit var binding: ActivityQuestGenericStepBinding
     private var ctaButtonTapped = false
@@ -111,7 +112,7 @@ class GenericStepActivity: BaseActivity() {
 
     private fun handleSkipClick() {
         binding.loading.visible(true)
-        model.markStepAsSkipped(firebaseAuth.currentUser?.uid ?: return) {
+        model.markStepAsSkipped {
             binding.loading.visible(false)
             handleStepRequestCompletion(it) {
                 handleSkipClick()
@@ -141,7 +142,7 @@ class GenericStepActivity: BaseActivity() {
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
                 binding.loading.visible(true)
-                model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
+                model.markStepAsCompleted {
                     binding.loading.visible(false)
                     handleStepRequestCompletion(it) {
                         updateStepState()
