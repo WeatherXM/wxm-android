@@ -121,6 +121,9 @@ class GenericStepActivity: BaseActivity() {
     }
 
     private fun updateStepState() {
+        if (!ctaButtonTapped) {
+            return
+        }
         when (model.questStep.type) {
             QuestStepType.CONNECT_WALLET -> {
                 // Check wallet
@@ -129,10 +132,9 @@ class GenericStepActivity: BaseActivity() {
                 // Check location permission
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
-                if (hasPermission(POST_NOTIFICATIONS) &&
-                    ctaButtonTapped) {
+                if (hasPermission(POST_NOTIFICATIONS)) {
                     binding.loading.visible(true)
-                    model.markStepAsCompleted(firebaseAuth.currentUser?.uid ?: return) {
+                    model.markStepAsCompleted {
                         binding.loading.visible(false)
                         handleStepRequestCompletion(it) {
                             updateStepState()
