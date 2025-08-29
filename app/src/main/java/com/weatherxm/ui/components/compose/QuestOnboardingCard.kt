@@ -34,6 +34,7 @@ import androidx.compose.ui.zIndex
 import com.weatherxm.R
 import com.weatherxm.ui.common.QuestOnboardingData
 import com.weatherxm.ui.common.QuestStep
+import com.weatherxm.ui.common.QuestStepType
 
 @Suppress("FunctionNaming", "LongMethod", "MagicNumber")
 @Composable
@@ -143,7 +144,7 @@ fun QuestOnboardingCard(data: QuestOnboardingData, onClick: () -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             MediumText(
-                                text = if (data.stepsDone == data.steps.size) {
+                                text = if (data.areAllStepsDone()) {
                                     stringResource(R.string.all_set)
                                 } else {
                                     stringResource(R.string.complete_tasks)
@@ -220,7 +221,7 @@ fun QuestOnboardingCardPreview() {
                     isOptional = false,
                     isCompleted = true,
                     isSkipped = false,
-                    type = "enable_location_permission"
+                    type = QuestStepType.ENABLE_LOCATION_PERMISSION
                 ),
                 QuestStep(
                     id = "step2",
@@ -230,7 +231,7 @@ fun QuestOnboardingCardPreview() {
                     isOptional = true,
                     isCompleted = false,
                     isSkipped = true,
-                    type = "enable_notifications"
+                    type = QuestStepType.ENABLE_NOTIFICATIONS
                 ),
                 QuestStep(
                     id = "step3",
@@ -240,7 +241,7 @@ fun QuestOnboardingCardPreview() {
                     isOptional = false,
                     isCompleted = true,
                     isSkipped = false,
-                    type = "enable_environment_sensors"
+                    type = QuestStepType.ENABLE_ENVIRONMENT_SENSORS
                 ),
                 QuestStep(
                     id = "step4",
@@ -250,7 +251,7 @@ fun QuestOnboardingCardPreview() {
                     isOptional = false,
                     isCompleted = false,
                     isSkipped = false,
-                    type = "connect_wallet"
+                    type = QuestStepType.CONNECT_WALLET
                 ),
                 QuestStep(
                     id = "step5",
@@ -260,7 +261,7 @@ fun QuestOnboardingCardPreview() {
                     isOptional = true,
                     isCompleted = false,
                     isSkipped = false,
-                    type = "social_follow_x"
+                    type = QuestStepType.SOCIAL_FOLLOW_X
                 )
             )
         )

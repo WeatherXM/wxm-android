@@ -209,6 +209,7 @@ import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.home.quests.QuestsViewModel
+import com.weatherxm.ui.queststeps.QuestGenericStepViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
@@ -216,6 +217,7 @@ import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
 import com.weatherxm.ui.photoverification.upload.PhotoUploadViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
+import com.weatherxm.ui.questonboarding.QuestOnboardingViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
 import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
 import com.weatherxm.ui.rewarddetails.RewardDetailsViewModel
@@ -801,6 +803,7 @@ private val viewmodels = module {
     viewModelOf(::PreferenceViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::QuestsViewModel)
+    viewModelOf(::QuestOnboardingViewModel)
     viewModelOf(::RebootViewModel)
     viewModelOf(::ResetPasswordViewModel)
     viewModelOf(::RewardBoostViewModel)
@@ -812,6 +815,7 @@ private val viewmodels = module {
     viewModelOf(::SignupViewModel)
     viewModelOf(::StartupViewModel)
     viewModelOf(::UpdatePromptViewModel)
+    viewModelOf(::QuestGenericStepViewModel)
 }
 
 val modules = listOf(

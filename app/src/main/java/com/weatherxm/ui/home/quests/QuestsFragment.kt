@@ -65,10 +65,12 @@ class QuestsFragment : BaseFragment() {
             binding.loading.visible(false)
             binding.swiperefresh.isRefreshing = false
             toggleOnboardingVisibility(model.onQuestToggleOption.value)
-            model.onboardingQuestData?.let {
+            model.onboardingQuestData?.let { onboardingData ->
                 binding.onboardingQuest.setContent {
-                    QuestOnboardingCard(it) {
-                        // TODO: Handle this click
+                    QuestOnboardingCard(onboardingData) {
+                        model.user?.uid?.let {
+                            navigator.showQuestOnboarding(context, it)
+                        }
                     }
                 }
             }
@@ -150,7 +152,7 @@ class QuestsFragment : BaseFragment() {
     private fun toggleOnboardingVisibility(currentQuestPage: Int) {
         binding.onboardingQuest.visible(
             (currentQuestPage == 0 && model.onboardingQuestData?.isCompleted == false) ||
-                    (currentQuestPage == 1 && model.onboardingQuestData?.isCompleted == true)
+                (currentQuestPage == 1 && model.onboardingQuestData?.isCompleted == true)
         )
     }
 }
