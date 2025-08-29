@@ -87,7 +87,7 @@ import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
 import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.explorer.UICell
-import com.weatherxm.ui.queststeps.GenericStepActivity
+import com.weatherxm.ui.queststeps.QuestGenericStepActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
@@ -211,7 +211,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showQuestStep(context: Context?, step: QuestStep, userId: String) {
         context?.let {
             it.startActivity(
-                Intent(it, GenericStepActivity::class.java)
+                Intent(it, QuestGenericStepActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_QUEST_STEP, step)
                     .putExtra(ARG_USER_ID, userId)
