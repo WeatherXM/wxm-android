@@ -174,7 +174,7 @@
                     android:layout_margin="@dimen/margin_normal"
                     android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/questsTitle"
-                    tools:composableName="com.weatherxm.ui.components.compose.QuestOnboardingCardKt"
+                    tools:composableName="com.weatherxm.ui.components.compose.QuestOnboardingCardKt.QuestOnboardingCardPreview"
                     tools:visibility="visible" />
 
                 <androidx.compose.ui.platform.ComposeView
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
                     app:layout_constraintTop_toBottomOf="@id/onboardingQuest"
-                    tools:composableName="com.weatherxm.ui.components.compose.QuestDailyCardKt" />
+                    tools:composableName="com.weatherxm.ui.components.compose.QuestDailyCardKt.QuestDailyCard" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -197,6 +197,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="@dimen/margin_extra_extra_large"
-        tools:composableName="com.weatherxm.ui.components.compose.QuestsPageSelectorKt" />
+        tools:composableName="com.weatherxm.ui.components.compose.QuestsPageSelectorKt.QuestsPageTogglePreview" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
