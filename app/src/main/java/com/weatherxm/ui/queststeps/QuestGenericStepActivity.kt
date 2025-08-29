@@ -28,6 +28,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.databinding.ActivityQuestGenericStepBinding
@@ -206,11 +207,17 @@ private fun Content(
             Column(
                 modifier = Modifier.padding(
                     vertical = dimensionResource(R.dimen.padding_normal_to_large)
-                )
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Title(text = step.title)
+                Title(
+                    text = step.title,
+                    textAlign = TextAlign.Center
+                )
+
                 MediumText(
                     text = step.description,
+                    textAlign = TextAlign.Center,
                     colorRes = R.color.darkGrey,
                     paddingValues = PaddingValues(
                         top = dimensionResource(R.dimen.padding_small_to_normal)
@@ -283,8 +290,8 @@ private fun CtaButtons(
 private  fun PreviewContent() {
     Content(
         QuestStep("stepId",
-            "Step Title",
-            "Step Description",
+            "Enable Environment Sensors",
+            "Step Description Step Description Step Description Step Description",
             0,
             false,
             false,
