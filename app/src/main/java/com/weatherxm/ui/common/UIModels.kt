@@ -14,11 +14,14 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.QuestUserProgress
+import com.weatherxm.data.models.QuestWithStepsFirestore
 import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -721,6 +724,80 @@ data class ActionForMessageView(
     val endIcon: Int? = null,
     val onClickListener: () -> Unit
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class QuestOnboardingData(
+    val title: String,
+    val description: String,
+    val isCompleted: Boolean,
+    val stepsDone: Int,
+    val totalWXM: Int,
+    val steps: List<QuestStep>
+) {
+    constructor(
+        questDataFirestore: QuestWithStepsFirestore,
+        userProgress: QuestUserProgress?
+    ) : this(
+        title = questDataFirestore.questData.title ?: String.empty(),
+        description = questDataFirestore.questData.description ?: String.empty(),
+        isCompleted = userProgress?.isCompleted ?: false,
+        stepsDone = (userProgress?.completedSteps?.size ?: 0) +
+            (userProgress?.skippedSteps?.size ?: 0),
+        totalWXM = questDataFirestore.steps.sumOf { step -> step.tokens ?: 0 },
+        steps = questDataFirestore.steps.map {
+            QuestStep(
+                id = it.stepId ?: "",
+                title = it.title ?: String.empty(),
+                description = it.description ?: String.empty(),
+                tokens = it.tokens ?: 0,
+                isOptional = it.isOptional ?: false,
+                isCompleted = userProgress?.completedSteps?.contains(it.stepId) == true,
+                isSkipped = userProgress?.skippedSteps?.contains(it.stepId) == true,
+                type = QuestStepType.parse(it.type)
+            )
+        }
+    )
+
+    fun areAllStepsDone() = stepsDone == steps.size && stepsDone > 0
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class QuestStep(
+    val id: String,
+    val title: String,
+    val description: String,
+    val tokens: Int,
+    val isOptional: Boolean,
+    val isCompleted: Boolean,
+    val isSkipped: Boolean,
+    val type: QuestStepType
+) : Parcelable
+
+@Parcelize
+enum class QuestStepType: Parcelable {
+    ENABLE_LOCATION_PERMISSION,
+    ENABLE_NOTIFICATIONS,
+    ENABLE_ENVIRONMENT_SENSORS,
+    CONNECT_WALLET,
+    SOCIAL_FOLLOW_X,
+    UNKNOWN;
+
+    companion object {
+        fun parse(typeString: String?): QuestStepType {
+            return try {
+                QuestStepType.entries.firstOrNull {
+                    it.name.equals(typeString, true)
+                } ?: UNKNOWN
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e)
+                UNKNOWN
+            }
+        }
+    }
+}
 
 enum class RewardTimelineType {
     DATA,

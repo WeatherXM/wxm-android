@@ -61,7 +61,7 @@ timber = "5.0.1"
 upload-service = "4.9.4"
 
 # Plugins
-android-gradle-plugin = "8.12.1"
+android-gradle-plugin = "8.12.2"
 detekt-plugin = "1.23.8"
 firebase-appdistribution-plugin = "5.1.1"
 firebase-crashlytics-plugin = "3.0.6"
@@ -121,6 +121,8 @@ firebase-config = { module = "com.google.firebase:firebase-config" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 gauge = { module = "com.github.codersalman:Gauge-Library-Android", version.ref = "gauge" }
 input-mask-android = { module = "com.redmadrobot:input-mask-android", version.ref = "input-mask-android" }
 insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "insetter" }

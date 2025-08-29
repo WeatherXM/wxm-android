@@ -14,6 +14,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -42,12 +43,14 @@ fun SmallText(
 @Composable
 fun MediumText(
     text: String,
+    textAlign: TextAlign = TextAlign.Start,
     fontWeight: FontWeight = FontWeight.Normal,
     colorRes: Int = R.color.colorOnSurface,
     paddingValues: PaddingValues = PaddingValues()
 ) {
     Text(
         text = text,
+        textAlign = textAlign,
         fontWeight = fontWeight,
         color = colorResource(colorRes),
         style = MaterialTheme.typography.bodyMedium,
@@ -76,11 +79,13 @@ fun LargeText(
 @Composable
 fun Title(
     text: String,
+    textAlign: TextAlign = TextAlign.Start,
     fontSize: TextUnit = 24.sp,
     colorRes: Int = R.color.colorOnSurface
 ) {
     Text(
         text = text,
+        textAlign = textAlign,
         fontSize = fontSize,
         fontWeight = FontWeight.SemiBold,
         color = colorResource(colorRes),
@@ -109,4 +114,23 @@ fun TextWithStartingIcon(
             colorRes = textColorRes
         )
     }
+}
+
+@Suppress("FunctionNaming")
+@Composable
+fun TextQuestWXMAllocated(amount: Int, amountFontSize: TextUnit) {
+    LargeText(amount.toString(), FontWeight.Bold, amountFontSize)
+    Text(
+        text = "\$WXM",
+        color = colorResource(R.color.darkGrey),
+        style = MaterialTheme.typography.bodySmall,
+        fontSize = 11.sp,
+        modifier = Modifier.padding(
+            top = when (amountFontSize) {
+                14.sp -> 1.dp
+                16.sp -> 2.dp
+                else -> 4.dp
+            }
+        )
+    )
 }
