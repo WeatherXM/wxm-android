@@ -221,6 +221,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
+            android:name="com.weatherxm.ui.queststeps.GenericStepActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
             android:name="com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM"
@@ -352,6 +356,10 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.questonboarding.QuestOnboardingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.questcompletion.QuestCompletionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity

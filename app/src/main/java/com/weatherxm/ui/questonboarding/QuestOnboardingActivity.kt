@@ -10,6 +10,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityQuestOnboardingBinding
 import com.weatherxm.ui.common.Contracts.ARG_USER_ID
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.compose.HeaderView
@@ -33,7 +34,9 @@ class QuestOnboardingActivity : BaseActivity() {
         }
 
         binding.actionBtn.setOnClickListener {
-            // TODO: Complete the quest and open the respective screen 
+            binding.loading.visible(true)
+            binding.actionBtn.isEnabled = false
+            model.completeQuest()
         }
 
         binding.header.setContent {
@@ -46,6 +49,7 @@ class QuestOnboardingActivity : BaseActivity() {
 
         model.onError().observe(this) {
             if (it != null) {
+                binding.actionBtn.isEnabled = true
                 binding.loading.visible(false)
                 showSnackbarMessage(
                     binding.root,
@@ -75,18 +79,24 @@ class QuestOnboardingActivity : BaseActivity() {
                         data.steps.forEach {
                             QuestStepDetailed(it) {
                                 if (!data.isCompleted && !it.isCompleted) {
-                                    // TODO: Handle this click for each step
+                                    navigator.showQuestStep(this@QuestOnboardingActivity, it)
                                 }
                             }
                         }
                     }
                 }
-                binding.actionBtn.visible(data.stepsDone == data.steps.size)
+                binding.actionBtn.visible(data.areAllStepsDone())
                 if (data.isCompleted) {
                     binding.actionBtn.isEnabled = false
                     binding.actionBtn.text = getString(R.string.quest_completed)
                 }
             }
+        }
+
+        model.onQuestCompleted().observe(this) {
+            binding.loading.visible(false)
+            binding.actionBtn.text = getString(R.string.quest_completed)
+            navigator.showQuestCompletion(this, model.onboardingQuestData?.title ?: String.empty())
         }
     }
 
