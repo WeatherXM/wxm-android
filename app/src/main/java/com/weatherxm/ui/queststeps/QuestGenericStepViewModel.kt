@@ -78,7 +78,7 @@ class QuestGenericStepViewModel(
                     result.authResult.signInResult?.publicKey?.let {
                         val addressConnected = Base58.encodeToString(it)
                         Timber.d("Address connected: $addressConnected")
-                        setWalletAddress(QuestsDataSourceImpl.SOLANA_CHAIN_ID, addressConnected)
+                        setWallet(QuestsDataSourceImpl.SOLANA_CHAIN_ID, addressConnected)
                     } ?: _onWalletAddressError.postValue(
                         resources.getString(R.string.error_address_not_found)
                     )
@@ -97,7 +97,7 @@ class QuestGenericStepViewModel(
         }
     }
 
-    suspend fun setWalletAddress(chainId: String, walletAddress: String) {
+    private suspend fun setWallet(chainId: String, walletAddress: String) {
         useCase.setWallet(userId, chainId, walletAddress).onRight {
             markStepAsCompleted()
         }.onLeft {
