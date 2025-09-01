@@ -1,17 +1,14 @@
 package com.weatherxm.ui.queststeps
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.weatherxm.ui.components.BaseActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,20 +18,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.weatherxm.ui.components.compose.MediumText
-import com.weatherxm.ui.components.compose.Title
-import com.weatherxm.databinding.ActivityQuestGenericStepBinding
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weatherxm.R
-import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
 import com.weatherxm.ui.common.Contracts.ARG_USER_ID
 import com.weatherxm.ui.common.QuestStep
@@ -45,14 +41,17 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.stepIcon
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
+import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.MediumText
+import com.weatherxm.ui.components.compose.Title
 import com.weatherxm.util.hasPermission
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.getValue
 
-class GenericStepActivity: BaseActivity() {
+class QuestGenericStepActivity : BaseActivity() {
     private val model: QuestGenericStepViewModel by viewModel() {
-        parametersOf(intent.parcelable<QuestStep>(ARG_QUEST_STEP),
+        parametersOf(
+            intent.parcelable<QuestStep>(ARG_QUEST_STEP),
             intent.getStringExtra(ARG_USER_ID) ?: String.empty()
         )
     }
@@ -67,6 +66,20 @@ class GenericStepActivity: BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        model.onStepCompleted().observe(this) {
+            binding.loading.visible(false)
+            handleStepRequestCompletion(it) {
+                handleCtaClick()
+            }
+        }
+
+        model.onStepSkipped().observe(this) {
+            binding.loading.visible(false)
+            handleStepRequestCompletion(it) {
+                handleSkipClick()
+            }
         }
 
         binding.composeView.setContent {
@@ -90,7 +103,9 @@ class GenericStepActivity: BaseActivity() {
                 // Navigate to wallet connection screen
             }
             QuestStepType.ENABLE_LOCATION_PERMISSION -> {
-                // Request location permission
+                requestLocationPermissions(this) {
+                    updateStepState()
+                }
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
                 // Request notification permission
@@ -114,12 +129,7 @@ class GenericStepActivity: BaseActivity() {
 
     private fun handleSkipClick() {
         binding.loading.visible(true)
-        model.markStepAsSkipped {
-            binding.loading.visible(false)
-            handleStepRequestCompletion(it) {
-                handleSkipClick()
-            }
-        }
+        model.markStepAsSkipped()
     }
 
     private fun updateStepState() {
@@ -131,17 +141,20 @@ class GenericStepActivity: BaseActivity() {
                 // Check wallet
             }
             QuestStepType.ENABLE_LOCATION_PERMISSION -> {
-                // Check location permission
+                /**
+                 * In case user taps the CTA, doesn't give permissions, backgrounds the app and
+                 * opens it again (so onResume calls updateStepState). We need to make this check
+                 * before proceeding with marking the step as completed.
+                 */
+                if (hasPermission(ACCESS_FINE_LOCATION) || hasPermission(ACCESS_COARSE_LOCATION)) {
+                    binding.loading.visible(true)
+                    model.markStepAsCompleted()
+                }
             }
             QuestStepType.ENABLE_NOTIFICATIONS -> {
                 if (hasPermission(POST_NOTIFICATIONS)) {
                     binding.loading.visible(true)
-                    model.markStepAsCompleted {
-                        binding.loading.visible(false)
-                        handleStepRequestCompletion(it) {
-                            handleCtaClick()
-                        }
-                    }
+                    model.markStepAsCompleted()
                 }
             }
             QuestStepType.ENABLE_ENVIRONMENT_SENSORS -> {
@@ -179,27 +192,19 @@ class GenericStepActivity: BaseActivity() {
             )
             .onPositiveClick(getString(R.string.allow_button_message)) {
                 binding.loading.visible(true)
-                model.markStepAsCompleted {
-                    binding.loading.visible(false)
-                    handleStepRequestCompletion(it) {
-                        handleCtaClick()
-                    }
-                }
+                model.markStepAsCompleted()
             }
             .build()
             .show(this)
     }
 }
 
+@Suppress("FunctionNaming")
 @Composable
-private fun Content(
-    step: QuestStep,
-    onCtaClick: () -> Unit,
-    onSkipClick: () -> Unit
-) {
+private fun Content(step: QuestStep, onCtaClick: () -> Unit, onSkipClick: () -> Unit) {
     Column(
         modifier = Modifier
-            .background(color = colorResource(R.color.light_background))
+            .background(color = colorResource(R.color.colorBackground))
             .padding(dimensionResource(R.dimen.padding_normal_to_large)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -232,10 +237,7 @@ private fun Content(
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Title(
-                    text = step.title,
-                    textAlign = TextAlign.Center
-                )
+                Title(text = step.title, textAlign = TextAlign.Center)
 
                 MediumText(
                     text = step.description,
@@ -249,11 +251,10 @@ private fun Content(
 
             if (step.isOptional) {
                 Box(
-                    modifier = Modifier
-                        .background(
-                            color = colorResource(R.color.colorSurface),
-                            shape = CircleShape
-                        ),
+                    modifier = Modifier.background(
+                        color = colorResource(R.color.colorSurface),
+                        shape = CircleShape
+                    ),
                     contentAlignment = Alignment.Center
                 ) {
                     MediumText(
@@ -272,12 +273,9 @@ private fun Content(
     }
 }
 
+@Suppress("FunctionNaming")
 @Composable
-private fun CtaButtons(
-    step: QuestStep,
-    onCtaClick: () -> Unit,
-    onSkipClick: () -> Unit
-) {
+private fun CtaButtons(step: QuestStep, onCtaClick: () -> Unit, onSkipClick: () -> Unit) {
     Button(
         onClick = onCtaClick,
         modifier = Modifier.fillMaxWidth(),
@@ -307,18 +305,21 @@ private fun CtaButtons(
     }
 }
 
+@Suppress("FunctionNaming")
 @Preview
 @Composable
-private  fun PreviewContent() {
+fun PreviewContent() {
     Content(
-        QuestStep("stepId",
+        step = QuestStep(
+            "stepId",
             "Enable Environment Sensors",
             "Step Description Step Description Step Description Step Description",
             0,
             false,
             false,
             false,
-            QuestStepType.CONNECT_WALLET),
+            QuestStepType.CONNECT_WALLET
+        ),
         onCtaClick = {},
         onSkipClick = {}
     )
