@@ -2,46 +2,48 @@ package com.weatherxm.ui.queststeps
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.ui.common.QuestStep
-import com.weatherxm.usecases.QuestsUseCase
 import com.weatherxm.data.datasource.QuestsDataSourceImpl.Companion.ONBOARDING_ID
+import com.weatherxm.ui.common.QuestStep
 import com.weatherxm.ui.common.SingleLiveEvent
+import com.weatherxm.usecases.QuestsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
 
 class QuestGenericStepViewModel(
     val questStep: QuestStep,
     val userId: String,
     private val useCase: QuestsUseCase,
     private val dispatcher: CoroutineDispatcher
-): ViewModel() {
+) : ViewModel() {
+    private val _onStepCompleted = SingleLiveEvent<Throwable?>()
+    private val _onStepSkipped = SingleLiveEvent<Throwable?>()
 
-    fun markStepAsCompleted(completion: (Throwable?) -> Unit) {
+    fun onStepCompleted(): SingleLiveEvent<Throwable?> = _onStepCompleted
+    fun onStepSkipped(): SingleLiveEvent<Throwable?> = _onStepSkipped
+
+    fun markStepAsCompleted() {
         viewModelScope.launch(dispatcher) {
-            useCase.markQuestStepAsCompleted(
-                userId,
-                ONBOARDING_ID,
-                questStep.id
-            )
+            useCase.markQuestStepAsCompleted(userId, ONBOARDING_ID, questStep.id)
                 .onRight {
-                    completion(null)
-                }.onLeft {
+                    _onStepCompleted.postValue(null)
+                }
+                .onLeft {
                     Timber.e(it, "[Firestore]: Error when marking the step as completed")
-                    completion(it)
+                    _onStepCompleted.postValue(it)
                 }
         }
     }
 
-    fun markStepAsSkipped(completion: (Throwable?) -> Unit) {
+    fun markStepAsSkipped() {
         viewModelScope.launch(dispatcher) {
             useCase.markQuestStepAsSkipped(userId, ONBOARDING_ID, questStep.id)
                 .onRight {
-                    completion(null)
-                }.onLeft {
+                    _onStepSkipped.postValue(null)
+                }
+                .onLeft {
                     Timber.e(it, "[Firestore]: Error when marking the step as completed")
-                    completion(it)
+                    _onStepSkipped.postValue(it)
                 }
         }
     }
