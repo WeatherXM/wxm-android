@@ -62,16 +62,15 @@ class QuestGenericStepViewModel(
     }
 
     fun connectSolanaWallet(senderForSolanaWallet: ActivityResultSender) {
-        // TODO: STOPSHIP: Fix the iconUri here.
         val walletAdapter = MobileWalletAdapter(
             connectionIdentity = ConnectionIdentity(
-                identityUri = "https://weatherxm.com".toUri(),
-                iconUri = "wp-content/uploads/2023/10/Untitled-design-11.png".toUri(),
+                identityUri = "https://weatherxm.network".toUri(),
+                iconUri = "logo-square.png".toUri(),
                 identityName = "WeatherXM App"
             )
         )
         viewModelScope.launch {
-            val payload = SignInWithSolana.Payload("weatherxm.com", "Sign in to WeatherXM App")
+            val payload = SignInWithSolana.Payload("weatherxm.network", "Sign in to WeatherXM App")
             val result = walletAdapter.signIn(senderForSolanaWallet, payload)
 
             when (result) {
