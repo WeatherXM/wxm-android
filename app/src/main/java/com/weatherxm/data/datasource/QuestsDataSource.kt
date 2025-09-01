@@ -248,7 +248,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
             .map {}
     }
     
-    fun updateEarnedTokens(userId: String, tokens: Int): Either<Throwable, Unit> {
+    private fun updateEarnedTokens(userId: String, tokens: Int): Either<Throwable, Unit> {
         return userDocument(userId)
             .update("earnedTokens", tokens)
             .safeAwait()
@@ -261,40 +261,6 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
             querySnapshot.documents.mapNotNull { it.id }
         }
     }
-
-    private fun listStepsInQuest(questId: String): Either<Throwable, List<QuestFirestoreStep>> {
-        val collectionRef = questDocument(questId).collection("steps")
-        return collectionRef.get().safeAwait().flatMap { querySnapshot ->
-            val steps = mutableListOf<QuestFirestoreStep>()
-            querySnapshot.documents.forEach { document ->
-                document.toObject<QuestFirestoreStep>()?.let {
-                    it.stepId = document.id
-                    steps.add(it)
-                }
-            }
-            Either.Right(steps)
-        }
-    }
-
-//    private suspend fun sumAllEarnedTokens(userId: String) {//}: Either<Throwable, Int> {
-//        val allUserQuestIds = listUserProgressQuestIds(userId)
-//        var earnedTokens = 0
-//        allUserQuestIds.onRight { questIds ->
-//            questIds.forEach { questId ->
-//                val temp = questDocument(questId).get().safeAwait()
-//                temp.onRight {
-//                    val questProgress = questProgressDocument(userId, questId)
-//                        .get()
-//                        .safeAwait()
-//                        .getOrNull()?.toObject<QuestUserProgress>()
-//                    val tokens = questProgress.completedSteps?.sumOf { stepId ->
-//                        fetchQuestStep(stepId, questId).getOrNull()?.tokens ?:
-//                    } ?: 0
-//                    earnedTokens += tokens
-//                }
-//            }
-//        }
-//    }
 
     private fun sumAllEarnedTokens(userId: String): Either<Throwable, Int> {
         return listUserProgressQuestIds(userId).flatMap { questIds ->
