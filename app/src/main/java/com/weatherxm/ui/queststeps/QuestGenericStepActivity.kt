@@ -119,7 +119,7 @@ class QuestGenericStepActivity : BaseActivity() {
                 updateStepState()
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
-                // Open social media profile
+                navigator.openWebsiteExternally(this, getString(R.string.x_url))
             }
             QuestStepType.UNKNOWN -> {
                 // No action
@@ -161,6 +161,8 @@ class QuestGenericStepActivity : BaseActivity() {
                 showSensorsDialog()
             }
             QuestStepType.SOCIAL_FOLLOW_X -> {
+                binding.loading.visible(true)
+                model.markStepAsCompleted()
             }
             QuestStepType.UNKNOWN -> {
                 // No action
