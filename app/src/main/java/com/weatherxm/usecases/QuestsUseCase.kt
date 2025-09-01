@@ -38,7 +38,9 @@ class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
         return repository.fetchUser(userId)
     }
 
-    override suspend fun fetchOnboardingData(userId: String): Either<Throwable, QuestOnboardingData> {
+    override suspend fun fetchOnboardingData(
+        userId: String
+    ): Either<Throwable, QuestOnboardingData> {
         return coroutineScope {
             /**
              * Fetch onboarding progress and quests in parallel
