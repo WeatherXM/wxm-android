@@ -11,12 +11,23 @@ interface QuestsUseCase {
     fun fetchUser(userId: String): Either<Throwable, QuestUser>
     suspend fun fetchOnboardingQuest(): Either<Throwable, QuestWithStepsFirestore>
     suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit>
-    suspend fun markQuestStepAsCompleted(userId: String,
-                                         questId: String,
-                                         stepId: String): Either<Throwable, Unit>
-    suspend fun markQuestStepAsSkipped(userId: String,
-                                       questId: String,
-                                       stepId: String): Either<Throwable, Unit>
+    suspend fun markQuestStepAsCompleted(
+        userId: String,
+        questId: String,
+        stepId: String
+    ): Either<Throwable, Unit>
+
+    suspend fun markQuestStepAsSkipped(
+        userId: String,
+        questId: String,
+        stepId: String
+    ): Either<Throwable, Unit>
+
+    suspend fun setWallet(
+        userId: String,
+        chainId: String,
+        walletAddress: String
+    ): Either<Throwable, Unit>
 }
 
 class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
@@ -35,16 +46,28 @@ class QuestsUseCaseImpl(val repository: QuestsRepository) : QuestsUseCase {
     override suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit> {
         return repository.completeQuest(userId, questId)
     }
-    
-    override suspend fun markQuestStepAsCompleted(userId: String,
-                                                  questId: String,
-                                                  stepId: String): Either<Throwable, Unit> {
+
+    override suspend fun markQuestStepAsCompleted(
+        userId: String,
+        questId: String,
+        stepId: String
+    ): Either<Throwable, Unit> {
         return repository.markQuestStepAsCompleted(userId, questId, stepId)
     }
 
-    override suspend fun markQuestStepAsSkipped(userId: String,
-                                                questId: String,
-                                                stepId: String): Either<Throwable, Unit> {
+    override suspend fun markQuestStepAsSkipped(
+        userId: String,
+        questId: String,
+        stepId: String
+    ): Either<Throwable, Unit> {
         return repository.markQuestStepAsSkipped(userId, questId, stepId)
+    }
+
+    override suspend fun setWallet(
+        userId: String,
+        chainId: String,
+        walletAddress: String
+    ): Either<Throwable, Unit> {
+        return repository.setWallet(userId, chainId, walletAddress)
     }
 }
