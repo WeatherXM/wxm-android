@@ -10,6 +10,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
@@ -178,7 +179,12 @@ class LoginActivity : BaseActivity() {
                     this.sendBroadcast(intent)
                 }
 
-                finish()
+                val fromOnboarding = intent.getBooleanExtra(ARG_FROM_ONBOARDING, false)
+                if (fromOnboarding) {
+                    navigator.showAnalyticsOptIn(this)
+                } else {
+                    finish()
+                }
             }
             Status.ERROR -> {
                 analytics.trackEventViewContent(

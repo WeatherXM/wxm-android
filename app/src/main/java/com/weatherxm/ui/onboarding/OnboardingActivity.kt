@@ -55,7 +55,7 @@ class OnboardingActivity : BaseActivity() {
         binding.content.setContent {
             Content(
                 onSignup = {
-                    navigator.showSignup(this)
+                    navigator.showSignup(this, true)
                     finish()
                 },
                 onExploreTheApp = {

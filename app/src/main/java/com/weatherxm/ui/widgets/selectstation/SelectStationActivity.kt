@@ -70,7 +70,7 @@ class SelectStationActivity : BaseActivity() {
         }
 
         binding.signInBtn.setOnClickListener {
-            navigator.showLogin(this, true)
+            navigator.showLogin(this, newTask = true)
             finish()
         }
 

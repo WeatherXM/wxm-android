@@ -29,6 +29,7 @@ class StartupUseCaseTest : BehaviorSpec({
         mockkObject(RefreshFcmApiWorker)
         every { authRepo.isLoggedIn() } returns true
         justRun { RefreshFcmApiWorker.initAndRefreshToken(context, null) }
+        every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns false
     }
 
     suspend fun getStartupType() = usecase.getStartupState().first()
@@ -48,8 +49,17 @@ class StartupUseCaseTest : BehaviorSpec({
                 every { appConfigRepo.shouldUpdate() } returns false
                 and("we should show the onboarding screen") {
                     every { userPreferencesRepo.shouldShowOnboarding() } returns true
-                    then("return ShowOnboarding") {
-                        getStartupType().shouldBeTypeOf<StartupState.ShowOnboarding>()
+                    and("user is not logged in") {
+                        every { authRepo.isLoggedIn() } returns false
+                        then("return ShowOnboarding") {
+                            getStartupType().shouldBeTypeOf<StartupState.ShowOnboarding>()
+                        }
+                    }
+                    and("user is logged in") {
+                        every { authRepo.isLoggedIn() } returns true
+                        then("return ShowHome") {
+                            getStartupType().shouldBeTypeOf<StartupState.ShowHome>()
+                        }
                     }
                     every { userPreferencesRepo.shouldShowOnboarding() } returns false
                 }

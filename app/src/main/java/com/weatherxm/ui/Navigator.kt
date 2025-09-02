@@ -44,6 +44,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
@@ -110,7 +111,7 @@ import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: AnalyticsWrapper) {
-    fun showLogin(context: Context, newTask: Boolean = false) {
+    fun showLogin(context: Context, newTask: Boolean = false, fromOnboarding: Boolean = false) {
         val intentFlags = if (newTask) {
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         } else {
@@ -118,13 +119,15 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
         context.startActivity(
             Intent(context, LoginActivity::class.java).addFlags(intentFlags)
+                .putExtra(ARG_FROM_ONBOARDING, fromOnboarding)
         )
     }
 
-    fun showSignup(context: Context) {
+    fun showSignup(context: Context, fromOnboarding: Boolean = false) {
         context.startActivity(
             Intent(context, SignupActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .putExtra(ARG_FROM_ONBOARDING, fromOnboarding)
         )
     }
 
