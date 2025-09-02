@@ -843,4 +843,14 @@
     <string name="overcast_light_rain">Overcast with light rain</string>
     <string name="overcast_light_snow">Overcast with light snow</string>
     <string name="overcast_mixture_snow_rain">Overcast with mixture of snow and rain</string>
+
+    <!-- Onboarding -->
+    <string name="real_weather_real_rewards">Real weather, real rewards.</string>
+    <string name="sign_up_now">Sign up now</string>
+    <string name="explore_the_app">Explore the app</string>
+    <string name="forecasts_every_corner">Forecasts for every\ncorner on earth</string>
+    <string name="live_transparent_network">A live, transparent\nnetwork</string>
+    <string name="contribute_earn_rewards">Contribute and\nearn rewards</string>
+    <string name="community_powered_weather">Community-Powered\nWeather</string>
+    <string name="local_weather_data_global_impact">Local weather data,\nglobal impact</string>
 </resources>

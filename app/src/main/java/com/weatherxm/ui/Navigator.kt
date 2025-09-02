@@ -88,6 +88,7 @@ import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.networkstats.growth.NetworkGrowthActivity
 import com.weatherxm.ui.networkstats.tokenmetrics.TokenMetricsActivity
+import com.weatherxm.ui.onboarding.OnboardingActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
@@ -138,6 +139,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showUpdatePrompt(context: Context) {
         context.startActivity(
             Intent(context, UpdatePromptActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+    }
+
+    fun showOnboarding(context: Context) {
+        context.startActivity(
+            Intent(context, OnboardingActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
