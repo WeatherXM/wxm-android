@@ -119,6 +119,12 @@ data class QuestUser(
 
 @Keep
 @JsonClass(generateAdapter = true)
+data class QuestUserWallet(
+    val address: String? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
 data class QuestUserProgress(
     @get:PropertyName("isCompleted") // https://medium.com/@eeddeellee/boolean-fields-that-start-with-is-in-firebase-firestore-49afb65e3639
     val isCompleted: Boolean? = null,
