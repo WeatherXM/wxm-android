@@ -128,7 +128,7 @@ class LocationsFragment : BaseFragment() {
             updateUI(it)
         }
         binding.emptySavedLocationsCard.setContent {
-            EmptySavedLocationsView()
+            EmptySavedLocationsView { binding.searchView.show() }
         }
 
         if (!model.getSavedLocations().isNotEmpty()) {

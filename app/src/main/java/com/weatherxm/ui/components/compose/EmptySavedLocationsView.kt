@@ -1,6 +1,7 @@
 package com.weatherxm.ui.components.compose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,7 @@ import com.weatherxm.R
 @Suppress("FunctionNaming", "MagicNumber")
 @Preview
 @Composable
-fun EmptySavedLocationsView() {
+fun EmptySavedLocationsView(onClick: () -> Unit = {}) {
     val borderColor = colorResource(R.color.colorSurface)
     val stroke = Stroke(
         width = 3f,
@@ -36,6 +37,7 @@ fun EmptySavedLocationsView() {
     )
     Box(
         Modifier
+            .clickable(onClick = onClick)
             .background(colorResource(R.color.colorBackground))
             .fillMaxWidth()
             .drawBehind {
@@ -69,5 +71,4 @@ fun EmptySavedLocationsView() {
             )
         }
     }
-
 }
