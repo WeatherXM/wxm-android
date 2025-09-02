@@ -6,6 +6,7 @@ import androidx.lifecycle.withCreated
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.get
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.mapbox.geojson.Point
@@ -30,6 +31,7 @@ import com.weatherxm.ui.home.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
+import com.weatherxm.util.AndroidBuildInfo
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -61,6 +63,11 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
 
         // Setup navigation view
         binding.navView.setupWithNavController(navController)
+
+        if(!AndroidBuildInfo.isSolana()) {
+            navController.graph.remove(navController.graph[R.id.navigation_quests])
+            binding.navView.menu.findItem(R.id.navigation_quests).isVisible = false
+        }
 
         explorerModel.onStatus().observe(this) { resource ->
             onExplorerState(resource)
