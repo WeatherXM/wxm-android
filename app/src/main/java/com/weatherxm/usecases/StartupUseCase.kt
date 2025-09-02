@@ -46,9 +46,8 @@ class StartupUseCaseImpl(
                 authRepository.isLoggedIn().apply {
                     if (this) RefreshFcmApiWorker.initAndRefreshToken(context, null)
                 }
-                // TODO: STOPSHIP: Add functionality to check here
-                if(true) {
-                    Timber.d("Show the Analytics Opt-In screen.")
+                if (userPreferencesRepository.shouldShowOnboarding()) {
+                    Timber.d("Show the Onboarding screen.")
                     trySend(StartupState.ShowOnboarding)
                 } else if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                     Timber.d("Show the Analytics Opt-In screen.")

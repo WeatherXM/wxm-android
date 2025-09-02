@@ -46,6 +46,13 @@ class StartupUseCaseTest : BehaviorSpec({
             }
             When("app should not be updated") {
                 every { appConfigRepo.shouldUpdate() } returns false
+                and("we should show the onboarding screen") {
+                    every { userPreferencesRepo.shouldShowOnboarding() } returns true
+                    then("return ShowOnboarding") {
+                        getStartupType().shouldBeTypeOf<StartupState.ShowOnboarding>()
+                    }
+                    every { userPreferencesRepo.shouldShowOnboarding() } returns false
+                }
                 and("we should show the opt-in analytics screen") {
                     every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns true
                     then("return ShowAnalyticsOptIn") {
@@ -58,8 +65,8 @@ class StartupUseCaseTest : BehaviorSpec({
                         getStartupType().shouldBeTypeOf<StartupState.ShowHome>()
                     }
                 }
-                then("refresh the FCM token (exactly = 2 because we have 2 `and` conditions") {
-                    coVerify(exactly = 2) {
+                then("refresh the FCM token (exactly = 3 because we have 3 `and` conditions") {
+                    coVerify(exactly = 3) {
                         RefreshFcmApiWorker.initAndRefreshToken(context, null)
                     }
                 }

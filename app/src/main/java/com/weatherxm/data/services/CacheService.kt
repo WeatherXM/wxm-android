@@ -61,6 +61,7 @@ class CacheService(
         const val KEY_DEVICE_NOTIFICATIONS_PROMPT = "device_notifications_prompt"
         const val KEY_DEVICE_NOTIFICATION = "device_notification"
         const val KEY_SAVED_LOCATIONS = "saved_locations"
+        const val KEY_SHOULD_SHOW_ONBOARDING = "should_show_onboarding"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -517,6 +518,14 @@ class CacheService(
         onUserPropertiesChangeListener?.invoke(KEY_SAVED_LOCATIONS, locations.size)
     }
 
+    fun shouldShowOnboarding(): Boolean {
+        return preferences.getBoolean(KEY_SHOULD_SHOW_ONBOARDING, true)
+    }
+
+    fun disableShouldShowOnboarding() {
+        preferences.edit { putBoolean(KEY_SHOULD_SHOW_ONBOARDING, false) }
+    }
+
     fun getPreferredUnit(
         @StringRes unitKeyResId: Int,
         @StringRes defaultUnitResId: Int
@@ -586,6 +595,7 @@ class CacheService(
         val lastDismissedAnnouncementBanner =
             preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
         val savedLocations = getSavedLocations()
+        val shouldShowOnboardingValue = shouldShowOnboarding()
 
         preferences.edit {
             clear()
@@ -601,6 +611,7 @@ class CacheService(
                 .putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, widgetIds)
                 .putBoolean(KEY_DEVICE_NOTIFICATIONS_PROMPT, savedDeviceNotificationsPrompt)
                 .putStringSet(KEY_SAVED_LOCATIONS, savedLocations.toSet())
+                .putBoolean(KEY_SHOULD_SHOW_ONBOARDING, shouldShowOnboardingValue)
         }
 
         installationId?.let { setInstallationId(it) }

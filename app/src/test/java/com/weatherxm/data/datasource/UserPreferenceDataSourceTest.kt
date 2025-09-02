@@ -33,6 +33,7 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
         coJustRun { cacheService.setDevicesSortFilterOptions(sortOrder, filter, groupBy) }
         justRun { cacheService.setAcceptTermsTimestamp(any()) }
         justRun { cacheService.setClaimingBadgeShouldShow(any()) }
+        justRun { cacheService.disableShouldShowOnboarding() }
     }
 
     context("Get analytics opt-in or opt-out timestamp") {
@@ -118,6 +119,26 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
                 datasource.setClaimingBadgeShouldShow(true)
                 then("set the shouldShow in cache") {
                     verify(exactly = 1) { cacheService.setClaimingBadgeShouldShow(any()) }
+                }
+            }
+        }
+    }
+
+    context("Get if we should show the onboarding") {
+        When("Using the Cache Source") {
+            and("the user has already seen the onboarding") {
+                every { cacheService.shouldShowOnboarding() } returns false
+                then("return false") {
+                    datasource.shouldShowOnboarding() shouldBe false
+                }
+            }
+            and("the user has not seen the onboarding") {
+                every { cacheService.shouldShowOnboarding() } returns true
+                then("return true") {
+                    datasource.shouldShowOnboarding() shouldBe true
+                }
+                then("verify that the call to disable that flag is made") {
+                    verify(exactly = 1) { cacheService.disableShouldShowOnboarding() }
                 }
             }
         }

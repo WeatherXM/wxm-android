@@ -2,17 +2,17 @@ package com.weatherxm.ui.onboarding
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -66,7 +67,6 @@ class OnboardingActivity : BaseActivity() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Suppress("FunctionNaming", "LongMethod")
 @Composable
 @Preview
@@ -121,43 +121,43 @@ private fun Content(
                 )
             }
 
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            val padding = (screenWidth - 300.dp) / 2
             HorizontalPager(
                 state = pagerState,
+                pageSize = PageSize.Fixed(300.dp),
+                contentPadding = PaddingValues(horizontal = padding),
+                pageSpacing = dimensionResource(R.dimen.padding_normal_to_large),
                 modifier = Modifier
                     .weight(1F)
                     .fillMaxWidth()
             ) { page ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Box(contentAlignment = Alignment.BottomCenter) {
-                        Image(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .clip(
-                                    RoundedCornerShape(
-                                        dimensionResource(R.dimen.radius_extra_large)
-                                    )
-                                ),
-                            painter = painterResource(images[page]),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
-                        Text(
-                            modifier = Modifier.padding(
-                                bottom = dimensionResource(R.dimen.padding_large),
-                                start = dimensionResource(R.dimen.padding_normal),
-                                end = dimensionResource(R.dimen.padding_normal)
+                Box(contentAlignment = Alignment.BottomCenter) {
+                    Image(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .clip(
+                                RoundedCornerShape(
+                                    dimensionResource(R.dimen.radius_extra_large)
+                                )
                             ),
-                            text = stringResource(texts[page]),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = colorResource(R.color.dark_text),
-                            style = MaterialTheme.typography.headlineSmall,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                        painter = painterResource(images[page]),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(
+                        modifier = Modifier.padding(
+                            bottom = dimensionResource(R.dimen.padding_large),
+                            start = dimensionResource(R.dimen.padding_normal),
+                            end = dimensionResource(R.dimen.padding_normal)
+                        ),
+                        text = stringResource(texts[page]),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = colorResource(R.color.dark_text),
+                        style = MaterialTheme.typography.headlineSmall,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 

@@ -125,4 +125,19 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
             }
         }
     }
+
+    context("Get if we should show the onboarding screen") {
+        When("we should show it") {
+            every { dataSource.shouldShowOnboarding() } returns true
+            then("return true") {
+                repo.shouldShowOnboarding() shouldBe true
+            }
+        }
+        When("we should NOT show it") {
+            every { dataSource.shouldShowOnboarding() } returns false
+            then("return false") {
+                repo.shouldShowOnboarding() shouldBe false
+            }
+        }
+    }
 })
