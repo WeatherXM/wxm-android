@@ -51,6 +51,8 @@
     <string name="error_helium_ota_133_suffix">STATION NOT IN RANGE</string>
     <string name="error_max_followed">Max followed stations threshold reached.</string>
     <string name="error_boost_not_supported">Boost is not supported, please check for app updates.</string>
+    <string name="error_no_compatible_wallet">No compatible wallet found.</string>
+    <string name="error_address_not_found">Address not found.</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>
