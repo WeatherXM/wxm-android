@@ -626,4 +626,8 @@ dependencies {
 
     // Markdown Renderer
     implementation(libs.markdown.renderer)
+
+    // Solana Mobile Wallet Adapter
+    implementation(libs.solana.mobile.wallet.adapter)
+    implementation(libs.solana.base58.converter)
 }
