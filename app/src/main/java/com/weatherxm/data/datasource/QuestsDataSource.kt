@@ -10,6 +10,7 @@ import com.weatherxm.data.models.QuestFirestore
 import com.weatherxm.data.models.QuestFirestoreStep
 import com.weatherxm.data.models.QuestUser
 import com.weatherxm.data.models.QuestUserProgress
+import com.weatherxm.data.models.QuestUserWallet
 import com.weatherxm.data.models.QuestWithStepsFirestore
 import com.weatherxm.data.safeAwait
 import kotlinx.coroutines.async
@@ -35,11 +36,18 @@ interface QuestsDataSource {
         questId: String,
         stepId: String
     ): Either<Throwable, Unit>
+
+    suspend fun setWallet(
+        userId: String,
+        chainId: String,
+        walletAddress: String
+    ): Either<Throwable, Unit>
 }
 
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     companion object {
         const val ONBOARDING_ID = "onboarding"
+        const val SOLANA_CHAIN_ID = "SOL"
     }
 
     private val firebaseFirestore: FirebaseFirestore by inject()
@@ -215,5 +223,21 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                     .safeAwait()
                     .map { }
             }
+    }
+
+    override suspend fun setWallet(
+        userId: String,
+        chainId: String,
+        walletAddress: String
+    ): Either<Throwable, Unit> {
+        return userDocument(userId)
+            .collection("wallet")
+            .document(chainId)
+            .set(QuestUserWallet(walletAddress))
+            .safeAwait()
+            .onLeft {
+                Timber.e(it, "[Firestore] Error setting wallet for chain $chainId, user $userId.")
+            }
+            .map {}
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityQuestGenericStepBinding
 import com.weatherxm.ui.common.Contracts.ARG_QUEST_STEP
@@ -58,6 +59,7 @@ class QuestGenericStepActivity : BaseActivity() {
 
     private lateinit var binding: ActivityQuestGenericStepBinding
     private var ctaButtonTapped = false
+    private val senderForSolanaWallet = ActivityResultSender(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +84,11 @@ class QuestGenericStepActivity : BaseActivity() {
             }
         }
 
+        model.onWalletAddressError().observe(this) { errorMsg ->
+            binding.loading.visible(false)
+            showSnackbarMessage(binding.root, errorMsg ?: getString(R.string.error_generic_message))
+        }
+
         binding.composeView.setContent {
             Content(
                 model.questStep,
@@ -100,7 +107,8 @@ class QuestGenericStepActivity : BaseActivity() {
         ctaButtonTapped = true
         when (model.questStep.type) {
             QuestStepType.CONNECT_WALLET -> {
-                // Navigate to wallet connection screen
+                binding.loading.visible(true)
+                model.connectSolanaWallet(senderForSolanaWallet)
             }
             QuestStepType.ENABLE_LOCATION_PERMISSION -> {
                 requestLocationPermissions(this) {
@@ -138,7 +146,7 @@ class QuestGenericStepActivity : BaseActivity() {
         }
         when (model.questStep.type) {
             QuestStepType.CONNECT_WALLET -> {
-                // Check wallet
+                // Do nothing. We handle it differently via the ViewModel.
             }
             QuestStepType.ENABLE_LOCATION_PERMISSION -> {
                 /**
@@ -177,9 +185,7 @@ class QuestGenericStepActivity : BaseActivity() {
             showSnackbarMessage(
                 binding.root,
                 error.message ?: getString(R.string.error_generic_message),
-                callback,
-                R.string.action_retry,
-                null
+                callback
             )
         }
 

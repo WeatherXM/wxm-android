@@ -614,4 +614,8 @@ dependencies {
     // Upload Service
     implementation(libs.upload.service)
     implementation(libs.upload.service.okhttp)
+
+    // Solana Mobile Wallet Adapter
+    implementation(libs.solana.mobile.wallet.adapter)
+    implementation(libs.solana.base58.converter)
 }
