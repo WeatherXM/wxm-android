@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
+import arrow.core.right
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -44,6 +45,7 @@ interface QuestsDataSource {
     ): Either<Throwable, Unit>
 }
 
+@Suppress("TooManyFunctions")
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     companion object {
         const val ONBOARDING_ID = "onboarding"
@@ -88,23 +90,29 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
 
     override fun fetchUser(userId: String): Either<Throwable, QuestUser> {
         /**
-         * Fetch user document
+         * Refresh earned tokens if needed and then fetch user document
          */
-        return userDocument(userId).get().safeAwait().flatMap { userDoc ->
-            /**
-             * If user exists, use it; else create
-             */
-            userDoc.toObject<QuestUser>()?.let {
-                Timber.d("[Firestore] Got Quest User: $it")
-                Either.Right(it)
-            } ?: run {
-                val newQuestUser = QuestUser(userId, 0, 0)
-                userDocument(userId).set(newQuestUser).safeAwait().map {
-                    Timber.d("[Firestore] New user created: $newQuestUser")
-                    newQuestUser
+        return refreshEarnedTokens(userId)
+            .onLeft {
+                Timber.e(it, "[Firestore] Error refreshing earned tokens for user $userId")
+            }
+            .flatMap {
+                userDocument(userId).get().safeAwait().flatMap { userDoc ->
+                    /**
+                     * If user exists, use it; else create
+                     */
+                    userDoc.toObject<QuestUser>()?.let {
+                        Timber.d("[Firestore] Got Quest User: $it")
+                        Either.Right(it)
+                    } ?: run {
+                        val newQuestUser = QuestUser(userId, 0, 0)
+                        userDocument(userId).set(newQuestUser).safeAwait().map {
+                            Timber.d("[Firestore] New user created: $newQuestUser")
+                            newQuestUser
+                        }
+                    }
                 }
             }
-        }
     }
 
     @Suppress("ReturnCount")
@@ -239,5 +247,58 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                 Timber.e(it, "[Firestore] Error setting wallet for chain $chainId, user $userId.")
             }
             .map {}
+    }
+    
+    private fun updateEarnedTokens(userId: String, tokens: Int): Either<Throwable, Unit> {
+        return userDocument(userId)
+            .update("earnedTokens", tokens)
+            .safeAwait()
+            .map { }
+    }
+
+    private fun listUserProgressQuestIds(userId: String): Either<Throwable, List<String>> {
+        val collectionRef = userDocument(userId).collection("progress")
+        return collectionRef.get().safeAwait().map { querySnapshot ->
+            querySnapshot.documents.mapNotNull { it.id }
+        }
+    }
+
+    @Suppress("ReturnCount")
+    private fun sumAllEarnedTokens(userId: String): Either<Throwable, Int> {
+        return listUserProgressQuestIds(userId).flatMap { questIds ->
+            var earnedTokens = 0
+            for (questId in questIds) {
+                // Fetch quest document. If it fails, return the error.
+                val questDocResult = questDocument(questId).get().safeAwait()
+                questDocResult.getOrElse { return Either.Left(it) }
+
+                // Fetch quest progress. If it fails, return the error.
+                val questProgressResult = questProgressDocument(userId, questId)
+                    .get()
+                    .safeAwait()
+                val questProgress = questProgressResult.getOrElse { return Either.Left(it) }
+                    ?.toObject<QuestUserProgress>()
+
+                // If questProgress is null (should not happen if previous steps succeeded),
+                // consider it an error.
+                if (questProgress == null) {
+                    return Either.Left(Throwable("Quest progress not found for $questId"))
+                }
+
+                questProgress.completedSteps?.forEach { stepId ->
+                    // Fetch quest step. If it fails, return the error.
+                    val stepResult = fetchQuestStep(stepId, questId)
+                    val step = stepResult.getOrElse { return Either.Left(it) }
+                    earnedTokens += step.tokens ?: 0
+                }
+            }
+            earnedTokens.right()
+        }
+    }
+
+    private fun refreshEarnedTokens(userId: String): Either<Throwable, Unit> {
+        return sumAllEarnedTokens(userId).flatMap {
+            updateEarnedTokens(userId, it)
+        }
     }
 }
