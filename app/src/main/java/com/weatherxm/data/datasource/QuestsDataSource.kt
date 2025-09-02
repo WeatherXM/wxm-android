@@ -248,7 +248,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
             }
             .map {}
     }
-    
+
     private fun updateEarnedTokens(userId: String, tokens: Int): Either<Throwable, Unit> {
         return userDocument(userId)
             .update("earnedTokens", tokens)
@@ -297,6 +297,16 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     }
 
     private fun refreshEarnedTokens(userId: String): Either<Throwable, Unit> {
+        userDocument(userId).get().safeAwait().onRight { userDoc ->
+            /**
+             * If the user doesn't currently exist, then return an Either.Right(Unit) indicating
+             * a success in order to proceed with the rest of the actions (e.g. create the user).
+             */
+            if (userDoc.data == null) {
+                return Either.Right(Unit)
+            }
+        }
+
         return sumAllEarnedTokens(userId).flatMap {
             updateEarnedTokens(userId, it)
         }
