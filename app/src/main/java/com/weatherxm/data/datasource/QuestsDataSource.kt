@@ -262,6 +262,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         }
     }
 
+    @Suppress("ReturnCount")
     private fun sumAllEarnedTokens(userId: String): Either<Throwable, Int> {
         return listUserProgressQuestIds(userId).flatMap { questIds ->
             var earnedTokens = 0
