@@ -45,6 +45,7 @@ interface QuestsDataSource {
     ): Either<Throwable, Unit>
 }
 
+@Suppress("TooManyFunctions")
 class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     companion object {
         const val ONBOARDING_ID = "onboarding"
