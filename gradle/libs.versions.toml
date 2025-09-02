@@ -55,6 +55,8 @@ mpAndroidCharts = "v3.1.0"
 networkResponseAdapter = "5.0.0"
 play-services-location = "21.3.0"
 play-services-barcode-scanner = "16.1.0"
+solana-mobile-wallet-adapter = "2.1.0"
+solana-base58-converter = "0.2.4"
 okhttp-bom = "5.1.0"
 retrofit = "3.0.0"
 retromock = "1.2.1"
@@ -155,6 +157,8 @@ okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 play-services-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "play-services-barcode-scanner" }
+solana-mobile-wallet-adapter = { module = "com.solanamobile:mobile-wallet-adapter-clientlib-ktx", version.ref = "solana-mobile-wallet-adapter" }
+solana-base58-converter = { module = "io.github.funkatronics:multimult", version.ref = "solana-base58-converter" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 retromock = { module = "co.infinum:retromock", version.ref = "retromock" }
