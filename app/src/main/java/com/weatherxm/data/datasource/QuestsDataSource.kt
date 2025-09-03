@@ -4,6 +4,8 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.right
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -11,7 +13,6 @@ import com.weatherxm.data.models.QuestFirestore
 import com.weatherxm.data.models.QuestFirestoreStep
 import com.weatherxm.data.models.QuestUser
 import com.weatherxm.data.models.QuestUserProgress
-import com.weatherxm.data.models.QuestUserWallet
 import com.weatherxm.data.models.QuestWithStepsFirestore
 import com.weatherxm.data.safeAwait
 import kotlinx.coroutines.async
@@ -50,19 +51,41 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     companion object {
         const val ONBOARDING_ID = "onboarding"
         const val SOLANA_CHAIN_ID = "SOL"
+        const val USERS = "users"
+        const val QUESTS = "quests"
+        const val WALLET = "wallet"
+        const val UID = "uid"
+        const val ADDRESS = "address"
+        const val PROGRESS = "progress"
+        const val COMPLETED_STEPS = "completedSteps"
+        const val SKIPPED_STEPS = "skippedSteps"
+        const val IS_COMPLETED = "isCompleted"
+        const val EARNED_TOKENS = "earnedTokens"
+        const val UPDATED_AT = "updatedAt"
+        const val COMPLETED_AT = "completedAt"
+        const val CREATED_AT = "createdAt"
     }
 
     private val firebaseFirestore: FirebaseFirestore by inject()
 
     private fun userDocument(userId: String) =
-        firebaseFirestore.collection("users").document(userId)
+        firebaseFirestore.collection(USERS).document(userId)
 
     private fun questDocument(questId: String) =
-        firebaseFirestore.collection("quests").document(questId)
+        firebaseFirestore.collection(QUESTS).document(questId)
 
     private fun questProgressDocument(userId: String, questId: String) = userDocument(userId)
-        .collection("progress")
+        .collection(PROGRESS)
         .document(questId)
+
+    private fun DocumentReference.updateWithTimestamp(key: String, value: Any): Task<Void> {
+        return update(
+            mapOf(
+                key to value,
+                UPDATED_AT to FieldValue.serverTimestamp()
+            )
+        )
+    }
 
     override fun fetchOnboardingProgress(userId: String): Either<Throwable, QuestUserProgress> {
         /**
@@ -76,14 +99,20 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                 Timber.d("[Firestore] Got User's Progress on Onboarding Quest: $it")
                 Either.Right(it)
             } ?: run {
-                val emptyProgress = QuestUserProgress.empty()
-                val setResult =
-                    questProgressDocument(userId, ONBOARDING_ID).set(emptyProgress).safeAwait()
-
-                setResult.map {
-                    Timber.d("[Firestore] Empty User's Progress on Onboarding Quest created")
-                    emptyProgress
-                }
+                questProgressDocument(userId, ONBOARDING_ID)
+                    .set(
+                        mapOf(
+                            IS_COMPLETED to false,
+                            COMPLETED_STEPS to emptyList<String>(),
+                            SKIPPED_STEPS to emptyList<String>(),
+                            CREATED_AT to FieldValue.serverTimestamp()
+                        )
+                    )
+                    .safeAwait()
+                    .map {
+                        Timber.d("[Firestore] Empty User's Progress on Onboarding Quest created")
+                        QuestUserProgress(false, emptyList(), emptyList())
+                    }
             }
         }
     }
@@ -105,11 +134,19 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                         Timber.d("[Firestore] Got Quest User: $it")
                         Either.Right(it)
                     } ?: run {
-                        val newQuestUser = QuestUser(userId, 0, 0)
-                        userDocument(userId).set(newQuestUser).safeAwait().map {
-                            Timber.d("[Firestore] New user created: $newQuestUser")
-                            newQuestUser
-                        }
+                        userDocument(userId)
+                            .set(
+                                mapOf(
+                                    UID to userId,
+                                    EARNED_TOKENS to 0,
+                                    CREATED_AT to FieldValue.serverTimestamp()
+                                )
+                            )
+                            .safeAwait()
+                            .map {
+                                Timber.d("[Firestore] New user created: $userId")
+                                QuestUser(userId, 0, 0)
+                            }
                     }
                 }
             }
@@ -161,7 +198,14 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
     }
 
     override suspend fun completeQuest(userId: String, questId: String): Either<Throwable, Unit> {
-        return questProgressDocument(userId, questId).update("isCompleted", true)
+        return questProgressDocument(userId, questId)
+            .update(
+                mapOf(
+                    IS_COMPLETED to true,
+                    UPDATED_AT to FieldValue.serverTimestamp(),
+                    COMPLETED_AT to FieldValue.serverTimestamp()
+                )
+            )
             .safeAwait()
             .map {}
     }
@@ -190,18 +234,18 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         stepId: String
     ): Either<Throwable, Unit> {
         return questProgressDocument(userId, questId)
-            .update("skippedSteps", FieldValue.arrayRemove(stepId))
+            .updateWithTimestamp(SKIPPED_STEPS, FieldValue.arrayRemove(stepId))
             .safeAwait()
             .onLeft {
                 Timber.e(
                     it,
-                    "[Firestore] Error removing $stepId from skippedSteps " +
+                    "[Firestore] Error removing $stepId from $SKIPPED_STEPS " +
                         "for quest $questId, user $userId."
                 )
             }
             .flatMap { // If the above was successful (Either.Right), proceed to mark as completed
                 questProgressDocument(userId, questId)
-                    .update("completedSteps", FieldValue.arrayUnion(stepId))
+                    .updateWithTimestamp(COMPLETED_STEPS, FieldValue.arrayUnion(stepId))
                     .safeAwait()
                     .map { }
             }
@@ -213,21 +257,18 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         stepId: String
     ): Either<Throwable, Unit> {
         return questProgressDocument(userId, questId)
-            .update("completedSteps", FieldValue.arrayRemove(stepId))
+            .updateWithTimestamp(COMPLETED_STEPS, FieldValue.arrayRemove(stepId))
             .safeAwait()
             .onLeft {
                 Timber.e(
                     it,
-                    "[Firestore] Error removing $stepId from completedSteps " +
+                    "[Firestore] Error removing $stepId from $COMPLETED_STEPS " +
                         "for quest $questId, user $userId."
                 )
             }
             .flatMap {
                 questProgressDocument(userId, questId)
-                    .update(
-                        "skippedSteps",
-                        FieldValue.arrayUnion(stepId)
-                    )
+                    .updateWithTimestamp(SKIPPED_STEPS, FieldValue.arrayUnion(stepId))
                     .safeAwait()
                     .map { }
             }
@@ -239,9 +280,9 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         walletAddress: String
     ): Either<Throwable, Unit> {
         return userDocument(userId)
-            .collection("wallet")
+            .collection(WALLET)
             .document(chainId)
-            .set(QuestUserWallet(walletAddress))
+            .set(mapOf(ADDRESS to walletAddress, CREATED_AT to FieldValue.serverTimestamp()))
             .safeAwait()
             .onLeft {
                 Timber.e(it, "[Firestore] Error setting wallet for chain $chainId, user $userId.")
@@ -251,13 +292,13 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
 
     private fun updateEarnedTokens(userId: String, tokens: Int): Either<Throwable, Unit> {
         return userDocument(userId)
-            .update("earnedTokens", tokens)
+            .updateWithTimestamp(EARNED_TOKENS, tokens)
             .safeAwait()
             .map { }
     }
 
     private fun listUserProgressQuestIds(userId: String): Either<Throwable, List<String>> {
-        val collectionRef = userDocument(userId).collection("progress")
+        val collectionRef = userDocument(userId).collection(PROGRESS)
         return collectionRef.get().safeAwait().map { querySnapshot ->
             querySnapshot.documents.mapNotNull { it.id }
         }

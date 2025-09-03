@@ -130,15 +130,7 @@ data class QuestUserProgress(
     val isCompleted: Boolean? = null,
     val completedSteps: List<String>? = null,
     val skippedSteps: List<String>? = null
-) {
-    companion object {
-        fun empty() = QuestUserProgress(
-            isCompleted = false,
-            completedSteps = emptyList(),
-            skippedSteps = emptyList()
-        )
-    }
-}
+)
 
 enum class RemoteBannerType {
     INFO_BANNER,
