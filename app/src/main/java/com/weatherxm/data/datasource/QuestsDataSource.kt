@@ -13,7 +13,6 @@ import com.weatherxm.data.models.QuestFirestore
 import com.weatherxm.data.models.QuestFirestoreStep
 import com.weatherxm.data.models.QuestUser
 import com.weatherxm.data.models.QuestUserProgress
-import com.weatherxm.data.models.QuestUserWallet
 import com.weatherxm.data.models.QuestWithStepsFirestore
 import com.weatherxm.data.safeAwait
 import kotlinx.coroutines.async
@@ -55,6 +54,8 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         const val USERS = "users"
         const val QUESTS = "quests"
         const val WALLET = "wallet"
+        const val UID = "uid"
+        const val ADDRESS = "address"
         const val PROGRESS = "progress"
         const val COMPLETED_STEPS = "completedSteps"
         const val SKIPPED_STEPS = "skippedSteps"
@@ -62,6 +63,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         const val EARNED_TOKENS = "earnedTokens"
         const val UPDATED_AT = "updatedAt"
         const val COMPLETED_AT = "completedAt"
+        const val CREATED_AT = "createdAt"
     }
 
     private val firebaseFirestore: FirebaseFirestore by inject()
@@ -97,14 +99,20 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                 Timber.d("[Firestore] Got User's Progress on Onboarding Quest: $it")
                 Either.Right(it)
             } ?: run {
-                val emptyProgress = QuestUserProgress.empty()
-                val setResult =
-                    questProgressDocument(userId, ONBOARDING_ID).set(emptyProgress).safeAwait()
-
-                setResult.map {
-                    Timber.d("[Firestore] Empty User's Progress on Onboarding Quest created")
-                    emptyProgress
-                }
+                questProgressDocument(userId, ONBOARDING_ID)
+                    .set(
+                        mapOf(
+                            IS_COMPLETED to false,
+                            COMPLETED_STEPS to emptyList<String>(),
+                            SKIPPED_STEPS to emptyList<String>(),
+                            CREATED_AT to FieldValue.serverTimestamp()
+                        )
+                    )
+                    .safeAwait()
+                    .map {
+                        Timber.d("[Firestore] Empty User's Progress on Onboarding Quest created")
+                        QuestUserProgress(false, emptyList(), emptyList())
+                    }
             }
         }
     }
@@ -126,11 +134,19 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
                         Timber.d("[Firestore] Got Quest User: $it")
                         Either.Right(it)
                     } ?: run {
-                        val newQuestUser = QuestUser(userId, 0, 0, FieldValue.serverTimestamp())
-                        userDocument(userId).set(newQuestUser).safeAwait().map {
-                            Timber.d("[Firestore] New user created: $newQuestUser")
-                            newQuestUser
-                        }
+                        userDocument(userId)
+                            .set(
+                                mapOf(
+                                    UID to userId,
+                                    EARNED_TOKENS to 0,
+                                    CREATED_AT to FieldValue.serverTimestamp()
+                                )
+                            )
+                            .safeAwait()
+                            .map {
+                                Timber.d("[Firestore] New user created: $userId")
+                                QuestUser(userId, 0, 0)
+                            }
                     }
                 }
             }
@@ -266,7 +282,7 @@ class QuestsDataSourceImpl : QuestsDataSource, KoinComponent {
         return userDocument(userId)
             .collection(WALLET)
             .document(chainId)
-            .set(QuestUserWallet(walletAddress, FieldValue.serverTimestamp()))
+            .set(mapOf(ADDRESS to walletAddress, CREATED_AT to FieldValue.serverTimestamp()))
             .safeAwait()
             .onLeft {
                 Timber.e(it, "[Firestore] Error setting wallet for chain $chainId, user $userId.")

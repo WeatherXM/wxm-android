@@ -4,7 +4,6 @@ package com.weatherxm.data.models
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.PropertyName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -115,15 +114,13 @@ data class QuestFirestoreStep(
 data class QuestUser(
     val uid: String? = null,
     val earnedTokens: Int? = null,
-    val paidTokens: Int? = null,
-    val createdAt: FieldValue? = null
+    val paidTokens: Int? = null
 )
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class QuestUserWallet(
-    val address: String? = null,
-    val createdAt: FieldValue? = null
+    val address: String? = null
 )
 
 @Keep
@@ -131,19 +128,9 @@ data class QuestUserWallet(
 data class QuestUserProgress(
     @get:PropertyName("isCompleted") // https://medium.com/@eeddeellee/boolean-fields-that-start-with-is-in-firebase-firestore-49afb65e3639
     val isCompleted: Boolean? = null,
-    val createdAt: FieldValue? = null,
     val completedSteps: List<String>? = null,
     val skippedSteps: List<String>? = null
-) {
-    companion object {
-        fun empty() = QuestUserProgress(
-            isCompleted = false,
-            completedSteps = emptyList(),
-            skippedSteps = emptyList(),
-            createdAt = FieldValue.serverTimestamp()
-        )
-    }
-}
+)
 
 enum class RemoteBannerType {
     INFO_BANNER,
