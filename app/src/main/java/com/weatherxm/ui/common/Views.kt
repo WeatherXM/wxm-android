@@ -137,10 +137,12 @@ inline fun <reified T : Parcelable> Intent.putParcelableList(key: String, data: 
 // https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
 @SuppressLint("NewApi")
 inline fun <reified T : Parcelable> Intent.parcelableList(key: String): ArrayList<T>? =
-    if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
-        getParcelableArrayListExtra(key, T::class.java)
-    } else {
-        @Suppress("DEPRECATION") getParcelableArrayListExtra<T>(key)
+    this.extras?.let {
+        if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
+            BundleCompat.getParcelableArrayList<T>(it, key, T::class.java)
+        } else {
+            @Suppress("DEPRECATION") getParcelableArrayListExtra<T>(key)
+        }
     }
 
 /**

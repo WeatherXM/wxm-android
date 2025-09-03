@@ -29,6 +29,7 @@ import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
 import com.weatherxm.util.permissionsBuilder
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.io.File
 
 open class BaseActivity : AppCompatActivity(), BaseInterface {
@@ -119,6 +120,10 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
                     ?: "${defaultPhotoPrefix}_img$index.jpg"
                 val file = File(cacheDir, fileName)
                 val imageBitmap = BitmapFactory.decodeFile(stationPhoto.localPath)
+                if (imageBitmap == null) {
+                    Timber.e("Image bitmap is null for path: ${stationPhoto.localPath}")
+                    return
+                }
                 file.copyInputStreamToFile(compressImageFile(imageBitmap))
                 copyExifMetadata(
                     stationPhoto.localPath,
