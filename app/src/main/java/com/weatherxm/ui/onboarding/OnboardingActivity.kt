@@ -3,6 +3,7 @@ package com.weatherxm.ui.onboarding
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -27,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
@@ -144,6 +148,20 @@ private fun Content(
                         painter = painterResource(images[page]),
                         contentDescription = null,
                         contentScale = ContentScale.Crop
+                    )
+                    Box(
+                        modifier = Modifier
+                            .width(300.dp)
+                            .height(120.dp)
+                            .clip(
+                                RoundedCornerShape(
+                                    topStart = 0.dp,
+                                    topEnd = 0.dp,
+                                    bottomStart = dimensionResource(R.dimen.radius_extra_large),
+                                    bottomEnd = dimensionResource(R.dimen.radius_extra_large)
+                                )
+                            )
+                            .background(Color.Black.copy(alpha = 0.5f))
                     )
                     Text(
                         modifier = Modifier.padding(
