@@ -62,9 +62,10 @@ object NumberUtils : KoinComponent {
     }
 
     fun Double.toBigDecimalSafe(): BigDecimal {
-        return when {
-            this.isNaN() || this.isInfinite() -> BigDecimal.ZERO
-            else -> try {
+        return if (this.isNaN() || this.isInfinite()) {
+            BigDecimal.ZERO
+        } else {
+            try {
                 this.toBigDecimal()
             } catch (e: NumberFormatException) {
                 Timber.e(e)
@@ -75,9 +76,10 @@ object NumberUtils : KoinComponent {
     }
 
     fun Float.toBigDecimalSafe(): BigDecimal {
-        return when {
-            this.isNaN() || this.isInfinite() -> BigDecimal.ZERO
-            else -> try {
+        return if (this.isNaN() || this.isInfinite()) {
+            BigDecimal.ZERO
+        } else {
+            try {
                 this.toBigDecimal()
             } catch (e: NumberFormatException) {
                 Timber.e(e)

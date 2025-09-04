@@ -5,6 +5,7 @@ import com.weatherxm.data.DECIMAL_FORMAT_TOKENS
 import com.weatherxm.data.THOUSANDS_GROUPING_SIZE
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.util.NumberUtils.formatTokens
+import com.weatherxm.util.NumberUtils.toBigDecimalSafe
 import com.weatherxm.util.NumberUtils.weiToETH
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -126,6 +127,56 @@ class NumberUtilsTest : BehaviorSpec({
             When("it is bigger than zero") {
                 then("the validator should return make the conversion and format the tokens") {
                     formatTokens(weiToETH(BigDecimal.valueOf(10000000000000000))) shouldBe "0.01"
+                }
+            }
+        }
+    }
+
+    context("Convert Double to BigDecimal") {
+        given("a Double") {
+            When("it NaN") {
+                then("the convertor should return zero") {
+                    Double.NaN.toBigDecimalSafe() shouldBe BigDecimal.ZERO
+                }
+            }
+            When("it's POSITIVE_INFINITY") {
+                then("the convertor should return zero") {
+                    Double.POSITIVE_INFINITY.toBigDecimalSafe() shouldBe BigDecimal.ZERO
+                }
+            }
+            When("it's NEGATIVE_INFINITY'") {
+                then("the convertor should return zero") {
+                    Double.NEGATIVE_INFINITY.toBigDecimalSafe() shouldBe BigDecimal.ZERO
+                }
+            }
+            When("it is valid") {
+                then("the convertor should return the correct BigDecimal") {
+                    10.0.toBigDecimalSafe() shouldBe 10.0.toBigDecimal()
+                }
+            }
+        }
+    }
+
+    context("Convert Float to BigDecimal") {
+        given("a Float") {
+            When("it NaN") {
+                then("the convertor should return zero") {
+                    Float.NaN.toBigDecimalSafe() shouldBe BigDecimal.ZERO
+                }
+            }
+            When("it's POSITIVE_INFINITY") {
+                then("the convertor should return zero") {
+                    Float.POSITIVE_INFINITY.toBigDecimalSafe() shouldBe BigDecimal.ZERO
+                }
+            }
+            When("it's NEGATIVE_INFINITY'") {
+                then("the convertor should return zero") {
+                    Float.NEGATIVE_INFINITY.toBigDecimalSafe() shouldBe BigDecimal.ZERO
+                }
+            }
+            When("it is valid") {
+                then("the convertor should return the correct BigDecimal") {
+                    10F.toBigDecimalSafe() shouldBe 10F.toBigDecimal()
                 }
             }
         }
