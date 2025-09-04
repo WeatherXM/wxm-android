@@ -76,6 +76,7 @@
                             android:layout_marginTop="@dimen/margin_extra_small"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:textColor="@color/colorPrimaryVariant"
+                            android:textIsSelectable="true"
                             app:layout_constraintTop_toBottomOf="@id/stationNameTitle"
                             tools:text="Macho Sangria Easterlies" />
 

@@ -29,6 +29,7 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.errorChip
 import com.weatherxm.ui.common.lowBatteryChip
+import com.weatherxm.ui.common.makeTextSelectable
 import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBundleChip
@@ -219,6 +220,9 @@ class DeviceDetailsActivity : BaseActivity() {
                 binding.toolbar.subtitle = device.name
             }
         }
+
+        // Ensure title and subtitle are selectable after updates
+        binding.toolbar.makeTextSelectable()
 
         with(binding.relationBtn) {
             when (device.relation) {
