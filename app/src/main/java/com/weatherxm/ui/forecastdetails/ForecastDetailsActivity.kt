@@ -129,20 +129,22 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun updateUI(forecast: UIForecastDay) {
-        // Update the header now that model.address has valid data
-        binding.header.setContent {
-            if (model.location.isCurrentLocation) {
-                HeaderView(
-                    title = getString(R.string.current_location).capitalizeWords(),
-                    subtitle = model.forecast().address,
-                    onInfoButton = null
-                )
-            } else {
-                HeaderView(
-                    title = model.forecast().address ?: EMPTY_VALUE,
-                    subtitle = null,
-                    onInfoButton = null
-                )
+        // Update the header now that model.address has valid data and we are in a location
+        if (!model.location.isEmpty()) {
+            binding.header.setContent {
+                if (model.location.isCurrentLocation) {
+                    HeaderView(
+                        title = getString(R.string.current_location).capitalizeWords(),
+                        subtitle = model.forecast().address,
+                        onInfoButton = null
+                    )
+                } else {
+                    HeaderView(
+                        title = model.forecast().address ?: EMPTY_VALUE,
+                        subtitle = null,
+                        onInfoButton = null
+                    )
+                }
             }
         }
 
