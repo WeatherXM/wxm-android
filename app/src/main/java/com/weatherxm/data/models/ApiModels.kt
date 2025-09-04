@@ -94,7 +94,7 @@ data class PublicDevice(
             bundleName = try {
                 BundleName.valueOf(bundle?.name ?: String.empty())
             } catch (e: IllegalArgumentException) {
-                Timber.e("Wrong Bundle Name: ${bundle?.name} for Device $name")
+                Timber.e(e, "Wrong Bundle Name: ${bundle?.name} for Device $name")
                 null
             },
             bundleTitle = bundle?.title,
@@ -178,7 +178,7 @@ data class Device(
             bundleName = try {
                 BundleName.valueOf(bundle?.name ?: String.empty())
             } catch (e: IllegalArgumentException) {
-                Timber.e("Wrong Bundle Name: ${bundle?.name} for Device $name")
+                Timber.e(e, "Wrong Bundle Name: ${bundle?.name} for Device $name")
                 null
             },
             bundleTitle = bundle?.title,

@@ -1,11 +1,14 @@
 package com.weatherxm.util
 
 import android.icu.text.CompactDecimalFormat
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import com.weatherxm.data.DECIMAL_FORMAT_TOKENS
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
+import timber.log.Timber
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -35,7 +38,7 @@ object NumberUtils : KoinComponent {
 
     fun formatTokens(amount: Float?): String {
         return amount?.let {
-            formatTokens(it.toBigDecimal())
+            formatTokens(it.toBigDecimalSafe())
         } ?: EMPTY_VALUE
     }
 
@@ -55,7 +58,35 @@ object NumberUtils : KoinComponent {
     }
 
     fun roundToDecimals(value: Number, decimals: Int = 1): Float {
-        return value.toFloat().toBigDecimal().setScale(decimals, RoundingMode.HALF_UP).toFloat()
+        return value.toFloat().toBigDecimalSafe().setScale(decimals, RoundingMode.HALF_UP).toFloat()
+    }
+
+    fun Double.toBigDecimalSafe(): BigDecimal {
+        return if (this.isNaN() || this.isInfinite()) {
+            BigDecimal.ZERO
+        } else {
+            try {
+                this.toBigDecimal()
+            } catch (e: NumberFormatException) {
+                Timber.e(e)
+                Firebase.crashlytics.recordException(Throwable("Invalid Number: $this", e))
+                BigDecimal.ZERO
+            }
+        }
+    }
+
+    fun Float.toBigDecimalSafe(): BigDecimal {
+        return if (this.isNaN() || this.isInfinite()) {
+            BigDecimal.ZERO
+        } else {
+            try {
+                this.toBigDecimal()
+            } catch (e: NumberFormatException) {
+                Timber.e(e)
+                Firebase.crashlytics.recordException(Throwable("Invalid Number: $this", e))
+                BigDecimal.ZERO
+            }
+        }
     }
 }
 
