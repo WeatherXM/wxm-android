@@ -139,6 +139,7 @@ private fun Content(
                 Box(contentAlignment = Alignment.BottomCenter) {
                     Image(
                         modifier = Modifier
+                            .width(300.dp)
                             .fillMaxHeight()
                             .clip(
                                 RoundedCornerShape(
