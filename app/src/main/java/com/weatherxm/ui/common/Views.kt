@@ -644,6 +644,21 @@ fun MaterialToolbar.setMenuTint(@ColorRes color: Int = R.color.colorPrimary) {
     }
 }
 
+/**
+ * Makes the MaterialToolbar title and subtitle text selectable for copy/paste functionality.
+ * This extension function programmatically finds the internal TextView components
+ * and enables text selection on them.
+ */
+fun MaterialToolbar.makeTextSelectable() {
+    // Iterate through all child views to find TextViews (title and subtitle)
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        if (child is TextView) {
+            child.setTextIsSelectable(true)
+        }
+    }
+}
+
 // https://stackoverflow.com/a/46165723/5403137
 class HorizontalScrollGestureListener(
     private val recyclerView: RecyclerView
