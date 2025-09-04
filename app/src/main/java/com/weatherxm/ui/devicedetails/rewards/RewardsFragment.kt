@@ -41,6 +41,7 @@ import com.weatherxm.ui.components.compose.DailyRewardsView
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils.formatTokens
+import com.weatherxm.util.NumberUtils.toBigDecimalSafe
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.getFirstLetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -77,7 +78,7 @@ class RewardsFragment : BaseFragment() {
             binding.emptyCard.visible(it.isEmpty())
             if (!it.isEmpty()) {
                 binding.totalRewards.text =
-                    getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
+                    getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimalSafe()))
                 updateWeeklyStreak(it.timeline)
                 binding.totalCard.visible(true)
                 binding.weeklyCard.visible(true)

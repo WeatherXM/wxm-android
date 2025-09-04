@@ -34,6 +34,7 @@ import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
 import com.weatherxm.util.NumberUtils.formatTokens
+import com.weatherxm.util.NumberUtils.toBigDecimalSafe
 import com.weatherxm.util.NumberUtils.weiToETH
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -236,9 +237,15 @@ class ProfileFragment : BaseFragment() {
     private fun updateRewardsUI(data: UIWalletRewards) {
         binding.rewards.clear()
         binding.totalEarnedValue.text =
-            getString(R.string.wxm_amount, formatTokens(weiToETH(data.totalEarned.toBigDecimal())))
+            getString(
+                R.string.wxm_amount,
+                formatTokens(weiToETH(data.totalEarned.toBigDecimalSafe()))
+            )
         binding.totalClaimedValue.text =
-            getString(R.string.wxm_amount, formatTokens(weiToETH(data.totalClaimed.toBigDecimal())))
+            getString(
+                R.string.wxm_amount,
+                formatTokens(weiToETH(data.totalClaimed.toBigDecimalSafe()))
+            )
         if (data.allocated == 0.0) {
             binding.rewards.subtitle(getString(R.string.no_allocated_rewards))
 
@@ -284,7 +291,8 @@ class ProfileFragment : BaseFragment() {
             binding.rewards
                 .subtitle(
                     getString(
-                        R.string.wxm_amount, formatTokens(weiToETH(data.allocated.toBigDecimal()))
+                        R.string.wxm_amount,
+                        formatTokens(weiToETH(data.allocated.toBigDecimalSafe()))
                     )
                 )
                 .action(getString(R.string.action_claim)) {
