@@ -64,7 +64,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         // Setup navigation view
         binding.navView.setupWithNavController(navController)
 
-        if(!AndroidBuildInfo.isSolana()) {
+        if (!AndroidBuildInfo.isSolana()) {
             navController.graph.remove(navController.graph[R.id.navigation_quests])
             binding.navView.menu.findItem(R.id.navigation_quests).isVisible = false
         }
@@ -88,6 +88,12 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
                 binding.searchLocationBtn.hide()
             } else {
                 binding.searchLocationBtn.show()
+            }
+        }
+
+        model.onNavigateToQuests().observe(this) {
+            binding.navView.menu.findItem(R.id.navigation_quests)?.let {
+                NavigationUI.onNavDestinationSelected(it, navController)
             }
         }
 

@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl.Companion.ANNOUNCEMENT_LOCAL_PRO_ACTION_URL
+import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl.Companion.ANNOUNCEMENT_QUESTS_URL
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBanner
 import com.weatherxm.data.models.RemoteBannerType
@@ -342,6 +343,8 @@ class LocationsFragment : BaseFragment() {
                                 )
                             )
                             ProPromotionDialogFragment().show(this)
+                        } else if (it.url == ANNOUNCEMENT_QUESTS_URL) {
+                            parentModel.navigateToQuests()
                         } else {
                             navigator.openWebsite(context, it.url)
                         }
