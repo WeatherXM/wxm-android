@@ -7,6 +7,7 @@ import com.funkatronics.encoders.Base58
 import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
 import com.solana.mobilewalletadapter.clientlib.ConnectionIdentity
 import com.solana.mobilewalletadapter.clientlib.MobileWalletAdapter
+import com.solana.mobilewalletadapter.clientlib.Solana
 import com.solana.mobilewalletadapter.clientlib.TransactionResult
 import com.solana.mobilewalletadapter.common.signin.SignInWithSolana
 import com.weatherxm.R
@@ -68,7 +69,9 @@ class QuestGenericStepViewModel(
                 iconUri = "logo-square.png".toUri(),
                 identityName = "WeatherXM App"
             )
-        )
+        ).apply {
+            blockchain = Solana.Mainnet
+        }
         viewModelScope.launch {
             val payload = SignInWithSolana.Payload("weatherxm.network", "Sign in to WeatherXM App")
             val result = walletAdapter.signIn(senderForSolanaWallet, payload)
