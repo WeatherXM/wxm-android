@@ -73,22 +73,12 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             onExplorerState(resource)
         }
 
-        explorerModel.onSearchOpenStatus().observe(this) { isOpened ->
-            if (isOpened) {
-                binding.mapLayerPickerBtn.hide()
-                binding.myLocationBtn.hide()
-            } else {
-                binding.mapLayerPickerBtn.show()
-                binding.myLocationBtn.show()
-            }
+        explorerModel.onSearchOpenStatus().observe(this) {
+            onExplorerSearchOpenStatus(it)
         }
 
-        locationsViewModel.onSearchOpenStatus().observe(this) { isOpened ->
-            if (isOpened) {
-                binding.searchLocationBtn.hide()
-            } else {
-                binding.searchLocationBtn.show()
-            }
+        locationsViewModel.onSearchOpenStatus().observe(this) {
+            onLocationSearchOpenStatus(it)
         }
 
         model.onNavigateToQuests().observe(this) {
@@ -322,6 +312,25 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             binding.navView.getOrCreateBadge(R.id.navigation_profile)
         } else {
             binding.navView.removeBadge(R.id.navigation_profile)
+        }
+    }
+
+    private fun onExplorerSearchOpenStatus(isOpened: Boolean) {
+        if (isOpened) {
+            binding.mapLayerPickerBtn.hide()
+            binding.myLocationBtn.hide()
+        } else {
+            binding.mapLayerPickerBtn.show()
+            binding.myLocationBtn.show()
+        }
+    }
+
+    private fun onLocationSearchOpenStatus(isOpened: Boolean) {
+
+        if (isOpened) {
+            binding.searchLocationBtn.hide()
+        } else {
+            binding.searchLocationBtn.show()
         }
     }
 
