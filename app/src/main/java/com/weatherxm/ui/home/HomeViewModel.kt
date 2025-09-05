@@ -37,6 +37,7 @@ class HomeViewModel(
     private val onSurvey = SingleLiveEvent<Survey>()
     private val onInfoBanner = SingleLiveEvent<RemoteBanner?>()
     private val onAnnouncementBanner = SingleLiveEvent<RemoteBanner?>()
+    private val onNavigateToQuests = SingleLiveEvent<Unit>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
@@ -47,6 +48,7 @@ class HomeViewModel(
     fun onInfoBanner(): LiveData<RemoteBanner?> = onInfoBanner
     fun onAnnouncementBanner(): LiveData<RemoteBanner?> = onAnnouncementBanner
     fun showOverlayViews() = showOverlayViews
+    fun onNavigateToQuests(): LiveData<Unit> = onNavigateToQuests
 
     fun hasDevices() = hasDevices
     fun isLoggedIn() = isLoggedIn ?: false
@@ -140,5 +142,9 @@ class HomeViewModel(
 
     fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
         userUseCase.setClaimingBadgeShouldShow(shouldShow)
+    }
+
+    fun navigateToQuests() {
+        onNavigateToQuests.postValue(Unit)
     }
 }
