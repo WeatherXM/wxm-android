@@ -99,6 +99,7 @@ class QuestOnboardingActivity : BaseActivity() {
             binding.loading.visible(false)
             binding.actionBtn.text = getString(R.string.quest_completed)
             navigator.showQuestCompletion(this, model.onboardingQuestData?.title ?: String.empty())
+            finish()
         }
     }
 
