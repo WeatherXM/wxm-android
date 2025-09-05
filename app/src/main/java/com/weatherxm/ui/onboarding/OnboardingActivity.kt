@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -136,7 +137,15 @@ private fun Content(
                     .weight(1F)
                     .fillMaxWidth()
             ) { page ->
-                Box(contentAlignment = Alignment.BottomCenter) {
+                Box(
+                    contentAlignment = Alignment.BottomCenter,
+                    modifier = Modifier.shadow(
+                        elevation = dimensionResource(R.dimen.elevation_normal),
+                        shape = RoundedCornerShape(
+                            dimensionResource(R.dimen.radius_extra_large)
+                        )
+                    )
+                ) {
                     Image(
                         modifier = Modifier
                             .width(300.dp)
