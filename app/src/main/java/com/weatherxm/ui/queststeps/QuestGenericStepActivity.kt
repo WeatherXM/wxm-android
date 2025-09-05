@@ -195,6 +195,7 @@ class QuestGenericStepActivity : BaseActivity() {
     private fun showSensorsDialog() {
         ActionDialogFragment
             .Builder(
+                title = getString(R.string.allow_sensors_dialog_title),
                 message = getString(R.string.allow_sensors_dialog_message),
                 negative = getString(R.string.do_not_allow_button_message)
             )
