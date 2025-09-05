@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import com.weatherxm.data.services.CacheService
 
 interface UserPreferenceDataSource {
+    fun shouldShowOnboarding(): Boolean
     fun getAnalyticsDecisionTimestamp(): Long
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getDevicesSortFilterOptions(): List<String>
@@ -18,6 +19,12 @@ interface UserPreferenceDataSource {
 class UserPreferenceDataSourceImpl(
     private val cacheService: CacheService
 ) : UserPreferenceDataSource {
+    override fun shouldShowOnboarding(): Boolean {
+        return cacheService.shouldShowOnboarding().apply {
+            if (this) cacheService.disableShouldShowOnboarding()
+        }
+    }
+
     override fun getAnalyticsDecisionTimestamp(): Long {
         return cacheService.getAnalyticsDecisionTimestamp()
     }

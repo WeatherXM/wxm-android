@@ -44,6 +44,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
@@ -88,6 +89,7 @@ import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.networkstats.growth.NetworkGrowthActivity
 import com.weatherxm.ui.networkstats.tokenmetrics.TokenMetricsActivity
+import com.weatherxm.ui.onboarding.OnboardingActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryActivity
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroActivity
@@ -109,7 +111,7 @@ import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: AnalyticsWrapper) {
-    fun showLogin(context: Context, newTask: Boolean = false) {
+    fun showLogin(context: Context, newTask: Boolean = false, fromOnboarding: Boolean = false) {
         val intentFlags = if (newTask) {
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         } else {
@@ -117,13 +119,15 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
         context.startActivity(
             Intent(context, LoginActivity::class.java).addFlags(intentFlags)
+                .putExtra(ARG_FROM_ONBOARDING, fromOnboarding)
         )
     }
 
-    fun showSignup(context: Context) {
+    fun showSignup(context: Context, fromOnboarding: Boolean = false) {
         context.startActivity(
             Intent(context, SignupActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .putExtra(ARG_FROM_ONBOARDING, fromOnboarding)
         )
     }
 
@@ -138,6 +142,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showUpdatePrompt(context: Context) {
         context.startActivity(
             Intent(context, UpdatePromptActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+    }
+
+    fun showOnboarding(context: Context) {
+        context.startActivity(
+            Intent(context, OnboardingActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }

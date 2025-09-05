@@ -5,6 +5,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivitySignupBinding
+import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
@@ -57,7 +58,10 @@ class SignupActivity : BaseActivity() {
         }
 
         binding.done.setOnClickListener {
-            navigator.showLogin(this)
+            navigator.showLogin(
+                context = this,
+                fromOnboarding = intent.getBooleanExtra(ARG_FROM_ONBOARDING, false)
+            )
             finish()
         }
 

@@ -17,6 +17,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_LAST_REMINDED_VERS
 import com.weatherxm.data.services.CacheService.Companion.KEY_PHOTO_VERIFICATION_ACCEPTED_TERMS
 import com.weatherxm.data.services.CacheService.Companion.KEY_SAVED_LOCATIONS
 import com.weatherxm.data.services.CacheService.Companion.KEY_SHOULD_SHOW_CLAIMING_BADGE
+import com.weatherxm.data.services.CacheService.Companion.KEY_SHOULD_SHOW_ONBOARDING
 import com.weatherxm.data.services.CacheService.Companion.KEY_WALLET_WARNING_DISMISSED_TIMESTAMP
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -223,6 +224,15 @@ class PrefsSingleVarTest(
             { prefEditor.putStringSet(KEY_SAVED_LOCATIONS, savedLocations) },
             { cacheService.getSavedLocations() },
             { cacheService.setSavedLocations(savedLocations.toList()) }
+        )
+
+        behaviorSpec.testGetSetSingleVar(
+            "if we should show the onboarding",
+            true,
+            { sharedPref.getBoolean(KEY_SHOULD_SHOW_ONBOARDING, true) },
+            { prefEditor.putBoolean(KEY_SHOULD_SHOW_ONBOARDING, false) },
+            { cacheService.shouldShowOnboarding() },
+            { cacheService.disableShouldShowOnboarding() }
         )
     }
 }

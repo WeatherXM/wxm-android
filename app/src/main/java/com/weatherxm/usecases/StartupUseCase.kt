@@ -43,10 +43,13 @@ class StartupUseCaseImpl(
                 appConfigRepository.setLastRemindedVersion()
                 trySend(StartupState.ShowUpdate)
             } else {
-                authRepository.isLoggedIn().apply {
+                val isLoggedIn = authRepository.isLoggedIn().apply {
                     if (this) RefreshFcmApiWorker.initAndRefreshToken(context, null)
                 }
-                if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
+                if (userPreferencesRepository.shouldShowOnboarding() && !isLoggedIn) {
+                    Timber.d("Show the Onboarding screen.")
+                    trySend(StartupState.ShowOnboarding)
+                } else if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                     Timber.d("Show the Analytics Opt-In screen.")
                     trySend(StartupState.ShowAnalyticsOptIn)
                 } else {

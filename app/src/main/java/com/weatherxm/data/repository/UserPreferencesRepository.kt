@@ -3,6 +3,7 @@ package com.weatherxm.data.repository
 import com.weatherxm.data.datasource.UserPreferenceDataSource
 
 interface UserPreferencesRepository {
+    fun shouldShowOnboarding(): Boolean
     fun shouldShowAnalyticsOptIn(): Boolean
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getWalletWarningDismissTimestamp(): Long
@@ -18,6 +19,9 @@ interface UserPreferencesRepository {
 class UserPreferencesRepositoryImpl(
     private val datasource: UserPreferenceDataSource
 ) : UserPreferencesRepository {
+    override fun shouldShowOnboarding(): Boolean {
+        return datasource.shouldShowOnboarding()
+    }
 
     override fun shouldShowAnalyticsOptIn(): Boolean {
         return datasource.getAnalyticsDecisionTimestamp() == 0L
