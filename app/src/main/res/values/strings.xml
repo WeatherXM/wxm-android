@@ -897,6 +897,7 @@
     <string name="skip_and_mark_as_done_button_title">Skip and mark as done</string>
     <string name="optional_step_description">This is optional. You can skip it and still complete the quest but you’ll lose this task’s rewards.</string>
     <string name="follow_us_on_x">Follow us on X</string>
+    <string name="allow_sensors_dialog_title">Allow Sensors?</string>
     <string name="allow_sensors_dialog_message">Allow “WeatherXM” to access Environment Sensors?</string>
     <string name="allow_button_message">Allow</string>
     <string name="do_not_allow_button_message">Don\'t allow</string>
