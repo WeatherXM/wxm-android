@@ -61,7 +61,7 @@ timber = "5.0.1"
 upload-service = "4.9.4"
 
 # Plugins
-android-gradle-plugin = "8.12.2"
+android-gradle-plugin = "8.13.0"
 detekt-plugin = "1.23.8"
 firebase-appdistribution-plugin = "5.1.1"
 firebase-crashlytics-plugin = "3.0.6"
