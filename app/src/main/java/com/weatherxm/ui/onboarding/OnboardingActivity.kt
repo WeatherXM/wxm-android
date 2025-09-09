@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -110,6 +111,19 @@ private fun Content(
                 contentScale = ContentScale.Crop
             )
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color.Transparent
+                        )
+                    )
+                )
+        )
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             Column(
                 modifier = Modifier
@@ -175,7 +189,14 @@ private fun Content(
                                     bottomEnd = dimensionResource(R.dimen.radius_extra_large)
                                 )
                             )
-                            .background(Color.Black.copy(alpha = 0.5f))
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        Color.Black
+                                    )
+                                )
+                            )
                     )
                     Text(
                         modifier = Modifier.padding(
