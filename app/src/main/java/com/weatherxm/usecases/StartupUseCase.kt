@@ -19,6 +19,7 @@ import timber.log.Timber
 
 interface StartupUseCase {
     fun getStartupState(): Flow<StartupState>
+    fun disableShouldShowOnboarding()
 }
 
 class StartupUseCaseImpl(
@@ -64,5 +65,9 @@ class StartupUseCaseImpl(
         return combine(delayFlow, stateFlow) { _, state ->
             state
         }.flowOn(dispatcher)
+    }
+
+    override fun disableShouldShowOnboarding() {
+        userPreferencesRepository.disableShouldShowOnboarding()
     }
 }

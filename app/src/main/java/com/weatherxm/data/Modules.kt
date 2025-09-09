@@ -202,6 +202,7 @@ import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.login.LoginViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
+import com.weatherxm.ui.onboarding.OnboardingViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
 import com.weatherxm.ui.photoverification.gallery.PhotoGalleryViewModel
 import com.weatherxm.ui.photoverification.intro.PhotoVerificationIntroViewModel
@@ -772,6 +773,7 @@ private val viewmodels = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::NetworkSearchViewModel)
     viewModelOf(::NetworkStatsViewModel)
+    viewModelOf(::OnboardingViewModel)
     viewModelOf(::PasswordPromptViewModel)
     viewModelOf(::PhotoGalleryViewModel)
     viewModelOf(::PhotoUploadViewModel)

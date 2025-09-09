@@ -47,9 +47,11 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ActivityOnboardingBinding
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.compose.LargeText
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingActivity : BaseActivity() {
     private lateinit var binding: ActivityOnboardingBinding
+    private val model: OnboardingViewModel by viewModel()
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,10 +62,12 @@ class OnboardingActivity : BaseActivity() {
         binding.content.setContent {
             Content(
                 onSignup = {
+                    model.disableShouldShowOnboarding()
                     navigator.showSignup(this, true)
                     finish()
                 },
                 onExploreTheApp = {
+                    model.disableShouldShowOnboarding()
                     navigator.showAnalyticsOptIn(this)
                     finish()
                 }

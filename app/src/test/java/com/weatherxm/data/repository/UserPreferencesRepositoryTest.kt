@@ -26,6 +26,7 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
         justRun { dataSource.setClaimingBadgeShouldShow(any()) }
         every { dataSource.getDevicesSortFilterOptions() } returns sortFilterGroupOptions
         every { dataSource.getClaimingBadgeShouldShow() } returns true
+        justRun { dataSource.disableShouldShowOnboarding() }
     }
 
     context("Enable/Disable analytics") {
@@ -137,6 +138,15 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
             every { dataSource.shouldShowOnboarding() } returns false
             then("return false") {
                 repo.shouldShowOnboarding() shouldBe false
+            }
+        }
+    }
+
+    context("Disable that we should show the onboarding") {
+        When("Using the repository to disable that flag") {
+            repo.disableShouldShowOnboarding()
+            then("verify that the call to disable that flag is made") {
+                verify(exactly = 1) { dataSource.disableShouldShowOnboarding() }
             }
         }
     }

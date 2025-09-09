@@ -4,6 +4,7 @@ import com.weatherxm.data.datasource.UserPreferenceDataSource
 
 interface UserPreferencesRepository {
     fun shouldShowOnboarding(): Boolean
+    fun disableShouldShowOnboarding()
     fun shouldShowAnalyticsOptIn(): Boolean
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getWalletWarningDismissTimestamp(): Long
@@ -21,6 +22,10 @@ class UserPreferencesRepositoryImpl(
 ) : UserPreferencesRepository {
     override fun shouldShowOnboarding(): Boolean {
         return datasource.shouldShowOnboarding()
+    }
+
+    override fun disableShouldShowOnboarding() {
+        datasource.disableShouldShowOnboarding()
     }
 
     override fun shouldShowAnalyticsOptIn(): Boolean {
