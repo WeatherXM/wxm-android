@@ -2,6 +2,7 @@ package com.weatherxm.ui.onboarding
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -99,12 +100,14 @@ private fun Content(
 
     Box {
         Box(modifier = Modifier.blur(100.dp)) {
-            Image(
-                modifier = Modifier.fillMaxHeight(),
-                painter = painterResource(currentImage.value),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
+            Crossfade(targetState = currentImage.value) { imageRes ->
+                Image(
+                    modifier = Modifier.fillMaxHeight(),
+                    painter = painterResource(imageRes),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             Column(
