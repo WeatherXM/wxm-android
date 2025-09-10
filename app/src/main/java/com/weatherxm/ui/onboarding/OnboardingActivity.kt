@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -47,9 +48,11 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ActivityOnboardingBinding
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.compose.LargeText
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingActivity : BaseActivity() {
     private lateinit var binding: ActivityOnboardingBinding
+    private val model: OnboardingViewModel by viewModel()
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,10 +63,12 @@ class OnboardingActivity : BaseActivity() {
         binding.content.setContent {
             Content(
                 onSignup = {
+                    model.disableShouldShowOnboarding()
                     navigator.showSignup(this, true)
                     finish()
                 },
                 onExploreTheApp = {
+                    model.disableShouldShowOnboarding()
                     navigator.showAnalyticsOptIn(this)
                     finish()
                 }
@@ -106,6 +111,19 @@ private fun Content(
                 contentScale = ContentScale.Crop
             )
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color.Transparent
+                        )
+                    )
+                )
+        )
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             Column(
                 modifier = Modifier
@@ -171,7 +189,14 @@ private fun Content(
                                     bottomEnd = dimensionResource(R.dimen.radius_extra_large)
                                 )
                             )
-                            .background(Color.Black.copy(alpha = 0.5f))
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        Color.Black
+                                    )
+                                )
+                            )
                     )
                     Text(
                         modifier = Modifier.padding(

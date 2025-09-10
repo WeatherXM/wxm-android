@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 
@@ -30,6 +31,7 @@ class StartupUseCaseTest : BehaviorSpec({
         every { authRepo.isLoggedIn() } returns true
         justRun { RefreshFcmApiWorker.initAndRefreshToken(context, null) }
         every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns false
+        justRun { userPreferencesRepo.disableShouldShowOnboarding() }
     }
 
     suspend fun getStartupType() = usecase.getStartupState().first()
@@ -80,6 +82,15 @@ class StartupUseCaseTest : BehaviorSpec({
                         RefreshFcmApiWorker.initAndRefreshToken(context, null)
                     }
                 }
+            }
+        }
+    }
+
+    context("Disable that we should show the onboarding") {
+        When("Using the usecase to disable that flag") {
+            usecase.disableShouldShowOnboarding()
+            then("verify that the call to disable that flag is made") {
+                verify(exactly = 1) { userPreferencesRepo.disableShouldShowOnboarding() }
             }
         }
     }

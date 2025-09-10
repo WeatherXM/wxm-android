@@ -4,6 +4,7 @@ import com.weatherxm.data.services.CacheService
 
 interface UserPreferenceDataSource {
     fun shouldShowOnboarding(): Boolean
+    fun disableShouldShowOnboarding()
     fun getAnalyticsDecisionTimestamp(): Long
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getDevicesSortFilterOptions(): List<String>
@@ -20,10 +21,10 @@ class UserPreferenceDataSourceImpl(
     private val cacheService: CacheService
 ) : UserPreferenceDataSource {
     override fun shouldShowOnboarding(): Boolean {
-        return cacheService.shouldShowOnboarding().apply {
-            if (this) cacheService.disableShouldShowOnboarding()
-        }
+        return cacheService.shouldShowOnboarding()
     }
+
+    override fun disableShouldShowOnboarding() = cacheService.disableShouldShowOnboarding()
 
     override fun getAnalyticsDecisionTimestamp(): Long {
         return cacheService.getAnalyticsDecisionTimestamp()

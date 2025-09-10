@@ -137,9 +137,15 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
                 then("return true") {
                     datasource.shouldShowOnboarding() shouldBe true
                 }
-                then("verify that the call to disable that flag is made") {
-                    verify(exactly = 1) { cacheService.disableShouldShowOnboarding() }
-                }
+            }
+        }
+    }
+
+    context("Disable that we should show the onboarding") {
+        When("Using the Cache Source") {
+            datasource.disableShouldShowOnboarding()
+            then("verify that the call to disable that flag is made") {
+                verify(exactly = 1) { cacheService.disableShouldShowOnboarding() }
             }
         }
     }
