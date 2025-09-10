@@ -32,12 +32,14 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/dark_text"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/amount"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Beta Reward" />
