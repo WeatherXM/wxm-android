@@ -50,7 +50,7 @@ class ProfileFragment : BaseFragment() {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 parentModel.setWalletNotMissing()
-                model.fetchUser(true)
+                model.fetchUser(parentModel.isLoggedIn(), true)
             }
         }
 
@@ -87,7 +87,7 @@ class ProfileFragment : BaseFragment() {
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchUser(parentModel.isLoggedIn())
+            model.fetchUser(parentModel.isLoggedIn(), true)
             if (parentModel.isLoggedIn()) {
                 parentModel.getSurvey()
             }

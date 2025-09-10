@@ -40,6 +40,7 @@ sealed class Failure(val code: String? = null) {
     object InvalidRefreshTokenError : Failure()
     object InstallationIdNotFound : Failure()
     object FirmwareBytesParsingError : Failure()
+    object TooManyRequestsError : Failure()
 }
 
 @Keep
