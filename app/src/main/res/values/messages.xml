@@ -51,6 +51,7 @@
     <string name="error_helium_ota_133_suffix">STATION NOT IN RANGE</string>
     <string name="error_max_followed">Max followed stations threshold reached.</string>
     <string name="error_boost_not_supported">Boost is not supported, please check for app updates.</string>
+    <string name="error_refreshed_too_quickly">You’ve refreshed a bit too quickly. Please wait a moment and try again.</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>

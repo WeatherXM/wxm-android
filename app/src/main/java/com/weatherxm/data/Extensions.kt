@@ -78,7 +78,7 @@ fun Response.path(): String = this.request.path()
  * Map a NetworkResponse to Either using Failure sealed classes.
  * Suppress ComplexMethod because it is just a bunch of "when statements"
  */
-@Suppress("ComplexMethod")
+@Suppress("ComplexMethod", "MagicNumber")
 fun <T : Any> NetworkResponse<T, ErrorResponse>.mapResponse(): Either<Failure, T> {
     Timber.d("Mapping network response")
     return try {
@@ -91,6 +91,9 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.mapResponse(): Either<Failure, T
                 Timber.d(this.error, "Network response: ServerError")
                 Timber.w(this.error, this.body.toString())
                 val code = this.body?.code
+                if(this.code == 429) {
+                    return Either.Left(Failure.TooManyRequestsError)
+                }
                 Either.Left(
                     when (code) {
                         INVALID_USERNAME -> InvalidUsername(code, this.body?.message)
