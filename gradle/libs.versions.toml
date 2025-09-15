@@ -68,7 +68,7 @@ firebase-crashlytics-plugin = "3.0.6"
 firebase-perf-plugin = "2.0.1"
 google-services-plugin = "4.4.3"
 grgit = "5.3.2"
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 ksp-plugin = "2.2.20-2.0.3"
 
 [libraries]
