@@ -570,6 +570,10 @@ data class LineChartData(
     fun getEntryValueForTooltip(position: Float): Float? {
         return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() }
     }
+
+    fun getEntryValueForTooltipWithPlaceholder(position: Float): Float? {
+        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() && it > 0 }
+    }
 }
 
 @Keep
@@ -619,6 +623,7 @@ data class DeviceTotalRewardsDetails(
     val datesChartTooltip: List<String>,
     val baseChartData: LineChartData,
     val betaChartData: LineChartData,
+    val correctionChartData: LineChartData,
     val otherChartData: LineChartData,
     var status: Status
 ) : Parcelable {
@@ -629,6 +634,7 @@ data class DeviceTotalRewardsDetails(
             listOf(),
             listOf(),
             listOf(),
+            LineChartData.empty(),
             LineChartData.empty(),
             LineChartData.empty(),
             LineChartData.empty(),

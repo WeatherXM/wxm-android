@@ -127,6 +127,7 @@ class DeviceRewardsAdapter(
             binding.rewardBreakdownChart.initRewardsBreakdownChart(
                 details.baseChartData,
                 details.betaChartData,
+                details.correctionChartData,
                 details.otherChartData,
                 details.totals,
                 details.datesChartTooltip
@@ -134,6 +135,7 @@ class DeviceRewardsAdapter(
 
             binding.baseRewardsLegend.visible(details.baseChartData.isDataValid())
             binding.betaRewardsLegend.visible(details.betaChartData.isDataValid())
+            binding.correctionRewardsLegend.visible(details.correctionChartData.isDataValid())
             binding.othersRewardsLegend.visible(details.otherChartData.isDataValid())
             binding.retryCard.visible(false)
             binding.detailsStatus.visible(false)

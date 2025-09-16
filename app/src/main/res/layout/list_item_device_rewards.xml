@@ -169,6 +169,21 @@
                         tools:visibility="visible" />
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/correctionRewardsLegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:drawableStart="@drawable/ic_rectangle"
+                        android:drawablePadding="@dimen/padding_extra_small"
+                        android:drawableTint="@color/correction_rewards_color"
+                        android:text="@string/compensation_rewards"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/textColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/betaRewardsLegend"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/othersRewardsLegend"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -180,7 +195,7 @@
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/textColor"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/betaRewardsLegend"
+                        app:layout_constraintTop_toBottomOf="@id/correctionRewardsLegend"
                         tools:visibility="visible" />
 
                     <androidx.recyclerview.widget.RecyclerView

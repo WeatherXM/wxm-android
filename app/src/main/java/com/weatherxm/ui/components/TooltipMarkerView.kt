@@ -14,12 +14,14 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.util.NumberUtils.formatTokens
 
 @SuppressLint("ViewConstructor")
+@Suppress("LongParameterList")
 class TooltipMarkerView(
     context: Context,
     private val dates: List<String>,
     private val totals: List<Float> = mutableListOf(),
     private val baseData: LineChartData = LineChartData.empty(),
     private val betaData: LineChartData = LineChartData.empty(),
+    private val correctionData: LineChartData = LineChartData.empty(),
     private val othersData: LineChartData = LineChartData.empty(),
 ) : MarkerView(context, R.layout.view_chart_tooltip) {
     private var dateView: TextView = findViewById(R.id.date)
@@ -28,11 +30,14 @@ class TooltipMarkerView(
     private var baseView: TextView = findViewById(R.id.baseValue)
     private var betaTitleView: TextView = findViewById(R.id.betaTitle)
     private var betaView: TextView = findViewById(R.id.betaValue)
+    private var correctionTitleView: TextView = findViewById(R.id.correctionTitle)
+    private var correctionView: TextView = findViewById(R.id.correctionValue)
     private var othersTitleView: TextView = findViewById(R.id.othersTitle)
     private var othersView: TextView = findViewById(R.id.othersValue)
 
     // callbacks everytime the MarkerView is redrawn, can be used to update the
     // content (user-interface)
+    @Suppress("CyclomaticComplexMethod")
     override fun refreshContent(e: Entry, highlight: Highlight?) {
         /**
          * We find the relevant timestamp by using the same index
@@ -42,11 +47,13 @@ class TooltipMarkerView(
 
         /**
          * As explained in the comment in RewardsUseCase, the "chart with filled layers" to work
-         * has "beta = base + beta", "others = base + beta + others", so in here to show the correct
+         * has "beta = base + beta", "correction = base + beta + correction",
+         * "others = base + beta + correction + others", so in here to show the correct
          * value in tooltip we need to make the respective subtractions.
          */
         var baseValue = 0F
         var betaValue = 0F
+        var correctionValue = 0F
 
         baseData.getEntryValueForTooltip(e.x).also {
             baseTitleView.visible(it != null)
@@ -66,11 +73,26 @@ class TooltipMarkerView(
             }
         }
 
+        correctionData.getEntryValueForTooltipWithPlaceholder(e.x).also {
+            correctionTitleView.visible(it != null)
+            correctionView.visible(it != null)
+            if (it != null) {
+                correctionValue = it
+                correctionView.text = if (betaValue > 0) {
+                    formatTokens((it - betaValue).coerceAtLeast(0F))
+                } else {
+                    formatTokens((it - baseValue).coerceAtLeast(0F))
+                }
+            }
+        }
+
         othersData.getEntryValueForTooltip(e.x).also {
             othersTitleView.visible(it != null)
             othersView.visible(it != null)
             if (it != null) {
-                othersView.text = if (betaValue > 0) {
+                othersView.text = if (correctionValue > 0) {
+                    formatTokens((it - correctionValue).coerceAtLeast(0F))
+                } else if (betaValue > 0) {
                     formatTokens((it - betaValue).coerceAtLeast(0F))
                 } else {
                     formatTokens((it - baseValue).coerceAtLeast(0F))

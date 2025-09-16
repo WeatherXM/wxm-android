@@ -175,6 +175,7 @@ class RewardsUseCaseImpl(
         }
     }
 
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     override suspend fun getDeviceRewardsByRange(
         deviceId: String,
         mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
@@ -183,6 +184,7 @@ class RewardsUseCaseImpl(
             val xLabels = mutableListOf<String>()
             val baseEntries = mutableListOf<Entry>()
             val betaEntries = mutableListOf<Entry>()
+            val correctionEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
             val totals = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
@@ -193,6 +195,7 @@ class RewardsUseCaseImpl(
 
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
+                val correctionCode = RewardsCode.correction.name
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
@@ -200,6 +203,8 @@ class RewardsUseCaseImpl(
                 var betaFound = false
                 var othersSum = 0F
                 var othersFound = false
+                var correctionSum = 0F
+                var correctionFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
@@ -217,7 +222,12 @@ class RewardsUseCaseImpl(
                         betaSum += it.value
                         betaFound = true
                     }
-                    if (it.code != baseCode && it.code != betaCode) {
+                    val codeIsCorrection = it.code.startsWith(correctionCode)
+                    if (codeIsCorrection) {
+                        correctionSum += it.value
+                        correctionFound = true
+                    }
+                    if (it.code != baseCode && it.code != betaCode && !codeIsCorrection) {
                         othersSum += it.value
                         othersFound = true
                     }
@@ -239,13 +249,26 @@ class RewardsUseCaseImpl(
                         betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
                     }
                 }
+                if (!correctionFound) {
+                    correctionEntries.add(Entry(counter.toFloat(), -1F))
+                } else {
+                    if (correctionSum == 0F) {
+                        correctionEntries.add(Entry(counter.toFloat(), 0F))
+                    } else {
+                        correctionEntries.add(
+                            Entry(counter.toFloat(), correctionSum + betaSum + baseSum)
+                        )
+                    }
+                }
                 if (!othersFound) {
                     otherEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
                     if (othersSum == 0F) {
                         otherEntries.add(Entry(counter.toFloat(), 0F))
                     } else {
-                        otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))
+                        otherEntries.add(
+                            Entry(counter.toFloat(), othersSum + correctionSum + betaSum + baseSum)
+                        )
                     }
                 }
             }
@@ -258,6 +281,7 @@ class RewardsUseCaseImpl(
                 datesChartTooltip,
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),
+                LineChartData(xLabels, correctionEntries),
                 LineChartData(xLabels, otherEntries),
                 Status.SUCCESS
             )
@@ -304,22 +328,20 @@ class RewardsUseCaseImpl(
         boostCode: String,
         details: BoostRewardDetails?
     ): String {
-        return try {
-            if (BoostCode.valueOf(boostCode) == BoostCode.beta_rewards) {
-                val participationStartDate =
-                    details?.participationStartDate.getFormattedDate(true)
-                val participationStopDate =
-                    details?.participationStopDate.getFormattedDate(true)
-                context.getString(
-                    R.string.boost_details_beta_desc,
-                    participationStartDate,
-                    participationStopDate
-                )
-            } else {
-                String.empty()
-            }
+        val isCodeSupported = try {
+            BoostCode.valueOf(boostCode) == BoostCode.beta_rewards
         } catch (e: IllegalArgumentException) {
-            Timber.e("Unsupported Boost Code: $boostCode")
+            Timber.e(e, "Unsupported Boost Code: $boostCode")
+            false
+        }
+
+        return if (isCodeSupported) {
+            context.getString(
+                R.string.boost_details_beta_desc,
+                details?.participationStartDate.getFormattedDate(true),
+                details?.participationStopDate.getFormattedDate(true)
+            )
+        } else {
             String.empty()
         }
     }

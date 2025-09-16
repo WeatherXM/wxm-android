@@ -9,7 +9,7 @@ import com.weatherxm.databinding.ListItemBoostDetailBinding
 import com.weatherxm.ui.common.BoostDetailInfo
 import com.weatherxm.ui.common.visible
 
-class RewardBoostDetailAdapter :
+class RewardBoostDetailAdapter(val needsTopDivider: Boolean) :
     ListAdapter<BoostDetailInfo, RewardBoostDetailAdapter.RewardBoostDetailViewHolder>(
         RewardBoostDetailDiffCallback()
     ) {
@@ -27,11 +27,12 @@ class RewardBoostDetailAdapter :
         holder.bind(getItem(position))
     }
 
-    inner class RewardBoostDetailViewHolder(private val binding: ListItemBoostDetailBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class RewardBoostDetailViewHolder(
+        private val binding: ListItemBoostDetailBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoostDetailInfo) {
-            binding.topDivider.visible(absoluteAdapterPosition == 0)
+            binding.topDivider.visible(absoluteAdapterPosition == 0 && needsTopDivider)
             binding.key.text = item.title
             binding.value.text = item.value
         }

@@ -974,11 +974,13 @@ enum class SeverityLevel {
 @Suppress("EnumNaming")
 enum class RewardsCode {
     base_reward,
-    beta_rewards
+    beta_rewards,
+    correction
 }
 
 @Suppress("EnumNaming")
 enum class BoostCode {
-    beta_rewards
+    beta_rewards,
+    correction
 }
 

@@ -89,6 +89,7 @@ class RewardBoostActivity : BaseActivity() {
 
         binding.title.text = data.title
         binding.amount.text = getString(R.string.reward, data.actualReward)
+        var needsTopDivider = true
         if (BoostCode.beta_rewards.name == boostCode && data.boostScore != null) {
             binding.dailyBoostScore.text = "${data.boostScore}%"
             binding.rewardsDesc.text = if (data.boostScore == 100) {
@@ -101,6 +102,7 @@ class RewardBoostActivity : BaseActivity() {
             binding.divider.visible(false)
             binding.dailyBoostScoreTitle.visible(false)
             binding.dailyBoostScore.visible(false)
+            needsTopDivider = false
         }
         binding.boostDetailsDesc.text = data.boostDesc
         binding.boostDetailsDesc.visible(data.boostDesc.isNotEmpty())
@@ -114,7 +116,7 @@ class RewardBoostActivity : BaseActivity() {
         }
         binding.aboutReadMore.visible(data.docUrl.isNotEmpty())
 
-        val detailsAdapter = RewardBoostDetailAdapter()
+        val detailsAdapter = RewardBoostDetailAdapter(needsTopDivider)
         binding.detailsRecycler.adapter = detailsAdapter
         detailsAdapter.submitList(data.details)
 
