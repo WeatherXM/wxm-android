@@ -44,17 +44,32 @@ class DeviceRewardsBoostAdapter :
         fun bind(item: DeviceTotalRewardsBoost) {
             val boostCode = item.boostCode
             try {
-                if (boostCode != null && BoostCode.valueOf(boostCode) == BoostCode.beta_rewards) {
-                    binding.title.text = itemView.context.getString(R.string.beta_reward_details)
-                    binding.boostProgressSlider.trackActiveTintList =
-                        itemView.context.getColorStateList(R.color.beta_rewards_fill)
-                    binding.boostProgressSlider.trackInactiveTintList =
-                        itemView.context.getColorStateList(R.color.beta_rewards_color)
-                } else {
+                if (boostCode == null) {
                     onUnknownBoost()
+                } else {
+                    val isBetaRewards = boostCode == BoostCode.beta_rewards.name
+                    val isCorrectionRewards = boostCode.startsWith(BoostCode.correction.name, true)
+
+                    if (isBetaRewards) {
+                        binding.title.text =
+                            itemView.context.getString(R.string.beta_reward_details)
+                        binding.boostProgressSlider.trackActiveTintList =
+                            itemView.context.getColorStateList(R.color.beta_rewards_fill)
+                        binding.boostProgressSlider.trackInactiveTintList =
+                            itemView.context.getColorStateList(R.color.beta_rewards_color)
+                    } else if (isCorrectionRewards) {
+                        binding.title.text =
+                            itemView.context.getString(R.string.compensation_reward_details)
+                        binding.boostProgressSlider.trackActiveTintList =
+                            itemView.context.getColorStateList(R.color.correction_rewards_color)
+                        binding.boostProgressSlider.trackInactiveTintList =
+                            itemView.context.getColorStateList(R.color.correction_rewards_fill)
+                    } else {
+                        onUnknownBoost()
+                    }
                 }
             } catch (e: IllegalArgumentException) {
-                Timber.e("Unsupported Boost Code: $boostCode")
+                Timber.e(e, "Unsupported Boost Code: $boostCode")
                 onUnknownBoost()
             }
 

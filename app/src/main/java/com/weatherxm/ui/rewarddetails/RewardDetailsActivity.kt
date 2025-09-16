@@ -416,8 +416,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     override fun onBoostReward(boost: BoostReward) {
         val isCodeSupported = try {
-            BoostCode.valueOf(boost.code ?: String.empty())
-            true
+            if (boost.code?.startsWith(BoostCode.correction.name, true) == true) {
+                true
+            } else {
+                BoostCode.valueOf(boost.code ?: String.empty())
+                true
+            }
         } catch (e: IllegalArgumentException) {
             Timber.e("Unsupported Boost Code: ${boost.code}")
             false
