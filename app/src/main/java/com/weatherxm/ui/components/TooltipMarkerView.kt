@@ -73,7 +73,7 @@ class TooltipMarkerView(
             }
         }
 
-        correctionData.getEntryValueForTooltip(e.x).also {
+        correctionData.getEntryValueForTooltipWithPlaceholder(e.x).also {
             correctionTitleView.visible(it != null)
             correctionView.visible(it != null)
             if (it != null) {

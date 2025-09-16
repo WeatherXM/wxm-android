@@ -250,7 +250,7 @@ class RewardsUseCaseImpl(
                     }
                 }
                 if (!correctionFound) {
-                    correctionEntries.add(Entry(counter.toFloat(), Float.NaN))
+                    correctionEntries.add(Entry(counter.toFloat(), -1F))
                 } else {
                     if (correctionSum == 0F) {
                         correctionEntries.add(Entry(counter.toFloat(), 0F))

@@ -570,6 +570,10 @@ data class LineChartData(
     fun getEntryValueForTooltip(position: Float): Float? {
         return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() }
     }
+
+    fun getEntryValueForTooltipWithPlaceholder(position: Float): Float? {
+        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() && it > 0 }
+    }
 }
 
 @Keep
