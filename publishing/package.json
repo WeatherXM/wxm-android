@@ -11,6 +11,6 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
-    "@solana-mobile/dapp-store-cli": "^0.11.0"
+    "@solana-mobile/dapp-store-cli": "^0.13.0"
   }
 }
