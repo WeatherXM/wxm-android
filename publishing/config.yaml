@@ -28,15 +28,15 @@ release:
     - purpose: featureGraphic
       uri: ./media/feature.png
     - purpose: screenshot
-      uri: ./media/screen1.png
+      uri: ./media/screen1-home.png
     - purpose: screenshot
-      uri: ./media/screen2.png
+      uri: ./media/screen2-historical.png
     - purpose: screenshot
-      uri: ./media/screen3.png
+      uri: ./media/screen3-forecast.png
     - purpose: screenshot
-      uri: ./media/screen4.png
+      uri: ./media/screen4-explorer.png
     - purpose: screenshot
-      uri: ./media/screen5.png
+      uri: ./media/screen5-rewards.png
   files:
     - purpose: install
       uri: ./files/app-release-solana.apk
@@ -63,8 +63,8 @@ release:
 
         Download now and be part of building weather, together.
       new_in_version: |
-        - Optimized for Solana Mobile (Seeker) compatibility
-        - Updated visuals and UX for crypto-native users
+        - Optimized for Seeker compatibility
+        - New onboarding experience
         - Bug fixes and performance improvements
       saga_features: |
         - Optimized dApp experience for Seeker hardware
