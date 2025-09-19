@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./media/app_icon.png
 release:
-  address: 4qqWkUwHjCEN5iugpncLXxrSvnps6Hu2V9vFZ5p5jduQ
+  address: E4FLPRQKyXyMLZk3T29NWpR6qkTbTz6V2DQqKwmXVJBQ
   media:
     - purpose: icon
       uri: ./media/app_icon.png
@@ -28,15 +28,15 @@ release:
     - purpose: featureGraphic
       uri: ./media/feature.png
     - purpose: screenshot
-      uri: ./media/screen1.png
+      uri: ./media/screen1-home.png
     - purpose: screenshot
-      uri: ./media/screen2.png
+      uri: ./media/screen2-historical.png
     - purpose: screenshot
-      uri: ./media/screen3.png
+      uri: ./media/screen3-forecast.png
     - purpose: screenshot
-      uri: ./media/screen4.png
+      uri: ./media/screen4-explorer.png
     - purpose: screenshot
-      uri: ./media/screen5.png
+      uri: ./media/screen5-rewards.png
   files:
     - purpose: install
       uri: ./files/app-release-solana.apk
@@ -63,12 +63,19 @@ release:
 
         Download now and be part of building weather, together.
       new_in_version: |
-        - Optimized for Solana Mobile (Seeker) compatibility
-        - Updated visuals and UX for crypto-native users
+        - Optimized for Seeker compatibility
+        - New onboarding experience
         - Bug fixes and performance improvements
       saga_features: |
         - Optimized dApp experience for Seeker hardware
         - Seamless onboarding with Solana-native UI flows
+  android_details:
+    cert_fingerprint: ee2858ec616e6aecc95d58b5d86025d2ad45b5886b0c4ea88d907801ebfc11e4
+    min_sdk: 28
+    version: 5.1.0
+    version_code: 113
+    locales:
+      - en-US
 solana_mobile_dapp_publisher_portal:
   google_store_package: com.weatherxm.app
   testing_instructions: |
@@ -77,8 +84,8 @@ solana_mobile_dapp_publisher_portal:
     3. Verify explorer map, station details, and station reward screens load correctly.
     4. Optional: Login with your WeatherXM credentials and walkthrough the entire app.
 lastSubmittedVersionOnChain:
-  address: 4qqWkUwHjCEN5iugpncLXxrSvnps6Hu2V9vFZ5p5jduQ
-  version_code: 112
-  apk_hash: bDXlwE/OK2fABOESpCWP2ZNhUY5SwOGozOtLVQJKfh0=
+  address: E4FLPRQKyXyMLZk3T29NWpR6qkTbTz6V2DQqKwmXVJBQ
+  version_code: 113
+  apk_hash: 1WSiAO2ub/23eu8SZZKfw7ACEgjX4NBhuh7hOavD4X4=
 lastUpdatedVersionOnStore:
-  address: 4qqWkUwHjCEN5iugpncLXxrSvnps6Hu2V9vFZ5p5jduQ
+  address: E4FLPRQKyXyMLZk3T29NWpR6qkTbTz6V2DQqKwmXVJBQ
