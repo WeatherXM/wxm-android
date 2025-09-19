@@ -92,6 +92,10 @@ android {
         versionCode = 10 + getVersionGitTags(isSolana = false).size
         versionName = getLastVersionGitTag(false, skipTagsLogging)
 
+        androidResources {
+            // Keeps language resources for only the locales specified below.
+            localeFilters += listOf("en")
+        }
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
         resValue("string", "mapbox_style", getStringProperty("MAPBOX_STYLE"))
