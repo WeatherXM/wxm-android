@@ -621,4 +621,7 @@ dependencies {
     // Upload Service
     implementation(libs.upload.service)
     implementation(libs.upload.service.okhttp)
+
+    // Markdown Renderer
+    implementation(libs.markdown.renderer)
 }

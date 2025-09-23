@@ -75,7 +75,7 @@ fun InfoBannerView(
             }
         }
         if (subtitle.isNotEmpty()) {
-            MediumText(subtitle)
+            MarkdownText(text = subtitle)
         }
         if (showActionButton) {
             Button(

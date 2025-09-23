@@ -10,14 +10,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mikepenz.markdown.compose.Markdown
+import com.mikepenz.markdown.model.DefaultMarkdownColors
+import com.mikepenz.markdown.model.DefaultMarkdownTypography
 import com.weatherxm.R
 
 
@@ -109,4 +116,48 @@ fun TextWithStartingIcon(
             colorRes = textColorRes
         )
     }
+}
+
+@Suppress("FunctionNaming")
+@Preview
+@Composable
+fun MarkdownText(
+    text: String = "",
+    textColorRes: Int = R.color.colorOnSurface,
+    linkColorRes: Int = R.color.colorPrimary
+) {
+    Markdown(
+        content = text,
+        colors = DefaultMarkdownColors(
+            text = colorResource(textColorRes),
+            codeBackground = Color.Transparent,
+            inlineCodeBackground = Color.Transparent,
+            dividerColor = Color.Transparent,
+            tableBackground = Color.Transparent,
+        ),
+        typography = DefaultMarkdownTypography(
+            h1 = MaterialTheme.typography.headlineLarge,
+            h2 = MaterialTheme.typography.headlineMedium,
+            h3 = MaterialTheme.typography.headlineSmall,
+            h4 = MaterialTheme.typography.titleLarge,
+            h5 = MaterialTheme.typography.titleMedium,
+            h6 = MaterialTheme.typography.titleSmall,
+            text = MaterialTheme.typography.bodyMedium,
+            code = MaterialTheme.typography.bodyMedium,
+            inlineCode = MaterialTheme.typography.bodyMedium,
+            quote = MaterialTheme.typography.bodyMedium,
+            paragraph = MaterialTheme.typography.bodyMedium,
+            ordered = MaterialTheme.typography.bodyMedium,
+            bullet = MaterialTheme.typography.bodyMedium,
+            list = MaterialTheme.typography.bodyMedium,
+            textLink = TextLinkStyles(
+                style = SpanStyle(
+                    color = colorResource(linkColorRes),
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = TextDecoration.Underline
+                )
+            ),
+            table = MaterialTheme.typography.bodyMedium
+        )
+    )
 }
