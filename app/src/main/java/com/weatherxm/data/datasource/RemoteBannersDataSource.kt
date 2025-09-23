@@ -67,14 +67,14 @@ class RemoteBannersDataSourceImpl(
     }
 
     override fun getRemoteBanner(bannerType: RemoteBannerType): RemoteBanner? {
-        var idKey = ""
-        var titleKey = ""
-        var messageKey = ""
-        var actionUrlKey = ""
-        var actionLabelKey = ""
-        var actionShowKey = ""
-        var showKey = ""
-        var dismissableKey = ""
+        var idKey: String
+        var titleKey: String
+        var messageKey: String
+        var actionUrlKey: String
+        var actionLabelKey: String
+        var actionShowKey: String
+        var showKey: String
+        var dismissableKey: String
 
         when (bannerType) {
             RemoteBannerType.INFO_BANNER -> {

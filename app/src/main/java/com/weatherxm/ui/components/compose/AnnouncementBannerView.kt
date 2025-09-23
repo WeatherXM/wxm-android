@@ -84,7 +84,11 @@ fun AnnouncementBannerView(
                 }
             }
             if (subtitle.isNotEmpty()) {
-                MediumText(subtitle, colorRes = R.color.light_layer2)
+                MarkdownText(
+                    text = subtitle,
+                    textColorRes = R.color.light_layer2,
+                    linkColorRes = R.color.dark_primary
+                )
             }
             if (showActionButton) {
                 Button(

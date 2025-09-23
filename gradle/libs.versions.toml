@@ -47,6 +47,7 @@ material = "1.13.0"
 mapbox = "11.15.0"
 mapbox-sdk-services = "7.8.0"
 mapbox-search-android = "2.15.0"
+markdown-renderer = "0.37.0"
 mixpanel = "8.2.3"
 mockk = "1.14.5"
 moshi = "1.15.2"
@@ -137,6 +138,7 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 mapbox = { module = "com.mapbox.maps:android-ndk27", version.ref = "mapbox" }
 mapbox-sdk-services = { module = "com.mapbox.mapboxsdk:mapbox-sdk-services", version.ref = "mapbox-sdk-services" }
 mapbox-search-android = { module = "com.mapbox.search:mapbox-search-android-ndk27", version.ref = "mapbox-search-android" }
+markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer-android", version.ref = "markdown-renderer" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
 moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }

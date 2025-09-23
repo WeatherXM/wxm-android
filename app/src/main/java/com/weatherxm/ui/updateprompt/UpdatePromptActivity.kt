@@ -9,6 +9,7 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.MarkdownText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpdatePromptActivity : BaseActivity() {
@@ -71,7 +72,9 @@ class UpdatePromptActivity : BaseActivity() {
             finish()
         }
 
-        binding.changelog.text = model.getChangelog()
+        binding.changelog.setContent {
+            MarkdownText(model.getChangelog())
+        }
     }
 
     override fun onResume() {

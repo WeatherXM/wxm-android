@@ -47,15 +47,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/light_layer1" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                android:textColor="@color/light_layer2"
                 app:layout_constraintTop_toBottomOf="@id/title"
-                tools:text="Let us hear what you think about our app." />
+                tools:composableName="com.weatherxm.ui.components.compose.TextsKt.MarkdownText" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/actionBtn"

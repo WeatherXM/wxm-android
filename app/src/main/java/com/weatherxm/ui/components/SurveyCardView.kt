@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import com.weatherxm.R
 import com.weatherxm.databinding.ViewSurveyCardBinding
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.MarkdownText
 
 class SurveyCardView : LinearLayout {
 
@@ -38,7 +40,13 @@ class SurveyCardView : LinearLayout {
     }
 
     fun message(message: String): SurveyCardView {
-        binding.message.text = message
+        binding.message.setContent {
+            MarkdownText(
+                text = message,
+                textColorRes = R.color.light_layer2,
+                linkColorRes = R.color.dark_primary
+            )
+        }
         binding.message.visible(message.isNotEmpty())
         return this
     }
