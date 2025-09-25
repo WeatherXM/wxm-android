@@ -52,12 +52,25 @@
                 style="@style/Widget.WeatherXM.ImageButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_marginStart="@dimen/margin_extra_small"
                 android:contentDescription="@string/read_more"
                 android:src="@drawable/ic_learn_more_info"
                 app:layout_constraintBottom_toBottomOf="@id/stationHealthTitle"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/stationHealthTitle"
                 app:layout_constraintTop_toTopOf="@id/stationHealthTitle"
                 app:tint="@color/colorPrimary" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/aiHealthCheckBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/stationHealthTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/stationHealthTitle"
+                tools:composableName="com.weatherxm.ui.components.compose.GradientButtonKt.GradientButton"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/stationHealthContainer"
@@ -66,7 +79,7 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                app:layout_constraintTop_toBottomOf="@id/stationHealthTitle">
+                app:layout_constraintTop_toBottomOf="@id/aiHealthCheckBtn">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/dataQualityCard"

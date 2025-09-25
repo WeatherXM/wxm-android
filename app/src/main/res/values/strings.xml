@@ -734,6 +734,13 @@
     <string name="station_health_location_quality_explanation"><![CDATA[It is crucial for the Network that a station stays in the same location throughout its lifetime.<br>The Proof-of-Location algorithm, which also <b>updates daily</b>, assesses the accuracy and consistency of the station’s location data, generating a confidence score for its position.]]></string>
     <string name="station_has_started_transmitting_data">Your station has started transmitting its initial data. Sit back and relax, your rewards are on the way!</string>
 
+    <!-- AI Station Health Check -->
+    <string name="ai_health_check">AI Health Check</string>
+    <string name="ai_health_check_loading_title">Analyzing your station…</string>
+    <string name="ai_health_check_loading_subtitle">Our AI is checking every sensor for you.\nYour station’s story is loading, give it some time!</string>
+    <string name="ai_health_check_error_title">Oops, storm in the system!</string>
+    <string name="ai_health_check_error_subtitle">Something went wrong while checking your station.\nTry again in a moment.</string>
+
     <!-- Terms Dialog -->
     <string name="terms_dialog_title">About our legal terms</string>
     <string name="terms_dialog_message"><![CDATA[We’ve implemented the new <a href="%1$s">Terms of Use</a> and <a href="%2$s">Privacy Policy</a> to better serve you and ensure alignment with best practices and applicable laws. By continuing to use the app for the next 30 days, it is considered that you accept the new terms and privacy policy mentioned above.<br><br>By accepting these Terms of Use and Privacy Policy, you agree that they apply to all prior and future interactions with the app.]]></string>

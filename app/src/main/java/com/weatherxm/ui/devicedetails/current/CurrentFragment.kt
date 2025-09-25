@@ -16,8 +16,10 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.AiHealthCheckDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.StationHealthExplanationDialogFragment
+import com.weatherxm.ui.components.compose.GradientButton
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.util.Rewards.getRewardScoreColor
@@ -202,5 +204,14 @@ class CurrentFragment : BaseFragment() {
         binding.emptyStationHealthInfo.visible(
             device.isOwned() && device.qodScore == null && device.metricsTimestamp == null
         )
+
+        // TODO: Show or set invisible this button respectively
+        binding.aiHealthCheckBtn.setContent {
+            GradientButton {
+                AiHealthCheckDialogFragment().show(this)
+                parentModel.getHealthCheckData()
+            }
+        }
+        binding.aiHealthCheckBtn.visible(true)
     }
 }
