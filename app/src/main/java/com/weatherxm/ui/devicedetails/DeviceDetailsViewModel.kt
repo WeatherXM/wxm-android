@@ -20,6 +20,7 @@ import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -49,6 +50,7 @@ class DeviceDetailsViewModel(
     private val onDevicePolling = MutableLiveData<UIDevice>()
     private val onUpdatedDevice = MutableLiveData<UIDevice>()
     private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
+    private val _onHealthCheckData = MutableLiveData<Resource<String>>()
 
     val shouldShowTerms = mutableStateOf(false)
     val showNotificationsPrompt = mutableStateOf(false)
@@ -57,6 +59,7 @@ class DeviceDetailsViewModel(
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
+    fun onHealthCheckData(): LiveData<Resource<String>> = _onHealthCheckData
 
     fun isLoggedIn() = isLoggedIn
 
@@ -141,6 +144,16 @@ class DeviceDetailsViewModel(
     fun checkDeviceNotificationsPrompt() {
         showNotificationsPrompt.value = false
         useCase.checkDeviceNotificationsPrompt()
+    }
+
+    fun getHealthCheckData() {
+        viewModelScope.launch(dispatcher) {
+            _onHealthCheckData.postValue(Resource.loading())
+            delay(2000L)
+            _onHealthCheckData.postValue(Resource.error(""))
+            delay(2000L)
+            _onHealthCheckData.postValue(Resource.success("All good."))
+        }
     }
 
     init {
