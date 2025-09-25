@@ -57,4 +57,8 @@ class DeviceDetailsUseCaseImpl(
     override fun checkDeviceNotificationsPrompt() {
         notificationsRepo.checkDeviceNotificationsPrompt()
     }
+
+    override suspend fun getDeviceHealthCheck(deviceName: String): String? {
+        return deviceRepository.getDeviceHealthCheck(deviceName)
+    }
 }
