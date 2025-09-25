@@ -13,4 +13,5 @@ interface DeviceDetailsUseCase {
     fun shouldShowTermsPrompt(): Boolean
     fun showDeviceNotificationsPrompt(): Boolean
     fun checkDeviceNotificationsPrompt()
+    suspend fun getDeviceHealthCheck(deviceName: String): String?
 }

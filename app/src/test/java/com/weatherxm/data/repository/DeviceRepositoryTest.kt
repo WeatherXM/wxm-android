@@ -26,6 +26,7 @@ class DeviceRepositoryTest : BehaviorSpec({
     lateinit var cacheFollowSource: CacheFollowDataSource
     lateinit var repo: DeviceRepository
 
+    val deviceName = "deviceName"
     val ownedId = "ownedId"
     val followedId = "followedId"
     val ownedDevice = Device(
@@ -315,6 +316,23 @@ class DeviceRepositoryTest : BehaviorSpec({
                 }
             }
 
+        }
+    }
+
+    context("Get health check for user device") {
+        given("The network source that will return the response") {
+            When("the response is a failure") {
+                coEvery { networkDeviceSource.getDeviceHealthCheck(deviceName) } returns null
+                then("return null") {
+                    repo.getDeviceHealthCheck(deviceName) shouldBe null
+                }
+            }
+            When("the response is a success") {
+                coEvery { networkDeviceSource.getDeviceHealthCheck(deviceName) } returns "OK"
+                then("return the health check") {
+                    repo.getDeviceHealthCheck(deviceName) shouldBe "OK"
+                }
+            }
         }
     }
 })
