@@ -77,6 +77,7 @@ class AiHealthCheckDialogFragment : BaseBottomSheetDialogFragment() {
     }
 }
 
+@Suppress("FunctionNaming")
 @Composable
 @Preview
 fun AiHealthCheckData(data: String = "lorem ipsum dolor sit amet") {

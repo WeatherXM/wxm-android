@@ -33,6 +33,7 @@ class DeviceDataSourceTest : BehaviorSpec({
     val cacheSource = CacheDeviceDataSource(cacheService)
 
     val deviceId = "deviceId"
+    val deviceName = "deviceName"
     val serialNumber = "serialNumber"
     val invalidSerialNumber = "invalidSerialNumber"
     val secret = "secret"
@@ -41,7 +42,7 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     val device = Device(
         deviceId,
-        "",
+        deviceName,
         null,
         null,
         null,
@@ -251,6 +252,17 @@ class DeviceDataSourceTest : BehaviorSpec({
         }
         When("Using the Cache Source") {
             testThrowNotImplemented { cacheSource.claimDevice(serialNumber, location) }
+        }
+    }
+
+    context("Get health check for user device") {
+        When("Using the Network Source") {
+            then("Get the health check returned from the network") {
+                networkSource.getDeviceHealthCheck(device.name) shouldBe "OK. Here's an analysis of your WeatherXM station, **Atomic Pine Yard**:\n\nThe station is **active** and located in Covas e Vila de Oliveira, PT."
+            }
+        }
+        When("Using the Cache Source") {
+            testThrowNotImplemented { cacheSource.getDeviceHealthCheck(device.name) }
         }
     }
 })

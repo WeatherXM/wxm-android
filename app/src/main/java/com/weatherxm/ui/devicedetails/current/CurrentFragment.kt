@@ -209,7 +209,7 @@ class CurrentFragment : BaseFragment() {
         binding.aiHealthCheckBtn.setContent {
             GradientButton {
                 AiHealthCheckDialogFragment().show(this)
-                parentModel.getHealthCheckData()
+                parentModel.getDeviceHealthCheck()
             }
         }
         binding.aiHealthCheckBtn.visible(true)

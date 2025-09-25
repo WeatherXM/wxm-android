@@ -85,4 +85,14 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
     ): Either<Failure, Device> {
         return apiService.setLocation(deviceId, LocationBody(lat, lon)).mapResponse()
     }
+
+    override suspend fun getDeviceHealthCheck(deviceName: String): String? {
+        /**
+         * TODO: STOPSHIP: Fix the below when API endpoint is available.
+         * Cannot use mapResponse to get the error. It's in different format
+         */
+        delay(5000L)
+        return "OK. Here's an analysis of your WeatherXM station, **Atomic Pine Yard**:\n\nThe station is **active** and located in Covas e Vila de Oliveira, PT."
+        //  return apiService.getDeviceHealthCheck(deviceName)
+    }
 }

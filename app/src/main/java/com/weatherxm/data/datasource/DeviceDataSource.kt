@@ -27,4 +27,6 @@ interface DeviceDataSource {
         lat: Double,
         lon: Double
     ): Either<Failure, Device>
+
+    suspend fun getDeviceHealthCheck(deviceName: String): String?
 }

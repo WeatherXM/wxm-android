@@ -1,7 +1,7 @@
 package com.weatherxm.ui.components.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 
-@Suppress("FunctionNaming")
+@Suppress("FunctionNaming", "MagicNumber")
 @Preview
 @Composable
 fun GradientButton(
@@ -52,7 +52,7 @@ fun GradientButton(
         ),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_extra_small))) {
+        Row(horizontalArrangement = spacedBy(dimensionResource(R.dimen.padding_extra_small))) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 painter = painterResource(iconRes),
