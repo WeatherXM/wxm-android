@@ -13,12 +13,15 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Location
+import com.weatherxm.ui.common.CapacityLayerOnSetLocation
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
+import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.LocationHelper
+import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
@@ -29,9 +32,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Suppress("TooManyFunctions")
 class DeviceEditLocationViewModel(
     private val usecase: EditLocationUseCase,
+    private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
     private val resources: Resources,
@@ -43,11 +46,13 @@ class DeviceEditLocationViewModel(
     private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
     private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
     private val onUpdatedDevice = MutableLiveData<Resource<UIDevice>>()
+    private val onCapacityLayer = MutableLiveData<CapacityLayerOnSetLocation?>()
 
     fun onMoveToLocation() = onMoveToLocation
     fun onSearchResults() = onSearchResults
     fun onReverseGeocodedAddress() = onReverseGeocodedAddress
     fun onUpdatedDevice(): LiveData<Resource<UIDevice>> = onUpdatedDevice
+    fun onCapacityLayer() = onCapacityLayer
 
     fun validateLocation(lat: Double, lon: Double): Boolean {
         return Validator.validateLocation(lat, lon)
@@ -126,6 +131,16 @@ class DeviceEditLocationViewModel(
                     }
                 )
                 onUpdatedDevice.postValue(Resource.error(message))
+            }
+        }
+    }
+
+    fun getCells() {
+        viewModelScope.launch(dispatcher) {
+            explorerUseCase.getCells().onRight { response ->
+                onCapacityLayer.postValue(
+                    MapboxUtils.createCapacityLayer(response.publicHexes)
+                )
             }
         }
     }
