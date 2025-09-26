@@ -180,7 +180,7 @@ class MapboxUtilsTest : BehaviorSpec({
                             .withFillOpacity(FILL_OPACITY_HEXAGONS)
                             .withFillOutlineColor(resources.getColor(R.color.white, null))
                             .withData(gson.toJsonTree(UICell(publicHex.index, publicHex.center)))
-                            .withPoints(polygonPointsToLatLng(publicHex.polygon))
+                            .withPoints(listOf(polygonPointsToLatLng(publicHex.polygon)))
                     )
 
                     val returnedList =

@@ -22,14 +22,17 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
+import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     private val model: ClaimLocationViewModel by activityViewModel()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
     private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
+    private val editLocationViewModel: DeviceEditLocationViewModel by viewModel()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
@@ -74,7 +77,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         binding.confirm.setOnClickListener {
             val markerLocation = getMapFragment().getMarkerLocation()
-            if (!model.validateLocation(markerLocation.lat, markerLocation.lon)) {
+            if (!editLocationViewModel.validateLocation(markerLocation.lat, markerLocation.lon)) {
                 showSnackbarMessage(
                     binding.root,
                     getString(R.string.invalid_location),
@@ -94,7 +97,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         }
 
         val adapter = SearchResultsAdapter {
-            model.getLocationFromSearchSuggestion(it)
+            editLocationViewModel.getLocationFromSearchSuggestion(it)
             hideKeyboard()
 
             analytics.trackEventUserAction(
@@ -106,15 +109,15 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         binding.addressSearchView.setAdapter(
             adapter,
-            onTextChanged = { model.getSearchSuggestions(it) },
+            onTextChanged = { editLocationViewModel.getSearchSuggestions(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(activity) {
-                    model.getLocation()
+                    editLocationViewModel.getLocation()
                 }
             }
         )
 
-        model.fetch()
+        editLocationViewModel.getCells()
     }
 
     private fun getMapFragment(): EditLocationMapFragment {
@@ -124,13 +127,13 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     @SuppressLint("MissingPermission")
     override fun onMapReady() {
         getMapFragment().addOnMapIdleListener {
-            model.getAddressFromPoint(it)
+            editLocationViewModel.getAddressFromPoint(it)
         }
 
         model.onRequestUserLocation().observe(viewLifecycleOwner) {
             if (it) {
                 requestLocationPermissions(activity) {
-                    model.getLocation()
+                    editLocationViewModel.getLocation()
                 }
             }
         }
@@ -140,7 +143,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         } else {
             binding.addressSearchView
         }
-        model.onSearchResults().observe(viewLifecycleOwner) {
+        editLocationViewModel.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
                 showSnackbarMessage(
                     binding.root,
@@ -156,16 +159,16 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
         }
 
-        model.onReverseGeocodedAddress().observe(viewLifecycleOwner) {
+        editLocationViewModel.onReverseGeocodedAddress().observe(viewLifecycleOwner) {
             getMapFragment().showMarkerAddress(it)
         }
 
-        model.onMoveToLocation().observe(viewLifecycleOwner) {
+        editLocationViewModel.onMoveToLocation().observe(viewLifecycleOwner) {
             getMapFragment().moveToLocation(it)
             addressSearchView.clear()
         }
 
-        model.onCapacityLayer().observe(this) { layerData ->
+        editLocationViewModel.onCapacityLayer().observe(this) { layerData ->
             layerData?.let {
                 getMapFragment().drawCapacityLayers(it)
             }
