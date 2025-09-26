@@ -155,16 +155,16 @@ object MapboxUtils : KoinComponent {
 
     fun createCapacityLayer(hexes: List<PublicHex>): CapacityLayerOnSetLocation {
         val features = hexes.map {
-            val isOverCapacity =
-                it.capacity != null && it.deviceCount != null && it.deviceCount >= it.capacity
-
             Feature.fromGeometry(
                 Polygon.fromLngLats(
                     listOf(polygonPointsToLatLng(it.polygon))
                 )
             ).apply {
-                addBooleanProperty("is_over_capacity", isOverCapacity)
-                addStringProperty("capacity_number", it.capacity.toString())
+                addBooleanProperty("is_below_capacity", it.isBelowCapacity())
+                addStringProperty(
+                    "capacity_number",
+                    "${it.deviceCount.toString()} / ${it.capacity.toString()}"
+                )
             }
         }
 
@@ -177,10 +177,10 @@ object MapboxUtils : KoinComponent {
             fillColor(
                 switchCase {
                     get {
-                        literal("is_over_capacity")
+                        literal("is_below_capacity")
                     }
-                    color(resources.getColor(R.color.error))
                     color(resources.getColor(R.color.colorPrimary))
+                    color(resources.getColor(R.color.error))
                 }
             )
         }
@@ -190,10 +190,10 @@ object MapboxUtils : KoinComponent {
             lineColor(
                 switchCase {
                     get {
-                        literal("is_over_capacity")
+                        literal("is_below_capacity")
                     }
-                    color(resources.getColor(R.color.error))
                     color(resources.getColor(R.color.colorPrimary))
+                    color(resources.getColor(R.color.error))
                 }
             )
         }
