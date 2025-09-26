@@ -121,8 +121,10 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
     }
 
     override fun onMapReady() {
-        getMapFragment().addOnMapIdleListener {
-            model.getAddressFromPoint(it)
+        getMapFragment().addOnMapIdleListener { point ->
+            point?.let {
+                model.getAddressFromPoint(it)
+            }
         }
 
         model.onSearchResults().observe(this) {

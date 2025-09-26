@@ -44,6 +44,7 @@ class DeviceEditLocationViewModel(
     private var reverseGeocodingJob: Job? = null
     private var checkCellCapacityJob: Job? = null
     private var hexBounds: List<HexBounds> = listOf()
+    private var isOnBelowCapacityHex: Boolean = true
 
     private data class HexBounds(
         val hex: PublicHex,
@@ -58,12 +59,14 @@ class DeviceEditLocationViewModel(
     private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
     private val onUpdatedDevice = MutableLiveData<Resource<UIDevice>>()
     private val onCapacityLayer = MutableLiveData<CapacityLayerOnSetLocation?>()
+    private val onCellWithBelowCapacity = MutableLiveData<Boolean?>(null)
 
     fun onMoveToLocation() = onMoveToLocation
     fun onSearchResults() = onSearchResults
     fun onReverseGeocodedAddress() = onReverseGeocodedAddress
     fun onUpdatedDevice(): LiveData<Resource<UIDevice>> = onUpdatedDevice
     fun onCapacityLayer() = onCapacityLayer
+    fun onCellWithBelowCapacity() = onCellWithBelowCapacity
 
     fun validateLocation(lat: Double, lon: Double): Boolean {
         return Validator.validateLocation(lat, lon)
@@ -96,10 +99,7 @@ class DeviceEditLocationViewModel(
         }
     }
 
-    fun getAddressFromPoint(point: Point?) {
-        if (point == null) {
-            return
-        }
+    fun getAddressFromPoint(point: Point) {
         reverseGeocodingJob?.let {
             if (it.isActive) {
                 it.cancel("Cancelling running reverse geocoding job.")
@@ -163,10 +163,8 @@ class DeviceEditLocationViewModel(
         }
     }
 
-    fun isPointOnBelowCapacityCell(point: Point?, onResult: (Boolean) -> Unit) {
-        if (point == null) {
-            return onResult(true)
-        }
+    fun isPointOnBelowCapacityCell(lat: Double, lon: Double) {
+        onCellWithBelowCapacity.postValue(null)
         checkCellCapacityJob?.let {
             if (it.isActive) {
                 it.cancel("Cancelling running job of checking cell capacity of point.")
@@ -175,26 +173,20 @@ class DeviceEditLocationViewModel(
 
         checkCellCapacityJob = viewModelScope.launch(dispatcher) {
             delay(ON_MAP_IDLE_JOB_DELAY)
-            if (hexBounds.isEmpty()) {
-                onResult(true)
-            } else {
-                val lat = point.latitude()
-                val lon = point.longitude()
 
-                val potentialHex = hexBounds.firstOrNull { bounds ->
-                    // Quick bounds check eliminates ~95% of hexes
-                    if (lat < bounds.minLat || lat > bounds.maxLat ||
-                        lon < bounds.minLon || lon > bounds.maxLon
-                    ) {
-                        false
-                    } else {
-                        // Only do expensive polygon check for candidates
-                        bounds.hex.isPointInConvexPolygon(lat, lon)
-                    }
-                }?.hex
+            val potentialHex = hexBounds.firstOrNull { bounds ->
+                // Quick bounds check eliminates ~95% of hexes
+                if (lat < bounds.minLat || lat > bounds.maxLat ||
+                    lon < bounds.minLon || lon > bounds.maxLon
+                ) {
+                    false
+                } else {
+                    // Only do expensive polygon check for candidates
+                    bounds.hex.isPointInConvexPolygon(lat, lon)
+                }
+            }?.hex
 
-                onResult(potentialHex == null || potentialHex.isBelowCapacity())
-            }
+            onCellWithBelowCapacity.postValue(potentialHex == null || potentialHex.isBelowCapacity())
         }
 
         checkCellCapacityJob?.invokeOnCompletion {
