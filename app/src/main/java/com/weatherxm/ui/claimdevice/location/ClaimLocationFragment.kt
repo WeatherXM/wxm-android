@@ -19,6 +19,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
@@ -76,24 +77,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         }
 
         binding.confirm.setOnClickListener {
-            val markerLocation = getMapFragment().getMarkerLocation()
-            if (!editLocationViewModel.validateLocation(markerLocation.lat, markerLocation.lon)) {
-                showSnackbarMessage(
-                    binding.root,
-                    getString(R.string.invalid_location),
-                    callback = { snackbar?.dismiss() },
-                    R.string.action_dismiss,
-                    binding.confirm
-                )
-                return@setOnClickListener
-            }
-            model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
-
-            when (model.getDeviceType()) {
-                DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
-                DeviceType.PULSE_4G -> pulseParentModel.next()
-                DeviceType.HELIUM -> heliumParentModel.next()
-            }
+            onConfirmClicked()
         }
 
         val adapter = SearchResultsAdapter {
@@ -127,25 +111,9 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     @SuppressLint("MissingPermission")
     override fun onMapReady() {
         getMapFragment().addOnMapIdleListener { point ->
-            editLocationViewModel.getAddressFromPoint(point)
-            editLocationViewModel.isPointOnBelowCapacityCell(point) { isBelowCapacity ->
-                if (isBelowCapacity) {
-                    snackbar?.dismiss()
-                } else {
-                    showSnackbarMessage(
-                        viewGroup = binding.root,
-                        message = getString(R.string.cell_already_max_capacity),
-                        callback = {
-                            navigator.openWebsite(
-                                context,
-                                getString(R.string.docs_url_cell_capacity)
-                            )
-                            snackbar?.dismiss()
-                        },
-                        actionTextResId = R.string.read_more,
-                        anchorView = binding.confirmLocationToggle
-                    )
-                }
+            point?.let {
+                editLocationViewModel.getAddressFromPoint(it)
+                editLocationViewModel.isPointOnBelowCapacityCell(it.latitude(), it.longitude())
             }
         }
 
@@ -193,6 +161,74 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
         }
 
+        editLocationViewModel.onCellWithBelowCapacity().observe(this) { isBelowCapacity ->
+            if (isBelowCapacity == null || isBelowCapacity) {
+                snackbar?.dismiss()
+            } else {
+                showSnackbarMessage(
+                    viewGroup = binding.root,
+                    message = getString(R.string.cell_already_max_capacity),
+                    callback = {
+                        navigator.openWebsite(
+                            context,
+                            getString(R.string.docs_url_cell_capacity)
+                        )
+                        snackbar?.dismiss()
+                    },
+                    actionTextResId = R.string.read_more,
+                    anchorView = binding.confirmLocationToggle
+                )
+            }
+        }
+
         getMapFragment().initMarkerAndListeners()
+    }
+
+    private fun onConfirmClicked() {
+        val markerLocation = getMapFragment().getMarkerLocation()
+        /**
+         * Check if the location is valid
+         */
+        if (!editLocationViewModel.validateLocation(markerLocation.lat, markerLocation.lon)) {
+            showSnackbarMessage(
+                binding.root,
+                getString(R.string.invalid_location),
+                callback = { snackbar?.dismiss() },
+                R.string.action_dismiss,
+                binding.confirm
+            )
+            return
+        }
+
+        /**
+         * Check if the location is inside a cell which has available capacity to proceed
+         * otherwise show a confirmation dialog
+         */
+        if (editLocationViewModel.onCellWithBelowCapacity().value == false) {
+            ActionDialogFragment
+                .Builder(
+                    title = getString(R.string.watch_out),
+                    message = getString(R.string.watch_out_cell_capacity),
+                    positive = getString(R.string.relocate)
+                )
+                .onNegativeClick(getString(R.string.proceed_anyway)) {
+                    snackbar?.dismiss()
+                    setLocationAndProceed(markerLocation.lat, markerLocation.lon)
+                }
+                .build()
+                .show(this)
+        } else {
+            setLocationAndProceed(markerLocation.lat, markerLocation.lon)
+        }
+    }
+
+    private fun setLocationAndProceed(lat: Double, lon: Double) {
+        model.setInstallationLocation(lat, lon)
+
+        when (model.getDeviceType()) {
+            DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
+            DeviceType.PULSE_4G -> pulseParentModel.next()
+            DeviceType.HELIUM -> heliumParentModel.next()
+        }
     }
 }
