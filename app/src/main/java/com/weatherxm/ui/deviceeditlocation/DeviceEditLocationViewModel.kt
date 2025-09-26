@@ -13,15 +13,16 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.common.CapacityLayerOnSetLocation
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
+import com.weatherxm.ui.components.BaseMapFragment.Companion.ON_MAP_IDLE_JOB_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.LocationHelper
-import com.weatherxm.util.MapboxUtils
+import com.weatherxm.util.MapboxUtils.createCapacityLayer
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
@@ -41,6 +42,16 @@ class DeviceEditLocationViewModel(
     private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null
+    private var checkCellCapacityJob: Job? = null
+    private var hexBounds: List<HexBounds> = listOf()
+
+    private data class HexBounds(
+        val hex: PublicHex,
+        val minLat: Double,
+        val maxLat: Double,
+        val minLon: Double,
+        val maxLon: Double
+    )
 
     private val onMoveToLocation = MutableLiveData<Location?>()
     private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
@@ -96,7 +107,7 @@ class DeviceEditLocationViewModel(
         }
 
         reverseGeocodingJob = viewModelScope.launch(dispatcher) {
-            delay(REVERSE_GEOCODING_DELAY)
+            delay(ON_MAP_IDLE_JOB_DELAY)
             usecase.getAddressFromPoint(point).onRight {
                 onReverseGeocodedAddress.postValue(it)
             }.onLeft {
@@ -138,9 +149,57 @@ class DeviceEditLocationViewModel(
     fun getCells() {
         viewModelScope.launch(dispatcher) {
             explorerUseCase.getCells().onRight { response ->
-                onCapacityLayer.postValue(
-                    MapboxUtils.createCapacityLayer(response.publicHexes)
-                )
+                hexBounds = response.publicHexes.map { hex ->
+                    HexBounds(
+                        hex = hex,
+                        minLat = hex.polygon.minOf { it.lat },
+                        maxLat = hex.polygon.maxOf { it.lat },
+                        minLon = hex.polygon.minOf { it.lon },
+                        maxLon = hex.polygon.maxOf { it.lon }
+                    )
+                }
+                onCapacityLayer.postValue(createCapacityLayer(response.publicHexes))
+            }
+        }
+    }
+
+    fun isPointOnBelowCapacityCell(point: Point?, onResult: (Boolean) -> Unit) {
+        if (point == null) {
+            return onResult(true)
+        }
+        checkCellCapacityJob?.let {
+            if (it.isActive) {
+                it.cancel("Cancelling running job of checking cell capacity of point.")
+            }
+        }
+
+        checkCellCapacityJob = viewModelScope.launch(dispatcher) {
+            delay(ON_MAP_IDLE_JOB_DELAY)
+            if (hexBounds.isEmpty()) {
+                onResult(true)
+            } else {
+                val lat = point.latitude()
+                val lon = point.longitude()
+
+                val potentialHex = hexBounds.firstOrNull { bounds ->
+                    // Quick bounds check eliminates ~95% of hexes
+                    if (lat < bounds.minLat || lat > bounds.maxLat ||
+                        lon < bounds.minLon || lon > bounds.maxLon
+                    ) {
+                        false
+                    } else {
+                        // Only do expensive polygon check for candidates
+                        bounds.hex.isPointInConvexPolygon(lat, lon)
+                    }
+                }?.hex
+
+                onResult(potentialHex == null || potentialHex.isBelowCapacity())
+            }
+        }
+
+        checkCellCapacityJob?.invokeOnCompletion {
+            if (it is CancellationException) {
+                Timber.d("Cancelled running job of checking cell capacity of point..")
             }
         }
     }

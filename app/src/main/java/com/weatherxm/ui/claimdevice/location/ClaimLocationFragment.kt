@@ -126,8 +126,27 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
     @SuppressLint("MissingPermission")
     override fun onMapReady() {
-        getMapFragment().addOnMapIdleListener {
-            editLocationViewModel.getAddressFromPoint(it)
+        getMapFragment().addOnMapIdleListener { point ->
+            editLocationViewModel.getAddressFromPoint(point)
+            editLocationViewModel.isPointOnBelowCapacityCell(point) { isBelowCapacity ->
+                if (isBelowCapacity) {
+                    snackbar?.dismiss()
+                } else {
+                    showSnackbarMessage(
+                        viewGroup = binding.root,
+                        message = getString(R.string.cell_already_max_capacity),
+                        callback = {
+                            navigator.openWebsite(
+                                context,
+                                getString(R.string.docs_url_cell_capacity)
+                            )
+                            snackbar?.dismiss()
+                        },
+                        actionTextResId = R.string.read_more,
+                        anchorView = binding.confirmLocationToggle
+                    )
+                }
+            }
         }
 
         model.onRequestUserLocation().observe(viewLifecycleOwner) {

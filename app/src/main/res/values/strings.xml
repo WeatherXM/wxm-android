@@ -856,4 +856,7 @@
     <string name="contribute_earn_rewards">Contribute and\nearn rewards</string>
     <string name="community_powered_weather">Community-Powered\nWeather</string>
     <string name="local_weather_data_global_impact">Local weather data,\nglobal impact</string>
+    
+    <!-- Cell Capacity On Set Location -->
+    <string name="cell_already_max_capacity">Cell already at max capacity. New stations may not be eligible for rewards.</string>
 </resources>
