@@ -25,6 +25,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object MapboxUtils : KoinComponent {
+    private const val HEX_OPACITY_FOR_SET_LOCATION = 0.2
+
     private val adapter: UICellJsonAdapter by inject()
     private val resources: Resources by inject()
     private val gson: Gson by inject()
@@ -108,9 +110,39 @@ object MapboxUtils : KoinComponent {
         }
     }
 
-    fun List<PublicHex>.toPointAnnotationOptions(): List<PointAnnotationOptions> {
+    fun List<PublicHex>.toCapacityPolygonsOnLocation(): List<PolygonAnnotationOptions> {
+        return map {
+            var fillColor = R.color.colorPrimary
+            var outlineColor = R.color.colorPrimary
+
+            if (it.capacity != null && it.deviceCount != null && it.deviceCount >= it.capacity) {
+                fillColor = R.color.error
+                outlineColor = R.color.error
+            }
+
+            PolygonAnnotationOptions()
+                .withFillColor(resources.getColor(fillColor))
+                .withFillOpacity(HEX_OPACITY_FOR_SET_LOCATION)
+                .withFillOutlineColor(resources.getColor(outlineColor))
+                .withData(gson.toJsonTree(UICell(it.index, it.center)))
+                .withPoints(polygonPointsToLatLng(it.polygon))
+        }
+    }
+
+    fun List<PublicHex>.toDeviceCountPoints(): List<PointAnnotationOptions> {
         return mapNotNull { hex ->
             hex.deviceCount?.takeIf { it > 0 }?.let {
+                PointAnnotationOptions()
+                    .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
+                    .withTextField(it.toString())
+                    .withTextColor(resources.getColor(R.color.dark_text))
+            }
+        }
+    }
+
+    fun List<PublicHex>.toCapacityPoints(): List<PointAnnotationOptions> {
+        return mapNotNull { hex ->
+            hex.capacity?.takeIf { it > 0 }?.let {
                 PointAnnotationOptions()
                     .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
                     .withTextField(it.toString())

@@ -7,13 +7,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
+import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.LocationHelper
+import com.weatherxm.util.MapboxUtils.toCapacityPoints
+import com.weatherxm.util.MapboxUtils.toCapacityPolygonsOnLocation
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,6 +30,7 @@ import timber.log.Timber
 
 class ClaimLocationViewModel(
     private val editLocationUseCase: EditLocationUseCase,
+    private val explorerUseCase: ExplorerUseCase,
     private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
     private val dispatcher: CoroutineDispatcher,
@@ -37,11 +43,15 @@ class ClaimLocationViewModel(
     private val onMoveToLocation = MutableLiveData<Location?>()
     private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
     private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
+    private val onPolygonsToDraw = MutableLiveData<List<PolygonAnnotationOptions>>()
+    private val onPointsToDraw = MutableLiveData<List<PointAnnotationOptions>>()
 
     fun onRequestUserLocation() = onRequestUserLocation
     fun onMoveToLocation() = onMoveToLocation
     fun onSearchResults() = onSearchResults
     fun onReverseGeocodedAddress() = onReverseGeocodedAddress
+    fun onPolygonsToDraw() = onPolygonsToDraw
+    fun onPointsToDraw() = onPointsToDraw
 
     fun requestUserLocation() {
         onRequestUserLocation.postValue(true)
@@ -118,6 +128,15 @@ class ClaimLocationViewModel(
         reverseGeocodingJob?.invokeOnCompletion {
             if (it is CancellationException) {
                 Timber.d("Cancelled running reverse geocoding job.")
+            }
+        }
+    }
+
+    fun fetch() {
+        viewModelScope.launch(dispatcher) {
+            explorerUseCase.getCells().onRight { response ->
+                onPolygonsToDraw.postValue(response.publicHexes.toCapacityPolygonsOnLocation())
+                onPointsToDraw.postValue(response.publicHexes.toCapacityPoints())
             }
         }
     }

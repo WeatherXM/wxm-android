@@ -104,7 +104,8 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             )
         }
 
-        binding.addressSearchView.setAdapter(adapter,
+        binding.addressSearchView.setAdapter(
+            adapter,
             onTextChanged = { model.getSearchSuggestions(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(activity) {
@@ -112,6 +113,8 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
                 }
             }
         )
+
+        model.fetch()
     }
 
     private fun getMapFragment(): EditLocationMapFragment {
@@ -160,6 +163,14 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         model.onMoveToLocation().observe(viewLifecycleOwner) {
             getMapFragment().moveToLocation(it)
             addressSearchView.clear()
+        }
+
+        model.onPolygonsToDraw().observe(this) {
+            getMapFragment().drawPolygons(it)
+        }
+
+        model.onPointsToDraw().observe(this) {
+            getMapFragment().drawPoints(it)
         }
 
         getMapFragment().initMarkerAndListeners()

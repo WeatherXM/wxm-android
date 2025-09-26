@@ -12,6 +12,7 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.EditLocationUseCase
+import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -28,6 +29,7 @@ import org.koin.dsl.module
 
 class ClaimLocationViewModelTest : BehaviorSpec({
     val usecase = mockk<EditLocationUseCase>()
+    val explorerUseCase = mockk<ExplorerUseCase>()
     val locationHelper = mockk<LocationHelper>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: ClaimLocationViewModel
@@ -55,7 +57,8 @@ class ClaimLocationViewModelTest : BehaviorSpec({
         }
         justRun { analytics.trackEventFailure(any()) }
 
-        viewModel = ClaimLocationViewModel(usecase, analytics, locationHelper, dispatcher)
+        viewModel =
+            ClaimLocationViewModel(usecase, explorerUseCase, analytics, locationHelper, dispatcher)
     }
 
     context("SET a Device Type and then GET it") {
