@@ -165,12 +165,10 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             addressSearchView.clear()
         }
 
-        model.onPolygonsToDraw().observe(this) {
-            getMapFragment().drawPolygons(it)
-        }
-
-        model.onPointsToDraw().observe(this) {
-            getMapFragment().drawPoints(it)
+        model.onCapacityLayer().observe(this) { layerData ->
+            layerData?.let {
+                getMapFragment().drawCapacityLayers(it)
+            }
         }
 
         getMapFragment().initMarkerAndListeners()
