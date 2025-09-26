@@ -7,6 +7,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
+import com.mapbox.maps.extension.style.layers.generated.FillLayer
+import com.mapbox.maps.extension.style.layers.generated.LineLayer
+import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.R
@@ -693,6 +697,14 @@ data class UploadPhotosState(
     val isSuccess: Boolean,
     val isError: Boolean,
     val isCancelled: Boolean = false
+)
+
+@Keep
+data class CapacityLayerOnSetLocation(
+    val source: GeoJsonSource,
+    val fillLayer: FillLayer,
+    val lineLayer: LineLayer,
+    val textLayer: SymbolLayer
 )
 
 @Keep

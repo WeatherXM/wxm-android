@@ -856,4 +856,11 @@
     <string name="contribute_earn_rewards">Contribute and\nearn rewards</string>
     <string name="community_powered_weather">Community-Powered\nWeather</string>
     <string name="local_weather_data_global_impact">Local weather data,\nglobal impact</string>
+
+    <!-- Cell Capacity On Set Location -->
+    <string name="cell_already_max_capacity">Cell already at max capacity. New stations may not be eligible for rewards.</string>
+    <string name="watch_out">Watch out!</string>
+    <string name="watch_out_cell_capacity">This cell has already reached its station limit based on its geospatial capacity. Only the top-ranked stations in this cell, determined by reward score and seniority, are eligible for rewards.\nIf you deploy here and your station ranks below the capacity threshold, it won’t receive any rewards.\nFor example, in a cell with a capacity of 5 stations, only the top 5 ranked devices are rewarded.\nTo maximize your earnings, consider deploying in a cell with available capacity.</string>
+    <string name="relocate">Relocate</string>
+    <string name="proceed_anyway">Proceed anyway</string>
 </resources>
