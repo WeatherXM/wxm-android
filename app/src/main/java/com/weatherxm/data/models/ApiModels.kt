@@ -376,6 +376,7 @@ data class PublicHex(
         return capacity != null && deviceCount != null && deviceCount < capacity
     }
 
+    @Suppress("MagicNumber", "ReturnCount")
     fun isPointInConvexPolygon(lat: Double, lon: Double): Boolean {
         if (polygon.size != 6) return false // H3 hexes should have 6 vertices
 
