@@ -7,14 +7,16 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.ViewAnnotationAnchor
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.viewannotation.annotationAnchor
 import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import timber.log.Timber
 
 class EditLocationMapFragment : BaseMapFragment() {
@@ -107,6 +109,14 @@ class EditLocationMapFragment : BaseMapFragment() {
                 .center(Point.fromLngLat(location.lon, location.lat))
                 .build()
         )
+    }
+
+    fun drawPolygons(polygons: List<PolygonAnnotationOptions>) {
+        polygonManager.create(polygons)
+    }
+
+    fun drawPoints(points: List<PointAnnotationOptions>) {
+        pointManager.create(points)
     }
 }
 

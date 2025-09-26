@@ -12,11 +12,11 @@ import com.weatherxm.data.models.NetworkSearchDeviceResult
 import com.weatherxm.data.models.NetworkSearchResults
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
-import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.data.repository.FollowRepository
+import com.weatherxm.data.repository.GeoLocationRepository
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.home.explorer.ExplorerData
 import com.weatherxm.ui.home.explorer.SearchResult
@@ -43,7 +43,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
     val index = "index"
     val address = "address"
     val location = Location.empty()
-    val publicHexes = mutableListOf(PublicHex(index, 0, 0, null, location, emptyList()))
+    val publicHexes = mutableListOf(PublicHex(index, 0, 0, null, 0, location, emptyList()))
     val cell = UICell(index, location)
 
     val ownedDevice = PublicDevice(

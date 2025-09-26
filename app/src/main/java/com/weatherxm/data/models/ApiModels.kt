@@ -368,6 +368,7 @@ data class PublicHex(
     val activeDeviceCount: Int?,
     @Json(name = "avg_data_quality")
     val avgDataQuality: Int?,
+    val capacity: Int?,
     val center: Location,
     val polygon: List<Location>,
 ) : Parcelable
