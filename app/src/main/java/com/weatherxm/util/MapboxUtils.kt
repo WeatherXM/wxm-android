@@ -132,17 +132,6 @@ object MapboxUtils : KoinComponent {
         }
     }
 
-    fun List<PublicHex>.toCapacityPoints(): List<PointAnnotationOptions> {
-        return mapNotNull { hex ->
-            hex.capacity?.takeIf { it > 0 }?.let {
-                PointAnnotationOptions()
-                    .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
-                    .withTextField(it.toString())
-                    .withTextColor(resources.getColor(R.color.dark_text))
-            }
-        }
-    }
-
     fun polygonPointsToLatLng(pointsOfPolygon: List<Location>): MutableList<Point> {
         val latLongs = pointsOfPolygon.map { coordinates ->
             Point.fromLngLat(coordinates.lon, coordinates.lat)
@@ -153,6 +142,7 @@ object MapboxUtils : KoinComponent {
         return latLongs
     }
 
+    @Suppress("MagicNumber")
     fun createCapacityLayer(hexes: List<PublicHex>): CapacityLayerOnSetLocation {
         val features = hexes.map {
             Feature.fromGeometry(

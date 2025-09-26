@@ -9,8 +9,6 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.extension.style.layers.addLayerAbove
 import com.mapbox.maps.extension.style.sources.addSource
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.viewannotation.annotationAnchor
 import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
@@ -112,14 +110,6 @@ class EditLocationMapFragment : BaseMapFragment() {
                 .center(Point.fromLngLat(location.lon, location.lat))
                 .build()
         )
-    }
-
-    fun drawPolygons(polygons: List<PolygonAnnotationOptions>) {
-        polygonManager.create(polygons)
-    }
-
-    fun drawPoints(points: List<PointAnnotationOptions>) {
-        pointManager.create(points)
     }
 
     fun drawCapacityLayers(layerData: CapacityLayerOnSetLocation) {

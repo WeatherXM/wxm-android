@@ -44,7 +44,6 @@ class DeviceEditLocationViewModel(
     private var reverseGeocodingJob: Job? = null
     private var checkCellCapacityJob: Job? = null
     private var hexBounds: List<HexBounds> = listOf()
-    private var isOnBelowCapacityHex: Boolean = true
 
     private data class HexBounds(
         val hex: PublicHex,
@@ -176,9 +175,9 @@ class DeviceEditLocationViewModel(
 
             val potentialHex = hexBounds.firstOrNull { bounds ->
                 // Quick bounds check eliminates ~95% of hexes
-                if (lat < bounds.minLat || lat > bounds.maxLat ||
-                    lon < bounds.minLon || lon > bounds.maxLon
-                ) {
+                val latOutOfBounds = lat < bounds.minLat || lat > bounds.maxLat
+                val lonOutOfBounds = lon < bounds.minLon || lon > bounds.maxLon
+                if (latOutOfBounds || lonOutOfBounds) {
                     false
                 } else {
                     // Only do expensive polygon check for candidates
@@ -186,7 +185,9 @@ class DeviceEditLocationViewModel(
                 }
             }?.hex
 
-            onCellWithBelowCapacity.postValue(potentialHex == null || potentialHex.isBelowCapacity())
+            onCellWithBelowCapacity.postValue(
+                potentialHex == null || potentialHex.isBelowCapacity()
+            )
         }
 
         checkCellCapacityJob?.invokeOnCompletion {
