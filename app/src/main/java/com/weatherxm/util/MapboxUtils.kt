@@ -5,8 +5,17 @@ import com.mapbox.api.staticmap.v1.MapboxStaticMap
 import com.mapbox.api.staticmap.v1.StaticMapCriteria
 import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import com.mapbox.geojson.utils.PolylineUtils
+import com.mapbox.maps.extension.style.expressions.dsl.generated.get
+import com.mapbox.maps.extension.style.expressions.dsl.generated.switchCase
+import com.mapbox.maps.extension.style.layers.generated.fillLayer
+import com.mapbox.maps.extension.style.layers.generated.lineLayer
+import com.mapbox.maps.extension.style.layers.generated.symbolLayer
+import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
@@ -15,8 +24,10 @@ import com.weatherxm.R
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.PublicHex
+import com.weatherxm.ui.common.CapacityLayerOnSetLocation
 import com.weatherxm.ui.common.Contracts.STATION_COUNT
 import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
+import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.ui.home.explorer.MapLayer
 import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.ui.home.explorer.UICellJsonAdapter
@@ -26,6 +37,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object MapboxUtils : KoinComponent {
+    private const val HEX_OPACITY_FOR_SET_LOCATION = 0.2
+
     private val adapter: UICellJsonAdapter by inject()
     private val resources: Resources by inject()
     private val gson: Gson by inject()
@@ -105,11 +118,11 @@ object MapboxUtils : KoinComponent {
                 .withFillOpacity(FILL_OPACITY_HEXAGONS)
                 .withFillOutlineColor(resources.getColor(R.color.white))
                 .withData(gson.toJsonTree(UICell(it.index, it.center)))
-                .withPoints(polygonPointsToLatLng(it.polygon))
+                .withPoints(listOf(polygonPointsToLatLng(it.polygon)))
         }
     }
 
-    fun List<PublicHex>.toPointAnnotationOptions(): List<PointAnnotationOptions> {
+    fun List<PublicHex>.toDeviceCountPoints(): List<PointAnnotationOptions> {
         return mapNotNull { hex ->
             hex.deviceCount?.takeIf { it > 0 }?.let {
                 PointAnnotationOptions()
@@ -121,15 +134,77 @@ object MapboxUtils : KoinComponent {
         }
     }
 
-    fun polygonPointsToLatLng(pointsOfPolygon: List<Location>): List<MutableList<Point>> {
-        val latLongs = listOf(pointsOfPolygon.map { coordinates ->
+    fun polygonPointsToLatLng(pointsOfPolygon: List<Location>): MutableList<Point> {
+        val latLongs = pointsOfPolygon.map { coordinates ->
             Point.fromLngLat(coordinates.lon, coordinates.lat)
-        }.toMutableList())
+        }.toMutableList()
 
         // Custom/Temporary fix for: https://github.com/mapbox/mapbox-maps-android/issues/733
-        latLongs.map { coordinates ->
-            coordinates.add(coordinates[0])
-        }
+        latLongs.add(latLongs[0])
         return latLongs
+    }
+
+    @Suppress("MagicNumber")
+    fun createCapacityLayer(hexes: List<PublicHex>): CapacityLayerOnSetLocation {
+        val features = hexes.map {
+            Feature.fromGeometry(
+                Polygon.fromLngLats(
+                    listOf(polygonPointsToLatLng(it.polygon))
+                )
+            ).apply {
+                addBooleanProperty("is_below_capacity", it.isBelowCapacity())
+                addStringProperty(
+                    "capacity_number",
+                    "${it.deviceCount.toString()} / ${it.capacity.toString()}"
+                )
+            }
+        }
+
+        val source = geoJsonSource("capacity-source") {
+            featureCollection(FeatureCollection.fromFeatures(features))
+        }
+
+        val fillLayer = fillLayer("capacity-fill-layer", "capacity-source") {
+            fillOpacity(HEX_OPACITY_FOR_SET_LOCATION)
+            fillColor(
+                switchCase {
+                    get {
+                        literal("is_below_capacity")
+                    }
+                    color(resources.getColor(R.color.colorPrimary))
+                    color(resources.getColor(R.color.error))
+                }
+            )
+        }
+
+        val lineLayer = lineLayer("capacity-outline-layer", "capacity-source") {
+            lineWidth(2.0)
+            lineColor(
+                switchCase {
+                    get {
+                        literal("is_below_capacity")
+                    }
+                    color(resources.getColor(R.color.colorPrimary))
+                    color(resources.getColor(R.color.error))
+                }
+            )
+        }
+
+        val textLayer = symbolLayer("capacity-text-layer", "capacity-source") {
+            textField(
+                get {
+                    literal("capacity_number")
+                }
+            )
+            textSize(18.0)
+            textColor(resources.getColor(R.color.dark_text))
+            minZoom(SHOW_STATION_COUNT_ZOOM_LEVEL)
+            textAllowOverlap(true)
+            textIgnorePlacement(true)
+            iconAllowOverlap(true)
+            iconIgnorePlacement(true)
+        }
+
+        return CapacityLayerOnSetLocation(source, fillLayer, lineLayer, textLayer)
     }
 }
