@@ -18,6 +18,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
@@ -63,7 +64,28 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
                 toast(R.string.invalid_location)
                 return@setOnClickListener
             }
-            model.setLocation(device.id, markerLocation.lat, markerLocation.lon)
+
+            /**
+             * Check if the location is inside a cell which has available capacity to proceed
+             * otherwise show a confirmation dialog
+             */
+            if (model.onCellWithBelowCapacity().value == false) {
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.watch_out),
+                        message = getString(R.string.watch_out_cell_capacity),
+                        positive = getString(R.string.relocate)
+                    )
+                    .onNegativeClick(getString(R.string.proceed_anyway)) {
+                        snackbar?.dismiss()
+                        model.setLocation(device.id, markerLocation.lat, markerLocation.lon)
+                    }
+                    .build()
+                    .show(this)
+            } else {
+                snackbar?.dismiss()
+                model.setLocation(device.id, markerLocation.lat, markerLocation.lon)
+            }
         }
 
         with(binding.relocationFeeNotice) {
@@ -95,6 +117,8 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
                 }
             }
         )
+
+        model.getCells()
     }
 
     private fun getMapFragment(): EditLocationMapFragment {
@@ -121,8 +145,11 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
     }
 
     override fun onMapReady() {
-        getMapFragment().addOnMapIdleListener {
-            model.getAddressFromPoint(it)
+        getMapFragment().addOnMapIdleListener { point ->
+            point?.let {
+                model.getAddressFromPoint(it)
+                model.isPointOnBelowCapacityCell(it.latitude(), it.longitude())
+            }
         }
 
         model.onSearchResults().observe(this) {
@@ -142,6 +169,29 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
         model.onMoveToLocation().observe(this) {
             getMapFragment().moveToLocation(it)
             binding.addressSearchView.clear()
+        }
+
+        model.onCapacityLayer().observe(this) { layerData ->
+            layerData?.let {
+                getMapFragment().drawCapacityLayers(it)
+            }
+        }
+
+        model.onCellWithBelowCapacity().observe(this) { isBelowCapacity ->
+            if (isBelowCapacity == null || isBelowCapacity) {
+                snackbar?.dismiss()
+            } else {
+                showSnackbarMessage(
+                    viewGroup = binding.root,
+                    message = getString(R.string.cell_already_max_capacity),
+                    callback = {
+                        navigator.openWebsite(this, getString(R.string.docs_url_cell_capacity))
+                        snackbar?.dismiss()
+                    },
+                    actionTextResId = R.string.read_more,
+                    anchorView = binding.bottomCard
+                )
+            }
         }
 
         getMapFragment().initMarkerAndListeners()

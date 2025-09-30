@@ -34,7 +34,7 @@ open class BaseMapFragment : BaseFragment() {
         const val DEFAULT_ZOOM_LEVEL: Double = 2.0
         const val ZOOMED_IN_ZOOM_LEVEL: Double = 11.0
         const val USER_SET_LOCATION_ZOOM_LEVEL: Double = 15.0
-        val REVERSE_GEOCODING_DELAY = TimeUnit.SECONDS.toMillis(1)
+        val ON_MAP_IDLE_JOB_DELAY = TimeUnit.SECONDS.toMillis(1)
     }
 
     fun interface OnMapDebugInfoListener {

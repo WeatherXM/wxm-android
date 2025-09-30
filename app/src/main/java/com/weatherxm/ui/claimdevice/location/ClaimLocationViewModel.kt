@@ -1,47 +1,17 @@
 package com.weatherxm.ui.claimdevice.location
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import androidx.annotation.RequiresPermission
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.mapbox.geojson.Point
-import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
-import com.weatherxm.usecases.EditLocationUseCase
-import com.weatherxm.util.LocationHelper
-import com.weatherxm.util.Validator
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
-class ClaimLocationViewModel(
-    private val editLocationUseCase: EditLocationUseCase,
-    private val analytics: AnalyticsWrapper,
-    private val locationHelper: LocationHelper,
-    private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
-    private var reverseGeocodingJob: Job? = null
+class ClaimLocationViewModel : ViewModel() {
     private var installationLocation = Location(0.0, 0.0)
     private var deviceType = DeviceType.M5_WIFI
 
     private val onRequestUserLocation = MutableLiveData(false)
-    private val onMoveToLocation = MutableLiveData<Location?>()
-    private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
-    private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
 
     fun onRequestUserLocation() = onRequestUserLocation
-    fun onMoveToLocation() = onMoveToLocation
-    fun onSearchResults() = onSearchResults
-    fun onReverseGeocodedAddress() = onReverseGeocodedAddress
 
     fun requestUserLocation() {
         onRequestUserLocation.postValue(true)
@@ -55,10 +25,6 @@ class ClaimLocationViewModel(
         return deviceType
     }
 
-    fun validateLocation(lat: Double, lon: Double): Boolean {
-        return Validator.validateLocation(lat, lon)
-    }
-
     fun setInstallationLocation(lat: Double, lon: Double) {
         installationLocation.lat = lat
         installationLocation.lon = lon
@@ -66,59 +32,5 @@ class ClaimLocationViewModel(
 
     fun getInstallationLocation(): Location {
         return installationLocation
-    }
-
-    @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
-    fun getLocation() {
-        locationHelper.getLocationAndThen {
-            onMoveToLocation.postValue(it)
-        }
-    }
-
-    fun getSearchSuggestions(query: String) {
-        viewModelScope.launch(dispatcher) {
-            editLocationUseCase.getSearchSuggestions(query).onRight {
-                onSearchResults.postValue(it)
-            }.onLeft {
-                onSearchResults.postValue(null)
-            }
-        }
-    }
-
-    fun getLocationFromSearchSuggestion(suggestion: SearchSuggestion) {
-        viewModelScope.launch(dispatcher) {
-            editLocationUseCase.getSuggestionLocation(suggestion).onRight {
-                onMoveToLocation.postValue(it)
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-            }
-        }
-    }
-
-    fun getAddressFromPoint(point: Point?) {
-        if (point == null) {
-            return
-        }
-        reverseGeocodingJob?.let {
-            if (it.isActive) {
-                it.cancel("Cancelling running reverse geocoding job.")
-            }
-        }
-
-        reverseGeocodingJob = viewModelScope.launch(dispatcher) {
-            delay(REVERSE_GEOCODING_DELAY)
-            editLocationUseCase.getAddressFromPoint(point).onRight {
-                onReverseGeocodedAddress.postValue(it)
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-                onReverseGeocodedAddress.postValue(null)
-            }
-        }
-
-        reverseGeocodingJob?.invokeOnCompletion {
-            if (it is CancellationException) {
-                Timber.d("Cancelled running reverse geocoding job.")
-            }
-        }
     }
 }

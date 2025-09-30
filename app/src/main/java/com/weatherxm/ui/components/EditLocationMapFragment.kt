@@ -7,14 +7,17 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.ViewAnnotationAnchor
+import com.mapbox.maps.extension.style.layers.addLayerAbove
+import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.viewannotation.annotationAnchor
 import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.models.Location
+import com.weatherxm.ui.common.CapacityLayerOnSetLocation
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import timber.log.Timber
 
 class EditLocationMapFragment : BaseMapFragment() {
@@ -107,6 +110,30 @@ class EditLocationMapFragment : BaseMapFragment() {
                 .center(Point.fromLngLat(location.lon, location.lat))
                 .build()
         )
+    }
+
+    fun drawCapacityLayers(layerData: CapacityLayerOnSetLocation) {
+        getMap().style?.apply {
+            // Add source if it doesn't exist
+            if (!styleSourceExists("capacity-source")) {
+                addSource(layerData.source)
+            }
+
+            // Add fill layer
+            if (!styleLayerExists("capacity-fill-layer")) {
+                addLayerAbove(layerData.fillLayer, "waterway-label")
+            }
+
+            // Add line layer above fill layer
+            if (!styleLayerExists("capacity-outline-layer")) {
+                addLayerAbove(layerData.lineLayer, "capacity-fill-layer")
+            }
+
+            // Add text layer above line layer
+            if (!styleLayerExists("capacity-text-layer")) {
+                addLayerAbove(layerData.textLayer, "capacity-outline-layer")
+            }
+        }
     }
 }
 
