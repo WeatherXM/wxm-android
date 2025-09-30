@@ -19,17 +19,21 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
+import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     private val model: ClaimLocationViewModel by activityViewModel()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
     private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
+    private val editLocationViewModel: DeviceEditLocationViewModel by viewModel()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
@@ -73,28 +77,11 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         }
 
         binding.confirm.setOnClickListener {
-            val markerLocation = getMapFragment().getMarkerLocation()
-            if (!model.validateLocation(markerLocation.lat, markerLocation.lon)) {
-                showSnackbarMessage(
-                    binding.root,
-                    getString(R.string.invalid_location),
-                    callback = { snackbar?.dismiss() },
-                    R.string.action_dismiss,
-                    binding.confirm
-                )
-                return@setOnClickListener
-            }
-            model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
-
-            when (model.getDeviceType()) {
-                DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
-                DeviceType.PULSE_4G -> pulseParentModel.next()
-                DeviceType.HELIUM -> heliumParentModel.next()
-            }
+            onConfirmClicked()
         }
 
         val adapter = SearchResultsAdapter {
-            model.getLocationFromSearchSuggestion(it)
+            editLocationViewModel.getLocationFromSearchSuggestion(it)
             hideKeyboard()
 
             analytics.trackEventUserAction(
@@ -104,14 +91,17 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             )
         }
 
-        binding.addressSearchView.setAdapter(adapter,
-            onTextChanged = { model.getSearchSuggestions(it) },
+        binding.addressSearchView.setAdapter(
+            adapter,
+            onTextChanged = { editLocationViewModel.getSearchSuggestions(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(activity) {
-                    model.getLocation()
+                    editLocationViewModel.getLocation()
                 }
             }
         )
+
+        editLocationViewModel.getCells()
     }
 
     private fun getMapFragment(): EditLocationMapFragment {
@@ -120,14 +110,17 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
     @SuppressLint("MissingPermission")
     override fun onMapReady() {
-        getMapFragment().addOnMapIdleListener {
-            model.getAddressFromPoint(it)
+        getMapFragment().addOnMapIdleListener { point ->
+            point?.let {
+                editLocationViewModel.getAddressFromPoint(it)
+                editLocationViewModel.isPointOnBelowCapacityCell(it.latitude(), it.longitude())
+            }
         }
 
         model.onRequestUserLocation().observe(viewLifecycleOwner) {
             if (it) {
                 requestLocationPermissions(activity) {
-                    model.getLocation()
+                    editLocationViewModel.getLocation()
                 }
             }
         }
@@ -137,7 +130,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         } else {
             binding.addressSearchView
         }
-        model.onSearchResults().observe(viewLifecycleOwner) {
+        editLocationViewModel.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
                 showSnackbarMessage(
                     binding.root,
@@ -153,15 +146,89 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
         }
 
-        model.onReverseGeocodedAddress().observe(viewLifecycleOwner) {
+        editLocationViewModel.onReverseGeocodedAddress().observe(viewLifecycleOwner) {
             getMapFragment().showMarkerAddress(it)
         }
 
-        model.onMoveToLocation().observe(viewLifecycleOwner) {
+        editLocationViewModel.onMoveToLocation().observe(viewLifecycleOwner) {
             getMapFragment().moveToLocation(it)
             addressSearchView.clear()
         }
 
+        editLocationViewModel.onCapacityLayer().observe(this) { layerData ->
+            layerData?.let {
+                getMapFragment().drawCapacityLayers(it)
+            }
+        }
+
+        editLocationViewModel.onCellWithBelowCapacity().observe(this) { isBelowCapacity ->
+            if (isBelowCapacity == null || isBelowCapacity) {
+                snackbar?.dismiss()
+            } else {
+                showSnackbarMessage(
+                    viewGroup = binding.root,
+                    message = getString(R.string.cell_already_max_capacity),
+                    callback = {
+                        navigator.openWebsite(
+                            context,
+                            getString(R.string.docs_url_cell_capacity)
+                        )
+                        snackbar?.dismiss()
+                    },
+                    actionTextResId = R.string.read_more,
+                    anchorView = binding.confirmLocationToggle
+                )
+            }
+        }
+
         getMapFragment().initMarkerAndListeners()
+    }
+
+    private fun onConfirmClicked() {
+        val markerLocation = getMapFragment().getMarkerLocation()
+        /**
+         * Check if the location is valid
+         */
+        if (!editLocationViewModel.validateLocation(markerLocation.lat, markerLocation.lon)) {
+            showSnackbarMessage(
+                binding.root,
+                getString(R.string.invalid_location),
+                callback = { snackbar?.dismiss() },
+                R.string.action_dismiss,
+                binding.confirm
+            )
+            return
+        }
+
+        /**
+         * Check if the location is inside a cell which has available capacity to proceed
+         * otherwise show a confirmation dialog
+         */
+        if (editLocationViewModel.onCellWithBelowCapacity().value == false) {
+            ActionDialogFragment
+                .Builder(
+                    title = getString(R.string.watch_out),
+                    message = getString(R.string.watch_out_cell_capacity),
+                    positive = getString(R.string.relocate)
+                )
+                .onNegativeClick(getString(R.string.proceed_anyway)) {
+                    snackbar?.dismiss()
+                    setLocationAndProceed(markerLocation.lat, markerLocation.lon)
+                }
+                .build()
+                .show(this)
+        } else {
+            setLocationAndProceed(markerLocation.lat, markerLocation.lon)
+        }
+    }
+
+    private fun setLocationAndProceed(lat: Double, lon: Double) {
+        model.setInstallationLocation(lat, lon)
+
+        when (model.getDeviceType()) {
+            DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
+            DeviceType.PULSE_4G -> pulseParentModel.next()
+            DeviceType.HELIUM -> heliumParentModel.next()
+        }
     }
 }

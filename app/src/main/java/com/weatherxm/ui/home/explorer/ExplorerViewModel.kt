@@ -20,7 +20,7 @@ import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
-import com.weatherxm.util.MapboxUtils.toPointAnnotationOptions
+import com.weatherxm.util.MapboxUtils.toDeviceCountPoints
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -219,7 +219,7 @@ class ExplorerViewModel(
                     response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions(
                         onMapLayer.value ?: MapLayer.DATA_QUALITY
                     )
-                    response.pointsToDraw = response.publicHexes.toPointAnnotationOptions()
+                    response.pointsToDraw = response.publicHexes.toDeviceCountPoints()
                     onExplorerData.postValue(response)
                 } else {
                     val newHexes = mutableListOf<PublicHex>()

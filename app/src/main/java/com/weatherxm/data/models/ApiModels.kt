@@ -373,9 +373,40 @@ data class PublicHex(
     val activeDeviceCount: Int?,
     @Json(name = "avg_data_quality")
     val avgDataQuality: Int?,
+    val capacity: Int?,
     val center: Location,
     val polygon: List<Location>,
-) : Parcelable
+) : Parcelable {
+    fun isBelowCapacity(): Boolean {
+        return capacity != null && deviceCount != null && deviceCount < capacity
+    }
+
+    @Suppress("MagicNumber", "ReturnCount")
+    fun isPointInConvexPolygon(lat: Double, lon: Double): Boolean {
+        if (polygon.size != 6) return false // H3 hexes should have 6 vertices
+
+        var sign: Boolean? = null
+
+        for (i in polygon.indices) {
+            val j = (i + 1) % polygon.size
+            val crossProduct = (polygon[j].lon - polygon[i].lon) * (lat - polygon[i].lat) -
+                (polygon[j].lat - polygon[i].lat) * (lon - polygon[i].lon)
+
+            when {
+                crossProduct > 0 -> {
+                    if (sign == false) return false
+                    sign = true
+                }
+                crossProduct < 0 -> {
+                    if (sign == true) return false
+                    sign = false
+                }
+            }
+        }
+
+        return true
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

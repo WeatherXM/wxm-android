@@ -28,7 +28,7 @@ import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.HEATMAP_WEIGHT
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
-import com.weatherxm.util.MapboxUtils.toPointAnnotationOptions
+import com.weatherxm.util.MapboxUtils.toDeviceCountPoints
 import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -67,8 +67,8 @@ class ExplorerViewModelTest : BehaviorSpec({
      */
     val geoJsonSource = mockk<GeoJsonSource>()
 
-    val publicHex = PublicHex("cellIndex", 1, 1, 1, location, listOf())
-    val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, location, listOf())
+    val publicHex = PublicHex("cellIndex", 1, 1, 1, 1, location, listOf())
+    val publicHex2 = PublicHex("cellIndex2", 1, 1, 1, 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
     val newPointAnnotationOptions = listOf(mockk<PointAnnotationOptions>())
     val explorerData = ExplorerData(
@@ -213,10 +213,10 @@ class ExplorerViewModelTest : BehaviorSpec({
         every {
             newExplorerData.publicHexes.toPolygonAnnotationOptions(MapLayer.DATA_QUALITY)
         } returns newPolygonAnnotationOptions
-        every { explorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
-        every { fullExplorerData.publicHexes.toPointAnnotationOptions() } returns emptyList()
+        every { explorerData.publicHexes.toDeviceCountPoints() } returns emptyList()
+        every { fullExplorerData.publicHexes.toDeviceCountPoints() } returns emptyList()
         every {
-            newExplorerData.publicHexes.toPointAnnotationOptions()
+            newExplorerData.publicHexes.toDeviceCountPoints()
         } returns newPointAnnotationOptions
 
         viewModel = ExplorerViewModel(
