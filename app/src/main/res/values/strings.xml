@@ -628,6 +628,9 @@
     <string name="update_required">Update Required</string>
     <string name="low_battery">Low Battery</string>
     <string name="low_battery_desc">Your station is reporting low battery. This will lead to data gaps and eventually loss of rewards. Read more on how to replace your station batteries.</string>
+    <string name="low_ws_battery">Low WS Battery</string>
+    <string name="low_gw_battery">Low GW Battery</string>
+    <string name="low_gw_battery_desc">Your gateway is reporting low battery. This will lead to data gaps and eventually loss of rewards. Read more on how to replace your station batteries.</string>
 
     <!-- Widgets -->
     <string name="select_station">Select Station for Widget</string>

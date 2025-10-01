@@ -156,6 +156,15 @@ class DevicesNotificationsWorker(
                     notificationType = DeviceNotificationType.BATTERY
                 )
             }
+            if (it.hasLowGwBattery == true && typesEnabled.contains(DeviceNotificationType.BATTERY)) {
+                Timber.d("[Devices BG Worker]: Has low battery ${it.id}")
+                sendNotification(
+                    titleResId = R.string.low_gw_battery,
+                    bodyResId = R.string.station_low_battery_notification_msg,
+                    device = it,
+                    notificationType = DeviceNotificationType.BATTERY
+                )
+            }
             if (it.shouldPromptUpdate() && typesEnabled.contains(DeviceNotificationType.FIRMWARE)) {
                 Timber.d("[Devices BG Worker]: Has firmware update ${it.id}")
                 sendNotification(

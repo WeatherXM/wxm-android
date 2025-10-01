@@ -73,6 +73,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         100F,
         100F,
         null,

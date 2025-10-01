@@ -65,12 +65,34 @@ class DeviceAlertsAdapter(
                     }
                 }
                 DeviceAlertType.LOW_BATTERY -> {
+                    var title = R.string.low_battery
+                    if (device?.isCellular() == true) {
+                        title = R.string.low_ws_battery
+                    }
                     binding.alert.setContent {
                         MessageCardView(
                             data = DataForMessageView(
-                                title = R.string.low_battery,
+                                title = title,
                                 subtitle = SubtitleForMessageView(
                                     message = R.string.low_battery_desc
+                                ),
+                                drawable = R.drawable.ic_low_battery,
+                                action = ActionForMessageView(label = R.string.read_more) {
+                                    deviceAlertListener.onLowBatteryReadMoreClicked()
+                                },
+                                useStroke = true,
+                                severityLevel = item.severity,
+                            )
+                        )
+                    }
+                }
+                DeviceAlertType.LOW_GATEWAY_BATTERY -> {
+                    binding.alert.setContent {
+                        MessageCardView(
+                            data = DataForMessageView(
+                                title = R.string.low_gw_battery,
+                                subtitle = SubtitleForMessageView(
+                                    message = R.string.low_gw_battery_desc
                                 ),
                                 drawable = R.drawable.ic_low_battery,
                                 action = ActionForMessageView(label = R.string.read_more) {

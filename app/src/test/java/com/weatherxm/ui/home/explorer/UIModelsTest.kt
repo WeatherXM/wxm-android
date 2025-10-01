@@ -51,7 +51,8 @@ class UIModelsTest : BehaviorSpec({
         polReason = null,
         metricsTimestamp = null,
         cellDataQuality = null,
-        hasLowBattery = null
+        hasLowBattery = null,
+        hasLowGwBattery = null
     )
 
     val deviceOfNullSearchResult = UIDevice(
@@ -85,6 +86,7 @@ class UIModelsTest : BehaviorSpec({
         polReason = null,
         metricsTimestamp = null,
         hasLowBattery = null,
+        hasLowGwBattery = null,
         cellDataQuality = null
     )
 

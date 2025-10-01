@@ -29,6 +29,7 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.errorChip
 import com.weatherxm.ui.common.lowBatteryChip
+import com.weatherxm.ui.common.lowGwBatteryChip
 import com.weatherxm.ui.common.makeTextSelectable
 import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.parcelable
@@ -289,10 +290,14 @@ class DeviceDetailsActivity : BaseActivity() {
         } else {
             when (device.alerts[0]) {
                 DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
-                    binding.alertChip.lowBatteryChip()
+                    binding.alertChip.lowBatteryChip(device)
                     setupAlertChipClickListener(
                         AnalyticsService.ParamValue.LOW_BATTERY_ID.paramValue
                     )
+                }
+                DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY) -> {
+                    binding.alertChip.lowGwBatteryChip()
+                    setupAlertChipClickListener(null)
                 }
                 DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
                     binding.alertChip.offlineChip()

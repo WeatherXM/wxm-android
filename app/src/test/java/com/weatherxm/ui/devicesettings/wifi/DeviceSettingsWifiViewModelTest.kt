@@ -90,6 +90,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         null
     )
     val newFriendlyName = "newFriendlyName"
@@ -138,6 +139,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         ),
         WeatherStation(
             "WS1001",
+            null,
             null,
             ZonedDateTime.parse("2024-10-01T14:00:00+02:00"),
             null,
