@@ -116,7 +116,7 @@ object MapboxUtils : KoinComponent {
                 .withFillColor(resources.getColor(fillColor))
                 .withFillOpacity(FILL_OPACITY_HEXAGONS)
                 .withFillOutlineColor(resources.getColor(R.color.white))
-                .withData(gson.toJsonTree(UICell(it.index, it.center)))
+                .withData(gson.toJsonTree(UICell(it.index, it.center, it.capacity)))
                 .withPoints(listOf(polygonPointsToLatLng(it.polygon)))
         }
     }

@@ -62,7 +62,7 @@ class MapboxUtilsTest : BehaviorSpec({
         0,
         0,
         0,
-        0,
+        1,
         Location(lat = 38.71742582818318, lon = 27.22897028978693),
         listOf(
             Location(lat = 38.72482636074315, lon = 27.214679947948405),
@@ -99,7 +99,7 @@ class MapboxUtilsTest : BehaviorSpec({
             .create()
         every {
             polygonAnnotation.getJsonObjectCopy().getAsJsonObject("custom_data")
-        } returns gson.toJsonTree(UICell("cellIndex", Location.empty())).asJsonObject
+        } returns gson.toJsonTree(UICell("cellIndex", Location.empty(), 1)).asJsonObject
 
         every { searchSuggestion.name } returns address
         every { searchSuggestion.address } returns mockk()
@@ -116,7 +116,7 @@ class MapboxUtilsTest : BehaviorSpec({
     context("Parse PolygonAnnotation to UICell UI Model") {
         given("A PolygonAnnotation") {
             then("return the UICell UI Model") {
-                getCustomData(polygonAnnotation) shouldBe UICell("cellIndex", Location.empty())
+                getCustomData(polygonAnnotation) shouldBe UICell("cellIndex", Location.empty(), 1)
             }
         }
     }
@@ -179,7 +179,15 @@ class MapboxUtilsTest : BehaviorSpec({
                             .withFillColor(resources.getColor(R.color.error, null))
                             .withFillOpacity(FILL_OPACITY_HEXAGONS)
                             .withFillOutlineColor(resources.getColor(R.color.white, null))
-                            .withData(gson.toJsonTree(UICell(publicHex.index, publicHex.center)))
+                            .withData(
+                                gson.toJsonTree(
+                                    UICell(
+                                        publicHex.index,
+                                        publicHex.center,
+                                        publicHex.capacity
+                                    )
+                                )
+                            )
                             .withPoints(listOf(polygonPointsToLatLng(publicHex.polygon)))
                     )
 
