@@ -1,11 +1,10 @@
-package com.weatherxm.ui.devicesettings.wifi
+package com.weatherxm.ui.devicesettings.pulse
 
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsBaseBinding
 import com.weatherxm.service.workers.UploadPhotoWorker
-import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
@@ -13,7 +12,6 @@ import com.weatherxm.ui.common.StationPhoto
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
@@ -25,8 +23,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class DeviceSettingsWifiActivity : BaseDeviceSettingsActivity() {
-    private val model: DeviceSettingsWifiViewModel by viewModel {
+class DeviceSettingsPulseActivity : BaseDeviceSettingsActivity() {
+    private val model: DeviceSettingsPulseViewModel by viewModel {
         parametersOf(intent.parcelable<UIDevice>(ARG_DEVICE))
     }
     private lateinit var binding: ActivityDeviceSettingsBaseBinding
@@ -40,7 +38,7 @@ class DeviceSettingsWifiActivity : BaseDeviceSettingsActivity() {
         setContentView(binding.root)
 
         if (model.device.isEmpty()) {
-            Timber.d("Could not start DeviceSettingsActivity. Device is null.")
+            Timber.d("Could not start DeviceSettingsPulseActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
@@ -145,12 +143,7 @@ class DeviceSettingsWifiActivity : BaseDeviceSettingsActivity() {
         gatewayAdapter = DeviceInfoItemAdapter(null)
         stationAdapter = DeviceInfoItemAdapter {
             if (it.alert == DeviceAlertType.LOW_STATION_RSSI) {
-                val url = when (model.device.bundleName) {
-                    BundleName.m5 -> getString(R.string.troubleshooting_m5_url)
-                    BundleName.d1 -> getString(R.string.troubleshooting_d1_url)
-                    else -> String.empty()
-                }
-                navigator.openWebsite(this, url)
+                navigator.openWebsite(this, getString(R.string.troubleshooting_pulse_url))
                 finish()
             }
         }
@@ -180,7 +173,11 @@ class DeviceSettingsWifiActivity : BaseDeviceSettingsActivity() {
         }
 
         model.onDeviceInfo().observe(this) { deviceInfo ->
-            if (deviceInfo.station.any { it.deviceAlert?.alert == DeviceAlertType.LOW_BATTERY }) {
+            if (deviceInfo.station.any {
+                    it.deviceAlert?.alert == DeviceAlertType.LOW_BATTERY ||
+                        it.deviceAlert?.alert == DeviceAlertType.LOW_GATEWAY_BATTERY
+                }
+            ) {
                 trackLowBatteryWarning(model.device.id)
             }
 

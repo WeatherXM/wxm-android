@@ -579,6 +579,7 @@
     <string name="battery_level_ok">Good</string>
     <string name="battery_level_low">Low</string>
     <string name="battery_level_low_message"><![CDATA[We’ve detected that your station’s battery level is <b>Low</b>.<br/>Please, replace the batteries as soon as possible, as <b>this may affect your $WXM rewards and data</b>.]]></string>
+    <string name="gateway_battery_level_low_message"><![CDATA[We’ve detected that your gateway’s battery level is <b>Low</b>.<br/>Please, replace the batteries as soon as possible, as <b>this may affect your $WXM rewards and data</b>.]]></string>
     <string name="station_rebooted">Station Rebooted</string>
     <string name="station_rebooted_subtitle">Your station is rebooted.\nYou now have a 5 minutes window to pair the station with another device! Station can be paired with up to 7 devices.</string>
     <string name="back_to_settings">Back to settings</string>
@@ -598,6 +599,19 @@
     <string name="station_gateway_rssi">Signal between Station &amp; Gateway (RSSI)</string>
     <string name="station_signal_low">Station signal reception is low. This may result in Data Gaps and reduced Rewards.</string>
     <string name="station_signal_no_signal"><![CDATA[<b>No Weather Station signal.</b> Check that your station is working well. This will cause Data Gaps and may lead to reduced Rewards.]]></string>
+    <string name="gsm_signal">GSM Signal</string>
+    <string name="gateway_frequency">Gateway frequency</string>
+    <string name="external_sim">External SIM</string>
+    <string name="external_sim_is_in_use">Is in use</string>
+    <string name="iccid_external_sim">ICCID of external SIM</string>
+    <string name="mobile_country_network_code">Mobile country and network code</string>
+    <string name="mcc">MCC</string>
+    <string name="mnc">MNC</string>
+    <string name="gateway_battery_level">Gateway Battery Level</string>
+    <string name="signal_gateway_station">Signal between Gateway &amp; Station (RSSI)</string>
+    <string name="next_communication">Next server communication </string>
+    <string name="id">ID </string>
+    <string name="station_battery_level">Station Battery Level</string>
 
     <!-- Station Notifications -->
     <string name="notifications">Notifications</string>

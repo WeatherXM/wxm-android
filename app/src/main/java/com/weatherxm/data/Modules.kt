@@ -190,6 +190,7 @@ import com.weatherxm.ui.devicenotifications.DeviceNotificationsViewModel
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
+import com.weatherxm.ui.devicesettings.pulse.DeviceSettingsPulseViewModel
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiViewModel
 import com.weatherxm.ui.devicesrewards.DevicesRewardsViewModel
 import com.weatherxm.ui.forecastdetails.ForecastDetailsViewModel
@@ -761,6 +762,7 @@ private val viewmodels = module {
     viewModelOf(::DeviceHeliumOTAViewModel)
     viewModelOf(::DeviceNotificationsViewModel)
     viewModelOf(::DeviceSettingsHeliumViewModel)
+    viewModelOf(::DeviceSettingsPulseViewModel)
     viewModelOf(::DeviceSettingsWifiViewModel)
     viewModelOf(::DevicesRewardsViewModel)
     viewModelOf(::DevicesViewModel)

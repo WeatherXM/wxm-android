@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicesettings.wifi
+package com.weatherxm.ui.devicesettings.pulse
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.models.BatteryState
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.WeatherStation
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Suppress("LongParameterList")
-class DeviceSettingsWifiViewModel(
+class DeviceSettingsPulseViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
     photosUseCase: DevicePhotoUseCase,
@@ -94,6 +95,46 @@ class DeviceSettingsWifiViewModel(
                 )
             }
 
+            val networkTimestamp =
+                networkRssiLastActivity?.getFormattedDateAndTime(context) ?: String.empty()
+            networkRssi?.let {
+                data.gateway.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.gsm_signal),
+                        resources.getString(R.string.rssi, it, networkTimestamp)
+                    )
+                )
+            }
+
+            frequency?.let {
+                data.gateway.add(
+                    UIDeviceInfoItem(resources.getString(R.string.gateway_frequency), it)
+                )
+            }
+
+            sim?.iccid?.let {
+                data.gateway.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.external_sim),
+                        resources.getString(R.string.external_sim_is_in_use)
+                    )
+                )
+                data.gateway.add(
+                    UIDeviceInfoItem(resources.getString(R.string.iccid_external_sim), it)
+                )
+            }
+
+            if (sim?.mcc != null && sim.mnc != null) {
+                val mccData = "${resources.getString(R.string.mcc)}: ${sim.mcc}"
+                val mncData = "${resources.getString(R.string.mnc)}: ${sim.mnc}"
+                data.gateway.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.mobile_country_network_code),
+                        "$mccData - $mncData"
+                    )
+                )
+            }
+
             handleFirmwareInfo()
 
             val gpsTimestamp =
@@ -107,15 +148,23 @@ class DeviceSettingsWifiViewModel(
                 )
             }
 
-            val wifiTimestamp =
-                wifiRssiLastActivity?.getFormattedDateAndTime(context) ?: String.empty()
-            wifiRssi?.let {
-                data.gateway.add(
-                    UIDeviceInfoItem(
-                        resources.getString(R.string.wifi_rssi),
-                        resources.getString(R.string.rssi, it, wifiTimestamp)
+            batteryState?.let {
+                if (it == BatteryState.low) {
+                    data.gateway.add(
+                        UIDeviceInfoItem(
+                            resources.getString(R.string.gateway_battery_level),
+                            resources.getString(R.string.battery_level_low),
+                            deviceAlert = DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY)
+                        )
                     )
-                )
+                } else {
+                    data.gateway.add(
+                        UIDeviceInfoItem(
+                            resources.getString(R.string.gateway_battery_level),
+                            resources.getString(R.string.battery_level_ok)
+                        )
+                    )
+                }
             }
 
             lastActivity?.let {
@@ -126,10 +175,45 @@ class DeviceSettingsWifiViewModel(
                     )
                 )
             }
+
+            val gatewayRssiTimestamp =
+                gatewayRssiLastActivity?.getFormattedDateAndTime(context) ?: String.empty()
+            gatewayRssi?.let {
+                data.gateway.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.signal_gateway_station),
+                        resources.getString(R.string.rssi, it, gatewayRssiTimestamp)
+                    )
+                )
+            }
+
+            nextCommunication?.let {
+                data.gateway.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.next_communication),
+                        it.getFormattedDateAndTime(context)
+                    )
+                )
+            }
         }
 
         // Get weather station info
         handleWeatherStationInfo(context, info.weatherStation)
+    }
+
+    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>) {
+        var walletAddress = String.empty()
+        coroutineScope {
+            val getWalletAddressJob = launch {
+                if (authUseCase.isLoggedIn()) {
+                    userUseCase.getWalletAddress().onRight {
+                        walletAddress = it
+                    }
+                }
+            }
+            getWalletAddressJob.join()
+            data.rewardSplit = RewardSplitsData(splits, walletAddress)
+        }
     }
 
     @Suppress("MagicNumber")
@@ -137,6 +221,29 @@ class DeviceSettingsWifiViewModel(
         weatherStation?.apply {
             model?.let {
                 data.station.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
+            }
+
+            id?.let {
+                data.station.add(UIDeviceInfoItem(resources.getString(R.string.id), it))
+            }
+
+            batteryState?.let {
+                if (it == BatteryState.low) {
+                    data.station.add(
+                        UIDeviceInfoItem(
+                            resources.getString(R.string.station_battery_level),
+                            resources.getString(R.string.battery_level_low),
+                            deviceAlert = DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY)
+                        )
+                    )
+                } else {
+                    data.station.add(
+                        UIDeviceInfoItem(
+                            resources.getString(R.string.station_battery_level),
+                            resources.getString(R.string.battery_level_ok)
+                        )
+                    )
+                }
             }
 
             hwVersion?.let {
@@ -164,10 +271,6 @@ class DeviceSettingsWifiViewModel(
                 )
             }
 
-            batteryState?.let {
-                handleLowBatteryInfo(data.station, it)
-            }
-
             lastActivity?.let {
                 data.station.add(
                     UIDeviceInfoItem(
@@ -176,21 +279,6 @@ class DeviceSettingsWifiViewModel(
                     )
                 )
             }
-        }
-    }
-
-    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>) {
-        var walletAddress = String.empty()
-        coroutineScope {
-            val getWalletAddressJob = launch {
-                if (authUseCase.isLoggedIn()) {
-                    userUseCase.getWalletAddress().onRight {
-                        walletAddress = it
-                    }
-                }
-            }
-            getWalletAddressJob.join()
-            data.rewardSplit = RewardSplitsData(splits, walletAddress)
         }
     }
 

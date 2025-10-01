@@ -50,6 +50,8 @@ fun DeviceInfoItemAlertView(alert: DeviceAlert, onRssiTroubleshoot: () -> Unit) 
     var message: Int? = null
     if (alert.alert == DeviceAlertType.LOW_BATTERY) {
         htmlMessage = R.string.battery_level_low_message
+    } else if (alert.alert == DeviceAlertType.LOW_GATEWAY_BATTERY) {
+        htmlMessage = R.string.gateway_battery_level_low_message
     } else if (alert.alert == DeviceAlertType.LOW_STATION_RSSI) {
         if (alert.severity == SeverityLevel.WARNING) {
             message = R.string.station_signal_low
@@ -69,7 +71,9 @@ fun DeviceInfoItemAlertView(alert: DeviceAlert, onRssiTroubleshoot: () -> Unit) 
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = spacedBy(dimensionResource(R.dimen.padding_small))
             ) {
-                if (alert.alert != DeviceAlertType.LOW_BATTERY) {
+                if (alert.alert != DeviceAlertType.LOW_BATTERY
+                    && alert.alert != DeviceAlertType.LOW_GATEWAY_BATTERY
+                ) {
                     Icon(
                         painter = painterResource(drawable),
                         tint = colorResource(drawableTint),

@@ -79,6 +79,7 @@ import com.weatherxm.ui.devicenotifications.DeviceNotificationsActivity
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumActivity
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyActivity
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
+import com.weatherxm.ui.devicesettings.pulse.DeviceSettingsPulseActivity
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity
 import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
 import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
@@ -230,6 +231,8 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showStationSettings(context: Context?, device: UIDevice) {
         val intent = if (device.isHelium()) {
             Intent(context, DeviceSettingsHeliumActivity::class.java)
+        } else if (device.isCellular()) {
+            Intent(context, DeviceSettingsPulseActivity::class.java)
         } else {
             Intent(context, DeviceSettingsWifiActivity::class.java)
         }
