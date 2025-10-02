@@ -43,8 +43,8 @@ class ExplorerUseCaseTest : BehaviorSpec({
     val index = "index"
     val address = "address"
     val location = Location.empty()
-    val publicHexes = mutableListOf(PublicHex(index, 0, 0, null, 0, location, emptyList()))
-    val cell = UICell(index, location)
+    val publicHexes = mutableListOf(PublicHex(index, 0, 0, null, 1, location, emptyList()))
+    val cell = UICell(index, location, 1)
 
     val ownedDevice = PublicDevice(
         "ownedDevice",
