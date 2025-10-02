@@ -27,7 +27,6 @@ import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.common.CapacityLayerOnSetLocation
 import com.weatherxm.ui.common.Contracts.STATION_COUNT
 import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
-import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.ui.home.explorer.MapLayer
 import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.ui.home.explorer.UICellJsonAdapter
@@ -117,7 +116,7 @@ object MapboxUtils : KoinComponent {
                 .withFillColor(resources.getColor(fillColor))
                 .withFillOpacity(FILL_OPACITY_HEXAGONS)
                 .withFillOutlineColor(resources.getColor(R.color.white))
-                .withData(gson.toJsonTree(UICell(it.index, it.center)))
+                .withData(gson.toJsonTree(UICell(it.index, it.center, it.capacity)))
                 .withPoints(listOf(polygonPointsToLatLng(it.polygon)))
         }
     }
@@ -198,7 +197,7 @@ object MapboxUtils : KoinComponent {
             )
             textSize(18.0)
             textColor(resources.getColor(R.color.dark_text))
-            minZoom(SHOW_STATION_COUNT_ZOOM_LEVEL)
+            minZoom(10.0)
             textAllowOverlap(true)
             textIgnorePlacement(true)
             iconAllowOverlap(true)
