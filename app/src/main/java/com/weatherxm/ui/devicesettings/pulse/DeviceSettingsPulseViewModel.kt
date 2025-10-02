@@ -108,7 +108,10 @@ class DeviceSettingsPulseViewModel(
 
             frequency?.let {
                 data.gateway.add(
-                    UIDeviceInfoItem(resources.getString(R.string.gateway_frequency), it)
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.gateway_frequency),
+                        "$it ${resources.getString(R.string.mhz)}"
+                    )
                 )
             }
 

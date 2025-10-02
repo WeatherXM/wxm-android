@@ -609,9 +609,10 @@
     <string name="mnc">MNC</string>
     <string name="gateway_battery_level">Gateway Battery Level</string>
     <string name="signal_gateway_station">Signal between Gateway &amp; Station (RSSI)</string>
-    <string name="next_communication">Next server communication </string>
+    <string name="next_communication">Next server communication</string>
     <string name="id">ID </string>
     <string name="station_battery_level">Station Battery Level</string>
+    <string name="mhz">MHz</string>
 
     <!-- Station Notifications -->
     <string name="notifications">Notifications</string>
