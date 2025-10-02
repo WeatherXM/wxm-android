@@ -80,6 +80,7 @@ class DeviceSettingsPulseViewModel(
         }
     }
 
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     override suspend fun handleInfo(context: Context, info: DeviceInfo) {
         handleRewardSplitInfo(info.rewardSplit ?: emptyList())
 
@@ -157,7 +158,7 @@ class DeviceSettingsPulseViewModel(
                         UIDeviceInfoItem(
                             resources.getString(R.string.gateway_battery_level),
                             resources.getString(R.string.battery_level_low),
-                            deviceAlert = DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY)
+                            DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY)
                         )
                     )
                 } else {
