@@ -39,6 +39,7 @@ class DeviceAlertsAdapter(
         private val binding: ListItemAlertBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        @Suppress("LongMethod")
         fun bind(item: DeviceAlert) {
             when (item.alert) {
                 DeviceAlertType.OFFLINE -> {
