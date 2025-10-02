@@ -141,7 +141,7 @@ class CurrentFragment : BaseFragment() {
                     )
                 )
                 model.device.cellCenter?.let { location ->
-                    navigator.showCellInfo(context, UICell(model.device.cellIndex, location))
+                    navigator.showCellInfo(context, UICell(model.device.cellIndex, location, null))
                 }
             }
             device.address

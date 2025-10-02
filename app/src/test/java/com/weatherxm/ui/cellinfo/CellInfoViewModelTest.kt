@@ -38,7 +38,7 @@ class CellInfoViewModelTest : BehaviorSpec({
     val followUseCase = mockk<FollowUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    val cell = UICell("", Location.empty())
+    val cell = UICell("", Location.empty(), 1)
     lateinit var viewModel: CellInfoViewModel
 
     val cellDevicesNoData = "No Data for this cell"

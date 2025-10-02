@@ -31,7 +31,8 @@ data class ExplorerData(
 @Parcelize
 data class UICell(
     var index: String,
-    var center: Location
+    var center: Location,
+    var capacity: Int?
 ) : Parcelable
 
 @Keep

@@ -213,7 +213,8 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
             binding.dataQualityChip.setChipIconTintResource(R.color.darkGrey)
 
         }
-        binding.capacityChip.text = getString(R.string.cell_stations_present, data.size)
+        binding.capacityChip.text =
+            getString(R.string.cell_stations_present, data.size, model.cell.capacity)
         binding.cellTotalsContainer.visible(true)
         binding.dataQualityChip.visible(true)
     }
