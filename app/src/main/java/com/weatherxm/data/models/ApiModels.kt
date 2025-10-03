@@ -409,6 +409,20 @@ data class Gateway(
     val wifiRssi: String?,
     @Json(name = "wifi_rssi_last_activity")
     val wifiRssiLastActivity: ZonedDateTime?,
+    @Json(name = "network_rssi")
+    val networkRssi: String?,
+    @Json(name = "network_rssi_last_activity")
+    val networkRssiLastActivity: ZonedDateTime?,
+    @Json(name = "gateway_rssi")
+    val gatewayRssi: String?,
+    @Json(name = "gateway_rssi_last_activity")
+    val gatewayRssiLastActivity: ZonedDateTime?,
+    @Json(name = "bat_state")
+    val batteryState: BatteryState?,
+    val frequency: String?,
+    @Json(name = "next_communication")
+    val nextCommunication: ZonedDateTime?,
+    val sim: GatewaySim?,
 ) : Parcelable
 
 @Keep
@@ -438,6 +452,15 @@ data class WeatherStation(
     val stationRssiLastActivity: ZonedDateTime?,
     @Json(name = "bat_state")
     val batteryState: BatteryState?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class GatewaySim(
+    val mcc: Int?,
+    val mnc: Int?,
+    val iccid: String?,
 ) : Parcelable
 
 @Keep
