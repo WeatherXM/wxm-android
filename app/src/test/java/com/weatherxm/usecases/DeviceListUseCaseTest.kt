@@ -52,6 +52,7 @@ class DeviceListUseCaseTest : BehaviorSpec({
             null,
             Relation.owned,
             null,
+            null,
             null
         ),
         Device(
@@ -66,6 +67,7 @@ class DeviceListUseCaseTest : BehaviorSpec({
             null,
             null,
             Relation.followed,
+            null,
             null,
             null
         ),
@@ -82,6 +84,7 @@ class DeviceListUseCaseTest : BehaviorSpec({
             null,
             Relation.owned,
             null,
+            BatteryState.low,
             BatteryState.low
         )
     )

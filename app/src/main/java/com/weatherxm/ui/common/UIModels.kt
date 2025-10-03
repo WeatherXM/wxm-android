@@ -75,6 +75,7 @@ data class UIDevice(
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
     val hasLowBattery: Boolean?,
+    val hasLowGwBattery: Boolean?,
     val totalRewards: Float?,
     val actualReward: Float?,
     val qodScore: Int?,
@@ -88,6 +89,7 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -167,6 +169,9 @@ data class UIDevice(
         if (hasLowBattery == true && isOwned()) {
             alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
         }
+        if (hasLowGwBattery == true && isOwned()) {
+            alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY))
+        }
         this.alerts = alerts.sortedByDescending { alert ->
             alert.severity
         }
@@ -240,6 +245,7 @@ enum class DeviceRelation : Parcelable {
 enum class DeviceAlertType : Parcelable {
     OFFLINE,
     LOW_BATTERY,
+    LOW_GATEWAY_BATTERY,
     NEEDS_UPDATE,
     LOW_STATION_RSSI
 }

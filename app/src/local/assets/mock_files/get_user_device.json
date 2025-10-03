@@ -4,15 +4,16 @@
     "label": null,
     "timezone": "Europe/Athens",
     "bundle": {
-        "name": "m5",
-        "title": "M5",
-        "connectivity": "wifi",
+        "name": "pulse",
+        "title": "Pulse",
+        "connectivity": "cellular",
         "ws_model": "WS1000",
         "gw_model": "WG1000",
         "hw_class": "CONSUMER"
     },
     "relation": "owned",
-    "bat_state": "low",
+    "bat_state": "ok",
+    "gateway_bat_state": "low",
     "location": {
         "lat": 37.981262,
         "lon": 23.730503
@@ -23,7 +24,7 @@
         "ts": "2022-01-13T22:00:00+02:00"
     },
     "attributes": {
-        "isActive": false,
+        "isActive": true,
         "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
         "firmware": {
             "current": "1.0.0",

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicesettings.wifi
+package com.weatherxm.ui.devicesettings.pulse
 
 import android.text.format.DateFormat
 import com.weatherxm.R
@@ -17,6 +17,7 @@ import com.weatherxm.data.models.BatteryState
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Firmware
 import com.weatherxm.data.models.Gateway
+import com.weatherxm.data.models.GatewaySim
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.models.WeatherStation
@@ -52,13 +53,13 @@ import org.koin.dsl.module
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class DeviceSettingsWifiViewModelTest : BehaviorSpec({
+class DeviceSettingsPulseViewModelTest : BehaviorSpec({
     val settingsUseCase = mockk<StationSettingsUseCase>()
     val photosUseCase = mockk<DevicePhotoUseCase>()
     val userUseCase = mockk<UserUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    lateinit var viewModel: DeviceSettingsWifiViewModel
+    lateinit var viewModel: DeviceSettingsPulseViewModel
 
     val device = UIDevice(
         "deviceId",
@@ -67,11 +68,11 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         DeviceRelation.OWNED,
         "la:bel",
         "friendlyName",
-        BundleName.d1,
-        "D1",
+        BundleName.pulse,
+        "Pulse",
         null,
         "WS1001",
-        "WG1200",
+        "WG3000",
         null,
         null,
         null,
@@ -128,7 +129,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         ZonedDateTime.parse("2024-10-01T14:00:00+02:00"),
         stakeholderSplits.splits,
         Gateway(
-            "WG1200",
+            "WG3000",
             Firmware("1.0.0", "1.0.0"),
             ZonedDateTime.parse("2024-10-01T14:00:00+02:00"),
             "serialNumber",
@@ -143,11 +144,11 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
             BatteryState.low,
             "868",
             ZonedDateTime.parse("2024-10-01T14:00:00+02:00"),
-            null
+            GatewaySim(10, 20, "XXXXXX")
         ),
         WeatherStation(
             "WS1001",
-            null,
+            "XXXXXX",
             null,
             ZonedDateTime.parse("2024-10-01T14:00:00+02:00"),
             null,
@@ -163,32 +164,44 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     )
     val deviceInfoFromDevice = mutableListOf(
         UIDeviceInfoItem("Station Name", "My Weather Station", null),
-        UIDeviceInfoItem("Bundle Name", "D1", null),
+        UIDeviceInfoItem("Bundle Name", "Pulse", null),
         UIDeviceInfoItem("Claimed At", "Oct 1, 2024, 14:00", null)
     )
 
     val uiFullDeviceInfo = UIDeviceInfo(
         deviceInfoFromDevice,
         mutableListOf(
-            UIDeviceInfoItem("Model", "WG1200"),
+            UIDeviceInfoItem("Model", "WG3000"),
             UIDeviceInfoItem("Serial Number", "serialNumber"),
+            UIDeviceInfoItem("GSM Signal", "-100 dBm @ Oct 1, 2024"),
+            UIDeviceInfoItem("Gateway Frequency", "868 MHz"),
+            UIDeviceInfoItem("External Sim", "Is in use"),
+            UIDeviceInfoItem("ICCID of external SIM", "XXXXXX"),
+            UIDeviceInfoItem("Mobile country and network code", "MCC: 10 - MNC: 20"),
             UIDeviceInfoItem("Firmware Version", "1.0.0 (latest)"),
             UIDeviceInfoItem("GPS Satellites", "5 sats @ Oct 1, 2024"),
-            UIDeviceInfoItem("Wifi RSSI", "-100 dBm @ Oct 1, 2024"),
-            UIDeviceInfoItem("Last Activity", "Oct 1, 2024, 14:00")
+            UIDeviceInfoItem(
+                "Gateway Battery Level",
+                "Low",
+                DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY)
+            ),
+            UIDeviceInfoItem("Last Activity", "Oct 1, 2024, 14:00"),
+            UIDeviceInfoItem("Gateway RSSI", "-100 dBm @ Oct 1, 2024"),
+            UIDeviceInfoItem("Next server communication", "Oct 1, 2024, 14:00")
         ),
         mutableListOf(
             UIDeviceInfoItem("Model", "WS1001"),
+            UIDeviceInfoItem("ID", "XXXXXX"),
+            UIDeviceInfoItem(
+                "Station Battery Level",
+                "Low",
+                DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY)
+            ),
             UIDeviceInfoItem("Hardware Version", "1.0.0"),
             UIDeviceInfoItem(
                 "Station RSSI",
                 "-100 dBm @ Oct 1, 2024",
                 DeviceAlert.createError(DeviceAlertType.LOW_STATION_RSSI)
-            ),
-            UIDeviceInfoItem(
-                "Battery Level",
-                "Low",
-                DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY)
             ),
             UIDeviceInfoItem("Last Station Activity", "Oct 1, 2024, 14:00"),
         ),
@@ -239,12 +252,32 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.satellites, any(), any())
         } returns "5 sats @ Oct 1, 2024"
-        every { resources.getString(R.string.wifi_rssi) } returns "Wifi RSSI"
+        every { resources.getString(R.string.gsm_signal) } returns "GSM Signal"
+        every { resources.getString(R.string.gateway_frequency) } returns "Gateway Frequency"
+        every { resources.getString(R.string.external_sim) } returns "External Sim"
+        every { resources.getString(R.string.external_sim_is_in_use) } returns "Is in use"
+        every { resources.getString(R.string.iccid_external_sim) } returns "ICCID of external SIM"
+        every { resources.getString(R.string.mcc) } returns "MCC"
+        every { resources.getString(R.string.mnc) } returns "MNC"
+        every {
+            resources.getString(R.string.mobile_country_network_code)
+        } returns "Mobile country and network code"
+        every {
+            resources.getString(R.string.gateway_battery_level)
+        } returns "Gateway Battery Level"
+        every {
+            resources.getString(R.string.station_battery_level)
+        } returns "Station Battery Level"
+        every {
+            resources.getString(R.string.next_communication)
+        } returns "Next server communication"
+        every { resources.getString(R.string.mhz) } returns "MHz"
+        every { resources.getString(R.string.id) } returns "ID"
         every { resources.getString(R.string.rssi, any(), any()) } returns "-100 dBm @ Oct 1, 2024"
         every { resources.getString(R.string.last_gateway_activity) } returns "Last Activity"
         every { resources.getString(R.string.hardware_version) } returns "Hardware Version"
+        every { resources.getString(R.string.signal_gateway_station) } returns "Gateway RSSI"
         every { resources.getString(R.string.station_gateway_rssi) } returns "Station RSSI"
-        every { resources.getString(R.string.battery_level) } returns "Battery Level"
         every { resources.getString(R.string.battery_level_low) } returns "Low"
         every {
             resources.getString(R.string.last_weather_station_activity)
@@ -258,7 +291,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         every { photosUseCase.getDevicePhotoUploadIds(device.id) } returns uploadIds
         justRun { photosUseCase.retryUpload(device.id) }
 
-        viewModel = DeviceSettingsWifiViewModel(
+        viewModel = DeviceSettingsPulseViewModel(
             device,
             settingsUseCase,
             photosUseCase,

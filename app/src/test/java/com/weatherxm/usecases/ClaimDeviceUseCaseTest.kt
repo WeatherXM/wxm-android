@@ -38,6 +38,7 @@ class ClaimDeviceUseCaseTest : BehaviorSpec({
         null,
         Relation.owned,
         null,
+        null,
         null
     )
     val uiDevice = device.toUIDevice()

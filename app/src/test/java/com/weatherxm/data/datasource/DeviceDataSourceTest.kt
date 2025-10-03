@@ -59,6 +59,7 @@ class DeviceDataSourceTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         null
     )
     val deviceInfo = mockk<DeviceInfo>()

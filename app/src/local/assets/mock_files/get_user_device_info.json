@@ -14,17 +14,33 @@
         }
     ],
     "gateway": {
-        "model": "WG1000",
+        "model": "WG3000",
         "serial_number": "01:23:45:67:89:AB:CD:DE:EF",
         "firmware": {
             "current": "0.3.34",
             "assigned": "0.3.13"
         },
         "gps_sats": "3",
-        "last_activity": "2023-03-20T18:20:30+02:00"
+        "gps_sats_last_activity": "2100-08-02T10:48:22+03:00",
+        "wifi_rssi_last_activity": "2100-08-02T10:48:22+03:00",
+        "wifi_rssi": -90,
+        "network_rssi_last_activity": "2100-08-02T10:48:22+03:00",
+        "network_rssi": -90,
+        "gateway_rssi_last_activity": "2100-08-02T10:48:22+03:00",
+        "gateway_rssi": -90,
+        "bat_state": "low",
+        "frequency": "868.3 MHz",
+        "sim": {
+            "mcc": 234,
+            "mnc": 15,
+            "iccid": "89882280666087778828"
+        },
+        "last_activity": "2023-03-20T18:20:30+02:00",
+        "next_communication": "2100-08-02T10:48:22+03:00"
     },
     "weather_station": {
-        "model": "WS1000",
+        "model": "WS1001",
+        "id": "XXXXXXXXXX",
         "last_activity": "2100-08-02T10:48:22+03:00",
         "station_rssi_last_activity": "2100-08-02T10:48:22+03:00",
         "station_rssi": -90,

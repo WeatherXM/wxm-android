@@ -48,6 +48,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         Relation.owned,
         null,
+        null,
         null
     )
     val ownedDevice2 = Device(
@@ -70,6 +71,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         Relation.owned,
         null,
+        null,
         null
     )
     val followedDevice = Device(
@@ -84,6 +86,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         Relation.followed,
+        null,
         null,
         null
     )

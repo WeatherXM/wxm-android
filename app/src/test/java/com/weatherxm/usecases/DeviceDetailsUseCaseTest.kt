@@ -72,7 +72,8 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         null,
         Relation.owned,
         null,
-        BatteryState.low
+        BatteryState.low,
+        null
     )
     val uiPublicDevice = publicDevice.toUIDevice().apply {
         relation = DeviceRelation.UNFOLLOWED
