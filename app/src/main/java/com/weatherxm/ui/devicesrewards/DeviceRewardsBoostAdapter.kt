@@ -49,6 +49,7 @@ class DeviceRewardsBoostAdapter :
                 } else {
                     val isBetaRewards = boostCode == BoostCode.beta_rewards.name
                     val isCorrectionRewards = boostCode.startsWith(BoostCode.correction.name, true)
+                    val isRolloutRewards = boostCode == BoostCode.rollouts.name
 
                     if (isBetaRewards) {
                         binding.title.text =
@@ -64,6 +65,9 @@ class DeviceRewardsBoostAdapter :
                             itemView.context.getColorStateList(R.color.correction_rewards_color)
                         binding.boostProgressSlider.trackInactiveTintList =
                             itemView.context.getColorStateList(R.color.correction_rewards_fill)
+                    } else if (isRolloutRewards) {
+                        binding.title.text =
+                            itemView.context.getString(R.string.rollouts_reward_details)
                     } else {
                         onUnknownBoost()
                     }
@@ -78,10 +82,24 @@ class DeviceRewardsBoostAdapter :
                 binding.boostProgressSlider.values = listOf(it.toFloat())
             } ?: binding.boostProgressSlider.visible(false)
 
-            binding.totalTokensSoFar.text =
-                itemView.context.getString(R.string.wxm_amount, formatTokens(item.currentRewards))
-            binding.totalTokensMax.text =
-                itemView.context.getString(R.string.wxm_amount, formatTokens(item.maxRewards))
+            if (item.currentRewards == null) {
+                binding.totalTokensSoFar.visible(false)
+                binding.totalTokensSoFarTitle.visible(false)
+            } else {
+                binding.totalTokensSoFar.text = itemView.context.getString(
+                    R.string.wxm_amount,
+                    formatTokens(item.currentRewards)
+                )
+            }
+            if (item.maxRewards == null) {
+                binding.totalTokensMax.visible(false)
+                binding.totalTokensMaxTitle.visible(false)
+            } else {
+                binding.totalTokensMax.text = itemView.context.getString(
+                    R.string.wxm_amount,
+                    formatTokens(item.maxRewards)
+                )
+            }
 
             val boostStartDate = item.boostPeriodStart.getFormattedDate(true, includeComma = false)
             val boostStopDate = item.boostPeriodEnd.getFormattedDate(true, includeComma = false)

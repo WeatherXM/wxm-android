@@ -185,6 +185,7 @@ class RewardsUseCaseImpl(
             val baseEntries = mutableListOf<Entry>()
             val betaEntries = mutableListOf<Entry>()
             val correctionEntries = mutableListOf<Entry>()
+            val rolloutsEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
             val totals = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
@@ -196,6 +197,7 @@ class RewardsUseCaseImpl(
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
                 val correctionCode = RewardsCode.correction.name
+                val rolloutsCode = RewardsCode.rollouts.name
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
@@ -205,13 +207,18 @@ class RewardsUseCaseImpl(
                 var othersFound = false
                 var correctionSum = 0F
                 var correctionFound = false
+                var rolloutsSum = 0F
+                var rolloutsFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
-                 * each layer atop the others. So in our case that we have base -> beta -> others
-                 * the beta entries should be the sum of base and beta (so that the layer is above
-                 * base) and others should be the sum of base, beta and others (so that the layer is
-                 * above base & beta).
+                 * each layer atop the others. So in our case that we have
+                 * 1. base -> beta -> correction -> rollouts -> others
+                 * 2. beta entries should be the sum of base and beta
+                 * --- (so that the layer is above base)
+                 * 3. correction entries should be the sum of beta and correction
+                 * --- (so that the layer is above beta)
+                 * etc for the others
                  */
                 timeseries.rewards?.forEach {
                     if (it.code == baseCode) {
@@ -222,12 +229,16 @@ class RewardsUseCaseImpl(
                         betaSum += it.value
                         betaFound = true
                     }
+                    if (it.code == rolloutsCode) {
+                        rolloutsSum += it.value
+                        rolloutsFound = true
+                    }
                     val codeIsCorrection = it.code.startsWith(correctionCode)
                     if (codeIsCorrection) {
                         correctionSum += it.value
                         correctionFound = true
                     }
-                    if (it.code != baseCode && it.code != betaCode && !codeIsCorrection) {
+                    if (it.code != baseCode && it.code != betaCode && !codeIsCorrection && it.code != rolloutsCode) {
                         othersSum += it.value
                         othersFound = true
                     }
@@ -260,6 +271,20 @@ class RewardsUseCaseImpl(
                         )
                     }
                 }
+                if (!rolloutsFound) {
+                    rolloutsEntries.add(Entry(counter.toFloat(), -1F))
+                } else {
+                    if (rolloutsSum == 0F) {
+                        rolloutsEntries.add(Entry(counter.toFloat(), 0F))
+                    } else {
+                        rolloutsEntries.add(
+                            Entry(
+                                counter.toFloat(),
+                                rolloutsSum + betaSum + baseSum + correctionSum
+                            )
+                        )
+                    }
+                }
                 if (!othersFound) {
                     otherEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
@@ -267,7 +292,10 @@ class RewardsUseCaseImpl(
                         otherEntries.add(Entry(counter.toFloat(), 0F))
                     } else {
                         otherEntries.add(
-                            Entry(counter.toFloat(), othersSum + correctionSum + betaSum + baseSum)
+                            Entry(
+                                counter.toFloat(),
+                                othersSum + correctionSum + betaSum + baseSum + rolloutsSum
+                            )
                         )
                     }
                 }
@@ -282,6 +310,7 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),
                 LineChartData(xLabels, correctionEntries),
+                LineChartData(xLabels, rolloutsEntries),
                 LineChartData(xLabels, otherEntries),
                 Status.SUCCESS
             )

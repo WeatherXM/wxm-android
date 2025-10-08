@@ -134,7 +134,7 @@ class RewardsUseCaseTest : BehaviorSpec({
     )
 
     val deviceRewardsSummary = DeviceRewardsSummary(
-        120F,
+        140F,
         listOf(
             DeviceRewardsSummaryData(
                 customTimestamp,
@@ -142,6 +142,7 @@ class RewardsUseCaseTest : BehaviorSpec({
                     DeviceRewardsSummaryDataReward("base", RewardsCode.base_reward.name, 40F),
                     DeviceRewardsSummaryDataReward("boost", RewardsCode.beta_rewards.name, 40F),
                     DeviceRewardsSummaryDataReward("correction", RewardsCode.correction.name, 20F),
+                    DeviceRewardsSummaryDataReward("rollouts", RewardsCode.rollouts.name, 20F),
                     DeviceRewardsSummaryDataReward("boost", "other", 20F)
                 )
             )
@@ -159,7 +160,7 @@ class RewardsUseCaseTest : BehaviorSpec({
         )
     )
     val deviceTotalRewardsDetails = DeviceTotalRewardsDetails(
-        120F,
+        140F,
         RewardsSummaryMode.WEEK,
         listOf(
             DeviceTotalRewardsBoost(
@@ -171,12 +172,13 @@ class RewardsUseCaseTest : BehaviorSpec({
                 customTimestamp
             )
         ),
-        listOf(120F),
+        listOf(140F),
         listOf("Monday"),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 40F))),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 80F))),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 100F))),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 120F))),
+        LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 140F))),
         Status.SUCCESS
     )
 
