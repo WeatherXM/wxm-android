@@ -157,8 +157,12 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
-        model.onViewportStations().observe(this) {
-            binding.activeStations.text = formatNumber(it)
+        model.onViewportStations().observe(this) { stationsCount ->
+            stationsCount?.let {
+                binding.areaStationsContainer.visible(it > 0)
+                binding.noStationsInArea.visible(it == 0)
+                binding.areaStations.text = formatNumber(it)
+            }
         }
 
         binding.menuBtn.setOnClickListener {
