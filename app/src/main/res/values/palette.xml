@@ -81,6 +81,7 @@
     <color name="beta_rewards_fill">#6A00B6</color>
     <color name="correction_rewards_color">#F4B400</color>
     <color name="correction_rewards_fill">#99F4B400</color>
+    <color name="rollouts_rewards">#DE3E80</color>
     <color name="other_reward">#07C38D</color>
     <color name="other_reward_fill">#9907C38D</color>
     <!-- End -->

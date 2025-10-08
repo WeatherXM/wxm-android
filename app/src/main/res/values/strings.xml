@@ -714,6 +714,9 @@
     <string name="beta_rewards">Beta Rewards</string>
     <string name="compensation_rewards">Compensation Rewards</string>
     <string name="compensation">Compensation:</string>
+    <string name="rollouts">Rollouts:</string>
+    <string name="rollouts_rewards">Rollouts Rewards</string>
+    <string name="rollouts_reward_details">Rollouts rewards details</string>
 
     <!-- Station Health -->
     <string name="data_quality_value">Data Quality %d%%</string>
