@@ -91,7 +91,7 @@ class TooltipMarkerView(
             }
         }
 
-        rolloutsData.getEntryValueForTooltip(e.x).also {
+        rolloutsData.getEntryValueForTooltipWithPlaceholder(e.x).also {
             rolloutsTitleView.visible(it != null)
             rolloutsView.visible(it != null)
             if (it != null) {

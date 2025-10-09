@@ -197,7 +197,7 @@ class RewardsUseCaseImpl(
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
                 val correctionCode = RewardsCode.correction.name
-                val rolloutsCode = RewardsCode.rollouts.name
+                val rolloutsCode = RewardsCode.trov2.name
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
@@ -221,24 +221,29 @@ class RewardsUseCaseImpl(
                  * etc for the others
                  */
                 timeseries.rewards?.forEach {
-                    if (it.code == baseCode) {
+                    val isBase = it.code == baseCode
+                    val isBeta = it.code == betaCode
+                    val isRollouts = it.code == rolloutsCode
+
+                    if (isBase) {
                         baseSum += it.value
                         baseFound = true
                     }
-                    if (it.code == betaCode) {
+                    if (isBeta) {
                         betaSum += it.value
                         betaFound = true
                     }
-                    if (it.code == rolloutsCode) {
+                    if (isRollouts) {
                         rolloutsSum += it.value
                         rolloutsFound = true
                     }
-                    val codeIsCorrection = it.code.startsWith(correctionCode)
-                    if (codeIsCorrection) {
+                    val isCorrection = it.code.startsWith(correctionCode)
+                    if (isCorrection) {
                         correctionSum += it.value
                         correctionFound = true
                     }
-                    if (it.code != baseCode && it.code != betaCode && !codeIsCorrection && it.code != rolloutsCode) {
+                    @Suppress("ComplexCondition")
+                    if (!isBase && !isBeta && !isCorrection && !isRollouts) {
                         othersSum += it.value
                         othersFound = true
                     }
@@ -246,59 +251,41 @@ class RewardsUseCaseImpl(
                 }
                 totals.add(sum)
 
-                if (!baseFound) {
-                    baseEntries.add(Entry(counter.toFloat(), Float.NaN))
-                } else {
-                    baseEntries.add(Entry(counter.toFloat(), baseSum))
-                }
-                if (!betaFound) {
-                    betaEntries.add(Entry(counter.toFloat(), Float.NaN))
-                } else {
-                    if (betaSum == 0F) {
-                        betaEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
-                    }
-                }
-                if (!correctionFound) {
-                    correctionEntries.add(Entry(counter.toFloat(), -1F))
-                } else {
-                    if (correctionSum == 0F) {
-                        correctionEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        correctionEntries.add(
-                            Entry(counter.toFloat(), correctionSum + betaSum + baseSum)
-                        )
-                    }
-                }
-                if (!rolloutsFound) {
-                    rolloutsEntries.add(Entry(counter.toFloat(), -1F))
-                } else {
-                    if (rolloutsSum == 0F) {
-                        rolloutsEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        rolloutsEntries.add(
-                            Entry(
-                                counter.toFloat(),
-                                rolloutsSum + betaSum + baseSum + correctionSum
-                            )
-                        )
-                    }
-                }
-                if (!othersFound) {
-                    otherEntries.add(Entry(counter.toFloat(), Float.NaN))
-                } else {
-                    if (othersSum == 0F) {
-                        otherEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        otherEntries.add(
-                            Entry(
-                                counter.toFloat(),
-                                othersSum + correctionSum + betaSum + baseSum + rolloutsSum
-                            )
-                        )
-                    }
-                }
+                baseEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = baseSum,
+                    isFound = baseFound,
+                    sum = baseSum
+                )
+                betaEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = betaSum + baseSum,
+                    isFound = betaFound,
+                    sum = betaSum
+                )
+                correctionEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = -1F,
+                    yIfFound = correctionSum + betaSum + baseSum,
+                    isFound = correctionFound,
+                    sum = correctionSum
+                )
+                rolloutsEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = -1F,
+                    yIfFound = rolloutsSum + betaSum + baseSum + correctionSum,
+                    isFound = rolloutsFound,
+                    sum = rolloutsSum
+                )
+                otherEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = othersSum + correctionSum + betaSum + baseSum + rolloutsSum,
+                    isFound = othersFound,
+                    sum = othersSum
+                )
             }
 
             DeviceTotalRewardsDetails(
@@ -315,6 +302,26 @@ class RewardsUseCaseImpl(
                 Status.SUCCESS
             )
         }
+    }
+
+    private fun MutableList<Entry>.createNewEntry(
+        x: Int,
+        yIfNotFound: Float,
+        yIfFound: Float,
+        isFound: Boolean,
+        sum: Float
+    ) {
+        add(
+            if (!isFound) {
+                Entry(x.toFloat(), yIfNotFound)
+            } else {
+                if (sum == 0F) {
+                    Entry(x.toFloat(), 0F)
+                } else {
+                    Entry(x.toFloat(), yIfFound)
+                }
+            }
+        )
     }
 
     private fun getTooltipDate(

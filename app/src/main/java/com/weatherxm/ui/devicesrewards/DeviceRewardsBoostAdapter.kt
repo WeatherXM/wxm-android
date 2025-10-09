@@ -49,7 +49,7 @@ class DeviceRewardsBoostAdapter :
                 } else {
                     val isBetaRewards = boostCode == BoostCode.beta_rewards.name
                     val isCorrectionRewards = boostCode.startsWith(BoostCode.correction.name, true)
-                    val isRolloutRewards = boostCode == BoostCode.rollouts.name
+                    val isRolloutRewards = boostCode == BoostCode.trov2.name
 
                     if (isBetaRewards) {
                         binding.title.text =
@@ -85,6 +85,7 @@ class DeviceRewardsBoostAdapter :
             if (item.currentRewards == null) {
                 binding.totalTokensSoFar.visible(false)
                 binding.totalTokensSoFarTitle.visible(false)
+                binding.firstDivider.visible(false)
             } else {
                 binding.totalTokensSoFar.text = itemView.context.getString(
                     R.string.wxm_amount,
@@ -94,6 +95,7 @@ class DeviceRewardsBoostAdapter :
             if (item.maxRewards == null) {
                 binding.totalTokensMax.visible(false)
                 binding.totalTokensMaxTitle.visible(false)
+                binding.secondDivider.visible(false)
             } else {
                 binding.totalTokensMax.text = itemView.context.getString(
                     R.string.wxm_amount,
