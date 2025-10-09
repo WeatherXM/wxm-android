@@ -9,8 +9,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.18.1",
   "devDependencies": {
-    "@solana-mobile/dapp-store-cli": "^0.13.0"
+    "@solana-mobile/dapp-store-cli": "^0.13.1"
   }
 }
