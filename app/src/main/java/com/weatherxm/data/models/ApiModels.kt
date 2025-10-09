@@ -120,7 +120,8 @@ data class PublicDevice(
             hex7 = null,
             totalRewards = null,
             actualReward = null,
-            hasLowBattery = null
+            hasLowBattery = null,
+            hasLowGwBattery = null
         )
     }
 }
@@ -143,12 +144,15 @@ data class Device(
     val relation: Relation?,
     val metrics: Metrics?,
     @Json(name = "bat_state")
-    val batteryState: BatteryState?
+    val batteryState: BatteryState?,
+    @Json(name = "gateway_bat_state")
+    val gatewayBatteryState: BatteryState?
 ) : Parcelable {
     companion object {
         fun empty() = Device(
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -204,7 +208,8 @@ data class Device(
             qodScore = metrics?.qodScore,
             polReason = metrics?.polToAnnotationGroupCode(),
             metricsTimestamp = metrics?.ts,
-            hasLowBattery = batteryState == BatteryState.low
+            hasLowBattery = batteryState == BatteryState.low,
+            hasLowGwBattery = gatewayBatteryState == BatteryState.low
         )
     }
 
@@ -404,6 +409,20 @@ data class Gateway(
     val wifiRssi: String?,
     @Json(name = "wifi_rssi_last_activity")
     val wifiRssiLastActivity: ZonedDateTime?,
+    @Json(name = "network_rssi")
+    val networkRssi: String?,
+    @Json(name = "network_rssi_last_activity")
+    val networkRssiLastActivity: ZonedDateTime?,
+    @Json(name = "gateway_rssi")
+    val gatewayRssi: String?,
+    @Json(name = "gateway_rssi_last_activity")
+    val gatewayRssiLastActivity: ZonedDateTime?,
+    @Json(name = "bat_state")
+    val batteryState: BatteryState?,
+    val frequency: String?,
+    @Json(name = "next_communication")
+    val nextCommunication: ZonedDateTime?,
+    val sim: GatewaySim?,
 ) : Parcelable
 
 @Keep
@@ -411,6 +430,7 @@ data class Gateway(
 @Parcelize
 data class WeatherStation(
     val model: String?,
+    val id: String?,
     val firmware: Firmware?,
     @Json(name = "last_activity")
     val lastActivity: ZonedDateTime?,
@@ -432,6 +452,15 @@ data class WeatherStation(
     val stationRssiLastActivity: ZonedDateTime?,
     @Json(name = "bat_state")
     val batteryState: BatteryState?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class GatewaySim(
+    val mcc: Int?,
+    val mnc: Int?,
+    val iccid: String?,
 ) : Parcelable
 
 @Keep

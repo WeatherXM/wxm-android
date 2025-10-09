@@ -311,8 +311,20 @@ fun Chip.updateRequiredChip() {
     setChipIconTintResource(R.color.warning)
 }
 
-fun Chip.lowBatteryChip() {
-    text = context.getString(R.string.low_battery)
+fun Chip.lowBatteryChip(device: UIDevice) {
+    text = if (device.isCellular()) {
+        context.getString(R.string.low_ws_battery)
+    } else {
+        context.getString(R.string.low_battery)
+    }
+    setChipBackgroundColorResource(R.color.warningTint)
+    chipIconSize = 0F
+    setIcon(R.drawable.ic_low_battery)
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.lowGwBatteryChip() {
+    text = context.getString(R.string.low_gw_battery)
     setChipBackgroundColorResource(R.color.warningTint)
     chipIconSize = 0F
     setIcon(R.drawable.ic_low_battery)
@@ -578,7 +590,10 @@ fun UIDevice.handleAlerts(context: Context, issueChip: Chip, analytics: Analytic
     } else {
         when (alerts[0]) {
             DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
-                issueChip.lowBatteryChip()
+                issueChip.lowBatteryChip(this)
+            }
+            DeviceAlert.createWarning(DeviceAlertType.LOW_GATEWAY_BATTERY) -> {
+                issueChip.lowGwBatteryChip()
             }
             DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
                 issueChip.offlineChip()

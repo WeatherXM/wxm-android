@@ -97,7 +97,8 @@ data class SearchResult(
             qodScore = null,
             polReason = null,
             metricsTimestamp = null,
-            hasLowBattery = null
+            hasLowBattery = null,
+            hasLowGwBattery = null
         )
     }
 }

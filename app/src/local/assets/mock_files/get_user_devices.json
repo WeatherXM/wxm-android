@@ -4,22 +4,23 @@
         "name": "Big Blue Cloud",
         "timezone": "Europe/Athens",
         "bundle": {
-            "name": "m5",
-            "title": "M5",
-            "connectivity": "wifi",
-            "ws_model": "WS1000",
-            "gw_model": "WG1000",
+            "name": "pulse",
+            "title": "Pulse",
+            "connectivity": "cellular",
+            "ws_model": "WS1001",
+            "gw_model": "WG3000",
             "hw_class": "CONSUMER"
         },
         "label": null,
         "relation": "owned",
-        "bat_state": "low",
+        "bat_state": "ok",
+        "gateway_bat_state": "low",
         "location": {
             "lat": 37.981262,
             "lon": 23.730503
         },
         "attributes": {
-            "isActive": false,
+            "isActive": true,
             "lastWeatherStationActivity": "2024-10-08T17:30:00+03:00",
             "hex3": {
                 "index": "833f72fffffffff",

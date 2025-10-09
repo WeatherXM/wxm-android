@@ -82,6 +82,7 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
         null
     )
     val stakeholderSplits = RewardSplitsData(
@@ -95,6 +96,7 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         null,
         WeatherStation(
             "WS2000",
+            "id",
             Firmware("1.0.0", "1.0.0"),
             ZonedDateTime.parse("2024-10-01T14:00:00+02:00"),
             "devEUI",

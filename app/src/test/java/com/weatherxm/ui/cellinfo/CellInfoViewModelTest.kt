@@ -77,6 +77,7 @@ class CellInfoViewModelTest : BehaviorSpec({
             null,
             null,
             null,
+            null,
             null
         )
     )
