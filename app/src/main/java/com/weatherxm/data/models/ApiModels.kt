@@ -1005,13 +1005,13 @@ enum class RewardsCode {
     base_reward,
     beta_rewards,
     correction,
-    rollouts
+    trov2
 }
 
 @Suppress("EnumNaming")
 enum class BoostCode {
     beta_rewards,
     correction,
-    rollouts
+    trov2
 }
 

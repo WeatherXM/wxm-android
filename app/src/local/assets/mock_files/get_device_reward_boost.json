@@ -1,19 +1,14 @@
 {
-    "code": "beta_rewards",
+    "code": "trov2",
+    "type": "TROv2",
     "metadata": {
-        "title": "Beta Reward",
-        "description": "Rewarded for participating in our beta reward program.",
-        "img_url": "string",
-        "doc_url": "string",
-        "about": "According to the Token Allocation table 3,000,000 $WXM are reserved to reward stations that participated to the network before the Token Launch Day (\"Beta period\")."
+        "title": "TROv2 Rewards",
+        "description": "A reward boost used to distribute additional rewards to TROv2 devices",
+        "total_rewardable_hours": 39563725
     },
     "details": {
-        "station_hours": 17500,
-        "max_daily_reward": 1.24,
-        "max_total_reward": 10.24,
-        "boost_start_date": "2024-03-05T09:29:54.450Z",
-        "boost_stop_date": "2024-03-05T09:29:54.450Z",
-        "participation_start_date": "2024-03-05T09:29:54.450Z",
-        "participation_stop_date": "2024-03-05T09:29:54.450Z"
+        "station_hours": 24,
+        "boost_start_date": "2025-10-04T00:00:00.000Z",
+        "boost_stop_date": "2026-09-19T00:00:00.000Z"
     }
 }

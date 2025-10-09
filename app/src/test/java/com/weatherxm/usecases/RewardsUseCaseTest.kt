@@ -142,7 +142,7 @@ class RewardsUseCaseTest : BehaviorSpec({
                     DeviceRewardsSummaryDataReward("base", RewardsCode.base_reward.name, 40F),
                     DeviceRewardsSummaryDataReward("boost", RewardsCode.beta_rewards.name, 40F),
                     DeviceRewardsSummaryDataReward("correction", RewardsCode.correction.name, 20F),
-                    DeviceRewardsSummaryDataReward("rollouts", RewardsCode.rollouts.name, 20F),
+                    DeviceRewardsSummaryDataReward("trov2", RewardsCode.trov2.name, 20F),
                     DeviceRewardsSummaryDataReward("boost", "other", 20F)
                 )
             )
