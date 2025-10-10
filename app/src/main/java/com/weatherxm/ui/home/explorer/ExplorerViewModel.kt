@@ -66,7 +66,7 @@ class ExplorerViewModel(
     // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onSearchOpenStatus = MutableLiveData(false)
 
-    private val onViewportStations = MutableLiveData(0)
+    private val onViewportStations = MutableLiveData<Int?>(null)
 
     private val onMapLayer = MutableLiveData(MapLayer.DATA_QUALITY)
 
@@ -184,7 +184,7 @@ class ExplorerViewModel(
     fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
     fun onRedrawPolygons(): LiveData<List<PolygonAnnotationOptions>> = onRedrawPolygons
     fun onExplorerData(): LiveData<ExplorerData> = onExplorerData
-    fun onViewportStations(): LiveData<Int> = onViewportStations
+    fun onViewportStations(): LiveData<Int?> = onViewportStations
     fun onMapLayer(): LiveData<MapLayer> = onMapLayer
 
     fun navigateToLocation(location: Location, zoomLevel: Double) {
@@ -306,7 +306,7 @@ class ExplorerViewModel(
                     } else {
                         0
                     }
-                } ?: 0
+                }
             )
         }
     }

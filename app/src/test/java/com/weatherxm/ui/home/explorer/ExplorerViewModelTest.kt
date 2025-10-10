@@ -265,7 +265,7 @@ class ExplorerViewModelTest : BehaviorSpec({
                 and("get stations in ViewPort") {
                     runTest { viewModel.getStationsInViewPort(180.0, -180.0, 90.0, -90.0) }
                     then("it should return 0") {
-                        viewModel.onViewportStations().value shouldBe 0
+                        viewModel.onViewportStations().value shouldBe null
                     }
                 }
             }
