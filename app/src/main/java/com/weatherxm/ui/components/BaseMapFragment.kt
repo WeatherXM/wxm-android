@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.ConstrainMode
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
@@ -94,6 +95,7 @@ open class BaseMapFragment : BaseFragment() {
         map.loadStyle(getMapStyle()) {
             Timber.d("MapBox is ready and style loaded")
 
+            binding.mapView.mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT)
             binding.mapView.gestures.rotateEnabled = false
             binding.mapView.gestures.pitchEnabled = false
             binding.mapView.scalebar.enabled = false
