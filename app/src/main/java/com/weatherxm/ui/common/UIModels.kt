@@ -630,6 +630,7 @@ data class DeviceTotalRewardsDetails(
     val baseChartData: LineChartData,
     val betaChartData: LineChartData,
     val correctionChartData: LineChartData,
+    val rolloutsChartData: LineChartData,
     val otherChartData: LineChartData,
     var status: Status
 ) : Parcelable {
@@ -640,6 +641,7 @@ data class DeviceTotalRewardsDetails(
             listOf(),
             listOf(),
             listOf(),
+            LineChartData.empty(),
             LineChartData.empty(),
             LineChartData.empty(),
             LineChartData.empty(),

@@ -1,236 +1,51 @@
 {
-    "total": 35.77685120991605,
+    "total": 8.374604064874664,
     "data": [
         {
-            "ts": "2025-08-28T00:00:00+00:00",
+            "ts": "2025-10-07T00:00:00+03:00",
             "rewards": [
                 {
                     "type": "base",
                     "code": "base_reward",
-                    "value": 1.9507051896480898
+                    "value": 2.11573839506828
                 }
             ]
         },
         {
-            "ts": "2025-08-29T00:00:00+00:00",
+            "ts": "2025-10-08T00:00:00+03:00",
             "rewards": [
                 {
                     "type": "base",
                     "code": "base_reward",
-                    "value": 1.947505126452495
-                }
-            ]
-        },
-        {
-            "ts": "2025-08-30T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9472389283761617
-                }
-            ]
-        },
-        {
-            "ts": "2025-08-31T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9507051896480898
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-01T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.962799669330394
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-02T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9625292740046838
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-03T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9237251670786415
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-04T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9587515468169943
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-05T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9646945248931182
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-06T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9747712780704185
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-07T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9742239467849223
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-08T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9701286129166091
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-09T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9739503949009283
+                    "value": 2.086288556602128
                 },
                 {
                     "type": "boost",
-                    "code": "correction",
-                    "value": 4.969805
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-10T00:00:00+00:00",
-            "rewards": [
+                    "code": "trov2",
+                    "value": 2.086288556602128
+                },
                 {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.974463079431633
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-11T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 2.0107268877911078
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-12T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 2.2921962992759455
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-13T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 0
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-14T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 1.9736966856288227
-                }
-            ]
-        },
-        {
-            "ts": "2025-09-15T00:00:00+00:00",
-            "rewards": [
-                {
-                    "type": "base",
-                    "code": "base_reward",
-                    "value": 2.064039408866995
+                    "type": "boost",
+                    "code": "correction-1",
+                    "value": 2.086288556602128
                 }
             ]
         }
     ],
     "details": [
         {
-            "code": "beta_rewards",
-            "current_rewards": 959.2118043196461,
-            "total_rewards": 959.2118043196461,
-            "boost_period_start": "2024-05-29T00:00:00.000Z",
-            "boost_period_end": "2025-07-28T00:00:00.000Z",
-            "completed_percentage": 100
+            "code": "trov2",
+            "type": "TROv2",
+            "boost_period_start": "2025-10-04T00:00:00.000Z",
+            "boost_period_end": "2026-09-19T00:00:00.000Z"
         },
         {
-            "code": "correction-2025-05-01",
+            "code": "correction-1",
             "type": "Correction",
-            "current_rewards": 0.491901,
-            "total_rewards": 0.491901,
-            "boost_period_start": "2025-09-14T00:00:00.000Z",
-            "boost_period_end": "2025-09-15T00:00:00.000Z",
-            "completed_percentage": 100
-        },
-        {
-            "code": "correction-2025-03-09",
-            "type": "Correction",
-            "current_rewards": 2.017276,
-            "total_rewards": 2.017276,
-            "boost_period_start": "2025-09-14T00:00:00.000Z",
-            "boost_period_end": "2025-09-15T00:00:00.000Z",
-            "completed_percentage": 100
-        },
-        {
-            "code": "correction-2025-02-03",
-            "type": "Correction",
-            "current_rewards": 2.460628,
-            "total_rewards": 2.460628,
-            "boost_period_start": "2025-09-14T00:00:00.000Z",
-            "boost_period_end": "2025-09-15T00:00:00.000Z",
+            "boost_period_start": "2025-10-04T00:00:00.000Z",
+            "boost_period_end": "2026-09-19T00:00:00.000Z",
+            "current_rewards": 2.086288556602128,
+            "total_rewards": 2.086288556602128,
             "completed_percentage": 100
         }
     ]

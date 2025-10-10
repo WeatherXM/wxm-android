@@ -1,46 +1,32 @@
 {
-    "timestamp": "2024-02-29T11:56:03.492Z",
-    "total_daily_reward": 55.55,
+    "timestamp": "2025-10-07T00:00:00+03:00",
+    "total_daily_reward": 4.233580980683507,
     "base": {
-        "actual_reward": 54.32,
-        "reward_score": 50,
-        "max_reward": 108.64,
-        "qod_score": 62,
+        "actual_reward": 2.1167904903417534,
+        "reward_score": 100,
+        "max_reward": 2.1167904903417534,
+        "qod_score": 100,
         "cell_capacity": 10,
         "cell_position": 1
     },
     "boost": {
-        "total_daily_reward": 1.23,
+        "total_daily_reward": 2.1167904903417534,
         "data": [
             {
-                "code": "beta_rewards",
-                "title": "Beta Reward",
-                "description": "Rewarded for participating in our beta reward program.",
-                "actual_reward": 1.23,
-                "reward_score": 50,
-                "max_reward": 2.46
+                "code": "trov2",
+                "title": "TROv2 Rewards",
+                "description": "A reward boost used to distribute additional rewards to TROv2 devices",
+                "actual_reward": 2.1167904903417534,
+                "reward_score": 100
             }
         ]
     },
     "reward_split": [
         {
-            "wallet": "0x0000000000000000000000000000000000000000",
-            "reward": "10.555",
-            "stake": 95
-        },
-        {
-            "wallet": "0x0000000000000000000000000000000000000001",
-            "reward": "1.555",
-            "stake": 5
+            "wallet": "0x12D4E16fcCAC298B3D05773CCDE93255A847e1E7",
+            "stake": 100,
+            "reward": 4.233580980683507
         }
     ],
-    "annotation_summary": [
-        {
-            "severity_level": "INFO",
-            "group": "WEATHER_DATA_GAPS",
-            "title": "Minor Sensor Issues",
-            "message": "Station is doing great! Minor issues detected during our data quality checks, that may be related to occasional sensor inaccuracies. That can happen once in a while.",
-            "doc_url": "https://docs.weatherxm.com/project/rewards-troubleshooting#sensor-problems"
-        }
-    ]
+    "annotation_summary": []
 }

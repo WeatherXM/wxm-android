@@ -185,6 +185,7 @@ class RewardsUseCaseImpl(
             val baseEntries = mutableListOf<Entry>()
             val betaEntries = mutableListOf<Entry>()
             val correctionEntries = mutableListOf<Entry>()
+            val rolloutsEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
             val totals = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
@@ -196,6 +197,7 @@ class RewardsUseCaseImpl(
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
                 val correctionCode = RewardsCode.correction.name
+                val rolloutsCode = RewardsCode.trov2.name
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
@@ -205,29 +207,43 @@ class RewardsUseCaseImpl(
                 var othersFound = false
                 var correctionSum = 0F
                 var correctionFound = false
+                var rolloutsSum = 0F
+                var rolloutsFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
-                 * each layer atop the others. So in our case that we have base -> beta -> others
-                 * the beta entries should be the sum of base and beta (so that the layer is above
-                 * base) and others should be the sum of base, beta and others (so that the layer is
-                 * above base & beta).
+                 * each layer atop the others. So in our case that we have
+                 * 1. base -> beta -> correction -> rollouts -> others
+                 * 2. beta entries should be the sum of base and beta
+                 * --- (so that the layer is above base)
+                 * 3. correction entries should be the sum of beta and correction
+                 * --- (so that the layer is above beta)
+                 * etc for the others
                  */
                 timeseries.rewards?.forEach {
-                    if (it.code == baseCode) {
+                    val isBase = it.code == baseCode
+                    val isBeta = it.code == betaCode
+                    val isRollouts = it.code == rolloutsCode
+
+                    if (isBase) {
                         baseSum += it.value
                         baseFound = true
                     }
-                    if (it.code == betaCode) {
+                    if (isBeta) {
                         betaSum += it.value
                         betaFound = true
                     }
-                    val codeIsCorrection = it.code.startsWith(correctionCode)
-                    if (codeIsCorrection) {
+                    if (isRollouts) {
+                        rolloutsSum += it.value
+                        rolloutsFound = true
+                    }
+                    val isCorrection = it.code.startsWith(correctionCode)
+                    if (isCorrection) {
                         correctionSum += it.value
                         correctionFound = true
                     }
-                    if (it.code != baseCode && it.code != betaCode && !codeIsCorrection) {
+                    @Suppress("ComplexCondition")
+                    if (!isBase && !isBeta && !isCorrection && !isRollouts) {
                         othersSum += it.value
                         othersFound = true
                     }
@@ -235,42 +251,41 @@ class RewardsUseCaseImpl(
                 }
                 totals.add(sum)
 
-                if (!baseFound) {
-                    baseEntries.add(Entry(counter.toFloat(), Float.NaN))
-                } else {
-                    baseEntries.add(Entry(counter.toFloat(), baseSum))
-                }
-                if (!betaFound) {
-                    betaEntries.add(Entry(counter.toFloat(), Float.NaN))
-                } else {
-                    if (betaSum == 0F) {
-                        betaEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
-                    }
-                }
-                if (!correctionFound) {
-                    correctionEntries.add(Entry(counter.toFloat(), -1F))
-                } else {
-                    if (correctionSum == 0F) {
-                        correctionEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        correctionEntries.add(
-                            Entry(counter.toFloat(), correctionSum + betaSum + baseSum)
-                        )
-                    }
-                }
-                if (!othersFound) {
-                    otherEntries.add(Entry(counter.toFloat(), Float.NaN))
-                } else {
-                    if (othersSum == 0F) {
-                        otherEntries.add(Entry(counter.toFloat(), 0F))
-                    } else {
-                        otherEntries.add(
-                            Entry(counter.toFloat(), othersSum + correctionSum + betaSum + baseSum)
-                        )
-                    }
-                }
+                baseEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = baseSum,
+                    isFound = baseFound,
+                    sum = baseSum
+                )
+                betaEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = betaSum + baseSum,
+                    isFound = betaFound,
+                    sum = betaSum
+                )
+                correctionEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = -1F,
+                    yIfFound = correctionSum + betaSum + baseSum,
+                    isFound = correctionFound,
+                    sum = correctionSum
+                )
+                rolloutsEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = -1F,
+                    yIfFound = rolloutsSum + betaSum + baseSum + correctionSum,
+                    isFound = rolloutsFound,
+                    sum = rolloutsSum
+                )
+                otherEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = othersSum + correctionSum + betaSum + baseSum + rolloutsSum,
+                    isFound = othersFound,
+                    sum = othersSum
+                )
             }
 
             DeviceTotalRewardsDetails(
@@ -282,10 +297,31 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),
                 LineChartData(xLabels, correctionEntries),
+                LineChartData(xLabels, rolloutsEntries),
                 LineChartData(xLabels, otherEntries),
                 Status.SUCCESS
             )
         }
+    }
+
+    private fun MutableList<Entry>.createNewEntry(
+        x: Int,
+        yIfNotFound: Float,
+        yIfFound: Float,
+        isFound: Boolean,
+        sum: Float
+    ) {
+        add(
+            if (!isFound) {
+                Entry(x.toFloat(), yIfNotFound)
+            } else {
+                if (sum == 0F) {
+                    Entry(x.toFloat(), 0F)
+                } else {
+                    Entry(x.toFloat(), yIfFound)
+                }
+            }
+        )
     }
 
     private fun getTooltipDate(

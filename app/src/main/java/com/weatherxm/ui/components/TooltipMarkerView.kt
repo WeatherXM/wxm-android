@@ -22,6 +22,7 @@ class TooltipMarkerView(
     private val baseData: LineChartData = LineChartData.empty(),
     private val betaData: LineChartData = LineChartData.empty(),
     private val correctionData: LineChartData = LineChartData.empty(),
+    private val rolloutsData: LineChartData = LineChartData.empty(),
     private val othersData: LineChartData = LineChartData.empty(),
 ) : MarkerView(context, R.layout.view_chart_tooltip) {
     private var dateView: TextView = findViewById(R.id.date)
@@ -32,6 +33,8 @@ class TooltipMarkerView(
     private var betaView: TextView = findViewById(R.id.betaValue)
     private var correctionTitleView: TextView = findViewById(R.id.correctionTitle)
     private var correctionView: TextView = findViewById(R.id.correctionValue)
+    private var rolloutsTitleView: TextView = findViewById(R.id.rolloutsTitle)
+    private var rolloutsView: TextView = findViewById(R.id.rolloutsValue)
     private var othersTitleView: TextView = findViewById(R.id.othersTitle)
     private var othersView: TextView = findViewById(R.id.othersValue)
 
@@ -48,12 +51,14 @@ class TooltipMarkerView(
         /**
          * As explained in the comment in RewardsUseCase, the "chart with filled layers" to work
          * has "beta = base + beta", "correction = base + beta + correction",
-         * "others = base + beta + correction + others", so in here to show the correct
+         * "rollouts = base + beta + correction + others",
+         * "others = base + beta + correction + rollouts + others", so in here to show the correct
          * value in tooltip we need to make the respective subtractions.
          */
         var baseValue = 0F
         var betaValue = 0F
         var correctionValue = 0F
+        var rolloutsValue = 0F
 
         baseData.getEntryValueForTooltip(e.x).also {
             baseTitleView.visible(it != null)
@@ -86,11 +91,28 @@ class TooltipMarkerView(
             }
         }
 
+        rolloutsData.getEntryValueForTooltipWithPlaceholder(e.x).also {
+            rolloutsTitleView.visible(it != null)
+            rolloutsView.visible(it != null)
+            if (it != null) {
+                rolloutsValue = it
+                rolloutsView.text = if (correctionValue > 0) {
+                    formatTokens((it - correctionValue).coerceAtLeast(0F))
+                } else if (betaValue > 0) {
+                    formatTokens((it - betaValue).coerceAtLeast(0F))
+                } else {
+                    formatTokens((it - baseValue).coerceAtLeast(0F))
+                }
+            }
+        }
+
         othersData.getEntryValueForTooltip(e.x).also {
             othersTitleView.visible(it != null)
             othersView.visible(it != null)
             if (it != null) {
-                othersView.text = if (correctionValue > 0) {
+                othersView.text = if (rolloutsValue > 0) {
+                    formatTokens((it - rolloutsValue).coerceAtLeast(0F))
+                } else if (correctionValue > 0) {
                     formatTokens((it - correctionValue).coerceAtLeast(0F))
                 } else if (betaValue > 0) {
                     formatTokens((it - betaValue).coerceAtLeast(0F))
