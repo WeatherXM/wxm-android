@@ -39,10 +39,33 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/dark_text"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/amount"
+                app:layout_constraintEnd_toStartOf="@id/seeDetails"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Beta Reward" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/seeDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:text="@string/see_details"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/dark_text"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintEnd_toStartOf="@id/arrowRight"
+                app:layout_constraintTop_toTopOf="@id/title" />
+
+            <ImageView
+                android:id="@+id/arrowRight"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:contentDescription="@string/see_details"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintBottom_toBottomOf="@id/seeDetails"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/seeDetails"
+                app:tint="@color/dark_text" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/desc"
@@ -56,13 +79,12 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/amount"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
                 android:textColor="@color/dark_text"
-                app:layout_constraintBottom_toBottomOf="@id/title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/desc"
                 tools:text="+ 0.2142 $WXM" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
