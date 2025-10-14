@@ -18,9 +18,15 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.search.SearchView.TransitionState
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.RenderedQueryGeometry
+import com.mapbox.maps.RenderedQueryOptions
+import com.mapbox.maps.ScreenBox
+import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.extension.style.layers.addLayerAbove
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
@@ -30,9 +36,10 @@ import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.toCameraOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.ui.common.Contracts.MAPBOX_CUSTOM_DATA_KEY
+import com.weatherxm.ui.common.Contracts.STATION_COUNT_LAYER
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
@@ -51,12 +58,15 @@ import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 @Suppress("TooManyFunctions")
 class ExplorerMapFragment : BaseMapFragment() {
+    private val gson: Gson by inject()
+
     companion object {
         const val CAMERA_ANIMATION_DURATION = 400L
         const val STATION_COUNT_POINT_TEXT_SIZE = 16.0
@@ -108,9 +118,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         map.subscribeMapIdle {
-            with(map.coordinateBoundsForCamera(map.cameraState.toCameraOptions())) {
-                model.getStationsInViewPort(north(), south(), east(), west())
-            }
+            updateStationsInViewport(map)
         }
 
         getMapView().location.updateSettings { enabled = true }
@@ -157,14 +165,6 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
-        model.onViewportStations().observe(this) { stationsCount ->
-            stationsCount?.let {
-                binding.areaStationsContainer.visible(it > 0)
-                binding.noStationsInArea.visible(it == 0)
-                binding.areaStations.text = formatNumber(it)
-            }
-        }
-
         binding.menuBtn.setOnClickListener {
             setupMenu()
         }
@@ -179,6 +179,46 @@ class ExplorerMapFragment : BaseMapFragment() {
             model.onSearchOpenStatus(false)
         } else {
             findNavController().popBackStack()
+        }
+    }
+
+    private fun updateStationsInViewport(map: MapboxMap) {
+        // Query rendered features from the points source
+        map.queryRenderedFeatures(
+            geometry = RenderedQueryGeometry(
+                ScreenBox(
+                    ScreenCoordinate(0.0, 0.0),
+                    ScreenCoordinate(
+                        binding.mapView.width.toDouble(),
+                        binding.mapView.height.toDouble()
+                    )
+                )
+            ),
+            options = RenderedQueryOptions(
+                listOf(STATION_COUNT_LAYER),
+                null
+            )
+        ) { results ->
+            val stationsCount = results.value?.sumOf { renderedFeature ->
+                renderedFeature.queriedFeature.feature.properties()
+                    ?.asMap()
+                    ?.get(MAPBOX_CUSTOM_DATA_KEY)
+                    ?.let {
+                        try {
+                            gson.fromJson(it, CustomDataOfStationCount::class.java).second
+                        } catch (e: JsonSyntaxException) {
+                            Timber.e(e)
+                            0
+                        }
+                    }
+                    ?: 0
+            } ?: 0
+
+            if (model.onExplorerData().value?.publicHexes?.isNotEmpty() == true) {
+                binding.areaStationsContainer.visible(stationsCount > 0)
+                binding.noStationsInArea.visible(stationsCount == 0)
+                binding.areaStations.text = formatNumber(stationsCount)
+            }
         }
     }
 

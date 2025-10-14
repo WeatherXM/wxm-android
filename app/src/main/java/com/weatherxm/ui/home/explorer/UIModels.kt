@@ -51,6 +51,13 @@ data class ExplorerCamera(
 
 @Keep
 @JsonClass(generateAdapter = true)
+data class CustomDataOfStationCount(
+    var first: String,
+    var second: Int
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
 data class SearchResult(
     var name: String?,
     var center: Location?,

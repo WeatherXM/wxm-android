@@ -15,6 +15,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.PublicHex
+import com.weatherxm.ui.common.Contracts.STATION_COUNT
 import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.home.explorer.MapLayer
 import com.weatherxm.ui.home.explorer.UICell
@@ -115,6 +116,7 @@ object MapboxUtils : KoinComponent {
                     .withPoint(Point.fromLngLat(hex.center.lon, hex.center.lat))
                     .withTextField(it.toString())
                     .withTextColor(resources.getColor(R.color.dark_text))
+                    .withData(gson.toJsonTree(STATION_COUNT to it))
             }
         }
     }

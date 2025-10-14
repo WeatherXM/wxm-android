@@ -39,7 +39,6 @@ class ExplorerViewModel(
         const val HEATMAP_LAYER_ID = "heatmap-layer"
         const val HEATMAP_LAYER_SOURCE = "heatmap"
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
-        const val SHOW_STATION_COUNT_ZOOM_LEVEL: Double = 10.0
     }
 
     // Explorer Data
@@ -65,8 +64,6 @@ class ExplorerViewModel(
 
     // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onSearchOpenStatus = MutableLiveData(false)
-
-    private val onViewportStations = MutableLiveData<Int?>(null)
 
     private val onMapLayer = MutableLiveData(MapLayer.DATA_QUALITY)
 
@@ -184,7 +181,6 @@ class ExplorerViewModel(
     fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
     fun onRedrawPolygons(): LiveData<List<PolygonAnnotationOptions>> = onRedrawPolygons
     fun onExplorerData(): LiveData<ExplorerData> = onExplorerData
-    fun onViewportStations(): LiveData<Int?> = onViewportStations
     fun onMapLayer(): LiveData<MapLayer> = onMapLayer
 
     fun navigateToLocation(location: Location, zoomLevel: Double) {
@@ -284,31 +280,6 @@ class ExplorerViewModel(
     @SuppressLint("MissingPermission")
     fun getLocation(onLocation: (location: Location?) -> Unit) {
         locationHelper.getLocationAndThen(onLocation)
-    }
-
-    @Suppress("MagicNumber")
-    fun getStationsInViewPort(
-        northLat: Double,
-        southLat: Double,
-        eastLon: Double,
-        westLon: Double
-    ) {
-        viewModelScope.launch {
-            onViewportStations.postValue(
-                onExplorerData.value?.publicHexes?.sumOf {
-                    val containsLon = if (westLon < eastLon && eastLon - westLon <= 180) {
-                        it.center.lon in westLon..eastLon
-                    } else {
-                        it.center.lon <= westLon || it.center.lon >= eastLon
-                    }
-                    if (it.center.lat in southLat..northLat && containsLon) {
-                        it.deviceCount ?: 0
-                    } else {
-                        0
-                    }
-                }
-            )
-        }
     }
 
     init {
