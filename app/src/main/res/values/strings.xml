@@ -69,6 +69,7 @@
     <string name="stations_in_area">Stations in this area</string>
     <string name="no_stations_in_area">No stations in this area</string>
     <string name="join_network_promo_subtitle">Get a station and contribute real data to WeatherXM while earning rewards.</string>
+    <string name="see_details">See details</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -714,6 +715,9 @@
     <string name="beta_rewards">Beta Rewards</string>
     <string name="compensation_rewards">Compensation Rewards</string>
     <string name="compensation">Compensation:</string>
+    <string name="rollouts">Rollouts:</string>
+    <string name="rollouts_rewards">Rollouts Rewards</string>
+    <string name="rollouts_reward_details">Rollouts rewards details</string>
 
     <!-- Station Health -->
     <string name="data_quality_value">Data Quality %d%%</string>

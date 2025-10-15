@@ -661,11 +661,12 @@ private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int, highlightCo
     }
 }
 
-@Suppress("MagicNumber", "LongParameterList", "LongMethod")
+@Suppress("MagicNumber", "LongParameterList", "LongMethod", "CyclomaticComplexMethod")
 fun LineChart.initRewardsBreakdownChart(
     baseData: LineChartData,
     betaData: LineChartData,
     correctionData: LineChartData,
+    rolloutsData: LineChartData,
     othersData: LineChartData,
     totals: List<Float>,
     datesChartTooltip: List<String>
@@ -684,6 +685,8 @@ fun LineChart.initRewardsBreakdownChart(
     val betaDataEmptyLineDataSets = betaData.getEmptyLineDataSets("")
     val correctionDataDataSetsWithValues = correctionData.getLineDataSetsWithValues("")
     val correctionDataEmptyLineDataSets = correctionData.getEmptyLineDataSets("")
+    val rolloutsDataDataSetsWithValues = rolloutsData.getLineDataSetsWithValues("")
+    val rolloutsDataEmptyLineDataSets = rolloutsData.getEmptyLineDataSets("")
     val otherDataDataSetsWithValues = othersData.getLineDataSetsWithValues("")
     val otherDataEmptyLineDataSets = othersData.getEmptyLineDataSets("")
 
@@ -696,6 +699,17 @@ fun LineChart.initRewardsBreakdownChart(
 
     if (otherDataEmptyLineDataSets.isNotEmpty()) {
         dataSets.addAll(otherDataEmptyLineDataSets)
+    }
+
+    if (rolloutsDataDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(rolloutsDataDataSetsWithValues.primaryLineInit(context, resources))
+        rolloutsDataDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.rollouts_rewards), context.getColor(R.color.darkGrey)
+        )
+    }
+
+    if (rolloutsDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(rolloutsDataEmptyLineDataSets)
     }
 
     if (correctionDataDataSetsWithValues.isNotEmpty()) {
@@ -773,6 +787,7 @@ fun LineChart.initRewardsBreakdownChart(
         baseData,
         betaData,
         correctionData,
+        rolloutsData,
         othersData
     )
     setDrawMarkers(true)
