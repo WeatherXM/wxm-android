@@ -9,6 +9,7 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
@@ -18,8 +19,8 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.weatherxm.databinding.FragmentMapBinding
+import com.weatherxm.ui.common.Contracts.STATION_COUNT_LAYER
 import com.weatherxm.ui.home.explorer.ExplorerMapFragment.Companion.STATION_COUNT_POINT_TEXT_SIZE
-import com.weatherxm.ui.home.explorer.ExplorerViewModel.Companion.SHOW_STATION_COUNT_ZOOM_LEVEL
 import com.weatherxm.util.DisplayModeHelper
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
@@ -77,6 +78,7 @@ open class BaseMapFragment : BaseFragment() {
         return binding.root
     }
 
+    @Suppress("MagicNumber")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -89,6 +91,14 @@ open class BaseMapFragment : BaseFragment() {
                 zoom = map.cameraState.zoom,
                 center = map.cameraState.center
             )
+
+            if (this::pointManager.isInitialized) {
+                if (it.cameraState.zoom < 10.0 && pointManager.textSize != 0.1) {
+                    pointManager.textSize = 0.1
+                } else if (it.cameraState.zoom >= 10.0 && pointManager.textSize == 0.1) {
+                    pointManager.textSize = STATION_COUNT_POINT_TEXT_SIZE
+                }
+            }
         }
 
         map.loadStyle(getMapStyle()) {
@@ -100,10 +110,9 @@ open class BaseMapFragment : BaseFragment() {
 
             with(binding.mapView.annotations) {
                 polygonManager = createPolygonAnnotationManager()
-                pointManager = createPointAnnotationManager().apply {
-                    minZoom = SHOW_STATION_COUNT_ZOOM_LEVEL
-                    textSize = STATION_COUNT_POINT_TEXT_SIZE
-                }
+                pointManager = createPointAnnotationManager(
+                    AnnotationConfig(layerId = STATION_COUNT_LAYER)
+                )
             }
 
             // Update camera

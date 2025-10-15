@@ -40,4 +40,7 @@ object Contracts {
     const val ARG_OPEN_STATION_FROM_NOTIFICATION = "open_station_from_notification"
     const val ARG_LOCATION = "location"
     const val ARG_FROM_ONBOARDING = "from_onboarding"
+    const val STATION_COUNT_LAYER = "station_count_layer"
+    const val STATION_COUNT = "station_count"
+    const val MAPBOX_CUSTOM_DATA_KEY = "custom_data"
 }
