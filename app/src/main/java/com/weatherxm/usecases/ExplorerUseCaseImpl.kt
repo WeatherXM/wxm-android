@@ -37,7 +37,7 @@ class ExplorerUseCaseImpl(
             it.firstOrNull { cell ->
                 cell.index == index
             }?.let { cell ->
-                Either.Right(UICell(cell.index, cell.center))
+                Either.Right(UICell(cell.index, cell.center, cell.capacity))
             } ?: Either.Left(DataError.CellNotFound)
         }
     }
