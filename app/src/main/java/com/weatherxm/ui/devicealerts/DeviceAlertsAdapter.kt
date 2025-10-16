@@ -66,14 +66,14 @@ class DeviceAlertsAdapter(
                     }
                 }
                 DeviceAlertType.LOW_BATTERY -> {
-                    var title = R.string.low_battery
-                    if (device?.isCellular() == true) {
-                        title = R.string.low_ws_battery
-                    }
                     binding.alert.setContent {
                         MessageCardView(
                             data = DataForMessageView(
-                                title = title,
+                                title = if (device?.isCellular() == true) {
+                                    R.string.low_weather_station_battery
+                                } else {
+                                    R.string.low_battery
+                                },
                                 subtitle = SubtitleForMessageView(
                                     message = R.string.low_battery_desc
                                 ),
@@ -91,7 +91,7 @@ class DeviceAlertsAdapter(
                     binding.alert.setContent {
                         MessageCardView(
                             data = DataForMessageView(
-                                title = R.string.low_gw_battery,
+                                title = R.string.low_gateway_battery,
                                 subtitle = SubtitleForMessageView(
                                     message = R.string.low_gw_battery_desc
                                 ),
