@@ -151,15 +151,19 @@ class DevicesNotificationsWorker(
                 Timber.d("[Devices BG Worker]: Has low battery ${it.id}")
                 if (it.hasLowBattery == true) {
                     sendNotification(
-                        titleResId = R.string.station_low_battery,
+                        titleResId = if (it.isCellular()) {
+                            R.string.low_weather_station_battery
+                        } else {
+                            R.string.station_low_battery
+                        },
                         bodyResId = R.string.station_low_battery_notification_msg,
                         device = it,
                         notificationType = DeviceNotificationType.BATTERY
                     )
                 } else if (it.hasLowGwBattery == true) {
                     sendNotification(
-                        titleResId = R.string.low_gw_battery,
-                        bodyResId = R.string.station_low_battery_notification_msg,
+                        titleResId = R.string.low_gateway_battery,
+                        bodyResId = R.string.station_low_gateway_battery_notification_msg,
                         device = it,
                         notificationType = DeviceNotificationType.BATTERY
                     )

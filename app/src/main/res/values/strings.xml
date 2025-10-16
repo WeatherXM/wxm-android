@@ -633,6 +633,7 @@
     <string name="station_inactive_notification_msg">Your station %s appears inactive. Please check its status.</string>
     <string name="station_low_battery">Station Low Battery</string>
     <string name="station_low_battery_notification_msg">To avoid data interruptions, please replace the batteries of %s.</string>
+    <string name="station_low_gateway_battery_notification_msg">To avoid data interruptions, please make sure the Gateway of %s is properly exposed to sunlight.</string>
     <string name="firmware_update_notification_msg">A new version is available for %s. Upgrade to enjoy the latest improvements.</string>
     <string name="station_health_issues">Station Health Issues</string>
     <string name="station_health_issues_notification_msg">Your station %s has some health issues. Tap to view its status.</string>
@@ -646,8 +647,10 @@
     <string name="low_battery">Low Battery</string>
     <string name="low_battery_desc">Your station is reporting low battery. This will lead to data gaps and eventually loss of rewards. Read more on how to replace your station batteries.</string>
     <string name="low_ws_battery">Low WS Battery</string>
+    <string name="low_weather_station_battery">Low Weather Station Battery</string>
     <string name="low_gw_battery">Low GW Battery</string>
-    <string name="low_gw_battery_desc">Your gateway is reporting low battery. This will lead to data gaps and eventually loss of rewards. Read more on how to replace your station batteries.</string>
+    <string name="low_gateway_battery">Low Gateway Battery</string>
+    <string name="low_gw_battery_desc">Your gateway’s solar charge is running low. This can cause data gaps and reward loss. Make sure your gateway is properly exposed to sunlight to keep it powered.</string>
 
     <!-- Widgets -->
     <string name="select_station">Select Station for Widget</string>
