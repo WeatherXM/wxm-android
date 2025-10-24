@@ -205,7 +205,6 @@ class CurrentFragment : BaseFragment() {
             device.isOwned() && device.qodScore == null && device.metricsTimestamp == null
         )
 
-        // TODO: STOPSHIP: Show or set invisible this button respectively
         binding.aiHealthCheckBtn.setContent {
             GradientButton {
                 AiHealthCheckDialogFragment().show(this)
