@@ -67,4 +67,8 @@ class CacheDeviceDataSource(private val cacheService: CacheService) : DeviceData
     ): Either<Failure, Device> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
+
+    override suspend fun getDeviceHealthCheck(deviceName: String): String? {
+        throw NotImplementedError("Won't be implemented. Ignore this.")
+    }
 }

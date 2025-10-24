@@ -24,6 +24,7 @@ import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -379,6 +380,34 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
             viewModel.setAcceptTerms()
             then("the respective function in the usecase should be called") {
                 verify(exactly = 1) { deviceDetailsUseCase.setAcceptTerms() }
+            }
+        }
+    }
+
+    context("Get health check for user device") {
+        given("a usecase that will return the response") {
+            When("it's failure") {
+                coEvery { deviceDetailsUseCase.getDeviceHealthCheck(device.name) } returns null
+                runTest { viewModel.getDeviceHealthCheck() }
+                then("LiveData onHealthCheck should post the value as failure") {
+                    viewModel.onHealthCheckData().isError("")
+                }
+            }
+            When("it's a success") {
+                and("the response is empty") {
+                    coEvery { deviceDetailsUseCase.getDeviceHealthCheck(device.name) } returns ""
+                    runTest { viewModel.getDeviceHealthCheck() }
+                    then("LiveData onHealthCheck should post the value as failure") {
+                        viewModel.onHealthCheckData().isError("")
+                    }
+                }
+                and("the response isn't empty") {
+                    coEvery { deviceDetailsUseCase.getDeviceHealthCheck(device.name) } returns "OK"
+                    runTest { viewModel.getDeviceHealthCheck() }
+                    then("LiveData onHealthCheck should post a success with the data as value") {
+                        viewModel.onHealthCheckData().isSuccess("OK")
+                    }
+                }
             }
         }
     }

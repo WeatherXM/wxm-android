@@ -12,6 +12,7 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 class DeviceDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
     var openExplorerOnBack: Boolean,
@@ -49,6 +50,7 @@ class DeviceDetailsViewModel(
     private val onDevicePolling = MutableLiveData<UIDevice>()
     private val onUpdatedDevice = MutableLiveData<UIDevice>()
     private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
+    private val _onHealthCheckData = SingleLiveEvent<Resource<String>>()
 
     val shouldShowTerms = mutableStateOf(false)
     val showNotificationsPrompt = mutableStateOf(false)
@@ -57,6 +59,7 @@ class DeviceDetailsViewModel(
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
+    fun onHealthCheckData(): LiveData<Resource<String>> = _onHealthCheckData
 
     fun isLoggedIn() = isLoggedIn
 
@@ -141,6 +144,19 @@ class DeviceDetailsViewModel(
     fun checkDeviceNotificationsPrompt() {
         showNotificationsPrompt.value = false
         useCase.checkDeviceNotificationsPrompt()
+    }
+
+    fun getDeviceHealthCheck() {
+        viewModelScope.launch(dispatcher) {
+            _onHealthCheckData.postValue(Resource.loading())
+            useCase.getDeviceHealthCheck(device.name).apply {
+                if (this.isNullOrEmpty()) {
+                    _onHealthCheckData.postValue(Resource.error(""))
+                } else {
+                    _onHealthCheckData.postValue(Resource.success(this))
+                }
+            }
+        }
     }
 
     init {

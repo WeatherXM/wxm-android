@@ -85,4 +85,15 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
     ): Either<Failure, Device> {
         return apiService.setLocation(deviceId, LocationBody(lat, lon)).mapResponse()
     }
+
+    override suspend fun getDeviceHealthCheck(deviceName: String): String? {
+        return apiService.getDeviceHealthCheck(deviceName).mapResponse().getOrNull()?.let {
+            if (it.error != null) {
+                Timber.e(it.error)
+                null
+            } else {
+                it.outputs?.result
+            }
+        }
+    }
 }

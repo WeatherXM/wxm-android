@@ -9,6 +9,8 @@ import com.weatherxm.TestUtils.testThrowNotImplemented
 import com.weatherxm.data.datasource.NetworkDeviceDataSource.Companion.CLAIM_MAX_RETRIES
 import com.weatherxm.data.models.Bundle
 import com.weatherxm.data.models.Device
+import com.weatherxm.data.models.DeviceHealthCheck
+import com.weatherxm.data.models.DeviceHealthCheckResult
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.network.ApiService
@@ -26,6 +28,7 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import java.net.SocketTimeoutException
 
 class DeviceDataSourceTest : BehaviorSpec({
     val apiService = mockk<ApiService>()
@@ -33,6 +36,7 @@ class DeviceDataSourceTest : BehaviorSpec({
     val cacheSource = CacheDeviceDataSource(cacheService)
 
     val deviceId = "deviceId"
+    val deviceName = "deviceName"
     val serialNumber = "serialNumber"
     val invalidSerialNumber = "invalidSerialNumber"
     val secret = "secret"
@@ -41,7 +45,7 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     val device = Device(
         deviceId,
-        "",
+        deviceName,
         null,
         null,
         null,
@@ -64,6 +68,18 @@ class DeviceDataSourceTest : BehaviorSpec({
     )
     val deviceInfo = mockk<DeviceInfo>()
     val devices = listOf(device)
+    val deviceHealthCheck = DeviceHealthCheck(
+        status = "success",
+        outputs = DeviceHealthCheckResult("result"),
+        error = null,
+        stationName = "stationName"
+    )
+    val deviceHealthCheckError = DeviceHealthCheck(
+        status = "failed",
+        outputs = null,
+        error = "error",
+        stationName = "stationName"
+    )
 
     val deviceResponse = NetworkResponse.Success<Device, ErrorResponse>(
         device, retrofitResponse(device)
@@ -80,6 +96,13 @@ class DeviceDataSourceTest : BehaviorSpec({
     val deviceClaimingErrorResponse = NetworkResponse.ServerError<Device, ErrorResponse>(
         ErrorResponse(DEVICE_CLAIMING, "", "", ""),
         retrofitResponse(device)
+    )
+
+    val deviceHealthCheckResponse = NetworkResponse.Success<DeviceHealthCheck, ErrorResponse>(
+        deviceHealthCheck, retrofitResponse(deviceHealthCheck)
+    )
+    val deviceHealthCheckErrorResponse = NetworkResponse.Success<DeviceHealthCheck, ErrorResponse>(
+        deviceHealthCheckError, retrofitResponse(deviceHealthCheckError)
     )
 
     beforeSpec {
@@ -251,6 +274,44 @@ class DeviceDataSourceTest : BehaviorSpec({
         }
         When("Using the Cache Source") {
             testThrowNotImplemented { cacheSource.claimDevice(serialNumber, location) }
+        }
+    }
+
+    context("Get health check for user device") {
+        When("Using the Network Source") {
+            and("the response is a success") {
+                and("it's a valid health check response (no error contained)") {
+                    coEvery {
+                        apiService.getDeviceHealthCheck(device.name)
+                    } returns deviceHealthCheckResponse
+                    then("return device health check") {
+                        networkSource.getDeviceHealthCheck(
+                            device.name
+                        ) shouldBe deviceHealthCheck.outputs?.result
+                    }
+                }
+                and("it's an invalid health check response (contains error)") {
+                    coEvery {
+                        apiService.getDeviceHealthCheck(device.name)
+                    } returns deviceHealthCheckErrorResponse
+                    then("return null") {
+                        networkSource.getDeviceHealthCheck(
+                            device.name
+                        ) shouldBe null
+                    }
+                }
+            }
+            and("the response is a failure") {
+                coEvery {
+                    apiService.getDeviceHealthCheck(device.name)
+                } returns NetworkResponse.NetworkError(SocketTimeoutException())
+                then("return null") {
+                    networkSource.getDeviceHealthCheck(device.name) shouldBe null
+                }
+            }
+        }
+        When("Using the Cache Source") {
+            testThrowNotImplemented { cacheSource.getDeviceHealthCheck(device.name) }
         }
     }
 })

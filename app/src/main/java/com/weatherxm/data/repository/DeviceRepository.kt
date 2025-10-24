@@ -23,6 +23,7 @@ interface DeviceRepository {
     suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
     suspend fun getUserDevicesIds(): List<String>
     suspend fun setLocation(deviceId: String, lat: Double, lon: Double): Either<Failure, Device>
+    suspend fun getDeviceHealthCheck(deviceName: String): String?
 }
 
 class DeviceRepositoryImpl(
@@ -90,5 +91,9 @@ class DeviceRepositoryImpl(
         lon: Double
     ): Either<Failure, Device> {
         return networkDeviceDataSource.setLocation(deviceId, lat, lon)
+    }
+
+    override suspend fun getDeviceHealthCheck(deviceName: String): String? {
+        return networkDeviceDataSource.getDeviceHealthCheck(deviceName)
     }
 }

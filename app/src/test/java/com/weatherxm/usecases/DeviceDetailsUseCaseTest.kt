@@ -24,6 +24,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.empty
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -45,6 +46,7 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         notificationsRepo
     )
 
+    val deviceName = "deviceName"
     val publicDevice = PublicDevice(
         "publicDevice",
         String.empty(),
@@ -179,6 +181,23 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
             usecase.checkDeviceNotificationsPrompt()
             then("make the respective call") {
                 verify(exactly = 1) { notificationsRepo.checkDeviceNotificationsPrompt() }
+            }
+        }
+    }
+
+    context("Get health check for user device") {
+        given("The repository that will return the response") {
+            When("the response is a failure") {
+                coEvery { deviceRepo.getDeviceHealthCheck(deviceName) } returns null
+                then("return null") {
+                    usecase.getDeviceHealthCheck(deviceName) shouldBe null
+                }
+            }
+            When("the response is a success") {
+                coEvery { deviceRepo.getDeviceHealthCheck(deviceName) } returns "OK"
+                then("return the health check") {
+                    usecase.getDeviceHealthCheck(deviceName) shouldBe "OK"
+                }
             }
         }
     }

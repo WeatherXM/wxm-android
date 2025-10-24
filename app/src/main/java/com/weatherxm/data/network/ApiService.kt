@@ -6,6 +6,7 @@ import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.models.BoostRewardResponse
 import com.weatherxm.data.models.Device
+import com.weatherxm.data.models.DeviceHealthCheck
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.DeviceRewardsSummary
 import com.weatherxm.data.models.DevicesRewards
@@ -327,4 +328,12 @@ interface ApiService {
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/get_user_device_health_check.json")
+    @GET("/api/v1/me/devices/{deviceName}/support")
+    suspend fun getDeviceHealthCheck(
+        @Path("deviceName") deviceName: String
+    ): NetworkResponse<DeviceHealthCheck, ErrorResponse>
 }

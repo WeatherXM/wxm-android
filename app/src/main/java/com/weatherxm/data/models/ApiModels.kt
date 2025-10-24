@@ -1006,6 +1006,24 @@ data class AWSMetadata(
     val policy: String?,
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceHealthCheck(
+    val status: String?,
+    val outputs: DeviceHealthCheckResult?,
+    val error: String?,
+    @Json(name = "station_name")
+    val stationName: String?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceHealthCheckResult(
+    val result: String?
+) : Parcelable
+
 @Suppress("EnumNaming")
 enum class Connectivity {
     wifi,
