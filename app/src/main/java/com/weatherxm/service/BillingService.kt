@@ -96,7 +96,7 @@ class BillingService(
             if (latestPurchase.isAcknowledged) {
                 activeSub = latestPurchase
             } else {
-                // TODO: STOPSHIP: Handle the purchase again as it's not acknowledged (and needs to be!!)
+                // TODO: STOPSHIP: Handle the purchase again - not acknowledged (and needs to be!!)
             }
         } else {
             activeSub = null

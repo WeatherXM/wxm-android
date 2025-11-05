@@ -61,7 +61,8 @@ class ForecastFragment : BaseFragment() {
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
-                forecastSelectedISODate = it.date.toString()
+                forecastSelectedISODate = it.date.toString(),
+                hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
@@ -77,7 +78,8 @@ class ForecastFragment : BaseFragment() {
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
-                forecastSelectedISODate = it.timestamp.toISODate()
+                forecastSelectedISODate = it.timestamp.toISODate(),
+                hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter

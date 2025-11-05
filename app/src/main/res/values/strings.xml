@@ -909,4 +909,5 @@
     <string name="mosaic_prompt_explanation">We’ve picked the top performed models in your area to give you the most accurate forecast possible.</string>
     <string name="see_the_plans">See the plans</string>
     <string name="free_subscription_claim">You have a free subscription. Claim now!</string>
+    <string name="powered_by_mosaic">powered by MOSAIC</string>
 </resources>
