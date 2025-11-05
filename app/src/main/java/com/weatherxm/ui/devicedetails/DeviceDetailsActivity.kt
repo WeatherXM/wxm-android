@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicedetails
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -32,6 +34,7 @@ import com.weatherxm.ui.common.lowBatteryChip
 import com.weatherxm.ui.common.lowGwBatteryChip
 import com.weatherxm.ui.common.makeTextSelectable
 import com.weatherxm.ui.common.offlineChip
+import com.weatherxm.ui.common.onTabSelected
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
@@ -155,13 +158,22 @@ class DeviceDetailsActivity : BaseActivity() {
 
         @Suppress("UseCheckOrError")
         TabLayoutMediator(binding.navigatorGroup, binding.viewPager) { tab, position ->
-            tab.text = when (position) {
-                OBSERVATIONS -> getString(R.string.overview)
-                FORECAST_TAB_POSITION -> resources.getString(R.string.forecast)
-                REWARDS_TAB_POSITION -> resources.getString(R.string.rewards)
+            when (position) {
+                OBSERVATIONS -> tab.text = getString(R.string.overview)
+                FORECAST_TAB_POSITION -> {
+                    // TODO: STOPSHIP: Check if we have an active subscription or not
+                    if (true) {
+                        tab.setCustomView(R.layout.view_forecast_premium_tab)
+                    } else {
+                        tab.text = getString(R.string.forecast)
+                    }
+                }
+                REWARDS_TAB_POSITION -> tab.text = resources.getString(R.string.rewards)
                 else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
             }
         }.attach()
+
+        setupTabChangedListener()
 
         updateDeviceInfo()
     }
@@ -172,6 +184,42 @@ class DeviceDetailsActivity : BaseActivity() {
             analytics.trackScreen(
                 AnalyticsService.Screen.EXPLORER_DEVICE, classSimpleName(), model.device.id
             )
+        }
+    }
+
+    private fun setupTabChangedListener() {
+        with(binding.navigatorGroup) {
+            onTabSelected {
+                // TODO: STOPSHIP: Check if we have an active subscription or not
+                if (true) {
+                    if (it.position == FORECAST_TAB_POSITION) {
+                        /**
+                         * Paint the tab properly.
+                         */
+                        val premiumColor = getColor(R.color.forecast_premium)
+                        setSelectedTabIndicatorColor(premiumColor)
+                        it.customView?.apply {
+                            findViewById<ImageView>(
+                                R.id.forecastIcon
+                            )?.setColor(R.color.forecast_premium)
+                            findViewById<MaterialTextView>(R.id.forecastTitle)?.setTextColor(
+                                premiumColor
+                            )
+                        }
+                    } else {
+                        /**
+                         * Revert the tab's color to the default non-selected ones.
+                         */
+                        setSelectedTabIndicatorColor(getColor(R.color.colorPrimary))
+                        getTabAt(FORECAST_TAB_POSITION)?.customView?.apply {
+                            findViewById<ImageView>(R.id.forecastIcon)?.setColor(R.color.darkGrey)
+                            findViewById<MaterialTextView>(
+                                R.id.forecastTitle
+                            )?.setTextColor(getColor(R.color.darkGrey))
+                        }
+                    }
+                }
+            }
         }
     }
 
