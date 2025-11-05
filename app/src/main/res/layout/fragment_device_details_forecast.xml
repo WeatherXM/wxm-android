@@ -148,8 +148,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
+                android:paddingBottom="@dimen/padding_small"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/dailyForecastRecycler"
-                tools:composableName="com.weatherxm.ui.components.compose.MosaicPromotionCardKt.PreviewMosaicPromotionCard" />
+                tools:composableName="com.weatherxm.ui.components.compose.MosaicPromotionCardKt.PreviewMosaicPromotionCard"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

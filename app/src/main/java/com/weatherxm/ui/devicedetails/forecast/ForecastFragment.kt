@@ -8,6 +8,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Status
@@ -21,6 +22,7 @@ import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.compose.MosaicPromotionCard
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.toISODate
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -31,6 +33,7 @@ class ForecastFragment : BaseFragment() {
     private val model: ForecastViewModel by viewModel {
         parametersOf(parentModel.device)
     }
+    private val billingService: BillingService by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,7 +114,7 @@ class ForecastFragment : BaseFragment() {
         model.onForecast().observe(viewLifecycleOwner) {
             hourlyForecastAdapter.submitList(it.next24Hours)
             dailyForecastAdapter.submitList(it.forecastDays)
-            binding.mosaicPromotionCard.visible(true)
+            binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
             binding.dailyForecastRecycler.visible(true)
             binding.dailyForecastTitle.visible(true)
             binding.temperatureBarsInfoButton.visible(true)
@@ -133,6 +136,7 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
@@ -162,7 +166,7 @@ class ForecastFragment : BaseFragment() {
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
-            binding.mosaicPromotionCard.visible(true)
+            binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
             binding.mosaicPromotionCard.visible(false)

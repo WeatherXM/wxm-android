@@ -19,6 +19,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.DeviceAlert
@@ -51,6 +52,7 @@ import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -64,6 +66,7 @@ class DeviceDetailsActivity : BaseActivity() {
         )
     }
     private lateinit var binding: ActivityDeviceDetailsBinding
+    private val billingService: BillingService by inject()
 
     companion object {
         private const val OBSERVATIONS = 0
@@ -158,17 +161,10 @@ class DeviceDetailsActivity : BaseActivity() {
 
         @Suppress("UseCheckOrError")
         TabLayoutMediator(binding.navigatorGroup, binding.viewPager) { tab, position ->
-            when (position) {
-                OBSERVATIONS -> tab.text = getString(R.string.overview)
-                FORECAST_TAB_POSITION -> {
-                    // TODO: STOPSHIP: Check if we have an active subscription or not
-                    if (true) {
-                        tab.setCustomView(R.layout.view_forecast_premium_tab)
-                    } else {
-                        tab.text = getString(R.string.forecast)
-                    }
-                }
-                REWARDS_TAB_POSITION -> tab.text = resources.getString(R.string.rewards)
+            tab.text = when (position) {
+                OBSERVATIONS -> getString(R.string.overview)
+                FORECAST_TAB_POSITION -> getString(R.string.forecast)
+                REWARDS_TAB_POSITION -> getString(R.string.rewards)
                 else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
             }
         }.attach()
@@ -180,6 +176,10 @@ class DeviceDetailsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (billingService.hasActiveSub()) {
+            binding.navigatorGroup.getTabAt(FORECAST_TAB_POSITION)
+                ?.setCustomView(R.layout.view_forecast_premium_tab)
+        }
         if (model.device.relation != DeviceRelation.OWNED) {
             analytics.trackScreen(
                 AnalyticsService.Screen.EXPLORER_DEVICE, classSimpleName(), model.device.id
@@ -190,8 +190,7 @@ class DeviceDetailsActivity : BaseActivity() {
     private fun setupTabChangedListener() {
         with(binding.navigatorGroup) {
             onTabSelected {
-                // TODO: STOPSHIP: Check if we have an active subscription or not
-                if (true) {
+                if (billingService.hasActiveSub()) {
                     if (it.position == FORECAST_TAB_POSITION) {
                         /**
                          * Paint the tab properly.

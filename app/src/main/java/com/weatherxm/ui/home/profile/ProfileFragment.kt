@@ -14,6 +14,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.FragmentProfileBinding
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.ActionForMessageView
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.Contracts.NOT_AVAILABLE_VALUE
@@ -37,6 +38,7 @@ import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.toBigDecimalSafe
 import com.weatherxm.util.NumberUtils.weiToETH
 import dev.chrisbanes.insetter.applyInsetter
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
 
@@ -44,6 +46,7 @@ class ProfileFragment : BaseFragment() {
     private lateinit var binding: FragmentProfileBinding
     private val model: ProfileViewModel by activityViewModel()
     private val parentModel: HomeViewModel by activityViewModel()
+    private val billingService: BillingService by inject()
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
@@ -306,8 +309,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun updateSubscriptionUI(it: UIWalletRewards) {
-        // TODO: STOPSHIP Check if the user has already an active subscription
-        if (false) {
+        if (billingService.hasActiveSub()) {
             binding.subscriptionSecondaryCard.visible(false)
         } else if (it.hasUnclaimedTokensForFreeTrial()) {
             binding.subscriptionSecondaryCard.setContent {
