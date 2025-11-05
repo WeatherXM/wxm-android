@@ -148,6 +148,7 @@ class ProfileFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     resource.data?.let {
                         updateRewardsUI(it)
+                        updateSubscriptionUI(it)
                     }
                     toggleLoading(false)
                 }
@@ -224,6 +225,7 @@ class ProfileFragment : BaseFragment() {
         binding.rewardsContainerCard.visible(false)
         binding.walletContainerCard.visible(false)
         binding.proPromotionCard.visible(false)
+        binding.subscriptionCard.visible(false)
         binding.progress.invisible()
         binding.swiperefresh.isRefreshing = false
     }
@@ -301,6 +303,47 @@ class ProfileFragment : BaseFragment() {
         }
         binding.totalsRewardsContainer.visible(true)
         binding.rewardsContainerCard.visible(true)
+    }
+
+    private fun updateSubscriptionUI(it: UIWalletRewards) {
+        // TODO: STOPSHIP Check if the user has already an active subscription
+        if (false) {
+            binding.subscriptionSecondaryCard.visible(false)
+        } else if (it.hasUnclaimedTokensForFreeTrial()) {
+            binding.subscriptionSecondaryCard.setContent {
+                MessageCardView(
+                    data = DataForMessageView(
+                        extraTopPadding = 24.dp,
+                        drawable = R.drawable.ic_crown,
+                        drawableTint = R.color.colorPrimary,
+                        title = R.string.claim_free_trial,
+                        subtitle = SubtitleForMessageView(
+                            message = R.string.claim_free_trial_subtitle
+                        )
+                    )
+                )
+            }
+            binding.subscriptionSecondaryCard.visible(true)
+        } else {
+            binding.subscriptionSecondaryCard.setContent {
+                MessageCardView(
+                    data = DataForMessageView(
+                        extraTopPadding = 24.dp,
+                        drawable = R.drawable.ic_crown,
+                        drawableTint = R.color.colorPrimary,
+                        title = R.string.free_trial_locked,
+                        subtitle = SubtitleForMessageView(
+                            messageAsString = getString(
+                                R.string.free_trial_locked_subtitle,
+                                it.remainingTokensForFreeTrial()
+                            )
+                        )
+                    )
+                )
+            }
+            binding.subscriptionSecondaryCard.visible(true)
+        }
+        binding.subscriptionCard.visible(true)
     }
 
     private fun updateUserUI(user: User?) {

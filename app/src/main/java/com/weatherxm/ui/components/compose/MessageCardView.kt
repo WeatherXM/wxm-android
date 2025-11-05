@@ -40,7 +40,7 @@ import com.weatherxm.ui.common.SubtitleForMessageView
 @Suppress("FunctionNaming", "LongMethod", "MagicNumber", "CyclomaticComplexMethod")
 @Composable
 fun MessageCardView(data: DataForMessageView) {
-    val (backgroundResId, strokeAndIconColor) = when (data.severityLevel) {
+    var (backgroundResId, strokeAndIconColor) = when (data.severityLevel) {
         SeverityLevel.INFO -> Pair(R.color.blueTint, R.color.infoStrokeColor)
         SeverityLevel.WARNING -> Pair(R.color.warningTint, R.color.warning)
         SeverityLevel.ERROR -> Pair(R.color.errorTint, R.color.error)
@@ -69,7 +69,7 @@ fun MessageCardView(data: DataForMessageView) {
                 data.drawable?.let {
                     Icon(
                         painter = painterResource(it),
-                        tint = colorResource(strokeAndIconColor),
+                        tint = colorResource(data.drawableTint ?: strokeAndIconColor),
                         modifier = Modifier.size(20.dp),
                         contentDescription = null
                     )
@@ -104,6 +104,9 @@ fun MessageCardView(data: DataForMessageView) {
                     }
                     data.subtitle?.message?.let {
                         MediumText(stringResource(it))
+                    }
+                    data.subtitle?.messageAsString?.let {
+                        MediumText(it)
                     }
                     data.subtitle?.htmlMessage?.let {
                         Text(
