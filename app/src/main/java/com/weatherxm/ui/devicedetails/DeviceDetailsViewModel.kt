@@ -147,6 +147,14 @@ class DeviceDetailsViewModel(
     }
 
     fun getDeviceHealthCheck() {
+        /**
+         * While in this screen, if we already have the data, don't refetch it just post it.
+         */
+        if (!_onHealthCheckData.value?.data.isNullOrEmpty()) {
+            _onHealthCheckData.postValue(Resource.success(_onHealthCheckData.value?.data))
+            return
+        }
+
         viewModelScope.launch(dispatcher) {
             _onHealthCheckData.postValue(Resource.loading())
             useCase.getDeviceHealthCheck(device.name).apply {

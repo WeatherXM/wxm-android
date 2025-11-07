@@ -45,6 +45,7 @@ fun GradientButton(
                 shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large))
             )
             .height(30.dp),
+        elevation = ButtonDefaults.buttonElevation(dimensionResource(R.dimen.elevation_normal)),
         onClick = onClick,
         contentPadding = PaddingValues(
             horizontal = dimensionResource(R.dimen.padding_small),
