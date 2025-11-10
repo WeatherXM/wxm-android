@@ -8,6 +8,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Status
@@ -18,10 +19,10 @@ import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.ui.components.ProPromotionDialogFragment
-import com.weatherxm.ui.components.compose.ProPromotionCard
+import com.weatherxm.ui.components.compose.MosaicPromotionCard
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.toISODate
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -32,6 +33,7 @@ class ForecastFragment : BaseFragment() {
     private val model: ForecastViewModel by viewModel {
         parametersOf(parentModel.device)
     }
+    private val billingService: BillingService by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +61,8 @@ class ForecastFragment : BaseFragment() {
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
-                forecastSelectedISODate = it.date.toString()
+                forecastSelectedISODate = it.date.toString(),
+                hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
@@ -75,7 +78,8 @@ class ForecastFragment : BaseFragment() {
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
-                forecastSelectedISODate = it.timestamp.toISODate()
+                forecastSelectedISODate = it.timestamp.toISODate(),
+                hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter
@@ -112,7 +116,7 @@ class ForecastFragment : BaseFragment() {
         model.onForecast().observe(viewLifecycleOwner) {
             hourlyForecastAdapter.submitList(it.next24Hours)
             dailyForecastAdapter.submitList(it.forecastDays)
-            binding.proPromotionCard.visible(true)
+            binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
             binding.dailyForecastRecycler.visible(true)
             binding.dailyForecastTitle.visible(true)
             binding.temperatureBarsInfoButton.visible(true)
@@ -128,26 +132,20 @@ class ForecastFragment : BaseFragment() {
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
-        initProPromotionCard()
+        initMosaicPromotionCard()
         fetchOrHideContent()
     }
 
     override fun onResume() {
         super.onResume()
+        binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
-    private fun initProPromotionCard() {
-        binding.proPromotionCard.setContent {
-            ProPromotionCard(R.string.fine_tune_forecast) {
-                analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
-                    Pair(
-                        FirebaseAnalytics.Param.SOURCE,
-                        AnalyticsService.ParamValue.LOCAL_FORECAST.paramValue
-                    )
-                )
-                ProPromotionDialogFragment().show(this)
+    private fun initMosaicPromotionCard() {
+        binding.mosaicPromotionCard.setContent {
+            MosaicPromotionCard(parentModel.hasFreePremiumTrialAvailable()) {
+                // TODO: STOPSHIP: Open Plans page
             }
         }
     }
@@ -156,7 +154,7 @@ class ForecastFragment : BaseFragment() {
         if (isLoading && binding.swiperefresh.isRefreshing) {
             binding.progress.invisible()
         } else if (isLoading) {
-            binding.proPromotionCard.visible(false)
+            binding.mosaicPromotionCard.visible(false)
             binding.dailyForecastTitle.visible(false)
             binding.temperatureBarsInfoButton.visible(false)
             binding.hourlyForecastTitle.visible(false)
@@ -170,10 +168,10 @@ class ForecastFragment : BaseFragment() {
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
-            binding.proPromotionCard.visible(true)
+            binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
-            binding.proPromotionCard.visible(false)
+            binding.mosaicPromotionCard.visible(false)
             binding.hourlyForecastTitle.visible(false)
             binding.hourlyForecastRecycler.visible(false)
             binding.dailyForecastRecycler.visible(false)

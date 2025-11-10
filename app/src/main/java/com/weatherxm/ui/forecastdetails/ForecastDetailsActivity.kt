@@ -5,6 +5,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
@@ -26,10 +27,9 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
-import com.weatherxm.ui.components.ProPromotionDialogFragment
 import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.ui.components.compose.JoinNetworkPromoCard
-import com.weatherxm.ui.components.compose.ProPromotionCard
+import com.weatherxm.ui.components.compose.MosaicPromotionCard
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
@@ -39,6 +39,7 @@ import com.weatherxm.util.Weather.getFormattedTemperature
 import com.weatherxm.util.Weather.getFormattedUV
 import com.weatherxm.util.Weather.getFormattedWind
 import com.weatherxm.util.Weather.getWindDirectionDrawable
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -49,11 +50,13 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private lateinit var binding: ActivityForecastDetailsBinding
+    private val billingService: BillingService by inject()
 
     private val model: ForecastDetailsViewModel by viewModel {
         parametersOf(
             intent.parcelable<UIDevice>(Contracts.ARG_DEVICE),
-            intent.parcelable<UILocation>(Contracts.ARG_LOCATION)
+            intent.parcelable<UILocation>(Contracts.ARG_LOCATION),
+            intent.getBooleanExtra(Contracts.ARG_HAS_FREE_TRIAL_AVAILABLE, false)
         )
     }
 
@@ -123,8 +126,17 @@ class ForecastDetailsActivity : BaseActivity() {
 
         if (!model.device.isEmpty()) {
             model.fetchDeviceForecast()
+            initMosaicPromotionCard()
         } else if (!model.location.isEmpty()) {
             model.fetchLocationForecast()
+        }
+    }
+
+    private fun initMosaicPromotionCard() {
+        binding.mosaicPromotionCard.setContent {
+            MosaicPromotionCard(model.hasFreeTrialAvailable) {
+                // TODO: STOPSHIP: Open Plans page
+            }
         }
     }
 
@@ -337,6 +349,10 @@ class ForecastDetailsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         if (!model.device.isEmpty()) {
+            billingService.hasActiveSub().apply {
+                binding.poweredByMosaic.visible(this)
+                binding.mosaicPromotionCard.visible(!this)
+            }
             analytics.trackScreen(
                 AnalyticsService.Screen.DEVICE_FORECAST_DETAILS,
                 classSimpleName()
@@ -353,25 +369,13 @@ class ForecastDetailsActivity : BaseActivity() {
             )
         }
 
-        model.isLoggedIn().also {
-            binding.promoCard.setContent {
-                if (it) {
-                    ProPromotionCard(R.string.want_more_accurate_forecasts) {
-                        analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
-                            Pair(
-                                FirebaseAnalytics.Param.SOURCE,
-                                AnalyticsService.ParamValue.LOCAL_FORECAST_DETAILS.paramValue
-                            )
-                        )
-                        ProPromotionDialogFragment().show(this)
-                    }
-                } else {
-                    JoinNetworkPromoCard {
-                        navigator.openWebsite(this, getString(R.string.shop_url))
-                    }
+        if (!model.isLoggedIn()) {
+            binding.joinNetworkCard.setContent {
+                JoinNetworkPromoCard {
+                    navigator.openWebsite(this, getString(R.string.shop_url))
                 }
             }
         }
+        binding.joinNetworkCard.visible(model.isLoggedIn())
     }
 }

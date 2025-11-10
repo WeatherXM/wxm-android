@@ -904,4 +904,10 @@
     <string name="claim_free_trial_subtitle">You’ve earned over 100 $WXM and kept at least 20% unclaimed.</string>
     <string name="free_trial_locked">Free trial locked</string>
     <string name="free_trial_locked_subtitle">You are %s $WXM away to unlock a free trial. Keep up!</string>
+    <string name="mosaic">MOSAIC</string>
+    <string name="mosaic_prompt_tagline">Smarter. Sharper. Sunnier.</string>
+    <string name="mosaic_prompt_explanation">We’ve picked the top performed models in your area to give you the most accurate forecast possible.</string>
+    <string name="see_the_plans">See the plans</string>
+    <string name="free_subscription_claim">You have a free subscription. Claim now!</string>
+    <string name="powered_by_mosaic">powered by MOSAIC</string>
 </resources>
