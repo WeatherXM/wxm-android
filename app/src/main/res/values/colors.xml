@@ -50,4 +50,5 @@
     <!-- Forecast -->
     <color name="daily_selected_tile">@color/light_layer1</color>
     <color name="daily_unselected_tile">@color/light_top</color>
+    <color name="forecast_premium">#800162</color>
 </resources>

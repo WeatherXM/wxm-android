@@ -21,6 +21,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -44,6 +45,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     val deviceDetailsUseCase = mockk<DeviceDetailsUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val followUseCase = mockk<FollowUseCase>()
+    val userUseCase = mockk<UserUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: DeviceDetailsViewModel
 
@@ -123,6 +125,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
             deviceDetailsUseCase,
             authUseCase,
             followUseCase,
+            userUseCase,
             resources,
             analytics,
             dispatcher

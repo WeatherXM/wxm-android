@@ -50,4 +50,5 @@
     <!-- Forecast -->
     <color name="daily_selected_tile">@color/dark_top</color>
     <color name="daily_unselected_tile">@color/layer1</color>
+    <color name="forecast_premium">#CD9EFC</color>
 </resources>

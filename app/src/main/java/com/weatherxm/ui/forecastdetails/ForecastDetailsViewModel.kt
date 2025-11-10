@@ -31,6 +31,7 @@ import java.time.LocalDate
 class ForecastDetailsViewModel(
     val device: UIDevice,
     val location: UILocation,
+    val hasFreeTrialAvailable: Boolean,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val authUseCase: AuthUseCase,

@@ -624,4 +624,7 @@ dependencies {
 
     // Markdown Renderer
     implementation(libs.markdown.renderer)
+
+    // Billing
+    implementation(libs.billing)
 }
