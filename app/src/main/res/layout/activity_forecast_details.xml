@@ -42,7 +42,6 @@
                 android:id="@+id/header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintEnd_toStartOf="@id/statusIcon"
@@ -81,6 +80,44 @@
 
             </FrameLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/poweredByMosaic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_small"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/blueTint"
+                app:cardCornerRadius="@dimen/radius_small"
+                app:contentPaddingBottom="@dimen/padding_small"
+                app:contentPaddingTop="@dimen/padding_small"
+                app:layout_constraintTop_toBottomOf="@id/header"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:src="@drawable/ic_thunder"
+                        app:tint="@color/forecast_premium"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powered_by_mosaic"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dailyTilesRecycler"
                 android:layout_width="match_parent"
@@ -93,7 +130,7 @@
                 android:paddingHorizontal="@dimen/padding_normal"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/header"
+                app:layout_constraintTop_toBottomOf="@id/poweredByMosaic"
                 tools:listitem="@layout/list_item_daily_tile_forecast" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -272,14 +309,16 @@
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/promoCard"
+                android:id="@+id/joinNetworkCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_extra_large"
                 android:clipChildren="false"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/dailyMainCard"
-                tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
+                tools:composableName="com.weatherxm.ui.components.compose.JoinNetworkPromoCardKt.PreviewJoinNetworkPromoCard"
+                tools:visibility="visible" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/hourlyTitle"
@@ -291,7 +330,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/promoCard" />
+                app:layout_constraintTop_toBottomOf="@id/joinNetworkCard" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hourlyForecastRecycler"
@@ -325,13 +364,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 android:textSize="10sp"
                 android:textStyle="italic"
                 app:layout_constraintTop_toBottomOf="@id/charts"
                 tools:ignore="SmallSp"
                 tools:text="All displayed times are in the Station’s timezone (Europe/Athens)." />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/mosaicPromotionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:clipChildren="false"
+                android:paddingBottom="@dimen/padding_small"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/displayTimeNotice"
+                tools:composableName="com.weatherxm.ui.components.compose.MosaicPromotionCardKt.PreviewMosaicPromotionCard"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

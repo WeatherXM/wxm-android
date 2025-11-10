@@ -45,6 +45,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
+import com.weatherxm.ui.common.Contracts.ARG_HAS_FREE_TRIAL_AVAILABLE
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
 import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
@@ -477,18 +478,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
+    @Suppress("LongParameterList")
     fun showForecastDetails(
         activityResultLauncher: ActivityResultLauncher<Intent>?,
         context: Context?,
         device: UIDevice,
         location: UILocation,
-        forecastSelectedISODate: String? = null
+        forecastSelectedISODate: String? = null,
+        hasFreeTrialAvailable: Boolean = false
     ) {
         val intent = Intent(context, ForecastDetailsActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .putExtra(ARG_DEVICE, device)
             .putExtra(ARG_LOCATION, location)
             .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
+            .putExtra(ARG_HAS_FREE_TRIAL_AVAILABLE, hasFreeTrialAvailable)
 
         activityResultLauncher?.launch(intent) ?: context?.startActivity(intent)
     }
