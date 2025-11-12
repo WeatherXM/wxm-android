@@ -48,3 +48,7 @@
 
  # Retain Upload Service classes
  -keep class net.gotev.uploadservice.** { *; }
+
+ # Keep Kotlin Pair class for Gson serialization
+ -keep class kotlin.Pair { *; }
+ -keepclassmembers class kotlin.Pair { *; }
