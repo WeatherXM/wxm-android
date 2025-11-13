@@ -913,4 +913,20 @@
     <string name="see_the_plans">See the plans</string>
     <string name="free_subscription_claim">You have a free subscription. Claim now!</string>
     <string name="powered_by_mosaic">powered by MOSAIC</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_features">Premium features</string>
+    <string name="mosaic_forecast">MOSAIC forecast</string>
+    <string name="mosaic_forecast_explanation">We tested 30 forecast models to see which ones match real weather the best. The best model today might not be the best for the next few days! We pick the top models in your area each day to give you the most reliable forecast.</string>
+    <string name="standard">Standard</string>
+    <string name="just_the_basics">Just the basics. Premium features are locked.\nUpgrade your subscription to unlock them!</string>
+    <string name="hourly_forecast_lowercased">Hourly forecast</string>
+    <string name="get_premium">Get premium</string>
+    <string name="manage_subscription">Manage subscription</string>
+    <string name="select_a_plan">Select a plan</string>
+    <string name="one_week_free_trial">1 Week Free Trial</string>
+    <string name="premium_subscription_unlocked">Premium subscription unlocked</string>
+    <string name="premium_subscription_unlocked_subtitle">Premium features unlocked!\nHead to a station and explore them.</string>
+    <string name="go_to_station">Go to Station</string>
+    <string name="purchase_failed">Purchase Failed</string>
+    <string name="purchase_failed_message"><![CDATA[Purchase process failed, please try again! If the problem persists, please contact our support team.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
 </resources>

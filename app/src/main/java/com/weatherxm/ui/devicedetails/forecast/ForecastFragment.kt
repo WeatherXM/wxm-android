@@ -145,7 +145,10 @@ class ForecastFragment : BaseFragment() {
     private fun initMosaicPromotionCard() {
         binding.mosaicPromotionCard.setContent {
             MosaicPromotionCard(parentModel.hasFreePremiumTrialAvailable()) {
-                // TODO: STOPSHIP: Open Plans page
+                navigator.showManageSubscription(
+                    context,
+                    parentModel.hasFreePremiumTrialAvailable()
+                )
             }
         }
     }

@@ -73,7 +73,8 @@ interface AnalyticsService {
         STATION_NOTIFICATIONS("Station Notifications"),
         LOCATIONS_HOME("Locations in Home"),
         LOCATION_FORECAST_DETAILS("Location Forecast Details"),
-        LOCATION_SEARCH("Location Search")
+        LOCATION_SEARCH("Location Search"),
+        MANAGE_SUBSCRIPTION("Manage Subscription")
     }
 
     // Custom Event Names

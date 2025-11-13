@@ -87,6 +87,7 @@ import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.ui.login.LoginActivity
+import com.weatherxm.ui.managesubscription.ManageSubscriptionActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.networkstats.growth.NetworkGrowthActivity
@@ -569,6 +570,14 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             Intent(context, NetworkGrowthActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_NETWORK_STATS, networkStats)
+        )
+    }
+
+    fun showManageSubscription(context: Context?, hasFreeTrialAvailable: Boolean) {
+        context?.startActivity(
+            Intent(context, ManageSubscriptionActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_HAS_FREE_TRIAL_AVAILABLE, hasFreeTrialAvailable)
         )
     }
 
