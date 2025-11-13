@@ -104,6 +104,13 @@ class ProfileFragment : BaseFragment() {
             navigator.showPreferences(this)
         }
 
+        binding.subscriptionCard.setOnClickListener {
+            navigator.showManageSubscription(
+                context,
+                model.onWalletRewards().value?.data?.hasUnclaimedTokensForFreeTrial() == true
+            )
+        }
+
         return binding.root
     }
 

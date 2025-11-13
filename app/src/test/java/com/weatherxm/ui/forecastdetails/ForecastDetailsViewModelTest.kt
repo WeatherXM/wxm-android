@@ -172,6 +172,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         viewModel = ForecastDetailsViewModel(
             device,
             location,
+            false,
             resources,
             analytics,
             authUseCase,
