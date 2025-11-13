@@ -135,7 +135,7 @@ class ForecastDetailsActivity : BaseActivity() {
     private fun initMosaicPromotionCard() {
         binding.mosaicPromotionCard.setContent {
             MosaicPromotionCard(model.hasFreeTrialAvailable) {
-                // TODO: STOPSHIP: Open Plans page
+                navigator.showManageSubscription(this, model.hasFreeTrialAvailable)
             }
         }
     }
