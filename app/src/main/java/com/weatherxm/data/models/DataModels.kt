@@ -80,6 +80,14 @@ data class RemoteBanner(
     val showCloseButton: Boolean
 ) : Parcelable
 
+@JsonClass(generateAdapter = true)
+data class SubscriptionOffer(
+    val id: String,
+    val price: String,
+    val offerToken: String,
+    val offerId: String? = null,
+)
+
 enum class RemoteBannerType {
     INFO_BANNER,
     ANNOUNCEMENT

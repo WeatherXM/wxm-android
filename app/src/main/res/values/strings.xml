@@ -923,10 +923,23 @@
     <string name="get_premium">Get premium</string>
     <string name="manage_subscription">Manage subscription</string>
     <string name="select_a_plan">Select a plan</string>
-    <string name="one_week_free_trial">1 Week Free Trial</string>
+    <string name="one_month_free_trial">1 Month Free Trial</string>
     <string name="premium_subscription_unlocked">Premium subscription unlocked</string>
     <string name="premium_subscription_unlocked_subtitle">Premium features unlocked!\nHead to a station and explore them.</string>
     <string name="go_to_station">Go to Station</string>
     <string name="purchase_failed">Purchase Failed</string>
     <string name="purchase_failed_message"><![CDATA[Purchase process failed, please try again! If the problem persists, please contact our support team.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
+    <string name="monthly">MONTHLY</string>
+    <string name="then_per_month">then %s per month.</string>
+    <string name="then_per_year">then %s per year.</string>
+    <string name="cancel_anytime">Cancel anytime.</string>
+    <string name="annually">ANNUALLY</string>
+    <string name="per_month">/month</string>
+    <string name="per_year">/year</string>
+    <string name="annual_premium">Annual premium</string>
+    <string name="monthly_premium">Monthly premium</string>
+    <string name="next_billing_date">Next billing date</string>
+    <string name="cancel_subscription">Cancel subscription</string>
+    <string name="canceled">Canceled</string>
+    <string name="canceled_subtitle">Premium features available until %s.\nSelect a plan to extend your subscription.</string>
 </resources>
