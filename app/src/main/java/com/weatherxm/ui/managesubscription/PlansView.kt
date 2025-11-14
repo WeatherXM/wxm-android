@@ -20,6 +20,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +43,7 @@ import com.weatherxm.ui.components.compose.SmallText
 @Suppress("FunctionNaming", "LongMethod")
 @Composable
 fun PlansView(plans: List<SubscriptionOffer>, onContinue: (SubscriptionOffer?) -> Unit) {
-    var selectedPlan by mutableStateOf(plans.firstOrNull())
+    var selectedPlan by remember { mutableStateOf(plans.firstOrNull()) }
 
     Column(verticalArrangement = Arrangement.SpaceBetween) {
         Column(

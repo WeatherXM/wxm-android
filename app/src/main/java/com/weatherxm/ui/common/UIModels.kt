@@ -789,6 +789,15 @@ data class ActionForMessageView(
     val onClickListener: () -> Unit
 )
 
+@Keep
+@JsonClass(generateAdapter = true)
+data class PurchaseUpdateState(
+    val success: Boolean,
+    val isLoading: Boolean,
+    val responseCode: Int?,
+    val debugMessage: String? = null
+)
+
 enum class RewardTimelineType {
     DATA,
     END_OF_LIST

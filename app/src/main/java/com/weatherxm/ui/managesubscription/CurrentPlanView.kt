@@ -29,7 +29,6 @@ import com.weatherxm.ui.components.compose.MediumText
 @Preview
 @Composable
 fun CurrentPlanView(currentPurchase: Purchase? = null) {
-    // TODO: STOPSHIP: Get the current plan and handle it accordingly
     Column(
         verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
     ) {
