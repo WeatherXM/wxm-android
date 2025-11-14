@@ -1,9 +1,13 @@
 package com.weatherxm.service
 
+import android.app.Activity
 import android.content.Context
+import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType.SUBS
 import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
@@ -12,18 +16,28 @@ import com.android.billingclient.api.Purchase.PurchaseState
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
+import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchasesAsync
+import com.weatherxm.R
 import com.weatherxm.data.models.SubscriptionOffer
 import com.weatherxm.data.replaceLast
+import com.weatherxm.ui.common.PurchaseUpdateState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.security.KeyFactory
+import java.security.NoSuchAlgorithmException
+import java.security.Signature
+import java.security.spec.InvalidKeySpecException
+import java.security.spec.X509EncodedKeySpec
+import java.util.Base64
 
 private const val PRODUCT_ID = "premium_forecast"
 const val PLAN_MONTHLY = "monthly"
@@ -31,7 +45,7 @@ const val PLAN_YEARLY = "yearly"
 const val OFFER_FREE_TRIAL = "free-trial"
 
 class BillingService(
-    context: Context,
+    private val context: Context,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher
 ) {
@@ -39,20 +53,39 @@ class BillingService(
 
     private var activeSub: Purchase? = null
     private var hasFetchedPurchases: Boolean = false
-    private var productDetails: ProductDetails? = null
     private var subs = mutableListOf<SubscriptionOffer>()
+
+    val purchaseUpdate = MutableSharedFlow<PurchaseUpdateState>()
 
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
-        Timber.d("[Purchase Update]: $billingResult --- $purchases")
-
-        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+        if (billingResult.responseCode == BillingResponseCode.OK) {
             if (purchases?.get(0)?.purchaseState == PurchaseState.PURCHASED) {
-                // TODO: STOPSHIP Handle new purchase (acknowledge it etc)
+                Timber.d("[Purchase Update]: Purchase was successful")
+                coroutineScope.launch {
+                    handlePurchase(purchases[0], false)
+                }
             }
+        } else if (billingResult.responseCode == BillingResponseCode.USER_CANCELED) {
+            Timber.w("[Purchase Update]: Purchase was canceled")
+            purchaseUpdate.tryEmit(
+                PurchaseUpdateState(
+                    success = false,
+                    isLoading = false,
+                    responseCode = billingResult.responseCode,
+                    debugMessage = billingResult.debugMessage
+                )
+            )
         } else {
-            Timber.e("[Purchase Update] Error: $billingResult")
-            // TODO: STOPSHIP Got an error. Propagate the result.
+            Timber.e("[Purchase Update]: Purchase failed $billingResult")
+            purchaseUpdate.tryEmit(
+                PurchaseUpdateState(
+                    success = false,
+                    isLoading = false,
+                    responseCode = billingResult.responseCode,
+                    debugMessage = billingResult.debugMessage
+                )
+            )
         }
     }
 
@@ -82,7 +115,7 @@ class BillingService(
         }
     }
 
-    fun startConnection() {
+    private fun startConnection() {
         billingClient?.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -101,7 +134,7 @@ class BillingService(
         })
     }
 
-    suspend fun setupPurchases() {
+    private suspend fun setupPurchases() {
         val purchasesResult = billingClient?.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(SUBS).build()
         )
@@ -119,14 +152,14 @@ class BillingService(
             if (latestPurchase.isAcknowledged) {
                 activeSub = latestPurchase
             } else {
-                // TODO: STOPSHIP: Handle the purchase again - not acknowledged (and needs to be!!)
+                handlePurchase(latestPurchase, true)
             }
         } else {
             activeSub = null
         }
     }
 
-    suspend fun setupProducts() {
+    private suspend fun getSubscriptionProduct(): ProductDetails? {
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(
                 listOf(
@@ -142,11 +175,11 @@ class BillingService(
             billingClient?.queryProductDetails(params)
         }
 
-        if (productDetailsResult?.productDetailsList.isNullOrEmpty()) {
-            return
-        }
+        return productDetailsResult?.productDetailsList?.getOrNull(0)
+    }
 
-        productDetails = productDetailsResult.productDetailsList?.get(0)
+    private suspend fun setupProducts() {
+        val productDetails = getSubscriptionProduct()
         subs = mutableListOf()
 
         productDetails?.subscriptionOfferDetails?.forEach { details ->
@@ -171,6 +204,145 @@ class BillingService(
                     )
                 }
             }
+        }
+    }
+
+    fun startBillingFlow(activity: Activity, offerToken: String?) {
+        purchaseUpdate.tryEmit(
+            PurchaseUpdateState(
+                success = false,
+                isLoading = true,
+                responseCode = null,
+                debugMessage = null
+            )
+        )
+
+        coroutineScope.launch(dispatcher) {
+            val productDetails = getSubscriptionProduct()
+
+            if (offerToken.isNullOrEmpty() || productDetails == null) {
+                return@launch
+            }
+
+            val productDetailsParamsList = listOf(
+                BillingFlowParams.ProductDetailsParams.newBuilder()
+                    .setProductDetails(productDetails)
+                    .setOfferToken(offerToken)
+                    .build()
+            )
+
+            val billingFlowParams = BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(productDetailsParamsList)
+                .build()
+
+            val billingResult = billingClient?.launchBillingFlow(activity, billingFlowParams)
+            Timber.d("[Purchase Update]: Purchase Flow Launch: $billingResult")
+
+            when (billingResult?.responseCode) {
+                BillingResponseCode.OK -> {
+                    // All good, billing flow started, do nothing.
+                }
+                BillingResponseCode.USER_CANCELED -> {
+                    purchaseUpdate.tryEmit(
+                        PurchaseUpdateState(
+                            success = false,
+                            isLoading = false,
+                            responseCode = billingResult.responseCode,
+                            debugMessage = billingResult.debugMessage
+                        )
+                    )
+                }
+                else -> {
+                    purchaseUpdate.tryEmit(
+                        PurchaseUpdateState(
+                            success = false,
+                            isLoading = false,
+                            responseCode = billingResult?.responseCode,
+                            debugMessage = billingResult?.debugMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun handlePurchase(purchase: Purchase, inBackground: Boolean) {
+        if (!verifyPurchase(purchase.originalJson, purchase.signature)) {
+            if (inBackground) return
+            purchaseUpdate.tryEmit(
+                PurchaseUpdateState(
+                    success = false,
+                    isLoading = false,
+                    responseCode = null,
+                    debugMessage = "Verification Failed"
+                )
+            )
+            return
+        }
+        if (!purchase.isAcknowledged) {
+            acknowledgePurchase(purchase)
+        }
+    }
+
+    private suspend fun acknowledgePurchase(purchase: Purchase, inBackground: Boolean = false) {
+        withContext(Dispatchers.IO) {
+            val params =
+                AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+            val result = billingClient?.acknowledgePurchase(params.build())
+            Timber.d("[Acknowledge Purchase Update]: $result")
+
+            when (result?.responseCode) {
+                BillingResponseCode.OK -> {
+                    activeSub = purchase
+
+                    if (inBackground) return@withContext
+
+                    purchaseUpdate.tryEmit(
+                        PurchaseUpdateState(
+                            success = true,
+                            isLoading = false,
+                            responseCode = result.responseCode,
+                            debugMessage = result.debugMessage
+                        )
+                    )
+                }
+                else -> {
+                    if (inBackground) return@withContext
+
+                    purchaseUpdate.tryEmit(
+                        PurchaseUpdateState(
+                            success = false,
+                            isLoading = false,
+                            responseCode = result?.responseCode,
+                            debugMessage = result?.debugMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun verifyPurchase(json: String, sig: String): Boolean {
+        return try {
+            val key =
+                Base64.getDecoder().decode(context.getString(R.string.base64_encoded_pub_key))
+            val pubKey = KeyFactory.getInstance("RSA").generatePublic(
+                X509EncodedKeySpec(key)
+            )
+            val signatureBytes = Base64.getDecoder().decode(sig)
+            val signature = Signature.getInstance("SHA1withRSA")
+            signature.initVerify(pubKey)
+            signature.update(json.toByteArray())
+            signature.verify(signatureBytes)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e)
+            false
+        } catch (e: NoSuchAlgorithmException) {
+            Timber.e(e)
+            false
+        } catch (e: InvalidKeySpecException) {
+            Timber.e(e)
+            false
         }
     }
 

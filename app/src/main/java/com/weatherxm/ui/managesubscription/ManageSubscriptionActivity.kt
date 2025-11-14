@@ -40,10 +40,10 @@ class ManageSubscriptionActivity : BaseActivity() {
         }
 
         binding.selectPlanComposable.setContent {
-            PlansView(
-                plans = billingService.getAvailableSubs(hasFreeTrialAvailable)
-            ) {
-                // TODO: STOPSHIP: Start the billing flow
+            PlansView(billingService.getAvailableSubs(hasFreeTrialAvailable)) { offer ->
+                offer?.let {
+                    billingService.startBillingFlow(this, it.offerToken)
+                }
             }
         }
 
