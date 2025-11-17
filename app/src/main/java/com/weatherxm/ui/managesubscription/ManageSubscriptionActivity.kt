@@ -47,7 +47,9 @@ class ManageSubscriptionActivity : BaseActivity() {
         }
 
         binding.currentPlanComposable.setContent {
-            CurrentPlanView(billingService.getActiveSub())
+            CurrentPlanView(billingService.getActiveSub()) {
+                navigator.openSubscriptionInStore(this)
+            }
         }
 
         binding.premiumFeaturesComposable.setContent {
@@ -85,6 +87,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             }
         }
 
+        billingService.clearPurchaseUpdates()
         binding.currentPlanComposable.visible(true)
         binding.premiumFeaturesComposable.visible(!billingService.hasActiveSub())
     }
