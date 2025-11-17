@@ -28,6 +28,7 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.data.models.WXMRemoteMessage
+import com.weatherxm.service.PREMIUM_FORECAST_PRODUCT_ID
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
@@ -719,6 +720,22 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Timber.d(e, "Could not open the store.")
                 it.toast(R.string.error_cannot_open_store)
             }
+        }
+    }
+
+    fun openSubscriptionInStore(context: Context) {
+        try {
+            val subscriptionId = PREMIUM_FORECAST_PRODUCT_ID
+            val packageName = context.packageName
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data =
+                    "https://play.google.com/store/account/subscriptions?sku=$subscriptionId&package=$packageName".toUri()
+            }
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Timber.d(e, "Could not open the store.")
+            context.toast(R.string.error_cannot_open_store)
         }
     }
 

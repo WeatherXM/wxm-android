@@ -41,7 +41,7 @@ import java.security.spec.InvalidKeySpecException
 import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
 
-private const val PRODUCT_ID = "premium_forecast"
+const val PREMIUM_FORECAST_PRODUCT_ID = "premium_forecast"
 const val PLAN_MONTHLY = "monthly"
 const val PLAN_YEARLY = "yearly"
 const val OFFER_FREE_TRIAL = "free-trial"
@@ -62,6 +62,9 @@ class BillingService(
     )
 
     fun getPurchaseUpdates(): SharedFlow<PurchaseUpdateState> = purchaseUpdate
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun clearPurchaseUpdates() = purchaseUpdate.resetReplayCache()
 
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
@@ -170,7 +173,7 @@ class BillingService(
             .setProductList(
                 listOf(
                     QueryProductDetailsParams.Product.newBuilder()
-                        .setProductId(PRODUCT_ID)
+                        .setProductId(PREMIUM_FORECAST_PRODUCT_ID)
                         .setProductType(SUBS)
                         .build()
                 )
