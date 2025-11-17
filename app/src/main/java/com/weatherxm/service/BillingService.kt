@@ -28,7 +28,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -55,7 +57,11 @@ class BillingService(
     private var hasFetchedPurchases: Boolean = false
     private var subs = mutableListOf<SubscriptionOffer>()
 
-    val purchaseUpdate = MutableSharedFlow<PurchaseUpdateState>()
+    private val purchaseUpdate = MutableSharedFlow<PurchaseUpdateState>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    fun getPurchaseUpdates(): SharedFlow<PurchaseUpdateState> = purchaseUpdate
 
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
@@ -253,6 +259,7 @@ class BillingService(
                     )
                 }
                 else -> {
+                    Timber.w("[Purchase Update]: Purchase failed $billingResult")
                     purchaseUpdate.tryEmit(
                         PurchaseUpdateState(
                             success = false,
