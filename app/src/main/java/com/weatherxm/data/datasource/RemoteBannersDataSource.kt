@@ -42,6 +42,7 @@ class RemoteBannersDataSourceImpl(
         const val ANNOUNCEMENT_SHOW = "announcement_show"
         const val ANNOUNCEMENT_DISMISSABLE = "announcement_dismissable"
         const val ANNOUNCEMENT_LOCAL_PRO_ACTION_URL = "weatherxm://announcement/weatherxm_pro"
+        const val ANNOUNCEMENT_LOCAL_PREMIUM = "weatherxm://announcement/premium"
     }
 
     override fun getSurvey(): Survey? {
