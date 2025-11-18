@@ -5,7 +5,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.withCreated
-import androidx.lifecycle.withResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -34,7 +33,6 @@ import com.weatherxm.ui.home.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
-import com.weatherxm.ui.managesubscription.CurrentPlanView
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel

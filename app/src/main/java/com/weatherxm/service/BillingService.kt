@@ -310,37 +310,34 @@ class BillingService(
             val result = billingClient?.acknowledgePurchase(params.build())
             Timber.d("[Acknowledge Purchase Update]: $result")
 
-            when (result?.responseCode) {
-                BillingResponseCode.OK -> {
-                    activeSubFlow.tryEmit(purchase)
+            if (result?.responseCode == BillingResponseCode.OK) {
+                activeSubFlow.tryEmit(purchase)
 
-                    if (inBackground) return@withContext
+                if (inBackground) return@withContext
 
-                    purchaseUpdate.tryEmit(
-                        PurchaseUpdateState(
-                            success = true,
-                            isLoading = false,
-                            responseCode = result.responseCode,
-                            debugMessage = result.debugMessage
-                        )
+                purchaseUpdate.tryEmit(
+                    PurchaseUpdateState(
+                        success = true,
+                        isLoading = false,
+                        responseCode = result.responseCode,
+                        debugMessage = result.debugMessage
                     )
-                    clearPurchaseUpdates()
-                }
-                else -> {
-                    activeSubFlow.tryEmit(null)
+                )
+                clearPurchaseUpdates()
+            } else {
+                activeSubFlow.tryEmit(null)
 
-                    if (inBackground) return@withContext
+                if (inBackground) return@withContext
 
-                    purchaseUpdate.tryEmit(
-                        PurchaseUpdateState(
-                            success = false,
-                            isLoading = false,
-                            responseCode = result?.responseCode,
-                            debugMessage = result?.debugMessage
-                        )
+                purchaseUpdate.tryEmit(
+                    PurchaseUpdateState(
+                        success = false,
+                        isLoading = false,
+                        responseCode = result?.responseCode,
+                        debugMessage = result?.debugMessage
                     )
-                    clearPurchaseUpdates()
-                }
+                )
+                clearPurchaseUpdates()
             }
         }
     }

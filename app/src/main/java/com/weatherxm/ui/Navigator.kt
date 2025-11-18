@@ -729,8 +729,8 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             val packageName = context.packageName
 
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                data =
-                    "https://play.google.com/store/account/subscriptions?sku=$subscriptionId&package=$packageName".toUri()
+                data = ("https://play.google.com/store/account/subscriptions?sku=" +
+                    "$subscriptionId&package=$packageName").toUri()
             }
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
