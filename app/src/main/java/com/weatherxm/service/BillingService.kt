@@ -30,7 +30,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -53,15 +55,16 @@ class BillingService(
 ) {
     private var billingClient: BillingClient? = null
 
-    private var activeSub: Purchase? = null
     private var hasFetchedPurchases: Boolean = false
     private var subs = mutableListOf<SubscriptionOffer>()
 
-    private val purchaseUpdate = MutableSharedFlow<PurchaseUpdateState>(
+    private val purchaseUpdate = MutableSharedFlow<PurchaseUpdateState?>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    fun getPurchaseUpdates(): SharedFlow<PurchaseUpdateState> = purchaseUpdate
+    private val activeSubFlow = MutableStateFlow<Purchase?>(null)
+
+    fun getPurchaseUpdates(): SharedFlow<PurchaseUpdateState?> = purchaseUpdate
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun clearPurchaseUpdates() = purchaseUpdate.resetReplayCache()
@@ -85,6 +88,7 @@ class BillingService(
                     debugMessage = billingResult.debugMessage
                 )
             )
+            clearPurchaseUpdates()
         } else {
             Timber.e("[Purchase Update]: Purchase failed $billingResult")
             purchaseUpdate.tryEmit(
@@ -95,10 +99,12 @@ class BillingService(
                     debugMessage = billingResult.debugMessage
                 )
             )
+            clearPurchaseUpdates()
         }
     }
 
     fun hasActiveSub(): Boolean {
+        val activeSub = activeSubFlow.value
         return if (billingClient?.isReady == false && activeSub == null) {
             startConnection()
             false
@@ -112,7 +118,7 @@ class BillingService(
         }
     }
 
-    fun getActiveSub(): Purchase? = activeSub
+    fun getActiveSubFlow(): StateFlow<Purchase?> = activeSubFlow
 
     fun getAvailableSubs(hasFreeTrialAvailable: Boolean): List<SubscriptionOffer> {
         return if (hasFreeTrialAvailable) {
@@ -143,7 +149,7 @@ class BillingService(
         })
     }
 
-    private suspend fun setupPurchases() {
+    suspend fun setupPurchases() {
         val purchasesResult = billingClient?.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(SUBS).build()
         )
@@ -159,12 +165,12 @@ class BillingService(
         val latestPurchase = purchasesResult.purchasesList.firstOrNull()
         if (latestPurchase != null) {
             if (latestPurchase.isAcknowledged) {
-                activeSub = latestPurchase
+                activeSubFlow.tryEmit(latestPurchase)
             } else {
                 handlePurchase(latestPurchase, true)
             }
         } else {
-            activeSub = null
+            activeSubFlow.tryEmit(null)
         }
     }
 
@@ -260,6 +266,7 @@ class BillingService(
                             debugMessage = billingResult.debugMessage
                         )
                     )
+                    clearPurchaseUpdates()
                 }
                 else -> {
                     Timber.w("[Purchase Update]: Purchase failed $billingResult")
@@ -271,6 +278,7 @@ class BillingService(
                             debugMessage = billingResult?.debugMessage
                         )
                     )
+                    clearPurchaseUpdates()
                 }
             }
         }
@@ -287,6 +295,7 @@ class BillingService(
                     debugMessage = "Verification Failed"
                 )
             )
+            clearPurchaseUpdates()
             return
         }
         if (!purchase.isAcknowledged) {
@@ -303,7 +312,7 @@ class BillingService(
 
             when (result?.responseCode) {
                 BillingResponseCode.OK -> {
-                    activeSub = purchase
+                    activeSubFlow.tryEmit(purchase)
 
                     if (inBackground) return@withContext
 
@@ -315,8 +324,11 @@ class BillingService(
                             debugMessage = result.debugMessage
                         )
                     )
+                    clearPurchaseUpdates()
                 }
                 else -> {
+                    activeSubFlow.tryEmit(null)
+
                     if (inBackground) return@withContext
 
                     purchaseUpdate.tryEmit(
@@ -327,6 +339,7 @@ class BillingService(
                             debugMessage = result?.debugMessage
                         )
                     )
+                    clearPurchaseUpdates()
                 }
             }
         }
