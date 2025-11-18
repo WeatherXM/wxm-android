@@ -44,7 +44,11 @@ fun CurrentPlanView(currentPurchase: Purchase?, onManageSubscription: () -> Unit
         )
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = colorResource(R.color.colorSurface)
+                containerColor = if(currentPurchase?.isAutoRenewing == false) {
+                    colorResource(R.color.errorTint)
+                } else {
+                    colorResource(R.color.colorSurface)
+                }
             ),
             shape = RoundedCornerShape(dimensionResource(R.dimen.radius_small)),
             elevation = CardDefaults.cardElevation(
@@ -183,9 +187,9 @@ fun CurrentPlanView(currentPurchase: Purchase?, onManageSubscription: () -> Unit
                         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_medium)),
                     ) {
                         MediumText(
-                            stringResource(R.string.get_premium),
+                            stringResource(R.string.manage_subscription),
                             fontWeight = FontWeight.Bold,
-                            colorRes = R.color.colorBackground
+                            colorRes = R.color.colorPrimary
                         )
                     }
                 }

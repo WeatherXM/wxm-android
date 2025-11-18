@@ -28,8 +28,32 @@ class ManageSubscriptionActivity : BaseActivity() {
     init {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                billingService.getPurchaseUpdates().collect {
-                    onPurchaseUpdate(it)
+                launch {
+                    billingService.getPurchaseUpdates().collect { state ->
+                        state?.let {
+                            onPurchaseUpdate(it)
+                        }
+                    }
+                }
+
+                launch {
+                    billingService.getActiveSubFlow().collect {
+                        binding.currentPlanComposable.setContent {
+                            CurrentPlanView(it) {
+                                navigator.openSubscriptionInStore(this@ManageSubscriptionActivity)
+                            }
+                        }
+
+                        if (it == null || !it.isAutoRenewing) {
+                            binding.premiumFeaturesComposable.visible(true)
+                        } else {
+                            binding.premiumFeaturesComposable.visible(false)
+                        }
+                    }
+                }
+
+                launch {
+                    billingService.setupPurchases()
                 }
             }
         }
@@ -44,12 +68,6 @@ class ManageSubscriptionActivity : BaseActivity() {
 
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-        }
-
-        binding.currentPlanComposable.setContent {
-            CurrentPlanView(billingService.getActiveSub()) {
-                navigator.openSubscriptionInStore(this)
-            }
         }
 
         binding.premiumFeaturesComposable.setContent {
@@ -74,8 +92,10 @@ class ManageSubscriptionActivity : BaseActivity() {
         }
 
         binding.backBtn.setOnClickListener {
+            binding.currentPlanComposable.visible(true)
             binding.appBar.visible(true)
             binding.mainContainer.visible(true)
+            binding.selectPlanComposable.visible(false)
             binding.statusView.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
@@ -88,8 +108,6 @@ class ManageSubscriptionActivity : BaseActivity() {
         }
 
         billingService.clearPurchaseUpdates()
-        binding.currentPlanComposable.visible(true)
-        binding.premiumFeaturesComposable.visible(!billingService.hasActiveSub())
     }
 
     override fun onResume() {
@@ -101,6 +119,7 @@ class ManageSubscriptionActivity : BaseActivity() {
         if (state.isLoading) {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
+            binding.selectPlanComposable.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
@@ -113,6 +132,8 @@ class ManageSubscriptionActivity : BaseActivity() {
         } else if (state.success) {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
+            binding.selectPlanComposable.visible(false)
+            binding.errorButtonsContainer.visible(false)
             binding.statusView.clear()
                 .animation(R.raw.anim_success)
                 .title(R.string.premium_subscription_unlocked)
@@ -122,6 +143,7 @@ class ManageSubscriptionActivity : BaseActivity() {
         } else {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
+            binding.selectPlanComposable.visible(false)
             binding.statusView.clear()
                 .animation(R.raw.anim_error)
                 .title(R.string.purchase_failed)
@@ -132,6 +154,7 @@ class ManageSubscriptionActivity : BaseActivity() {
                 .action(resources.getString(R.string.contact_support_title))
                 .listener { navigator.openSupportCenter(this) }
                 .visible(true)
+            binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(true)
         }
     }
