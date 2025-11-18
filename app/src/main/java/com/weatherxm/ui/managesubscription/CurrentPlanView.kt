@@ -23,7 +23,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.billingclient.api.Purchase
@@ -44,7 +43,7 @@ fun CurrentPlanView(currentPurchase: Purchase?, onManageSubscription: () -> Unit
         )
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = if(currentPurchase?.isAutoRenewing == false) {
+                containerColor = if (currentPurchase?.isAutoRenewing == false) {
                     colorResource(R.color.errorTint)
                 } else {
                     colorResource(R.color.colorSurface)
@@ -176,7 +175,7 @@ fun CurrentPlanView(currentPurchase: Purchase?, onManageSubscription: () -> Unit
                         }
                     }
                 }
-                if(currentPurchase != null) {
+                if (currentPurchase != null) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = onManageSubscription,

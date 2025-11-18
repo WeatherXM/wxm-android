@@ -14,9 +14,12 @@ import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.User
+import com.weatherxm.data.models.Wallet
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -49,6 +52,9 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: DeviceDetailsViewModel
 
+    val user = User("id", "email", null, null, null, Wallet("address", null))
+    val testWalletRewards =
+        UIWalletRewards(4.710946906233152E21, 4.3124899E21, 3.98457006233152E20, "0x00")
     val emptyDevice = UIDevice.empty()
     val device = UIDevice(
         "deviceId",
@@ -118,6 +124,8 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         justRun { deviceDetailsUseCase.setAcceptTerms() }
         every { deviceDetailsUseCase.shouldShowTermsPrompt() } returns true
         every { deviceDetailsUseCase.showDeviceNotificationsPrompt() } returns true
+        coMockEitherRight({ userUseCase.getUser() }, user)
+        coMockEitherRight({ userUseCase.getWalletRewards(user.wallet?.address) }, testWalletRewards)
 
         viewModel = DeviceDetailsViewModel(
             emptyDevice,
@@ -144,6 +152,16 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                 }
                 then("get if we should show the notifications prompt or not") {
                     viewModel.showNotificationsPrompt.value shouldBe false
+                }
+            }
+        }
+    }
+
+    context("Get if the user has a free premium trial available or not") {
+        given("A use case returning the user and the rewards") {
+            When("it's a success") {
+                then("Depending on the rewards it should return a boolean") {
+                    viewModel.hasFreePremiumTrialAvailable() shouldBe false
                 }
             }
         }
