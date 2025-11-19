@@ -123,12 +123,14 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
-        } else if (!state.success && state.responseCode == BillingResponseCode.USER_CANCELED) {
-            binding.appBar.visible(true)
-            binding.mainContainer.visible(true)
+        } else if (state.responseCode == BillingResponseCode.USER_CANCELED) {
             binding.statusView.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
+            binding.appBar.visible(true)
+            binding.currentPlanComposable.visible(true)
+            binding.mainContainer.visible(true)
+            billingService.clearPurchaseUpdates()
         } else if (state.success) {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
@@ -140,6 +142,7 @@ class ManageSubscriptionActivity : BaseActivity() {
                 .subtitle(R.string.premium_subscription_unlocked_subtitle)
                 .visible(true)
             binding.successBtn.visible(true)
+            billingService.clearPurchaseUpdates()
         } else {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
@@ -156,6 +159,7 @@ class ManageSubscriptionActivity : BaseActivity() {
                 .visible(true)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(true)
+            billingService.clearPurchaseUpdates()
         }
     }
 }

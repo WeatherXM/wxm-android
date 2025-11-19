@@ -88,7 +88,6 @@ class BillingService(
                     debugMessage = billingResult.debugMessage
                 )
             )
-            clearPurchaseUpdates()
         } else {
             Timber.e("[Purchase Update]: Purchase failed $billingResult")
             purchaseUpdate.tryEmit(
@@ -99,7 +98,6 @@ class BillingService(
                     debugMessage = billingResult.debugMessage
                 )
             )
-            clearPurchaseUpdates()
         }
     }
 
@@ -266,7 +264,6 @@ class BillingService(
                             debugMessage = billingResult.debugMessage
                         )
                     )
-                    clearPurchaseUpdates()
                 }
                 else -> {
                     Timber.w("[Purchase Update]: Purchase failed $billingResult")
@@ -278,7 +275,6 @@ class BillingService(
                             debugMessage = billingResult?.debugMessage
                         )
                     )
-                    clearPurchaseUpdates()
                 }
             }
         }
@@ -295,7 +291,6 @@ class BillingService(
                     debugMessage = "Verification Failed"
                 )
             )
-            clearPurchaseUpdates()
             return
         }
         if (!purchase.isAcknowledged) {
@@ -323,7 +318,6 @@ class BillingService(
                         debugMessage = result.debugMessage
                     )
                 )
-                clearPurchaseUpdates()
             } else {
                 activeSubFlow.tryEmit(null)
 
@@ -337,7 +331,6 @@ class BillingService(
                         debugMessage = result?.debugMessage
                     )
                 )
-                clearPurchaseUpdates()
             }
         }
     }
