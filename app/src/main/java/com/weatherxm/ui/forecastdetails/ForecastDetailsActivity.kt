@@ -350,7 +350,13 @@ class ForecastDetailsActivity : BaseActivity() {
         super.onResume()
         if (!model.device.isEmpty()) {
             billingService.hasActiveSub().apply {
-                binding.poweredByMosaic.visible(this)
+                if(this) {
+                    binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
+                } else {
+                    binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+                }
+                binding.poweredByWeatherXMIcon.visible(this)
+                binding.poweredByMeteoblueIcon.visible(!this)
                 binding.mosaicPromotionCard.visible(!this)
             }
             analytics.trackScreen(
@@ -358,6 +364,8 @@ class ForecastDetailsActivity : BaseActivity() {
                 classSimpleName()
             )
         } else {
+            binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+            binding.poweredByMeteoblueIcon.visible(true)
             analytics.trackScreen(
                 screen = AnalyticsService.Screen.LOCATION_FORECAST_DETAILS,
                 screenClass = classSimpleName(),

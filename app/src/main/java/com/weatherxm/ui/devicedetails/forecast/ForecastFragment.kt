@@ -138,7 +138,16 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
+        billingService.hasActiveSub().apply {
+            if(this) {
+                binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
+            } else {
+                binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+            }
+            binding.poweredByWeatherXMIcon.visible(this)
+            binding.poweredByMeteoblueIcon.visible(!this)
+            binding.mosaicPromotionCard.visible(!this)
+        }
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 

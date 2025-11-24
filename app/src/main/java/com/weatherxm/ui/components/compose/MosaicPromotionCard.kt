@@ -43,7 +43,7 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Title(
-                text = stringResource(R.string.mosaic),
+                text = stringResource(R.string.hyper_local),
                 fontSize = 25.sp,
                 colorRes = R.color.colorPrimary
             )
