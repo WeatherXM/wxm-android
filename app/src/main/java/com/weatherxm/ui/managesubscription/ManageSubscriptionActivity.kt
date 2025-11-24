@@ -131,6 +131,10 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.currentPlanComposable.visible(true)
             binding.mainContainer.visible(true)
             billingService.clearPurchaseUpdates()
+            analytics.trackEventViewContent(
+                AnalyticsService.ParamValue.BILLING_FLOW_RESULT.paramValue,
+                success = 0L
+            )
         } else if (state.success) {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
@@ -143,6 +147,10 @@ class ManageSubscriptionActivity : BaseActivity() {
                 .visible(true)
             binding.successBtn.visible(true)
             billingService.clearPurchaseUpdates()
+            analytics.trackEventViewContent(
+                AnalyticsService.ParamValue.BILLING_FLOW_RESULT.paramValue,
+                success = 1L
+            )
         } else {
             binding.appBar.visible(false)
             binding.mainContainer.visible(false)
@@ -160,6 +168,10 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(true)
             billingService.clearPurchaseUpdates()
+            analytics.trackEventViewContent(
+                AnalyticsService.ParamValue.BILLING_FLOW_RESULT.paramValue,
+                success = -1L
+            )
         }
     }
 }
