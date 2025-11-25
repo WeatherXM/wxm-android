@@ -493,7 +493,8 @@ data class LineChartData(
     }
 
     fun isDataValid(): Boolean {
-        return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
+        return timestamps.isNotEmpty() &&
+            entries.filterNot { it.y.isNaN() || it.y < 0F }.isNotEmpty()
     }
 
     /**
