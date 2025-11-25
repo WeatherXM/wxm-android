@@ -1055,7 +1055,7 @@ enum class RewardsCode {
     beta_rewards,
     correction,
     trov2,
-    cell_bounties
+    cell_bounty
 }
 
 @Suppress("EnumNaming")
@@ -1063,6 +1063,6 @@ enum class BoostCode {
     beta_rewards,
     correction,
     trov2,
-    cell_bounties
+    cell_bounty
 }
 

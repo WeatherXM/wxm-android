@@ -418,6 +418,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         val isCodeSupported = try {
             if (boost.code?.startsWith(BoostCode.correction.name, true) == true) {
                 true
+            } else if (boost.code?.startsWith("cell-bounty", true) == true) {
+                true
             } else {
                 BoostCode.valueOf(boost.code ?: String.empty())
                 true

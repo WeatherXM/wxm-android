@@ -199,7 +199,7 @@ class RewardsUseCaseImpl(
                 val betaCode = RewardsCode.beta_rewards.name
                 val correctionCode = RewardsCode.correction.name
                 val rolloutsCode = RewardsCode.trov2.name
-                val cellBountiesCode = RewardsCode.cell_bounties.name
+                val cellBountyCode = "cell-bounty"
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
@@ -228,7 +228,8 @@ class RewardsUseCaseImpl(
                     val isBase = it.code == baseCode
                     val isBeta = it.code == betaCode
                     val isRollouts = it.code == rolloutsCode
-                    val isCellBounties = it.code == cellBountiesCode
+                    val isCellBounty = it.code.startsWith(cellBountyCode)
+                    val isCorrection = it.code.startsWith(correctionCode)
 
                     if (isBase) {
                         baseSum += it.value
@@ -242,17 +243,16 @@ class RewardsUseCaseImpl(
                         rolloutsSum += it.value
                         rolloutsFound = true
                     }
-                    if (isCellBounties) {
-                        cellBountiesSum += it.value
-                        cellBountiesFound = true
-                    }
-                    val isCorrection = it.code.startsWith(correctionCode)
                     if (isCorrection) {
                         correctionSum += it.value
                         correctionFound = true
                     }
+                    if (isCellBounty) {
+                        cellBountiesSum += it.value
+                        cellBountiesFound = true
+                    }
                     @Suppress("ComplexCondition")
-                    if (!isBase && !isBeta && !isCorrection && !isRollouts && !isCellBounties) {
+                    if (!isBase && !isBeta && !isCorrection && !isRollouts && !isCellBounty) {
                         othersSum += it.value
                         othersFound = true
                     }
@@ -290,7 +290,7 @@ class RewardsUseCaseImpl(
                 )
                 cellBountiesEntries.createNewEntry(
                     x = counter,
-                    yIfNotFound = Float.NaN,
+                    yIfNotFound = -1F,
                     yIfFound = cellBountiesSum + rolloutsSum + betaSum + baseSum + correctionSum,
                     isFound = cellBountiesFound,
                     sum = cellBountiesSum
