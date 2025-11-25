@@ -129,6 +129,7 @@ class DeviceRewardsAdapter(
                 details.betaChartData,
                 details.correctionChartData,
                 details.rolloutsChartData,
+                details.cellBountiesChartData,
                 details.otherChartData,
                 details.totals,
                 details.datesChartTooltip
@@ -138,6 +139,7 @@ class DeviceRewardsAdapter(
             binding.betaRewardsLegend.visible(details.betaChartData.isDataValid())
             binding.correctionRewardsLegend.visible(details.correctionChartData.isDataValid())
             binding.rolloutsRewardsLegend.visible(details.rolloutsChartData.isDataValid())
+            binding.cellBountiesLegend.visible(details.cellBountiesChartData.isDataValid())
             binding.othersRewardsLegend.visible(details.otherChartData.isDataValid())
             binding.retryCard.visible(false)
             binding.detailsStatus.visible(false)

@@ -50,4 +50,8 @@
     <!-- Forecast -->
     <color name="daily_selected_tile">@color/light_layer1</color>
     <color name="daily_unselected_tile">@color/light_top</color>
+
+    <!-- Rewards -->
+    <color name="cell_bounties_reward">@color/light_crypto</color>
+    <color name="cell_bounties_reward_fill">@color/light_crypto_opacity</color>
 </resources>

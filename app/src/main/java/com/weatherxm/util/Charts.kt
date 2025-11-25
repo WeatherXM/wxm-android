@@ -667,6 +667,7 @@ fun LineChart.initRewardsBreakdownChart(
     betaData: LineChartData,
     correctionData: LineChartData,
     rolloutsData: LineChartData,
+    cellBountiesData: LineChartData,
     othersData: LineChartData,
     totals: List<Float>,
     datesChartTooltip: List<String>
@@ -687,6 +688,8 @@ fun LineChart.initRewardsBreakdownChart(
     val correctionDataEmptyLineDataSets = correctionData.getEmptyLineDataSets("")
     val rolloutsDataDataSetsWithValues = rolloutsData.getLineDataSetsWithValues("")
     val rolloutsDataEmptyLineDataSets = rolloutsData.getEmptyLineDataSets("")
+    val cellBountiesDataSetsWithValues = rolloutsData.getLineDataSetsWithValues("")
+    val cellBountiesEmptyLineDataSets = rolloutsData.getEmptyLineDataSets("")
     val otherDataDataSetsWithValues = othersData.getLineDataSetsWithValues("")
     val otherDataEmptyLineDataSets = othersData.getEmptyLineDataSets("")
 
@@ -699,6 +702,17 @@ fun LineChart.initRewardsBreakdownChart(
 
     if (otherDataEmptyLineDataSets.isNotEmpty()) {
         dataSets.addAll(otherDataEmptyLineDataSets)
+    }
+
+    if (cellBountiesDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(cellBountiesDataSetsWithValues.primaryLineInit(context, resources))
+        cellBountiesDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.cell_bounties_reward), context.getColor(R.color.darkGrey)
+        )
+    }
+
+    if (cellBountiesEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(cellBountiesEmptyLineDataSets)
     }
 
     if (rolloutsDataDataSetsWithValues.isNotEmpty()) {

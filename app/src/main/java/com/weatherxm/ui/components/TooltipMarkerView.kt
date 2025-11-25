@@ -23,6 +23,7 @@ class TooltipMarkerView(
     private val betaData: LineChartData = LineChartData.empty(),
     private val correctionData: LineChartData = LineChartData.empty(),
     private val rolloutsData: LineChartData = LineChartData.empty(),
+    private val cellBountiesData: LineChartData = LineChartData.empty(),
     private val othersData: LineChartData = LineChartData.empty(),
 ) : MarkerView(context, R.layout.view_chart_tooltip) {
     private var dateView: TextView = findViewById(R.id.date)
@@ -35,6 +36,8 @@ class TooltipMarkerView(
     private var correctionView: TextView = findViewById(R.id.correctionValue)
     private var rolloutsTitleView: TextView = findViewById(R.id.rolloutsTitle)
     private var rolloutsView: TextView = findViewById(R.id.rolloutsValue)
+    private var cellBountiesTitleView: TextView = findViewById(R.id.cellBountiesTitle)
+    private var cellBountiesView: TextView = findViewById(R.id.cellBountiesValue)
     private var othersTitleView: TextView = findViewById(R.id.othersTitle)
     private var othersView: TextView = findViewById(R.id.othersValue)
 
@@ -59,6 +62,7 @@ class TooltipMarkerView(
         var betaValue = 0F
         var correctionValue = 0F
         var rolloutsValue = 0F
+        var cellBountiesValue = 0F
 
         baseData.getEntryValueForTooltip(e.x).also {
             baseTitleView.visible(it != null)
@@ -106,11 +110,30 @@ class TooltipMarkerView(
             }
         }
 
+        cellBountiesData.getEntryValueForTooltipWithPlaceholder(e.x).also {
+            cellBountiesTitleView.visible(it != null)
+            cellBountiesView.visible(it != null)
+            if (it != null) {
+                cellBountiesValue = it
+                cellBountiesView.text = if (rolloutsValue > 0) {
+                    formatTokens((it - rolloutsValue).coerceAtLeast(0F))
+                } else if (correctionValue > 0) {
+                    formatTokens((it - correctionValue).coerceAtLeast(0F))
+                } else if (betaValue > 0) {
+                    formatTokens((it - betaValue).coerceAtLeast(0F))
+                } else {
+                    formatTokens((it - baseValue).coerceAtLeast(0F))
+                }
+            }
+        }
+
         othersData.getEntryValueForTooltip(e.x).also {
             othersTitleView.visible(it != null)
             othersView.visible(it != null)
             if (it != null) {
-                othersView.text = if (rolloutsValue > 0) {
+                othersView.text = if (cellBountiesValue > 0) {
+                    formatTokens((it - cellBountiesValue).coerceAtLeast(0F))
+                } else if (rolloutsValue > 0) {
                     formatTokens((it - rolloutsValue).coerceAtLeast(0F))
                 } else if (correctionValue > 0) {
                     formatTokens((it - correctionValue).coerceAtLeast(0F))

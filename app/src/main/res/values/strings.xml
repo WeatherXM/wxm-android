@@ -721,6 +721,9 @@
     <string name="rollouts">Rollouts:</string>
     <string name="rollouts_rewards">Rollouts Rewards</string>
     <string name="rollouts_reward_details">Rollouts rewards details</string>
+    <string name="cell_bounties">Cell Bounties</string>
+    <string name="cell_bounties_rewards">Cell Bounties Rewards:</string>
+    <string name="cell_bounties_reward_details">Cell Bounties rewards details</string>
 
     <!-- Station Health -->
     <string name="data_quality_value">Data Quality %d%%</string>

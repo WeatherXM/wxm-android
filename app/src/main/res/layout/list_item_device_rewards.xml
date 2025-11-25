@@ -199,6 +199,21 @@
                         tools:visibility="visible" />
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/cellBountiesLegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:drawableStart="@drawable/ic_rectangle"
+                        android:drawablePadding="@dimen/padding_extra_small"
+                        android:drawableTint="@color/cell_bounties_reward"
+                        android:text="@string/cell_bounties_rewards"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/textColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/rolloutsRewardsLegend"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/othersRewardsLegend"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -210,7 +225,7 @@
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/textColor"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/rolloutsRewardsLegend"
+                        app:layout_constraintTop_toBottomOf="@id/cellBountiesLegend"
                         tools:visibility="visible" />
 
                     <androidx.recyclerview.widget.RecyclerView

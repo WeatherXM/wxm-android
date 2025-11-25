@@ -186,6 +186,7 @@ class RewardsUseCaseImpl(
             val betaEntries = mutableListOf<Entry>()
             val correctionEntries = mutableListOf<Entry>()
             val rolloutsEntries = mutableListOf<Entry>()
+            val cellBountiesEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
             val totals = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
@@ -198,6 +199,7 @@ class RewardsUseCaseImpl(
                 val betaCode = RewardsCode.beta_rewards.name
                 val correctionCode = RewardsCode.correction.name
                 val rolloutsCode = RewardsCode.trov2.name
+                val cellBountiesCode = RewardsCode.cell_bounties.name
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
@@ -209,6 +211,8 @@ class RewardsUseCaseImpl(
                 var correctionFound = false
                 var rolloutsSum = 0F
                 var rolloutsFound = false
+                var cellBountiesSum = 0F
+                var cellBountiesFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
@@ -224,6 +228,7 @@ class RewardsUseCaseImpl(
                     val isBase = it.code == baseCode
                     val isBeta = it.code == betaCode
                     val isRollouts = it.code == rolloutsCode
+                    val isCellBounties = it.code == cellBountiesCode
 
                     if (isBase) {
                         baseSum += it.value
@@ -237,13 +242,17 @@ class RewardsUseCaseImpl(
                         rolloutsSum += it.value
                         rolloutsFound = true
                     }
+                    if (isCellBounties) {
+                        cellBountiesSum += it.value
+                        cellBountiesFound = true
+                    }
                     val isCorrection = it.code.startsWith(correctionCode)
                     if (isCorrection) {
                         correctionSum += it.value
                         correctionFound = true
                     }
                     @Suppress("ComplexCondition")
-                    if (!isBase && !isBeta && !isCorrection && !isRollouts) {
+                    if (!isBase && !isBeta && !isCorrection && !isRollouts && !isCellBounties) {
                         othersSum += it.value
                         othersFound = true
                     }
@@ -279,10 +288,18 @@ class RewardsUseCaseImpl(
                     isFound = rolloutsFound,
                     sum = rolloutsSum
                 )
+                cellBountiesEntries.createNewEntry(
+                    x = counter,
+                    yIfNotFound = Float.NaN,
+                    yIfFound = cellBountiesSum + rolloutsSum + betaSum + baseSum + correctionSum,
+                    isFound = cellBountiesFound,
+                    sum = cellBountiesSum
+                )
                 otherEntries.createNewEntry(
                     x = counter,
                     yIfNotFound = Float.NaN,
-                    yIfFound = othersSum + correctionSum + betaSum + baseSum + rolloutsSum,
+                    yIfFound = othersSum + cellBountiesSum + correctionSum + betaSum + baseSum +
+                        rolloutsSum,
                     isFound = othersFound,
                     sum = othersSum
                 )
@@ -298,6 +315,7 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, betaEntries),
                 LineChartData(xLabels, correctionEntries),
                 LineChartData(xLabels, rolloutsEntries),
+                LineChartData(xLabels, cellBountiesEntries),
                 LineChartData(xLabels, otherEntries),
                 Status.SUCCESS
             )
