@@ -178,6 +178,7 @@ class RewardsUseCaseTest : BehaviorSpec({
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 80F))),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 100F))),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 120F))),
+        LineChartData.empty(),
         LineChartData(mutableListOf("Mon"), mutableListOf(Entry(0F, 140F))),
         Status.SUCCESS
     )

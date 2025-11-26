@@ -49,7 +49,8 @@ class DeviceRewardsBoostAdapter :
                 } else {
                     val isBetaRewards = boostCode == BoostCode.beta_rewards.name
                     val isCorrectionRewards = boostCode.startsWith(BoostCode.correction.name, true)
-                    val isCellBountiesReward = boostCode.startsWith("cell-bounty", true)
+                    val isCellBountiesReward =
+                        boostCode.startsWith(BoostCode.cell_bounty.name, true)
                     val isRolloutRewards = boostCode == BoostCode.trov2.name
 
                     if (isBetaRewards) {

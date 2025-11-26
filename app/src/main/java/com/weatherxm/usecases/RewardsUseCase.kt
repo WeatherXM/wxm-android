@@ -199,7 +199,7 @@ class RewardsUseCaseImpl(
                 val betaCode = RewardsCode.beta_rewards.name
                 val correctionCode = RewardsCode.correction.name
                 val rolloutsCode = RewardsCode.trov2.name
-                val cellBountyCode = "cell-bounty"
+                val cellBountyCode = RewardsCode.cell_bounty.name
                 var sum = 0F
                 var baseSum = 0F
                 var baseFound = false
