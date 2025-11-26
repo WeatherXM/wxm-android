@@ -493,7 +493,8 @@ data class LineChartData(
     }
 
     fun isDataValid(): Boolean {
-        return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
+        return timestamps.isNotEmpty() &&
+            entries.filterNot { it.y.isNaN() || it.y < 0F }.isNotEmpty()
     }
 
     /**
@@ -635,6 +636,7 @@ data class DeviceTotalRewardsDetails(
     val betaChartData: LineChartData,
     val correctionChartData: LineChartData,
     val rolloutsChartData: LineChartData,
+    val cellBountyChartData: LineChartData,
     val otherChartData: LineChartData,
     var status: Status
 ) : Parcelable {
@@ -645,6 +647,7 @@ data class DeviceTotalRewardsDetails(
             listOf(),
             listOf(),
             listOf(),
+            LineChartData.empty(),
             LineChartData.empty(),
             LineChartData.empty(),
             LineChartData.empty(),

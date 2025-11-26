@@ -1054,13 +1054,15 @@ enum class RewardsCode {
     base_reward,
     beta_rewards,
     correction,
-    trov2
+    trov2,
+    cell_bounty
 }
 
 @Suppress("EnumNaming")
 enum class BoostCode {
     beta_rewards,
     correction,
-    trov2
+    trov2,
+    cell_bounty
 }
 

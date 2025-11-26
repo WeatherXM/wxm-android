@@ -667,6 +667,7 @@ fun LineChart.initRewardsBreakdownChart(
     betaData: LineChartData,
     correctionData: LineChartData,
     rolloutsData: LineChartData,
+    cellBountyData: LineChartData,
     othersData: LineChartData,
     totals: List<Float>,
     datesChartTooltip: List<String>
@@ -687,18 +688,31 @@ fun LineChart.initRewardsBreakdownChart(
     val correctionDataEmptyLineDataSets = correctionData.getEmptyLineDataSets("")
     val rolloutsDataDataSetsWithValues = rolloutsData.getLineDataSetsWithValues("")
     val rolloutsDataEmptyLineDataSets = rolloutsData.getEmptyLineDataSets("")
-    val otherDataDataSetsWithValues = othersData.getLineDataSetsWithValues("")
-    val otherDataEmptyLineDataSets = othersData.getEmptyLineDataSets("")
+    val cellBountyDataSetsWithValues = cellBountyData.getLineDataSetsWithValues("")
+    val cellBountyDataEmptyLineDataSets = cellBountyData.getEmptyLineDataSets("")
+    val othersDataDataSetsWithValues = othersData.getLineDataSetsWithValues("")
+    val othersDataEmptyLineDataSets = othersData.getEmptyLineDataSets("")
 
-    if (otherDataDataSetsWithValues.isNotEmpty()) {
-        dataSets.addAll(otherDataDataSetsWithValues.primaryLineInit(context, resources))
-        otherDataDataSetsWithValues.initRewardBreakDown(
+    if (othersDataDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(othersDataDataSetsWithValues.primaryLineInit(context, resources))
+        othersDataDataSetsWithValues.initRewardBreakDown(
             context.getColor(R.color.other_reward), context.getColor(R.color.darkGrey)
         )
     }
 
-    if (otherDataEmptyLineDataSets.isNotEmpty()) {
-        dataSets.addAll(otherDataEmptyLineDataSets)
+    if (othersDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(othersDataEmptyLineDataSets)
+    }
+
+    if (cellBountyDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(cellBountyDataSetsWithValues.primaryLineInit(context, resources))
+        cellBountyDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.cell_bounty_reward), context.getColor(R.color.darkGrey)
+        )
+    }
+
+    if (cellBountyDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(cellBountyDataEmptyLineDataSets)
     }
 
     if (rolloutsDataDataSetsWithValues.isNotEmpty()) {
@@ -788,6 +802,7 @@ fun LineChart.initRewardsBreakdownChart(
         betaData,
         correctionData,
         rolloutsData,
+        cellBountyData,
         othersData
     )
     setDrawMarkers(true)
