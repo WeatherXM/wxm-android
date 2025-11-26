@@ -636,7 +636,7 @@ data class DeviceTotalRewardsDetails(
     val betaChartData: LineChartData,
     val correctionChartData: LineChartData,
     val rolloutsChartData: LineChartData,
-    val cellBountiesChartData: LineChartData,
+    val cellBountyChartData: LineChartData,
     val otherChartData: LineChartData,
     var status: Status
 ) : Parcelable {

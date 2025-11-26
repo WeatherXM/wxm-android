@@ -134,23 +134,23 @@
             tools:text="73.24" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/cellBountiesTitle"
+            android:id="@+id/cellBountyTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
-            android:text="@string/cell_bounties"
+            android:text="@string/cell_bounty"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rolloutsValue" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/cellBountiesValue"
+            android:id="@+id/cellBountyValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small_to_normal"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            app:layout_constraintStart_toEndOf="@id/cellBountiesTitle"
+            app:layout_constraintStart_toEndOf="@id/cellBountyTitle"
             app:layout_constraintTop_toBottomOf="@id/rolloutsValue"
             tools:text="73.24" />
 
@@ -162,7 +162,7 @@
             android:text="@string/other"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cellBountiesValue" />
+            app:layout_constraintTop_toBottomOf="@id/cellBountyValue" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/othersValue"
@@ -172,7 +172,7 @@
             android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
             app:layout_constraintStart_toEndOf="@id/othersTitle"
-            app:layout_constraintTop_toBottomOf="@id/cellBountiesValue"
+            app:layout_constraintTop_toBottomOf="@id/cellBountyValue"
             tools:text="73.24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

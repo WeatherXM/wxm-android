@@ -186,7 +186,7 @@ class RewardsUseCaseImpl(
             val betaEntries = mutableListOf<Entry>()
             val correctionEntries = mutableListOf<Entry>()
             val rolloutsEntries = mutableListOf<Entry>()
-            val cellBountiesEntries = mutableListOf<Entry>()
+            val cellBountyEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
             val totals = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
@@ -211,8 +211,8 @@ class RewardsUseCaseImpl(
                 var correctionFound = false
                 var rolloutsSum = 0F
                 var rolloutsFound = false
-                var cellBountiesSum = 0F
-                var cellBountiesFound = false
+                var cellBountySum = 0F
+                var cellBountyFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
@@ -248,8 +248,8 @@ class RewardsUseCaseImpl(
                         correctionFound = true
                     }
                     if (isCellBounty) {
-                        cellBountiesSum += it.value
-                        cellBountiesFound = true
+                        cellBountySum += it.value
+                        cellBountyFound = true
                     }
                     @Suppress("ComplexCondition")
                     if (!isBase && !isBeta && !isCorrection && !isRollouts && !isCellBounty) {
@@ -288,17 +288,17 @@ class RewardsUseCaseImpl(
                     isFound = rolloutsFound,
                     sum = rolloutsSum
                 )
-                cellBountiesEntries.createNewEntry(
+                cellBountyEntries.createNewEntry(
                     x = counter,
                     yIfNotFound = -1F,
-                    yIfFound = cellBountiesSum + rolloutsSum + betaSum + baseSum + correctionSum,
-                    isFound = cellBountiesFound,
-                    sum = cellBountiesSum
+                    yIfFound = cellBountySum + rolloutsSum + betaSum + baseSum + correctionSum,
+                    isFound = cellBountyFound,
+                    sum = cellBountySum
                 )
                 otherEntries.createNewEntry(
                     x = counter,
                     yIfNotFound = Float.NaN,
-                    yIfFound = othersSum + cellBountiesSum + correctionSum + betaSum + baseSum +
+                    yIfFound = othersSum + cellBountySum + correctionSum + betaSum + baseSum +
                         rolloutsSum,
                     isFound = othersFound,
                     sum = othersSum
@@ -315,7 +315,7 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, betaEntries),
                 LineChartData(xLabels, correctionEntries),
                 LineChartData(xLabels, rolloutsEntries),
-                LineChartData(xLabels, cellBountiesEntries),
+                LineChartData(xLabels, cellBountyEntries),
                 LineChartData(xLabels, otherEntries),
                 Status.SUCCESS
             )

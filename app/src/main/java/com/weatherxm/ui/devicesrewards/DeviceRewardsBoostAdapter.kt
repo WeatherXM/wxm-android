@@ -49,7 +49,7 @@ class DeviceRewardsBoostAdapter :
                 } else {
                     val isBetaRewards = boostCode == BoostCode.beta_rewards.name
                     val isCorrectionRewards = boostCode.startsWith(BoostCode.correction.name, true)
-                    val isCellBountiesReward =
+                    val isCellBountyReward =
                         boostCode.startsWith(BoostCode.cell_bounty.name, true)
                     val isRolloutRewards = boostCode == BoostCode.trov2.name
 
@@ -67,13 +67,13 @@ class DeviceRewardsBoostAdapter :
                             itemView.context.getColorStateList(R.color.correction_rewards_color)
                         binding.boostProgressSlider.trackInactiveTintList =
                             itemView.context.getColorStateList(R.color.correction_rewards_fill)
-                    } else if (isCellBountiesReward) {
+                    } else if (isCellBountyReward) {
                         binding.title.text =
-                            itemView.context.getString(R.string.cell_bounties_reward_details)
+                            itemView.context.getString(R.string.cell_bounty_reward_details)
                         binding.boostProgressSlider.trackActiveTintList =
-                            itemView.context.getColorStateList(R.color.cell_bounties_reward)
+                            itemView.context.getColorStateList(R.color.cell_bounty_reward)
                         binding.boostProgressSlider.trackInactiveTintList =
-                            itemView.context.getColorStateList(R.color.cell_bounties_reward_fill)
+                            itemView.context.getColorStateList(R.color.cell_bounty_reward_fill)
                     } else if (isRolloutRewards) {
                         binding.title.text =
                             itemView.context.getString(R.string.rollouts_reward_details)

@@ -52,6 +52,6 @@
     <color name="daily_unselected_tile">@color/layer1</color>
 
     <!-- Rewards -->
-    <color name="cell_bounties_reward">@color/dark_crypto</color>
-    <color name="cell_bounties_reward_fill">@color/dark_crypto_opacity</color>
+    <color name="cell_bounty_reward">@color/dark_crypto</color>
+    <color name="cell_bounty_reward_fill">@color/dark_crypto_opacity</color>
 </resources>
