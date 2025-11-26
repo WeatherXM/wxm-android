@@ -51,7 +51,6 @@
     <color name="daily_selected_tile">@color/dark_top</color>
     <color name="daily_unselected_tile">@color/layer1</color>
     <color name="forecast_premium">#CD9EFC</color>
-    <color name="forecast_premium">#CD9EFC</color>
 
     <!-- Rewards -->
     <color name="cell_bounty_reward">@color/dark_crypto</color>
