@@ -53,8 +53,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     lateinit var viewModel: DeviceDetailsViewModel
 
     val user = User("id", "email", null, null, null, Wallet("address", null))
-    val testWalletRewards =
-        UIWalletRewards(4.710946906233152E21, 4.3124899E21, 3.98457006233152E20, "0x00")
+    val testWalletRewards = UIWalletRewards(8E19, 0.0, 8E19, "0x00")
     val emptyDevice = UIDevice.empty()
     val device = UIDevice(
         "deviceId",
@@ -161,7 +160,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         given("A use case returning the user and the rewards") {
             When("it's a success") {
                 then("Depending on the rewards it should return a boolean") {
-                    viewModel.hasFreePremiumTrialAvailable() shouldBe false
+                    viewModel.hasFreePremiumTrialAvailable() shouldBe true
                 }
             }
         }

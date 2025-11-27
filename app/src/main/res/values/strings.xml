@@ -904,7 +904,7 @@
     <string name="premium_subscription">Premium subscription</string>
     <string name="see_manage_subscription">See and manage your subscription</string>
     <string name="claim_free_trial">Claim your free trial!</string>
-    <string name="claim_free_trial_subtitle">You’ve earned over 100 $WXM and kept at least 20% unclaimed.</string>
+    <string name="claim_free_trial_subtitle">You’ve kept at least 80 $WXM unclaimed.</string>
     <string name="free_trial_locked">Free trial locked</string>
     <string name="free_trial_locked_subtitle">You are %s $WXM away to unlock a free trial. Keep up!</string>
     <string name="hyper_local">HYPER LOCAL</string>
