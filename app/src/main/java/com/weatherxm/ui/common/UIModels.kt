@@ -22,7 +22,11 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
+import com.weatherxm.util.NumberUtils.formatTokens
+import com.weatherxm.util.NumberUtils.toBigDecimalSafe
+import com.weatherxm.util.NumberUtils.weiToETH
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -419,6 +423,38 @@ data class UIWalletRewards(
     companion object {
         fun empty() = UIWalletRewards(0.0, 0.0, 0.0, String.empty())
     }
+
+    /**
+     * If unclaimed tokens / earned tokens >= 20% AND earned tokens >= 100 then return true
+     */
+    @Suppress("MagicNumber")
+    fun hasUnclaimedTokensForFreeTrial(): Boolean {
+        val earnedETH = weiToETH(totalEarned.toBigDecimalSafe())
+        val allocatedETH = weiToETH(allocated.toBigDecimalSafe())
+        return if (earnedETH >= BigDecimal.valueOf(100)) {
+            allocatedETH / earnedETH >= BigDecimal.valueOf(0.20)
+        } else {
+            false
+        }
+    }
+
+    /**
+     * If earned tokens < 100 then we should return 100 as remaining tokens otherwise we should
+     * return the difference to reach 20% (the threshold) of the allocated / earned tokens
+     */
+    @Suppress("MagicNumber")
+    fun remainingTokensForFreeTrial(): String {
+        val earnedETH = weiToETH(totalEarned.toBigDecimalSafe())
+        val allocatedETH = weiToETH(allocated.toBigDecimalSafe())
+
+        return if (earnedETH < BigDecimal.valueOf(100)) {
+            formatTokens(BigDecimal.valueOf(100.0) - allocatedETH)
+        } else {
+            val threshold = earnedETH * BigDecimal.valueOf(0.20)
+            formatTokens(threshold - allocatedETH)
+        }
+    }
+
 }
 
 @Keep
@@ -725,6 +761,7 @@ data class DataForMessageView(
     val title: Int? = null,
     val subtitle: SubtitleForMessageView? = null,
     val drawable: Int? = null,
+    val drawableTint: Int? = null,
     val action: ActionForMessageView? = null,
     val useStroke: Boolean = false,
     val severityLevel: SeverityLevel = SeverityLevel.INFO,
@@ -735,6 +772,7 @@ data class DataForMessageView(
 @JsonClass(generateAdapter = true)
 data class SubtitleForMessageView(
     val message: Int? = null,
+    val messageAsString: String? = null,
     val htmlMessage: Int? = null,
     val htmlMessageAsString: String? = null,
     val onLinkClickedListener: (() -> Unit)? = null

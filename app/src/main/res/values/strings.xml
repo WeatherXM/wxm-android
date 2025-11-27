@@ -899,4 +899,18 @@
     <string name="watch_out_cell_capacity">This cell has already reached its station limit based on its geospatial capacity. Only the top-ranked stations in this cell, determined by reward score and seniority, are eligible for rewards.\nIf you deploy here and your station ranks below the capacity threshold, it won’t receive any rewards.\nFor example, in a cell with a capacity of 5 stations, only the top 5 ranked devices are rewarded.\nTo maximize your earnings, consider deploying in a cell with available capacity.</string>
     <string name="relocate">Relocate</string>
     <string name="proceed_anyway">Proceed anyway</string>
+
+    <!-- Hyperlocal Upsell -->
+    <string name="premium_subscription">Premium subscription</string>
+    <string name="see_manage_subscription">See and manage your subscription</string>
+    <string name="claim_free_trial">Claim your free trial!</string>
+    <string name="claim_free_trial_subtitle">You’ve earned over 100 $WXM and kept at least 20% unclaimed.</string>
+    <string name="free_trial_locked">Free trial locked</string>
+    <string name="free_trial_locked_subtitle">You are %s $WXM away to unlock a free trial. Keep up!</string>
+    <string name="mosaic">MOSAIC</string>
+    <string name="mosaic_prompt_tagline">Smarter. Sharper. Sunnier.</string>
+    <string name="mosaic_prompt_explanation">We’ve picked the top performed models in your area to give you the most accurate forecast possible.</string>
+    <string name="see_the_plans">See the plans</string>
+    <string name="free_subscription_claim">You have a free subscription. Claim now!</string>
+    <string name="powered_by_mosaic">powered by MOSAIC</string>
 </resources>
