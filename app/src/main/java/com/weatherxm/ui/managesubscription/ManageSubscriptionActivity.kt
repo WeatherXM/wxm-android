@@ -10,6 +10,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityManageSubscriptionBinding
 import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Contracts.ARG_HAS_FREE_TRIAL_AVAILABLE
+import com.weatherxm.ui.common.Contracts.ARG_IS_LOGGED_IN
 import com.weatherxm.ui.common.PurchaseUpdateState
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.visible
@@ -24,6 +25,7 @@ class ManageSubscriptionActivity : BaseActivity() {
     private val billingService: BillingService by inject()
 
     private var hasFreeTrialAvailable = false
+    private var isLoggedIn = false
 
     init {
         lifecycleScope.launch {
@@ -65,6 +67,7 @@ class ManageSubscriptionActivity : BaseActivity() {
         setContentView(binding.root)
 
         hasFreeTrialAvailable = intent?.extras?.getBoolean(ARG_HAS_FREE_TRIAL_AVAILABLE) == true
+        isLoggedIn = intent?.extras?.getBoolean(ARG_IS_LOGGED_IN) == true
 
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
@@ -72,9 +75,17 @@ class ManageSubscriptionActivity : BaseActivity() {
 
         binding.premiumFeaturesComposable.setContent {
             PremiumFeaturesView {
-                binding.selectPlanComposable.visible(true)
-                binding.premiumFeaturesComposable.visible(false)
-                binding.currentPlanComposable.visible(false)
+                if(isLoggedIn) {
+                    binding.selectPlanComposable.visible(true)
+                    binding.premiumFeaturesComposable.visible(false)
+                    binding.currentPlanComposable.visible(false)
+                } else {
+                    navigator.showLoginDialog(
+                        fragmentActivity = this,
+                        title = getString(R.string.get_premium),
+                        message = getString(R.string.get_premium_login_prompt)
+                    )
+                }
             }
         }
 

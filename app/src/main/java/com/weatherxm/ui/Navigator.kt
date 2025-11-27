@@ -48,6 +48,7 @@ import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
 import com.weatherxm.ui.common.Contracts.ARG_HAS_FREE_TRIAL_AVAILABLE
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
+import com.weatherxm.ui.common.Contracts.ARG_IS_LOGGED_IN
 import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
@@ -574,11 +575,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
-    fun showManageSubscription(context: Context?, hasFreeTrialAvailable: Boolean) {
+    fun showManageSubscription(
+        context: Context?,
+        hasFreeTrialAvailable: Boolean,
+        isLoggedIn: Boolean
+    ) {
         context?.startActivity(
             Intent(context, ManageSubscriptionActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_HAS_FREE_TRIAL_AVAILABLE, hasFreeTrialAvailable)
+                .putExtra(ARG_IS_LOGGED_IN, isLoggedIn)
         )
     }
 

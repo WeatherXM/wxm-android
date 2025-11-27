@@ -107,7 +107,8 @@ class ProfileFragment : BaseFragment() {
         binding.subscriptionCard.setOnClickListener {
             navigator.showManageSubscription(
                 context,
-                model.onWalletRewards().value?.data?.hasUnclaimedTokensForFreeTrial() == true
+                model.onWalletRewards().value?.data?.hasUnclaimedTokensForFreeTrial() == true,
+                true
             )
         }
 

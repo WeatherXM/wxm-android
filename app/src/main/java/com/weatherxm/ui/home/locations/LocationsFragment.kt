@@ -346,10 +346,15 @@ class LocationsFragment : BaseFragment() {
                         } else if (it.url == ANNOUNCEMENT_LOCAL_PREMIUM) {
                             navigator.showManageSubscription(
                                 context,
-                                parentModel.hasFreePremiumTrialAvailable()
+                                parentModel.hasFreePremiumTrialAvailable(),
+                                parentModel.isLoggedIn()
                             )
                         } else {
-                            navigator.openWebsite(context, it.url)
+                            navigator.showManageSubscription(
+                                context,
+                                parentModel.hasFreePremiumTrialAvailable(),
+                                parentModel.isLoggedIn()
+                            )
                         }
                     },
                     onClose = {

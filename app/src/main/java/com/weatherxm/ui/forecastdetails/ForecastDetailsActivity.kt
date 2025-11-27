@@ -135,7 +135,11 @@ class ForecastDetailsActivity : BaseActivity() {
     private fun initMosaicPromotionCard() {
         binding.mosaicPromotionCard.setContent {
             MosaicPromotionCard(model.hasFreeTrialAvailable) {
-                navigator.showManageSubscription(this, model.hasFreeTrialAvailable)
+                navigator.showManageSubscription(
+                    this,
+                    model.hasFreeTrialAvailable,
+                    model.isLoggedIn()
+                )
             }
         }
     }
@@ -350,7 +354,7 @@ class ForecastDetailsActivity : BaseActivity() {
         super.onResume()
         if (!model.device.isEmpty()) {
             billingService.hasActiveSub().apply {
-                if(this) {
+                if (this) {
                     binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
                 } else {
                     binding.poweredByText.text = getString(R.string.powered_by_meteoblue)

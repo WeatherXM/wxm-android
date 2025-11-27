@@ -152,7 +152,8 @@ class ForecastFragment : BaseFragment() {
             MosaicPromotionCard(parentModel.hasFreePremiumTrialAvailable()) {
                 navigator.showManageSubscription(
                     context,
-                    parentModel.hasFreePremiumTrialAvailable()
+                    parentModel.hasFreePremiumTrialAvailable(),
+                    true
                 )
             }
         }

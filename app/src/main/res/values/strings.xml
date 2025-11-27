@@ -944,4 +944,5 @@
     <string name="canceled">Canceled</string>
     <string name="canceled_subtitle">Premium features are available until your subscription expires.\nSelect a plan to extend your subscription.</string>
     <string name="premium_forecast">Premium Forecast</string>
+    <string name="get_premium_login_prompt">You need to login to get premium forecast.</string>
 </resources>
