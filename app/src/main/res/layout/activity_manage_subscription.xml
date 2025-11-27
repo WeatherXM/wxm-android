@@ -84,18 +84,7 @@
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="@dimen/margin_normal"
         android:layout_marginBottom="@dimen/margin_large"
-        android:text="@string/go_to_station"
-        android:visibility="gone" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/selectPlanBtn"
-        style="@style/Widget.WeatherXM.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginHorizontal="@dimen/margin_normal"
-        android:layout_marginBottom="@dimen/margin_large"
-        android:text="@string/go_to_station"
+        android:text="@string/action_continue"
         android:visibility="gone" />
 
     <LinearLayout
