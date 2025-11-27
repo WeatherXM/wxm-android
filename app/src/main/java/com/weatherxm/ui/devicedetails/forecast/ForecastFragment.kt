@@ -138,15 +138,11 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        billingService.hasActiveSub().apply {
-            if(this) {
-                binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
-            } else {
-                binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
-            }
-            binding.poweredByWeatherXMIcon.visible(this)
-            binding.poweredByMeteoblueIcon.visible(!this)
-            binding.mosaicPromotionCard.visible(!this)
+        if (model.device.relation != UNFOLLOWED) {
+            handleForecastPremiumComponents()
+        } else {
+            binding.mosaicPromotionCard.visible(false)
+            binding.poweredByCard.visible(false)
         }
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
@@ -180,10 +176,11 @@ class ForecastFragment : BaseFragment() {
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
-            binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
+            handleForecastPremiumComponents()
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
             binding.mosaicPromotionCard.visible(false)
+            binding.poweredByCard.visible(false)
             binding.hourlyForecastTitle.visible(false)
             binding.hourlyForecastRecycler.visible(false)
             binding.dailyForecastRecycler.visible(false)
@@ -212,5 +209,19 @@ class ForecastFragment : BaseFragment() {
                 )
             }
         }
+    }
+
+    private fun handleForecastPremiumComponents() {
+        billingService.hasActiveSub().apply {
+            if (this) {
+                binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
+            } else {
+                binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+            }
+            binding.poweredByWeatherXMIcon.visible(this)
+            binding.poweredByMeteoblueIcon.visible(!this)
+            binding.mosaicPromotionCard.visible(!this)
+        }
+        binding.poweredByCard.visible(true)
     }
 }
