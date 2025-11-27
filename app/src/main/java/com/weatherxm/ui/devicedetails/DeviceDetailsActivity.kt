@@ -159,17 +159,7 @@ class DeviceDetailsActivity : BaseActivity() {
         binding.viewPager.adapter = adapter
         binding.viewPager.offscreenPageLimit = adapter.itemCount - 1
 
-        @Suppress("UseCheckOrError")
-        TabLayoutMediator(binding.navigatorGroup, binding.viewPager) { tab, position ->
-            tab.text = when (position) {
-                OBSERVATIONS -> getString(R.string.overview)
-                FORECAST_TAB_POSITION -> getString(R.string.forecast)
-                REWARDS_TAB_POSITION -> getString(R.string.rewards)
-                else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
-            }
-        }.attach()
-
-        setupTabChangedListener()
+        setupTabs()
 
         updateDeviceInfo()
     }
@@ -187,16 +177,42 @@ class DeviceDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun setupTabChangedListener() {
+    private fun setupTabs() {
         with(binding.navigatorGroup) {
+            @Suppress("UseCheckOrError")
+            TabLayoutMediator(this, binding.viewPager) { tab, position ->
+                tab.text = when (position) {
+                    OBSERVATIONS -> getString(R.string.overview)
+                    FORECAST_TAB_POSITION -> getString(R.string.forecast)
+                    REWARDS_TAB_POSITION -> getString(R.string.rewards)
+                    else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
+                }
+            }.attach()
+
+            val premiumColor = getColor(R.color.forecast_premium)
+            if (billingService.hasActiveSub()) {
+                setSelectedTabIndicatorColor(premiumColor)
+                setTabTextColors(
+                    context.getColor(R.color.darkGrey),
+                    context.getColor(R.color.forecast_premium)
+                )
+            } else {
+                /**
+                 * Revert the tab's color to the default non-selected ones.
+                 */
+                setSelectedTabIndicatorColor(getColor(R.color.colorPrimary))
+                setTabTextColors(
+                    context.getColor(R.color.darkGrey),
+                    context.getColor(R.color.colorPrimary)
+                )
+            }
+
             onTabSelected {
                 if (billingService.hasActiveSub()) {
                     if (it.position == FORECAST_TAB_POSITION) {
                         /**
-                         * Paint the tab properly.
+                         * Paint the custom tab properly.
                          */
-                        val premiumColor = getColor(R.color.forecast_premium)
-                        setSelectedTabIndicatorColor(premiumColor)
                         it.customView?.apply {
                             findViewById<ImageView>(
                                 R.id.forecastIcon
@@ -206,10 +222,6 @@ class DeviceDetailsActivity : BaseActivity() {
                             )
                         }
                     } else {
-                        /**
-                         * Revert the tab's color to the default non-selected ones.
-                         */
-                        setSelectedTabIndicatorColor(getColor(R.color.colorPrimary))
                         getTabAt(FORECAST_TAB_POSITION)?.customView?.apply {
                             findViewById<ImageView>(R.id.forecastIcon)?.setColor(R.color.darkGrey)
                             findViewById<MaterialTextView>(

@@ -44,4 +44,5 @@ object Contracts {
     const val STATION_COUNT = "station_count"
     const val MAPBOX_CUSTOM_DATA_KEY = "custom_data"
     const val ARG_HAS_FREE_TRIAL_AVAILABLE = "has_free_trial_available"
+    const val ARG_IS_LOGGED_IN = "is_logged_in"
 }

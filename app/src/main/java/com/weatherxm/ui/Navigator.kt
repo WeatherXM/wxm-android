@@ -28,6 +28,7 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.data.models.WXMRemoteMessage
+import com.weatherxm.service.PREMIUM_FORECAST_PRODUCT_ID
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
@@ -47,6 +48,7 @@ import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_FROM_ONBOARDING
 import com.weatherxm.ui.common.Contracts.ARG_HAS_FREE_TRIAL_AVAILABLE
 import com.weatherxm.ui.common.Contracts.ARG_INSTRUCTIONS_ONLY
+import com.weatherxm.ui.common.Contracts.ARG_IS_LOGGED_IN
 import com.weatherxm.ui.common.Contracts.ARG_LOCATION
 import com.weatherxm.ui.common.Contracts.ARG_NETWORK_STATS
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
@@ -87,6 +89,7 @@ import com.weatherxm.ui.forecastdetails.ForecastDetailsActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.explorer.UICell
 import com.weatherxm.ui.login.LoginActivity
+import com.weatherxm.ui.managesubscription.ManageSubscriptionActivity
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.networkstats.growth.NetworkGrowthActivity
@@ -572,6 +575,19 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
+    fun showManageSubscription(
+        context: Context?,
+        hasFreeTrialAvailable: Boolean,
+        isLoggedIn: Boolean
+    ) {
+        context?.startActivity(
+            Intent(context, ManageSubscriptionActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_HAS_FREE_TRIAL_AVAILABLE, hasFreeTrialAvailable)
+                .putExtra(ARG_IS_LOGGED_IN, isLoggedIn)
+        )
+    }
+
     @Suppress("LongParameterList")
     fun showMessageDialog(
         fragmentManager: FragmentManager,
@@ -710,6 +726,22 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 Timber.d(e, "Could not open the store.")
                 it.toast(R.string.error_cannot_open_store)
             }
+        }
+    }
+
+    fun openSubscriptionInStore(context: Context) {
+        try {
+            val subscriptionId = PREMIUM_FORECAST_PRODUCT_ID
+            val packageName = context.packageName
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = ("https://play.google.com/store/account/subscriptions?sku=" +
+                    "$subscriptionId&package=$packageName").toUri()
+            }
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Timber.d(e, "Could not open the store.")
+            context.toast(R.string.error_cannot_open_store)
         }
     }
 

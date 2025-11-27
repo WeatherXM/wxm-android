@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import timber.log.Timber
 
 class ClaimPulsePrepareGatewayFragment : BaseFragment() {
     private val model: ClaimPulseViewModel by activityViewModel()
@@ -22,7 +23,7 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
     // Register the launcher and result handler for QR code scanner
     private val barcodeLauncher = registerForActivityResult(ScanContract()) {
         if (!it.contents.isNullOrEmpty()) {
-            println("[BARCODE SCAN RESULT]: $it")
+            Timber.d("[BARCODE SCAN RESULT]: $it")
             val scannedInfo = it.contents.removePrefix("P")
             if (model.validateSerial(scannedInfo)) {
                 dismissSnackbar()
