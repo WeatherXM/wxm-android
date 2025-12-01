@@ -89,7 +89,7 @@ android {
         applicationId = "com.weatherxm.app"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10 + getVersionGitTags(isSolana = false).size
+        versionCode = 29 + getVersionGitTags(isSolana = false).size
         versionName = getLastVersionGitTag(false, skipTagsLogging)
 
         androidResources {
@@ -99,6 +99,11 @@ android {
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
         resValue("string", "mapbox_style", getStringProperty("MAPBOX_STYLE"))
+        resValue(
+            "string",
+            "base64_encoded_pub_key",
+            getStringProperty("BASE64_ENCODED_RSA_PUBLIC_KEY")
+        )
 
         // Instrumented Tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

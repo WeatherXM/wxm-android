@@ -425,34 +425,17 @@ data class UIWalletRewards(
     }
 
     /**
-     * If unclaimed tokens / earned tokens >= 20% AND earned tokens >= 100 then return true
+     * If unclaimed tokens >= 80 then return true
      */
     @Suppress("MagicNumber")
     fun hasUnclaimedTokensForFreeTrial(): Boolean {
-        val earnedETH = weiToETH(totalEarned.toBigDecimalSafe())
-        val allocatedETH = weiToETH(allocated.toBigDecimalSafe())
-        return if (earnedETH >= BigDecimal.valueOf(100)) {
-            allocatedETH / earnedETH >= BigDecimal.valueOf(0.20)
-        } else {
-            false
-        }
+        return weiToETH(allocated.toBigDecimalSafe()) >= BigDecimal.valueOf(80.0)
     }
 
-    /**
-     * If earned tokens < 100 then we should return 100 as remaining tokens otherwise we should
-     * return the difference to reach 20% (the threshold) of the allocated / earned tokens
-     */
     @Suppress("MagicNumber")
     fun remainingTokensForFreeTrial(): String {
-        val earnedETH = weiToETH(totalEarned.toBigDecimalSafe())
-        val allocatedETH = weiToETH(allocated.toBigDecimalSafe())
-
-        return if (earnedETH < BigDecimal.valueOf(100)) {
-            formatTokens(BigDecimal.valueOf(100.0) - allocatedETH)
-        } else {
-            val threshold = earnedETH * BigDecimal.valueOf(0.20)
-            formatTokens(threshold - allocatedETH)
-        }
+        val tokensDifference = BigDecimal.valueOf(80.0) - weiToETH(allocated.toBigDecimalSafe())
+        return formatTokens(tokensDifference)
     }
 
 }
@@ -787,6 +770,15 @@ data class ActionForMessageView(
     val startIcon: Int? = null,
     val endIcon: Int? = null,
     val onClickListener: () -> Unit
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class PurchaseUpdateState(
+    val success: Boolean,
+    val isLoading: Boolean,
+    val responseCode: Int?,
+    val debugMessage: String? = null
 )
 
 enum class RewardTimelineType {

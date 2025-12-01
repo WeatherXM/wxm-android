@@ -73,7 +73,8 @@ interface AnalyticsService {
         STATION_NOTIFICATIONS("Station Notifications"),
         LOCATIONS_HOME("Locations in Home"),
         LOCATION_FORECAST_DETAILS("Location Forecast Details"),
-        LOCATION_SEARCH("Location Search")
+        LOCATION_SEARCH("Location Search"),
+        MANAGE_SUBSCRIPTION("Manage Subscription")
     }
 
     // Custom Event Names
@@ -303,6 +304,7 @@ interface AnalyticsService {
         UNAUTHENTICATED("unauthenticated"),
         CLICK_ON_LOCATION_SEARCH_RESULT("Click on Location Search Result"),
         MAX_LOCATIONS_SAVED_ERROR("Max Locations Saved Error"),
+        BILLING_FLOW_RESULT("Billing Flow Result")
     }
 
     // Custom Param Names
