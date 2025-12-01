@@ -55,7 +55,7 @@ class ManageSubscriptionActivity : BaseActivity() {
                 }
 
                 launch {
-                    billingService.setupPurchases()
+                    billingService.setupPurchases(false)
                 }
             }
         }
@@ -75,7 +75,7 @@ class ManageSubscriptionActivity : BaseActivity() {
 
         binding.premiumFeaturesComposable.setContent {
             PremiumFeaturesView {
-                if(isLoggedIn) {
+                if (isLoggedIn) {
                     binding.selectPlanComposable.visible(true)
                     binding.premiumFeaturesComposable.visible(false)
                     binding.currentPlanComposable.visible(false)

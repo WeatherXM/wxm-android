@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,6 +58,7 @@ class BillingService(
 
     private var hasFetchedPurchases: Boolean = false
     private var subs = mutableListOf<SubscriptionOffer>()
+    private var acknowledgeJob: Job? = null
 
     private val purchaseUpdate = MutableSharedFlow<PurchaseUpdateState?>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -147,7 +149,7 @@ class BillingService(
         })
     }
 
-    suspend fun setupPurchases() {
+    suspend fun setupPurchases(inBackground: Boolean = true) {
         val purchasesResult = billingClient?.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(SUBS).build()
         )
@@ -155,7 +157,7 @@ class BillingService(
         /**
          * Got an error in the process. Terminate it.
          */
-        if (purchasesResult?.billingResult?.responseCode != BillingClient.BillingResponseCode.OK) {
+        if (purchasesResult?.billingResult?.responseCode != BillingResponseCode.OK) {
             return
         }
         hasFetchedPurchases = true
@@ -165,7 +167,7 @@ class BillingService(
             if (latestPurchase.isAcknowledged) {
                 activeSubFlow.tryEmit(latestPurchase)
             } else {
-                handlePurchase(latestPurchase, true)
+                handlePurchase(latestPurchase, inBackground)
             }
         } else {
             activeSubFlow.tryEmit(null)
@@ -280,7 +282,7 @@ class BillingService(
         }
     }
 
-    private suspend fun handlePurchase(purchase: Purchase, inBackground: Boolean) {
+    private fun handlePurchase(purchase: Purchase, inBackground: Boolean) {
         if (!verifyPurchase(purchase.originalJson, purchase.signature)) {
             if (inBackground) return
             purchaseUpdate.tryEmit(
@@ -294,22 +296,24 @@ class BillingService(
             return
         }
         if (!purchase.isAcknowledged) {
-            acknowledgePurchase(purchase)
+            acknowledgePurchase(purchase, inBackground)
         }
     }
 
-    private suspend fun acknowledgePurchase(purchase: Purchase, inBackground: Boolean = false) {
-        withContext(Dispatchers.IO) {
+    private fun acknowledgePurchase(purchase: Purchase, inBackground: Boolean = false) {
+        if (acknowledgeJob?.isActive == true) {
+            return
+        }
+        acknowledgeJob = coroutineScope.launch(Dispatchers.IO) {
             val params =
                 AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
             val result = billingClient?.acknowledgePurchase(params.build())
             Timber.d("[Acknowledge Purchase Update]: $result")
 
+            if (inBackground) return@launch
+
             if (result?.responseCode == BillingResponseCode.OK) {
                 activeSubFlow.tryEmit(purchase)
-
-                if (inBackground) return@withContext
-
                 purchaseUpdate.tryEmit(
                     PurchaseUpdateState(
                         success = true,
@@ -320,9 +324,6 @@ class BillingService(
                 )
             } else {
                 activeSubFlow.tryEmit(null)
-
-                if (inBackground) return@withContext
-
                 purchaseUpdate.tryEmit(
                     PurchaseUpdateState(
                         success = false,
