@@ -104,16 +104,6 @@
                         android:src="@drawable/ic_thunder"
                         android:visibility="gone"
                         app:tint="@color/forecast_premium"
-                        tools:ignore="ContentDescription"
-                        tools:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/poweredByMeteoblueIcon"
-                        android:layout_width="50dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/meteoblue_logo_2024"
-                        android:visibility="gone"
-                        app:tint="@color/colorOnSurface"
                         tools:ignore="ContentDescription" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -122,7 +112,18 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler"
-                        tools:text="@string/powered_by_weatherxm" />
+                        tools:text="@string/powered_by" />
+
+                    <ImageView
+                        android:id="@+id/poweredByMeteoblueIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:src="@drawable/meteoblue_logo_2024"
+                        android:visibility="gone"
+                        app:tint="@color/colorOnSurface"
+                        tools:ignore="ContentDescription"
+                        tools:visibility="visible" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

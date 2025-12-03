@@ -217,7 +217,7 @@ class ForecastFragment : BaseFragment() {
             if (this) {
                 binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
             } else {
-                binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+                binding.poweredByText.text = getString(R.string.powered_by)
             }
             binding.poweredByWeatherXMIcon.visible(this)
             binding.poweredByMeteoblueIcon.visible(!this)

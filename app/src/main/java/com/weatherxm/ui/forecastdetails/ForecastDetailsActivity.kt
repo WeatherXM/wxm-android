@@ -357,7 +357,7 @@ class ForecastDetailsActivity : BaseActivity() {
                 if (this) {
                     binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
                 } else {
-                    binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+                    binding.poweredByText.text = getString(R.string.powered_by)
                 }
                 binding.poweredByWeatherXMIcon.visible(this)
                 binding.poweredByMeteoblueIcon.visible(!this)
@@ -368,7 +368,7 @@ class ForecastDetailsActivity : BaseActivity() {
                 classSimpleName()
             )
         } else {
-            binding.poweredByText.text = getString(R.string.powered_by_meteoblue)
+            binding.poweredByText.text = getString(R.string.powered_by)
             binding.poweredByMeteoblueIcon.visible(true)
             analytics.trackScreen(
                 screen = AnalyticsService.Screen.LOCATION_FORECAST_DETAILS,
