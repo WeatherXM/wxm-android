@@ -89,7 +89,7 @@ android {
         applicationId = "com.weatherxm.app"
         minSdk = 28
         targetSdk = 36
-        versionCode = 29 + getVersionGitTags(isSolana = false).size
+        versionCode = 30 + getVersionGitTags(isSolana = false).size
         versionName = getLastVersionGitTag(false, skipTagsLogging)
 
         androidResources {
