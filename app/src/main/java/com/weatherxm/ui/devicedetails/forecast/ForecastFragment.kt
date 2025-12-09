@@ -214,12 +214,8 @@ class ForecastFragment : BaseFragment() {
 
     private fun handleForecastPremiumComponents() {
         billingService.hasActiveSub().apply {
-            if (this) {
-                binding.poweredByText.text = getString(R.string.powered_by_weatherxm)
-            } else {
-                binding.poweredByText.text = getString(R.string.powered_by)
-            }
-            binding.poweredByWeatherXMIcon.visible(this)
+            binding.poweredByWXMLogo.visible(this)
+            binding.poweredByPremiumThunder.visible(this)
             binding.poweredByMeteoblueIcon.visible(!this)
             binding.mosaicPromotionCard.visible(!this)
         }

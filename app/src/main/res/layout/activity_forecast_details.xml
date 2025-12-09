@@ -99,7 +99,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/poweredByWeatherXMIcon"
+                        android:id="@+id/poweredByPremiumThunder"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginEnd="@dimen/margin_small"
@@ -113,9 +113,9 @@
                         android:id="@+id/poweredByText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/powered_by"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler"
-                        tools:text="@string/powered_by_weatherxm" />
+                        app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler" />
 
                     <ImageView
                         android:id="@+id/poweredByMeteoblueIcon"
@@ -126,6 +126,17 @@
                         android:visibility="gone"
                         app:tint="@color/colorOnSurface"
                         tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/poweredByWXMLogo"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:src="@drawable/full_logo"
+                        android:visibility="gone"
+                        app:tint="@color/colorOnSurface"
+                        tools:ignore="ContentDescription"
+                        tools:visibility="visible" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
