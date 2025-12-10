@@ -16,7 +16,8 @@ class CacheWeatherForecastDataSource(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
-        exclude: String?
+        exclude: String?,
+        token: String?
     ): Either<Failure, List<WeatherData>> {
         return cacheService.getDeviceForecast(deviceId)
     }

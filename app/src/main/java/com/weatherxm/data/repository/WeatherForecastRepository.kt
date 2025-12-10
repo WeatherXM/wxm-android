@@ -6,6 +6,7 @@ import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
+import com.weatherxm.service.BillingService
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -23,6 +24,7 @@ interface WeatherForecastRepository {
 }
 
 class WeatherForecastRepositoryImpl(
+    private val billingService: BillingService,
     private val networkSource: NetworkWeatherForecastDataSource,
     private val cacheSource: CacheWeatherForecastDataSource,
 ) : WeatherForecastRepository {
@@ -37,26 +39,50 @@ class WeatherForecastRepositoryImpl(
         toDate: LocalDate,
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>> {
-        if (forceRefresh) {
-            clearDeviceForecastFromCache()
-        }
-
         val to = if (ChronoUnit.DAYS.between(fromDate, toDate) < PREFETCH_DAYS) {
             fromDate.plusDays(PREFETCH_DAYS)
         } else {
             toDate
         }
 
-        return cacheSource.getDeviceForecast(deviceId, fromDate, to)
+        return if (billingService.hasActiveSub()) {
+            getDevicePremiumForecast(deviceId, fromDate, to)
+        } else {
+            getDeviceDefaultForecast(deviceId, fromDate, to, forceRefresh)
+        }
+    }
+
+    private suspend fun getDeviceDefaultForecast(
+        deviceId: String,
+        fromDate: LocalDate,
+        toDate: LocalDate,
+        forceRefresh: Boolean
+    ): Either<Failure, List<WeatherData>> {
+        if (forceRefresh) {
+            clearDeviceForecastFromCache()
+        }
+
+        return cacheSource.getDeviceForecast(deviceId, fromDate, toDate)
             .onRight {
-                Timber.d("Got forecast from cache [$fromDate to $to].")
+                Timber.d("Got forecast from cache [$fromDate to $toDate].")
             }
             .mapLeft {
-                return networkSource.getDeviceForecast(deviceId, fromDate, to).onRight {
-                    Timber.d("Got forecast from network [$fromDate to $to].")
+                return networkSource.getDeviceForecast(deviceId, fromDate, toDate).onRight {
+                    Timber.d("Got forecast from network [$fromDate to $toDate].")
                     cacheSource.setDeviceForecast(deviceId, it)
                 }
             }
+    }
+
+    private suspend fun getDevicePremiumForecast(
+        deviceId: String,
+        fromDate: LocalDate,
+        toDate: LocalDate
+    ): Either<Failure, List<WeatherData>> {
+        val token = billingService.getActiveSubFlow().value?.purchaseToken
+        return networkSource.getDeviceForecast(deviceId, fromDate, toDate, token = token).onRight {
+            Timber.d("Got premium forecast from network [$fromDate to $toDate].")
+        }
     }
 
     override fun clearLocationForecastFromCache() {

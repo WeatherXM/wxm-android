@@ -16,13 +16,15 @@ class NetworkWeatherForecastDataSource(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
-        exclude: String?
+        exclude: String?,
+        token: String?
     ): Either<Failure, List<WeatherData>> {
         return apiService.getForecast(
             deviceId,
             fromDate.toString(),
             toDate.toString(),
-            exclude
+            exclude,
+            token
         ).mapResponse()
     }
 

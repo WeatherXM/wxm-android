@@ -3,16 +3,19 @@ package com.weatherxm.data.repository
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl.Companion.PREFETCH_DAYS
+import com.weatherxm.service.BillingService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.isRootTest
 import io.mockk.coJustRun
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import java.time.ZonedDateTime
 
@@ -20,6 +23,7 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
     lateinit var networkSource: NetworkWeatherForecastDataSource
     lateinit var cacheSource: CacheWeatherForecastDataSource
     lateinit var repo: WeatherForecastRepositoryImpl
+    lateinit var billingService: BillingService
 
     val location = Location.empty()
     val deviceId = "deviceId"
@@ -27,12 +31,14 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
     val fromDate = now.minusDays(PREFETCH_DAYS)
     val toDateLessThanPrefetched = fromDate.plusDays(PREFETCH_DAYS - 1)
     val forecastData = mockk<List<WeatherData>>()
+    val purchaseToken = "purchaseToken"
 
     beforeInvocation { testCase, _ ->
         if (testCase.isRootTest()) {
             networkSource = mockk<NetworkWeatherForecastDataSource>()
             cacheSource = mockk<CacheWeatherForecastDataSource>()
-            repo = WeatherForecastRepositoryImpl(networkSource, cacheSource)
+            billingService = mockk<BillingService>()
+            repo = WeatherForecastRepositoryImpl(billingService, networkSource, cacheSource)
             coJustRun { cacheSource.clearDeviceForecast() }
             coJustRun { cacheSource.clearLocationForecast() }
             coJustRun { cacheSource.setDeviceForecast(deviceId, forecastData) }
@@ -45,8 +51,14 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
                 { cacheSource.getDeviceForecast(deviceId, fromDate, now) },
                 forecastData
             )
+            coMockEitherRight(
+                { networkSource.getDeviceForecast(deviceId, fromDate, now, token = purchaseToken) },
+                forecastData
+            )
             coMockEitherRight({ networkSource.getLocationForecast(location) }, forecastData)
             coMockEitherRight({ cacheSource.getLocationForecast(location) }, forecastData)
+            every { billingService.hasActiveSub() } returns false
+            every { billingService.getActiveSubFlow().value?.purchaseToken } returns purchaseToken
         }
     }
 
@@ -159,4 +171,30 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
         }
     }
 
+    context("Handle fetching premium forecast") {
+        given("the datasource that we use to perform the API call") {
+            every { billingService.hasActiveSub() } returns true
+            When("the API returns the correct data") {
+                then("forecast should be fetched from network") {
+                    repo.getDeviceForecast(deviceId, fromDate, now, false).isSuccess(forecastData)
+                }
+            }
+            When("the API returns a failure") {
+                coMockEitherLeft(
+                    {
+                        networkSource.getDeviceForecast(
+                            deviceId,
+                            fromDate,
+                            now,
+                            token = purchaseToken
+                        )
+                    },
+                    failure
+                )
+                then("forecast should return the failure") {
+                    repo.getDeviceForecast(deviceId, fromDate, now, false).isError()
+                }
+            }
+        }
+    }
 })

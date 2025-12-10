@@ -100,6 +100,7 @@ interface ApiService {
         @Query("fromDate") fromDate: String,
         @Query("toDate") toDate: String,
         @Query("exclude") exclude: String? = null,
+        @Query("token") token: String? = null,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
     @Mock
