@@ -35,6 +35,7 @@ class ForecastUseCaseTest : BehaviorSpec({
             device.address,
             tomorrowInUtc.toLocalDate(),
             utc,
+            false,
             listOf(
                 HourlyWeather(
                     tomorrowInUtc,
@@ -94,6 +95,7 @@ class ForecastUseCaseTest : BehaviorSpec({
     )
     val uiForecast = UIForecast(
         address = device.address,
+        isPremium = false,
         next24Hours = listOf(hourlyWeather),
         forecastDays = listOf(
             UIForecastDay(

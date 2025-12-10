@@ -18,6 +18,8 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ChartsUseCase
+import com.weatherxm.usecases.ChartsUseCaseImpl.Companion.FORECAST_CHART_STEP_DEFAULT
+import com.weatherxm.usecases.ChartsUseCaseImpl.Companion.FORECAST_CHART_STEP_PREMIUM
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.LocationsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -25,6 +27,7 @@ import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Duration
 import java.time.LocalDate
 
 @Suppress("LongParameterList")
@@ -145,8 +148,15 @@ class ForecastDetailsViewModel(
 
     fun getCharts(forecastDay: UIForecastDay): Charts {
         Timber.d("Returning forecast charts for [${forecastDay.date}]")
+        val chartStep = if (forecast.isPremium == true) {
+            Duration.ofHours(FORECAST_CHART_STEP_PREMIUM)
+        } else {
+            Duration.ofHours(FORECAST_CHART_STEP_DEFAULT)
+        }
         return chartsUseCase.createHourlyCharts(
-            forecastDay.date, forecastDay.hourlyWeather ?: mutableListOf()
+            forecastDay.date,
+            forecastDay.hourlyWeather ?: mutableListOf(),
+            chartStep
         )
     }
 

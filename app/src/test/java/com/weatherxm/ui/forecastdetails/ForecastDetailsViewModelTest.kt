@@ -119,7 +119,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
     )
     val emptyForecast: UIForecast = UIForecast.empty()
     val forecast =
-        UIForecast(device.address, listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
+        UIForecast(device.address, true, listOf(hourlyWeather), listOf(forecastDay, forecastDayTomorrow))
     val charts = mockk<Charts>()
     val savedLocationsLessThanMax = mutableListOf<Location>().apply {
         repeat(MAX_AUTH_LOCATIONS - 1) {

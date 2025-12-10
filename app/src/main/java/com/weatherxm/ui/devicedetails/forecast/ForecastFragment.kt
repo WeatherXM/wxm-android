@@ -122,6 +122,11 @@ class ForecastFragment : BaseFragment() {
             binding.temperatureBarsInfoButton.visible(true)
             binding.hourlyForecastRecycler.visible(true)
             binding.hourlyForecastTitle.visible(true)
+            binding.poweredByWXMLogo.visible(it.isPremium == true)
+            binding.poweredByPremiumThunder.visible(it.isPremium == true)
+            binding.poweredByMeteoblueIcon.visible(it.isPremium == false)
+            binding.mosaicPromotionCard.visible(it.isPremium == false)
+            binding.poweredByCard.visible(it.isPremium != null)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -138,12 +143,6 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (model.device.relation != UNFOLLOWED) {
-            handleForecastPremiumComponents()
-        } else {
-            binding.mosaicPromotionCard.visible(false)
-            binding.poweredByCard.visible(false)
-        }
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
@@ -177,7 +176,6 @@ class ForecastFragment : BaseFragment() {
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
-            handleForecastPremiumComponents()
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
             binding.mosaicPromotionCard.visible(false)
@@ -210,15 +208,5 @@ class ForecastFragment : BaseFragment() {
                 )
             }
         }
-    }
-
-    private fun handleForecastPremiumComponents() {
-        billingService.hasActiveSub().apply {
-            binding.poweredByWXMLogo.visible(this)
-            binding.poweredByPremiumThunder.visible(this)
-            binding.poweredByMeteoblueIcon.visible(!this)
-            binding.mosaicPromotionCard.visible(!this)
-        }
-        binding.poweredByCard.visible(true)
     }
 }

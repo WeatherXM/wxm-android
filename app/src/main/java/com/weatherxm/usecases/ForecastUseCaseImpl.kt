@@ -81,6 +81,7 @@ class ForecastUseCaseImpl(
 
         return UIForecast(
             address = data[0].address,
+            isPremium = data[0].isPremium,
             next24Hours = nextHourlyWeatherForecast,
             forecastDays = forecastDays
         )

@@ -45,7 +45,8 @@ class WeatherForecastRepositoryImpl(
             toDate
         }
 
-        return if (billingService.hasActiveSub()) {
+        // TODO: STOPSHIP: Revert the below with billingService.hasActiveSub()
+        return if (true) {
             getDevicePremiumForecast(deviceId, fromDate, to)
         } else {
             getDeviceDefaultForecast(deviceId, fromDate, to, forceRefresh)

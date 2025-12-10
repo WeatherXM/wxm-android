@@ -263,11 +263,12 @@ enum class DeviceAlertType : Parcelable {
 @Parcelize
 data class UIForecast(
     val address: String?,
+    val isPremium: Boolean?,
     val next24Hours: List<HourlyWeather>?,
     val forecastDays: List<UIForecastDay>
 ) : Parcelable {
     companion object {
-        fun empty() = UIForecast(String.empty(), mutableListOf(), mutableListOf())
+        fun empty() = UIForecast(String.empty(), null,mutableListOf(), mutableListOf())
     }
 
     fun isEmpty(): Boolean = next24Hours.isNullOrEmpty() && forecastDays.isEmpty()
