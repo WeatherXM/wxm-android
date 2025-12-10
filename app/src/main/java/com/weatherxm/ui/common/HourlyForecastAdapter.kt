@@ -43,8 +43,10 @@ class HourlyForecastAdapter(
             binding.icon.setWeatherAnimation(item.icon)
             binding.temperaturePrimary.text =
                 Weather.getFormattedTemperature(itemView.context, item.temperature, 1)
-            binding.precipProbability.text =
-                Weather.getFormattedPrecipitationProbability(item.precipProbability)
+            item.precipProbability?.let {
+                binding.precipProbability.text =
+                    Weather.getFormattedPrecipitationProbability(item.precipProbability)
+            } ?: binding.precipProbabilityContainer.visible(false)
         }
     }
 

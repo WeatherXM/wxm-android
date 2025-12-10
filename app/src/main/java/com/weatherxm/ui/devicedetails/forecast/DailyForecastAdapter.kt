@@ -12,6 +12,7 @@ import com.weatherxm.databinding.ListItemForecastBinding
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setWeatherAnimation
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.Resources
@@ -103,13 +104,24 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             binding.maxTemperature.text =
                 Weather.getFormattedTemperature(itemView.context, item.maxTemp)
 
-            binding.precipProbability.text =
-                Weather.getFormattedPrecipitationProbability(item.precipProbability)
-            binding.precip.text = Weather.getFormattedPrecipitation(
-                context = itemView.context,
-                value = item.precip,
-                isRainRate = false
-            )
+            if (item.precipProbability == null) {
+                binding.precipProbabilityIcon.visible(false)
+                binding.precipProbability.visible(false)
+            } else {
+                binding.precipProbability.text =
+                    Weather.getFormattedPrecipitationProbability(item.precipProbability)
+            }
+
+            if (item.precip == null) {
+                binding.precipIcon.visible(false)
+                binding.precip.visible(false)
+            } else {
+                binding.precip.text = Weather.getFormattedPrecipitation(
+                    context = itemView.context,
+                    value = item.precip,
+                    isRainRate = false
+                )
+            }
 
             binding.wind.text =
                 Weather.getFormattedWind(itemView.context, item.windSpeed, item.windDirection)

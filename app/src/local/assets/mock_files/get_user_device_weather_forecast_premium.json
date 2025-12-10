@@ -8,7 +8,7 @@
                 "timestamp": "2025-12-10T16:00:00+02:00",
                 "temperature": 15.33,
                 "humidity": 67,
-                "precipitation": 0,
+                "precipitation": 10,
                 "wind_speed": 2.76,
                 "wind_direction": 324,
                 "feels_like": 15.33,
@@ -18,7 +18,7 @@
                 "timestamp": "2025-12-10T17:00:00+02:00",
                 "temperature": 14.42,
                 "humidity": 71,
-                "precipitation": 0,
+                "precipitation": 5,
                 "wind_speed": 2.38,
                 "wind_direction": 312,
                 "feels_like": 14.42,
@@ -91,7 +91,7 @@
             "timestamp": "2025-12-10T00:00:00+02:00",
             "humidity": 70,
             "wind_speed": 2.07,
-            "wind_direction": 234.76598366222618,
+            "wind_direction": 234,
             "icon": "partly-cloudy-day-drizzle"
         }
     },
@@ -347,7 +347,7 @@
             "timestamp": "2025-12-11T00:00:00+02:00",
             "humidity": 71,
             "wind_speed": 2.92,
-            "wind_direction": 57.43656854300959,
+            "wind_direction": 57,
             "icon": "partly-cloudy-day"
         }
     },
@@ -603,7 +603,7 @@
             "timestamp": "2025-12-12T00:00:00+02:00",
             "humidity": 75,
             "wind_speed": 2.21,
-            "wind_direction": 97.27073457027066,
+            "wind_direction": 97,
             "icon": "partly-cloudy-day"
         }
     },
@@ -859,7 +859,7 @@
             "timestamp": "2025-12-13T00:00:00+02:00",
             "humidity": 75,
             "wind_speed": 2.5,
-            "wind_direction": 80.35896996755905,
+            "wind_direction": 80,
             "icon": "partly-cloudy-day-drizzle"
         }
     }

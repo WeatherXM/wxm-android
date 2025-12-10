@@ -6,6 +6,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
 import com.weatherxm.service.BillingService
+import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
@@ -95,7 +96,6 @@ class ForecastDetailsActivity : BaseActivity() {
             initSavedLocationIcon()
             binding.displayTimeNotice.visible(false)
         }
-        setupChartsAndListeners()
 
         model.onForecastLoaded().observe(this) {
             when (it.status) {
@@ -164,22 +164,55 @@ class ForecastDetailsActivity : BaseActivity() {
             }
         }
 
+        // Update the "Powered By" card
+        if (model.forecast().isPremium == true) {
+            binding.poweredByWXMLogo.visible(true)
+            binding.poweredByPremiumThunder.visible(true)
+            binding.poweredByMeteoblueIcon.visible(false)
+            binding.mosaicPromotionCard.visible(false)
+        } else {
+            binding.poweredByMeteoblueIcon.visible(true)
+            // Show the Mosaic promo only on devices' forecast
+            binding.mosaicPromotionCard.visible(!model.device.isEmpty())
+        }
+
         // Update Daily Weather
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
         binding.dailyIcon.setWeatherAnimation(forecast.icon)
         binding.dailyMaxTemp.text = getFormattedTemperature(this, forecast.maxTemp)
         binding.dailyMinTemp.text = getFormattedTemperature(this, forecast.minTemp)
-        binding.precipProbabilityCard.setData(
-            getFormattedPrecipitationProbability(forecast.precipProbability)
-        )
-        binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
-        binding.windCard.setData(getFormattedWind(this, forecast.windSpeed, forecast.windDirection))
-        binding.dailyPrecipCard.setData(
-            getFormattedPrecipitation(context = this, value = forecast.precip, isRainRate = false)
-        )
-        binding.uvCard.setData(getFormattedUV(this, forecast.uv))
-        binding.humidityCard.setData(getFormattedHumidity(forecast.humidity))
-        binding.pressureCard.setData(getFormattedPressure(this, forecast.pressure))
+        if (model.forecast().isPremium == true) {
+            binding.dailyPremiumWind.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
+            binding.dailyPremiumWind.setData(
+                getFormattedWind(this, forecast.windSpeed, forecast.windDirection)
+            )
+            binding.dailyPremiumHumidity.setData(getFormattedHumidity(forecast.humidity))
+            binding.dailyDefaultFirstRow.visible(false)
+            binding.dailyDefaultSecondRow.visible(false)
+            binding.dailyPremiumRow.visible(true)
+        } else {
+            binding.precipProbabilityCard.setData(
+                getFormattedPrecipitationProbability(forecast.precipProbability)
+            )
+            binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
+            binding.windCard.setData(
+                getFormattedWind(
+                    this,
+                    forecast.windSpeed,
+                    forecast.windDirection
+                )
+            )
+            binding.dailyPrecipCard.setData(
+                getFormattedPrecipitation(
+                    context = this,
+                    value = forecast.precip,
+                    isRainRate = false
+                )
+            )
+            binding.uvCard.setData(getFormattedUV(this, forecast.uv))
+            binding.humidityCard.setData(getFormattedHumidity(forecast.humidity))
+            binding.pressureCard.setData(getFormattedPressure(this, forecast.pressure))
+        }
 
         // Update Hourly Tiles
         hourlyAdapter = HourlyForecastAdapter(null)
@@ -195,26 +228,36 @@ class ForecastDetailsActivity : BaseActivity() {
         with(binding.charts) {
             val charts = model.getCharts(forecast)
             clearCharts()
-            initTemperatureChart(charts.temperature, charts.feelsLike)
-            initWindChart(charts.windSpeed, charts.windGust, charts.windDirection)
-            initPrecipitationChart(charts.precipitation, charts.precipProbability, false)
-            initHumidityChart(charts.humidity)
-            initPressureChart(charts.pressure)
-            initSolarChart(charts.uv, charts.solarRadiation)
+            initTemperatureChart(charts.temperature, charts.feelsLike, true)
+            initWindChart(charts.windSpeed, charts.windGust, charts.windDirection, true)
+            initPrecipitationChart(
+                charts.precipitation,
+                charts.precipProbability,
+                isHistoricalData = false,
+                hideChartIfNoData = true
+            )
+            initHumidityChart(charts.humidity, true)
+            initPressureChart(charts.pressure, true)
+            initSolarChart(charts.uv, charts.solarRadiation, true)
             autoHighlightCharts(0F)
+            setupChartsAndListeners(charts)
             visible(!charts.isEmpty())
         }
     }
 
-    private fun setupChartsAndListeners() {
+    private fun setupChartsAndListeners(charts: Charts) {
         with(binding.charts) {
             chartPrecipitation().primaryLine(
                 getString(R.string.precipitation), getString(R.string.precipitation)
             )
-            chartPrecipitation().secondaryLine(
-                getString(R.string.probability),
-                getString(R.string.precipitation_probability)
-            )
+            if (charts.precipProbability.isDataValid()) {
+                chartPrecipitation().secondaryLine(
+                    getString(R.string.probability),
+                    getString(R.string.precipitation_probability)
+                )
+            } else {
+                chartPrecipitation().secondaryLine(null, null)
+            }
             chartWind().primaryLine(null, getString(R.string.speed))
             chartWind().secondaryLine(null, null)
             chartSolar().updateTitle(getString(R.string.uv_index))
@@ -353,19 +396,11 @@ class ForecastDetailsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         if (!model.device.isEmpty()) {
-            billingService.hasActiveSub().apply {
-                binding.poweredByWXMLogo.visible(this)
-                binding.poweredByPremiumThunder.visible(this)
-                binding.poweredByMeteoblueIcon.visible(!this)
-                binding.mosaicPromotionCard.visible(!this)
-            }
             analytics.trackScreen(
                 AnalyticsService.Screen.DEVICE_FORECAST_DETAILS,
                 classSimpleName()
             )
         } else {
-            binding.poweredByText.text = getString(R.string.powered_by)
-            binding.poweredByMeteoblueIcon.visible(true)
             analytics.trackScreen(
                 screen = AnalyticsService.Screen.LOCATION_FORECAST_DETAILS,
                 screenClass = classSimpleName(),

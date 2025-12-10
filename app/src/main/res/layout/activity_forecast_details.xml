@@ -251,7 +251,38 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
-                        android:id="@+id/dailyFirstRow"
+                        android:id="@+id/dailyPremiumRow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:clipChildren="false"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2"
+                        app:layout_constraintTop_toBottomOf="@id/dailyIcon">
+
+                        <com.weatherxm.ui.components.WeatherMeasurementCardView
+                            android:id="@+id/dailyPremiumHumidity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            app:weather_data_icon="@drawable/ic_weather_humidity"
+                            app:weather_data_title="@string/humidity" />
+
+                        <com.weatherxm.ui.components.WeatherMeasurementCardView
+                            android:id="@+id/dailyPremiumWind"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            app:weather_data_icon="@drawable/ic_wind_direction"
+                            app:weather_data_title="@string/wind" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/dailyDefaultFirstRow"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_large"
@@ -290,7 +321,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/dailySecondRow"
+                        android:id="@+id/dailyDefaultSecondRow"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
@@ -298,7 +329,7 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:weightSum="3"
-                        app:layout_constraintTop_toBottomOf="@id/dailyFirstRow">
+                        app:layout_constraintTop_toBottomOf="@id/dailyDefaultFirstRow">
 
                         <com.weatherxm.ui.components.WeatherMeasurementCardView
                             android:id="@+id/windCard"
