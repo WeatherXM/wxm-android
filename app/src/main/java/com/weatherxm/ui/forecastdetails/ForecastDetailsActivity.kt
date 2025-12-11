@@ -5,7 +5,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
-import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
@@ -40,7 +39,6 @@ import com.weatherxm.util.Weather.getFormattedTemperature
 import com.weatherxm.util.Weather.getFormattedUV
 import com.weatherxm.util.Weather.getFormattedWind
 import com.weatherxm.util.Weather.getWindDirectionDrawable
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -51,7 +49,6 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private lateinit var binding: ActivityForecastDetailsBinding
-    private val billingService: BillingService by inject()
 
     private val model: ForecastDetailsViewModel by viewModel {
         parametersOf(
@@ -224,6 +221,11 @@ class ForecastDetailsActivity : BaseActivity() {
             )
         }
 
+        // Update Charts
+        updateCharts(forecast)
+    }
+
+    private fun updateCharts(forecast: UIForecastDay) {
         // Update Charts
         with(binding.charts) {
             val charts = model.getCharts(forecast)

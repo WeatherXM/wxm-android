@@ -12,6 +12,7 @@ import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
@@ -114,19 +115,7 @@ class ForecastFragment : BaseFragment() {
         }
 
         model.onForecast().observe(viewLifecycleOwner) {
-            hourlyForecastAdapter.submitList(it.next24Hours)
-            dailyForecastAdapter.submitList(it.forecastDays)
-            binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
-            binding.dailyForecastRecycler.visible(true)
-            binding.dailyForecastTitle.visible(true)
-            binding.temperatureBarsInfoButton.visible(true)
-            binding.hourlyForecastRecycler.visible(true)
-            binding.hourlyForecastTitle.visible(true)
-            binding.poweredByWXMLogo.visible(it.isPremium == true)
-            binding.poweredByPremiumThunder.visible(it.isPremium == true)
-            binding.poweredByMeteoblueIcon.visible(it.isPremium == false)
-            binding.mosaicPromotionCard.visible(it.isPremium == false)
-            binding.poweredByCard.visible(it.isPremium != null)
+            onForecast(hourlyForecastAdapter, dailyForecastAdapter, it)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -208,5 +197,25 @@ class ForecastFragment : BaseFragment() {
                 )
             }
         }
+    }
+
+    private fun onForecast(
+        hourlyForecastAdapter: HourlyForecastAdapter,
+        dailyForecastAdapter: DailyForecastAdapter,
+        forecast: UIForecast
+    ) {
+        hourlyForecastAdapter.submitList(forecast.next24Hours)
+        dailyForecastAdapter.submitList(forecast.forecastDays)
+        binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
+        binding.dailyForecastRecycler.visible(true)
+        binding.dailyForecastTitle.visible(true)
+        binding.temperatureBarsInfoButton.visible(true)
+        binding.hourlyForecastRecycler.visible(true)
+        binding.hourlyForecastTitle.visible(true)
+        binding.poweredByWXMLogo.visible(forecast.isPremium == true)
+        binding.poweredByPremiumThunder.visible(forecast.isPremium == true)
+        binding.poweredByMeteoblueIcon.visible(forecast.isPremium == false)
+        binding.mosaicPromotionCard.visible(forecast.isPremium == false)
+        binding.poweredByCard.visible(forecast.isPremium != null)
     }
 }
