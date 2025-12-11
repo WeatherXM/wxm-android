@@ -208,7 +208,7 @@
                     android:id="@+id/walletContainerCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
                     app:cardElevation="@dimen/elevation_small"
                     app:contentPadding="0dp"
                     tools:strokeColor="@color/error"

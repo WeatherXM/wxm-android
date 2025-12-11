@@ -166,6 +166,7 @@ class ProfileFragment : BaseFragment() {
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     onNotAvailableRewards()
+                    updateSubscriptionUI(null)
                     resource.message?.let { context.toast(it) }
                     toggleLoading(false)
                 }
@@ -316,8 +317,8 @@ class ProfileFragment : BaseFragment() {
         binding.rewardsContainerCard.visible(true)
     }
 
-    private fun updateSubscriptionUI(it: UIWalletRewards) {
-        if (billingService.hasActiveSub()) {
+    private fun updateSubscriptionUI(it: UIWalletRewards?) {
+        if (billingService.hasActiveSub() || it == null) {
             binding.subscriptionSecondaryCard.visible(false)
         } else if (it.hasUnclaimedTokensForFreeTrial()) {
             binding.subscriptionSecondaryCard.setContent {
