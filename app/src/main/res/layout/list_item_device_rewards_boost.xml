@@ -29,22 +29,13 @@
         app:layout_constraintTop_toTopOf="@id/boostProgressSlider"
         tools:text="70%" />
 
-    <com.google.android.material.slider.RangeSlider
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/boostProgressSlider"
-        style="@style/Widget.WeatherXM.Slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-10dp"
         android:layout_marginTop="@dimen/margin_normal"
-        android:layout_marginEnd="-9dp"
-        android:enabled="false"
-        android:valueFrom="0"
-        android:valueTo="100"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:trackHeight="23dp"
-        tools:trackColorActive="@color/beta_rewards_fill"
-        tools:trackColorInactive="@color/beta_rewards_color"
-        tools:values="@array/reward_slider_default_values" />
+        tools:composableName="com.weatherxm.ui.components.compose.RoundedRangeViewKt.PreviewRoundedRangeView" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/totalTokensSoFarTitle"

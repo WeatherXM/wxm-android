@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicesrewards
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.weatherxm.data.models.BoostCode
 import com.weatherxm.databinding.ListItemDeviceRewardsBoostBinding
 import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.RoundedRangeView
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils.formatTokens
 import timber.log.Timber
@@ -36,16 +38,20 @@ class DeviceRewardsBoostAdapter :
         holder.bind(getItem(position))
     }
 
-    inner class DeviceRewardsBoostViewHolder(
+    class DeviceRewardsBoostViewHolder(
         private val binding: ListItemDeviceRewardsBoostBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        @Suppress("MagicNumber")
         @SuppressLint("SetTextI18n")
         fun bind(item: DeviceTotalRewardsBoost) {
             val boostCode = item.boostCode
+            var progressSliderActiveColor: Int = R.color.other_reward
+            var progressSliderInactiveColor: Int = R.color.other_reward_fill
             try {
                 if (boostCode == null) {
-                    onUnknownBoost()
+                    binding.title.text =
+                        itemView.context.getString(R.string.other_boost_reward_details)
                 } else {
                     val isBetaRewards = boostCode == BoostCode.beta_rewards.name
                     val isCorrectionRewards = boostCode.startsWith(BoostCode.correction.name, true)
@@ -56,39 +62,42 @@ class DeviceRewardsBoostAdapter :
                     if (isBetaRewards) {
                         binding.title.text =
                             itemView.context.getString(R.string.beta_reward_details)
-                        binding.boostProgressSlider.trackActiveTintList =
-                            itemView.context.getColorStateList(R.color.beta_rewards_fill)
-                        binding.boostProgressSlider.trackInactiveTintList =
-                            itemView.context.getColorStateList(R.color.beta_rewards_color)
+                        progressSliderActiveColor = R.color.beta_rewards_fill
+                        progressSliderInactiveColor = R.color.beta_rewards_color
                     } else if (isCorrectionRewards) {
                         binding.title.text =
                             itemView.context.getString(R.string.compensation_reward_details)
-                        binding.boostProgressSlider.trackActiveTintList =
-                            itemView.context.getColorStateList(R.color.correction_rewards_color)
-                        binding.boostProgressSlider.trackInactiveTintList =
-                            itemView.context.getColorStateList(R.color.correction_rewards_fill)
+                        progressSliderActiveColor = R.color.correction_rewards_color
+                        progressSliderInactiveColor = R.color.correction_rewards_fill
                     } else if (isCellBountyReward) {
                         binding.title.text =
                             itemView.context.getString(R.string.cell_bounty_reward_details)
-                        binding.boostProgressSlider.trackActiveTintList =
-                            itemView.context.getColorStateList(R.color.cell_bounty_reward)
-                        binding.boostProgressSlider.trackInactiveTintList =
-                            itemView.context.getColorStateList(R.color.cell_bounty_reward_fill)
+                        progressSliderActiveColor = R.color.cell_bounty_reward
+                        progressSliderInactiveColor = R.color.cell_bounty_reward_fill
                     } else if (isRolloutRewards) {
                         binding.title.text =
                             itemView.context.getString(R.string.rollouts_reward_details)
                     } else {
-                        onUnknownBoost()
+                        binding.title.text =
+                            itemView.context.getString(R.string.other_boost_reward_details)
                     }
                 }
             } catch (e: IllegalArgumentException) {
                 Timber.e(e, "Unsupported Boost Code: $boostCode")
-                onUnknownBoost()
+                binding.title.text = itemView.context.getString(R.string.other_boost_reward_details)
             }
 
             item.completedPercentage?.let {
                 binding.boostProgress.text = "$it%"
-                binding.boostProgressSlider.values = listOf(it.toFloat())
+                binding.boostProgressSlider.setContent {
+                    RoundedRangeView(
+                        23.dp,
+                        0F..it.toFloat(),
+                        0F..100F,
+                        progressSliderInactiveColor,
+                        progressSliderActiveColor
+                    )
+                }
             } ?: binding.boostProgressSlider.visible(false)
 
             if (item.currentRewards == null) {
@@ -115,14 +124,6 @@ class DeviceRewardsBoostAdapter :
             val boostStartDate = item.boostPeriodStart.getFormattedDate(true, includeComma = false)
             val boostStopDate = item.boostPeriodEnd.getFormattedDate(true, includeComma = false)
             binding.boostPeriod.text = "$boostStartDate - $boostStopDate"
-        }
-
-        private fun onUnknownBoost() {
-            binding.title.text = itemView.context.getString(R.string.other_boost_reward_details)
-            binding.boostProgressSlider.trackActiveTintList =
-                itemView.context.getColorStateList(R.color.other_reward)
-            binding.boostProgressSlider.trackInactiveTintList =
-                itemView.context.getColorStateList(R.color.other_reward_fill)
         }
     }
 }

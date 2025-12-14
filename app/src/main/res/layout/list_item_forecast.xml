@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small_to_normal"
             android:layout_marginEnd="@dimen/margin_large"
+            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@id/icon"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,26 +47,19 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/min_temperature"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/textColor"
                 android:textStyle="bold"
                 tools:text="13°C" />
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/temperature"
-                style="@style/Widget.WeatherXM.Slider"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/temperatureView"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:layout_weight="1"
-                android:enabled="false"
-                app:trackColorActive="@color/crypto"
-                app:trackColorInactive="@color/colorBackground"
-                app:values="@array/temperature_slider_sample_values"
-                tools:valueFrom="10"
-                tools:valueTo="28" />
+                tools:composableName="com.weatherxm.ui.components.compose.RoundedRangeViewKt.PreviewRoundedRangeView" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/max_temperature"

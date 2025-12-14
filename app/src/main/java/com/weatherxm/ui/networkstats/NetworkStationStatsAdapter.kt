@@ -31,7 +31,7 @@ class NetworkStationStatsAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class StationInfoViewHolder(
+    class StationInfoViewHolder(
         private val binding: ListItemNetworkStationStatsBinding,
         private val listener: (NetworkStationStats) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {

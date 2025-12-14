@@ -419,19 +419,14 @@
                                     app:layout_constraintTop_toBottomOf="@id/circSupplyTitle"
                                     tools:text="55.4M" />
 
-                                <com.google.android.material.slider.RangeSlider
+                                <androidx.compose.ui.platform.ComposeView
                                     android:id="@+id/circSupplyBar"
-                                    style="@style/Widget.WeatherXM.Slider.NetworkStats"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginHorizontal="@dimen/margin_extra_small"
-                                    android:enabled="false"
-                                    android:valueFrom="0"
+                                    android:layout_height="4dp"
+                                    android:layout_marginHorizontal="@dimen/margin_small_to_normal"
+                                    android:layout_marginTop="@dimen/margin_small"
                                     app:layout_constraintTop_toBottomOf="@id/circSupply"
-                                    app:trackColorActive="@color/blue"
-                                    app:trackHeight="4dp"
-                                    tools:values="@array/network_stats_circ_supply_default_values" />
-
+                                    tools:composableName="com.weatherxm.ui.components.compose.RoundedRangeViewKt.PreviewRoundedRangeView" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </com.google.android.material.card.MaterialCardView>
                     </LinearLayout>

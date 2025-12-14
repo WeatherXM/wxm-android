@@ -2,10 +2,12 @@ package com.weatherxm.ui.devicedetails.forecast
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ListItemForecastBinding
@@ -13,6 +15,7 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.RoundedRangeView
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.Resources
@@ -91,12 +94,18 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             binding.date.text = item.date.getRelativeDayAndMonthDay(itemView.context)
             binding.icon.setWeatherAnimation(item.icon)
             if (minTemperature == Float.MAX_VALUE || maxTemperature == Float.MIN_VALUE) {
-                binding.temperature.invisible()
+                binding.temperatureView.invisible()
             } else {
-                binding.temperature.apply {
-                    valueFrom = minTemperature
-                    valueTo = maxTemperature
-                    values = listOf(item.minTemp, item.maxTemp)
+                val rangeStart = item.minTemp ?: 0F
+                val rangeEnd = item.maxTemp ?: 0F
+                binding.temperatureView.setContent {
+                    RoundedRangeView(
+                        16.dp,
+                        rangeStart..rangeEnd,
+                        minTemperature..maxTemperature,
+                        R.color.colorBackground,
+                        R.color.crypto
+                    )
                 }
             }
             binding.minTemperature.text =
