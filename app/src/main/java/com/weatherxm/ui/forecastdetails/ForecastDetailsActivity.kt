@@ -164,7 +164,6 @@ class ForecastDetailsActivity : BaseActivity() {
         // Update the "Powered By" card
         if (model.forecast().isPremium == true) {
             binding.poweredByWXMLogo.visible(true)
-            binding.poweredByPremiumThunder.visible(true)
             binding.poweredByMeteoblueIcon.visible(false)
             binding.mosaicPromotionCard.visible(false)
         } else {

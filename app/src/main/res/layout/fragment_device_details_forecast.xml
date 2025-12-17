@@ -161,9 +161,11 @@
                 android:paddingBottom="@dimen/padding_small"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/blueTint"
-                app:cardCornerRadius="@dimen/radius_small"
-                app:contentPaddingBottom="@dimen/padding_small"
-                app:contentPaddingTop="@dimen/padding_small"
+                app:cardCornerRadius="@dimen/radius_large"
+                app:contentPaddingLeft="@dimen/padding_normal_to_large"
+                app:contentPaddingRight="@dimen/padding_normal_to_large"
+                app:contentPaddingBottom="@dimen/padding_small_to_normal"
+                app:contentPaddingTop="@dimen/padding_small_to_normal"
                 app:layout_constraintTop_toBottomOf="@id/dailyForecastRecycler"
                 tools:visibility="visible">
 
@@ -171,17 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/poweredByPremiumThunder"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_marginEnd="@dimen/margin_small"
-                        android:src="@drawable/ic_thunder"
-                        android:visibility="gone"
-                        app:tint="@color/forecast_premium"
-                        tools:ignore="ContentDescription" />
+                    android:orientation="vertical">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/poweredByText"
@@ -193,9 +185,9 @@
 
                     <ImageView
                         android:id="@+id/poweredByWXMLogo"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:src="@drawable/full_logo"
                         android:visibility="gone"
                         app:tint="@color/colorOnSurface"
@@ -203,9 +195,9 @@
 
                     <ImageView
                         android:id="@+id/poweredByMeteoblueIcon"
-                        android:layout_width="50dp"
-                        android:layout_height="18dp"
-                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_width="70dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:src="@drawable/meteoblue_logo_2024"
                         android:visibility="gone"
                         app:tint="@color/colorOnSurface"

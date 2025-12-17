@@ -1,5 +1,6 @@
 package com.weatherxm.ui.components.compose
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +35,8 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_large)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.elevation_normal)
-        )
+        ),
+        border = BorderStroke(2.dp, colorResource(R.color.dark_crypto_opacity_30))
     ) {
         Column(
             modifier = Modifier
@@ -42,10 +44,13 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
                 .padding(dimensionResource(R.dimen.padding_normal_to_large)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Title(
-                text = stringResource(R.string.hyper_local),
-                fontSize = 25.sp,
-                colorRes = R.color.colorPrimary
+            Text(
+                text = stringResource(R.string.mosaic_forecast).uppercase(),
+                fontSize = 22.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = colorResource(R.color.colorPrimary),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall
             )
             Text(
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small)),
@@ -56,7 +61,7 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large)),
+                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_normal)),
                 text = stringResource(R.string.mosaic_prompt_explanation),
                 color = colorResource(R.color.chart_primary_line),
                 textAlign = TextAlign.Center,
@@ -65,11 +70,15 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = dimensionResource(R.dimen.padding_large)),
+                    .padding(
+                        top = dimensionResource(R.dimen.padding_normal_to_large),
+                        start = dimensionResource(R.dimen.padding_normal),
+                        end = dimensionResource(R.dimen.padding_normal)
+                    ),
                 onClick = { onClickListener() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.colorPrimary),
-                    contentColor = colorResource(R.color.colorBackground)
+                    contentColor = colorResource(R.color.colorOnPrimary)
                 ),
                 shape = RoundedCornerShape(dimensionResource(R.dimen.radius_extra_extra_large)),
                 contentPadding = PaddingValues(
@@ -81,7 +90,7 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
                     text = stringResource(R.string.see_the_plans),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    colorRes = R.color.colorBackground
+                    colorRes = R.color.colorOnPrimary
                 )
             }
             if (hasFreeSubAvailable) {

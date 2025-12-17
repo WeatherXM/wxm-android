@@ -213,7 +213,6 @@ class ForecastFragment : BaseFragment() {
         binding.hourlyForecastRecycler.visible(true)
         binding.hourlyForecastTitle.visible(true)
         binding.poweredByWXMLogo.visible(forecast.isPremium == true)
-        binding.poweredByPremiumThunder.visible(forecast.isPremium == true)
         binding.poweredByMeteoblueIcon.visible(forecast.isPremium == false)
         binding.mosaicPromotionCard.visible(forecast.isPremium == false)
         binding.poweredByCard.visible(forecast.isPremium != null)
