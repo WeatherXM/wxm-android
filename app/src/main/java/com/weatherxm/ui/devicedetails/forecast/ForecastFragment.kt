@@ -11,12 +11,12 @@ import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
@@ -36,6 +36,9 @@ class ForecastFragment : BaseFragment() {
     }
     private val billingService: BillingService by inject()
 
+    private lateinit var hourlyForecastAdapter: HourlyForecastAdapter
+    private lateinit var dailyForecastAdapter: DailyForecastAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,13 +53,13 @@ class ForecastFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchForecast(true)
+            model.fetchForecasts(true)
         }
 
         initHiddenContent()
 
         // Initialize the adapters with empty data
-        val dailyForecastAdapter = DailyForecastAdapter {
+        dailyForecastAdapter = DailyForecastAdapter {
             navigator.showForecastDetails(
                 activityResultLauncher = null,
                 context = context,
@@ -66,7 +69,7 @@ class ForecastFragment : BaseFragment() {
                 hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
-        val hourlyForecastAdapter = HourlyForecastAdapter {
+        hourlyForecastAdapter = HourlyForecastAdapter {
             analytics.trackEventSelectContent(
                 AnalyticsService.ParamValue.HOURLY_DETAILS_CARD.paramValue,
                 Pair(
@@ -111,19 +114,15 @@ class ForecastFragment : BaseFragment() {
 
         parentModel.onDeviceFirstFetch().observe(viewLifecycleOwner) {
             model.device = it
-            model.fetchForecast(true)
+            model.fetchForecasts(true)
         }
 
-        model.onForecast().observe(viewLifecycleOwner) {
-            onForecast(hourlyForecastAdapter, dailyForecastAdapter, it)
+        model.onDefaultForecast().observe(viewLifecycleOwner) {
+            onForecast(it) { model.fetchForecasts(true) }
         }
 
-        model.onLoading().observe(viewLifecycleOwner) {
-            onLoading(it)
-        }
-
-        model.onError().observe(viewLifecycleOwner) {
-            showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
+        model.onPremiumForecast().observe(viewLifecycleOwner) {
+            onForecast(it) { model.fetchForecasts() }
         }
 
         initMosaicPromotionCard()
@@ -147,25 +146,10 @@ class ForecastFragment : BaseFragment() {
         }
     }
 
-    private fun onLoading(isLoading: Boolean) {
-        if (isLoading && binding.swiperefresh.isRefreshing) {
-            binding.progress.invisible()
-        } else if (isLoading) {
-            binding.mosaicPromotionCard.visible(false)
-            binding.dailyForecastTitle.visible(false)
-            binding.temperatureBarsInfoButton.visible(false)
-            binding.hourlyForecastTitle.visible(false)
-            binding.progress.visible(true)
-        } else {
-            binding.swiperefresh.isRefreshing = false
-            binding.progress.invisible()
-        }
-    }
-
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
-            model.fetchForecast()
+            model.fetchForecasts()
         } else if (model.device.relation == UNFOLLOWED) {
             binding.mosaicPromotionCard.visible(false)
             binding.poweredByCard.visible(false)
@@ -199,22 +183,42 @@ class ForecastFragment : BaseFragment() {
         }
     }
 
-    private fun onForecast(
-        hourlyForecastAdapter: HourlyForecastAdapter,
-        dailyForecastAdapter: DailyForecastAdapter,
-        forecast: UIForecast
-    ) {
-        hourlyForecastAdapter.submitList(forecast.next24Hours)
-        dailyForecastAdapter.submitList(forecast.forecastDays)
-        binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
-        binding.dailyForecastRecycler.visible(true)
-        binding.dailyForecastTitle.visible(true)
-        binding.temperatureBarsInfoButton.visible(true)
-        binding.hourlyForecastRecycler.visible(true)
-        binding.hourlyForecastTitle.visible(true)
-        binding.poweredByWXMLogo.visible(forecast.isPremium == true)
-        binding.poweredByMeteoblueIcon.visible(forecast.isPremium == false)
-        binding.mosaicPromotionCard.visible(forecast.isPremium == false)
-        binding.poweredByCard.visible(forecast.isPremium != null)
+    private fun onForecast(resource: Resource<UIForecast>, onErrorRetry: (() -> Unit)? = null) {
+        when (resource.status) {
+            Status.SUCCESS -> {
+                val forecast = resource.data
+                hourlyForecastAdapter.submitList(forecast?.next24Hours)
+                dailyForecastAdapter.submitList(forecast?.forecastDays)
+                binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
+                binding.dailyForecastRecycler.visible(true)
+                binding.dailyForecastTitle.visible(true)
+                binding.temperatureBarsInfoButton.visible(true)
+                binding.hourlyForecastRecycler.visible(true)
+                binding.hourlyForecastTitle.visible(true)
+                binding.poweredByWXMLogo.visible(forecast?.isPremium == true)
+                binding.poweredByMeteoblueIcon.visible(forecast?.isPremium == false)
+                binding.mosaicPromotionCard.visible(forecast?.isPremium == false)
+                binding.poweredByCard.visible(forecast?.isPremium != null)
+                binding.swiperefresh.isRefreshing = false
+                binding.statusView.visible(false)
+                binding.swiperefresh.visible(true)
+            }
+            Status.ERROR -> {
+                binding.statusView.animation(R.raw.anim_error, false)
+                    .title(R.string.error_generic_message)
+                    .action(getString(R.string.action_retry))
+                    .subtitle(resource.message)
+                    .listener { onErrorRetry?.invoke() }
+                    .visible(true)
+            }
+            Status.LOADING -> {
+                if (binding.swiperefresh.isRefreshing) {
+                    binding.statusView.visible(false)
+                } else {
+                    binding.swiperefresh.visible(false)
+                    binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
+                }
+            }
+        }
     }
 }

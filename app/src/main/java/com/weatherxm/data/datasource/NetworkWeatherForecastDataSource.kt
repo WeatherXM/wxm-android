@@ -12,7 +12,7 @@ class NetworkWeatherForecastDataSource(
     private val apiService: ApiService
 ) : WeatherForecastDataSource {
 
-    override suspend fun getDeviceForecast(
+    override suspend fun getDeviceDefaultForecast(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
@@ -32,6 +32,22 @@ class NetworkWeatherForecastDataSource(
         location: Location
     ): Either<Failure, List<WeatherData>> {
         return apiService.getLocationForecast(location.lat, location.lon).mapResponse()
+    }
+
+    override suspend fun getDevicePremiumForecast(
+        deviceId: String,
+        fromDate: LocalDate,
+        toDate: LocalDate,
+        exclude: String?,
+        token: String
+    ): Either<Failure, List<WeatherData>> {
+        return apiService.getPremiumForecast(
+            deviceId,
+            fromDate.toString(),
+            toDate.toString(),
+            exclude,
+            token
+        ).mapResponse()
     }
 
     override suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>) {

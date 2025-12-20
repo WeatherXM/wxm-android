@@ -12,7 +12,7 @@ class CacheWeatherForecastDataSource(
     private val cacheService: CacheService
 ) : WeatherForecastDataSource {
 
-    override suspend fun getDeviceForecast(
+    override suspend fun getDeviceDefaultForecast(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
@@ -20,6 +20,16 @@ class CacheWeatherForecastDataSource(
         token: String?
     ): Either<Failure, List<WeatherData>> {
         return cacheService.getDeviceForecast(deviceId)
+    }
+
+    override suspend fun getDevicePremiumForecast(
+        deviceId: String,
+        fromDate: LocalDate,
+        toDate: LocalDate,
+        exclude: String?,
+        token: String
+    ): Either<Failure, List<WeatherData>> {
+        throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
     override suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>) {

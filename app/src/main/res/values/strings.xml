@@ -504,7 +504,7 @@
     <string name="type_gateway_claiming_key_6_digit_hint">Enter 6-digit key</string>
 
     <!-- Forecast -->
-    <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
+    <string name="forecast_empty">No forecast weather data could not be found.</string>
     <string name="next_24_hours">Next 24 hours</string>
     <string name="next_7_days">Next 7 days</string>
     <string name="daily_conditions">Daily Conditions</string>

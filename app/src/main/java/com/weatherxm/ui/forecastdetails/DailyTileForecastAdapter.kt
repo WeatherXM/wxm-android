@@ -17,7 +17,7 @@ import java.time.LocalDate
 class DailyTileForecastAdapter(
     private var selectedDate: LocalDate,
     private val onNewSelectedPosition: (Int, Int) -> Unit,
-    private val onClickListener: (UIForecastDay) -> Unit
+    private val onClickListener: (Int) -> Unit
 ) : ListAdapter<UIForecastDay, DailyTileForecastAdapter.DailyTileViewHolder>(
     UIForecastDayDiffCallback()
 ) {
@@ -44,7 +44,7 @@ class DailyTileForecastAdapter(
 
         fun bind(item: UIForecastDay, position: Int) {
             binding.root.setOnClickListener {
-                onClickListener.invoke(item)
+                onClickListener.invoke(position)
                 selectedDate = item.date
                 checkSelectionStatus(item, position)
             }

@@ -11,8 +11,10 @@ import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.capitalizeWords
@@ -94,35 +96,20 @@ class ForecastDetailsActivity : BaseActivity() {
             binding.displayTimeNotice.visible(false)
         }
 
-        model.onForecastLoaded().observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    val selectedDayPosition = model.getSelectedDayPosition(
-                        intent.getStringExtra(ARG_FORECAST_SELECTED_DAY)
-                    )
-                    val forecastDay = model.forecast().forecastDays[selectedDayPosition]
-                    setupDailyAdapter(forecastDay, selectedDayPosition)
-                    updateUI(forecastDay)
-                    binding.statusView.visible(false)
-                    binding.mainContainer.visible(true)
-                }
-                Status.ERROR -> {
-                    binding.statusView.clear()
-                        .animation(R.raw.anim_error)
-                        .title(getString(R.string.error_generic_message))
-                        .subtitle(it.message)
-                    binding.mainContainer.visible(false)
-                }
-                Status.LOADING -> {
-                    binding.statusView.clear().animation(R.raw.anim_loading)
-                    binding.mainContainer.visible(false)
-                    binding.statusView.visible(true)
-                }
-            }
+        model.onDeviceDefaultForecast().observe(this) {
+            onForecast(it)
+        }
+
+        model.onDevicePremiumForecast().observe(this) {
+            onForecast(it)
+        }
+
+        model.onLocationForecast().observe(this) {
+            onForecast(it)
         }
 
         if (!model.device.isEmpty()) {
-            model.fetchDeviceForecast()
+            model.fetchDeviceForecasts()
             initMosaicPromotionCard()
         } else if (!model.location.isEmpty()) {
             model.fetchLocationForecast()
@@ -141,19 +128,48 @@ class ForecastDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun updateUI(forecast: UIForecastDay) {
+    private fun onForecast(resource: Resource<UIForecast>) {
+        when (resource.status) {
+            Status.SUCCESS -> {
+                val forecast = resource.data ?: UIForecast.empty()
+                val selectedDayPosition = model.getSelectedDayPosition(
+                    intent.getStringExtra(ARG_FORECAST_SELECTED_DAY),
+                    forecast
+                )
+                setupDailyAdapter(forecast, selectedDayPosition)
+                updateUI(forecast, selectedDayPosition)
+                binding.statusView.visible(false)
+                binding.mainContainer.visible(true)
+            }
+            Status.ERROR -> {
+                binding.statusView.clear()
+                    .animation(R.raw.anim_error)
+                    .title(getString(R.string.error_generic_message))
+                    .subtitle(resource.message)
+                binding.mainContainer.visible(false)
+            }
+            Status.LOADING -> {
+                binding.statusView.clear().animation(R.raw.anim_loading)
+                binding.mainContainer.visible(false)
+                binding.statusView.visible(true)
+            }
+        }
+    }
+
+    private fun updateUI(forecast: UIForecast, selectedDayPosition: Int) {
+        val forecastDay = forecast.forecastDays[selectedDayPosition]
         // Update the header now that model.address has valid data and we are in a location
         if (!model.location.isEmpty()) {
             binding.header.setContent {
                 if (model.location.isCurrentLocation) {
                     HeaderView(
                         title = getString(R.string.current_location).capitalizeWords(),
-                        subtitle = model.forecast().address,
+                        subtitle = forecast.address,
                         onInfoButton = null
                     )
                 } else {
                     HeaderView(
-                        title = model.forecast().address ?: EMPTY_VALUE,
+                        title = forecast.address ?: EMPTY_VALUE,
                         subtitle = null,
                         onInfoButton = null
                     )
@@ -162,7 +178,7 @@ class ForecastDetailsActivity : BaseActivity() {
         }
 
         // Update the "Powered By" card
-        if (model.forecast().isPremium == true) {
+        if (forecast.isPremium == true) {
             binding.poweredByWXMLogo.visible(true)
             binding.poweredByMeteoblueIcon.visible(false)
             binding.mosaicPromotionCard.visible(false)
@@ -173,61 +189,66 @@ class ForecastDetailsActivity : BaseActivity() {
         }
 
         // Update Daily Weather
-        binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
-        binding.dailyIcon.setWeatherAnimation(forecast.icon)
-        binding.dailyMaxTemp.text = getFormattedTemperature(this, forecast.maxTemp)
-        binding.dailyMinTemp.text = getFormattedTemperature(this, forecast.minTemp)
-        if (model.forecast().isPremium == true) {
-            binding.dailyPremiumWind.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
-            binding.dailyPremiumWind.setData(
-                getFormattedWind(this, forecast.windSpeed, forecast.windDirection)
+        binding.dailyDate.text = forecastDay.date.getRelativeDayAndShort(this)
+        binding.dailyIcon.setWeatherAnimation(forecastDay.icon)
+        binding.dailyMaxTemp.text = getFormattedTemperature(this, forecastDay.maxTemp)
+        binding.dailyMinTemp.text = getFormattedTemperature(this, forecastDay.minTemp)
+        if (forecast.isPremium == true) {
+            binding.dailyPremiumWind.setIcon(
+                getWindDirectionDrawable(
+                    this,
+                    forecastDay.windDirection
+                )
             )
-            binding.dailyPremiumHumidity.setData(getFormattedHumidity(forecast.humidity))
+            binding.dailyPremiumWind.setData(
+                getFormattedWind(this, forecastDay.windSpeed, forecastDay.windDirection)
+            )
+            binding.dailyPremiumHumidity.setData(getFormattedHumidity(forecastDay.humidity))
             binding.dailyDefaultFirstRow.visible(false)
             binding.dailyDefaultSecondRow.visible(false)
             binding.dailyPremiumRow.visible(true)
         } else {
             binding.precipProbabilityCard.setData(
-                getFormattedPrecipitationProbability(forecast.precipProbability)
+                getFormattedPrecipitationProbability(forecastDay.precipProbability)
             )
-            binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
+            binding.windCard.setIcon(getWindDirectionDrawable(this, forecastDay.windDirection))
             binding.windCard.setData(
                 getFormattedWind(
                     this,
-                    forecast.windSpeed,
-                    forecast.windDirection
+                    forecastDay.windSpeed,
+                    forecastDay.windDirection
                 )
             )
             binding.dailyPrecipCard.setData(
                 getFormattedPrecipitation(
                     context = this,
-                    value = forecast.precip,
+                    value = forecastDay.precip,
                     isRainRate = false
                 )
             )
-            binding.uvCard.setData(getFormattedUV(this, forecast.uv))
-            binding.humidityCard.setData(getFormattedHumidity(forecast.humidity))
-            binding.pressureCard.setData(getFormattedPressure(this, forecast.pressure))
+            binding.uvCard.setData(getFormattedUV(this, forecastDay.uv))
+            binding.humidityCard.setData(getFormattedHumidity(forecastDay.humidity))
+            binding.pressureCard.setData(getFormattedPressure(this, forecastDay.pressure))
         }
 
         // Update Hourly Tiles
         hourlyAdapter = HourlyForecastAdapter(null)
         binding.hourlyForecastRecycler.adapter = hourlyAdapter
-        hourlyAdapter.submitList(forecast.hourlyWeather)
-        if (!forecast.hourlyWeather.isNullOrEmpty()) {
+        hourlyAdapter.submitList(forecastDay.hourlyWeather)
+        if (!forecastDay.hourlyWeather.isNullOrEmpty()) {
             binding.hourlyForecastRecycler.scrollToPosition(
-                model.getDefaultHourPosition(forecast.hourlyWeather)
+                model.getDefaultHourPosition(forecastDay.hourlyWeather)
             )
         }
 
         // Update Charts
-        updateCharts(forecast)
+        updateCharts(forecast, forecastDay)
     }
 
-    private fun updateCharts(forecast: UIForecastDay) {
+    private fun updateCharts(forecast: UIForecast, forecastDay: UIForecastDay) {
         // Update Charts
         with(binding.charts) {
-            val charts = model.getCharts(forecast)
+            val charts = model.getCharts(forecast, forecastDay)
             clearCharts()
             initTemperatureChart(charts.temperature, charts.feelsLike, true)
             initWindChart(charts.windSpeed, charts.windGust, charts.windDirection, true)
@@ -289,13 +310,14 @@ class ForecastDetailsActivity : BaseActivity() {
         binding.mainContainer.smoothScrollTo(chartX, finalY, SCROLL_DURATION_MS)
     }
 
-    private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
+    private fun setupDailyAdapter(forecast: UIForecast, selectedDayPosition: Int) {
+        val forecastDay = forecast.forecastDays[selectedDayPosition]
         dailyAdapter = DailyTileForecastAdapter(
             forecastDay.date,
             onNewSelectedPosition = { position, width ->
                 binding.dailyTilesRecycler.moveItemToCenter(position, binding.root.width, width)
             },
-            onClickListener = {
+            onClickListener = { newSelectedDayPosition ->
                 analytics.trackEventSelectContent(
                     AnalyticsService.ParamValue.DAILY_CARD.paramValue,
                     Pair(
@@ -305,11 +327,11 @@ class ForecastDetailsActivity : BaseActivity() {
                 )
                 // Get selected position before we update it in order to reset the stroke
                 dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
-                updateUI(it)
+                updateUI(forecast, newSelectedDayPosition)
             }
         )
         binding.dailyTilesRecycler.adapter = dailyAdapter
-        dailyAdapter.submitList(model.forecast().forecastDays)
+        dailyAdapter.submitList(forecast.forecastDays)
         binding.dailyTilesRecycler.scrollToPosition(selectedDayPosition)
     }
 
