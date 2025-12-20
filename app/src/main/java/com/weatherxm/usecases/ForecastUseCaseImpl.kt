@@ -20,6 +20,7 @@ class ForecastUseCaseImpl(
     private val repo: WeatherForecastRepository
 ) : ForecastUseCase {
 
+    @Suppress("MagicNumber")
     private suspend fun getDeviceForecast(
         isPremium: Boolean,
         device: UIDevice,
@@ -44,7 +45,6 @@ class ForecastUseCaseImpl(
         }
     }
 
-    @Suppress("MagicNumber")
     override suspend fun getDeviceDefaultForecast(
         device: UIDevice,
         forceRefresh: Boolean
@@ -52,7 +52,6 @@ class ForecastUseCaseImpl(
         return getDeviceForecast(false, device, forceRefresh)
     }
 
-    @Suppress("MagicNumber")
     override suspend fun getDevicePremiumForecast(device: UIDevice): Either<Failure, UIForecast> {
         return getDeviceForecast(isPremium = true, device)
     }

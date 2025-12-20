@@ -11,6 +11,7 @@ import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.models.NetworkError.NoConnectionError
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 
 class ForecastViewModel(
     var device: UIDevice = UIDevice.empty(),
+    private val billingService: BillingService,
     private val resources: Resources,
     private val forecastUseCase: ForecastUseCase,
     private val analytics: AnalyticsWrapper,
@@ -48,11 +50,12 @@ class ForecastViewModel(
             mutableLiveData = onDefaultForecast,
             fetchOperation = { forecastUseCase.getDeviceDefaultForecast(device, forceRefresh) }
         )
-        // TODO: STOPSHIP: We need a check here to not fetch the below if not premium available.
-        fetchDeviceForecast(
-            mutableLiveData = onPremiumForecast,
-            fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }
-        )
+        if (billingService.hasActiveSub()) {
+            fetchDeviceForecast(
+                mutableLiveData = onPremiumForecast,
+                fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }
+            )
+        }
     }
 
     private fun fetchDeviceForecast(

@@ -8,7 +8,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
-import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.Resource
@@ -20,10 +19,10 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.compose.ForecastTabSelector
 import com.weatherxm.ui.components.compose.MosaicPromotionCard
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.toISODate
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -34,10 +33,10 @@ class ForecastFragment : BaseFragment() {
     private val model: ForecastViewModel by viewModel {
         parametersOf(parentModel.device)
     }
-    private val billingService: BillingService by inject()
 
     private lateinit var hourlyForecastAdapter: HourlyForecastAdapter
     private lateinit var dailyForecastAdapter: DailyForecastAdapter
+    private var currentSelectedTab = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -118,15 +117,37 @@ class ForecastFragment : BaseFragment() {
         }
 
         model.onDefaultForecast().observe(viewLifecycleOwner) {
-            onForecast(it) { model.fetchForecasts(true) }
+            if (currentSelectedTab == 0) {
+                onForecast(it) { model.fetchForecasts(true) }
+            }
         }
 
         model.onPremiumForecast().observe(viewLifecycleOwner) {
-            onForecast(it) { model.fetchForecasts() }
+            if (currentSelectedTab == 1) {
+                onForecast(it) { model.fetchForecasts() }
+            }
         }
 
+        initForecastTabsSelector()
         initMosaicPromotionCard()
         fetchOrHideContent()
+    }
+
+    private fun initForecastTabsSelector() {
+        binding.forecastTabSelector.setContent {
+            ForecastTabSelector(0) { newSelectedTab ->
+                currentSelectedTab = newSelectedTab
+                if (newSelectedTab == 0) {
+                    model.onDefaultForecast().value?.let {
+                        onForecast(it) { model.fetchForecasts(true) }
+                    }
+                } else {
+                    model.onPremiumForecast().value?.let {
+                        onForecast(it) { model.fetchForecasts() }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -152,12 +173,8 @@ class ForecastFragment : BaseFragment() {
             model.fetchForecasts()
         } else if (model.device.relation == UNFOLLOWED) {
             binding.mosaicPromotionCard.visible(false)
-            binding.poweredByCard.visible(false)
-            binding.hourlyForecastTitle.visible(false)
-            binding.hourlyForecastRecycler.visible(false)
-            binding.dailyForecastRecycler.visible(false)
-            binding.dailyForecastTitle.visible(false)
-            binding.temperatureBarsInfoButton.visible(false)
+            binding.forecastTabSelector.visible(false)
+            binding.mainContainer.visible(false)
             binding.hiddenContentContainer.visible(true)
         }
     }
@@ -189,21 +206,17 @@ class ForecastFragment : BaseFragment() {
                 val forecast = resource.data
                 hourlyForecastAdapter.submitList(forecast?.next24Hours)
                 dailyForecastAdapter.submitList(forecast?.forecastDays)
-                binding.mosaicPromotionCard.visible(!billingService.hasActiveSub())
-                binding.dailyForecastRecycler.visible(true)
-                binding.dailyForecastTitle.visible(true)
-                binding.temperatureBarsInfoButton.visible(true)
-                binding.hourlyForecastRecycler.visible(true)
-                binding.hourlyForecastTitle.visible(true)
-                binding.poweredByWXMLogo.visible(forecast?.isPremium == true)
-                binding.poweredByMeteoblueIcon.visible(forecast?.isPremium == false)
+                binding.poweredByMeteoblueIcon.visible(currentSelectedTab == 0)
+                binding.poweredByWXMLogo.visible(currentSelectedTab == 1)
+                binding.forecastTabSelector.visible(forecast?.isPremium == true)
                 binding.mosaicPromotionCard.visible(forecast?.isPremium == false)
                 binding.poweredByCard.visible(forecast?.isPremium != null)
                 binding.swiperefresh.isRefreshing = false
                 binding.statusView.visible(false)
-                binding.swiperefresh.visible(true)
+                binding.mainContainer.visible(true)
             }
             Status.ERROR -> {
+                binding.mainContainer.visible(false)
                 binding.statusView.animation(R.raw.anim_error, false)
                     .title(R.string.error_generic_message)
                     .action(getString(R.string.action_retry))
@@ -215,7 +228,7 @@ class ForecastFragment : BaseFragment() {
                 if (binding.swiperefresh.isRefreshing) {
                     binding.statusView.visible(false)
                 } else {
-                    binding.swiperefresh.visible(false)
+                    binding.mainContainer.visible(false)
                     binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
                 }
             }
