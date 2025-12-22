@@ -208,9 +208,9 @@ class ForecastFragment : BaseFragment() {
                 dailyForecastAdapter.submitList(forecast?.forecastDays)
                 binding.poweredByMeteoblueIcon.visible(currentSelectedTab == 0)
                 binding.poweredByWXMLogo.visible(currentSelectedTab == 1)
-                binding.forecastTabSelector.visible(forecast?.isPremium == true)
-                binding.mosaicPromotionCard.visible(forecast?.isPremium == false)
-                binding.poweredByCard.visible(forecast?.isPremium != null)
+                binding.forecastTabSelector.visible(true)
+                binding.mosaicPromotionCard.visible(false)
+                binding.poweredByCard.visible(true)
                 binding.swiperefresh.isRefreshing = false
                 binding.statusView.visible(false)
                 binding.mainContainer.visible(true)
