@@ -29,6 +29,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
+import com.weatherxm.ui.components.compose.ForecastTabSelector
 import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.ui.components.compose.JoinNetworkPromoCard
 import com.weatherxm.ui.components.compose.MosaicPromotionCard
@@ -62,6 +63,7 @@ class ForecastDetailsActivity : BaseActivity() {
 
     private lateinit var dailyAdapter: DailyTileForecastAdapter
     private lateinit var hourlyAdapter: HourlyForecastAdapter
+    private var currentSelectedTab = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,22 +99,44 @@ class ForecastDetailsActivity : BaseActivity() {
         }
 
         model.onDeviceDefaultForecast().observe(this) {
-            onForecast(it)
+            if (currentSelectedTab == 0) {
+                onForecast(it) { model.fetchDeviceForecasts() }
+            }
         }
 
         model.onDevicePremiumForecast().observe(this) {
-            onForecast(it)
+            if (currentSelectedTab == 1) {
+                onForecast(it) { model.fetchDeviceForecasts() }
+            }
         }
 
         model.onLocationForecast().observe(this) {
-            onForecast(it)
+            onForecast(it) { model.fetchLocationForecast() }
         }
 
         if (!model.device.isEmpty()) {
             model.fetchDeviceForecasts()
+            initForecastTabsSelector()
             initMosaicPromotionCard()
         } else if (!model.location.isEmpty()) {
             model.fetchLocationForecast()
+        }
+    }
+
+    private fun initForecastTabsSelector() {
+        binding.forecastTabSelector.setContent {
+            ForecastTabSelector(0) { newSelectedTab ->
+                currentSelectedTab = newSelectedTab
+                if (newSelectedTab == 0) {
+                    model.onDeviceDefaultForecast().value?.let {
+                        onForecast(it) { model.fetchDeviceForecasts() }
+                    }
+                } else {
+                    model.onDevicePremiumForecast().value?.let {
+                        onForecast(it) { model.fetchDeviceForecasts() }
+                    }
+                }
+            }
         }
     }
 
@@ -128,7 +152,7 @@ class ForecastDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun onForecast(resource: Resource<UIForecast>) {
+    private fun onForecast(resource: Resource<UIForecast>, onErrorRetry: () -> Unit) {
         when (resource.status) {
             Status.SUCCESS -> {
                 val forecast = resource.data ?: UIForecast.empty()
@@ -146,6 +170,8 @@ class ForecastDetailsActivity : BaseActivity() {
                     .animation(R.raw.anim_error)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(resource.message)
+                    .action(getString(R.string.action_retry))
+                    .listener { onErrorRetry.invoke() }
                 binding.mainContainer.visible(false)
             }
             Status.LOADING -> {
@@ -178,14 +204,13 @@ class ForecastDetailsActivity : BaseActivity() {
         }
 
         // Update the "Powered By" card
-        if (forecast.isPremium == true) {
-            binding.poweredByWXMLogo.visible(true)
-            binding.poweredByMeteoblueIcon.visible(false)
-            binding.mosaicPromotionCard.visible(false)
-        } else {
-            binding.poweredByMeteoblueIcon.visible(true)
-            // Show the Mosaic promo only on devices' forecast
-            binding.mosaicPromotionCard.visible(!model.device.isEmpty())
+        binding.poweredByMeteoblueIcon.visible(currentSelectedTab == 0)
+        binding.poweredByWXMLogo.visible(currentSelectedTab == 1)
+
+        // Update the forecast tabs or the mosaic prompt
+        if (!model.device.isEmpty()) {
+            binding.forecastTabSelector.visible(forecast.isPremium == true || currentSelectedTab == 1)
+            binding.mosaicPromotionCard.visible(forecast.isPremium == false)
         }
 
         // Update Daily Weather
@@ -193,7 +218,11 @@ class ForecastDetailsActivity : BaseActivity() {
         binding.dailyIcon.setWeatherAnimation(forecastDay.icon)
         binding.dailyMaxTemp.text = getFormattedTemperature(this, forecastDay.maxTemp)
         binding.dailyMinTemp.text = getFormattedTemperature(this, forecastDay.minTemp)
-        if (forecast.isPremium == true) {
+
+        /**
+         * Some data are missing in the Hyper Local tab so we handle it differently below.
+         */
+        if (currentSelectedTab == 1) {
             binding.dailyPremiumWind.setIcon(
                 getWindDirectionDrawable(
                     this,
@@ -298,7 +327,7 @@ class ForecastDetailsActivity : BaseActivity() {
     @Suppress("MagicNumber")
     private fun scrollToChart(chart: LineChartView) {
         val (chartX, chartY) = chart.screenLocation()
-        val currentY = binding.mainContainer.scrollY
+        val currentY = binding.scrollView.scrollY
 
         /**
          * It didn't seem to scroll properly at the top of the chart's card,
@@ -307,7 +336,7 @@ class ForecastDetailsActivity : BaseActivity() {
          * and scroll properly to the top of the card containing the chart
          */
         val finalY = chartY - binding.appBar.height - binding.root.paddingTop + currentY - 110
-        binding.mainContainer.smoothScrollTo(chartX, finalY, SCROLL_DURATION_MS)
+        binding.scrollView.smoothScrollTo(chartX, finalY, SCROLL_DURATION_MS)
     }
 
     private fun setupDailyAdapter(forecast: UIForecast, selectedDayPosition: Int) {

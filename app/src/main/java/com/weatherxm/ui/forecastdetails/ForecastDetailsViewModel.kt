@@ -11,6 +11,7 @@ import com.weatherxm.data.datasource.LocationsDataSource.Companion.MAX_AUTH_LOCA
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
@@ -36,6 +37,7 @@ class ForecastDetailsViewModel(
     val device: UIDevice,
     val location: UILocation,
     val hasFreeTrialAvailable: Boolean,
+    private val billingService: BillingService,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val authUseCase: AuthUseCase,
@@ -57,11 +59,12 @@ class ForecastDetailsViewModel(
             mutableLiveData = onDeviceDefaultForecast,
             fetchOperation = { forecastUseCase.getDeviceDefaultForecast(device) }
         )
-        // TODO: STOPSHIP: We need a check here to not fetch the below if not premium available. 
-        fetchDeviceForecast(
-            mutableLiveData = onDevicePremiumForecast,
-            fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }
-        )
+        if (billingService.hasActiveSub()) {
+            fetchDeviceForecast(
+                mutableLiveData = onDevicePremiumForecast,
+                fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }
+            )
+        }
     }
 
     private fun fetchDeviceForecast(
@@ -158,10 +161,10 @@ class ForecastDetailsViewModel(
 
     fun getCharts(forecast: UIForecast, forecastDay: UIForecastDay): Charts {
         Timber.d("Returning forecast charts for [${forecastDay.date}]")
-        val chartStep = if (forecast.isPremium == true) {
-            Duration.ofHours(FORECAST_CHART_STEP_PREMIUM)
-        } else {
+        val chartStep = if (forecast.isPremium == false) {
             Duration.ofHours(FORECAST_CHART_STEP_DEFAULT)
+        } else {
+            Duration.ofHours(FORECAST_CHART_STEP_PREMIUM)
         }
         return chartsUseCase.createHourlyCharts(
             forecastDay.date,

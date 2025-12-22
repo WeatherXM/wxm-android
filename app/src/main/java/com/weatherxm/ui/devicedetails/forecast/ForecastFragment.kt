@@ -200,7 +200,7 @@ class ForecastFragment : BaseFragment() {
         }
     }
 
-    private fun onForecast(resource: Resource<UIForecast>, onErrorRetry: (() -> Unit)? = null) {
+    private fun onForecast(resource: Resource<UIForecast>, onErrorRetry: () -> Unit) {
         when (resource.status) {
             Status.SUCCESS -> {
                 val forecast = resource.data
@@ -208,8 +208,10 @@ class ForecastFragment : BaseFragment() {
                 dailyForecastAdapter.submitList(forecast?.forecastDays)
                 binding.poweredByMeteoblueIcon.visible(currentSelectedTab == 0)
                 binding.poweredByWXMLogo.visible(currentSelectedTab == 1)
-                binding.forecastTabSelector.visible(true)
-                binding.mosaicPromotionCard.visible(false)
+                binding.forecastTabSelector.visible(
+                    forecast?.isPremium == true || currentSelectedTab == 1
+                )
+                binding.mosaicPromotionCard.visible(forecast?.isPremium == false)
                 binding.poweredByCard.visible(true)
                 binding.swiperefresh.isRefreshing = false
                 binding.statusView.visible(false)
@@ -221,7 +223,7 @@ class ForecastFragment : BaseFragment() {
                     .title(R.string.error_generic_message)
                     .action(getString(R.string.action_retry))
                     .subtitle(resource.message)
-                    .listener { onErrorRetry?.invoke() }
+                    .listener { onErrorRetry.invoke() }
                     .visible(true)
             }
             Status.LOADING -> {
