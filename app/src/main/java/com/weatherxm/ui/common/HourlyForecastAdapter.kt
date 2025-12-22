@@ -46,6 +46,7 @@ class HourlyForecastAdapter(
             item.precipProbability?.let {
                 binding.precipProbability.text =
                     Weather.getFormattedPrecipitationProbability(item.precipProbability)
+                binding.precipProbabilityContainer.visible(true)
             } ?: binding.precipProbabilityContainer.visible(false)
         }
     }

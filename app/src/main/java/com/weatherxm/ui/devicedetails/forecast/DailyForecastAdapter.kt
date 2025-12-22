@@ -153,9 +153,12 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
                 oldItem.maxTemp == newItem.maxTemp &&
                 oldItem.minTemp == newItem.minTemp &&
                 oldItem.precipProbability == newItem.precipProbability &&
+                oldItem.precip == newItem.precip &&
                 oldItem.windSpeed == newItem.windSpeed &&
                 oldItem.windDirection == newItem.windDirection &&
                 oldItem.humidity == newItem.humidity &&
+                oldItem.pressure == newItem.pressure &&
+                oldItem.uv == newItem.uv &&
                 oldItem.hourlyWeather?.size == newItem.hourlyWeather?.size
         }
     }

@@ -133,7 +133,7 @@ class BillingService(
     private fun startConnection() {
         billingClient?.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                if (billingResult.responseCode == BillingResponseCode.OK) {
                     coroutineScope.launch(dispatcher) {
                         setupPurchases()
                     }
