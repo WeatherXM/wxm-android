@@ -258,6 +258,9 @@ class ForecastDetailsActivity : BaseActivity() {
             binding.uvCard.setData(getFormattedUV(this, forecastDay.uv))
             binding.humidityCard.setData(getFormattedHumidity(forecastDay.humidity))
             binding.pressureCard.setData(getFormattedPressure(this, forecastDay.pressure))
+            binding.dailyPremiumRow.visible(false)
+            binding.dailyDefaultFirstRow.visible(true)
+            binding.dailyDefaultSecondRow.visible(true)
         }
 
         // Update Hourly Tiles
