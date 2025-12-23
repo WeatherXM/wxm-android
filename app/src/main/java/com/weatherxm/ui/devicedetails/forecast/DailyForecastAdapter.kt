@@ -2,6 +2,8 @@ package com.weatherxm.ui.devicedetails.forecast
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -31,9 +33,14 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
 
     private var minTemperature: Float = Float.MAX_VALUE
     private var maxTemperature: Float = Float.MIN_VALUE
+    private var isOnPremiumTab: Boolean = false
 
     val resources: Resources by inject()
     val analytics: AnalyticsWrapper by inject()
+
+    fun setPremiumData(isOnPremiumTab: Boolean) {
+        this.isOnPremiumTab = isOnPremiumTab
+    }
 
     override fun submitList(list: List<UIForecastDay>?) {
         /*
@@ -99,12 +106,23 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
                 val rangeStart = item.minTemp ?: 0F
                 val rangeEnd = item.maxTemp ?: 0F
                 binding.temperatureView.setContent {
+                    val brushColor = if (isOnPremiumTab) {
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(itemView.context.getColor(R.color.blue)),
+                                Color(itemView.context.getColor(R.color.forecast_premium))
+                            )
+                        )
+                    } else {
+                        null
+                    }
                     RoundedRangeView(
                         16.dp,
                         rangeStart..rangeEnd,
                         minTemperature..maxTemperature,
                         R.color.colorBackground,
-                        R.color.crypto
+                        R.color.crypto,
+                        brushColor
                     )
                 }
             }

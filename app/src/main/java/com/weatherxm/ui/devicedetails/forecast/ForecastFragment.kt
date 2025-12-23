@@ -205,6 +205,7 @@ class ForecastFragment : BaseFragment() {
             Status.SUCCESS -> {
                 val forecast = resource.data
                 hourlyForecastAdapter.submitList(forecast?.next24Hours)
+                dailyForecastAdapter.setPremiumData(currentSelectedTab == 1)
                 dailyForecastAdapter.submitList(forecast?.forecastDays)
                 binding.poweredByMeteoblueIcon.visible(currentSelectedTab == 0)
                 binding.poweredByWXMLogo.visible(currentSelectedTab == 1)

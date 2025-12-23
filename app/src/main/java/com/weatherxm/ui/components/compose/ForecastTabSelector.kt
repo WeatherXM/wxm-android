@@ -117,7 +117,7 @@ private fun RowScope.TabItem(
                             )
                         )
                     } else {
-                        Brush.linearGradient(listOf(Color.Transparent, Color.Transparent))
+                        Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent))
                     },
                     shape = RoundedCornerShape(dimensionResource(R.dimen.radius_small))
                 ),

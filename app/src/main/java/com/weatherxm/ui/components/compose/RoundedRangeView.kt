@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +22,8 @@ fun RoundedRangeView(
     currentRange: ClosedFloatingPointRange<Float>,
     totalRange: ClosedFloatingPointRange<Float>,
     inactiveColorResId: Int,
-    activeColorResId: Int
+    activeColorResId: Int,
+    activeColorBrush: Brush? = null
 ) {
     val cornerRadius = dimensionResource(R.dimen.radius_extra_extra_large).value
     val inactiveColor = colorResource(inactiveColorResId)
@@ -47,12 +49,21 @@ fun RoundedRangeView(
         val activeWidth = width * (endFraction - startFraction)
 
         // Draw active track
-        drawRoundRect(
-            color = activeColor,
-            topLeft = Offset(startX, 0f),
-            size = Size(activeWidth, trackHeight),
-            cornerRadius = CornerRadius(cornerRadius, cornerRadius)
-        )
+        if (activeColorBrush != null) {
+            drawRoundRect(
+                brush = activeColorBrush,
+                topLeft = Offset(startX, 0f),
+                size = Size(activeWidth, trackHeight),
+                cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+            )
+        } else {
+            drawRoundRect(
+                color = activeColor,
+                topLeft = Offset(startX, 0f),
+                size = Size(activeWidth, trackHeight),
+                cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+            )
+        }
     }
 }
 
