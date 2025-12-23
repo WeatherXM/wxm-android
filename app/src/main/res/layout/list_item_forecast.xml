@@ -22,7 +22,6 @@
             tools:text="Today, Tuesday 31/1" />
 
         <ImageView
-            android:id="@+id/openRewards"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/action_open"
@@ -94,16 +93,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temperatureContainer">
 
-            <ImageView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/precipProbabilityIcon"
                 android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/ic_weather_precip_probability"
-                app:layout_constraintBottom_toBottomOf="@id/precipProbability"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/precipProbability"
-                app:tint="@color/darkGrey"
-                tools:ignore="contentDescription" />
+                android:layout_height="14dp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/precipProbability"
@@ -116,17 +109,11 @@
                 app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
                 tools:text="50%" />
 
-            <ImageView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/precipIcon"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:layout_marginStart="@dimen/margin_small"
-                android:src="@drawable/ic_weather_precipitation"
-                app:layout_constraintBottom_toBottomOf="@id/precip"
-                app:layout_constraintStart_toEndOf="@id/precipProbability"
-                app:layout_constraintTop_toTopOf="@id/precip"
-                app:tint="@color/darkGrey"
-                tools:ignore="contentDescription" />
+                android:layout_marginStart="@dimen/margin_small" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/precip"
@@ -140,16 +127,10 @@
                 app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
                 tools:text="1.5 in" />
 
-            <ImageView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/windIcon"
                 android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/ic_wind_direction"
-                app:layout_constraintBottom_toBottomOf="@id/wind"
-                app:layout_constraintStart_toEndOf="@id/precip"
-                app:layout_constraintTop_toTopOf="@id/wind"
-                app:tint="@color/darkGrey"
-                tools:ignore="contentDescription" />
+                android:layout_height="14dp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/wind"
@@ -162,17 +143,11 @@
                 app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
                 tools:text="3 km/h 359°" />
 
-            <ImageView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/humidityIcon"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:layout_marginStart="@dimen/margin_small"
-                android:src="@drawable/ic_weather_humidity"
-                app:layout_constraintBottom_toBottomOf="@id/humidity"
-                app:layout_constraintStart_toEndOf="@id/wind"
-                app:layout_constraintTop_toTopOf="@id/humidity"
-                app:tint="@color/darkGrey"
-                tools:ignore="contentDescription" />
+                android:layout_marginStart="@dimen/margin_small" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/humidity"

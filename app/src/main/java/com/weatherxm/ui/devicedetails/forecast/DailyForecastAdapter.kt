@@ -2,8 +2,10 @@ package com.weatherxm.ui.devicedetails.forecast
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -17,12 +19,13 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.GradientIcon
+import com.weatherxm.ui.components.compose.GradientIconRotatable
 import com.weatherxm.ui.components.compose.RoundedRangeView
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
-import com.weatherxm.util.Weather.getWindDirectionDrawable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -131,14 +134,19 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             binding.maxTemperature.text =
                 Weather.getFormattedTemperature(itemView.context, item.maxTemp)
 
+            // Setup precipProbabilityIcon
             if (item.precipProbability == null) {
                 binding.precipProbabilityIcon.visible(false)
                 binding.precipProbability.visible(false)
             } else {
                 binding.precipProbability.text =
                     Weather.getFormattedPrecipitationProbability(item.precipProbability)
+                binding.precipProbabilityIcon.setContent {
+                    SetWeatherIcon(R.drawable.ic_weather_precip_probability)
+                }
             }
 
+            // Setup precipIcon
             if (item.precip == null) {
                 binding.precipIcon.visible(false)
                 binding.precip.visible(false)
@@ -148,15 +156,59 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
                     value = item.precip,
                     isRainRate = false
                 )
+                binding.precipIcon.setContent {
+                    SetWeatherIcon(R.drawable.ic_weather_precipitation)
+                }
             }
 
+            // Setup windIcon
             binding.wind.text =
                 Weather.getFormattedWind(itemView.context, item.windSpeed, item.windDirection)
-            binding.windIcon.setImageDrawable(
-                getWindDirectionDrawable(itemView.context, item.windDirection)
-            )
+            binding.windIcon.setContent {
+                SetWindDirectionIcon(item.windDirection)
+            }
+
+            // Setup humidityIcon
             binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
+            binding.humidityIcon.setContent {
+                SetWeatherIcon(R.drawable.ic_weather_humidity)
+            }
         }
+    }
+
+    @Composable
+    private fun SetWeatherIcon(iconRes: Int) {
+        GradientIcon(
+            iconRes = iconRes,
+            size = 14.dp,
+            brush = if (isOnPremiumTab) {
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        colorResource(R.color.blue),
+                        colorResource(R.color.forecast_premium)
+                    )
+                )
+            } else null,
+            tint = if (!isOnPremiumTab) colorResource(R.color.darkGrey) else null
+        )
+    }
+
+    @Composable
+    private fun SetWindDirectionIcon(windDirection: Int?) {
+        GradientIconRotatable(
+            iconRes = R.drawable.ic_wind_direction,
+            rotation = (windDirection?.toFloat() ?: 0f) + 180f,
+            size = 14.dp,
+            brush = if (isOnPremiumTab) {
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        colorResource(R.color.blue),
+                        colorResource(R.color.forecast_premium)
+                    )
+                )
+            } else null,
+            tint = if (!isOnPremiumTab) colorResource(R.color.darkGrey) else null
+        )
     }
 
     class UIForecastDiffCallback : DiffUtil.ItemCallback<UIForecastDay>() {
