@@ -169,6 +169,17 @@ class DeviceDetailsActivity : BaseActivity() {
         if (billingService.hasActiveSub()) {
             binding.navigatorGroup.getTabAt(FORECAST_TAB_POSITION)
                 ?.setCustomView(R.layout.view_forecast_premium_tab)
+
+            if(binding.viewPager.currentItem == FORECAST_TAB_POSITION) {
+                binding.navigatorGroup.getTabAt(FORECAST_TAB_POSITION)?.customView?.apply {
+                    findViewById<ImageView>(
+                        R.id.forecastIcon
+                    )?.setColor(R.color.forecast_premium)
+                    findViewById<MaterialTextView>(R.id.forecastTitle)?.setTextColor(
+                        getColor(R.color.forecast_premium)
+                    )
+                }
+            }
         }
         if (model.device.relation != DeviceRelation.OWNED) {
             analytics.trackScreen(
@@ -192,10 +203,7 @@ class DeviceDetailsActivity : BaseActivity() {
             val premiumColor = getColor(R.color.forecast_premium)
             if (billingService.hasActiveSub()) {
                 setSelectedTabIndicatorColor(premiumColor)
-                setTabTextColors(
-                    context.getColor(R.color.darkGrey),
-                    context.getColor(R.color.forecast_premium)
-                )
+                setTabTextColors(context.getColor(R.color.darkGrey), premiumColor)
             } else {
                 /**
                  * Revert the tab's color to the default non-selected ones.

@@ -182,6 +182,7 @@ class ForecastDetailsActivity : BaseActivity() {
         }
     }
 
+    @Suppress("LongMethod")
     private fun updateUI(forecast: UIForecast, selectedDayPosition: Int) {
         val forecastDay = forecast.forecastDays[selectedDayPosition]
         // Update the header now that model.address has valid data and we are in a location
@@ -209,7 +210,9 @@ class ForecastDetailsActivity : BaseActivity() {
 
         // Update the forecast tabs or the mosaic prompt
         if (!model.device.isEmpty()) {
-            binding.forecastTabSelector.visible(forecast.isPremium == true || currentSelectedTab == 1)
+            binding.forecastTabSelector.visible(
+                forecast.isPremium == true || currentSelectedTab == 1
+            )
             binding.mosaicPromotionCard.visible(forecast.isPremium == false)
         }
 

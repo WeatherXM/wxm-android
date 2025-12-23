@@ -176,6 +176,7 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
         }
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     private fun SetWeatherIcon(iconRes: Int) {
         GradientIcon(
@@ -193,6 +194,7 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
         )
     }
 
+    @Suppress("FunctionNaming")
     @Composable
     private fun SetWindDirectionIcon(windDirection: Int?) {
         GradientIconRotatable(

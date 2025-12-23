@@ -22,7 +22,7 @@ import com.weatherxm.R
 import kotlin.math.min
 
 /**
- * A reusable icon composable that can be rotated and tinted with either a gradient brush or a static color.
+ * A reusable icon that can be rotated and tinted with either a gradient brush or a static color.
  * Useful for icons that need to be oriented based on data (e.g., wind direction).
  *
  * @param iconRes The drawable resource ID for the icon
@@ -32,7 +32,7 @@ import kotlin.math.min
  * @param brush Optional gradient brush to apply to the icon
  * @param tint Optional static color to apply to the icon (used if brush is null)
  */
-@Suppress("FunctionNaming", "LongParameterList")
+@Suppress("LongMethod", "FunctionNaming", "LongParameterList")
 @Composable
 fun GradientIconRotatable(
     @DrawableRes iconRes: Int,
