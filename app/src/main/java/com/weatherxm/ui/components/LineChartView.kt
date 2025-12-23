@@ -6,11 +6,17 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewLineChartBinding
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.GradientIcon
 
 class LineChartView : LinearLayout {
 
@@ -40,9 +46,15 @@ class LineChartView : LinearLayout {
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.LineChartView, 0, 0).apply {
             try {
                 binding.chartTitle.text = getString(R.styleable.LineChartView_line_chart_title)
-                binding.chartTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    getResourceId(R.styleable.LineChartView_line_chart_title_icon, 0), 0, 0, 0
-                )
+                val iconResourceId =
+                    getResourceId(R.styleable.LineChartView_line_chart_title_icon, 0)
+                binding.chartIcon.setContent {
+                    Icon(
+                        painter = painterResource(iconResourceId),
+                        contentDescription = null,
+                        tint = colorResource(R.color.colorOnSurface)
+                    )
+                }
 
                 getString(R.styleable.LineChartView_line_chart_primary_line_name)?.let {
                     binding.primaryLineName.text = it
@@ -120,6 +132,29 @@ class LineChartView : LinearLayout {
         binding.chart.setNoDataText(resources.getString(R.string.error_no_data_chart_found))
         binding.chart.setNoDataTextColor(context.getColor(R.color.colorOnSurface))
         binding.chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
+    }
+
+    fun updateIcon(iconResourceId: Int, isPremium: Boolean) {
+        binding.chartIcon.setContent {
+            if (isPremium) {
+                GradientIcon(
+                    iconRes = iconResourceId,
+                    size = 25.dp,
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            colorResource(R.color.blue),
+                            colorResource(R.color.forecast_premium)
+                        )
+                    )
+                )
+            } else {
+                Icon(
+                    painter = painterResource(iconResourceId),
+                    contentDescription = null,
+                    tint = colorResource(R.color.colorOnSurface)
+                )
+            }
+        }
     }
 
     fun updateTitle(text: String) {

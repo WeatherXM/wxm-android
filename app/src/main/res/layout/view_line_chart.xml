@@ -29,20 +29,25 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/chartIcon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="@dimen/margin_normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/chart_title"
+                    android:id="@+id/chartTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_normal"
-                    android:drawablePadding="@dimen/padding_extra_small"
-                    android:gravity="center_vertical"
+                    android:layout_marginStart="@dimen/margin_extra_small"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:textStyle="bold"
-                    app:drawableTint="@color/colorOnSurface"
+                    app:layout_constraintBottom_toBottomOf="@id/chartIcon"
                     app:layout_constraintEnd_toStartOf="@id/primaryLineName"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:drawableStart="@drawable/ic_weather_precipitation"
+                    app:layout_constraintStart_toEndOf="@id/chartIcon"
+                    app:layout_constraintTop_toTopOf="@id/chartIcon"
                     tools:text="Chart Title" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -52,7 +57,7 @@
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     app:layout_constraintEnd_toStartOf="@id/secondaryLineName"
-                    app:layout_constraintTop_toTopOf="@id/chart_title"
+                    app:layout_constraintTop_toTopOf="@id/chartTitle"
                     tools:text="Temperature" />
 
                 <com.google.android.material.chip.Chip

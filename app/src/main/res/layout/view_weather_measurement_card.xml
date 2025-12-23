@@ -20,6 +20,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/gradientIcon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="25dp"

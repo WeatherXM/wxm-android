@@ -223,14 +223,18 @@ class ForecastDetailsActivity : BaseActivity() {
          * Some data are missing in the Hyper Local tab so we handle it differently below.
          */
         if (currentSelectedTab == 1) {
-            binding.dailyPremiumWind.setIcon(
-                getWindDirectionDrawable(
-                    this,
-                    forecastDay.windDirection
-                )
+            binding.dailyPremiumWind.setGradientIcon(
+                iconRes = null,
+                windDirection = forecastDay.windDirection,
+                isRotatableWindIcon = true
             )
             binding.dailyPremiumWind.setData(
                 getFormattedWind(this, forecastDay.windSpeed, forecastDay.windDirection)
+            )
+            binding.dailyPremiumHumidity.setGradientIcon(
+                iconRes = R.drawable.ic_weather_humidity,
+                windDirection = null,
+                isRotatableWindIcon = false
             )
             binding.dailyPremiumHumidity.setData(getFormattedHumidity(forecastDay.humidity))
             binding.dailyDefaultFirstRow.visible(false)
@@ -241,6 +245,7 @@ class ForecastDetailsActivity : BaseActivity() {
                 getFormattedPrecipitationProbability(forecastDay.precipProbability)
             )
             binding.windCard.setIcon(getWindDirectionDrawable(this, forecastDay.windDirection))
+            binding.humidityCard.setIcon(getDrawable(R.drawable.ic_weather_humidity))
             binding.windCard.setData(
                 getFormattedWind(
                     this,
@@ -317,6 +322,18 @@ class ForecastDetailsActivity : BaseActivity() {
             chartSolar().updateTitle(getString(R.string.uv_index))
             chartSolar().primaryLine(null, getString(R.string.uv_index))
             chartSolar().secondaryLine(null, null)
+            chartTemperature().updateIcon(
+                R.drawable.ic_weather_temperature,
+                currentSelectedTab == 1
+            )
+            chartPrecipitation().updateIcon(
+                R.drawable.ic_weather_precipitation,
+                currentSelectedTab == 1
+            )
+            chartWind().updateIcon(R.drawable.ic_weather_wind, currentSelectedTab == 1)
+            chartHumidity().updateIcon(R.drawable.ic_weather_humidity, currentSelectedTab == 1)
+            chartPressure().updateIcon(R.drawable.ic_weather_pressure, currentSelectedTab == 1)
+            chartSolar().updateIcon(R.drawable.ic_weather_solar, currentSelectedTab == 1)
             binding.dailyMainCard.setOnClickListener { scrollToChart(chartTemperature()) }
             binding.precipProbabilityCard.setOnClickListener { scrollToChart(chartPrecipitation()) }
             binding.dailyPrecipCard.setOnClickListener { scrollToChart(chartPrecipitation()) }
