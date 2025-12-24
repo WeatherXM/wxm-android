@@ -19,7 +19,6 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
@@ -29,6 +28,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
+import com.weatherxm.ui.components.compose.DailyTileForecast
 import com.weatherxm.ui.components.compose.ForecastTabSelector
 import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.ui.components.compose.JoinNetworkPromoCard
@@ -61,7 +61,6 @@ class ForecastDetailsActivity : BaseActivity() {
         )
     }
 
-    private lateinit var dailyAdapter: DailyTileForecastAdapter
     private lateinit var hourlyAdapter: HourlyForecastAdapter
     private var currentSelectedTab = 0
 
@@ -363,28 +362,28 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun setupDailyAdapter(forecast: UIForecast, selectedDayPosition: Int) {
-        val forecastDay = forecast.forecastDays[selectedDayPosition]
-        dailyAdapter = DailyTileForecastAdapter(
-            forecastDay.date,
-            onNewSelectedPosition = { position, width ->
-                binding.dailyTilesRecycler.moveItemToCenter(position, binding.root.width, width)
-            },
-            onClickListener = { newSelectedDayPosition ->
-                analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.DAILY_CARD.paramValue,
-                    Pair(
-                        FirebaseAnalytics.Param.ITEM_ID,
-                        AnalyticsService.ParamValue.DAILY_DETAILS.paramValue
+        binding.dailyTilesCompose.setContent {
+            DailyTileForecast(
+                forecastDays = forecast.forecastDays,
+                selectedDate = forecast.forecastDays[selectedDayPosition].date,
+                isPremiumTabSelected = currentSelectedTab == 1,
+                onDaySelected = { selectedDate ->
+                    analytics.trackEventSelectContent(
+                        AnalyticsService.ParamValue.DAILY_CARD.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.ITEM_ID,
+                            AnalyticsService.ParamValue.DAILY_DETAILS.paramValue
+                        )
                     )
-                )
-                // Get selected position before we update it in order to reset the stroke
-                dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
-                updateUI(forecast, newSelectedDayPosition)
-            }
-        )
-        binding.dailyTilesRecycler.adapter = dailyAdapter
-        dailyAdapter.submitList(forecast.forecastDays)
-        binding.dailyTilesRecycler.scrollToPosition(selectedDayPosition)
+                    val newSelectedDayPosition = forecast.forecastDays.indexOfFirst {
+                        it.date == selectedDate
+                    }
+                    if (newSelectedDayPosition != -1) {
+                        updateUI(forecast, newSelectedDayPosition)
+                    }
+                }
+            )
+        }
     }
 
     private fun handleOwnershipIcon() {

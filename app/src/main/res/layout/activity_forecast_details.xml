@@ -116,19 +116,13 @@
                 app:layout_constraintTop_toBottomOf="@id/tabsOrMosaicPromptContainer"
                 tools:visibility="visible">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/dailyTilesRecycler"
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/dailyTilesCompose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    android:overScrollMode="never"
-                    android:paddingHorizontal="@dimen/padding_normal"
-                    android:scrollbars="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:clipChildren="false"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/list_item_daily_tile_forecast" />
+                    tools:composableName="com.weatherxm.ui.components.compose.DailyTileForecastKt.PreviewDailyTileForecast" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/dailyTitle"
@@ -140,7 +134,7 @@
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                     android:textColor="@color/darkestBlue"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler" />
+                    app:layout_constraintTop_toBottomOf="@id/dailyTilesCompose" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/dailyMainCard"
@@ -424,8 +418,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/powered_by"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                            app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler" />
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
 
                         <ImageView
                             android:id="@+id/poweredByWXMLogo"

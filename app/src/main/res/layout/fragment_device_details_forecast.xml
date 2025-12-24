@@ -198,8 +198,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/powered_by"
-                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                                app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler" />
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
 
                             <ImageView
                                 android:id="@+id/poweredByWXMLogo"

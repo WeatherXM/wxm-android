@@ -137,6 +137,7 @@ kotest-assertions = { module = "io.kotest:kotest-assertions-core-jvm", version.r
 kotest-koin = { module = "io.kotest.extensions:kotest-extensions-koin-jvm", version.ref = "kotest-koin" }
 kpermissions = { module = "com.github.fondesa:kpermissions", version.ref = "kpermissions" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 mapbox = { module = "com.mapbox.maps:android-ndk27", version.ref = "mapbox" }
 mapbox-sdk-services = { module = "com.mapbox.mapboxsdk:mapbox-sdk-services", version.ref = "mapbox-sdk-services" }
 mapbox-search-android = { module = "com.mapbox.search:mapbox-search-android-ndk27", version.ref = "mapbox-search-android" }

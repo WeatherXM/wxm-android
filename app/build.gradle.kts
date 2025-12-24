@@ -564,6 +564,7 @@ dependencies {
 
     // Animations
     implementation(libs.lottie)
+    implementation(libs.lottie.compose)
 
     // Charts
     implementation(libs.mpAndroidCharts)
