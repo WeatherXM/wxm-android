@@ -909,7 +909,7 @@
     <string name="free_trial_locked_subtitle">You are %s $WXM away to unlock a free trial. Keep up!</string>
     <string name="mosaic_prompt_tagline">Smarter. Sharper. More Accurate.</string>
     <string name="mosaic_prompt_explanation">We’ve picked the top performed models in your area to give you the most accurate forecast possible.</string>
-    <string name="see_the_plans">See the plans</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="free_subscription_claim">You have a free subscription. Claim now!</string>
     <string name="powered_by">Powered by</string>
     <string name="current_plan">Current plan</string>
