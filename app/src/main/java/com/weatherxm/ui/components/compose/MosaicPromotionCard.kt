@@ -87,7 +87,7 @@ fun MosaicPromotionCard(hasFreeSubAvailable: Boolean, onClickListener: () -> Uni
                 )
             ) {
                 LargeText(
-                    text = stringResource(R.string.see_the_plans),
+                    text = stringResource(R.string.upgrade_to_premium),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     colorRes = R.color.colorOnPrimary

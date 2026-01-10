@@ -22,7 +22,6 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
-import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.toBigDecimalSafe
 import com.weatherxm.util.NumberUtils.weiToETH
 import kotlinx.parcelize.Parcelize
@@ -268,7 +267,7 @@ data class UIForecast(
     val forecastDays: List<UIForecastDay>
 ) : Parcelable {
     companion object {
-        fun empty() = UIForecast(String.empty(), null,mutableListOf(), mutableListOf())
+        fun empty() = UIForecast(String.empty(), null, mutableListOf(), mutableListOf())
     }
 
     fun isEmpty(): Boolean = next24Hours.isNullOrEmpty() && forecastDays.isEmpty()
@@ -432,13 +431,6 @@ data class UIWalletRewards(
     fun hasUnclaimedTokensForFreeTrial(): Boolean {
         return weiToETH(allocated.toBigDecimalSafe()) >= BigDecimal.valueOf(80.0)
     }
-
-    @Suppress("MagicNumber")
-    fun remainingTokensForFreeTrial(): String {
-        val tokensDifference = BigDecimal.valueOf(80.0) - weiToETH(allocated.toBigDecimalSafe())
-        return formatTokens(tokensDifference)
-    }
-
 }
 
 @Keep

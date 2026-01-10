@@ -343,12 +343,7 @@ class ProfileFragment : BaseFragment() {
                         drawable = R.drawable.ic_crown,
                         drawableTint = R.color.colorPrimary,
                         title = R.string.free_trial_locked,
-                        subtitle = SubtitleForMessageView(
-                            messageAsString = getString(
-                                R.string.free_trial_locked_subtitle,
-                                it.remainingTokensForFreeTrial()
-                            )
-                        )
+                        subtitle = SubtitleForMessageView(R.string.free_trial_locked_subtitle)
                     )
                 )
             }

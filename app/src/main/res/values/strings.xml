@@ -903,10 +903,10 @@
     <!-- Hyperlocal Upsell -->
     <string name="premium_subscription">Premium subscription</string>
     <string name="see_manage_subscription">See and manage your subscription</string>
-    <string name="claim_free_trial">Claim your free trial!</string>
-    <string name="claim_free_trial_subtitle">You’ve kept at least 80 $WXM unclaimed.</string>
-    <string name="free_trial_locked">Free trial locked</string>
-    <string name="free_trial_locked_subtitle">You are %s $WXM away to unlock a free trial. Keep up!</string>
+    <string name="claim_free_trial">Claim your Premium free trial!</string>
+    <string name="claim_free_trial_subtitle">You have 80+ unclaimed $WXM. Start your Premium free trial now!</string>
+    <string name="free_trial_locked">You’re close to a free Premium trial</string>
+    <string name="free_trial_locked_subtitle">Unlock a free Premium trial at 80 unclaimed $WXM. Keep your $WXM unclaimed to qualify.</string>
     <string name="mosaic_prompt_tagline">Smarter. Sharper. More Accurate.</string>
     <string name="mosaic_prompt_explanation">We’ve picked the top performed models in your area to give you the most accurate forecast possible.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
