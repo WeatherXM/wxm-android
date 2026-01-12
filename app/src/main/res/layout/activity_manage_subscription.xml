@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:background="@color/blueTint"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,45 +19,113 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="@string/manage_subscription" />
+            app:navigationIcon="@drawable/ic_close"
+            app:subtitleTextColor="@color/colorPrimary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/topDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:dividerColor="@color/colorSurface"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:padding="@dimen/padding_normal"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/subscriptionTabSelector"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
             android:clipChildren="false"
-            android:clipToPadding="false">
+            android:clipToPadding="false"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:composableName="com.weatherxm.ui.components.compose.SubscriptionTabSelectorKt.PreviewSubscriptionTabSelector" />
 
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/currentPlanComposable"
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toTopOf="@id/bottomDivider"
+            app:layout_constraintTop_toBottomOf="@id/subscriptionTabSelector">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PremiumFeatures" />
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/premiumFeaturesComposable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/currentPlanComposable"
-                tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PremiumFeatures"
-                tools:visibility="visible" />
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/currentPlanComposable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PremiumFeatures" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/premiumFeaturesComposable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/currentPlanComposable"
+                    tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PremiumFeatures"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/bottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/margin_large"
+            app:dividerColor="@color/colorSurface"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintBottom_toTopOf="@id/mainActionBtn" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mainActionBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small_to_normal"
+            android:text="@string/upgrade_to_premium"
+            android:textColor="@color/light_top"
+            android:visibility="gone"
+            app:backgroundTint="@color/crypto"
+            app:cornerRadius="@dimen/radius_extra_large"
+            app:icon="@drawable/ic_sparkles"
+            app:iconGravity="textStart"
+            app:iconTint="@color/light_top"
+            app:layout_constraintBottom_toTopOf="@id/cancelAnytimeText"
+            tools:visibility="visible" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/cancelAnytimeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:gravity="center"
+            android:text="@string/cancel_anytime"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+            android:textColor="@color/darkGrey"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/selectPlanComposable"
@@ -96,8 +165,7 @@
         android:layout_marginBottom="@dimen/margin_large"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:weightSum="2"
-        tools:visibility="visible">
+        android:weightSum="2">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/backBtn"

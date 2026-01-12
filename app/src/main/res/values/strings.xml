@@ -928,11 +928,10 @@
     <string name="go_to_station">Go to Station</string>
     <string name="purchase_failed">Purchase Failed</string>
     <string name="purchase_failed_message"><![CDATA[Purchase process failed, please try again! If the problem persists, please contact our support team.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
-    <string name="monthly">MONTHLY</string>
+    <string name="monthly">Monthly</string>
     <string name="then_per_month">then %s per month.</string>
     <string name="then_per_year">then %s per year.</string>
-    <string name="cancel_anytime">Cancel anytime.</string>
-    <string name="annually">ANNUALLY</string>
+    <string name="annual">Annual</string>
     <string name="per_month">/month</string>
     <string name="per_year">/year</string>
     <string name="annual_premium">Annual premium</string>
@@ -945,4 +944,8 @@
     <string name="get_premium_login_prompt">You need to login to get premium forecast.</string>
     <string name="basic_forecast">Basic Forecast</string>
     <string name="hyperlocal">Hyperlocal</string>
+    <string name="get_the_most_accurate_forecasts">Get the most accurate forecasts</string>
+    <string name="cancel_anytime">Cancel anytime. No long-term commitments.</string>
+    <string name="currently_on_premium">You are currently on Premium Plan.</string>
+    <string name="downgrade_free_plan">Downgrade to Free Plan</string>
 </resources>

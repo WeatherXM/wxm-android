@@ -135,7 +135,7 @@ private fun Plan(
                 SmallText(
                     text = when (sub.id) {
                         PLAN_MONTHLY -> stringResource(R.string.monthly)
-                        PLAN_YEARLY -> stringResource(R.string.annually)
+                        PLAN_YEARLY -> stringResource(R.string.annual)
                         else -> sub.id
                     },
                     colorRes = R.color.darkGrey

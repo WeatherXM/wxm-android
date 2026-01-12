@@ -15,6 +15,7 @@ import com.weatherxm.ui.common.PurchaseUpdateState
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.SubscriptionTabSelector
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,6 +27,7 @@ class ManageSubscriptionActivity : BaseActivity() {
 
     private var hasFreeTrialAvailable = false
     private var isLoggedIn = false
+    private var currentSelectedTab = 0
 
     init {
         lifecycleScope.launch {
@@ -46,11 +48,32 @@ class ManageSubscriptionActivity : BaseActivity() {
                             }
                         }
 
-                        if (it == null || !it.isAutoRenewing) {
-                            binding.premiumFeaturesComposable.visible(true)
-                        } else {
-                            binding.premiumFeaturesComposable.visible(false)
+                        binding.subscriptionTabSelector.setContent {
+                            SubscriptionTabSelector(1) { newSelectedTab ->
+                                currentSelectedTab = newSelectedTab
+                                if (newSelectedTab == 0) {
+                                    // TODO: Update the UI
+                                } else {
+                                    // TODO: Update the UI
+                                }
+                            }
                         }
+
+                        if (it == null || !it.isAutoRenewing) {
+                            binding.toolbar.title = getString(R.string.upgrade_to_premium)
+                            binding.premiumFeaturesComposable.visible(true)
+                            binding.cancelAnytimeText.visible(true)
+                            binding.subscriptionTabSelector.visible(true)
+                        } else {
+                            binding.toolbar.title = getString(R.string.manage_subscription)
+                            binding.premiumFeaturesComposable.visible(false)
+                            binding.cancelAnytimeText.visible(false)
+                            binding.subscriptionTabSelector.visible(false)
+                        }
+                        binding.toolbar.subtitle =
+                            getString(R.string.get_the_most_accurate_forecasts)
+
+                        // TODO: STOPSHIP: Change button text, color & icon based on user selection
                     }
                 }
 
@@ -105,6 +128,8 @@ class ManageSubscriptionActivity : BaseActivity() {
         binding.backBtn.setOnClickListener {
             binding.currentPlanComposable.visible(true)
             binding.appBar.visible(true)
+            binding.topDivider.visible(true)
+            binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             binding.selectPlanComposable.visible(false)
             binding.statusView.visible(false)
@@ -129,6 +154,7 @@ class ManageSubscriptionActivity : BaseActivity() {
     private fun onPurchaseUpdate(state: PurchaseUpdateState) {
         if (state.isLoading) {
             binding.appBar.visible(false)
+            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.selectPlanComposable.visible(false)
             binding.successBtn.visible(false)
@@ -139,7 +165,9 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.appBar.visible(true)
+            binding.topDivider.visible(true)
             binding.currentPlanComposable.visible(true)
+            binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             billingService.clearPurchaseUpdates()
             analytics.trackEventViewContent(
@@ -148,6 +176,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             )
         } else if (state.success) {
             binding.appBar.visible(false)
+            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.selectPlanComposable.visible(false)
             binding.errorButtonsContainer.visible(false)
@@ -164,6 +193,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             )
         } else {
             binding.appBar.visible(false)
+            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.selectPlanComposable.visible(false)
             binding.statusView.clear()
