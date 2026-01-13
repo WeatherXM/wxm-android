@@ -932,14 +932,8 @@
     <string name="then_per_month">then %s per month.</string>
     <string name="then_per_year">then %s per year.</string>
     <string name="annual">Annual</string>
-    <string name="per_month">/month</string>
-    <string name="per_year">/year</string>
-    <string name="annual_premium">Annual premium</string>
-    <string name="monthly_premium">Monthly premium</string>
-    <string name="next_billing_date">Next billing date</string>
-    <string name="cancel_subscription">Cancel subscription</string>
-    <string name="canceled">Canceled</string>
-    <string name="canceled_subtitle">Premium features are available until your subscription expires.\nSelect a plan to extend your subscription.</string>
+    <string name="per_month">per month</string>
+    <string name="per_year">per year</string>
     <string name="premium_forecast">Premium Forecast</string>
     <string name="get_premium_login_prompt">You need to login to get premium forecast.</string>
     <string name="basic_forecast">Basic Forecast</string>
@@ -947,5 +941,17 @@
     <string name="get_the_most_accurate_forecasts">Get the most accurate forecasts</string>
     <string name="cancel_anytime">Cancel anytime. No long-term commitments.</string>
     <string name="currently_on_premium">You are currently on Premium Plan.</string>
+    <string name="currently_on_free">You are currently on Free Plan</string>
     <string name="downgrade_free_plan">Downgrade to Free Plan</string>
+    <string name="free">Free</string>
+    <string name="premium">Premium</string>
+    <string name="free_plan_first_benefit">24-hour-ahead 3-hourly forecast</string>
+    <string name="free_plan_second_benefit">7-day daily forecast</string>
+    <string name="free_plan_third_benefit">Basic weather parameters</string>
+    <string name="free_plan_fourth_benefit">Standard forecast accuracy</string>
+    <string name="premium_plan_description">We test 40+ forecast models against real weather. Every day, we automatically pick the best-performing models for your station, so your forecast stays as accurate as possible.</string>
+    <string name="premium_plan_first_benefit">Everything in</string>
+    <string name="premium_plan_second_benefit">24-hour-ahead hourly forecast</string>
+    <string name="premium_plan_third_benefit">Advanced accuracy from the best hyperlocal forecast models</string>
+    <string name="premium_plan_fourth_benefit">Priority updates for new features</string>
 </resources>

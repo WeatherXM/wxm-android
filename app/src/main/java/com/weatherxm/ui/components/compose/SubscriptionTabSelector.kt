@@ -47,6 +47,10 @@ fun SubscriptionTabSelector(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_large),
+                vertical = dimensionResource(R.dimen.margin_normal)
+            )
             .height(50.dp),
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_extra_extra_large)),
         colors = CardDefaults.cardColors(

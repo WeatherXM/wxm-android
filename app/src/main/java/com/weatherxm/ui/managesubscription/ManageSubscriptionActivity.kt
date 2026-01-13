@@ -1,12 +1,17 @@
 package com.weatherxm.ui.managesubscription
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.models.SubscriptionOffer
 import com.weatherxm.databinding.ActivityManageSubscriptionBinding
 import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Contracts.ARG_HAS_FREE_TRIAL_AVAILABLE
@@ -28,6 +33,8 @@ class ManageSubscriptionActivity : BaseActivity() {
     private var hasFreeTrialAvailable = false
     private var isLoggedIn = false
     private var currentSelectedTab = 0
+    private var hasActiveRenewingSub = mutableStateOf(false)
+    private var planSelected = mutableStateOf<SubscriptionOffer?>(null)
 
     init {
         lifecycleScope.launch {
@@ -42,38 +49,64 @@ class ManageSubscriptionActivity : BaseActivity() {
 
                 launch {
                     billingService.getActiveSubFlow().collect {
-                        binding.currentPlanComposable.setContent {
-                            CurrentPlanView(it) {
-                                navigator.openSubscriptionInStore(this@ManageSubscriptionActivity)
-                            }
-                        }
-
-                        binding.subscriptionTabSelector.setContent {
-                            SubscriptionTabSelector(1) { newSelectedTab ->
-                                currentSelectedTab = newSelectedTab
-                                if (newSelectedTab == 0) {
-                                    // TODO: Update the UI
+                        if (it == null || !it.isAutoRenewing) {
+                            hasActiveRenewingSub.value = false
+                            binding.toolbar.title = getString(R.string.upgrade_to_premium)
+                            binding.planComposable.setContent {
+                                val availableSub = if (currentSelectedTab == 0) {
+                                    billingService.getMonthlyAvailableSub(hasFreeTrialAvailable)
                                 } else {
-                                    // TODO: Update the UI
+                                    billingService.getAnnualAvailableSub(hasFreeTrialAvailable)
+                                }
+                                Column {
+                                    FreePlanView(
+                                        isSelected = planSelected.value == null,
+                                        isCurrentPlan = !hasActiveRenewingSub.value
+                                    ) {
+                                        onFreeSelected()
+                                    }
+                                    PremiumPlanView(
+                                        sub = availableSub,
+                                        isSelected = planSelected.value == availableSub,
+                                        isCurrentPlan = hasActiveRenewingSub.value
+                                    ) {
+                                        onPremiumSelected(availableSub)
+                                    }
                                 }
                             }
-                        }
-
-                        if (it == null || !it.isAutoRenewing) {
-                            binding.toolbar.title = getString(R.string.upgrade_to_premium)
-                            binding.premiumFeaturesComposable.visible(true)
                             binding.cancelAnytimeText.visible(true)
                             binding.subscriptionTabSelector.visible(true)
                         } else {
+                            hasActiveRenewingSub.value = true
                             binding.toolbar.title = getString(R.string.manage_subscription)
-                            binding.premiumFeaturesComposable.visible(false)
+                            binding.planComposable.setContent {
+                                val availableSub = if (currentSelectedTab == 0) {
+                                    billingService.getMonthlyAvailableSub(hasFreeTrialAvailable)
+                                } else {
+                                    billingService.getAnnualAvailableSub(hasFreeTrialAvailable)
+                                }
+                                Column {
+                                    PremiumPlanView(
+                                        sub = availableSub,
+                                        isSelected = planSelected.value == availableSub,
+                                        isCurrentPlan = hasActiveRenewingSub.value
+                                    ) {
+                                        onPremiumSelected(availableSub)
+                                    }
+                                    FreePlanView(
+                                        isSelected = planSelected.value == null,
+                                        isCurrentPlan = !hasActiveRenewingSub.value
+                                    ) {
+                                        onFreeSelected()
+                                    }
+                                }
+                            }
                             binding.cancelAnytimeText.visible(false)
                             binding.subscriptionTabSelector.visible(false)
                         }
                         binding.toolbar.subtitle =
                             getString(R.string.get_the_most_accurate_forecasts)
 
-                        // TODO: STOPSHIP: Change button text, color & icon based on user selection
                     }
                 }
 
@@ -96,27 +129,32 @@ class ManageSubscriptionActivity : BaseActivity() {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         }
 
-        binding.premiumFeaturesComposable.setContent {
-            PremiumFeaturesView {
-                if (isLoggedIn) {
-                    binding.selectPlanComposable.visible(true)
-                    binding.premiumFeaturesComposable.visible(false)
-                    binding.currentPlanComposable.visible(false)
+        binding.subscriptionTabSelector.setContent {
+            SubscriptionTabSelector(1) { newSelectedTab ->
+                currentSelectedTab = newSelectedTab
+                if (newSelectedTab == 0) {
+                    billingService.getMonthlyAvailableSub(hasFreeTrialAvailable)
                 } else {
-                    navigator.showLoginDialog(
-                        fragmentActivity = this,
-                        title = getString(R.string.get_premium),
-                        message = getString(R.string.get_premium_login_prompt)
-                    )
-                }
-            }
-        }
-
-        binding.selectPlanComposable.setContent {
-            PlansView(billingService.getAvailableSubs(hasFreeTrialAvailable)) { offer ->
-                offer?.let {
-                    model.setOfferToken(it.offerToken)
-                    billingService.startBillingFlow(this, it.offerToken)
+                    billingService.getAnnualAvailableSub(hasFreeTrialAvailable)
+                }?.let {
+                    planSelected.value == it
+                    binding.planComposable.setContent {
+                        Column {
+                            FreePlanView(
+                                isSelected = planSelected.value == null,
+                                isCurrentPlan = !hasActiveRenewingSub.value
+                            ) {
+                                onFreeSelected()
+                            }
+                            PremiumPlanView(
+                                sub = it,
+                                isSelected = planSelected.value == it,
+                                isCurrentPlan = hasActiveRenewingSub.value
+                            ) {
+                                onPremiumSelected(it)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -126,12 +164,10 @@ class ManageSubscriptionActivity : BaseActivity() {
         }
 
         binding.backBtn.setOnClickListener {
-            binding.currentPlanComposable.visible(true)
             binding.appBar.visible(true)
             binding.topDivider.visible(true)
             binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
-            binding.selectPlanComposable.visible(false)
             binding.statusView.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
@@ -151,12 +187,70 @@ class ManageSubscriptionActivity : BaseActivity() {
         analytics.trackScreen(AnalyticsService.Screen.MANAGE_SUBSCRIPTION, classSimpleName())
     }
 
+    private fun onFreeSelected() {
+        planSelected.value = null
+        if (hasActiveRenewingSub.value) {
+            binding.mainActionBtn.text = getString(R.string.downgrade_free_plan)
+            styleButton(showSparklesIcon = false, backgroundColor = R.color.warningTint)
+
+            binding.mainActionBtn.setOnClickListener {
+                navigator.openSubscriptionInStore(this)
+            }
+            binding.mainActionBtn.isEnabled = true
+        } else {
+            binding.mainActionBtn.text = getString(R.string.currently_on_free)
+            styleButton(showSparklesIcon = false, backgroundColor = R.color.layer1)
+            binding.mainActionBtn.isEnabled = false
+        }
+    }
+
+    private fun onPremiumSelected(subscriptionOffer: SubscriptionOffer?) {
+        planSelected.value = subscriptionOffer
+
+        if (hasActiveRenewingSub.value) {
+            binding.mainActionBtn.text = getString(R.string.currently_on_premium)
+            styleButton(showSparklesIcon = true, backgroundColor = R.color.layer1)
+            binding.mainActionBtn.isEnabled = false
+        } else {
+            binding.mainActionBtn.text = getString(R.string.upgrade_to_premium)
+            styleButton(showSparklesIcon = true, backgroundColor = R.color.crypto)
+
+            binding.mainActionBtn.setOnClickListener {
+                if (isLoggedIn && subscriptionOffer != null) {
+                    model.setOfferToken(subscriptionOffer.offerToken)
+                    billingService.startBillingFlow(this, subscriptionOffer.offerToken)
+                } else {
+                    navigator.showLoginDialog(
+                        fragmentActivity = this,
+                        title = getString(R.string.get_premium),
+                        message = getString(R.string.get_premium_login_prompt)
+                    )
+                }
+            }
+            binding.mainActionBtn.isEnabled = false
+        }
+    }
+
+    private fun styleButton(showSparklesIcon: Boolean, backgroundColor: Int) {
+        val backgroundColor = ContextCompat.getColor(this, backgroundColor)
+        val textColor = ContextCompat.getColor(this, R.color.colorOnSurface)
+
+        binding.mainActionBtn.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+        binding.mainActionBtn.setTextColor(textColor)
+
+        if (showSparklesIcon) {
+            binding.mainActionBtn.icon = ContextCompat.getDrawable(this, R.drawable.ic_sparkles)
+            binding.mainActionBtn.iconTint = ColorStateList.valueOf(textColor)
+        } else {
+            binding.mainActionBtn.icon = null
+        }
+    }
+
     private fun onPurchaseUpdate(state: PurchaseUpdateState) {
         if (state.isLoading) {
             binding.appBar.visible(false)
             binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
-            binding.selectPlanComposable.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
@@ -166,7 +260,6 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.errorButtonsContainer.visible(false)
             binding.appBar.visible(true)
             binding.topDivider.visible(true)
-            binding.currentPlanComposable.visible(true)
             binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             billingService.clearPurchaseUpdates()
@@ -178,7 +271,6 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.appBar.visible(false)
             binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
-            binding.selectPlanComposable.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.statusView.clear()
                 .animation(R.raw.anim_success)
@@ -195,7 +287,6 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.appBar.visible(false)
             binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
-            binding.selectPlanComposable.visible(false)
             binding.statusView.clear()
                 .animation(R.raw.anim_error)
                 .title(R.string.purchase_failed)

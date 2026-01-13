@@ -34,6 +34,8 @@
     <color name="progressBarTrackColor">@color/dark_lightest_blue</color>
     <color name="alternativeTextColor">@color/dark_text</color>
     <color name="tooltip">@color/dark_tooltip</color>
+    <color name="crypto_opacity_15">@color/dark_crypto_opacity_15</color>
+    <color name="cryptoInverse">@color/light_crypto</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>

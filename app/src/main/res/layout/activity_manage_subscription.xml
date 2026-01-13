@@ -35,55 +35,31 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/subscriptionTabSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            tools:composableName="com.weatherxm.ui.components.compose.SubscriptionTabSelectorKt.PreviewSubscriptionTabSelector" />
+            tools:composableName="com.weatherxm.ui.components.compose.SubscriptionTabSelectorKt.PreviewSubscriptionTabSelector"
+            tools:visibility="visible" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"
-            android:clipChildren="false"
-            android:clipToPadding="false"
             app:layout_constraintBottom_toTopOf="@id/bottomDivider"
             app:layout_constraintTop_toBottomOf="@id/subscriptionTabSelector">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/planComposable"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipChildren="false"
-                android:clipToPadding="false">
+                android:layout_height="wrap_content"
+                tools:composableName="com.weatherxm.ui.managesubscription.FreePlanViewKt.PreviewFreePlanView" />
 
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/currentPlanComposable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PremiumFeatures" />
-
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/premiumFeaturesComposable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/currentPlanComposable"
-                    tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PremiumFeatures"
-                    tools:visibility="visible" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.divider.MaterialDivider
@@ -126,16 +102,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/selectPlanComposable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/padding_normal"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:composableName="com.weatherxm.ui.managesubscription.ManageSubscriptionActivity.PreviewPlans"
-        tools:visibility="visible" />
 
     <com.weatherxm.ui.components.EmptyView
         android:id="@+id/statusView"

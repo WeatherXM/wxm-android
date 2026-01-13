@@ -120,14 +120,24 @@ class BillingService(
 
     fun getActiveSubFlow(): StateFlow<Purchase?> = activeSubFlow
 
-    fun getAvailableSubs(hasFreeTrialAvailable: Boolean): List<SubscriptionOffer> {
+    fun getMonthlyAvailableSub(hasFreeTrialAvailable: Boolean): SubscriptionOffer? {
         return if (hasFreeTrialAvailable) {
             subs.filter {
-                it.offerId == OFFER_FREE_TRIAL || it.offerId == null
+                it.offerId == OFFER_FREE_TRIAL || it.offerId == null && it.id == PLAN_MONTHLY
             }.distinctBy { it.id }
         } else {
-            subs.filter { it.offerId == null }.distinctBy { it.id }
-        }
+            subs.filter { it.offerId == null && it.id == PLAN_MONTHLY }.distinctBy { it.id }
+        }.firstOrNull()
+    }
+
+    fun getAnnualAvailableSub(hasFreeTrialAvailable: Boolean): SubscriptionOffer? {
+        return if (hasFreeTrialAvailable) {
+            subs.filter {
+                it.offerId == OFFER_FREE_TRIAL || it.offerId == null && it.id == PLAN_MONTHLY
+            }.distinctBy { it.id }
+        } else {
+            subs.filter { it.offerId == null && it.id == PLAN_MONTHLY }.distinctBy { it.id }
+        }.firstOrNull()
     }
 
     private fun startConnection() {
