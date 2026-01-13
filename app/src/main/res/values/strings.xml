@@ -954,4 +954,8 @@
     <string name="premium_plan_second_benefit">24-hour-ahead hourly forecast</string>
     <string name="premium_plan_third_benefit">Advanced accuracy from the best hyperlocal forecast models</string>
     <string name="premium_plan_fourth_benefit">Priority updates for new features</string>
+    <string name="downgrade_to_free_dialog_title">Downgrade to Free?</string>
+    <string name="downgrade_to_free_dialog_subtitle">Are you sure you want to downgrade to Free plan? If you downgrade you will lose access to:\n\n • 24-hour-ahead hourly forecast\n • Advanced accuracy from the best forecast hyperlocal models\n • Priority updates for new features</string>
+    <string name="downgrade">Downgrade</string>
+    <string name="stay_on_premium">Stay on Premium</string>
 </resources>

@@ -22,6 +22,7 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_LOGGED_IN
 import com.weatherxm.ui.common.PurchaseUpdateState
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.compose.SubscriptionTabSelector
 import kotlinx.coroutines.launch
@@ -206,8 +207,17 @@ class ManageSubscriptionActivity : BaseActivity() {
             styleButton(showSparklesIcon = false, backgroundColor = R.color.warningTint)
 
             binding.mainActionBtn.setOnClickListener {
-                navigator.openSubscriptionInStore(this)
-                // TODO: STOPSHIP: Show the dialog and proceed.
+                ActionDialogFragment
+                    .Builder(
+                        title = getString(R.string.downgrade_to_free_dialog_title),
+                        message = getString(R.string.downgrade_to_free_dialog_subtitle),
+                        positive = getString(R.string.stay_on_premium)
+                    )
+                    .onNegativeClick(getString(R.string.proceed_anyway)) {
+                        navigator.openSubscriptionInStore(this)
+                    }
+                    .build()
+                    .show(this)
             }
             binding.mainActionBtn.isEnabled = true
         } else {

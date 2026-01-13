@@ -50,8 +50,10 @@ fun FreePlanView(isSelected: Boolean, isCurrentPlan: Boolean, onSelected: () -> 
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.elevation_normal)
         ),
-        border = if (isSelected) {
+        border = if (isSelected && isCurrentPlan) {
             BorderStroke(2.dp, colorResource(R.color.colorPrimary))
+        } else if (isSelected) {
+            BorderStroke(2.dp, colorResource(R.color.warning))
         } else {
             null
         }
@@ -60,24 +62,37 @@ fun FreePlanView(isSelected: Boolean, isCurrentPlan: Boolean, onSelected: () -> 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.margin_normal_to_large)),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_normal))
+            horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
         ) {
             // Checkmark icon
             Box(
                 modifier = Modifier
                     .size(48.dp)
                     .background(
-                        color = colorResource(R.color.crypto_opacity_15),
+                        color = if (isCurrentPlan || !isSelected) {
+                            colorResource(R.color.crypto_opacity_15)
+                        } else {
+                            colorResource(R.color.warningTint)
+                        },
                         shape = RoundedCornerShape(14.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_only),
-                    contentDescription = null,
-                    tint = colorResource(R.color.darkGrey),
-                    modifier = Modifier.size(20.dp)
-                )
+                if (isCurrentPlan || !isSelected) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_checkmark_only),
+                        contentDescription = null,
+                        tint = colorResource(R.color.darkGrey),
+                        modifier = Modifier.size(20.dp)
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_warning_triangle),
+                        contentDescription = null,
+                        tint = colorResource(R.color.warning),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
             Column(
                 verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small_to_normal))
