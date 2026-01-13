@@ -123,7 +123,7 @@ class BillingService(
     fun getMonthlyAvailableSub(hasFreeTrialAvailable: Boolean): SubscriptionOffer? {
         return if (hasFreeTrialAvailable) {
             subs.filter {
-                it.offerId == OFFER_FREE_TRIAL || it.offerId == null && it.id == PLAN_MONTHLY
+                (it.offerId == OFFER_FREE_TRIAL || it.offerId == null) && it.id == PLAN_MONTHLY
             }.distinctBy { it.id }
         } else {
             subs.filter { it.offerId == null && it.id == PLAN_MONTHLY }.distinctBy { it.id }
@@ -133,10 +133,10 @@ class BillingService(
     fun getAnnualAvailableSub(hasFreeTrialAvailable: Boolean): SubscriptionOffer? {
         return if (hasFreeTrialAvailable) {
             subs.filter {
-                it.offerId == OFFER_FREE_TRIAL || it.offerId == null && it.id == PLAN_MONTHLY
+                (it.offerId == OFFER_FREE_TRIAL || it.offerId == null) && it.id == PLAN_YEARLY
             }.distinctBy { it.id }
         } else {
-            subs.filter { it.offerId == null && it.id == PLAN_MONTHLY }.distinctBy { it.id }
+            subs.filter { it.offerId == null && it.id == PLAN_YEARLY }.distinctBy { it.id }
         }.firstOrNull()
     }
 

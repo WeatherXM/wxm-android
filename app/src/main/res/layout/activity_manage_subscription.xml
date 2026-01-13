@@ -80,14 +80,12 @@
             android:layout_marginBottom="@dimen/margin_small_to_normal"
             android:text="@string/upgrade_to_premium"
             android:textColor="@color/light_top"
-            android:visibility="gone"
             app:backgroundTint="@color/crypto"
             app:cornerRadius="@dimen/radius_extra_large"
             app:icon="@drawable/ic_sparkles"
             app:iconGravity="textStart"
             app:iconTint="@color/light_top"
-            app:layout_constraintBottom_toTopOf="@id/cancelAnytimeText"
-            tools:visibility="visible" />
+            app:layout_constraintBottom_toTopOf="@id/cancelAnytimeText" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/cancelAnytimeText"
