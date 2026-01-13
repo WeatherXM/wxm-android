@@ -197,6 +197,7 @@ private fun DailyTileItem(
     }
 }
 
+@Suppress("FunctionNaming", "UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
 private fun PreviewDailyTileForecast() {

@@ -95,7 +95,9 @@ fun FreePlanView(isSelected: Boolean, isCurrentPlan: Boolean, onSelected: () -> 
 
                     if (isCurrentPlan) {
                         Card(
-                            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_extra_extra_large)),
+                            shape = RoundedCornerShape(
+                                dimensionResource(R.dimen.radius_extra_extra_large)
+                            ),
                             colors = CardDefaults.cardColors(
                                 containerColor = colorResource(R.color.cryptoInverse)
                             )

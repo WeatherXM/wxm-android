@@ -111,7 +111,9 @@ fun PremiumPlanView(
 
                     if (isCurrentPlan) {
                         Card(
-                            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_extra_extra_large)),
+                            shape = RoundedCornerShape(
+                                dimensionResource(R.dimen.radius_extra_extra_large)
+                            ),
                             colors = CardDefaults.cardColors(
                                 containerColor = colorResource(R.color.cryptoInverse)
                             )
@@ -165,9 +167,15 @@ fun PremiumPlanView(
                         pop()
                     }.toAnnotatedString()
                     FeatureItem(text = firstBenefit)
-                    FeatureItem(text = AnnotatedString(stringResource(R.string.premium_plan_second_benefit)))
-                    FeatureItem(text = AnnotatedString(stringResource(R.string.premium_plan_third_benefit)))
-                    FeatureItem(text = AnnotatedString(stringResource(R.string.premium_plan_fourth_benefit)))
+                    FeatureItem(
+                        text = AnnotatedString(stringResource(R.string.premium_plan_second_benefit))
+                    )
+                    FeatureItem(
+                        text = AnnotatedString(stringResource(R.string.premium_plan_third_benefit))
+                    )
+                    FeatureItem(
+                        text = AnnotatedString(stringResource(R.string.premium_plan_fourth_benefit))
+                    )
                 }
             }
         }
