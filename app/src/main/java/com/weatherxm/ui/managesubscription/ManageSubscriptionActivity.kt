@@ -246,7 +246,6 @@ class ManageSubscriptionActivity : BaseActivity() {
 
             val planOfferToken = planSelected.value?.offerToken
             binding.mainActionBtn.setOnClickListener {
-                shouldShowDowngradeDialog.value = true
                 if (isLoggedIn && planOfferToken != null) {
                     model.setOfferToken(planOfferToken)
                     billingService.startBillingFlow(this, planOfferToken)
