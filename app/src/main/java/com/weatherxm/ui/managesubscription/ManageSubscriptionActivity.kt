@@ -22,8 +22,8 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_LOGGED_IN
 import com.weatherxm.ui.common.PurchaseUpdateState
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.DowngradeDialog
 import com.weatherxm.ui.components.compose.SubscriptionTabSelector
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -37,8 +37,9 @@ class ManageSubscriptionActivity : BaseActivity() {
     private var hasFreeTrialAvailable = false
     private var isLoggedIn = false
     private var currentSelectedTab = 1
-    private var hasActiveRenewingSub = mutableStateOf(false)
-    private var planSelected = mutableStateOf<SubscriptionOffer?>(null)
+    private val hasActiveRenewingSub = mutableStateOf(false)
+    private val planSelected = mutableStateOf<SubscriptionOffer?>(null)
+    private val shouldShowDowngradeDialog = mutableStateOf(false)
 
     init {
         lifecycleScope.launch {
@@ -173,6 +174,19 @@ class ManageSubscriptionActivity : BaseActivity() {
             }
         }
 
+        binding.dialogComposeView.setContent {
+            DowngradeDialog(
+                shouldShow = shouldShowDowngradeDialog.value,
+                onDowngrade = {
+                    shouldShowDowngradeDialog.value = false
+                    navigator.openSubscriptionInStore(this)
+                },
+                onClose = {
+                    shouldShowDowngradeDialog.value = false
+                }
+            )
+        }
+
         binding.successBtn.setOnClickListener {
             finish()
         }
@@ -207,17 +221,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             styleButton(showSparklesIcon = false, backgroundColor = R.color.warningTint)
 
             binding.mainActionBtn.setOnClickListener {
-                ActionDialogFragment
-                    .Builder(
-                        title = getString(R.string.downgrade_to_free_dialog_title),
-                        message = getString(R.string.downgrade_to_free_dialog_subtitle),
-                        positive = getString(R.string.stay_on_premium)
-                    )
-                    .onNegativeClick(getString(R.string.proceed_anyway)) {
-                        navigator.openSubscriptionInStore(this)
-                    }
-                    .build()
-                    .show(this)
+                shouldShowDowngradeDialog.value = true
             }
             binding.mainActionBtn.isEnabled = true
         } else {
@@ -234,10 +238,15 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.mainActionBtn.isEnabled = false
         } else {
             binding.mainActionBtn.text = getString(R.string.upgrade_to_premium)
-            styleButton(showSparklesIcon = true, backgroundColor = R.color.crypto)
+            styleButton(
+                showSparklesIcon = true,
+                backgroundColor = R.color.crypto,
+                textColor = R.color.dark_text
+            )
 
             val planOfferToken = planSelected.value?.offerToken
             binding.mainActionBtn.setOnClickListener {
+                shouldShowDowngradeDialog.value = true
                 if (isLoggedIn && planOfferToken != null) {
                     model.setOfferToken(planOfferToken)
                     billingService.startBillingFlow(this, planOfferToken)
@@ -263,9 +272,13 @@ class ManageSubscriptionActivity : BaseActivity() {
         initActionButtonForPremiumSelected()
     }
 
-    private fun styleButton(showSparklesIcon: Boolean, backgroundColor: Int) {
+    private fun styleButton(
+        showSparklesIcon: Boolean,
+        backgroundColor: Int,
+        textColor: Int = R.color.colorOnSurface
+    ) {
         val backgroundColor = ContextCompat.getColor(this, backgroundColor)
-        val textColor = ContextCompat.getColor(this, R.color.colorOnSurface)
+        val textColor = ContextCompat.getColor(this, textColor)
 
         binding.mainActionBtn.backgroundTintList = ColorStateList.valueOf(backgroundColor)
         binding.mainActionBtn.setTextColor(textColor)
