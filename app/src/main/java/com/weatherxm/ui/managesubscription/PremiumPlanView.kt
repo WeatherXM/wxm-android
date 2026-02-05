@@ -44,6 +44,7 @@ fun PremiumPlanView(
     sub: SubscriptionOffer?,
     isSelected: Boolean,
     isCurrentPlan: Boolean,
+    hasFreeTrialAvailable: Boolean,
     onSelected: () -> Unit
 ) {
     if (sub == null) {
@@ -150,6 +151,26 @@ fun PremiumPlanView(
                     )
                 }
 
+                if (hasFreeTrialAvailable) {
+                    Card(
+                        shape = RoundedCornerShape(
+                            dimensionResource(R.dimen.radius_extra_extra_large)
+                        ),
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(R.color.successTint)
+                        )
+                    ) {
+                        SmallText(
+                            text = stringResource(R.string.try_for_free_2_months),
+                            colorRes = R.color.success,
+                            paddingValues = PaddingValues(
+                                horizontal = dimensionResource(R.dimen.margin_small_to_normal),
+                                vertical = dimensionResource(R.dimen.margin_extra_small)
+                            )
+                        )
+                    }
+                }
+
                 SmallText(
                     text = stringResource(R.string.premium_plan_description),
                     colorRes = R.color.darkestBlue
@@ -211,17 +232,20 @@ private fun PreviewPremiumPlanView() {
         PremiumPlanView(
             sub = SubscriptionOffer("monthly", "$4.99", "offerToken", null),
             isSelected = false,
-            isCurrentPlan = false
+            isCurrentPlan = false,
+            hasFreeTrialAvailable = false
         ) {}
         PremiumPlanView(
             sub = SubscriptionOffer("yearly", "$39.99", "offerToken", null),
             isSelected = true,
-            isCurrentPlan = false
+            isCurrentPlan = false,
+            hasFreeTrialAvailable = true
         ) {}
         PremiumPlanView(
             sub = SubscriptionOffer("yearly", "$39.99", "offerToken", null),
             isSelected = true,
-            isCurrentPlan = true
+            isCurrentPlan = true,
+            hasFreeTrialAvailable = true
         ) {}
     }
 }

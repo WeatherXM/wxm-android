@@ -35,24 +35,24 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/padding_normal"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/subscriptionTabSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:composableName="com.weatherxm.ui.components.compose.SubscriptionTabSelectorKt.PreviewSubscriptionTabSelector"
-            tools:visibility="visible" />
+        <!--        <androidx.compose.ui.platform.ComposeView-->
+        <!--            android:id="@+id/subscriptionTabSelector"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:clipChildren="false"-->
+        <!--            android:clipToPadding="false"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            tools:composableName="com.weatherxm.ui.components.compose.SubscriptionTabSelectorKt.PreviewSubscriptionTabSelector" />-->
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/bottomDivider"
-            app:layout_constraintTop_toBottomOf="@id/subscriptionTabSelector">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/planComposable"
