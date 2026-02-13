@@ -227,8 +227,17 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:visibility="gone"
-                            android:weightSum="2"
+                            android:weightSum="3"
                             app:layout_constraintTop_toBottomOf="@id/dailyIcon">
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/dailyPremiumPrecip"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_precipitation"
+                                app:weather_data_title="@string/daily_precip" />
 
                             <com.weatherxm.ui.components.WeatherMeasurementCardView
                                 android:id="@+id/dailyPremiumHumidity"

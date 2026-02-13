@@ -225,6 +225,18 @@ class ForecastDetailsActivity : BaseActivity() {
          * Some data are missing in the Hyper Local tab so we handle it differently below.
          */
         if (currentSelectedTab == 1) {
+            binding.dailyPremiumPrecip.setGradientIcon(
+                iconRes = R.drawable.ic_weather_precipitation,
+                windDirection = null,
+                isRotatableWindIcon = false
+            )
+            binding.dailyPremiumPrecip.setData(
+                getFormattedPrecipitation(
+                    context = this,
+                    value = forecastDay.precip,
+                    isRainRate = false
+                )
+            )
             binding.dailyPremiumWind.setGradientIcon(
                 iconRes = null,
                 windDirection = forecastDay.windDirection,
