@@ -63,6 +63,7 @@ class ForecastDetailsActivity : BaseActivity() {
 
     private lateinit var hourlyAdapter: HourlyForecastAdapter
     private var currentSelectedTab = 0
+    private var hasOpenedManageSubscription = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,6 +143,7 @@ class ForecastDetailsActivity : BaseActivity() {
     private fun initMosaicPromotionCard() {
         binding.mosaicPromotionCard.setContent {
             MosaicPromotionCard(model.hasFreeTrialAvailable) {
+                hasOpenedManageSubscription = true
                 navigator.showManageSubscription(
                     this,
                     model.hasFreeTrialAvailable,
@@ -482,11 +484,17 @@ class ForecastDetailsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         if (!model.device.isEmpty()) {
+            if (hasOpenedManageSubscription) {
+                model.fetchDeviceForecasts()
+            }
             analytics.trackScreen(
                 AnalyticsService.Screen.DEVICE_FORECAST_DETAILS,
                 classSimpleName()
             )
         } else {
+            if (hasOpenedManageSubscription) {
+                model.fetchLocationForecast()
+            }
             analytics.trackScreen(
                 screen = AnalyticsService.Screen.LOCATION_FORECAST_DETAILS,
                 screenClass = classSimpleName(),

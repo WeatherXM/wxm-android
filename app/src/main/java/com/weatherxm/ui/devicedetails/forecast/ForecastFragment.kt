@@ -37,6 +37,7 @@ class ForecastFragment : BaseFragment() {
     private lateinit var hourlyForecastAdapter: HourlyForecastAdapter
     private lateinit var dailyForecastAdapter: DailyForecastAdapter
     private var currentSelectedTab = 0
+    private var hasOpenedManageSubscription = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -153,11 +154,16 @@ class ForecastFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
+
+        if (hasOpenedManageSubscription) {
+            model.fetchForecasts(true)
+        }
     }
 
     private fun initMosaicPromotionCard() {
         binding.mosaicPromotionCard.setContent {
             MosaicPromotionCard(parentModel.hasFreePremiumTrialAvailable()) {
+                hasOpenedManageSubscription = true
                 navigator.showManageSubscription(
                     context,
                     parentModel.hasFreePremiumTrialAvailable(),
