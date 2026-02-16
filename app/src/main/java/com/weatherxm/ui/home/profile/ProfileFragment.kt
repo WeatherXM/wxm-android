@@ -33,6 +33,7 @@ import com.weatherxm.ui.components.compose.MessageCardView
 import com.weatherxm.ui.components.compose.ProPromotionCard
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.Mask
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.toBigDecimalSafe
@@ -318,6 +319,11 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun updateSubscriptionUI(it: UIWalletRewards?) {
+        // TODO: When we have the Solana implementation, remove this.
+        if (AndroidBuildInfo.isSolana) {
+            return
+        }
+
         if (billingService.hasActiveSub() || it == null) {
             binding.subscriptionSecondaryCard.visible(false)
         } else if (it.hasUnclaimedTokensForFreeTrial()) {

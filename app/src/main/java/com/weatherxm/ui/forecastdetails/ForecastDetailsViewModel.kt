@@ -24,6 +24,7 @@ import com.weatherxm.usecases.ChartsUseCaseImpl.Companion.FORECAST_CHART_STEP_DE
 import com.weatherxm.usecases.ChartsUseCaseImpl.Companion.FORECAST_CHART_STEP_PREMIUM
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.LocationsUseCase
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
@@ -59,7 +60,8 @@ class ForecastDetailsViewModel(
             mutableLiveData = onDeviceDefaultForecast,
             fetchOperation = { forecastUseCase.getDeviceDefaultForecast(device) }
         )
-        if (billingService.hasActiveSub()) {
+        // TODO: When we have the Solana implementation, remove this check for isSolana 
+        if (billingService.hasActiveSub() && !AndroidBuildInfo.isSolana) {
             fetchDeviceForecast(
                 mutableLiveData = onDevicePremiumForecast,
                 fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }

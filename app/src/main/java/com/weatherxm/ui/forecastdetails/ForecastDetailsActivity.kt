@@ -33,6 +33,7 @@ import com.weatherxm.ui.components.compose.ForecastTabSelector
 import com.weatherxm.ui.components.compose.HeaderView
 import com.weatherxm.ui.components.compose.JoinNetworkPromoCard
 import com.weatherxm.ui.components.compose.MosaicPromotionCard
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
@@ -112,6 +113,11 @@ class ForecastDetailsActivity : BaseActivity() {
 
         model.onLocationForecast().observe(this) {
             onForecast(it) { model.fetchLocationForecast() }
+        }
+
+        // TODO: When we have the Solana implementation, remove this
+        if (AndroidBuildInfo.isSolana) {
+            binding.tabsOrMosaicPromptContainer.visible(false)
         }
 
         if (!model.device.isEmpty()) {

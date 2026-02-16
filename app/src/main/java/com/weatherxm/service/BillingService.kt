@@ -23,6 +23,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.SubscriptionOffer
 import com.weatherxm.data.replaceLast
 import com.weatherxm.ui.common.PurchaseUpdateState
+import com.weatherxm.util.AndroidBuildInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -104,6 +105,11 @@ class BillingService(
     }
 
     fun hasActiveSub(): Boolean {
+        // TODO: When Solana is implemented, remove this
+        if (AndroidBuildInfo.isSolana) {
+            return false
+        }
+
         val activeSub = activeSubFlow.value
         return if (billingClient?.isReady == false && activeSub == null) {
             startConnection()
@@ -160,6 +166,11 @@ class BillingService(
     }
 
     suspend fun setupPurchases(inBackground: Boolean = true) {
+        // TODO: When we have the Solana implementation remove this 
+        if (AndroidBuildInfo.isSolana) {
+            return
+        }
+
         val purchasesResult = billingClient?.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(SUBS).build()
         )
@@ -371,13 +382,16 @@ class BillingService(
     }
 
     init {
-        billingClient = BillingClient.newBuilder(context)
-            .setListener(purchasesUpdatedListener)
-            .enableAutoServiceReconnection()
-            .enablePendingPurchases(
-                PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
-            )
-            .build()
-        startConnection()
+        // TODO: When we have the Solana implementation remove this check 
+        if (!AndroidBuildInfo.isSolana) {
+            billingClient = BillingClient.newBuilder(context)
+                .setListener(purchasesUpdatedListener)
+                .enableAutoServiceReconnection()
+                .enablePendingPurchases(
+                    PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
+                )
+                .build()
+            startConnection()
+        }
     }
 }

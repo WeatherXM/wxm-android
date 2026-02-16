@@ -22,6 +22,7 @@ import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.compose.ForecastTabSelector
 import com.weatherxm.ui.components.compose.MosaicPromotionCard
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.toISODate
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -127,6 +128,11 @@ class ForecastFragment : BaseFragment() {
             if (currentSelectedTab == 1) {
                 onForecast(it) { model.fetchForecasts() }
             }
+        }
+
+        // TODO: When we have the Solana implementation, remove this
+        if (AndroidBuildInfo.isSolana) {
+            binding.tabsOrMosaicPromptContainer.visible(false)
         }
 
         initForecastTabsSelector()
