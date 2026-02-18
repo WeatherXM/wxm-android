@@ -67,15 +67,9 @@ class ManageSubscriptionActivity : BaseActivity() {
                             binding.planComposable.setContent {
                                 Column(
                                     modifier = Modifier.padding(
-                                        bottom = dimensionResource(R.dimen.margin_normal)
+                                        bottom = dimensionResource(R.dimen.margin_large)
                                     )
                                 ) {
-                                    FreePlanView(
-                                        isSelected = planSelected.value == null,
-                                        isCurrentPlan = !hasActiveRenewingSub.value
-                                    ) {
-                                        onFreeSelected()
-                                    }
                                     PremiumPlanView(
                                         sub = availableSub,
                                         isSelected = planSelected.value == availableSub,
@@ -83,6 +77,12 @@ class ManageSubscriptionActivity : BaseActivity() {
                                         hasFreeTrialAvailable = hasFreeTrialAvailable
                                     ) {
                                         onPremiumSelected(availableSub)
+                                    }
+                                    FreePlanView(
+                                        isSelected = planSelected.value == null,
+                                        isCurrentPlan = !hasActiveRenewingSub.value
+                                    ) {
+                                        onFreeSelected()
                                     }
                                 }
                             }
@@ -94,7 +94,7 @@ class ManageSubscriptionActivity : BaseActivity() {
                             binding.planComposable.setContent {
                                 Column(
                                     modifier = Modifier.padding(
-                                        bottom = dimensionResource(R.dimen.margin_normal)
+                                        bottom = dimensionResource(R.dimen.margin_large)
                                     )
                                 ) {
                                     PremiumPlanView(
@@ -156,7 +156,7 @@ class ManageSubscriptionActivity : BaseActivity() {
 //                    binding.planComposable.setContent {
 //                        Column(
 //                            modifier = Modifier.padding(
-//                                bottom = dimensionResource(R.dimen.margin_normal)
+//                                bottom = dimensionResource(R.dimen.margin_large)
 //                            )
 //                        ) {
 //                            FreePlanView(
@@ -244,7 +244,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.mainActionBtn.text = getString(R.string.upgrade_to_premium)
             styleButton(
                 showSparklesIcon = true,
-                backgroundColor = R.color.crypto,
+                backgroundColor = R.color.colorPrimary,
                 textColor = R.color.dark_text
             )
 

@@ -2,13 +2,14 @@ package com.weatherxm.ui.managesubscription
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +21,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
@@ -51,6 +56,9 @@ fun PremiumPlanView(
         return
     }
 
+    val primaryColor = colorResource(R.color.colorPrimary)
+    val successColor = colorResource(R.color.success)
+
     Card(
         onClick = onSelected,
         modifier = Modifier
@@ -68,37 +76,32 @@ fun PremiumPlanView(
             defaultElevation = dimensionResource(R.dimen.elevation_normal)
         ),
         border = if (isSelected) {
-            BorderStroke(2.dp, colorResource(R.color.colorPrimary))
+            BorderStroke(2.dp, primaryColor)
         } else {
-            null
+            BorderStroke(1.dp, colorResource(R.color.crypto_opacity_15))
         }
     ) {
-        Row(
+        // Gradient overlay on top of card surface
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.margin_normal_to_large)),
-            horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
-        ) {
-            // Checkmark icon
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(
-                        color = colorResource(R.color.crypto_opacity_15),
-                        shape = RoundedCornerShape(14.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_sparkles),
-                    contentDescription = null,
-                    tint = colorResource(R.color.textColor),
-                    modifier = Modifier.size(20.dp)
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            primaryColor.copy(alpha = 0.12f),
+                            Color.Transparent,
+                            successColor.copy(alpha = 0.08f)
+                        )
+                    )
                 )
-            }
+        ) {
             Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.margin_normal_to_large)),
                 verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small_to_normal))
             ) {
+                // Header row: title + badge
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -111,75 +114,138 @@ fun PremiumPlanView(
                     )
 
                     if (isCurrentPlan) {
-                        Card(
-                            shape = RoundedCornerShape(
-                                dimensionResource(R.dimen.radius_extra_extra_large)
-                            ),
-                            colors = CardDefaults.cardColors(
-                                containerColor = colorResource(R.color.cryptoInverse)
-                            )
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = primaryColor.copy(alpha = 0.12f),
+                                    shape = RoundedCornerShape(999.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = primaryColor.copy(alpha = 0.35f),
+                                    shape = RoundedCornerShape(999.dp)
+                                )
+                                .padding(
+                                    horizontal = dimensionResource(R.dimen.margin_small_to_normal),
+                                    vertical = dimensionResource(R.dimen.margin_extra_small)
+                                )
                         ) {
                             SmallText(
                                 text = stringResource(R.string.current_plan).uppercase(),
-                                colorRes = R.color.colorOnSurface,
-                                fontWeight = FontWeight.Bold,
-                                paddingValues = PaddingValues(
+                                colorRes = R.color.colorPrimary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier
+                                .background(
+                                    color = primaryColor.copy(alpha = 0.12f),
+                                    shape = RoundedCornerShape(999.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = primaryColor.copy(alpha = 0.35f),
+                                    shape = RoundedCornerShape(999.dp)
+                                )
+                                .padding(
                                     horizontal = dimensionResource(R.dimen.margin_small_to_normal),
                                     vertical = dimensionResource(R.dimen.margin_extra_small)
+                                ),
+                            horizontalArrangement = spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_star_filled),
+                                contentDescription = null,
+                                tint = colorResource(R.color.colorPrimary),
+                                modifier = Modifier.size(8.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.best_accuracy),
+                                color = colorResource(R.color.colorPrimary),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp,
+                                lineHeight = 12.sp,
+                                style = TextStyle(
+                                    platformStyle = PlatformTextStyle(
+                                        includeFontPadding = false
+                                    )
                                 )
                             )
                         }
                     }
                 }
 
-                Row(
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_small))
-                ) {
-                    LargeText(
-                        text = sub.price,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                    MediumText(
-                        text = when (sub.id) {
-                            PLAN_MONTHLY -> stringResource(R.string.per_month)
-                            PLAN_YEARLY -> stringResource(R.string.per_year)
-                            else -> "/${sub.id}"
-                        },
-                        colorRes = R.color.darkGrey
-                    )
-                }
-
-                if (hasFreeTrialAvailable) {
-                    Card(
-                        shape = RoundedCornerShape(
-                            dimensionResource(R.dimen.radius_extra_extra_large)
-                        ),
-                        colors = CardDefaults.cardColors(
-                            containerColor = colorResource(R.color.successTint)
+                // Pricing section
+                Column(verticalArrangement = spacedBy(4.dp)) {
+                    if (hasFreeTrialAvailable) {
+                        LargeText(
+                            text = stringResource(R.string.two_months_free),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 32.sp
                         )
-                    ) {
-                        SmallText(
-                            text = stringResource(R.string.try_for_free_2_months),
-                            colorRes = R.color.success,
-                            paddingValues = PaddingValues(
-                                horizontal = dimensionResource(R.dimen.margin_small_to_normal),
-                                vertical = dimensionResource(R.dimen.margin_extra_small)
+                        val thenNote = stringResource(
+                            if (sub.id == PLAN_YEARLY) R.string.then_per_year
+                            else R.string.then_per_month,
+                            sub.price
+                        )
+                        MediumText(
+                            text = listOf(
+                                stringResource(R.string.two_months_free),
+                                thenNote
+                            ).joinToString(separator = ", "),
+                            colorRes = R.color.darkGrey
+                        )
+                        MediumText(
+                            text = stringResource(R.string.limited_launch_offer),
+                            colorRes = R.color.darkGrey
+                        )
+                    } else {
+                        Row(
+                            horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_small))
+                        ) {
+                            Text(
+                                text = sub.price,
+                                color = colorResource(R.color.colorOnSurface),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 32.sp,
+                                modifier = Modifier.alignByBaseline()
                             )
+                            Text(
+                                text = when (sub.id) {
+                                    PLAN_MONTHLY -> stringResource(R.string.per_month)
+                                    PLAN_YEARLY -> stringResource(R.string.per_year)
+                                    else -> "/${sub.id}"
+                                },
+                                color = colorResource(R.color.darkGrey),
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.alignByBaseline()
+                            )
+                        }
+                        MediumText(
+                            text = stringResource(R.string.limited_launch_price),
+                            colorRes = R.color.darkGrey
                         )
                     }
                 }
 
-                SmallText(
-                    text = stringResource(R.string.premium_plan_description),
-                    colorRes = R.color.darkestBlue
+                // Divider
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(colorResource(R.color.crypto_opacity_15))
                 )
 
-                // Features list
-                Column(
-                    verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small))
-                ) {
+                // Description
+                MediumText(
+                    text = stringResource(R.string.premium_plan_description),
+                    colorRes = R.color.darkGrey
+                )
+
+                // Features
+                Column(verticalArrangement = spacedBy(9.dp)) {
                     val firstBenefit = AnnotatedString.Builder().apply {
                         append(stringResource(R.string.premium_plan_first_benefit))
                         append(" ")
@@ -187,17 +253,18 @@ fun PremiumPlanView(
                         append(stringResource(R.string.free))
                         pop()
                     }.toAnnotatedString()
-                    FeatureItem(text = firstBenefit)
-                    FeatureItem(
+                    PremiumFeatureItem(text = firstBenefit)
+                    PremiumFeatureItem(
                         text = AnnotatedString(stringResource(R.string.premium_plan_second_benefit))
                     )
-                    FeatureItem(
+                    PremiumFeatureItem(
                         text = AnnotatedString(stringResource(R.string.premium_plan_third_benefit))
                     )
-                    FeatureItem(
+                    PremiumFeatureItem(
                         text = AnnotatedString(stringResource(R.string.premium_plan_fourth_benefit))
                     )
                 }
+
             }
         }
     }
@@ -205,17 +272,32 @@ fun PremiumPlanView(
 
 @Suppress("FunctionNaming")
 @Composable
-private fun FeatureItem(text: AnnotatedString) {
+private fun PremiumFeatureItem(text: AnnotatedString) {
     Row(
         horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_small_to_normal)),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_checkmark_only),
-            contentDescription = null,
-            tint = colorResource(R.color.colorPrimary),
-            modifier = Modifier.size(20.dp)
-        )
+        Box(
+            modifier = Modifier
+                .size(18.dp)
+                .background(
+                    color = colorResource(R.color.successTint),
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = colorResource(R.color.success).copy(alpha = 0.35f),
+                    shape = RoundedCornerShape(6.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_checkmark_only),
+                contentDescription = null,
+                tint = colorResource(R.color.success),
+                modifier = Modifier.size(10.dp)
+            )
+        }
         Text(
             text = text,
             color = colorResource(R.color.colorOnSurface),
@@ -225,27 +307,27 @@ private fun FeatureItem(text: AnnotatedString) {
 }
 
 @Suppress("UnusedPrivateMember", "FunctionNaming")
-@Preview
+@PreviewLightDark
 @Composable
 private fun PreviewPremiumPlanView() {
     Column {
         PremiumPlanView(
-            sub = SubscriptionOffer("monthly", "$4.99", "offerToken", null),
+            sub = SubscriptionOffer("monthly", "$0.99", "offerToken", null),
             isSelected = false,
             isCurrentPlan = false,
             hasFreeTrialAvailable = false
         ) {}
         PremiumPlanView(
-            sub = SubscriptionOffer("yearly", "$39.99", "offerToken", null),
+            sub = SubscriptionOffer("monthly", "$0.99", "offerToken", null),
             isSelected = true,
             isCurrentPlan = false,
             hasFreeTrialAvailable = true
         ) {}
         PremiumPlanView(
-            sub = SubscriptionOffer("yearly", "$39.99", "offerToken", null),
+            sub = SubscriptionOffer("monthly", "$0.99", "offerToken", null),
             isSelected = true,
             isCurrentPlan = true,
-            hasFreeTrialAvailable = true
+            hasFreeTrialAvailable = false
         ) {}
     }
 }

@@ -2,19 +2,21 @@ package com.weatherxm.ui.managesubscription
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +25,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,103 +50,86 @@ fun FreePlanView(isSelected: Boolean, isCurrentPlan: Boolean, onSelected: () -> 
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.colorSurface)
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = dimensionResource(R.dimen.elevation_normal)
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = if (isSelected && isCurrentPlan) {
             BorderStroke(2.dp, colorResource(R.color.colorPrimary))
         } else if (isSelected) {
             BorderStroke(2.dp, colorResource(R.color.warning))
         } else {
-            null
+            BorderStroke(1.dp, colorResource(R.color.crypto_opacity_15))
         }
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.margin_normal_to_large)),
-            horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_normal))
+            verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small_to_normal))
         ) {
-            // Checkmark icon
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(
-                        color = if (isCurrentPlan || !isSelected) {
-                            colorResource(R.color.crypto_opacity_15)
-                        } else {
-                            colorResource(R.color.warningTint)
-                        },
-                        shape = RoundedCornerShape(14.dp)
-                    ),
-                contentAlignment = Alignment.Center
+            // Header row: title + current plan badge
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
             ) {
-                if (isCurrentPlan || !isSelected) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_checkmark_only),
-                        contentDescription = null,
-                        tint = colorResource(R.color.darkGrey),
-                        modifier = Modifier.size(20.dp)
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_warning_triangle),
-                        contentDescription = null,
-                        tint = colorResource(R.color.warning),
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-            Column(
-                verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small_to_normal))
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top
-                ) {
-                    LargeText(
-                        text = stringResource(R.string.free),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
+                LargeText(
+                    text = stringResource(R.string.free),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
 
-                    if (isCurrentPlan) {
-                        Card(
-                            shape = RoundedCornerShape(
-                                dimensionResource(R.dimen.radius_extra_extra_large)
-                            ),
-                            colors = CardDefaults.cardColors(
-                                containerColor = colorResource(R.color.cryptoInverse)
+                if (isCurrentPlan) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = colorResource(R.color.crypto_opacity_15),
+                                shape = RoundedCornerShape(999.dp)
                             )
-                        ) {
-                            SmallText(
-                                text = stringResource(R.string.current_plan).uppercase(),
-                                colorRes = R.color.colorOnSurface,
-                                fontWeight = FontWeight.Bold,
-                                paddingValues = PaddingValues(
-                                    horizontal = dimensionResource(R.dimen.margin_small_to_normal),
-                                    vertical = dimensionResource(R.dimen.margin_extra_small)
-                                )
+                            .border(
+                                width = 1.dp,
+                                color = colorResource(R.color.darkGrey).copy(alpha = 0.25f),
+                                shape = RoundedCornerShape(999.dp)
                             )
-                        }
+                            .padding(
+                                horizontal = dimensionResource(R.dimen.margin_small_to_normal),
+                                vertical = dimensionResource(R.dimen.margin_extra_small)
+                            )
+                    ) {
+                        SmallText(
+                            text = stringResource(R.string.current_plan).uppercase(),
+                            colorRes = R.color.darkGrey,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
+            }
 
+            // Price + tagline
+            Column(verticalArrangement = spacedBy(4.dp)) {
                 LargeText(
                     text = "$0",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 32.sp
+                    fontSize = 24.sp
                 )
+                MediumText(
+                    text = stringResource(R.string.free_plan_tagline),
+                    colorRes = R.color.darkGrey
+                )
+            }
 
-                Column(
-                    verticalArrangement = spacedBy(dimensionResource(R.dimen.margin_small))
-                ) {
-                    FeatureItem(text = stringResource(R.string.free_plan_first_benefit))
-                    FeatureItem(text = stringResource(R.string.free_plan_second_benefit))
-                    FeatureItem(text = stringResource(R.string.free_plan_third_benefit))
-                    FeatureItem(text = stringResource(R.string.free_plan_fourth_benefit))
-                }
+            // Divider
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(colorResource(R.color.crypto_opacity_15))
+            )
+
+            // Features
+            Column(verticalArrangement = spacedBy(9.dp)) {
+                FreeFeatureItem(stringResource(R.string.free_plan_first_benefit))
+                FreeFeatureItem(stringResource(R.string.free_plan_second_benefit))
+                FreeFeatureItem(stringResource(R.string.free_plan_third_benefit))
+                FreeFeatureItem(stringResource(R.string.free_plan_fourth_benefit))
             }
         }
     }
@@ -151,17 +137,33 @@ fun FreePlanView(isSelected: Boolean, isCurrentPlan: Boolean, onSelected: () -> 
 
 @Suppress("FunctionNaming")
 @Composable
-private fun FeatureItem(text: String) {
+private fun FreeFeatureItem(text: String) {
     Row(
-        horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_small)),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_small_to_normal)),
+        verticalAlignment = Alignment.Top
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_checkmark_only),
-            contentDescription = null,
-            tint = colorResource(R.color.crypto),
-            modifier = Modifier.size(14.dp)
-        )
+        Box(
+            modifier = Modifier
+                .size(18.dp)
+                .background(
+                    color = colorResource(R.color.crypto_opacity_15),
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = colorResource(R.color.darkGrey).copy(alpha = 0.2f),
+                    shape = RoundedCornerShape(6.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "•",
+                color = colorResource(R.color.darkGrey),
+                fontSize = 14.sp,
+                lineHeight = 14.sp,
+                textAlign = TextAlign.Center
+            )
+        }
         MediumText(text = text, colorRes = R.color.darkestBlue)
     }
 }

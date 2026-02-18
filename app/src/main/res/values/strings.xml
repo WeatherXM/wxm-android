@@ -959,4 +959,11 @@
     <string name="downgrade">Downgrade</string>
     <string name="stay_on_premium">Stay on Premium</string>
     <string name="try_for_free_2_months">Try for free for 2 months</string>
+    <string name="two_months_free">2 months free</string>
+    <string name="best_accuracy">BEST ACCURACY</string>
+    <string name="limited_launch_price">Limited-time launch price.</string>
+    <string name="limited_launch_offer">Limited-time launch offer.</string>
+    <string name="start_premium">Start Premium</string>
+    <string name="claim_free_trial_cta">Claim Free Trial</string>
+    <string name="free_plan_tagline">Forecasts for general tracking.</string>
 </resources>
