@@ -203,7 +203,9 @@ fun PremiumPlanView(
                         )
                     } else {
                         Row(
-                            horizontalArrangement = spacedBy(dimensionResource(R.dimen.margin_small))
+                            horizontalArrangement = spacedBy(dimensionResource(
+                                R.dimen.margin_small)
+                            )
                         ) {
                             Text(
                                 text = sub.price,

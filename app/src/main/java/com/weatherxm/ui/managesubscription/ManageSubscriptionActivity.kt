@@ -197,6 +197,7 @@ class ManageSubscriptionActivity : BaseActivity() {
 
         binding.backBtn.setOnClickListener {
             binding.appBar.visible(true)
+            binding.topDivider.visible(true)
             // binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             binding.statusView.visible(false)
@@ -308,6 +309,7 @@ class ManageSubscriptionActivity : BaseActivity() {
     private fun onPurchaseUpdate(state: PurchaseUpdateState) {
         if (state.isLoading) {
             binding.appBar.visible(false)
+            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
@@ -317,6 +319,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.appBar.visible(true)
+            binding.topDivider.visible(true)
             //    binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             billingService.clearPurchaseUpdates()
@@ -326,6 +329,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             )
         } else if (state.success) {
             binding.appBar.visible(false)
+            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.statusView.clear()
@@ -341,6 +345,7 @@ class ManageSubscriptionActivity : BaseActivity() {
             )
         } else {
             binding.appBar.visible(false)
+            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.statusView.clear()
                 .animation(R.raw.anim_error)

@@ -425,11 +425,11 @@ data class UIWalletRewards(
     }
 
     /**
-     * If unclaimed tokens >= 80 then return true
+     * If unclaimed tokens >= 100 then return true
      */
     @Suppress("MagicNumber")
     fun hasUnclaimedTokensForFreeTrial(): Boolean {
-        return weiToETH(allocated.toBigDecimalSafe()) >= BigDecimal.valueOf(80.0)
+        return weiToETH(allocated.toBigDecimalSafe()) >= BigDecimal.valueOf(100.0)
     }
 }
 
