@@ -197,7 +197,6 @@ class ManageSubscriptionActivity : BaseActivity() {
 
         binding.backBtn.setOnClickListener {
             binding.appBar.visible(true)
-            binding.topDivider.visible(true)
             // binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             binding.statusView.visible(false)
@@ -222,7 +221,11 @@ class ManageSubscriptionActivity : BaseActivity() {
     private fun initActionButtonForFreeSelected() {
         if (hasActiveRenewingSub.value) {
             binding.mainActionBtn.text = getString(R.string.downgrade_free_plan)
-            styleButton(showSparklesIcon = false, backgroundColor = R.color.warningTint)
+            styleButton(
+                showSparklesIcon = false,
+                backgroundColor = R.color.warningTint,
+                textColor = R.color.colorOnSurface
+            )
 
             binding.mainActionBtn.setOnClickListener {
                 shouldShowDowngradeDialog.value = true
@@ -230,7 +233,11 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.mainActionBtn.isEnabled = true
         } else {
             binding.mainActionBtn.text = getString(R.string.currently_on_free)
-            styleButton(showSparklesIcon = false, backgroundColor = R.color.layer1)
+            styleButton(
+                showSparklesIcon = false,
+                backgroundColor = R.color.layer1,
+                textColor = R.color.colorOnSurface
+            )
             binding.mainActionBtn.isEnabled = false
         }
     }
@@ -238,14 +245,18 @@ class ManageSubscriptionActivity : BaseActivity() {
     private fun initActionButtonForPremiumSelected() {
         if (hasActiveRenewingSub.value) {
             binding.mainActionBtn.text = getString(R.string.currently_on_premium)
-            styleButton(showSparklesIcon = true, backgroundColor = R.color.layer1)
+            styleButton(
+                showSparklesIcon = true,
+                backgroundColor = R.color.layer1,
+                textColor = R.color.colorOnSurface
+            )
             binding.mainActionBtn.isEnabled = false
         } else {
             binding.mainActionBtn.text = getString(R.string.upgrade_to_premium)
             styleButton(
                 showSparklesIcon = true,
-                backgroundColor = R.color.colorPrimary,
-                textColor = R.color.dark_text
+                backgroundColor = R.color.crypto,
+                textColor = R.color.colorOnPrimary
             )
 
             val planOfferToken = planSelected.value?.offerToken
@@ -278,7 +289,7 @@ class ManageSubscriptionActivity : BaseActivity() {
     private fun styleButton(
         showSparklesIcon: Boolean,
         backgroundColor: Int,
-        textColor: Int = R.color.colorOnSurface
+        textColor: Int = R.color.colorOnPrimary
     ) {
         val backgroundColor = ContextCompat.getColor(this, backgroundColor)
         val textColor = ContextCompat.getColor(this, textColor)
@@ -297,7 +308,6 @@ class ManageSubscriptionActivity : BaseActivity() {
     private fun onPurchaseUpdate(state: PurchaseUpdateState) {
         if (state.isLoading) {
             binding.appBar.visible(false)
-            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
@@ -307,7 +317,6 @@ class ManageSubscriptionActivity : BaseActivity() {
             binding.successBtn.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.appBar.visible(true)
-            binding.topDivider.visible(true)
             //    binding.subscriptionTabSelector.visible(true)
             binding.mainContainer.visible(true)
             billingService.clearPurchaseUpdates()
@@ -317,7 +326,6 @@ class ManageSubscriptionActivity : BaseActivity() {
             )
         } else if (state.success) {
             binding.appBar.visible(false)
-            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.errorButtonsContainer.visible(false)
             binding.statusView.clear()
@@ -333,7 +341,6 @@ class ManageSubscriptionActivity : BaseActivity() {
             )
         } else {
             binding.appBar.visible(false)
-            binding.topDivider.visible(false)
             binding.mainContainer.visible(false)
             binding.statusView.clear()
                 .animation(R.raw.anim_error)

@@ -294,7 +294,7 @@ private fun PremiumFeatureItem(text: AnnotatedString) {
             Icon(
                 painter = painterResource(R.drawable.ic_checkmark_only),
                 contentDescription = null,
-                tint = colorResource(R.color.success),
+                tint = colorResource(R.color.textColor),
                 modifier = Modifier.size(10.dp)
             )
         }

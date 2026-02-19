@@ -912,7 +912,7 @@
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="free_subscription_claim">You have a free subscription. Claim now!</string>
     <string name="powered_by">Powered by</string>
-    <string name="current_plan">Current plan</string>
+    <string name="current_plan">Current Plan</string>
     <string name="premium_features">Premium features</string>
     <string name="mosaic_forecast">✨ HYPERLOCAL forecast</string>
     <string name="mosaic_forecast_explanation">We tested 30 forecast models to see which ones match real weather the best. The best model today might not be the best for the next few days! We pick the top models in your area each day to give you the most reliable forecast.</string>
@@ -960,7 +960,7 @@
     <string name="stay_on_premium">Stay on Premium</string>
     <string name="try_for_free_2_months">Try for free for 2 months</string>
     <string name="two_months_free">2 months free</string>
-    <string name="best_accuracy">BEST ACCURACY</string>
+    <string name="best_accuracy">Best Accuracy</string>
     <string name="limited_launch_price">Limited-time launch price.</string>
     <string name="limited_launch_offer">Limited-time launch offer.</string>
     <string name="start_premium">Start Premium</string>
