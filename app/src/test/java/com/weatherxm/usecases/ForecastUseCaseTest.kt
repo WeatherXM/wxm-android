@@ -115,18 +115,18 @@ class ForecastUseCaseTest : BehaviorSpec({
         )
     )
 
-    context("Get Weather Forecast") {
+    context("Get Device Default Weather Forecast") {
         given("A repository providing the forecast data") {
             When("Device has a null timezone property") {
                 then("return INVALID_TIMEZONE failure") {
-                    usecase.getDeviceForecast(device, forceRefresh).leftOrNull()
+                    usecase.getDeviceDefaultForecast(device, forceRefresh).leftOrNull()
                         .shouldBeTypeOf<ApiError.UserError.InvalidTimezone>()
                 }
             }
             When("Device does has an empty timezone property") {
                 device.timezone = String.empty()
                 then("return INVALID_TIMEZONE failure") {
-                    usecase.getDeviceForecast(device, forceRefresh).leftOrNull()
+                    usecase.getDeviceDefaultForecast(device, forceRefresh).leftOrNull()
                         .shouldBeTypeOf<ApiError.UserError.InvalidTimezone>()
                 }
             }
@@ -136,18 +136,18 @@ class ForecastUseCaseTest : BehaviorSpec({
                 val toDate = fromDate.plusDays(7)
                 and("repository returns a failure") {
                     coMockEitherLeft({
-                        repo.getDeviceForecast(device.id, fromDate, toDate, forceRefresh)
+                        repo.getDeviceDefaultForecast(device.id, fromDate, toDate, forceRefresh)
                     }, failure)
                     then("return that failure") {
-                        usecase.getDeviceForecast(device, forceRefresh).isError()
+                        usecase.getDeviceDefaultForecast(device, forceRefresh).isError()
                     }
                 }
                 When("repository returns success along with the data") {
                     coMockEitherRight({
-                        repo.getDeviceForecast(device.id, fromDate, toDate, forceRefresh)
+                        repo.getDeviceDefaultForecast(device.id, fromDate, toDate, forceRefresh)
                     }, weatherData)
                     then("return the respective UIForecast") {
-                        usecase.getDeviceForecast(device, forceRefresh).isSuccess(uiForecast)
+                        usecase.getDeviceDefaultForecast(device, forceRefresh).isSuccess(uiForecast)
                     }
                 }
             }

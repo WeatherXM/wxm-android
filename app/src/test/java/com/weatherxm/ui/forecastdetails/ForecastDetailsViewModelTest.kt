@@ -15,6 +15,7 @@ import com.weatherxm.data.datasource.LocationsDataSource.Companion.MAX_AUTH_LOCA
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.models.Location
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
@@ -36,6 +37,7 @@ import kotlinx.coroutines.test.runTest
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -46,6 +48,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
     val chartsUseCase = mockk<ChartsUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val locationsUseCase = mockk<LocationsUseCase>()
+    val billingService = mockk<BillingService>()
     val device = UIDevice.empty()
     val location = UILocation.empty()
     val analytics = mockk<AnalyticsWrapper>()
@@ -159,6 +162,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         justRun { analytics.trackEventFailure(any()) }
         justRun { locationsUseCase.addSavedLocation(Location.empty()) }
         justRun { locationsUseCase.removeSavedLocation(Location.empty()) }
+        every { billingService.hasActiveSub() } returns false
         every { charts.date } returns today
         every {
             resources.getString(R.string.forecast_empty)
@@ -169,14 +173,15 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.error_forecast_invalid_timezone)
         } returns invalidTimezoneMsg
-        every { chartsUseCase.createHourlyCharts(today, any()) } returns charts
-        every { chartsUseCase.createHourlyCharts(tomorrow, any()) } returns charts
+        every { chartsUseCase.createHourlyCharts(today, any(), any()) } returns charts
+        every { chartsUseCase.createHourlyCharts(tomorrow, any(), any()) } returns charts
         every { authUseCase.isLoggedIn() } returns true
 
         viewModel = ForecastDetailsViewModel(
             device,
             location,
             false,
+            billingService,
             resources,
             analytics,
             authUseCase,
@@ -192,85 +197,85 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
             When("it's a failure") {
                 and("it's an InvalidFromDate failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getDeviceForecast(device) },
+                        { forecastUseCase.getDeviceDefaultForecast(device) },
                         invalidFromDate
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchDeviceForecast() },
+                        { viewModel.fetchDeviceForecasts() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onDeviceDefaultForecast(),
                         1,
                         forecastGenericErrorMsg
                     )
                 }
                 and("it's an InvalidToDate failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getDeviceForecast(device) },
+                        { forecastUseCase.getDeviceDefaultForecast(device) },
                         invalidToDate
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchDeviceForecast() },
+                        { viewModel.fetchDeviceForecasts() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onDeviceDefaultForecast(),
                         2,
                         forecastGenericErrorMsg
                     )
                 }
                 and("it's an InvalidTimezone failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getDeviceForecast(device) },
+                        { forecastUseCase.getDeviceDefaultForecast(device) },
                         invalidTimezone
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchDeviceForecast() },
+                        { viewModel.fetchDeviceForecasts() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onDeviceDefaultForecast(),
                         3,
                         invalidTimezoneMsg
                     )
                 }
                 and("it's any other failure") {
                     coMockEitherLeft(
-                        { forecastUseCase.getDeviceForecast(device) },
+                        { forecastUseCase.getDeviceDefaultForecast(device) },
                         failure
                     )
                     testHandleFailureViewModel(
-                        { viewModel.fetchDeviceForecast() },
+                        { viewModel.fetchDeviceForecasts() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onDeviceDefaultForecast(),
                         4,
                         REACH_OUT_MSG
                     )
                 }
                 then("forecast should be set to empty") {
-                    viewModel.forecast().isEmpty() shouldBe true
+                    viewModel.onDeviceDefaultForecast().value?.data shouldBe null
                 }
             }
             When("it's a success") {
                 and("an empty forecast returned") {
                     coMockEitherRight(
-                        { forecastUseCase.getDeviceForecast(device) },
+                        { forecastUseCase.getDeviceDefaultForecast(device) },
                         emptyForecast
                     )
-                    runTest { viewModel.fetchDeviceForecast() }
-                    then("LiveData onForecastLoaded should post the error for the empty forecast") {
-                        viewModel.onForecastLoaded().isError(emptyForecastMsg)
+                    runTest { viewModel.fetchDeviceForecasts() }
+                    then("LiveData onDeviceDefaultForecast should post the error for the empty forecast") {
+                        viewModel.onDeviceDefaultForecast().isError(emptyForecastMsg)
                     }
                     then("forecast should be set to empty") {
-                        viewModel.forecast().isEmpty() shouldBe true
+                        viewModel.onDeviceDefaultForecast().value?.data shouldBe null
                     }
                 }
                 and("a valid non-empty forecast is returned") {
                     coMockEitherRight(
-                        { forecastUseCase.getDeviceForecast(device) },
+                        { forecastUseCase.getDeviceDefaultForecast(device) },
                         forecast
                     )
-                    runTest { viewModel.fetchDeviceForecast() }
-                    then("LiveData onForecastLoaded should post Unit as a success value") {
-                        viewModel.onForecastLoaded().isSuccess(Unit)
+                    runTest { viewModel.fetchDeviceForecasts() }
+                    then("LiveData onDeviceDefaultForecast should post success with the forecast") {
+                        viewModel.onDeviceDefaultForecast().isSuccess(forecast)
                     }
                     then("forecast should be set to the returned value") {
-                        viewModel.forecast() shouldBe forecast
+                        viewModel.onDeviceDefaultForecast().value?.data shouldBe forecast
                     }
                 }
             }
@@ -281,17 +286,17 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
         given("a selected day as a LocalDate ISO String") {
             When("it's null") {
                 then("return 0") {
-                    viewModel.getSelectedDayPosition(null) shouldBe 0
+                    viewModel.getSelectedDayPosition(null, forecast) shouldBe 0
                 }
             }
             When("it's a date we don't have in the forecast") {
                 then("return 0") {
-                    viewModel.getSelectedDayPosition(LocalDate.MIN.toString()) shouldBe 0
+                    viewModel.getSelectedDayPosition(LocalDate.MIN.toString(), forecast) shouldBe 0
                 }
             }
             When("it's a date we do have in the forecast") {
                 then("return the position") {
-                    viewModel.getSelectedDayPosition(tomorrow.toString()) shouldBe 1
+                    viewModel.getSelectedDayPosition(tomorrow.toString(), forecast) shouldBe 1
                 }
             }
         }
@@ -316,8 +321,8 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
     context("Get charts for forecast") {
         given("the usecase returning the charts") {
             then("return the charts") {
-                viewModel.getCharts(forecastDay) shouldBe charts
-                viewModel.getCharts(forecastDayTomorrow) shouldBe charts
+                viewModel.getCharts(forecast, forecastDay) shouldBe charts
+                viewModel.getCharts(forecast, forecastDayTomorrow) shouldBe charts
             }
         }
     }
@@ -333,7 +338,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                     testHandleFailureViewModel(
                         { viewModel.fetchLocationForecast() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onLocationForecast(),
                         5,
                         forecastGenericErrorMsg
                     )
@@ -346,7 +351,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                     testHandleFailureViewModel(
                         { viewModel.fetchLocationForecast() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onLocationForecast(),
                         6,
                         forecastGenericErrorMsg
                     )
@@ -359,7 +364,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                     testHandleFailureViewModel(
                         { viewModel.fetchLocationForecast() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onLocationForecast(),
                         7,
                         invalidTimezoneMsg
                     )
@@ -372,13 +377,13 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                     testHandleFailureViewModel(
                         { viewModel.fetchLocationForecast() },
                         analytics,
-                        viewModel.onForecastLoaded(),
+                        viewModel.onLocationForecast(),
                         8,
                         REACH_OUT_MSG
                     )
                 }
                 then("forecast should be set to empty") {
-                    viewModel.forecast().isEmpty() shouldBe true
+                    viewModel.onLocationForecast().value?.data shouldBe null
                 }
             }
             When("it's a success") {
@@ -388,11 +393,11 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         emptyForecast
                     )
                     runTest { viewModel.fetchLocationForecast() }
-                    then("LiveData onForecastLoaded should post the error for the empty forecast") {
-                        viewModel.onForecastLoaded().isError(emptyForecastMsg)
+                    then("LiveData onLocationForecast should post the error for the empty forecast") {
+                        viewModel.onLocationForecast().isError(emptyForecastMsg)
                     }
                     then("forecast should be set to empty") {
-                        viewModel.forecast().isEmpty() shouldBe true
+                        viewModel.onLocationForecast().value?.data shouldBe null
                     }
                 }
                 and("a valid non-empty forecast is returned") {
@@ -401,11 +406,11 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         forecast
                     )
                     runTest { viewModel.fetchLocationForecast() }
-                    then("LiveData onForecastLoaded should post Unit as a success value") {
-                        viewModel.onForecastLoaded().isSuccess(Unit)
+                    then("LiveData onLocationForecast should post success with the forecast") {
+                        viewModel.onLocationForecast().isSuccess(forecast)
                     }
                     then("forecast should be set to the returned value") {
-                        viewModel.forecast() shouldBe forecast
+                        viewModel.onLocationForecast().value?.data shouldBe forecast
                     }
                 }
             }
