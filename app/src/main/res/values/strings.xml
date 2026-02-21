@@ -961,9 +961,12 @@
     <string name="try_for_free_2_months">Try for free for 2 months</string>
     <string name="two_months_free">2 months free</string>
     <string name="best_accuracy">Best Accuracy</string>
-    <string name="limited_launch_price">Limited-time launch price.</string>
-    <string name="limited_launch_offer">Limited-time launch offer.</string>
+    <string name="launch_offer_title">Limited-time launch offer</string>
+    <string name="offer_discount">for the first %1$s months. Standard price %2$s.</string>
+    <string name="offer_discount_after_trial">for the next %1$s months. Standard price %2$s.</string>
     <string name="start_premium">Start Premium</string>
     <string name="claim_free_trial_cta">Claim Free Trial</string>
     <string name="free_plan_tagline">Forecasts for general tracking.</string>
+    <string name="wxm_token_reward_trial_title">%1$d-Month Free Premium Trial</string>
+    <string name="wxm_token_reward_trial_body">You’re eligible for an exclusive 2-month Premium trial for holding 200+ $WXM. Start now and enjoy full access at no cost.</string>
 </resources>

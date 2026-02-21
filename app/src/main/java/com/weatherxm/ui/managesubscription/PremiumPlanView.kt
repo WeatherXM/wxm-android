@@ -1,5 +1,6 @@
 package com.weatherxm.ui.managesubscription
 
+import android.R.id.bold
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,10 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mapbox.maps.extension.style.expressions.dsl.generated.id
+import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.models.SubscriptionOffer
 import com.weatherxm.service.PLAN_MONTHLY
 import com.weatherxm.service.PLAN_YEARLY
+import com.weatherxm.service.TAG_DISCOUNT
+import com.weatherxm.service.TAG_FREE_TRIAL
+import com.weatherxm.service.TAG_LAUNCH_OFFER
 import com.weatherxm.ui.components.compose.LargeText
 import com.weatherxm.ui.components.compose.MediumText
 import com.weatherxm.ui.components.compose.SmallText
@@ -95,6 +101,7 @@ fun PremiumPlanView(
                     )
                 )
         ) {
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -177,57 +184,132 @@ fun PremiumPlanView(
                     }
                 }
 
+                if (TAG_FREE_TRIAL in sub.tags && hasFreeTrialAvailable) {
+                    val tokenGold = colorResource(R.color.warning)
+                    val tokenAmber = colorResource(R.color.beta_rewards_color)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        tokenGold.copy(alpha = 0.18f),
+                                        tokenAmber.copy(alpha = 0.10f)
+                                    )
+                                ),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        tokenGold.copy(alpha = 0.60f),
+                                        tokenAmber.copy(alpha = 0.40f)
+                                    )
+                                ),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(dimensionResource(R.dimen.margin_small_to_normal))
+                    ) {
+                        Row(
+                            horizontalArrangement = spacedBy(
+                                dimensionResource(R.dimen.margin_small_to_normal)
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_coins),
+                                contentDescription = null,
+                                tint = tokenGold,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Column(verticalArrangement = spacedBy(2.dp)) {
+                                val freeTrialMonths = sub.freeTrialPeriod
+                                    ?.filter { it.isDigit() }?.toIntOrNull() ?: 2
+                                Text(
+                                    text = stringResource(
+                                        R.string.wxm_token_reward_trial_title,
+                                        freeTrialMonths
+                                    ),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    lineHeight = 18.sp,
+                                    style = TextStyle(
+                                        brush = Brush.horizontalGradient(
+                                            colors = listOf(tokenGold, tokenAmber)
+                                        ),
+                                        platformStyle = PlatformTextStyle(
+                                            includeFontPadding = false
+                                        )
+                                    )
+                                )
+                                SmallText(
+                                    text = stringResource(
+                                        R.string.wxm_token_reward_trial_body
+                                    ),
+                                    colorRes = R.color.colorOnSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+
+                if (TAG_LAUNCH_OFFER in sub.tags) {
+                    Text(
+                        text = stringResource(R.string.launch_offer_title),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    colorResource(R.color.colorPrimary),
+                                    colorResource(R.color.beta_rewards_color),
+                                    colorResource(R.color.success)
+                                )
+                            )
+                        )
+                    )
+                }
+
                 // Pricing section
                 Column(verticalArrangement = spacedBy(4.dp)) {
-                    if (hasFreeTrialAvailable) {
-                        LargeText(
-                            text = stringResource(R.string.two_months_free),
+                    Row(
+                        horizontalArrangement = spacedBy(dimensionResource(
+                            R.dimen.margin_small)
+                        )
+                    ) {
+                        Text(
+                            text = sub.price,
+                            color = colorResource(R.color.colorOnSurface),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 32.sp
+                            fontSize = 32.sp,
+                            modifier = Modifier.alignByBaseline()
                         )
-                        val thenNote = stringResource(
-                            if (sub.id == PLAN_YEARLY) R.string.then_per_year
-                            else R.string.then_per_month,
-                            sub.price
+                        Text(
+                            text = when (sub.id) {
+                                PLAN_MONTHLY -> stringResource(R.string.per_month)
+                                PLAN_YEARLY -> stringResource(R.string.per_year)
+                                else -> "/${sub.id}"
+                            },
+                            color = colorResource(R.color.darkGrey),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.alignByBaseline()
                         )
-                        MediumText(
-                            text = listOf(
-                                stringResource(R.string.two_months_free),
-                                thenNote
-                            ).joinToString(separator = ", "),
-                            colorRes = R.color.darkGrey
-                        )
-                        MediumText(
-                            text = stringResource(R.string.limited_launch_offer),
-                            colorRes = R.color.darkGrey
-                        )
-                    } else {
-                        Row(
-                            horizontalArrangement = spacedBy(dimensionResource(
-                                R.dimen.margin_small)
-                            )
-                        ) {
-                            Text(
-                                text = sub.price,
-                                color = colorResource(R.color.colorOnSurface),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 32.sp,
-                                modifier = Modifier.alignByBaseline()
-                            )
-                            Text(
-                                text = when (sub.id) {
-                                    PLAN_MONTHLY -> stringResource(R.string.per_month)
-                                    PLAN_YEARLY -> stringResource(R.string.per_year)
-                                    else -> "/${sub.id}"
-                                },
-                                color = colorResource(R.color.darkGrey),
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.alignByBaseline()
-                            )
+                    }
+
+                    if (TAG_DISCOUNT in sub.tags && sub.discountedCycles != null && sub.basePrice != null) {
+                        val discountStringRes = if (TAG_FREE_TRIAL in sub.tags) {
+                            R.string.offer_discount_after_trial
+                        } else {
+                            R.string.offer_discount
                         }
                         MediumText(
-                            text = stringResource(R.string.limited_launch_price),
-                            colorRes = R.color.darkGrey
+                            text = stringResource(
+                                discountStringRes,
+                                sub.discountedCycles,
+                                sub.basePrice
+                            ),
+                            colorRes = R.color.colorOnSurface
                         )
                     }
                 }
@@ -267,6 +349,12 @@ fun PremiumPlanView(
                     )
                 }
 
+                // Show offer id for debug purposes
+                if (BuildConfig.DEBUG) {
+                    SmallText(
+                        text = "Offer ID: ${sub.offerId}"
+                    )
+                }
             }
         }
     }
@@ -311,25 +399,57 @@ private fun PremiumFeatureItem(text: AnnotatedString) {
 @Suppress("UnusedPrivateMember", "FunctionNaming")
 @PreviewLightDark
 @Composable
-private fun PreviewPremiumPlanView() {
-    Column {
-        PremiumPlanView(
-            sub = SubscriptionOffer("monthly", "$0.99", "offerToken", null),
-            isSelected = false,
-            isCurrentPlan = false,
-            hasFreeTrialAvailable = false
-        ) {}
-        PremiumPlanView(
-            sub = SubscriptionOffer("monthly", "$0.99", "offerToken", null),
-            isSelected = true,
-            isCurrentPlan = false,
-            hasFreeTrialAvailable = true
-        ) {}
-        PremiumPlanView(
-            sub = SubscriptionOffer("monthly", "$0.99", "offerToken", null),
-            isSelected = true,
-            isCurrentPlan = true,
-            hasFreeTrialAvailable = false
-        ) {}
-    }
+private fun PreviewPremiumPlanViewBasePlan() {
+    PremiumPlanView(
+        sub = SubscriptionOffer("monthly", "€4.19", "offerToken", null),
+        isSelected = false,
+        isCurrentPlan = false,
+        hasFreeTrialAvailable = false
+    ) {}
+}
+
+@Suppress("UnusedPrivateMember", "FunctionNaming")
+@PreviewLightDark
+@Composable
+private fun PreviewPremiumPlanViewLaunchOffer() {
+    PremiumPlanView(
+        sub = SubscriptionOffer(
+            id = "monthly", price = "€1.05", offerToken = "token",
+            offerId = "launch-offer",
+            tags = listOf("discount", "launch-offer", "monthly"),
+            discountedCycles = 12, basePrice = "€4.19"
+        ),
+        isSelected = true,
+        isCurrentPlan = false,
+        hasFreeTrialAvailable = false
+    ) {}
+}
+
+@Suppress("UnusedPrivateMember", "FunctionNaming")
+@PreviewLightDark
+@Composable
+private fun PreviewPremiumPlanViewFreeTrial() {
+    PremiumPlanView(
+        sub = SubscriptionOffer(
+            id = "monthly", price = "€1.05", offerToken = "token",
+            offerId = "launch-offer-wxm-holders",
+            tags = listOf("discount", "free-trial", "launch-offer", "monthly"),
+            freeTrialPeriod = "P2M", discountedCycles = 10, basePrice = "€4.19"
+        ),
+        isSelected = true,
+        isCurrentPlan = false,
+        hasFreeTrialAvailable = true
+    ) {}
+}
+
+@Suppress("UnusedPrivateMember", "FunctionNaming")
+@PreviewLightDark
+@Composable
+private fun PreviewPremiumPlanViewCurrentPlan() {
+    PremiumPlanView(
+        sub = SubscriptionOffer("monthly", "€4.19", "offerToken", null),
+        isSelected = true,
+        isCurrentPlan = true,
+        hasFreeTrialAvailable = false
+    ) {}
 }

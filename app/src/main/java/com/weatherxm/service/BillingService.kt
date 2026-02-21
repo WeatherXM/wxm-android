@@ -19,6 +19,8 @@ import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchasesAsync
+import com.mapbox.maps.extension.style.expressions.dsl.generated.any
+import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.models.SubscriptionOffer
 import com.weatherxm.data.replaceLast
@@ -48,7 +50,9 @@ import java.util.Base64
 const val PREMIUM_FORECAST_PRODUCT_ID = "premium_forecast"
 const val PLAN_MONTHLY = "monthly"
 const val PLAN_YEARLY = "yearly"
-const val OFFER_FREE_TRIAL = "free-trial"
+const val TAG_LAUNCH_OFFER = "launch-offer"
+const val TAG_FREE_TRIAL = "free-trial"
+const val TAG_DISCOUNT = "discount"
 
 class BillingService(
     private val context: Context,
@@ -128,22 +132,14 @@ class BillingService(
 
     fun getMonthlyAvailableSub(hasFreeTrialAvailable: Boolean): SubscriptionOffer? {
         return if (hasFreeTrialAvailable) {
-            subs.filter {
-                (it.offerId == OFFER_FREE_TRIAL || it.offerId == null) && it.id == PLAN_MONTHLY
-            }.distinctBy { it.id }
+            subs.firstOrNull { TAG_FREE_TRIAL in it.tags }
+                ?: subs.firstOrNull { TAG_LAUNCH_OFFER in it.tags }
+                ?: subs.firstOrNull()
         } else {
-            subs.filter { it.offerId == null && it.id == PLAN_MONTHLY }.distinctBy { it.id }
-        }.firstOrNull()
-    }
-
-    fun getAnnualAvailableSub(hasFreeTrialAvailable: Boolean): SubscriptionOffer? {
-        return if (hasFreeTrialAvailable) {
-            subs.filter {
-                (it.offerId == OFFER_FREE_TRIAL || it.offerId == null) && it.id == PLAN_YEARLY
-            }.distinctBy { it.id }
-        } else {
-            subs.filter { it.offerId == null && it.id == PLAN_YEARLY }.distinctBy { it.id }
-        }.firstOrNull()
+            subs.firstOrNull { TAG_LAUNCH_OFFER in it.tags && TAG_FREE_TRIAL !in it.tags }
+                ?: subs.firstOrNull { TAG_LAUNCH_OFFER in it.tags }
+                ?: subs.firstOrNull()
+        }
     }
 
     private fun startConnection() {
@@ -218,29 +214,44 @@ class BillingService(
         val productDetails = getSubscriptionProduct()
         subs = mutableListOf()
 
-        productDetails?.subscriptionOfferDetails?.forEach { details ->
-            details.pricingPhases.pricingPhaseList.forEach {
-                /**
-                 * The below might produce duplicates (e.g. a plan with and without the free trial),
-                 * the UI will be responsible to show each one by calling the getAvailableSubs()
-                 * function.
-                 *
-                 * Also due to the Billing Service returning the formatted price as "3.99 $"
-                 * we format it so that it becomes "3.99$".
-                 */
-                val offerSupported = details.offerId == OFFER_FREE_TRIAL || details.offerId == null
-                if (it.priceAmountMicros > 0 && offerSupported) {
-                    subs.add(
-                        SubscriptionOffer(
-                            details.basePlanId,
-                            it.formattedPrice.replaceLast(" ", ""),
-                            details.offerToken,
-                            details.offerId
-                        )
-                    )
+        // Debug logs with plan details
+        if (BuildConfig.DEBUG) {
+            productDetails.also {
+                Timber.d("Product [id=${it?.productId}, name = ${it?.name}, description = ${it?.description}, title = ${it?.title}]]")
+                it?.subscriptionOfferDetails?.forEach { o ->
+                    Timber.d("\tOffer [id=${o.offerId}, tags = ${o.offerTags}]")
+                    o.pricingPhases.pricingPhaseList.forEach { p ->
+                        Timber.d("\t\tPhase [pricef = ${p.formattedPrice}, period = ${p.billingPeriod}, cycles = ${p.billingCycleCount}, recur = ${p.recurrenceMode}], price = ${p.priceAmountMicros}, curr = ${p.priceCurrencyCode}]")
+                    }
                 }
             }
         }
+
+        productDetails?.subscriptionOfferDetails
+            ?.filter { TAG_LAUNCH_OFFER in it.offerTags || it.offerId == null }
+            ?.forEach { details ->
+                val phases = details.pricingPhases.pricingPhaseList
+                val freePhase = phases.firstOrNull { it.priceAmountMicros == 0L }
+                val paidPhases = phases.filter { it.priceAmountMicros > 0L }
+                val discountPhase = paidPhases.firstOrNull { it.billingCycleCount > 0 }
+                val basePhase = paidPhases.firstOrNull { it.billingCycleCount == 0 }
+                val displayPrice = (discountPhase ?: basePhase)
+                    ?.formattedPrice?.replaceLast(" ", "") ?: return@forEach
+                subs.add(
+                    SubscriptionOffer(
+                        id = details.basePlanId,
+                        price = displayPrice,
+                        offerToken = details.offerToken,
+                        offerId = details.offerId,
+                        tags = details.offerTags,
+                        freeTrialPeriod = freePhase?.billingPeriod,
+                        discountedCycles = discountPhase?.billingCycleCount,
+                        basePrice = basePhase?.formattedPrice?.replaceLast(" ", ""),
+                    )
+                )
+            }
+
+        Timber.d("Subs: $subs")
     }
 
     fun startBillingFlow(activity: Activity, offerToken: String?) {
