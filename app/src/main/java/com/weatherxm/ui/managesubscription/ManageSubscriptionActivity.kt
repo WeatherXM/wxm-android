@@ -56,11 +56,7 @@ class ManageSubscriptionActivity : BaseActivity() {
                     billingService.getActiveSubFlow().collect {
                         val availableSub =
                             billingService.getMonthlyAvailableSub(hasFreeTrialAvailable)
-//                        val availableSub = if (currentSelectedTab == 0) {
-//                            billingService.getMonthlyAvailableSub(hasFreeTrialAvailable)
-//                        } else {
-//                            billingService.getAnnualAvailableSub(hasFreeTrialAvailable)
-//                        }
+
                         if (it == null || !it.isAutoRenewing) {
                             hasActiveRenewingSub.value = false
                             binding.toolbar.title = getString(R.string.upgrade_to_premium)
