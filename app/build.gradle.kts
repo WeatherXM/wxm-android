@@ -273,6 +273,7 @@ android {
         }
         getByName("debug") {
             isDefault = true
+            //noinspection WrongGradleMethod
             signingConfigs.firstOrNull { it.name == "debug-config" }?.let {
                 signingConfig = it
             }
