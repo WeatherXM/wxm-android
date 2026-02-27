@@ -235,7 +235,8 @@ class BillingService(
                 val discountPhase = paidPhases.firstOrNull { it.billingCycleCount > 0 }
                 val basePhase = paidPhases.firstOrNull { it.billingCycleCount == 0 }
                 val displayPrice = (discountPhase ?: basePhase)
-                    ?.formattedPrice?.replaceLast(" ", "") ?: return@forEach
+                    ?.formattedPrice
+                    ?.replaceLast(" ", "") ?: return@forEach
                 subs.add(
                     SubscriptionOffer(
                         id = details.basePlanId,
