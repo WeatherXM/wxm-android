@@ -43,6 +43,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.parse
 
+@Suppress("unused")
 @OptIn(FlowPreview::class)
 class DeviceDetailsViewModelTest : BehaviorSpec({
     val deviceDetailsUseCase = mockk<DeviceDetailsUseCase>()
@@ -53,7 +54,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
     lateinit var viewModel: DeviceDetailsViewModel
 
     val user = User("id", "email", null, null, null, Wallet("address", null))
-    val testWalletRewards = UIWalletRewards(8E19, 0.0, 8E19, "0x00")
+    val testWalletRewards = UIWalletRewards(2E20, 0.0, 2E20, "0x00")
     val emptyDevice = UIDevice.empty()
     val device = UIDevice(
         "deviceId",
