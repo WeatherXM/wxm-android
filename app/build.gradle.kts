@@ -143,6 +143,7 @@ android {
         }
         create("remote") {
             dimension = "mode"
+            isDefault = true
         }
         create("mock") {
             val apiURL = getFlavorProperty("API_URL", "remotemock.env")
@@ -199,6 +200,7 @@ android {
             }
         }
         create("prod") {
+            isDefault = true
             val apiURL = getFlavorProperty("API_URL", "production.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
             val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "production.env")
@@ -270,6 +272,7 @@ android {
             manifestPlaceholders["crashlyticsEnabled"] = true
         }
         getByName("debug") {
+            isDefault = true
             signingConfigs.firstOrNull { it.name == "debug-config" }?.let {
                 signingConfig = it
             }
