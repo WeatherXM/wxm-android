@@ -94,6 +94,7 @@ android {
 
         androidResources {
             // Keeps language resources for only the locales specified below.
+            @Suppress("UnstableApiUsage")
             localeFilters += listOf("en")
         }
         // Resource value fields
