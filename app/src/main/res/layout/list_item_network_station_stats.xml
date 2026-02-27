@@ -47,13 +47,23 @@
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/stationSlider"
-            style="@style/Widget.WeatherXM.Slider.NetworkStats"
+            style="@style/Widget.Material3.Slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
+            android:stepSize="0"
             android:valueFrom="0"
             android:valueTo="100"
+            app:labelBehavior="gone"
             app:layout_constraintTop_toTopOf="parent"
+            app:thumbElevation="0dp"
+            app:thumbHeight="0dp"
+            app:thumbTrackGapSize="0dp"
+            app:thumbWidth="0dp"
+            app:trackColorActive="@color/network_stats_slider"
+            app:trackColorInactive="@color/colorSurface"
+            app:trackHeight="18dp"
+            app:trackStopIndicatorSize="0dp"
             app:values="@array/network_stats_slider_default_values" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

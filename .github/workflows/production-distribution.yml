@@ -15,6 +15,8 @@ env:
     ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
     # Firebase distribution on tech team group
     ORG_GRADLE_PROJECT_FIREBASE_TEST_GROUP: ${{ secrets.FIREBASE_TECH_TEAM_TEST_GROUP }}
+    # The base 64 encoded RSA public key found in Google Play Console
+    ORG_GRADLE_PROJECT_BASE64_ENCODED_RSA_PUBLIC_KEY: ${{ secrets.BASE64_ENCODED_RSA_PUBLIC_KEY }}
     # Gradle config
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}

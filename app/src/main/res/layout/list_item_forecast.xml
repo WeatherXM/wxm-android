@@ -22,7 +22,6 @@
             tools:text="Today, Tuesday 31/1" />
 
         <ImageView
-            android:id="@+id/openRewards"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/action_open"
@@ -38,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small_to_normal"
             android:layout_marginEnd="@dimen/margin_large"
+            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@id/icon"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,26 +46,19 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/min_temperature"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/textColor"
                 android:textStyle="bold"
                 tools:text="13°C" />
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/temperature"
-                style="@style/Widget.WeatherXM.Slider"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/temperatureView"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:layout_weight="1"
-                android:enabled="false"
-                app:trackColorActive="@color/crypto"
-                app:trackColorInactive="@color/colorBackground"
-                app:values="@array/temperature_slider_sample_values"
-                tools:valueFrom="10"
-                tools:valueTo="28" />
+                tools:composableName="com.weatherxm.ui.components.compose.RoundedRangeViewKt.PreviewRoundedRangeView" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/max_temperature"
@@ -90,100 +83,83 @@
             tools:background="#88212121"
             tools:lottie_rawRes="@raw/anim_weather_clear_day" />
 
-        <ImageView
-            android:id="@+id/precipProbabilityIcon"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:src="@drawable/ic_weather_precip_probability"
-            app:layout_constraintBottom_toBottomOf="@id/precipProbability"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/icon"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/precipProbability"
-            app:tint="@color/darkGrey"
-            tools:ignore="contentDescription" />
+            app:layout_constraintTop_toBottomOf="@id/temperatureContainer">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/precipProbability"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_extra_extra_small"
-            android:layout_marginTop="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/darkGrey"
-            app:layout_constraintStart_toEndOf="@id/precipProbabilityIcon"
-            app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
-            tools:text="50%" />
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/precipProbabilityIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp" />
 
-        <ImageView
-            android:id="@+id/precipIcon"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:layout_marginStart="@dimen/margin_small"
-            android:src="@drawable/ic_weather_precipitation"
-            app:layout_constraintBottom_toBottomOf="@id/precip"
-            app:layout_constraintStart_toEndOf="@id/precipProbability"
-            app:layout_constraintTop_toTopOf="@id/precip"
-            app:tint="@color/darkGrey"
-            tools:ignore="contentDescription" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/precipProbability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_extra_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintStart_toEndOf="@id/precipProbabilityIcon"
+                app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
+                tools:text="50%" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/precip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_extra_extra_small"
-            android:layout_marginTop="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/darkGrey"
-            app:layout_constraintStart_toEndOf="@id/precipIcon"
-            app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
-            tools:text="1.5 in" />
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/precipIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="@dimen/margin_small" />
 
-        <ImageView
-            android:id="@+id/windIcon"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:layout_marginStart="@dimen/margin_small"
-            android:src="@drawable/ic_wind_direction"
-            app:layout_constraintBottom_toBottomOf="@id/wind"
-            app:layout_constraintStart_toEndOf="@id/precip"
-            app:layout_constraintTop_toTopOf="@id/wind"
-            app:tint="@color/darkGrey"
-            tools:ignore="contentDescription" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/precip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_extra_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintStart_toEndOf="@id/precipIcon"
+                app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
+                tools:text="1.5 in" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/wind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_extra_extra_small"
-            android:layout_marginTop="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/darkGrey"
-            app:layout_constraintStart_toEndOf="@id/windIcon"
-            app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
-            tools:text="3 km/h 359°" />
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/windIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp" />
 
-        <ImageView
-            android:id="@+id/humidityIcon"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:layout_marginStart="@dimen/margin_small"
-            android:src="@drawable/ic_weather_humidity"
-            app:layout_constraintBottom_toBottomOf="@id/humidity"
-            app:layout_constraintStart_toEndOf="@id/wind"
-            app:layout_constraintTop_toTopOf="@id/humidity"
-            app:tint="@color/darkGrey"
-            tools:ignore="contentDescription" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_extra_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintStart_toEndOf="@id/windIcon"
+                app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
+                tools:text="3 km/h 359°" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_extra_extra_small"
-            android:layout_marginTop="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/darkGrey"
-            app:layout_constraintStart_toEndOf="@id/humidityIcon"
-            app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
-            tools:text="50%" />
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/humidityIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="@dimen/margin_small" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_extra_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintStart_toEndOf="@id/humidityIcon"
+                app:layout_constraintTop_toBottomOf="@id/temperatureContainer"
+                tools:text="50%" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

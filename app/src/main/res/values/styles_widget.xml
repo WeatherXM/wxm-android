@@ -190,27 +190,6 @@
     </style>
 
     <!--
-        Sliders
-    -->
-    <style name="Widget.WeatherXM.Slider" parent="Widget.Material3.Slider">
-        <item name="android:stepSize">0</item>
-        <item name="labelBehavior">gone</item>
-        <item name="thumbElevation">0dp</item>
-        <item name="thumbWidth">0dp</item>
-        <item name="thumbHeight">0dp</item>
-        <item name="thumbTrackGapSize">0dp</item>
-        <item name="trackStopIndicatorSize">0dp</item>
-        <item name="trackHeight">@dimen/slider_default_track_height</item>
-        <item name="trackColorInactive">@color/blueTint</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Slider.NetworkStats" parent="Widget.WeatherXM.Slider">
-        <item name="trackHeight">18dp</item>
-        <item name="trackColorInactive">@color/colorSurface</item>
-        <item name="trackColorActive">@color/network_stats_slider</item>
-    </style>
-
-    <!--
         AlertDialog Styles
     -->
     <style name="Widget.WeatherXM.AlertDialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">

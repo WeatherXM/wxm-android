@@ -5,8 +5,14 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewWeatherMeasurementCardBinding
+import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.GradientIcon
+import com.weatherxm.ui.components.compose.GradientIconRotatable
 
 class WeatherMeasurementCardView : LinearLayout {
 
@@ -43,9 +49,42 @@ class WeatherMeasurementCardView : LinearLayout {
         }
     }
 
+    fun setGradientIcon(iconRes: Int?, windDirection: Int?, isRotatableWindIcon: Boolean) {
+        binding.gradientIcon.setContent {
+            if (isRotatableWindIcon) {
+                GradientIconRotatable(
+                    iconRes = R.drawable.ic_wind_direction,
+                    rotation = (windDirection?.toFloat() ?: 0f) + 180f,
+                    size = 25.dp,
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            colorResource(R.color.blue),
+                            colorResource(R.color.forecast_premium)
+                        )
+                    )
+                )
+            } else if(iconRes != null) {
+                GradientIcon(
+                    iconRes = iconRes,
+                    size = 25.dp,
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            colorResource(R.color.blue),
+                            colorResource(R.color.forecast_premium)
+                        )
+                    )
+                )
+            }
+        }
+        binding.icon.visible(false)
+        binding.gradientIcon.visible(true)
+    }
+
     fun setIcon(drawable: Drawable?) {
         drawable?.let {
             binding.icon.setImageDrawable(it)
+            binding.gradientIcon.visible(false)
+            binding.icon.visible(true)
         }
     }
 

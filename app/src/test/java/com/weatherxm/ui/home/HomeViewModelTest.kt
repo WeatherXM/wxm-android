@@ -8,8 +8,11 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.RemoteBanner
 import com.weatherxm.data.models.RemoteBannerType
 import com.weatherxm.data.models.Survey
+import com.weatherxm.data.models.User
+import com.weatherxm.data.models.Wallet
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.WalletWarnings
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DevicePhotoUseCase
@@ -41,6 +44,8 @@ class HomeViewModelTest : BehaviorSpec({
     val bannerId = "bannerId"
     val deviceId = "deviceId"
     val devices = listOf(UIDevice.empty())
+    val user = User("id", "email", null, null, null, Wallet("address", null))
+    val testWalletRewards = UIWalletRewards(0.0, 0.0, 0.01, "0x00")
 
     listener(InstantExecutorListener())
 
@@ -65,6 +70,8 @@ class HomeViewModelTest : BehaviorSpec({
             remoteBannersUseCase.dismissRemoteBanner(RemoteBannerType.ANNOUNCEMENT, bannerId)
         }
         justRun { photosUseCase.retryUpload(deviceId) }
+        coMockEitherRight({ userUseCase.getUser() }, user)
+        coMockEitherRight({ userUseCase.getWalletRewards(user.wallet?.address) }, testWalletRewards)
 
         viewModel =
             HomeViewModel(
@@ -75,6 +82,16 @@ class HomeViewModelTest : BehaviorSpec({
                 analytics,
                 dispatcher
             )
+    }
+
+    context("Get if the user has a free premium trial available or not") {
+        given("A use case returning the user and the rewards") {
+            When("it's a success") {
+                then("Depending on the rewards it should return a boolean") {
+                    viewModel.hasFreePremiumTrialAvailable() shouldBe false
+                }
+            }
+        }
     }
 
     context("GET if the user is logged in") {

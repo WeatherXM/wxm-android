@@ -59,6 +59,7 @@ class WeatherHistoryDataSourceTest : BehaviorSpec({
             address = "",
             date = toDate,
             tz = "Europe/Athens",
+            isPremium = false,
             hourly = hourlyWeather,
             daily = null
         )

@@ -15,6 +15,7 @@ import com.google.android.material.search.SearchView.TransitionState
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl.Companion.ANNOUNCEMENT_LOCAL_PREMIUM
 import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl.Companion.ANNOUNCEMENT_LOCAL_PRO_ACTION_URL
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.RemoteBanner
@@ -342,8 +343,18 @@ class LocationsFragment : BaseFragment() {
                                 )
                             )
                             ProPromotionDialogFragment().show(this)
+                        } else if (it.url == ANNOUNCEMENT_LOCAL_PREMIUM) {
+                            navigator.showManageSubscription(
+                                context,
+                                parentModel.hasFreePremiumTrialAvailable(),
+                                parentModel.isLoggedIn()
+                            )
                         } else {
-                            navigator.openWebsite(context, it.url)
+                            navigator.showManageSubscription(
+                                context,
+                                parentModel.hasFreePremiumTrialAvailable(),
+                                parentModel.isLoggedIn()
+                            )
                         }
                     },
                     onClose = {

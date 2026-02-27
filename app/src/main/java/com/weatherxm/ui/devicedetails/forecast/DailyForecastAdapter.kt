@@ -2,21 +2,30 @@ package com.weatherxm.ui.devicedetails.forecast
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ListItemForecastBinding
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setWeatherAnimation
+import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.GradientIcon
+import com.weatherxm.ui.components.compose.GradientIconRotatable
+import com.weatherxm.ui.components.compose.RoundedRangeView
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
-import com.weatherxm.util.Weather.getWindDirectionDrawable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -27,9 +36,14 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
 
     private var minTemperature: Float = Float.MAX_VALUE
     private var maxTemperature: Float = Float.MIN_VALUE
+    private var isOnPremiumTab: Boolean = false
 
     val resources: Resources by inject()
     val analytics: AnalyticsWrapper by inject()
+
+    fun setPremiumData(isOnPremiumTab: Boolean) {
+        this.isOnPremiumTab = isOnPremiumTab
+    }
 
     override fun submitList(list: List<UIForecastDay>?) {
         /*
@@ -90,12 +104,29 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             binding.date.text = item.date.getRelativeDayAndMonthDay(itemView.context)
             binding.icon.setWeatherAnimation(item.icon)
             if (minTemperature == Float.MAX_VALUE || maxTemperature == Float.MIN_VALUE) {
-                binding.temperature.invisible()
+                binding.temperatureView.invisible()
             } else {
-                binding.temperature.apply {
-                    valueFrom = minTemperature
-                    valueTo = maxTemperature
-                    values = listOf(item.minTemp, item.maxTemp)
+                val rangeStart = item.minTemp ?: 0F
+                val rangeEnd = item.maxTemp ?: 0F
+                binding.temperatureView.setContent {
+                    val brushColor = if (isOnPremiumTab) {
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(itemView.context.getColor(R.color.blue)),
+                                Color(itemView.context.getColor(R.color.forecast_premium))
+                            )
+                        )
+                    } else {
+                        null
+                    }
+                    RoundedRangeView(
+                        16.dp,
+                        rangeStart..rangeEnd,
+                        minTemperature..maxTemperature,
+                        R.color.colorBackground,
+                        R.color.crypto,
+                        brushColor
+                    )
                 }
             }
             binding.minTemperature.text =
@@ -103,21 +134,83 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             binding.maxTemperature.text =
                 Weather.getFormattedTemperature(itemView.context, item.maxTemp)
 
-            binding.precipProbability.text =
-                Weather.getFormattedPrecipitationProbability(item.precipProbability)
-            binding.precip.text = Weather.getFormattedPrecipitation(
-                context = itemView.context,
-                value = item.precip,
-                isRainRate = false
-            )
+            // Setup precipProbabilityIcon
+            if (item.precipProbability == null) {
+                binding.precipProbabilityIcon.visible(false)
+                binding.precipProbability.visible(false)
+            } else {
+                binding.precipProbability.text =
+                    Weather.getFormattedPrecipitationProbability(item.precipProbability)
+                binding.precipProbabilityIcon.setContent {
+                    SetWeatherIcon(R.drawable.ic_weather_precip_probability)
+                }
+            }
 
+            // Setup precipIcon
+            if (item.precip == null) {
+                binding.precipIcon.visible(false)
+                binding.precip.visible(false)
+            } else {
+                binding.precip.text = Weather.getFormattedPrecipitation(
+                    context = itemView.context,
+                    value = item.precip,
+                    isRainRate = false
+                )
+                binding.precipIcon.setContent {
+                    SetWeatherIcon(R.drawable.ic_weather_precipitation)
+                }
+            }
+
+            // Setup windIcon
             binding.wind.text =
                 Weather.getFormattedWind(itemView.context, item.windSpeed, item.windDirection)
-            binding.windIcon.setImageDrawable(
-                getWindDirectionDrawable(itemView.context, item.windDirection)
-            )
+            binding.windIcon.setContent {
+                SetWindDirectionIcon(item.windDirection)
+            }
+
+            // Setup humidityIcon
             binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
+            binding.humidityIcon.setContent {
+                SetWeatherIcon(R.drawable.ic_weather_humidity)
+            }
         }
+    }
+
+    @Suppress("FunctionNaming")
+    @Composable
+    private fun SetWeatherIcon(iconRes: Int) {
+        GradientIcon(
+            iconRes = iconRes,
+            size = 14.dp,
+            brush = if (isOnPremiumTab) {
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        colorResource(R.color.blue),
+                        colorResource(R.color.forecast_premium)
+                    )
+                )
+            } else null,
+            tint = if (!isOnPremiumTab) colorResource(R.color.darkGrey) else null
+        )
+    }
+
+    @Suppress("FunctionNaming")
+    @Composable
+    private fun SetWindDirectionIcon(windDirection: Int?) {
+        GradientIconRotatable(
+            iconRes = R.drawable.ic_wind_direction,
+            rotation = (windDirection?.toFloat() ?: 0f) + 180f,
+            size = 14.dp,
+            brush = if (isOnPremiumTab) {
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        colorResource(R.color.blue),
+                        colorResource(R.color.forecast_premium)
+                    )
+                )
+            } else null,
+            tint = if (!isOnPremiumTab) colorResource(R.color.darkGrey) else null
+        )
     }
 
     class UIForecastDiffCallback : DiffUtil.ItemCallback<UIForecastDay>() {
@@ -132,9 +225,12 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
                 oldItem.maxTemp == newItem.maxTemp &&
                 oldItem.minTemp == newItem.minTemp &&
                 oldItem.precipProbability == newItem.precipProbability &&
+                oldItem.precip == newItem.precip &&
                 oldItem.windSpeed == newItem.windSpeed &&
                 oldItem.windDirection == newItem.windDirection &&
                 oldItem.humidity == newItem.humidity &&
+                oldItem.pressure == newItem.pressure &&
+                oldItem.uv == newItem.uv &&
                 oldItem.hourlyWeather?.size == newItem.hourlyWeather?.size
         }
     }

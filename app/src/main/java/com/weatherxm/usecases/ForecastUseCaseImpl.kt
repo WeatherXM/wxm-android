@@ -21,23 +21,39 @@ class ForecastUseCaseImpl(
 ) : ForecastUseCase {
 
     @Suppress("MagicNumber")
-    override suspend fun getDeviceForecast(
+    private suspend fun getDeviceForecast(
+        isPremium: Boolean,
         device: UIDevice,
-        forceRefresh: Boolean
+        forceRefresh: Boolean = false
     ): Either<Failure, UIForecast> {
         if (device.timezone.isNullOrEmpty()) {
             return Either.Left(ApiError.UserError.InvalidTimezone(INVALID_TIMEZONE))
         }
         val nowDeviceTz = ZonedDateTime.now(ZoneId.of(device.timezone))
         val dateEndInDeviceTz = nowDeviceTz.plusDays(7).toLocalDate()
-        return repo.getDeviceForecast(
-            device.id,
-            nowDeviceTz.toLocalDate(),
-            dateEndInDeviceTz,
-            forceRefresh
-        ).map {
+        return if (isPremium) {
+            repo.getDevicePremiumForecast(device.id, nowDeviceTz.toLocalDate(), dateEndInDeviceTz)
+        } else {
+            repo.getDeviceDefaultForecast(
+                device.id,
+                nowDeviceTz.toLocalDate(),
+                dateEndInDeviceTz,
+                forceRefresh
+            )
+        }.map {
             getUIForecastFromWeatherData(nowDeviceTz, it)
         }
+    }
+
+    override suspend fun getDeviceDefaultForecast(
+        device: UIDevice,
+        forceRefresh: Boolean
+    ): Either<Failure, UIForecast> {
+        return getDeviceForecast(false, device, forceRefresh)
+    }
+
+    override suspend fun getDevicePremiumForecast(device: UIDevice): Either<Failure, UIForecast> {
+        return getDeviceForecast(isPremium = true, device)
     }
 
     override suspend fun getLocationForecast(location: Location): Either<Failure, UIForecast> {
@@ -81,6 +97,7 @@ class ForecastUseCaseImpl(
 
         return UIForecast(
             address = data[0].address,
+            isPremium = data[0].isPremium,
             next24Hours = nextHourlyWeatherForecast,
             forecastDays = forecastDays
         )

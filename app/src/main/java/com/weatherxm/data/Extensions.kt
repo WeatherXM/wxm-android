@@ -173,3 +173,13 @@ fun String.textToLocation(): Location {
     val split = split("_")
     return Location(split[0].toDouble(), split[1].toDouble())
 }
+
+fun String.replaceLast(oldValue: String, newValue: String): String {
+    val lastIndex = lastIndexOf(oldValue)
+    if (lastIndex == -1) {
+        return this
+    }
+    val prefix = substring(0, lastIndex)
+    val suffix = substring(lastIndex + oldValue.length)
+    return "$prefix$newValue$suffix"
+}

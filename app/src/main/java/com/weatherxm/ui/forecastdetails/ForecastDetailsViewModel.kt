@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.datasource.LocationsDataSource.Companion.MAX_AUTH_LOCATIONS
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.service.BillingService
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
@@ -18,19 +20,25 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ChartsUseCase
+import com.weatherxm.usecases.ChartsUseCaseImpl.Companion.FORECAST_CHART_STEP_DEFAULT
+import com.weatherxm.usecases.ChartsUseCaseImpl.Companion.FORECAST_CHART_STEP_PREMIUM
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.LocationsUseCase
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Duration
 import java.time.LocalDate
 
 @Suppress("LongParameterList")
 class ForecastDetailsViewModel(
     val device: UIDevice,
     val location: UILocation,
+    val hasFreeTrialAvailable: Boolean,
+    private val billingService: BillingService,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val authUseCase: AuthUseCase,
@@ -39,75 +47,86 @@ class ForecastDetailsViewModel(
     private val locationsUseCase: LocationsUseCase,
     private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val onForecastLoaded = MutableLiveData<Resource<Unit>>()
+    private val onDeviceDefaultForecast = MutableLiveData<Resource<UIForecast>>()
+    private val onDevicePremiumForecast = MutableLiveData<Resource<UIForecast>>()
+    private val onLocationForecast = MutableLiveData<Resource<UIForecast>>()
 
-    fun onForecastLoaded(): LiveData<Resource<Unit>> = onForecastLoaded
+    fun onDeviceDefaultForecast(): LiveData<Resource<UIForecast>> = onDeviceDefaultForecast
+    fun onDevicePremiumForecast(): LiveData<Resource<UIForecast>> = onDevicePremiumForecast
+    fun onLocationForecast(): LiveData<Resource<UIForecast>> = onLocationForecast
 
-    private var forecast: UIForecast = UIForecast.empty()
+    fun fetchDeviceForecasts() {
+        fetchDeviceForecast(
+            mutableLiveData = onDeviceDefaultForecast,
+            fetchOperation = { forecastUseCase.getDeviceDefaultForecast(device) }
+        )
+        // TODO: When we have the Solana implementation, remove this check for isSolana 
+        if (billingService.hasActiveSub() && !AndroidBuildInfo.isSolana) {
+            fetchDeviceForecast(
+                mutableLiveData = onDevicePremiumForecast,
+                fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }
+            )
+        }
+    }
 
-    fun forecast() = forecast
-
-    fun fetchDeviceForecast() {
-        onForecastLoaded.postValue(Resource.loading())
+    private fun fetchDeviceForecast(
+        mutableLiveData: MutableLiveData<Resource<UIForecast>>,
+        fetchOperation: suspend () -> Either<Failure, UIForecast>
+    ) {
         viewModelScope.launch(dispatcher) {
-            forecastUseCase.getDeviceForecast(device).onRight {
+            mutableLiveData.postValue(Resource.loading())
+            fetchOperation().onRight {
                 Timber.d("Got forecast details for device forecast")
-                forecast = it
                 if (it.isEmpty()) {
-                    onForecastLoaded.postValue(
+                    mutableLiveData.postValue(
                         Resource.error(resources.getString(R.string.forecast_empty))
                     )
                 } else {
-                    onForecastLoaded.postValue(Resource.success(Unit))
+                    mutableLiveData.postValue(Resource.success(it))
                 }
             }.onLeft {
-                forecast = UIForecast.empty()
                 analytics.trackEventFailure(it.code)
-                handleForecastFailure(it)
+                mutableLiveData.postValue(getFailureResource(it))
             }
         }
     }
 
     fun fetchLocationForecast() {
-        onForecastLoaded.postValue(Resource.loading())
+        onLocationForecast.postValue(Resource.loading())
         viewModelScope.launch(dispatcher) {
             forecastUseCase.getLocationForecast(location.coordinates)
                 .onRight {
                     Timber.d("Got forecast details for location forecast")
-                    forecast = it
                     if (it.isEmpty()) {
-                        onForecastLoaded.postValue(
+                        onLocationForecast.postValue(
                             Resource.error(resources.getString(R.string.forecast_empty))
                         )
                     } else {
-                        onForecastLoaded.postValue(Resource.success(Unit))
+                        onLocationForecast.postValue(Resource.success(it))
                     }
                 }
                 .onLeft {
-                    forecast = UIForecast.empty()
                     analytics.trackEventFailure(it.code)
-                    handleForecastFailure(it)
+                    onLocationForecast.postValue(getFailureResource(it))
                 }
         }
     }
 
-    private fun handleForecastFailure(failure: Failure) {
-        onForecastLoaded.postValue(
-            Resource.error(
-                when (failure) {
-                    is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
-                        resources.getString(R.string.error_forecast_generic_message)
-                    }
-                    is ApiError.UserError.InvalidTimezone -> {
-                        resources.getString(R.string.error_forecast_invalid_timezone)
-                    }
-                    else -> failure.getDefaultMessage(R.string.error_reach_out_short)
+    private fun <T> getFailureResource(failure: Failure): Resource<T> {
+        return Resource.error(
+            when (failure) {
+                is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
+                    resources.getString(R.string.error_forecast_generic_message)
                 }
-            )
+                is ApiError.UserError.InvalidTimezone -> {
+                    resources.getString(R.string.error_forecast_invalid_timezone)
+                }
+                else -> failure.getDefaultMessage(R.string.error_reach_out_short)
+            }
         )
     }
 
-    fun getSelectedDayPosition(selectedISODate: String?): Int {
+    fun getSelectedDayPosition(selectedISODate: String?, forecast: UIForecast): Int {
         if (selectedISODate == null) {
             return 0
         }
@@ -142,10 +161,17 @@ class ForecastDetailsViewModel(
         )
     }
 
-    fun getCharts(forecastDay: UIForecastDay): Charts {
+    fun getCharts(forecast: UIForecast, forecastDay: UIForecastDay): Charts {
         Timber.d("Returning forecast charts for [${forecastDay.date}]")
+        val chartStep = if (forecast.isPremium == false) {
+            Duration.ofHours(FORECAST_CHART_STEP_DEFAULT)
+        } else {
+            Duration.ofHours(FORECAST_CHART_STEP_PREMIUM)
+        }
         return chartsUseCase.createHourlyCharts(
-            forecastDay.date, forecastDay.hourlyWeather ?: mutableListOf()
+            forecastDay.date,
+            forecastDay.hourlyWeather ?: mutableListOf(),
+            chartStep
         )
     }
 

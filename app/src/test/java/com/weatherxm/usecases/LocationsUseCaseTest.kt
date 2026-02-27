@@ -37,6 +37,7 @@ class LocationsUseCaseTest : BehaviorSpec({
             "Address",
             tomorrowInUtc.toLocalDate(),
             utc,
+            false,
             listOf(
                 HourlyWeather(
                     tomorrowInUtc,

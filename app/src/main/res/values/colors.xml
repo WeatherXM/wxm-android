@@ -34,6 +34,8 @@
     <color name="progressBarTrackColor">@color/light_lightest_blue</color>
     <color name="alternativeTextColor">@color/darkGrey</color>
     <color name="tooltip">@color/light_tooltip</color>
+    <color name="crypto_opacity_15">@color/light_crypto_opacity_15</color>
+    <color name="cryptoInverse">@color/dark_crypto</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">@color/colorPrimary</color>
@@ -50,6 +52,7 @@
     <!-- Forecast -->
     <color name="daily_selected_tile">@color/light_layer1</color>
     <color name="daily_unselected_tile">@color/light_top</color>
+    <color name="forecast_premium">#800162</color>
 
     <!-- Rewards -->
     <color name="cell_bounty_reward">@color/light_crypto</color>

@@ -2,6 +2,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2024-04-11",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -408,6 +409,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2021-12-21",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -790,6 +792,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2021-12-20",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -1172,6 +1175,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2021-12-23",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -1554,6 +1558,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2021-12-24",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -1936,6 +1941,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2021-12-25",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -2318,6 +2324,7 @@
     {
         "tz": "Europe/Athens",
         "date": "2021-12-26",
+        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,

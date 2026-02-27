@@ -10,17 +10,19 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
+import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UILocation
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.ui.components.ProPromotionDialogFragment
-import com.weatherxm.ui.components.compose.ProPromotionCard
+import com.weatherxm.ui.components.compose.ForecastTabSelector
+import com.weatherxm.ui.components.compose.MosaicPromotionCard
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.toISODate
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,6 +34,11 @@ class ForecastFragment : BaseFragment() {
     private val model: ForecastViewModel by viewModel {
         parametersOf(parentModel.device)
     }
+
+    private lateinit var hourlyForecastAdapter: HourlyForecastAdapter
+    private lateinit var dailyForecastAdapter: DailyForecastAdapter
+    private var currentSelectedTab = 0
+    private var hasOpenedManageSubscription = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,22 +54,23 @@ class ForecastFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchForecast(true)
+            model.fetchForecasts(true)
         }
 
         initHiddenContent()
 
         // Initialize the adapters with empty data
-        val dailyForecastAdapter = DailyForecastAdapter {
+        dailyForecastAdapter = DailyForecastAdapter {
             navigator.showForecastDetails(
                 activityResultLauncher = null,
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
-                forecastSelectedISODate = it.date.toString()
+                forecastSelectedISODate = it.date.toString(),
+                hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
-        val hourlyForecastAdapter = HourlyForecastAdapter {
+        hourlyForecastAdapter = HourlyForecastAdapter {
             analytics.trackEventSelectContent(
                 AnalyticsService.ParamValue.HOURLY_DETAILS_CARD.paramValue,
                 Pair(
@@ -75,7 +83,8 @@ class ForecastFragment : BaseFragment() {
                 context = context,
                 device = model.device,
                 location = UILocation.empty(),
-                forecastSelectedISODate = it.timestamp.toISODate()
+                forecastSelectedISODate = it.timestamp.toISODate(),
+                hasFreeTrialAvailable = parentModel.hasFreePremiumTrialAvailable()
             )
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter
@@ -106,79 +115,78 @@ class ForecastFragment : BaseFragment() {
 
         parentModel.onDeviceFirstFetch().observe(viewLifecycleOwner) {
             model.device = it
-            model.fetchForecast(true)
+            model.fetchForecasts(true)
         }
 
-        model.onForecast().observe(viewLifecycleOwner) {
-            hourlyForecastAdapter.submitList(it.next24Hours)
-            dailyForecastAdapter.submitList(it.forecastDays)
-            binding.proPromotionCard.visible(true)
-            binding.dailyForecastRecycler.visible(true)
-            binding.dailyForecastTitle.visible(true)
-            binding.temperatureBarsInfoButton.visible(true)
-            binding.hourlyForecastRecycler.visible(true)
-            binding.hourlyForecastTitle.visible(true)
+        model.onDefaultForecast().observe(viewLifecycleOwner) {
+            if (currentSelectedTab == 0) {
+                onForecast(it) { model.fetchForecasts(true) }
+            }
         }
 
-        model.onLoading().observe(viewLifecycleOwner) {
-            onLoading(it)
+        model.onPremiumForecast().observe(viewLifecycleOwner) {
+            if (currentSelectedTab == 1) {
+                onForecast(it) { model.fetchForecasts() }
+            }
         }
 
-        model.onError().observe(viewLifecycleOwner) {
-            showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
+        // TODO: When we have the Solana implementation, remove this
+        if (AndroidBuildInfo.isSolana) {
+            binding.tabsOrMosaicPromptContainer.visible(false)
         }
 
-        initProPromotionCard()
+        initForecastTabsSelector()
+        initMosaicPromotionCard()
         fetchOrHideContent()
+    }
+
+    private fun initForecastTabsSelector() {
+        binding.forecastTabSelector.setContent {
+            ForecastTabSelector(0) { newSelectedTab ->
+                currentSelectedTab = newSelectedTab
+                if (newSelectedTab == 0) {
+                    model.onDefaultForecast().value?.let {
+                        onForecast(it) { model.fetchForecasts(true) }
+                    }
+                } else {
+                    model.onPremiumForecast().value?.let {
+                        onForecast(it) { model.fetchForecasts() }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
-    }
 
-    private fun initProPromotionCard() {
-        binding.proPromotionCard.setContent {
-            ProPromotionCard(R.string.fine_tune_forecast) {
-                analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.PRO_PROMOTION_CTA.paramValue,
-                    Pair(
-                        FirebaseAnalytics.Param.SOURCE,
-                        AnalyticsService.ParamValue.LOCAL_FORECAST.paramValue
-                    )
-                )
-                ProPromotionDialogFragment().show(this)
-            }
+        if (hasOpenedManageSubscription) {
+            model.fetchForecasts(true)
         }
     }
 
-    private fun onLoading(isLoading: Boolean) {
-        if (isLoading && binding.swiperefresh.isRefreshing) {
-            binding.progress.invisible()
-        } else if (isLoading) {
-            binding.proPromotionCard.visible(false)
-            binding.dailyForecastTitle.visible(false)
-            binding.temperatureBarsInfoButton.visible(false)
-            binding.hourlyForecastTitle.visible(false)
-            binding.progress.visible(true)
-        } else {
-            binding.swiperefresh.isRefreshing = false
-            binding.progress.invisible()
+    private fun initMosaicPromotionCard() {
+        binding.mosaicPromotionCard.setContent {
+            MosaicPromotionCard(parentModel.hasFreePremiumTrialAvailable()) {
+                hasOpenedManageSubscription = true
+                navigator.showManageSubscription(
+                    context,
+                    parentModel.hasFreePremiumTrialAvailable(),
+                    true
+                )
+            }
         }
     }
 
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
             binding.hiddenContentContainer.visible(false)
-            binding.proPromotionCard.visible(true)
-            model.fetchForecast()
+            model.fetchForecasts()
         } else if (model.device.relation == UNFOLLOWED) {
-            binding.proPromotionCard.visible(false)
-            binding.hourlyForecastTitle.visible(false)
-            binding.hourlyForecastRecycler.visible(false)
-            binding.dailyForecastRecycler.visible(false)
-            binding.dailyForecastTitle.visible(false)
-            binding.temperatureBarsInfoButton.visible(false)
+            binding.mosaicPromotionCard.visible(false)
+            binding.forecastTabSelector.visible(false)
+            binding.mainContainer.visible(false)
             binding.hiddenContentContainer.visible(true)
         }
     }
@@ -200,6 +208,44 @@ class ForecastFragment : BaseFragment() {
                     title = getString(R.string.add_favorites),
                     htmlMessage = getString(R.string.hidden_content_login_prompt, model.device.name)
                 )
+            }
+        }
+    }
+
+    private fun onForecast(resource: Resource<UIForecast>, onErrorRetry: () -> Unit) {
+        when (resource.status) {
+            Status.SUCCESS -> {
+                val forecast = resource.data
+                hourlyForecastAdapter.submitList(forecast?.next24Hours)
+                dailyForecastAdapter.setPremiumData(currentSelectedTab == 1)
+                dailyForecastAdapter.submitList(forecast?.forecastDays)
+                binding.poweredByMeteoblueIcon.visible(currentSelectedTab == 0)
+                binding.poweredByWXMLogo.visible(currentSelectedTab == 1)
+                binding.forecastTabSelector.visible(
+                    forecast?.isPremium == true || currentSelectedTab == 1
+                )
+                binding.mosaicPromotionCard.visible(forecast?.isPremium == false)
+                binding.poweredByCard.visible(true)
+                binding.swiperefresh.isRefreshing = false
+                binding.statusView.visible(false)
+                binding.mainContainer.visible(true)
+            }
+            Status.ERROR -> {
+                binding.mainContainer.visible(false)
+                binding.statusView.animation(R.raw.anim_error, false)
+                    .title(R.string.error_generic_message)
+                    .action(getString(R.string.action_retry))
+                    .subtitle(resource.message)
+                    .listener { onErrorRetry.invoke() }
+                    .visible(true)
+            }
+            Status.LOADING -> {
+                if (binding.swiperefresh.isRefreshing) {
+                    binding.statusView.visible(false)
+                } else {
+                    binding.mainContainer.visible(false)
+                    binding.statusView.clear().animation(R.raw.anim_loading).visible(true)
+                }
             }
         }
     }

@@ -1,14 +1,15 @@
 package com.weatherxm.ui.components
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.compose.ui.unit.dp
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewRewardQualityCardBinding
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.components.compose.RoundedRangeView
 import com.weatherxm.util.Rewards.getRewardScoreColor
 
 open class RewardsQualityCardView : LinearLayout {
@@ -85,13 +86,20 @@ open class RewardsQualityCardView : LinearLayout {
     @Suppress("MagicNumber")
     fun setSlider(score: Int): RewardsQualityCardView {
         // In case of zero score, show a very small number instead of an empty slider
-        binding.slider.values = if (score == 0) {
-            listOf(0.1F)
+        val rangeEnd = if (score == 0) {
+            0.1F
         } else {
-            listOf(score.toFloat())
+            score.toFloat()
         }
-        binding.slider.trackActiveTintList =
-            ColorStateList.valueOf(context.getColor(getRewardScoreColor(score)))
+        binding.slider.setContent {
+            RoundedRangeView(
+                20.dp,
+                0F..rangeEnd,
+                0F..100F,
+                R.color.blueTint,
+                getRewardScoreColor(score)
+            )
+        }
         binding.sliderContainer.visible(true)
         return this
     }

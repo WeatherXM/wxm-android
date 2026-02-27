@@ -31,7 +31,7 @@ fun getVersionGitTags(isSolana: Boolean, printForDebugging: Boolean = false): Li
     return grgit.tag.list().filter {
         it.name.matches(versionTagsRegex)
     }.sortedBy {
-        it.dateTime
+        it.dateTime ?: it.commit.dateTime
     }.map {
         if (printForDebugging) {
             println("${it.name} --- (${it.dateTime})")
@@ -89,16 +89,22 @@ android {
         applicationId = "com.weatherxm.app"
         minSdk = 28
         targetSdk = 36
-        versionCode = 30 + getVersionGitTags(isSolana = false).size
+        versionCode = 44 + getVersionGitTags(isSolana = false).size
         versionName = getLastVersionGitTag(false, skipTagsLogging)
 
         androidResources {
             // Keeps language resources for only the locales specified below.
+            @Suppress("UnstableApiUsage")
             localeFilters += listOf("en")
         }
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
         resValue("string", "mapbox_style", getStringProperty("MAPBOX_STYLE"))
+        resValue(
+            "string",
+            "base64_encoded_pub_key",
+            getStringProperty("BASE64_ENCODED_RSA_PUBLIC_KEY")
+        )
 
         // Instrumented Tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -138,6 +144,7 @@ android {
         }
         create("remote") {
             dimension = "mode"
+            isDefault = true
         }
         create("mock") {
             val apiURL = getFlavorProperty("API_URL", "remotemock.env")
@@ -194,6 +201,7 @@ android {
             }
         }
         create("prod") {
+            isDefault = true
             val apiURL = getFlavorProperty("API_URL", "production.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
             val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "production.env")
@@ -265,6 +273,8 @@ android {
             manifestPlaceholders["crashlyticsEnabled"] = true
         }
         getByName("debug") {
+            isDefault = true
+            //noinspection WrongGradleMethod
             signingConfigs.firstOrNull { it.name == "debug-config" }?.let {
                 signingConfig = it
             }
@@ -559,6 +569,7 @@ dependencies {
 
     // Animations
     implementation(libs.lottie)
+    implementation(libs.lottie.compose)
 
     // Charts
     implementation(libs.mpAndroidCharts)
@@ -624,4 +635,7 @@ dependencies {
 
     // Markdown Renderer
     implementation(libs.markdown.renderer)
+
+    // Billing
+    implementation(libs.billing)
 }

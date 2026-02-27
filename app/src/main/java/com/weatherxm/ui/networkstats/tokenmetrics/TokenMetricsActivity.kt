@@ -2,6 +2,7 @@ package com.weatherxm.ui.networkstats.tokenmetrics
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.compose.ui.unit.dp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -14,6 +15,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.compose.RoundedRangeView
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.util.NumberUtils.compactNumber
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -127,8 +129,15 @@ class TokenMetricsActivity : BaseActivity() {
         if (data.totalSupply != null && data.circulatingSupply != null
             && data.totalSupply >= data.circulatingSupply
         ) {
-            binding.circSupplyBar.valueTo = data.totalSupply.toFloat()
-            binding.circSupplyBar.values = listOf(data.circulatingSupply.toFloat())
+            binding.circSupplyBar.setContent {
+                RoundedRangeView(
+                    4.dp,
+                    0F..data.circulatingSupply.toFloat(),
+                    0F..data.totalSupply.toFloat(),
+                    R.color.colorSurface,
+                    R.color.blue
+                )
+            }
         } else {
             binding.circSupplyBar.visible(false)
         }

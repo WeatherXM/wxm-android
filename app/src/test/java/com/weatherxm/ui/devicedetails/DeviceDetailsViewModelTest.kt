@@ -14,13 +14,17 @@ import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.User
+import com.weatherxm.data.models.Wallet
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -39,14 +43,18 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.parse
 
+@Suppress("unused")
 @OptIn(FlowPreview::class)
 class DeviceDetailsViewModelTest : BehaviorSpec({
     val deviceDetailsUseCase = mockk<DeviceDetailsUseCase>()
     val authUseCase = mockk<AuthUseCase>()
     val followUseCase = mockk<FollowUseCase>()
+    val userUseCase = mockk<UserUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: DeviceDetailsViewModel
 
+    val user = User("id", "email", null, null, null, Wallet("address", null))
+    val testWalletRewards = UIWalletRewards(2E20, 0.0, 2E20, "0x00")
     val emptyDevice = UIDevice.empty()
     val device = UIDevice(
         "deviceId",
@@ -116,6 +124,8 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         justRun { deviceDetailsUseCase.setAcceptTerms() }
         every { deviceDetailsUseCase.shouldShowTermsPrompt() } returns true
         every { deviceDetailsUseCase.showDeviceNotificationsPrompt() } returns true
+        coMockEitherRight({ userUseCase.getUser() }, user)
+        coMockEitherRight({ userUseCase.getWalletRewards(user.wallet?.address) }, testWalletRewards)
 
         viewModel = DeviceDetailsViewModel(
             emptyDevice,
@@ -123,6 +133,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
             deviceDetailsUseCase,
             authUseCase,
             followUseCase,
+            userUseCase,
             resources,
             analytics,
             dispatcher
@@ -141,6 +152,16 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                 }
                 then("get if we should show the notifications prompt or not") {
                     viewModel.showNotificationsPrompt.value shouldBe false
+                }
+            }
+        }
+    }
+
+    context("Get if the user has a free premium trial available or not") {
+        given("A use case returning the user and the rewards") {
+            When("it's a success") {
+                then("Depending on the rewards it should return a boolean") {
+                    viewModel.hasFreePremiumTrialAvailable() shouldBe true
                 }
             }
         }

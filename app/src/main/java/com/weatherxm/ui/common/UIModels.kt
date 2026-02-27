@@ -22,7 +22,10 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
+import com.weatherxm.util.NumberUtils.toBigDecimalSafe
+import com.weatherxm.util.NumberUtils.weiToETH
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -259,11 +262,12 @@ enum class DeviceAlertType : Parcelable {
 @Parcelize
 data class UIForecast(
     val address: String?,
+    val isPremium: Boolean?,
     val next24Hours: List<HourlyWeather>?,
     val forecastDays: List<UIForecastDay>
 ) : Parcelable {
     companion object {
-        fun empty() = UIForecast(String.empty(), mutableListOf(), mutableListOf())
+        fun empty() = UIForecast(String.empty(), null, mutableListOf(), mutableListOf())
     }
 
     fun isEmpty(): Boolean = next24Hours.isNullOrEmpty() && forecastDays.isEmpty()
@@ -418,6 +422,14 @@ data class UIWalletRewards(
 ) : Parcelable {
     companion object {
         fun empty() = UIWalletRewards(0.0, 0.0, 0.0, String.empty())
+    }
+
+    /**
+     * If unclaimed tokens >= 200 then return true
+     */
+    @Suppress("MagicNumber")
+    fun hasUnclaimedTokensForFreeTrial(): Boolean {
+        return weiToETH(allocated.toBigDecimalSafe()) >= BigDecimal.valueOf(200.0)
     }
 }
 
@@ -725,6 +737,7 @@ data class DataForMessageView(
     val title: Int? = null,
     val subtitle: SubtitleForMessageView? = null,
     val drawable: Int? = null,
+    val drawableTint: Int? = null,
     val action: ActionForMessageView? = null,
     val useStroke: Boolean = false,
     val severityLevel: SeverityLevel = SeverityLevel.INFO,
@@ -735,6 +748,7 @@ data class DataForMessageView(
 @JsonClass(generateAdapter = true)
 data class SubtitleForMessageView(
     val message: Int? = null,
+    val messageAsString: String? = null,
     val htmlMessage: Int? = null,
     val htmlMessageAsString: String? = null,
     val onLinkClickedListener: (() -> Unit)? = null
@@ -749,6 +763,15 @@ data class ActionForMessageView(
     val startIcon: Int? = null,
     val endIcon: Int? = null,
     val onClickListener: () -> Unit
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class PurchaseUpdateState(
+    val success: Boolean,
+    val isLoading: Boolean,
+    val responseCode: Int?,
+    val debugMessage: String? = null
 )
 
 enum class RewardTimelineType {

@@ -24,12 +24,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/mainContainer"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:visibility="visible">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,7 +40,6 @@
                 android:id="@+id/header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintEnd_toStartOf="@id/statusIcon"
@@ -81,257 +78,382 @@
 
             </FrameLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dailyTilesRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                android:paddingHorizontal="@dimen/padding_normal"
-                android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/header"
-                tools:listitem="@layout/list_item_daily_tile_forecast" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/dailyTitle"
+            <FrameLayout
+                android:id="@+id/tabsOrMosaicPromptContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                android:text="@string/daily_conditions"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                android:textColor="@color/darkestBlue"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/dailyTilesRecycler" />
+                android:layout_marginTop="@dimen/margin_large"
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@id/header">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/dailyMainCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal"
-                app:cardElevation="@dimen/elevation_normal"
-                app:contentPadding="@dimen/padding_normal"
-                app:layout_constraintTop_toBottomOf="@id/dailyTitle">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/forecastTabSelector"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:visibility="gone"
+                    tools:composableName="com.weatherxm.ui.components.compose.ForecastTabSelectorKt.PreviewForecastTabSelector"
+                    tools:visibility="visible" />
 
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/dailyIcon"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerInside"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:lottie_autoPlay="false"
-                        app:lottie_loop="true"
-                        tools:lottie_rawRes="@raw/anim_weather_clear_day" />
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/mosaicPromotionCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:visibility="gone"
+                    tools:composableName="com.weatherxm.ui.components.compose.MosaicPromotionCardKt.PreviewMosaicPromotionCard" />
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mainContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:clipChildren="false"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/tabsOrMosaicPromptContainer"
+                tools:visibility="visible">
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/dailyTilesCompose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:composableName="com.weatherxm.ui.components.compose.DailyTileForecastKt.PreviewDailyTileForecast" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/dailyTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_extra_large"
+                    android:text="@string/daily_conditions"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textColor="@color/darkestBlue"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/dailyTilesCompose" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/dailyMainCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    app:cardElevation="@dimen/elevation_normal"
+                    app:contentPadding="@dimen/padding_normal"
+                    app:layout_constraintTop_toBottomOf="@id/dailyTitle">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        app:layout_constraintBottom_toBottomOf="@id/dailyIcon"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/dailyIcon"
-                        app:layout_constraintTop_toTopOf="@id/dailyIcon">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/dailyDate"
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/dailyIcon"
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerInside"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:lottie_autoPlay="false"
+                            app:lottie_loop="true"
+                            tools:lottie_rawRes="@raw/anim_weather_clear_day" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_small"
+                            app:layout_constraintBottom_toBottomOf="@id/dailyIcon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/dailyIcon"
+                            app:layout_constraintTop_toTopOf="@id/dailyIcon">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/dailyDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                                android:textColor="@color/darkestBlue"
+                                android:textStyle="bold"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="Today, Tuesday, Apr 2" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/dailyMaxTemp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_extra_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                                android:textColor="@color/darkGrey"
+                                android:textSize="26sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/dailyDate"
+                                tools:text="17°C" />
+
+                            <com.google.android.material.divider.MaterialDivider
+                                android:id="@+id/dailyTempsDivider"
+                                android:layout_width="2dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="4dp"
+                                app:dividerColor="@color/darkGrey"
+                                app:layout_constraintBottom_toBottomOf="@id/dailyMinTemp"
+                                app:layout_constraintStart_toEndOf="@id/dailyMaxTemp"
+                                app:layout_constraintTop_toTopOf="@id/dailyMaxTemp" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/dailyMinTemp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textColor="@color/darkGrey"
+                                android:textSize="20sp"
+                                app:layout_constraintBaseline_toBaselineOf="@id/dailyMaxTemp"
+                                app:layout_constraintStart_toEndOf="@id/dailyTempsDivider"
+                                tools:text="12°C" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:id="@+id/dailyPremiumRow"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                            android:textColor="@color/darkestBlue"
-                            android:textStyle="bold"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="Today, Tuesday, Apr 2" />
+                            android:layout_marginTop="@dimen/margin_large"
+                            android:clipChildren="false"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="3"
+                            app:layout_constraintTop_toBottomOf="@id/dailyIcon">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/dailyMaxTemp"
-                            android:layout_width="wrap_content"
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/dailyPremiumPrecip"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_precipitation"
+                                app:weather_data_title="@string/daily_precip" />
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/dailyPremiumHumidity"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_humidity"
+                                app:weather_data_title="@string/humidity" />
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/dailyPremiumWind"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_wind_direction"
+                                app:weather_data_title="@string/wind" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/dailyDefaultFirstRow"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_extra_small"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                            android:textColor="@color/darkGrey"
-                            android:textSize="26sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/dailyDate"
-                            tools:text="17°C" />
+                            android:layout_marginTop="@dimen/margin_large"
+                            android:clipChildren="false"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="3"
+                            app:layout_constraintTop_toBottomOf="@id/dailyIcon">
 
-                        <com.google.android.material.divider.MaterialDivider
-                            android:id="@+id/dailyTempsDivider"
-                            android:layout_width="2dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="@dimen/margin_small"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="4dp"
-                            app:dividerColor="@color/darkGrey"
-                            app:layout_constraintBottom_toBottomOf="@id/dailyMinTemp"
-                            app:layout_constraintStart_toEndOf="@id/dailyMaxTemp"
-                            app:layout_constraintTop_toTopOf="@id/dailyMaxTemp" />
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/precipProbabilityCard"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_precip_probability"
+                                app:weather_data_title="@string/precipitation_probability" />
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/dailyMinTemp"
-                            android:layout_width="wrap_content"
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/dailyPrecipCard"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_precipitation"
+                                app:weather_data_title="@string/daily_precip" />
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/humidityCard"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_humidity"
+                                app:weather_data_title="@string/humidity" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/dailyDefaultSecondRow"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_small"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
-                            android:textColor="@color/darkGrey"
-                            android:textSize="20sp"
-                            app:layout_constraintBaseline_toBaselineOf="@id/dailyMaxTemp"
-                            app:layout_constraintStart_toEndOf="@id/dailyTempsDivider"
-                            tools:text="12°C" />
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:clipChildren="false"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="3"
+                            app:layout_constraintTop_toBottomOf="@id/dailyDefaultFirstRow">
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/windCard"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_wind_direction"
+                                app:weather_data_title="@string/wind" />
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/uvCard"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_solar"
+                                app:weather_data_title="@string/uv_index" />
+
+                            <com.weatherxm.ui.components.WeatherMeasurementCardView
+                                android:id="@+id/pressureCard"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                app:weather_data_icon="@drawable/ic_weather_pressure"
+                                app:weather_data_title="@string/pressure" />
+                        </LinearLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/joinNetworkCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_extra_large"
+                    android:clipChildren="false"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/dailyMainCard"
+                    tools:composableName="com.weatherxm.ui.components.compose.JoinNetworkPromoCardKt.PreviewJoinNetworkPromoCard"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/hourlyTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_extra_large"
+                    android:text="@string/hourly_forecast"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textColor="@color/darkestBlue"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/joinNetworkCard" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hourlyForecastRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:paddingHorizontal="@dimen/padding_normal"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/hourlyTitle"
+                    tools:listitem="@layout/list_item_hourly_forecast" />
+
+                <com.weatherxm.ui.components.ChartsView
+                    android:id="@+id/charts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_extra_large"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/padding_normal"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/displayTimeNotice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:textSize="10sp"
+                    android:textStyle="italic"
+                    app:layout_constraintTop_toBottomOf="@id/charts"
+                    tools:ignore="SmallSp"
+                    tools:text="All displayed times are in the Station’s timezone (Europe/Athens)." />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/poweredByCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_large"
+                    app:cardBackgroundColor="@color/blueTint"
+                    app:cardCornerRadius="@dimen/radius_large"
+                    app:contentPaddingBottom="@dimen/padding_small_to_normal"
+                    app:contentPaddingLeft="@dimen/padding_normal_to_large"
+                    app:contentPaddingRight="@dimen/padding_normal_to_large"
+                    app:contentPaddingTop="@dimen/padding_small_to_normal"
+                    app:layout_constraintTop_toBottomOf="@id/displayTimeNotice">
 
                     <LinearLayout
-                        android:id="@+id/dailyFirstRow"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_large"
-                        android:clipChildren="false"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="3"
-                        app:layout_constraintTop_toBottomOf="@id/dailyIcon">
+                        android:orientation="vertical">
 
-                        <com.weatherxm.ui.components.WeatherMeasurementCardView
-                            android:id="@+id/precipProbabilityCard"
-                            android:layout_width="0dp"
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/poweredByText"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            app:weather_data_icon="@drawable/ic_weather_precip_probability"
-                            app:weather_data_title="@string/precipitation_probability" />
+                            android:text="@string/powered_by"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
 
-                        <com.weatherxm.ui.components.WeatherMeasurementCardView
-                            android:id="@+id/dailyPrecipCard"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            app:weather_data_icon="@drawable/ic_weather_precipitation"
-                            app:weather_data_title="@string/daily_precip" />
+                        <ImageView
+                            android:id="@+id/poweredByWXMLogo"
+                            android:layout_width="150dp"
+                            android:layout_height="25dp"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:src="@drawable/full_logo"
+                            android:visibility="gone"
+                            app:tint="@color/colorOnSurface"
+                            tools:ignore="ContentDescription" />
 
-                        <com.weatherxm.ui.components.WeatherMeasurementCardView
-                            android:id="@+id/humidityCard"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            app:weather_data_icon="@drawable/ic_weather_humidity"
-                            app:weather_data_title="@string/humidity" />
+                        <ImageView
+                            android:id="@+id/poweredByMeteoblueIcon"
+                            android:layout_width="70dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:src="@drawable/meteoblue_logo_2024"
+                            android:visibility="gone"
+                            app:tint="@color/colorOnSurface"
+                            tools:ignore="ContentDescription"
+                            tools:visibility="visible" />
+
                     </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <LinearLayout
-                        android:id="@+id/dailySecondRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal"
-                        android:clipChildren="false"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="3"
-                        app:layout_constraintTop_toBottomOf="@id/dailyFirstRow">
-
-                        <com.weatherxm.ui.components.WeatherMeasurementCardView
-                            android:id="@+id/windCard"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            app:weather_data_icon="@drawable/ic_wind_direction"
-                            app:weather_data_title="@string/wind" />
-
-                        <com.weatherxm.ui.components.WeatherMeasurementCardView
-                            android:id="@+id/uvCard"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            app:weather_data_icon="@drawable/ic_weather_solar"
-                            app:weather_data_title="@string/uv_index" />
-
-                        <com.weatherxm.ui.components.WeatherMeasurementCardView
-                            android:id="@+id/pressureCard"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            app:weather_data_icon="@drawable/ic_weather_pressure"
-                            app:weather_data_title="@string/pressure" />
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/promoCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                android:clipChildren="false"
-                app:layout_constraintTop_toBottomOf="@id/dailyMainCard"
-                tools:composableName="com.weatherxm.ui.components.compose.ProPromotionCardKt.PreviewProPromotionCard" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/hourlyTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                android:text="@string/hourly_forecast"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                android:textColor="@color/darkestBlue"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/promoCard" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/hourlyForecastRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                android:paddingHorizontal="@dimen/padding_normal"
-                android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/hourlyTitle"
-                tools:listitem="@layout/list_item_hourly_forecast" />
-
-            <com.weatherxm.ui.components.ChartsView
-                android:id="@+id/charts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:paddingBottom="@dimen/padding_normal"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler"
-                tools:visibility="visible" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/displayTimeNotice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                android:textSize="10sp"
-                android:textStyle="italic"
-                app:layout_constraintTop_toBottomOf="@id/charts"
-                tools:ignore="SmallSp"
-                tools:text="All displayed times are in the Station’s timezone (Europe/Athens)." />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
