@@ -257,7 +257,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         emptyForecast
                     )
                     runTest { viewModel.fetchDeviceForecasts() }
-                    then("LiveData onDeviceDefaultForecast should post the error for the empty forecast") {
+                    then("onDeviceDefaultForecast should post the error for the empty forecast") {
                         viewModel.onDeviceDefaultForecast().isError(emptyForecastMsg)
                     }
                     then("forecast should be set to empty") {
@@ -392,7 +392,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         emptyForecast
                     )
                     runTest { viewModel.fetchLocationForecast() }
-                    then("LiveData onLocationForecast should post the error for the empty forecast") {
+                    then("onLocationForecast should post the error for the empty forecast") {
                         viewModel.onLocationForecast().isError(emptyForecastMsg)
                     }
                     then("forecast should be set to empty") {

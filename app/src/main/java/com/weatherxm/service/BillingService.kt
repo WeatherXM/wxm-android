@@ -216,11 +216,21 @@ class BillingService(
         // Debug logs with plan details
         if (BuildConfig.DEBUG) {
             productDetails.also {
-                Timber.d("Product [id=${it?.productId}, name = ${it?.name}, description = ${it?.description}, title = ${it?.title}]]")
+                Timber.d(
+                    "Product [id=${it?.productId}, name = ${it?.name}," +
+                        " description = ${it?.description}, title = ${it?.title}]]"
+                )
                 it?.subscriptionOfferDetails?.forEach { o ->
                     Timber.d("\tOffer [id=${o.offerId}, tags = ${o.offerTags}]")
                     o.pricingPhases.pricingPhaseList.forEach { p ->
-                        Timber.d("\t\tPhase [pricef = ${p.formattedPrice}, period = ${p.billingPeriod}, cycles = ${p.billingCycleCount}, recur = ${p.recurrenceMode}], price = ${p.priceAmountMicros}, curr = ${p.priceCurrencyCode}]")
+                        Timber.d(
+                            "\t\tPhase [pricef = ${p.formattedPrice}," +
+                                " period = ${p.billingPeriod}," +
+                                " cycles = ${p.billingCycleCount}," +
+                                " recur = ${p.recurrenceMode}]," +
+                                " price = ${p.priceAmountMicros}," +
+                                " curr = ${p.priceCurrencyCode}]"
+                        )
                     }
                 }
             }
@@ -236,7 +246,8 @@ class BillingService(
                 val basePhase = paidPhases.firstOrNull { it.billingCycleCount == 0 }
                 val displayPrice = (discountPhase ?: basePhase)
                     ?.formattedPrice
-                    ?.replaceLast(" ", "") ?: return@forEach
+                    ?.replaceLast(" ", "")
+                    ?: return@forEach
                 subs.add(
                     SubscriptionOffer(
                         id = details.basePlanId,

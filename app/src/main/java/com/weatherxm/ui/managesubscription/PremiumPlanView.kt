@@ -118,139 +118,10 @@ fun PremiumPlanView(
                         fontSize = 18.sp
                     )
 
-                    if (isCurrentPlan) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = primaryColor.copy(alpha = 0.12f),
-                                    shape = RoundedCornerShape(999.dp)
-                                )
-                                .border(
-                                    width = 1.dp,
-                                    color = primaryColor.copy(alpha = 0.35f),
-                                    shape = RoundedCornerShape(999.dp)
-                                )
-                                .padding(
-                                    horizontal = dimensionResource(R.dimen.margin_small_to_normal),
-                                    vertical = dimensionResource(R.dimen.margin_extra_small)
-                                )
-                        ) {
-                            SmallText(
-                                text = stringResource(R.string.current_plan).uppercase(),
-                                colorRes = R.color.colorPrimary,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    } else {
-                        Row(
-                            modifier = Modifier
-                                .background(
-                                    color = primaryColor.copy(alpha = 0.12f),
-                                    shape = RoundedCornerShape(999.dp)
-                                )
-                                .border(
-                                    width = 1.dp,
-                                    color = primaryColor.copy(alpha = 0.35f),
-                                    shape = RoundedCornerShape(999.dp)
-                                )
-                                .padding(
-                                    horizontal = dimensionResource(R.dimen.margin_small_to_normal),
-                                    vertical = dimensionResource(R.dimen.margin_extra_small)
-                                ),
-                            horizontalArrangement = spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_star_filled),
-                                contentDescription = null,
-                                tint = colorResource(R.color.colorPrimary),
-                                modifier = Modifier.size(8.dp)
-                            )
-                            Text(
-                                text = stringResource(R.string.best_accuracy),
-                                color = colorResource(R.color.colorPrimary),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp,
-                                lineHeight = 12.sp,
-                                style = TextStyle(
-                                    platformStyle = PlatformTextStyle(
-                                        includeFontPadding = false
-                                    )
-                                )
-                            )
-                        }
-                    }
+                    PlanHeaderBadge(isCurrentPlan, primaryColor)
                 }
 
-                if (TAG_FREE_TRIAL in sub.tags && hasFreeTrialAvailable) {
-                    val tokenGold = colorResource(R.color.warning)
-                    val tokenAmber = colorResource(R.color.beta_rewards_color)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        tokenGold.copy(alpha = 0.18f),
-                                        tokenAmber.copy(alpha = 0.10f)
-                                    )
-                                ),
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .border(
-                                width = 1.dp,
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        tokenGold.copy(alpha = 0.60f),
-                                        tokenAmber.copy(alpha = 0.40f)
-                                    )
-                                ),
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .padding(dimensionResource(R.dimen.margin_small_to_normal))
-                    ) {
-                        Row(
-                            horizontalArrangement = spacedBy(
-                                dimensionResource(R.dimen.margin_small_to_normal)
-                            ),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_coins),
-                                contentDescription = null,
-                                tint = tokenGold,
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Column(verticalArrangement = spacedBy(2.dp)) {
-                                val freeTrialMonths = sub.freeTrialPeriod
-                                    ?.filter { it.isDigit() }?.toIntOrNull() ?: 2
-                                Text(
-                                    text = stringResource(
-                                        R.string.wxm_token_reward_trial_title,
-                                        freeTrialMonths
-                                    ),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
-                                    lineHeight = 18.sp,
-                                    style = TextStyle(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(tokenGold, tokenAmber)
-                                        ),
-                                        platformStyle = PlatformTextStyle(
-                                            includeFontPadding = false
-                                        )
-                                    )
-                                )
-                                SmallText(
-                                    text = stringResource(
-                                        R.string.wxm_token_reward_trial_body
-                                    ),
-                                    colorRes = R.color.colorOnSurfaceVariant
-                                )
-                            }
-                        }
-                    }
-                }
+                FreeTrialBanner(sub, hasFreeTrialAvailable)
 
                 if (TAG_LAUNCH_OFFER in sub.tags) {
                     Text(
@@ -295,7 +166,10 @@ fun PremiumPlanView(
                         )
                     }
 
-                    if (TAG_DISCOUNT in sub.tags && sub.discountedCycles != null && sub.basePrice != null) {
+                    if (TAG_DISCOUNT in sub.tags &&
+                        sub.discountedCycles != null &&
+                        sub.basePrice != null
+                    ) {
                         val discountStringRes = if (TAG_FREE_TRIAL in sub.tags) {
                             R.string.offer_discount_after_trial
                         } else {
@@ -353,6 +227,146 @@ fun PremiumPlanView(
                         text = "Offer ID: ${sub.offerId}"
                     )
                 }
+            }
+        }
+    }
+}
+
+@Suppress("FunctionNaming")
+@Composable
+private fun PlanHeaderBadge(isCurrentPlan: Boolean, primaryColor: Color) {
+    if (isCurrentPlan) {
+        Box(
+            modifier = Modifier
+                .background(
+                    color = primaryColor.copy(alpha = 0.12f),
+                    shape = RoundedCornerShape(999.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = primaryColor.copy(alpha = 0.35f),
+                    shape = RoundedCornerShape(999.dp)
+                )
+                .padding(
+                    horizontal = dimensionResource(R.dimen.margin_small_to_normal),
+                    vertical = dimensionResource(R.dimen.margin_extra_small)
+                )
+        ) {
+            SmallText(
+                text = stringResource(R.string.current_plan).uppercase(),
+                colorRes = R.color.colorPrimary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    } else {
+        Row(
+            modifier = Modifier
+                .background(
+                    color = primaryColor.copy(alpha = 0.12f),
+                    shape = RoundedCornerShape(999.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = primaryColor.copy(alpha = 0.35f),
+                    shape = RoundedCornerShape(999.dp)
+                )
+                .padding(
+                    horizontal = dimensionResource(R.dimen.margin_small_to_normal),
+                    vertical = dimensionResource(R.dimen.margin_extra_small)
+                ),
+            horizontalArrangement = spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_star_filled),
+                contentDescription = null,
+                tint = colorResource(R.color.colorPrimary),
+                modifier = Modifier.size(8.dp)
+            )
+            Text(
+                text = stringResource(R.string.best_accuracy),
+                color = colorResource(R.color.colorPrimary),
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                lineHeight = 12.sp,
+                style = TextStyle(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
+                )
+            )
+        }
+    }
+}
+
+@Suppress("FunctionNaming")
+@Composable
+private fun FreeTrialBanner(sub: SubscriptionOffer, hasFreeTrialAvailable: Boolean) {
+    if (TAG_FREE_TRIAL !in sub.tags || !hasFreeTrialAvailable) return
+    val tokenGold = colorResource(R.color.warning)
+    val tokenAmber = colorResource(R.color.beta_rewards_color)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        tokenGold.copy(alpha = 0.18f),
+                        tokenAmber.copy(alpha = 0.10f)
+                    )
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        tokenGold.copy(alpha = 0.60f),
+                        tokenAmber.copy(alpha = 0.40f)
+                    )
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(dimensionResource(R.dimen.margin_small_to_normal))
+    ) {
+        Row(
+            horizontalArrangement = spacedBy(
+                dimensionResource(R.dimen.margin_small_to_normal)
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_coins),
+                contentDescription = null,
+                tint = tokenGold,
+                modifier = Modifier.size(24.dp)
+            )
+            Column(verticalArrangement = spacedBy(2.dp)) {
+                val freeTrialMonths = sub.freeTrialPeriod
+                    ?.filter { it.isDigit() }
+                    ?.toIntOrNull()
+                    ?: 2
+                Text(
+                    text = stringResource(
+                        R.string.wxm_token_reward_trial_title,
+                        freeTrialMonths
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    lineHeight = 18.sp,
+                    style = TextStyle(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(tokenGold, tokenAmber)
+                        ),
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    )
+                )
+                SmallText(
+                    text = stringResource(R.string.wxm_token_reward_trial_body),
+                    colorRes = R.color.colorOnSurfaceVariant
+                )
             }
         }
     }

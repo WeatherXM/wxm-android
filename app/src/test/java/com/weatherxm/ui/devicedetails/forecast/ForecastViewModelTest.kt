@@ -117,7 +117,7 @@ class ForecastViewModelTest : BehaviorSpec({
                     then("track the event's failure in the analytics") {
                         verify(exactly = 1) { analytics.trackEventFailure(any()) }
                     }
-                    then("LiveData onDefaultForecast should post the error without a retry function") {
+                    then("onDefaultForecast should post the error without a retry function") {
                         viewModel.onDefaultForecast().isError(forecastGenericErrorMsg)
                     }
                 }
@@ -130,7 +130,7 @@ class ForecastViewModelTest : BehaviorSpec({
                     then("track the event's failure in the analytics") {
                         verify(exactly = 2) { analytics.trackEventFailure(any()) }
                     }
-                    then("LiveData onDefaultForecast should post the error without a retry function") {
+                    then("onDefaultForecast should post the error without a retry function") {
                         viewModel.onDefaultForecast().isError(forecastGenericErrorMsg)
                     }
                 }
@@ -143,7 +143,7 @@ class ForecastViewModelTest : BehaviorSpec({
                     then("track the event's failure in the analytics") {
                         verify(exactly = 3) { analytics.trackEventFailure(any()) }
                     }
-                    then("LiveData onDefaultForecast should post the error without a retry function") {
+                    then("onDefaultForecast should post the error without a retry function") {
                         viewModel.onDefaultForecast().isError(invalidTimezoneMsg)
                     }
                 }
@@ -169,7 +169,7 @@ class ForecastViewModelTest : BehaviorSpec({
                 and("the forecast is empty") {
                     every { forecast.isEmpty() } returns true
                     runTest { viewModel.fetchForecasts() }
-                    then("LiveData onDefaultForecast should post the error indicating an empty forecast") {
+                    then("onDefaultForecast should post the error indicating an empty forecast") {
                         viewModel.onDefaultForecast().isError(emptyForecastMsg)
                     }
                 }

@@ -49,9 +49,15 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     forecastData,
                     forecastResponse,
                     mockFunction = {
-                        apiService.getForecast(deviceId, fromDate.toString(), toDate.toString(), null, token)
+                        apiService.getForecast(
+                            deviceId, fromDate.toString(), toDate.toString(), null, token
+                        )
                     },
-                    runFunction = { networkSource.getDeviceDefaultForecast(deviceId, fromDate, toDate, token = token) }
+                    runFunction = {
+                        networkSource.getDeviceDefaultForecast(
+                            deviceId, fromDate, toDate, token = token
+                        )
+                    }
                 )
             }
             When("Using the Cache Source") {
@@ -59,7 +65,9 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     "forecast",
                     forecastData,
                     mockFunction = { cacheService.getDeviceForecast(deviceId) },
-                    runFunction = { cacheSource.getDeviceDefaultForecast(deviceId, fromDate, toDate) }
+                    runFunction = {
+                        cacheSource.getDeviceDefaultForecast(deviceId, fromDate, toDate)
+                    }
                 )
             }
         }
@@ -73,9 +81,15 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     forecastData,
                     forecastResponse,
                     mockFunction = {
-                        apiService.getPremiumForecast(deviceId, fromDate.toString(), toDate.toString(), null, token)
+                        apiService.getPremiumForecast(
+                            deviceId, fromDate.toString(), toDate.toString(), null, token
+                        )
                     },
-                    runFunction = { networkSource.getDevicePremiumForecast(deviceId, fromDate, toDate, token = token) }
+                    runFunction = {
+                        networkSource.getDevicePremiumForecast(
+                            deviceId, fromDate, toDate, token = token
+                        )
+                    }
                 )
             }
             When("Using the Cache Source") {
