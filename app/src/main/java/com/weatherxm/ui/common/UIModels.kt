@@ -425,7 +425,7 @@ data class UIWalletRewards(
     }
 
     /**
-     * If unclaimed tokens >= 100 then return true
+     * If unclaimed tokens >= 200 then return true
      */
     @Suppress("MagicNumber")
     fun hasUnclaimedTokensForFreeTrial(): Boolean {
