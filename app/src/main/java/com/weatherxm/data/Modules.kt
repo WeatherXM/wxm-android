@@ -332,6 +332,8 @@ private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 1800L
 
+private const val MIXPANEL_EU_SERVER_URL = "https://api-eu.mixpanel.com"
+
 private const val COIL_MEMORY_CACHE_SIZE_PERCENTAGE = 0.25
 private const val COIL_DISK_CACHE_SIZE_PERCENTAGE = 0.02
 
@@ -629,6 +631,7 @@ val analytics = module {
 
     single<MixpanelAPI>(createdAtStart = true) {
         MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
+            setServerURL(MIXPANEL_EU_SERVER_URL)
             setEnableLogging(true)
         }
     }
