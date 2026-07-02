@@ -70,6 +70,6 @@ task("clean") {
  * Configures gradle wrapper for this project
  */
 tasks.wrapper {
-    gradleVersion = "8.5"
+    gradleVersion = "8.14.4"
     distributionType = Wrapper.DistributionType.ALL
 }
