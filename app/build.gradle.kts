@@ -80,8 +80,8 @@ fun getFlavorProperty(propertyName: String, flavorEnvFile: String): String {
 
 android {
     namespace = "com.weatherxm"
-    compileSdk = 36
-    buildToolsVersion = "36.0.0"
+    compileSdk = 37
+    buildToolsVersion = "37.0.0"
 
     val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")
 
