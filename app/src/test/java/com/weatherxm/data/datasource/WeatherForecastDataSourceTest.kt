@@ -27,7 +27,6 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
     val toDate = LocalDate.now().plusDays(1)
     val forecastData = listOf<WeatherData>()
     val location = Location.empty()
-    val token = "purchaseToken"
 
     val forecastResponse = NetworkResponse.Success<List<WeatherData>, ErrorResponse>(
         forecastData,
@@ -41,7 +40,7 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
         coJustRun { cacheService.clearLocationForecast() }
     }
 
-    context("Get device default forecast") {
+    context("Get device forecast") {
         given("A Network and a Cache Source providing the forecast") {
             When("Using the Network Source") {
                 testNetworkCall(
@@ -49,15 +48,9 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     forecastData,
                     forecastResponse,
                     mockFunction = {
-                        apiService.getForecast(
-                            deviceId, fromDate.toString(), toDate.toString(), null, token
-                        )
+                        apiService.getForecast(deviceId, fromDate.toString(), toDate.toString())
                     },
-                    runFunction = {
-                        networkSource.getDeviceDefaultForecast(
-                            deviceId, fromDate, toDate, token = token
-                        )
-                    }
+                    runFunction = { networkSource.getDeviceForecast(deviceId, fromDate, toDate) }
                 )
             }
             When("Using the Cache Source") {
@@ -65,37 +58,8 @@ class WeatherForecastDataSourceTest : BehaviorSpec({
                     "forecast",
                     forecastData,
                     mockFunction = { cacheService.getDeviceForecast(deviceId) },
-                    runFunction = {
-                        cacheSource.getDeviceDefaultForecast(deviceId, fromDate, toDate)
-                    }
+                    runFunction = { cacheSource.getDeviceForecast(deviceId, fromDate, toDate) }
                 )
-            }
-        }
-    }
-
-    context("Get device premium forecast") {
-        given("A Network and a Cache Source providing the forecast") {
-            When("Using the Network Source") {
-                testNetworkCall(
-                    "Forecast",
-                    forecastData,
-                    forecastResponse,
-                    mockFunction = {
-                        apiService.getPremiumForecast(
-                            deviceId, fromDate.toString(), toDate.toString(), null, token
-                        )
-                    },
-                    runFunction = {
-                        networkSource.getDevicePremiumForecast(
-                            deviceId, fromDate, toDate, token = token
-                        )
-                    }
-                )
-            }
-            When("Using the Cache Source") {
-                testThrowNotImplemented {
-                    cacheSource.getDevicePremiumForecast(deviceId, fromDate, toDate, token = token)
-                }
             }
         }
     }

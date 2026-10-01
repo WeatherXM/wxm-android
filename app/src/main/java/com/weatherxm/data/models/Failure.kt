@@ -198,8 +198,3 @@ sealed class MapBoxError(code: String) : Failure(code) {
 
 @Keep
 object CancellationError : Failure()
-
-@Keep
-sealed class BillingClientError : Failure() {
-    object NotReady : BillingClientError()
-}

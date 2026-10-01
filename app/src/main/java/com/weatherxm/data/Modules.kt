@@ -163,7 +163,6 @@ import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepositoryImpl
 import com.weatherxm.data.services.CacheService
-import com.weatherxm.service.BillingService
 import com.weatherxm.service.GlobalUploadObserverService
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.analytics.AnalyticsOptInViewModel
@@ -203,7 +202,6 @@ import com.weatherxm.ui.home.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.ui.login.LoginViewModel
-import com.weatherxm.ui.managesubscription.ManageSubscriptionViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.onboarding.OnboardingViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
@@ -282,8 +280,6 @@ import com.weatherxm.util.Resources
 import com.weatherxm.util.WidgetHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -350,7 +346,6 @@ private val logging = module {
 
 private val dispatchers = module {
     single<CoroutineDispatcher> { Dispatchers.IO }
-    single<CoroutineScope> { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
 }
 
 private val preferences = module {
@@ -778,7 +773,6 @@ private val viewmodels = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::LocationsViewModel)
     viewModelOf(::LoginViewModel)
-    viewModelOf(::ManageSubscriptionViewModel)
     viewModelOf(::NetworkSearchViewModel)
     viewModelOf(::NetworkStatsViewModel)
     viewModelOf(::OnboardingViewModel)
@@ -801,12 +795,6 @@ private val viewmodels = module {
     viewModelOf(::UpdatePromptViewModel)
 }
 
-private val billingService = module {
-    single<BillingService>(createdAtStart = true) {
-        BillingService(androidContext(), get(), get())
-    }
-}
-
 val modules = listOf(
     analytics,
     apiServiceModule,
@@ -822,6 +810,5 @@ val modules = listOf(
     repositories,
     usecases,
     utilities,
-    viewmodels,
-    billingService
+    viewmodels
 )

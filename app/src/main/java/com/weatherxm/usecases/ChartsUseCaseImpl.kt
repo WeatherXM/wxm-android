@@ -12,14 +12,9 @@ import com.weatherxm.util.NumberUtils
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.convertPrecipitation
 import com.weatherxm.util.Weather.convertWindSpeed
-import java.time.Duration
 import java.time.LocalDate
 
 class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
-    companion object {
-        const val FORECAST_CHART_STEP_DEFAULT = 3L
-        const val FORECAST_CHART_STEP_PREMIUM = 1L
-    }
 
     /**
      * Suppress long and Complex method warning by detekt because it is just a bunch of `.let`
@@ -28,8 +23,7 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
     @Suppress("LongMethod", "ComplexMethod")
     override fun createHourlyCharts(
         date: LocalDate,
-        hourlyWeatherData: List<HourlyWeather>,
-        chartStep: Duration
+        hourlyWeatherData: List<HourlyWeather>
     ): Charts {
         val temperatureEntries = mutableListOf<Entry>()
         val feelsLikeEntries = mutableListOf<Entry>()
@@ -47,8 +41,7 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
 
         LocalDateTimeRange(
             date.atStartOfDay(),
-            date.plusDays(1).atStartOfDay().minusHours(1),
-            chartStep
+            date.plusDays(1).atStartOfDay().minusHours(1)
         ).forEachIndexed { i, localDateTime ->
             val counter = i.toFloat()
             val emptyEntry = Entry(counter, Float.NaN)

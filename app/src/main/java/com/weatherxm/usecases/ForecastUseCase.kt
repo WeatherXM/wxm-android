@@ -7,10 +7,10 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 
 interface ForecastUseCase {
-    suspend fun getDeviceDefaultForecast(
+    suspend fun getDeviceForecast(
         device: UIDevice,
         forceRefresh: Boolean = false
     ): Either<Failure, UIForecast>
-    suspend fun getDevicePremiumForecast(device: UIDevice): Either<Failure, UIForecast>
+
     suspend fun getLocationForecast(location: Location): Either<Failure, UIForecast>
 }

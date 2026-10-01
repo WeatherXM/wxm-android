@@ -1,9 +1,7 @@
 package com.weatherxm.ui.home
 
 import android.os.Bundle
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.withCreated
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -15,7 +13,6 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Location
 import com.weatherxm.databinding.ActivityHomeBinding
-import com.weatherxm.service.BillingService
 import com.weatherxm.service.workers.DevicesNotificationsWorker
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Resource
@@ -34,7 +31,6 @@ import com.weatherxm.ui.home.explorer.MapLayerPickerDialogFragment
 import com.weatherxm.ui.home.locations.LocationsViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -44,7 +40,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val devicesViewModel: DevicesViewModel by viewModel()
     private val profileViewModel: ProfileViewModel by viewModel()
     private val locationsViewModel: LocationsViewModel by viewModel()
-    private val billingService: BillingService by inject()
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
@@ -53,10 +48,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         lifecycleScope.launch {
             withCreated {
                 requestNotificationsPermissions()
-            }
-
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                billingService.setupPurchases()
             }
         }
     }

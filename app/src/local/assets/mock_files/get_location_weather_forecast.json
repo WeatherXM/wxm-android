@@ -3,7 +3,6 @@
         "address": "Athens, GR",
         "tz": "Europe/Athens",
         "date": "2025-07-24",
-        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -411,7 +410,6 @@
         "address": "Athens, GR",
         "tz": "Europe/Athens",
         "date": "2025-07-25",
-        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,
@@ -794,7 +792,6 @@
     {
         "tz": "Europe/Athens",
         "date": "2025-07-26",
-        "isPremium": false,
         "hourly": [
             {
                 "precipitation": 0,

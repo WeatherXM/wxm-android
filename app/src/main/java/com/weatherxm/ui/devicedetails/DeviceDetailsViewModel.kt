@@ -17,12 +17,10 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -35,7 +33,6 @@ class DeviceDetailsViewModel(
     private val useCase: DeviceDetailsUseCase,
     private val authUseCase: AuthUseCase,
     private val followUseCase: FollowUseCase,
-    private val userUseCase: UserUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher,
@@ -55,7 +52,6 @@ class DeviceDetailsViewModel(
     private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
     private val _onHealthCheckData = SingleLiveEvent<Resource<String>>()
 
-    private var hasFreePremiumTrialAvailable = false
     val shouldShowTerms = mutableStateOf(false)
     val showNotificationsPrompt = mutableStateOf(false)
 
@@ -64,7 +60,6 @@ class DeviceDetailsViewModel(
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
     fun onHealthCheckData(): LiveData<Resource<String>> = _onHealthCheckData
-    fun hasFreePremiumTrialAvailable() = hasFreePremiumTrialAvailable
 
     fun isLoggedIn() = isLoggedIn
 
@@ -184,14 +179,6 @@ class DeviceDetailsViewModel(
                     if (!it && device.isOwned()) {
                         showNotificationsPrompt.value = useCase.showDeviceNotificationsPrompt()
                     }
-                }
-            }
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            userUseCase.getUser().onRight { user ->
-                userUseCase.getWalletRewards(user.wallet?.address).onRight {
-                    hasFreePremiumTrialAvailable = it.hasUnclaimedTokensForFreeTrial()
                 }
             }
         }

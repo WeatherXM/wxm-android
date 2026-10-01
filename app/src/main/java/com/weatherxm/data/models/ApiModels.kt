@@ -288,7 +288,6 @@ data class WeatherData(
     val address: String?,
     var date: LocalDate,
     val tz: String?,
-    val isPremium: Boolean?,
     val hourly: List<HourlyWeather>?,
     val daily: DailyData?
 ) : Parcelable

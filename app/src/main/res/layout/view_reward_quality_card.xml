@@ -86,12 +86,17 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:visibility="visible">
 
-                <androidx.compose.ui.platform.ComposeView
+                <com.google.android.material.slider.RangeSlider
                     android:id="@+id/slider"
+                    style="@style/Widget.WeatherXM.Slider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_small"
-                    tools:composableName="com.weatherxm.ui.components.compose.RoundedRangeViewKt.PreviewRoundedRangeView" />
+                    android:enabled="false"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    app:trackHeight="20dp"
+                    tools:trackColorActive="@color/warning"
+                    tools:values="@array/reward_slider_default_values" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

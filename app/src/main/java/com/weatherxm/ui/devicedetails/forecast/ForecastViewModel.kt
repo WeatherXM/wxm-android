@@ -4,39 +4,42 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.models.NetworkError.NoConnectionError
-import com.weatherxm.service.BillingService
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ForecastViewModel(
     var device: UIDevice = UIDevice.empty(),
-    private val billingService: BillingService,
     private val resources: Resources,
     private val forecastUseCase: ForecastUseCase,
     private val analytics: AnalyticsWrapper,
     private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val onDefaultForecast = MutableLiveData<Resource<UIForecast>>()
-    private val onPremiumForecast = MutableLiveData<Resource<UIForecast>>()
+    private val onLoading = MutableLiveData<Boolean>()
 
-    fun onDefaultForecast(): LiveData<Resource<UIForecast>> = onDefaultForecast
-    fun onPremiumForecast(): LiveData<Resource<UIForecast>> = onPremiumForecast
+    private val onError = MutableLiveData<UIError>()
 
-    fun fetchForecasts(forceRefresh: Boolean = false) {
+    private val onForecast = MutableLiveData<UIForecast>()
+
+    fun onLoading(): LiveData<Boolean> = onLoading
+
+    fun onError(): LiveData<UIError> = onError
+
+    fun onForecast(): LiveData<UIForecast> = onForecast
+
+    fun fetchForecast(forceRefresh: Boolean = false) {
         /**
          * If we got here directly from a search result or through a notification,
          * then we need to wait for the View Model to load the device from the network,
@@ -47,54 +50,40 @@ class ForecastViewModel(
         if (device.isEmpty() || device.isDeviceFromSearchResult || device.isUnfollowed()) {
             return
         }
-        fetchDeviceForecast(
-            mutableLiveData = onDefaultForecast,
-            fetchOperation = { forecastUseCase.getDeviceDefaultForecast(device, forceRefresh) }
-        )
-        // TODO: When we have the Solana implementation, remove this check for isSolana
-        if (billingService.hasActiveSub() && !AndroidBuildInfo.isSolana) {
-            fetchDeviceForecast(
-                mutableLiveData = onPremiumForecast,
-                fetchOperation = { forecastUseCase.getDevicePremiumForecast(device) }
-            )
-        }
-    }
-
-    private fun fetchDeviceForecast(
-        mutableLiveData: MutableLiveData<Resource<UIForecast>>,
-        fetchOperation: suspend () -> Either<Failure, UIForecast>
-    ) {
+        onLoading.postValue(true)
         viewModelScope.launch(dispatcher) {
-            mutableLiveData.postValue(Resource.loading())
-            fetchOperation().onRight {
+            forecastUseCase.getDeviceForecast(device, forceRefresh).onRight {
+                Timber.d("Got forecast for device")
                 if (it.isEmpty()) {
-                    mutableLiveData.postValue(
-                        Resource.error(resources.getString(R.string.forecast_empty))
-                    )
-                } else {
-                    mutableLiveData.postValue(Resource.success(it))
+                    onError.postValue(UIError(resources.getString(R.string.forecast_empty)))
                 }
+                onForecast.postValue(it)
             }.onLeft {
                 analytics.trackEventFailure(it.code)
-                mutableLiveData.postValue(Resource.error(getFailureMessage(it)))
+                handleForecastFailure(it)
             }
+            onLoading.postValue(false)
         }
     }
 
-    private fun getFailureMessage(failure: Failure): String {
-        return when (failure) {
-            is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
-                resources.getString(R.string.error_forecast_generic_message)
+    private fun handleForecastFailure(failure: Failure) {
+        onError.postValue(
+            when (failure) {
+                is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
+                    UIError(resources.getString(R.string.error_forecast_generic_message))
+                }
+                is ApiError.UserError.InvalidTimezone -> {
+                    UIError(resources.getString(R.string.error_forecast_invalid_timezone))
+                }
+                is NoConnectionError, is ConnectionTimeoutError -> {
+                    UIError(failure.getDefaultMessage(R.string.error_reach_out_short)) {
+                        fetchForecast()
+                    }
+                }
+                else -> {
+                    UIError(resources.getString(R.string.error_reach_out_short))
+                }
             }
-            is ApiError.UserError.InvalidTimezone -> {
-                resources.getString(R.string.error_forecast_invalid_timezone)
-            }
-            is NoConnectionError, is ConnectionTimeoutError -> {
-                failure.getDefaultMessage(R.string.error_reach_out_short)
-            }
-            else -> {
-                resources.getString(R.string.error_reach_out_short)
-            }
-        }
+        )
     }
 }

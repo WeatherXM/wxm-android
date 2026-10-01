@@ -100,18 +100,6 @@ interface ApiService {
         @Query("fromDate") fromDate: String,
         @Query("toDate") toDate: String,
         @Query("exclude") exclude: String? = null,
-        @Query("token") token: String? = null,
-    ): NetworkResponse<List<WeatherData>, ErrorResponse>
-
-    @Mock
-    @MockResponse(body = "mock_files/get_user_device_weather_forecast_premium.json")
-    @GET("/api/v1/me/devices/{deviceId}/forecast/premium")
-    suspend fun getPremiumForecast(
-        @Path("deviceId") deviceId: String,
-        @Query("fromDate") fromDate: String,
-        @Query("toDate") toDate: String,
-        @Query("exclude") exclude: String? = null,
-        @Query("token") token: String,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
     @Mock

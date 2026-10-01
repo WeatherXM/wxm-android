@@ -17,7 +17,6 @@ import com.weatherxm.usecases.DevicePhotoUseCase
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
@@ -38,7 +37,6 @@ class HomeViewModel(
     private val onSurvey = SingleLiveEvent<Survey>()
     private val onInfoBanner = SingleLiveEvent<RemoteBanner?>()
     private val onAnnouncementBanner = SingleLiveEvent<RemoteBanner?>()
-    private var hasFreePremiumTrialAvailable = false
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
@@ -49,7 +47,6 @@ class HomeViewModel(
     fun onInfoBanner(): LiveData<RemoteBanner?> = onInfoBanner
     fun onAnnouncementBanner(): LiveData<RemoteBanner?> = onAnnouncementBanner
     fun showOverlayViews() = showOverlayViews
-    fun hasFreePremiumTrialAvailable() = hasFreePremiumTrialAvailable
 
     fun hasDevices() = hasDevices
     fun isLoggedIn() = isLoggedIn ?: false
@@ -143,15 +140,5 @@ class HomeViewModel(
 
     fun setClaimingBadgeShouldShow(shouldShow: Boolean) {
         userUseCase.setClaimingBadgeShouldShow(shouldShow)
-    }
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            userUseCase.getUser().onRight { user ->
-                userUseCase.getWalletRewards(user.wallet?.address).onRight {
-                    hasFreePremiumTrialAvailable = it.hasUnclaimedTokensForFreeTrial()
-                }
-            }
-        }
     }
 }

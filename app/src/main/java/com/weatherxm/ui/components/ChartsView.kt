@@ -9,8 +9,6 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.weatherxm.databinding.ViewChartsBinding
 import com.weatherxm.ui.common.LineChartData
-import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.visible
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.UnitSelector
 import com.weatherxm.util.Weather
@@ -76,19 +74,7 @@ class ChartsView : LinearLayout {
         binding.chartSolar.clearChart()
     }
 
-    private fun LineChartView.handleNoData(hideChartIfNoData: Boolean) {
-        if (hideChartIfNoData) {
-            visible(false)
-        } else {
-            showNoDataText()
-        }
-    }
-
-    fun initTemperatureChart(
-        temperatureData: LineChartData,
-        feelsLikeData: LineChartData,
-        hideChartIfNoData: Boolean = false
-    ) {
+    fun initTemperatureChart(temperatureData: LineChartData, feelsLikeData: LineChartData) {
         if (temperatureData.isDataValid() && feelsLikeData.isDataValid()) {
             temperatureDataSets = binding.chartTemperature
                 .getChart()
@@ -121,11 +107,11 @@ class ChartsView : LinearLayout {
                     }
                 })
         } else {
-            binding.chartTemperature.handleNoData(hideChartIfNoData)
+            binding.chartTemperature.showNoDataText()
         }
     }
 
-    fun initHumidityChart(data: LineChartData, hideChartIfNoData: Boolean = false) {
+    fun initHumidityChart(data: LineChartData) {
         if (data.isDataValid()) {
             humidityDataSets = binding.chartHumidity.getChart().initHumidity24hChart(data)
             binding.chartHumidity.getChart().setOnChartValueSelectedListener(
@@ -147,11 +133,11 @@ class ChartsView : LinearLayout {
                     }
                 })
         } else {
-            binding.chartHumidity.handleNoData(hideChartIfNoData)
+            binding.chartHumidity.showNoDataText()
         }
     }
 
-    fun initPressureChart(data: LineChartData, hideChartIfNoData: Boolean = false) {
+    fun initPressureChart(data: LineChartData) {
         if (data.isDataValid()) {
             pressureDataSets = binding.chartPressure.getChart().initPressure24hChart(data)
             binding.chartPressure.getChart().setOnChartValueSelectedListener(
@@ -177,15 +163,11 @@ class ChartsView : LinearLayout {
                     }
                 })
         } else {
-            binding.chartPressure.handleNoData(hideChartIfNoData)
+            binding.chartPressure.showNoDataText()
         }
     }
 
-    fun initSolarChart(
-        uvData: LineChartData,
-        radiationData: LineChartData,
-        hideChartIfNoData: Boolean = false
-    ) {
+    fun initSolarChart(uvData: LineChartData, radiationData: LineChartData) {
         if (uvData.isDataValid() || radiationData.isDataValid()) {
             solarDataSets = binding.chartSolar.getChart().initSolarChart(uvData, radiationData)
             binding.chartSolar.getChart().setOnChartValueSelectedListener(
@@ -199,17 +181,16 @@ class ChartsView : LinearLayout {
                     }
                 })
         } else {
-            binding.chartSolar.handleNoData(hideChartIfNoData)
+            binding.chartSolar.showNoDataText()
         }
     }
 
     fun initPrecipitationChart(
         primaryData: LineChartData,
         secondaryData: LineChartData,
-        isHistoricalData: Boolean,
-        hideChartIfNoData: Boolean = false
+        isHistoricalData: Boolean
     ) {
-        if (primaryData.isDataValid()) {
+        if (primaryData.isDataValid() && secondaryData.isDataValid()) {
             precipDataSets = binding.chartPrecipitation
                 .getChart()
                 .initPrecipitation24hChart(primaryData, secondaryData, isHistoricalData)
@@ -228,15 +209,12 @@ class ChartsView : LinearLayout {
                     }
                 })
         } else {
-            binding.chartPrecipitation.handleNoData(hideChartIfNoData)
+            binding.chartPrecipitation.showNoDataText()
         }
     }
 
     fun initWindChart(
-        windSpeedData: LineChartData,
-        windGustData: LineChartData,
-        windDirectionData: LineChartData,
-        hideChartIfNoData: Boolean = false
+        windSpeedData: LineChartData, windGustData: LineChartData, windDirectionData: LineChartData
     ) {
         if (windSpeedData.isDataValid() && windDirectionData.isDataValid()) {
             windDataSets = binding.chartWind
@@ -253,7 +231,7 @@ class ChartsView : LinearLayout {
                     }
                 })
         } else {
-            binding.chartWind.handleNoData(hideChartIfNoData)
+            binding.chartWind.showNoDataText()
         }
     }
 
@@ -322,18 +300,13 @@ class ChartsView : LinearLayout {
                 primaryData.entries[e.x.toInt()].y,
                 getDecimalsPrecipitation(precipUnit.type)
             )
-
-            val secondaryDataText = if (secondaryData.isDataValid()) {
-                Weather.getFormattedPrecipitationProbability(
-                    secondaryData.entries[e.x.toInt()].y.toInt()
-                )
-            } else {
-                String.empty()
-            }
+            val percentage = Weather.getFormattedPrecipitationProbability(
+                secondaryData.entries[e.x.toInt()].y.toInt()
+            )
             binding.chartPrecipitation.onHighlightedData(
                 time,
                 "${precipitationValue}${precipUnit.unit}",
-                secondaryDataText
+                percentage
             )
 
             autoHighlightCharts(e.x)

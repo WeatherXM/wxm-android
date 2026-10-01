@@ -19,20 +19,11 @@ interface WeatherForecastDataSource {
     @Retention(AnnotationRetention.SOURCE)
     private annotation class Exclude
 
-    suspend fun getDeviceDefaultForecast(
+    suspend fun getDeviceForecast(
         deviceId: String,
         fromDate: LocalDate,
         toDate: LocalDate,
-        exclude: @Exclude String? = null,
-        token: String? = null
-    ): Either<Failure, List<WeatherData>>
-
-    suspend fun getDevicePremiumForecast(
-        deviceId: String,
-        fromDate: LocalDate,
-        toDate: LocalDate,
-        exclude: @Exclude String? = null,
-        token: String
+        exclude: @Exclude String? = null
     ): Either<Failure, List<WeatherData>>
 
     suspend fun setDeviceForecast(deviceId: String, forecast: List<WeatherData>)
