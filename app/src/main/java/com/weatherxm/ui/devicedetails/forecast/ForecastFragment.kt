@@ -118,6 +118,7 @@ class ForecastFragment : BaseFragment() {
             binding.temperatureBarsInfoButton.visible(true)
             binding.hourlyForecastRecycler.visible(true)
             binding.hourlyForecastTitle.visible(true)
+            binding.poweredByCard.visible(true)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -160,6 +161,7 @@ class ForecastFragment : BaseFragment() {
             binding.dailyForecastTitle.visible(false)
             binding.temperatureBarsInfoButton.visible(false)
             binding.hourlyForecastTitle.visible(false)
+            binding.poweredByCard.visible(false)
             binding.progress.visible(true)
         } else {
             binding.swiperefresh.isRefreshing = false
@@ -179,6 +181,7 @@ class ForecastFragment : BaseFragment() {
             binding.dailyForecastRecycler.visible(false)
             binding.dailyForecastTitle.visible(false)
             binding.temperatureBarsInfoButton.visible(false)
+            binding.poweredByCard.visible(false)
             binding.hiddenContentContainer.visible(true)
         }
     }

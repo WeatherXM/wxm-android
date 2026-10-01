@@ -509,6 +509,7 @@
     <string name="next_7_days">Next 7 days</string>
     <string name="daily_conditions">Daily Conditions</string>
     <string name="hourly_forecast">Hourly Forecast</string>
+    <string name="powered_by">Powered by</string>
 
     <!-- Device History -->
     <string name="history">History</string>
