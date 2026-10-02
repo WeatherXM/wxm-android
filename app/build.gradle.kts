@@ -31,7 +31,7 @@ fun getVersionGitTags(isSolana: Boolean, printForDebugging: Boolean = false): Li
     return grgit.tag.list().filter {
         it.name.matches(versionTagsRegex)
     }.sortedBy {
-        it.dateTime
+        it.dateTime ?: it.commit.dateTime
     }.map {
         if (printForDebugging) {
             println("${it.name} --- (${it.dateTime})")
